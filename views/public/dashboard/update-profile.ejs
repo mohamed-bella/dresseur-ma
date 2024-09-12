@@ -1,0 +1,92 @@
+<%- include('./partials/head.ejs') %>
+     <%- include('./partials/nav.ejs') %>
+
+          <div class="container mt-5">
+               <div class="row">
+                    <div class="col-md-6 offset-md-3">
+                         <h2 class="text-center">Mettre à jour le profil de l'éducateur canin</h2>
+
+                         <!-- Formulaire pour les Informations de base -->
+                         <form class="update-form" action="/dashboard/update-basic-info" method="POST">
+                              <h4>Informations de base</h4>
+                              <div class="form-group mb-3">
+                                   <label for="displayName">Nom complet</label>
+                                   <input type="text" class="form-control" id="displayName" name="displayName" value="<%= user.displayName || 'non' %>" placeholder="Entrez votre nom complet" required>
+                                   <small class="form-text text-muted">Entrez votre nom complet comme il apparaît sur les documents officiels.</small>
+                              </div>
+                              <div class="form-group mb-3">
+                                   <label for="location">Localisation</label>
+                                   <input type="text" class="form-control" id="location" name="location" value="<%= user.location || 'non' %>" placeholder="Entrez votre localisation">
+                                   <small class="form-text text-muted">Indiquez votre ville ou région où vous offrez vos services.</small>
+                              </div>
+                              <div class="form-group mb-3">
+                                   <label for="bio">Bio</label>
+                                   <textarea type="text" class="form-control" id="bio" name="bio" placeholder="Entrez votre Bio"><%= user.bio || 'Je Suis Un dresseur professionnels ...' %></textarea>
+                                   <small class="form-text text-muted">Ex. (Je suis un dresseur professionnels ....)</small>
+                              </div>
+                              <button type="submit" class="btn btn-success w-100">Mettre à jour les informations de base</button>
+                         </form>
+
+                         <!-- Formulaire pour les Détails professionnels -->
+                         <form class="update-form" action="/dashboard/update-professional-details" method="POST" class="mt-4">
+                              <h4>Détails professionnels</h4>
+                              <div class="form-group mb-3">
+                                   <label for="experience">Années d'expérience</label>
+                                   <input type="number" class="form-control" id="experience" name="experience" value="<%= user.experience || 0 %>" placeholder="Entrez votre nombre d'années d'expérience" min="0">
+                                   <small class="form-text text-muted">Nombre d'années que vous avez travaillé en tant qu'éducateur canin.</small>
+                              </div>
+                              <div class="form-group mb-3">
+                                   <label for="specialization">Spécialisation</label>
+                                   <input type="text" class="form-control" id="specialization" name="specialization" value="<%= user.specialization.join(', ') || 'non' %>" placeholder="Entrez vos spécialités (séparées par des virgules)">
+                                   <small class="form-text text-muted">Listez les spécialités telles que l'obéissance, l'agilité, etc.</small>
+                              </div>
+                              <div class="form-group mb-3">
+                                   <label for="certifications">Certifications</label>
+                                   <input type="text" class="form-control" id="certifications" name="certifications" value="<%= user.certifications.join(', ') || 'non' %>" placeholder="Entrez vos certifications (séparées par des virgules)">
+                                   <small class="form-text text-muted">Mentionnez les certifications pertinentes que vous avez obtenues.</small>
+                              </div>
+                              <button type="submit" class="btn btn-success w-100">Mettre à jour les détails professionnels</button>
+                         </form>
+
+                         <!-- Formulaire pour les Services offerts -->
+                         <form class="update-form" action="/dashboard/update-services-offered" method="POST" class="mt-4">
+                              <h4>Services offerts</h4>
+                              <div class="form-group mb-3">
+                                   <label for="trainingMethods">Méthodes d'éducation</label>
+                                   <textarea class="form-control" id="trainingMethods" name="trainingMethods" rows="3" placeholder="Décrivez vos méthodes d'éducation"><%= user.trainingMethods || 'non' %></textarea>
+                                   <small class="form-text text-muted">Expliquez les méthodes que vous utilisez pour entraîner les chiens.</small>
+                              </div>
+                              <div class="form-group mb-3">
+                                   <label for="programs">Programmes d'éducation</label>
+                                   <input type="text" class="form-control" id="programs" name="programs" value="<%= user.servicesOffered.programs.join(', ') || 'non' %>" placeholder="Décrivez vos programmes d'éducation (séparés par des virgules)">
+                                   <small class="form-text text-muted">Décrivez les différents programmes d'éducation que vous proposez.</small>
+                              </div>
+                              <div class="form-group mb-3">
+                                   <label for="pricing">Tarifs</label>
+                                   <input type="text" class="form-control" id="pricing" name="pricing" value="<%= user.servicesOffered.pricing || 'non' %>" placeholder="Décrivez votre structure tarifaire">
+                                   <small class="form-text text-muted">Indiquez vos tarifs pour les différents services offerts.</small>
+                              </div>
+                              <div class="form-group mb-3">
+                                   <label for="availability">Disponibilité</label>
+                                   <input type="text" class="form-control" id="availability" name="availability" value="<%= user.servicesOffered.availability || 'non' %>" placeholder="Entrez vos jours et heures de disponibilité">
+                                   <small class="form-text text-muted">Indiquez vos jours et heures disponibles pour les séances d'éducation.</small>
+                              </div>
+                              <button type="submit" class="btn btn-success w-100">Mettre à jour les services offerts</button>
+                         </form>
+
+                         <!-- Formulaire pour le Téléchargement d'images -->
+                         <form class="update-form" id="uploadForm" enctype="multipart/form-data" action="/dashboard/upload-photos" method="POST" class="mt-4">
+                              <h4>Téléchargement d'images</h4>
+                              <div class="mb-3">
+                                   <label for="photos" class="form-label">Téléchargez des photos</label>
+                                   <input type="file" class="form-control" id="photos" name="photos" multiple>
+                                   <small class="form-text text-muted">Vous pouvez télécharger plusieurs photos à la fois.</small>
+                              </div>
+                              <button type="submit" class="btn btn-success">Télécharger</button>
+                         </form>
+
+                    </div>
+               </div>
+          </div>
+
+          <%- include('../partials/footer.ejs') %>

@@ -1,0 +1,116 @@
+<%- include('partials/head.ejs') %>
+     <%- include('partials/navbar.ejs') %>
+
+          <div class="container mt-5">
+               <h1 class="text-center my-4">
+                    <%= announcement.title %>
+               </h1>
+
+               <div class="row">
+                    <!-- Image Gallery Section -->
+                    <div class="col-md-8">
+                         <div class="card">
+                              <div class="card-body">
+                                   <!-- Large Image -->
+                                   <div class="main-image mb-3">
+                                        <img id="mainImage" src="<%= announcement.images[0] || 'https://via.placeholder.com/600x400' %>" class="img-fluid" alt="Image for <%= announcement.title %>">
+                                   </div>
+                                   <!-- Thumbnail Images -->
+                                   <div class="thumbnail-images d-flex ">
+                                        <% announcement.images.forEach(function(image, index) { %>
+                                             <img src="<%= image %>" class="img-thumbnail small-image" alt="Thumbnail <%= index + 1 %>" style="cursor:pointer; max-width: 100px;">
+                                             <% }); %>
+                                   </div>
+                              </div>
+                         </div>
+                    </div>
+
+                    <!-- Seller Information Card -->
+                    <div class="col-md-4">
+                         <div class="card">
+                              <div class="card-body">
+                                   <div class="">
+                                        <h4>Vendeur</h4>
+                                        <hr>
+                                   </div>
+                                   <div class="row p-3 mb-2 " style="background-color: #ffc1072b;border: 1px solid #7c7c7c;margin: 0px;border-radius: 45px;">
+                                        <div class="col-md-4">
+                                             <i class="bi bi-person-circle"></i>
+                                        </div>
+                                        <div class="col-md-8">
+                                             <strong>
+                                                  <%= announcement.sellerDisplayName %>
+                                             </strong>
+                                        </div>
+                                   </div>
+                                   <p>
+                                   <p id="phoneNumber" style="display: none;">
+                                        Téléphone: <%= announcement.number %> <!-- Initial hidden part of the number -->
+                                   </p>
+                                   <button id="showNumberBtn" class="btn btn-warning mt-2" style="width: 100%;">
+                                        <i class="bi bi-telephone-fill"></i> Appeler
+                                   </button>
+                                   </p>
+                              </div>
+                         </div>
+                    </div>
+
+                    <!-- Announcement Details Section -->
+
+               </div>
+
+               <div class="row mt-4">
+                    <!-- Seller Information Card -->
+                    <div class="col-md-12">
+                         <div class="card">
+                              <div class="card-body">
+                                   <h4 class="display-6">Description</h4>
+                                   <p>
+                                        <%= announcement.description %>
+                                   </p>
+
+                                   <h4 class="display-6">Prix</h4>
+                                   <p><strong>
+                                             <%= announcement.price %> MAD
+                                        </strong></p>
+
+                                   <h4 class="display-6">Lieu</h4>
+                                   <p>
+                                        <%= announcement.location %>
+                                   </p>
+
+                                   <h4 class="display-6">Date de publication</h4>
+                                   <p>
+                                        <%= announcement.datePosted.toLocaleDateString('fr-FR') %>
+                                   </p>
+
+                                   <a href="/" class="btn btn-secondary mt-3">Retour à la liste</a>
+                              </div>
+                         </div>
+                    </div>
+               </div>
+          </div>
+
+          <%- include('partials/footer.ejs') %>
+
+               <script>
+                    // JavaScript to change the main image when a thumbnail is clicked
+                    const thumbnailImages = document.querySelectorAll('.small-image');
+                    const mainImage = document.getElementById('mainImage');
+
+                    thumbnailImages.forEach(img => {
+                         img.addEventListener('click', function () {
+                              mainImage.src = this.src;
+                         });
+                    });
+               </script>
+
+               <script>
+                    // JavaScript to reveal the full phone number when the button is clicked
+                    document.getElementById('showNumberBtn').addEventListener('click', function () {
+                         const phoneNumberElement = document.getElementById('phoneNumber');
+                         phoneNumberElement.textContent = '<%= announcement.number %>'; // Full phone number from the announcement
+                         phoneNumberElement.style.display = 'block'
+                         this.style.display = 'none'; // Hide the button after showing the number
+                    });
+               </script>

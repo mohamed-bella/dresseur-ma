@@ -1,0 +1,235 @@
+body {
+     font-family: 'Poppins', sans-serif;
+     /* background-image: url('https://res.cloudinary.com/dxg2nsnkj/image/upload/v1726091520/Untitled_design_9_i51edq.png'); */
+     background-repeat: repeat;
+     /* This will make the background repeat */
+     background-size: auto;
+     background-color: #f1f1f0cb;
+     /* Keeps the original size of the image */
+}
+
+header {
+     transition: top 0.3s;
+     position: fixed;
+     background-color: #ffffff;
+     box-shadow: gray 0px -7px 5px 7px;
+     top: 0px;
+}
+
+.nav-link {
+     color: rgb(66, 66, 66)
+}
+
+/* To avoid content overlapping the fixed navbar */
+body {
+     padding-top: 60px;
+     /* Adjust this value based on the height of your navbar */
+     background-color: #2827b32e;
+}
+
+/* General input styles */
+input[type="text"],
+input[type="email"],
+input[type="number"],
+select,
+input[type="password"] {
+     width: 100%;
+     padding: 12px 20px;
+     margin: 8px 0;
+     box-sizing: border-box;
+     border: 2px solid #ccc;
+     border-radius: 4px;
+     background-color: #f9f9f9;
+     font-size: 16px;
+     transition: border-color 0.3s ease;
+}
+
+/* Focus state */
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus,
+input[type="password"]:focus {
+     border-color: #4CAF50;
+     /* Change border color on focus */
+     outline: none;
+     /* Remove default focus outline */
+     background-color: #fff;
+}
+
+/* Hover state */
+input[type="text"]:hover,
+input[type="email"]:hover,
+input[type="number"]:hover,
+input[type="password"]:hover {
+     border-color: #888;
+     /* Darken the border on hover */
+}
+
+/* Placeholder text styles */
+input[type="text"]::placeholder,
+input[type="email"]::placeholder,
+input[type="number"]::placeholder,
+input[type="password"]::placeholder {
+     color: #999;
+     /* Lighter color for placeholder text */
+     font-style: italic;
+}
+
+/* Disabled state */
+input[type="text"]:disabled,
+input[type="email"]:disabled,
+input[type="number"]:disabled,
+input[type="password"]:disabled {
+     background-color: #e0e0e0;
+     cursor: not-allowed;
+}
+
+/* General select styles */
+select {
+     width: 100%;
+     padding: 12px 20px;
+     margin: 8px 0;
+     box-sizing: border-box;
+     border: 2px solid #ccc;
+     border-radius: 4px;
+     background-color: #f9f9f9;
+     font-size: 16px;
+     transition: border-color 0.3s ease;
+     appearance: none;
+     /* Remove the default arrow in some browsers */
+}
+
+/* Focus state */
+select:focus {
+     border-color: #4CAF50;
+     /* Change border color on focus */
+     outline: none;
+     /* Remove default focus outline */
+     background-color: #fff;
+}
+
+/* Hover state */
+select:hover {
+     border-color: #888;
+     /* Darken the border on hover */
+}
+
+/* Disabled state */
+select:disabled {
+     background-color: #e0e0e0;
+     cursor: not-allowed;
+}
+
+/* Style the arrow (optional, for better cross-browser consistency) */
+select {
+     background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 5"><path fill="%23999" d="M2 0L0 2h4z"/></svg>');
+     background-repeat: no-repeat;
+     background-position: right 10px top 50%;
+     background-size: 10px 10px;
+}
+
+
+input {
+     border-radius: 8px;
+}
+
+
+/* 
+     =====================  HOME CARD STYLES  ==================
+*/
+.dog-card:hover {
+     cursor: pointer;
+     /* box-shadow: 0px 4px 4px black; */
+     transition: border-color 0.3s ease;
+     outline: 5px solid #afaf1d;
+}
+
+.card-img-left {
+     object-fit: contain;
+     background-color: #f9f9f9;
+     /* Optional: Set background color behind the image */
+}
+
+.card-img-left {
+     width: 100%;
+     /* Ensure it takes full width of the column */
+     height: 100%;
+     /* Make it fill the height of the container */
+     object-fit: cover;
+     /* Ensures the image covers the area without stretching */
+     border-radius: 0.25rem 0 0 0.25rem;
+     /* Apply rounded corners to the left side */
+}
+
+/* General Image Styling */
+.card-img-left {
+     width: 100%;
+     height: 100%;
+     object-fit: cover;
+     border-radius: 0.25rem 0 0 0.25rem;
+}
+
+/* Mobile-specific adjustments */
+@media (max-width: 767px) {
+     .card-img-left {
+          border-radius: 0.25rem 0.25rem 0 0;
+          /* Apply rounded corners on top for mobile */
+          height: 150px;
+          /* Set a fixed height for the image on mobile devices */
+     }
+
+     .card-body {
+          padding: 10px;
+          /* Reduce padding for smaller devices */
+     }
+
+     .card-title {
+          font-size: 1.25rem;
+          /* Slightly smaller title for mobile */
+     }
+
+     .btn {
+          font-size: 0.875rem;
+          /* Smaller button size on mobile */
+     }
+}
+
+.img-container {
+     height: 240px;
+     /* Set a fixed height for the image container */
+     overflow: hidden;
+     /* Crop the overflow if the image is too big */
+}
+
+.img-container img {
+     width: 100%;
+     /* Make sure the image takes up the full width */
+     height: 100%;
+     /* Make sure the image takes up the full height */
+     object-fit: cover;
+     /* Keep the aspect ratio, crop any overflow */
+
+}
+
+/* 
+================ DEATILS PAGE
+*/
+
+#phoneNumber {
+     background-color: #ffc107;
+     padding: 5px;
+     border-radius: 35px;
+     text-align: center;
+}
+
+.dog-price {
+     position: absolute;
+     right: 10px;
+     bottom: 8px;
+     color: red;
+     font-size: larger;
+     font-weight: 800;
+     background-color: #ffd5d5;
+     padding: 2px 5px;
+     border-radius: 50px;
+}

@@ -1,0 +1,39 @@
+<%- include('partials/head.ejs') %>
+     <%- include('partials/navbar.ejs') %>
+
+          <div class="container mt-5">
+               <h1 class="text-center my-4">Annonces disponibles</h1>
+               <a href="/announcements/new" class="btn btn-success mb-3">Créer une nouvelle annonce</a>
+
+               <div class="row">
+                    <% if (announcements.length===0) { %>
+                         <p class="text-center">Aucune annonce n'a été trouvée.</p>
+                         <% } else { %>
+                              <% announcements.forEach(function(announcement) { %>
+                                   <div class="col-md-4 mb-4">
+                                        <div class="card">
+                                             <img src="<%= announcement.images[0] || 'https://via.placeholder.com/150' %>" class="card-img-top" alt="Image annonce">
+                                             <div class="card-body">
+                                                  <h5 class="card-title">
+                                                       <%= announcement.title %>
+                                                  </h5>
+                                                  <p class="card-text">
+                                                       <%= announcement.description %>
+                                                  </p>
+                                                  <p class="card-text"><strong>Prix:</strong>
+                                                       <%= announcement.price %> MAD
+                                                  </p>
+                                                  <p class="card-text"><strong>Lieu:</strong>
+                                                       <%= announcement.location %>
+                                                  </p>
+                                                  <a href="/announcements/<%= announcement._id %>/edit" class="btn btn-warning">Modifier</a>
+                                                  <a href="/announcements/<%= announcement._id %>/delete" class="btn btn-danger">Supprimer</a>
+                                             </div>
+                                        </div>
+                                   </div>
+                                   <% }); %>
+                                        <% } %>
+               </div>
+          </div>
+
+          <%- include('partials/footer.ejs') %>

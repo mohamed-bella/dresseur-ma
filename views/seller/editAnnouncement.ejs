@@ -1,0 +1,98 @@
+<%- include('../marketplace/partials/head.ejs') %>
+     <%- include('../marketplace/partials/navbar.ejs') %>
+
+          <div class="container mt-5">
+               <h1 class="text-center my-4">Modifier l'annonce</h1>
+
+               <% var message=typeof message !=='undefined' ? message : '' ; %>
+
+                    <% if (message) { %>
+                         <div class="alert alert-danger">
+                              <%= message %>
+                         </div>
+                         <% } %>
+
+                              <!-- Form for Updating Announcement Details -->
+                              <form action="/seller/announcements/<%= announcement._id %>?_method=POST" method="POST" class="needs-validation" novalidate>
+                                   <!-- Title -->
+                                   <div class="mb-3">
+                                        <label for="title" class="form-label">Titre de l'annonce</label>
+                                        <input type="text" class="form-control" id="title" name="title" value="<%= announcement.title %>" required>
+                                        <div class="invalid-feedback">Le titre est obligatoire.</div>
+                                   </div>
+
+                                   <!-- Description -->
+                                   <div class="mb-3">
+                                        <label for="description" class="form-label">Description</label>
+                                        <textarea class="form-control" id="description" name="description" rows="4" required><%= announcement.description %></textarea>
+                                        <div class="invalid-feedback">La description est obligatoire.</div>
+                                   </div>
+
+                                   <!-- Price -->
+                                   <div class="mb-3">
+                                        <label for="price" class="form-label">Prix (MAD)</label>
+                                        <input type="number" class="form-control" id="price" name="price" value="<%= announcement.price %>" required>
+                                        <div class="invalid-feedback">Le prix est obligatoire.</div>
+                                   </div>
+
+                                   <!-- Location -->
+                                   <div class="mb-3">
+                                        <label for="location" class="form-label">Lieu</label>
+                                        <input type="text" class="form-control" id="location" name="location" value="<%= announcement.location %>" required>
+                                        <div class="invalid-feedback">Le lieu est obligatoire.</div>
+                                   </div>
+
+                                   <button type="submit" class="btn btn-primary">Mettre à jour l'annonce</button>
+                              </form>
+
+                              <hr>
+
+                              <!-- Separate Form for Adding/Deleting Images -->
+                              <form action="/seller/announcements/<%= announcement._id %>/images" method="POST" enctype="multipart/form-data">
+                                   <div class="mb-3">
+                                        <label for="existing-images" class="form-label">Images existantes</label>
+                                        <div class="existing-images">
+                                             <% announcement.images.forEach(function(image, index) { %>
+                                                  <div class="image-container" style="display:inline-block; position:relative;">
+                                                       <img src="<%= image %>" alt="Dog Image" class="img-thumbnail" style="max-width: 150px;">
+                                                       <button type="button" class="btn btn-danger btn-sm delete-image-btn" data-image-url="<%= image %>" style="position: absolute; top: 5px; right: 5px;">X</button>
+                                                  </div>
+                                                  <% }); %>
+                                        </div>
+                                   </div>
+
+                                   <!-- Add New Images -->
+                                   <div class="mb-3">
+                                        <label for="new-images" class="form-label">Ajouter de nouvelles images</label>
+                                        <input type="file" class="form-control" id="new-images" name="newImages" multiple accept="image/*">
+                                   </div>
+
+                                   <input type="hidden" id="deletedImages" name="deletedImages" value="">
+
+                                   <button type="submit" class="btn btn-primary">Mettre à jour les images</button>
+                              </form>
+
+                              <div class="mt-4">
+                                   <a href="/seller/announcements" class="btn btn-secondary">Annuler</a>
+                              </div>
+          </div>
+
+          <%- include('../marketplace/partials/footer.ejs') %>
+
+               <!-- JavaScript for handling image deletion -->
+               <script>
+                    const deleteButtons = document.querySelectorAll('.delete-image-btn');
+                    const deletedImagesInput = document.getElementById('deletedImages');
+
+                    deleteButtons.forEach(button => {
+                         button.addEventListener('click', function () {
+                              const imageUrl = this.getAttribute('data-image-url');
+                              this.closest('.image-container').remove();
+
+                              // Append the URL to the deletedImages input
+                              let currentDeletedImages = deletedImagesInput.value;
+                              currentDeletedImages = currentDeletedImages ? currentDeletedImages + ',' + imageUrl : imageUrl;
+                              deletedImagesInput.value = currentDeletedImages;
+                         });
+                    });
+               </script>

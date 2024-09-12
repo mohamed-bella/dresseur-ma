@@ -1,0 +1,108 @@
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+     <div class="modal-dialog" role="document">
+          <div class="modal-content">
+               <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Laisser un avis sur <%= trainer.displayName %>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                         <span aria-hidden="true">&times;</span>
+                    </button>
+               </div>
+               <div class="modal-body">
+                    <div class="container">
+                         <div class="row justify-content-center">
+                              <div class="col-md-10">
+                                   <form action="/reviews/<%= trainer._id %>" method="POST">
+                                        <!-- Star Rating -->
+                                        <div class="mb-3">
+                                             <label class="form-label">Évaluation :</label>
+                                             <div class="star-rating">
+                                                  <input type="radio" id="star1" name="rating" value="1" />
+                                                  <label for="star1" title="1 étoiles"><i class="fas fa-star"></i></label>
+
+                                                  <input type="radio" id="star2" name="rating" value="2" />
+                                                  <label for="star2" title="2 étoiles"><i class="fas fa-star"></i></label>
+
+                                                  <input type="radio" id="star3" name="rating" value="3" />
+                                                  <label for="star3" title="3 étoiles"><i class="fas fa-star"></i></label>
+
+                                                  <input type="radio" id="star4" name="rating" value="4" />
+                                                  <label for="star4" title="4 étoiles"><i class="fas fa-star"></i></label>
+
+                                                  <input type="radio" id="star5" name="rating" value="5" />
+                                                  <label for="star5" title="5 étoile"><i class="fas fa-star"></i></label>
+                                             </div>
+
+                                        </div>
+
+                                        <!-- Review Textarea -->
+                                        <div class="mb-3">
+                                             <label for="review" class="form-label">Votre avis :</label>
+                                             <textarea class="form-control" id="review" name="review" rows="5" placeholder="Partagez votre expérience..." required></textarea>
+                                        </div>
+                                        <!-- Review Textarea -->
+                                        <div class="mb-3">
+                                             <label for="email" class="form-label">Votre E-mail :</label>
+                                             <input class="form-control" id="email" name="email" placeholder="example@gmail.com" required></input>
+                                        </div>
+
+                                        <!-- Submit Button -->
+                                        <div class="d-grid">
+                                             <button type="submit" class="btn btn-primary">Soumettre l'avis</button>
+                                        </div>
+                                   </form>
+                              </div>
+                         </div>
+                    </div>
+               </div>
+               <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+               </div>
+          </div>
+     </div>
+</div>
+
+<!-- JavaScript to Handle Star Selection -->
+<script>
+     document.addEventListener('DOMContentLoaded', function () {
+          const stars = document.querySelectorAll('.star-rating input');
+          const starLabels = document.querySelectorAll('.star-rating label i');
+
+          // Add event listener to each radio input
+          stars.forEach((star, index) => {
+               star.addEventListener('click', function () {
+                    const ratingValue = parseInt(star.value);
+
+                    // Clear the highlighting from all stars
+                    starLabels.forEach(starIcon => {
+                         starIcon.classList.remove('selected');
+                    });
+
+                    // Highlight all stars up to the selected rating
+                    for (let i = 0; i < ratingValue; i++) {
+                         starLabels[i].classList.add('selected');
+                    }
+               });
+          });
+     });
+
+
+</script>
+
+<!-- CSS for Star Selection -->
+<style>
+     .star-rating i {
+          font-size: 2rem;
+          color: gray;
+          cursor: pointer;
+     }
+
+     .star-rating input {
+          display: none;
+          /* Hide radio buttons */
+     }
+
+     .star-rating i.selected {
+          color: gold;
+     }
+</style>

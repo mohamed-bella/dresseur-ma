@@ -1,0 +1,103 @@
+<%- include('partials/head.ejs') %>
+     <%- include('partials/navbar.ejs') %>
+
+          <div class="container mt-5">
+               <h1 class="text-center my-4">Créer une nouvelle annonce</h1>
+
+               <% var message=typeof message !=='undefined' ? message : '' ; %>
+
+                    <% if (message) { %>
+                         <div class="alert alert-danger">
+                              <%= message %>
+                         </div>
+                         <% } %>
+
+                              <form action="/announcements" method="POST" class="needs-validation" enctype="multipart/form-data" novalidate id="announcementForm">
+                                   <div class="mb-3">
+                                        <label for="title" class="form-label">Titre de l'annonce</label>
+                                        <input type="text" class="form-control" id="title" name="title" placeholder="Entrez le titre de l'annonce" required>
+                                        <div class="invalid-feedback">Le titre est obligatoire.</div>
+                                   </div>
+
+                                   <div class="mb-3">
+                                        <label for="description" class="form-label">Description</label>
+                                        <textarea class="form-control" id="description" name="description" rows="4" placeholder="Entrez la description de l'annonce" required></textarea>
+                                        <div class="invalid-feedback">La description est obligatoire.</div>
+                                   </div>
+
+                                   <div class="mb-3">
+                                        <label for="price" class="form-label">Prix (MAD)</label>
+                                        <input type="number" class="form-control" id="price" name="price" placeholder="Entrez le prix en MAD" min="0" required>
+                                        <div class="invalid-feedback">Le prix est obligatoire et doit être un nombre positif.</div>
+                                   </div>
+
+                                   <div class="mb-3">
+                                        <label for="location" class="form-label">Lieu</label>
+                                        <input type="text" class="form-control" id="location" name="location" placeholder="Entrez le lieu de l'annonce (ex: Casablanca)" required>
+                                        <div class="invalid-feedback">Le lieu est obligatoire.</div>
+                                   </div>
+
+                                   <div class="mb-3">
+                                        <label for="number" class="form-label">Numéro</label>
+                                        <input type="text" class="form-control" id="number" name="number" placeholder="Entrez votre Numéro (ex: 0612345678)" required pattern="^0[5-7][0-9]{8}$">
+                                        <div class="invalid-feedback">Le numéro est obligatoire et doit être au format valide (ex: 0612345678).</div>
+                                   </div>
+
+                                   <div class="mb-3">
+                                        <label for="images" class="form-label">Images (sélectionnez plusieurs)</label>
+                                        <input type="file" class="form-control" id="images" name="images" multiple accept="image/*">
+                                        <div class="invalid-feedback">Veuillez sélectionner au moins une image.</div>
+                                   </div>
+
+                                   <button type="submit" class="btn btn-primary">Publier l'annonce</button>
+                              </form>
+          </div>
+
+          <%- include('partials/footer.ejs') %>
+
+               <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                         const form = document.getElementById('announcementForm');
+                         const inputs = form.querySelectorAll('input, textarea');  // Select all inputs and textareas
+
+                         // Validate on input event
+                         inputs.forEach(input => {
+                              input.addEventListener('input', function () {
+                                   validateField(input);
+                              });
+                         });
+
+                         // Add submit listener to check full form validity
+                         form.addEventListener('submit', function (event) {
+                              // Check form validity
+                              if (!form.checkValidity()) {
+                                   event.preventDefault();
+                                   event.stopPropagation();
+                              }
+
+                              // Custom validation for images (at least one image must be selected)
+                              const imageInput = document.getElementById('images');
+                              if (imageInput.files.length === 0) {
+                                   event.preventDefault();
+                                   event.stopPropagation();
+                                   imageInput.classList.add('is-invalid');
+                              } else {
+                                   imageInput.classList.remove('is-invalid');
+                                   imageInput.classList.add('is-valid');
+                              }
+
+                              form.classList.add('was-validated');
+                         }, false);
+
+                         // Function to validate individual form fields
+                         function validateField(field) {
+                              if (field.checkValidity()) {
+                                   field.classList.remove('is-invalid');
+                                   field.classList.add('is-valid');
+                              } else {
+                                   field.classList.remove('is-valid');
+                                   field.classList.add('is-invalid');
+                              }
+                         }
+                    });
+               </script>

@@ -1,0 +1,66 @@
+<header class="p-3 bg-light navbar-light fixed-top nav" style="position: fixed;">
+     <div class="container mt-10">
+          <div class="d-flex flex-wrap align-items-center justify-content-between">
+               <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-decoration-none">
+                    <img src="https://res.cloudinary.com/dxg2nsnkj/image/upload/v1726071234/Untitled_design_8_b90gyq.png" class="bi me-2" style=' width:40px' role="img" aria-label="Bootstrap">
+                    <!-- <use xlink:href="#bootstrap"></use> -->
+                    </img>
+                    <!-- <span class="fs-4">Marche Canine</span> -->
+               </a>
+
+
+
+               <div class="text-end">
+                    <% if (user) { %>
+                         <a href="/seller/dashboard" class="btn btn-outline-dark me-2"><i class="bi bi-speedometer2"></i> Dashboard</a>
+                         <a href="/announcements/new" class="btn btn-warning"><i class="bi bi-plus-square"></i> Ajouter Annonce</a>
+                         <a href="/auth/logout" class="btn btn-danger">Logout</a>
+                         <% } else { %>
+                              <button data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-warning me-2">
+                                   <i class="bi bi-plus-square"></i> Ajouter un annonce</button>
+                              <% } %>
+               </div>
+          </div>
+     </div>
+</header>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+     <div class="modal-dialog">
+          <div class="modal-content">
+               <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Informations sur le Chien</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+               </div>
+               <form id="dogInfoForm" action="/auth/google" method="GET">
+                    <div class="modal-body">
+                         <div class="form-group mb-3">
+                              <label for="dogName" class="form-label">Nom du chien</label>
+                              <input type="text" class="form-control" id="dogName" name="dogName" placeholder="Entrez le nom du chien" required>
+                         </div>
+                         <div class="form-group mb-3">
+                              <label for="location" class="form-label">Lieu</label>
+                              <input type="text" class="form-control" id="location" name="location" placeholder="Entrez votre localisation" required>
+                         </div>
+                         <div class="form-group mb-3">
+                              <label for="phone" class="form-label">Numéro de téléphone</label>
+                              <input type="tel" class="form-control" id="phone" name="phone" placeholder="Entrez votre numéro de téléphone" required>
+                         </div>
+                    </div>
+                    <div class="modal-footer">
+                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                         <button type="submit" class="btn btn-primary">Soumettre et Se Connecter</button>
+                    </div>
+               </form>
+          </div>
+     </div>
+</div>
+
+<script>
+     // Redirect to Google login after form submission
+     document.getElementById('dogInfoForm').addEventListener('submit', function (e) {
+          e.preventDefault();
+          window.location.href = '/auth/google';
+     });
+</script>
+
+<div style="margin-top: 7.5rem!important;"></div>

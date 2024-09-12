@@ -1,0 +1,89 @@
+<%- include('./partials/head.ejs') %>
+     <%- include('./partials/nav.ejs') %>
+          <!-- Page Content  -->
+          <h2>Welcome, <%= user.firstName %> 👋
+          </h2>
+          <div class="account-status">
+               status :
+               <span class="status-label">
+                    <%= user.status %>
+               </span>
+          </div>
+          <!-- <div class="text-center mt-5">
+               <div class="row align-items-start">
+                    <div class="col col-lg-4 col-md-6 col-sm-12 ">
+                         <a href="/dashboard/update-profile" class="card">
+                              <p>
+                                   <h2>Mettre jour mon profile</h2>
+                              </p>
+                         </a>
+                    </div>
+
+
+               </div>
+          </div> -->
+
+          <!-- <div class="container mt-4"></div> -->
+          <div class="row">
+               <div class="col col-lg-8 col-md-12 col-sm-12">
+                    <div class="card mt-5">
+                         <div class="profile-section">
+                              <div class="profile-pic">
+                                   <img src="<%= user.image %>" alt="">
+                              </div>
+                              <div class="profile-details">
+                                   <h5>
+                                        <%= user.displayName %>
+                                   </h5>
+                                   <p class="text-muted">Dog Trainer | <%= user.location %><br>
+                                             <%= user.email %>
+                                   </p>
+                              </div>
+                              <div>
+                                   <a class="btn btn-dark" href="/dashboard/update-profile">
+                                        <i class="bi bi-pencil-square"></i> Edit Profile
+                                   </a>
+                              </div>
+                         </div>
+
+                         <div class="profile-completion">
+                              <p class="text-muted">Profile Completion</p>
+                              <div class="progress">
+                                   <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: <%= profileCompletion %>%" aria-valuenow="<%= profileCompletion %>%" aria-valuemin="0" aria-valuemax="100">
+                                        <%= profileCompletion %>%
+                                   </div>
+                              </div>
+                         </div>
+                    </div>
+               </div>
+               <div class="col col-lg-4 col-md-12 col-sm-12">
+                    <div class="card mt-5">
+                         playn a game to earn points
+                    </div>
+               </div>
+          </div>
+
+
+
+          <!-- <h2>Collapsible Sidebar Using Bootstrap 4</h2>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          
+                    <div class="line"></div>
+          
+                    <h2>Lorem Ipsum Dolor</h2>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          
+                    <div class="line"></div>
+          
+                    <h2>Lorem Ipsum Dolor</h2>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          
+                    <div class="line"></div>
+          
+                    <h3>Lorem Ipsum Dolor</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+               -->
+          </div>
+          </div>
+          <%- include('../partials/footer.ejs') %>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+     <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+     <!-- SEO Meta Tags -->
+     <meta name="description" content="Découvrez et publiez des annonces pour l'adoption, la vente, ou les services pour chiens. Trouvez votre futur compagnon ou aidez d'autres à trouver le leur.">
+     <meta name="keywords" content="chiens, adoption de chiens, acheter des chiens, vendre des chiens, services pour chiens, annonces pour chiens, animaux">
+     <meta name="author" content="Ndressilik">
+
+     <!-- Open Graph Meta Tags (pour le partage sur les réseaux sociaux) -->
+     <meta property="og:title" content="<%= title %> | Ndressilik - Annonces et Adoption de Chiens">
+     <meta property="og:description" content="Retrouvez les dernières annonces pour l'adoption, la vente ou les services pour chiens. Connectez-vous avec des vendeurs et des amoureux des chiens partout dans le pays.">
+     <meta property="og:image" content='/images/default-dog-og-image.jpg'>
+     <meta property="og:url" content="https://ndressilik.com/">
+     <meta property="og:type" content="website">
+
+     <!-- Twitter Card Meta Tags -->
+     <meta name="twitter:card" content="summary_large_image">
+     <meta name="twitter:title" content="<%= title %> | Ndressilik - Annonces et Adoption de Chiens">
+     <meta name="twitter:description" content="Trouvez les meilleures annonces pour l'adoption, la vente ou les services pour chiens sur Ndressilik.">
+     <meta name="twitter:image" content="/images/default-dog-og-image.jpg">
+
+     <!-- Structured Data (JSON-LD pour SEO) -->
+     <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "<%= title %> | Ndressilik",
+      "description": "Découvrez les annonces pour l'adoption, la vente ou les services pour chiens sur Ndressilik.",
+      "url": "https://ndressilik.com",
+      "author": {
+        "@type": "Organization",
+        "name": "Ndressilik"
+      }
+    }
+    </script>
+
+     <!-- Font Awesome -->
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+
+     <!-- Bootstrap CDN -->
+     <link rel="stylesheet" href="https://getbootstrap.com/docs/5.3/dist/css/bootstrap.min.css">
+
+     <!-- Bootstrap Icons -->
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+     <!-- Preload Key Resources -->
+     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" as="style">
+     <link rel="preload" href="/css/styles.css" as="style">
+
+     <!-- Google Fonts -->
+     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+
+     <!-- Custom CSS -->
+     <link rel="stylesheet" href="/css/styles.css">
+
+     <!-- SEO-Optimized Title -->
+     <title>
+          <%= title %> | Ndressilik - Annonces et Adoption de Chiens
+     </title>
+</head>
+
+<body>

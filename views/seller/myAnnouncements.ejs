@@ -1,0 +1,35 @@
+<%- include('../marketplace/partials/head.ejs') %>
+     <%- include('../marketplace/partials/navbar.ejs') %>
+
+          <div class="container mt-5">
+               <h1 class="text-center my-4">Mes Annonces</h1>
+
+               <% if (announcements.length===0) { %>
+                    <p class="text-center">Vous n'avez aucune annonce pour le moment.</p>
+                    <% } else { %>
+                         <div class="row">
+                              <% announcements.forEach(function(announcement) { %>
+                                   <div class="col-md-4 mb-4">
+                                        <div class="card">
+                                             <img src="<%= announcement.images[0] || 'https://via.placeholder.com/150' %>" class="card-img-top" alt="Image de l'annonce">
+                                             <div class="card-body">
+                                                  <h5 class="card-title">
+                                                       <%= announcement.title %>
+                                                  </h5>
+                                                  <p class="card-text">
+                                                       <%= announcement.description %>
+                                                  </p>
+                                                  <a href="/seller/announcements/<%= announcement._id %>/edit" class="btn btn-warning">Modifier</a>
+                                                  <form action="/seller/announcements/<%= announcement._id %>/delete" method="POST" style="display:inline;">
+                                                       <!-- <input type="hidden" name="_method" value="DELETE"> -->
+                                                       <button type="submit" class="btn btn-danger">Supprimer</button>
+                                                  </form>
+                                             </div>
+                                        </div>
+                                   </div>
+                                   <% }); %>
+                         </div>
+                         <% } %>
+          </div>
+
+          <%- include('../marketplace/partials/footer.ejs') %>

@@ -1,0 +1,297 @@
+<%- include('./partials/head.ejs') %>
+     <style>
+          body {
+               font-family: Arial, sans-serif;
+               display: flex;
+               justify-content: center;
+               align-items: center;
+               height: 100vh;
+               margin: 0;
+               background-color: #4CAF50;
+               background-image: url('https://res.cloudinary.com/dxg2nsnkj/image/upload/v1725668573/Untitled_design_6_rcn46g.png');
+          }
+
+          .onboarding-container {
+               width: 100%;
+               max-width: 600px;
+               padding: 20px;
+               border: 1px solid #ddd;
+               border-radius: 8px;
+               background: #fff;
+          }
+
+          .form-step {
+               display: none;
+          }
+
+          .form-step label {
+               display: block;
+               margin-top: 10px;
+          }
+
+          .form-step input,
+          .form-step textarea {
+               width: 100%;
+               padding: 8px;
+               margin-top: 5px;
+               border: 1px solid #ccc;
+               border-radius: 4px;
+          }
+
+          .form-buttons {
+               margin-top: 20px;
+               text-align: right;
+          }
+
+          .form-buttons button {
+               padding: 10px 20px;
+               border: none;
+               border-radius: 4px;
+               cursor: pointer;
+          }
+
+          /* Card-like radio button styling */
+          .card-container {
+               display: flex;
+               justify-content: space-around;
+               gap: 20px;
+               margin-top: 20px;
+          }
+
+          .card-option {
+               position: relative;
+               cursor: pointer;
+               width: 100%;
+               max-width: 200px;
+               padding: 20px;
+               border: 2px solid #ddd;
+               border-radius: 10px;
+               text-align: center;
+               transition: border-color 0.3s, box-shadow 0.3s;
+               background-color: #fff;
+          }
+
+          .card-option:hover {
+               border-color: #4caf50;
+               box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+          }
+
+          .card-input {
+               display: none;
+          }
+
+          .card-content img {
+               width: 50px;
+               height: 50px;
+               margin-bottom: 10px;
+          }
+
+          .card-content h3 {
+               margin: 10px 0;
+               font-size: 18px;
+               color: #333;
+          }
+
+          .card-content p {
+               font-size: 14px;
+               color: #666;
+          }
+
+          /* Selected card styling */
+          .card-input:checked+.card-content {
+               border: 2px solid #4caf50;
+               box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
+               background-color: #f9f9f9;
+          }
+
+          /* Slider styling */
+          .slider-container {
+               margin-top: 20px;
+          }
+
+          .slider {
+               width: 100%;
+          }
+
+          .social-icons {
+               display: flex;
+               gap: 10px;
+               margin-top: 10px;
+          }
+
+          .social-icons input {
+               width: calc(100% - 40px);
+               padding: 5px;
+               border: 1px solid #ccc;
+               border-radius: 4px;
+          }
+
+          .social-icons img {
+               width: 30px;
+               height: 30px;
+          }
+     </style>
+
+     <div class="onboarding-container">
+          <form id="onboarding-form" method="post" action="/onboarding">
+               <!-- Step 1: Location and Bio -->
+               <div class="form-step" id="step-1">
+                    <h2>Étape 1: Localisation et Bio</h2>
+                    <label for="location">Localisation:</label>
+                    <input type="text" id="location" name="location" class="form-control" required>
+                    <label for="bio">Bio:</label>
+                    <textarea class="form-control" id="bio" name="bio" rows="4" required></textarea>
+               </div>
+
+               <!-- Step 2: Specializations -->
+               <div class="form-step" id="step-2">
+                    <h2>Étape 2: Spécialisations</h2>
+                    <div class="card-container">
+                         <label class="card-option">
+                              <input type="radio" name="specialization" value="Fitness" class="card-input">
+                              <div class="card-content">
+                                   <img src="https://via.placeholder.com/50" alt="Fitness">
+                                   <h3>Fitness</h3>
+                              </div>
+                         </label>
+                         <label class="card-option">
+                              <input type="radio" name="specialization" value="Nutrition" class="card-input">
+                              <div class="card-content">
+                                   <img src="https://via.placeholder.com/50" alt="Nutrition">
+                                   <h3>Nutrition</h3>
+                              </div>
+                         </label>
+                         <label class="card-option">
+                              <input type="radio" name="specialization" value="Comportement" class="card-input">
+                              <div class="card-content">
+                                   <img src="https://via.placeholder.com/50" alt="Comportement">
+                                   <h3>Comportement</h3>
+                              </div>
+                         </label>
+                    </div>
+               </div>
+
+               <!-- Step 3: Training Methods -->
+               <div class="form-step" id="step-3">
+                    <h2>Étape 3: Méthodes d'entraînement</h2>
+                    <div class="card-container">
+                         <label class="card-option">
+                              <input type="radio" name="trainingMethods" value="Méthode Positive" class="card-input">
+                              <div class="card-content">
+                                   <img src="https://via.placeholder.com/50" alt="Méthode Positive">
+                                   <h3>Méthode Positive</h3>
+                              </div>
+                         </label>
+                         <label class="card-option">
+                              <input type="radio" name="trainingMethods" value="Méthode Traditionnelle" class="card-input">
+                              <div class="card-content">
+                                   <img src="https://via.placeholder.com/50" alt="Méthode Traditionnelle">
+                                   <h3>Méthode Traditionnelle</h3>
+                              </div>
+                         </label>
+                    </div>
+               </div>
+
+               <!-- Step 4: Training Programs -->
+               <div class="form-step" id="step-4">
+                    <h2>Étape 4: Programmes d'entraînement</h2>
+                    <div class="card-container">
+                         <label class="card-option">
+                              <input type="radio" name="trainingPrograms" value="Programme A" class="card-input">
+                              <div class="card-content">
+                                   <img src="https://via.placeholder.com/50" alt="Programme A">
+                                   <h3>Programme A</h3>
+                              </div>
+                         </label>
+                         <label class="card-option">
+                              <input type="radio" name="trainingPrograms" value="Programme B" class="card-input">
+                              <div class="card-content">
+                                   <img src="https://via.placeholder.com/50" alt="Programme B">
+                                   <h3>Programme B</h3>
+                              </div>
+                         </label>
+                    </div>
+               </div>
+
+               <!-- Step 5: Pricing Structure with Range Slider -->
+               <div class="form-step" id="step-5">
+                    <h2>Étape 5: Structure des Prix</h2>
+                    <div class="slider-container">
+                         <label for="pricing">Structure des prix (de):</label>
+                         <input type="range" id="pricingMin" name="pricingMin" class="slider" min="0" max="500" step="10">
+                         <span id="pricingMinValue">0€</span>
+                         <label for="pricing">à:</label>
+                         <input type="range" id="pricingMax" name="pricingMax" class="slider" min="100" max="1000" step="10">
+                         <span id="pricingMaxValue">1000€</span>
+                    </div>
+               </div>
+
+               <!-- Step 6: Social Media Links with Icons -->
+               <div class="form-step" id="step-6">
+                    <h2>Étape 6: Liens des Réseaux Sociaux</h2>
+                    <div class="social-icons">
+                         <img src="https://via.placeholder.com/30/Facebook" alt="Facebook">
+                         <input type="text" id="facebook" name="socialMediaLinks[facebook]" placeholder="Lien Facebook">
+                    </div>
+                    <div class="social-icons">
+                         <img src="https://via.placeholder.com/30/Instagram" alt="Instagram">
+                         <input type="text" id="instagram" name="socialMediaLinks[instagram]" placeholder="Lien Instagram">
+                    </div>
+                    <div class="social-icons">
+                         <img src="https://via.placeholder.com/30/Twitter" alt="Twitter">
+                         <input type="text" id="twitter" name="socialMediaLinks[twitter]" placeholder="Lien Twitter">
+                    </div>
+               </div>
+
+               <div class="form-buttons">
+                    <button class="btn btn-secondary" type="button" id="prev-btn" onclick="prevStep()">Précédent</button>
+                    <button class="btn btn-success" type="button" id="next-btn" onclick="nextStep()">Suivant</button>
+                    <button class="btn btn-success" type="submit" id="submit-btn">Soumettre</button>
+               </div>
+          </form>
+     </div>
+
+     <script>
+          // JavaScript to handle progress and range slider updates
+          let currentStep = 0;
+          const steps = document.querySelectorAll('.form-step');
+          const pricingMin = document.getElementById('pricingMin');
+          const pricingMax = document.getElementById('pricingMax');
+          const pricingMinValue = document.getElementById('pricingMinValue');
+          const pricingMaxValue = document.getElementById('pricingMaxValue');
+
+          pricingMin.addEventListener('input', () => {
+               pricingMinValue.textContent = pricingMin.value + '€';
+          });
+
+          pricingMax.addEventListener('input', () => {
+               pricingMaxValue.textContent = pricingMax.value + '€';
+          });
+
+          function showStep(step) {
+               steps.forEach((el, index) => {
+                    el.style.display = index === step ? 'block' : 'none';
+               });
+               document.getElementById('prev-btn').style.display = step === 0 ? 'none' : 'inline-block';
+               document.getElementById('next-btn').style.display = step === steps.length - 1 ? 'none' : 'inline-block';
+               document.getElementById('submit-btn').style.display = step === steps.length - 1 ? 'inline-block' : 'none';
+          }
+
+          function nextStep() {
+               if (currentStep < steps.length - 1) {
+                    currentStep++;
+                    showStep(currentStep);
+               }
+          }
+
+          function prevStep() {
+               if (currentStep > 0) {
+                    currentStep--;
+                    showStep(currentStep);
+               }
+          }
+
+          showStep(currentStep);
+     </script>
+
+     <%- include('../partials/footer.ejs') %>

@@ -1,0 +1,47 @@
+<%- include('./partials/head.ejs') %>
+     <%- include('./partials/nav.ejs') %>
+          <div class="container mt-5">
+               <div class="row">
+                    <div class="col-md-8 offset-md-2">
+                         <h2 class="text-center mb-4">Profil de l'éducateur canin</h2>
+
+                         <!-- Display current profile information -->
+                         <div class="text-center mb-4">
+                              <img src="<%= user.image %>" alt="Photo de profil" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+                         </div>
+
+                         <div class=" p-4">
+                              <h4 class="card-title text-center mb-4">
+                                   <%= user.displayName %>
+                              </h4>
+                              <div class="card-body">
+                                   <p><i class="fas fa-map-marker-alt"></i> <strong>Localisation:</strong>
+                                        <%= user.location || 'Non renseigné' %>
+                                   </p>
+                                   <p><i class="fas fa-calendar-alt"></i> <strong>Années d'expérience:</strong>
+                                        <%= user.experience || 'Non renseigné' %>
+                                   </p>
+                                   <p><i class="fas fa-star"></i> <strong>Spécialisations:</strong>
+                                        <%= user.specialization.length ? user.specialization.join(', ') : ' Non renseigné' %>
+                                   </p>
+                                   <p><i class="fas fa-certificate"></i> <strong>Certifications:</strong>
+                                        <%= user.certifications.length ? user.certifications.join(', ') : ' Non renseigné' %>
+                                   </p>
+                                   <p><i class="fas fa-chalkboard-teacher"></i> <strong>Méthodes d'éducation:</strong>
+                                        <%= user.trainingMethods || 'Non renseigné' %>
+                                   </p>
+                                   <p><i class="fas fa-list"></i> <strong>Programmes d'éducation:</strong>
+                                        <%= user.servicesOffered.programs.length ? user.servicesOffered.programs.join(', ') : ' Non renseigné' %>
+                                   </p>
+                                   <p><i class="fas fa-tags"></i> <strong>Tarifs:</strong>
+                                        <%= user.servicesOffered.pricing || 'Non renseigné' %>
+                                   </p>
+                                   <p><i class="fas fa-clock"></i> <strong>Disponibilité:</strong>
+                                        <%= user.servicesOffered.availability || 'Non renseigné' %>
+                                   </p>
+                              </div>
+                         </div>
+                    </div>
+               </div>
+          </div>
+          <%- include('../partials/footer.ejs') %>
