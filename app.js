@@ -7,6 +7,7 @@ const MongoStore = require('connect-mongo');
 const methodOverride = require('method-override');
 const bodyParser = require('body-parser')
 const flash = require('connect-flash')
+const consultationRoutes = require('./routes/consultationRoutes');
 
 require('./config/passport')
 require('dotenv').config()
@@ -32,6 +33,8 @@ app.use(passport.session());
 // Method-override to support DELETE and PUT methods
 app.use(methodOverride('_method'));
 
+
+
 mongoose.connect(process.env.DATABASE_URI).then(() => {
      app.listen(3000)
      console.log('database connected and listen to port 3000')
@@ -45,22 +48,22 @@ app.use((req, res, next) => {
 });
 
 
-
-
 // const publicRoutes = require('./routes/publicRoutes')
 // app.use(publicRoutes)
 
-const marcheCanineRoutes = require('./routes/marcheCanineRoutes')
-app.use(marcheCanineRoutes)
+// const marcheCanineRoutes = require('./routes/marcheCanineRoutes')
+// app.use(marcheCanineRoutes)
 
-const authRoutes = require('./routes/authRoutes')
-app.use('/auth', authRoutes)
+// const authRoutes = require('./routes/authRoutes')
+// app.use('/auth', authRoutes)
 
-const sellerRoutes = require('./routes/sellerRoutes')
-app.use('/seller', sellerRoutes)
+// const sellerRoutes = require('./routes/sellerRoutes')
+// app.use('/seller', sellerRoutes)
 
-// const adminRoutes = require('./routes/adminRoutes')
-// app.use('/admin', adminRoutes)
+
+// Other app configurations...
+
+app.use(consultationRoutes);
 
 app.use((req, res) => {
      res.render('404', {

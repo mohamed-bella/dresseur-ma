@@ -1,0 +1,27 @@
+<%- include('./partials/head.ejs') %>
+
+     <div class="container mt-5">
+          <h1 class="text-center">Consultation</h1>
+          <% if (message) { %>
+               <div class="alert alert-danger">
+                    <%= message %>
+               </div>
+               <% } %>
+                    <form action="/consultation" method="POST" class="needs-validation" novalidate>
+                         <div class="mb-3">
+                              <label for="whatsappNumber" class="form-label">WhatsApp Number</label>
+                              <input type="text" class="form-control" id="whatsappNumber" name="whatsappNumber" placeholder="Enter your WhatsApp number" required>
+                              <div class="invalid-feedback">WhatsApp number is required.</div>
+                         </div>
+
+                         <div class="mb-3">
+                              <label for="problemDescription" class="form-label">Describe Your Problem</label>
+                              <textarea class="form-control" id="problemDescription" name="problemDescription" rows="5" placeholder="Explain your problem" required></textarea>
+                              <div class="invalid-feedback">Problem description is required.</div>
+                         </div>
+
+                         <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+     </div>
+
+     <%- include('./partials/footer.ejs') %>

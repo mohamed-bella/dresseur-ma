@@ -1,0 +1,37 @@
+<%- include('./partials/head.ejs') %>
+
+     <div class="container mt-5">
+          <h1 class="text-center">Consultations Admin Dashboard</h1>
+
+          <% if (consultations.length> 0) { %>
+               <table class="table table-striped">
+                    <thead>
+                         <tr>
+                              <th>WhatsApp Number</th>
+                              <th>Problem Description</th>
+                              <th>Date Submitted</th>
+                         </tr>
+                    </thead>
+                    <tbody>
+                         <% consultations.forEach(function(consultation) { %>
+                              <tr>
+                                   <td>
+                                        <%= consultation.whatsappNumber %>
+                                   </td>
+                                   <td>
+                                        <%= consultation.problemDescription %>
+                                   </td>
+                                   <td>
+                                        <%= consultation.dateSubmitted.toLocaleString() %>
+                                   </td>
+                              </tr>
+                              <% }); %>
+                    </tbody>
+               </table>
+               <% } else { %>
+                    <p>No consultations found.</p>
+                    <% } %>
+
+     </div>
+
+     <%- include('./partials/footer.ejs') %>

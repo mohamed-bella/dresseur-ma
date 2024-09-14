@@ -1,191 +1,191 @@
 <%- include('partials/head.ejs') %>
      <%- include('partials/navbar.ejs') %>
-          <!-- <%- include('partials/filter.ejs') %> -->
+          <%- include('partials/filter.ejs') %>
 
-          <div class="container mt-5">
+               <div class="container mt-5">
 
-               <h1 class="text-center my-4">Bienvenue à la Marche Canine</h1>
+                    <h1 class="text-center my-4">Bienvenue à la Marche Canine</h1>
 
-               <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-center">
-                         <% if (currentPage> 1) { %>
-                              <!-- Previous button -->
-                              <li class="page-item">
-                                   <a class="page-link" href="/?page=<%= currentPage - 1 %>">&laquo;</a>
-                              </li>
-                              <% } %>
+                    <nav aria-label="Page navigation example">
+                         <ul class="pagination justify-content-center">
+                              <% if (currentPage> 1) { %>
+                                   <!-- Previous button -->
+                                   <li class="page-item">
+                                        <a class="page-link" href="/?page=<%= currentPage - 1 %>">&laquo;</a>
+                                   </li>
+                                   <% } %>
 
-                                   <% for (let i=1; i <=totalPages; i++) { %>
-                                        <% if (i===1 || i===totalPages || (i>= currentPage - 2 && i <= currentPage + 2)) { %>
-                                                  <!-- Show the first page, last page, and pages around the current page -->
-                                                  <li class="page-item <%= currentPage === i ? 'active' : '' %>">
-                                                       <a class="page-link" href="/?page=<%= i %>">
-                                                            <%= i %>
-                                                       </a>
-                                                  </li>
-                                                  <% } else if (i===currentPage - 3 || i===currentPage + 3) { %>
-                                                       <!-- Add dots between the ranges -->
-                                                       <li class="page-item disabled">
-                                                            <a class="page-link">...</a>
+                                        <% for (let i=1; i <=totalPages; i++) { %>
+                                             <% if (i===1 || i===totalPages || (i>= currentPage - 2 && i <= currentPage + 2)) { %>
+                                                       <!-- Show the first page, last page, and pages around the current page -->
+                                                       <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                                                            <a class="page-link" href="/?page=<%= i %>">
+                                                                 <%= i %>
+                                                            </a>
                                                        </li>
+                                                       <% } else if (i===currentPage - 3 || i===currentPage + 3) { %>
+                                                            <!-- Add dots between the ranges -->
+                                                            <li class="page-item disabled">
+                                                                 <a class="page-link">...</a>
+                                                            </li>
+                                                            <% } %>
+                                                                 <% } %>
+
+                                                                      <% if (currentPage < totalPages) { %>
+                                                                           <!-- Next button -->
+                                                                           <li class="page-item">
+                                                                                <a class="page-link" href="/?page=<%= currentPage + 1 %>">&raquo;</a>
+                                                                           </li>
+                                                                           <% } %>
+                         </ul>
+                    </nav>
+                    <div class="card-container">
+                         <div class="row">
+                              <% if (typeof announcements !=undefined) { %>
+                                   <% if (announcements && announcements.length> 0) { %>
+                                        <!-- Existing Announcements Loop -->
+                                        <% announcements.forEach(function(announcement) { %>
+                                             <div class="col-md-4 mb-4">
+                                                  <div class="card mb-3 dog-card" onclick="window.location.href= '/announcements/<%= announcement._id %>'">
+                                                       <div class="row g-0">
+                                                            <!-- Image Section -->
+                                                            <div class="col-4 col-md-12 img-container">
+                                                                 <img src="<%= announcement.images[0] || 'https://via.placeholder.com/150' %>" class="img-fluid card-img-left" alt="Image annonce">
+                                                            </div>
+                                                            <!-- Card Body Section -->
+                                                            <div class="col-8 col-md-12">
+                                                                 <div class="card-body">
+                                                                      <!-- Title -->
+                                                                      <h5 class="card-title mb-2">
+                                                                           <%= announcement.title %>
+                                                                      </h5>
+                                                                      <!-- Location and Price with Icons -->
+                                                                      <p class="card-text mb-1">
+                                                                           <i class="bi bi-geo-alt-fill"></i> <!-- Bootstrap icon for location -->
+                                                                           <strong>Lieu: </strong>
+                                                                           <%= announcement.location %>
+                                                                      </p>
+                                                                      <p class="card-text mb-2 dog-price">
+                                                                           <!-- <i class="bi bi-currency-dollar"></i> Bootstrap icon for price -->
+                                                                           <!-- <strong>Prix: </strong> -->
+                                                                           <%= announcement.price %> MAD
+                                                                      </p>
+                                                                      <!-- Description (Optional for compact layout) -->
+                                                                      <p class="card-text d-none d-md-block">
+                                                                           <%= announcement.description %>
+                                                                      </p>
+                                                                      <!-- Details Button -->
+                                                                      <a href="/announcements/<%= announcement._id %>" class="btn btn-primary btn-sm">Voir les détails</a>
+                                                                 </div>
+                                                            </div>
+                                                       </div>
+                                                  </div>
+                                             </div>
+                                             <% }); %>
+                                                  <% } else { %>
+                                                       <p class="text-center">Aucune annonce disponible pour le moment.</p>
                                                        <% } %>
                                                             <% } %>
+                         </div>
 
-                                                                 <% if (currentPage < totalPages) { %>
-                                                                      <!-- Next button -->
-                                                                      <li class="page-item">
-                                                                           <a class="page-link" href="/?page=<%= currentPage + 1 %>">&raquo;</a>
-                                                                      </li>
-                                                                      <% } %>
-                    </ul>
-               </nav>
-               <div class="card-container">
-                    <div class="row">
-                         <% if (typeof announcements !=undefined) { %>
-                              <% if (announcements && announcements.length> 0) { %>
-                                   <!-- Existing Announcements Loop -->
-                                   <% announcements.forEach(function(announcement) { %>
-                                        <div class="col-md-4 mb-4">
-                                             <div class="card mb-3 dog-card" onclick="window.location.href= '/announcements/<%= announcement._id %>'">
-                                                  <div class="row g-0">
-                                                       <!-- Image Section -->
-                                                       <div class="col-4 col-md-12 img-container">
-                                                            <img src="<%= announcement.images[0] || 'https://via.placeholder.com/150' %>" class="img-fluid card-img-left" alt="Image annonce">
-                                                       </div>
-                                                       <!-- Card Body Section -->
-                                                       <div class="col-8 col-md-12">
-                                                            <div class="card-body">
-                                                                 <!-- Title -->
-                                                                 <h5 class="card-title mb-2">
-                                                                      <%= announcement.title %>
-                                                                 </h5>
-                                                                 <!-- Location and Price with Icons -->
-                                                                 <p class="card-text mb-1">
-                                                                      <i class="bi bi-geo-alt-fill"></i> <!-- Bootstrap icon for location -->
-                                                                      <strong>Lieu: </strong>
-                                                                      <%= announcement.location %>
-                                                                 </p>
-                                                                 <p class="card-text mb-2 dog-price">
-                                                                      <!-- <i class="bi bi-currency-dollar"></i> Bootstrap icon for price -->
-                                                                      <!-- <strong>Prix: </strong> -->
-                                                                      <%= announcement.price %> MAD
-                                                                 </p>
-                                                                 <!-- Description (Optional for compact layout) -->
-                                                                 <p class="card-text d-none d-md-block">
-                                                                      <%= announcement.description %>
-                                                                 </p>
-                                                                 <!-- Details Button -->
-                                                                 <a href="/announcements/<%= announcement._id %>" class="btn btn-primary btn-sm">Voir les détails</a>
+                         <!-- New Section for Scraped Data -->
+                         <div class="container mt-5">
+
+                              <div class="row">
+                                   <% if (scrapedData && scrapedData.length> 0) { %>
+                                        <!-- Loop through scraped data -->
+                                        <% scrapedData.forEach(function(data) { %>
+                                             <div class="col-md-4 mb-4">
+                                                  <div class="card mb-3 dog-card" onclick="window.location.href= '/chien<%= data.link %>'">
+                                                       <div class="row g-0">
+                                                            <!-- Image Section -->
+                                                            <div class="col-4 col-lg-12 col-md-4 img-container">
+                                                                 <img src="https://www.animalsouk.ma/<%= data.image || 'https://via.placeholder.com/150' %>" class="img-fluid card-img-left" alt="Image annonce">
+                                                            </div>
+                                                            <!-- Card Body Section -->
+                                                            <div class="col-8 col-md-8">
+                                                                 <div class="card-body">
+                                                                      <!-- Title -->
+                                                                      <h5 class="card-title mb-2">
+                                                                           <%= data.title %>
+                                                                      </h5>
+                                                                      <!-- Location and Price with Icons -->
+                                                                      <p class="card-text mb-1">
+                                                                           <i class="bi bi-geo-alt-fill"></i> <!-- Bootstrap icon for location -->
+                                                                           <strong>Lieu: </strong>
+                                                                           <%= data.description %> <!-- Assuming description contains location -->
+                                                                      </p>
+                                                                      <p class="card-text mb-2 dog-price">
+                                                                           <!-- <i class="bi bi-currency-dollar"></i> Bootstrap icon for price -->
+                                                                           <!-- <strong>Prix: </strong> -->
+                                                                           <%= data.price %>
+                                                                      </p>
+                                                                      <!-- Description (Optional for compact layout) -->
+                                                                      <p class="card-text d-none d-md-block">
+                                                                           <!-- <%= data.description %> -->
+                                                                      </p>
+                                                                      <!-- Details Button -->
+                                                                      <a target="_blank" href="/chien<%= data.link %>" class="btn btn-primary btn-sm">Voir les détails</a>
+                                                                 </div>
                                                             </div>
                                                        </div>
                                                   </div>
                                              </div>
-                                        </div>
-                                        <% }); %>
-                                             <% } else { %>
-                                                  <p class="text-center">Aucune annonce disponible pour le moment.</p>
-                                                  <% } %>
+                                             <% }); %>
+                                                  <% } else { %>
+                                                       <p class="text-center">Aucune donnée scrapée disponible pour le moment.</p>
                                                        <% } %>
-                    </div>
-
-                    <!-- New Section for Scraped Data -->
-                    <div class="container mt-5">
-
-                         <div class="row">
-                              <% if (scrapedData && scrapedData.length> 0) { %>
-                                   <!-- Loop through scraped data -->
-                                   <% scrapedData.forEach(function(data) { %>
-                                        <div class="col-md-4 mb-4">
-                                             <div class="card mb-3 dog-card" onclick="window.location.href= '/chien<%= data.link %>'">
-                                                  <div class="row g-0">
-                                                       <!-- Image Section -->
-                                                       <div class="col-4 col-lg-12 col-md-4 img-container">
-                                                            <img src="https://www.animalsouk.ma/<%= data.image || 'https://via.placeholder.com/150' %>" class="img-fluid card-img-left" alt="Image annonce">
-                                                       </div>
-                                                       <!-- Card Body Section -->
-                                                       <div class="col-8 col-md-8">
-                                                            <div class="card-body">
-                                                                 <!-- Title -->
-                                                                 <h5 class="card-title mb-2">
-                                                                      <%= data.title %>
-                                                                 </h5>
-                                                                 <!-- Location and Price with Icons -->
-                                                                 <p class="card-text mb-1">
-                                                                      <i class="bi bi-geo-alt-fill"></i> <!-- Bootstrap icon for location -->
-                                                                      <strong>Lieu: </strong>
-                                                                      <%= data.description %> <!-- Assuming description contains location -->
-                                                                 </p>
-                                                                 <p class="card-text mb-2 dog-price">
-                                                                      <!-- <i class="bi bi-currency-dollar"></i> Bootstrap icon for price -->
-                                                                      <!-- <strong>Prix: </strong> -->
-                                                                      <%= data.price %>
-                                                                 </p>
-                                                                 <!-- Description (Optional for compact layout) -->
-                                                                 <p class="card-text d-none d-md-block">
-                                                                      <!-- <%= data.description %> -->
-                                                                 </p>
-                                                                 <!-- Details Button -->
-                                                                 <a target="_blank" href="/chien<%= data.link %>" class="btn btn-primary btn-sm">Voir les détails</a>
-                                                            </div>
-                                                       </div>
-                                                  </div>
-                                             </div>
-                                        </div>
-                                        <% }); %>
-                                             <% } else { %>
-                                                  <p class="text-center">Aucune donnée scrapée disponible pour le moment.</p>
-                                                  <% } %>
+                              </div>
                          </div>
                     </div>
-               </div>
-               <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-center">
-                         <% if (currentPage> 1) { %>
-                              <!-- Previous button -->
-                              <li class="page-item">
-                                   <a class="page-link" href="/?page=<%= currentPage - 1 %>">&laquo;</a>
-                              </li>
-                              <% } %>
+                    <nav aria-label="Page navigation example">
+                         <ul class="pagination justify-content-center">
+                              <% if (currentPage> 1) { %>
+                                   <!-- Previous button -->
+                                   <li class="page-item">
+                                        <a class="page-link" href="/?page=<%= currentPage - 1 %>">&laquo;</a>
+                                   </li>
+                                   <% } %>
 
-                                   <% for (let i=1; i <=totalPages; i++) { %>
-                                        <% if (i===1 || i===totalPages || (i>= currentPage - 2 && i <= currentPage + 2)) { %>
-                                                  <!-- Show the first page, last page, and pages around the current page -->
-                                                  <li class="page-item <%= currentPage === i ? 'active' : '' %>">
-                                                       <a class="page-link" href="/?page=<%= i %>">
-                                                            <%= i %>
-                                                       </a>
-                                                  </li>
-                                                  <% } else if (i===currentPage - 3 || i===currentPage + 3) { %>
-                                                       <!-- Add dots between the ranges -->
-                                                       <li class="page-item disabled">
-                                                            <a class="page-link">...</a>
+                                        <% for (let i=1; i <=totalPages; i++) { %>
+                                             <% if (i===1 || i===totalPages || (i>= currentPage - 2 && i <= currentPage + 2)) { %>
+                                                       <!-- Show the first page, last page, and pages around the current page -->
+                                                       <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                                                            <a class="page-link" href="/?page=<%= i %>">
+                                                                 <%= i %>
+                                                            </a>
                                                        </li>
-                                                       <% } %>
+                                                       <% } else if (i===currentPage - 3 || i===currentPage + 3) { %>
+                                                            <!-- Add dots between the ranges -->
+                                                            <li class="page-item disabled">
+                                                                 <a class="page-link">...</a>
+                                                            </li>
                                                             <% } %>
+                                                                 <% } %>
 
-                                                                 <% if (currentPage < totalPages) { %>
-                                                                      <!-- Next button -->
-                                                                      <li class="page-item">
-                                                                           <a class="page-link" href="/?page=<%= currentPage + 1 %>">&raquo;</a>
-                                                                      </li>
-                                                                      <% } %>
-                    </ul>
-               </nav>
-          </div>
-          <script>
-               document.addEventListener('DOMContentLoaded', function () {
-                    // Find all img elements with the class 'img-fluid card-img-left'
-                    const images = document.querySelectorAll('.img-fluid.card-img-left');
+                                                                      <% if (currentPage < totalPages) { %>
+                                                                           <!-- Next button -->
+                                                                           <li class="page-item">
+                                                                                <a class="page-link" href="/?page=<%= currentPage + 1 %>">&raquo;</a>
+                                                                           </li>
+                                                                           <% } %>
+                         </ul>
+                    </nav>
+               </div>
+               <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                         // Find all img elements with the class 'img-fluid card-img-left'
+                         const images = document.querySelectorAll('.img-fluid.card-img-left');
 
-                    // Iterate over each image element
-                    images.forEach(function (image) {
-                         // Check if the image src matches the specific URL you want to remove
-                         if (image.src === 'https://www.animalsouk.ma//img/marketplace.webp?v1') {
-                              // Remove the parent element (which is the .img-container div)
-                              image.closest('.dog-card').remove();
-                         }
+                         // Iterate over each image element
+                         images.forEach(function (image) {
+                              // Check if the image src matches the specific URL you want to remove
+                              if (image.src === 'https://www.animalsouk.ma//img/marketplace.webp?v1') {
+                                   // Remove the parent element (which is the .img-container div)
+                                   image.closest('.dog-card').remove();
+                              }
+                         });
                     });
-               });
-          </script>
+               </script>
 
-          <%- include('partials/footer.ejs') %>
+               <%- include('partials/footer.ejs') %>

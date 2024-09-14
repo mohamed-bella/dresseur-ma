@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const upload = require('../config/multer'); // Import Multer
 const { marcheCanineController, ensureSellerAuthenticated } = require('../controllers/marcheCanineController');
-
+const filterController = require('../controllers/filterController')
 // GET: Retrieve all announcements (Home page)
 router.get('/', marcheCanineController.getAnnouncements);
 
@@ -27,7 +27,7 @@ router.put('/announcements/:id', ensureSellerAuthenticated, marcheCanineControll
 router.post('/announcements/:id/', ensureSellerAuthenticated, marcheCanineController.deleteAnnouncement);
 
 // GET: Filter announcements based on criteria (e.g., location, price)
-router.get('/announcements/filter', marcheCanineController.filterAnnouncements);
+router.get('/announcements/filter', filterController.filterAnnouncements);
 
 // Dynamic route for scraping individual dog pages
 router.get('/chien/:slug', marcheCanineController.getDogDetails);

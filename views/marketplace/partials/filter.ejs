@@ -1,26 +1,18 @@
-<div class="container mt-4 card p-3">
-     <form action="/announcements/filter" method="GET" class="row g-3">
-          <div class="col-md-12">
-               <label for="location" class="form-label">Lieu</label>
-               <input type="text" class="form-control" id="location" name="location" placeholder="Ex: Casablanca">
-          </div>
+<form method="GET" action="/announcements/filter">
+     <!-- Filter by Title (Name) -->
+     <label for="title">Nom:</label>
+     <input type="text" id="title" name="title" placeholder="Nom de l'annonce">
 
-          <div class="col-md-12">
-               <label for="price" class="form-label">Prix maximum</label>
-               <input type="number" class="form-control" id="price" name="price" placeholder="Ex: 5000 MAD">
-          </div>
+     <!-- Filter by Price Range -->
+     <label for="minPrice">Prix Min:</label>
+     <input type="number" id="minPrice" name="minPrice" placeholder="Prix minimum">
 
-          <div class="col-md-12">
-               <label for="type" class="form-label">Type</label>
-               <select class="form-select" id="type" name="type">
-                    <option value="">Sélectionnez le type</option>
-                    <option value="vente">Vente</option>
-                    <option value="adoption">Adoption</option>
-               </select>
-          </div>
+     <label for="maxPrice">Prix Max:</label>
+     <input type="number" id="maxPrice" name="maxPrice" placeholder="Prix maximum">
 
-          <div class="col-md-12 d-flex justify-content-end">
-               <button type="submit" class="btn btn-primary">Filtrer</button>
-          </div>
-     </form>
-</div>
+     <!-- Filter by Location -->
+     <label for="location">Lieu:</label>
+     <input type="text" id="location" name="location" placeholder="Lieu">
+
+     <button type="submit" class="btn btn-primary">Filtrer</button>
+</form>
