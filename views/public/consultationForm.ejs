@@ -1,7 +1,31 @@
 <%- include('./partials/head.ejs') %>
+     <style>
+          @import url('https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400..800&display=swap');
 
+          body {
+               direction: rtl;
+               text-align: justify;
+               font-family: "Baloo Bhaijaan 2", Arial, Helvetica, sans-serif;
+          }
+
+          form {
+               margin: auto;
+               max-width: 700px;
+               margin-bottom: 30px;
+          }
+
+          form input,
+          form textarea {
+               border: 2px solid #ffbd59 !important
+          }
+     </style>
      <div class="container mt-5">
-          <h1 class="text-center">Consultation</h1>
+          <!-- Ndressilik Logo -->
+          <div class="text-center mb-4">
+               <img src="https://res.cloudinary.com/dxg2nsnkj/image/upload/v1726159468/dogs/hsdy0nueyyjulhocok6w.png" alt="Ndressilik Logo" style="max-width: 150px;">
+          </div>
+
+          <h1 class="text-center mb-4">استشارة</h1>
           <% if (message) { %>
                <div class="alert alert-danger">
                     <%= message %>
@@ -9,18 +33,18 @@
                <% } %>
                     <form action="/consultation" method="POST" class="needs-validation" novalidate>
                          <div class="mb-3">
-                              <label for="whatsappNumber" class="form-label">WhatsApp Number</label>
-                              <input type="text" class="form-control" id="whatsappNumber" name="whatsappNumber" placeholder="Enter your WhatsApp number" required>
-                              <div class="invalid-feedback">WhatsApp number is required.</div>
+                              <label for="whatsappNumber" class="form-label">رقم الواتساب</label>
+                              <input type="number" class="form-control" id="whatsappNumber" name="whatsappNumber" placeholder="أدخل رقم الواتساب الخاص بك" required>
+                              <div class="invalid-feedback">رقم الواتساب مطلوب.</div>
                          </div>
 
                          <div class="mb-3">
-                              <label for="problemDescription" class="form-label">Describe Your Problem</label>
-                              <textarea class="form-control" id="problemDescription" name="problemDescription" rows="5" placeholder="Explain your problem" required></textarea>
-                              <div class="invalid-feedback">Problem description is required.</div>
+                              <label for="problemDescription" class="form-label">وصف مشكلتك</label>
+                              <textarea class="form-control" id="problemDescription" name="problemDescription" rows="5" placeholder="اشرح مشكلتك" required></textarea>
+                              <div class="invalid-feedback">وصف المشكلة مطلوب.</div>
                          </div>
 
-                         <button type="submit" class="btn btn-primary">Submit</button>
+                         <button type="submit" class="btn btn-dark btn-lg btn-block">إرسال</button>
                     </form>
      </div>
 
