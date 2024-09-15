@@ -1,0 +1,85 @@
+<%- include('partials/head.ejs') %>
+     <style>
+          body {
+               background-color: white;
+          }
+     </style>
+     <%- include('partials/navbar.ejs') %>
+          <%- include('partials/hero.ejs') %>
+               <hr>
+
+               <div class="container mt-5">
+                    <h2 class="text-center mb-5" style="font-size: 2.5rem; font-weight: bold;">Nos Services</h2>
+
+                    <div class="row">
+                         <!-- Service 1: Vendre des Chiens -->
+                         <div class="col-md-4 mb-4">
+                              <a href="/announcements" class="card-link" style="text-decoration: none;">
+                                   <div class="card text-center" style="border: 1px solid #ddd; background-color: #ffefd5; border-radius: 8px;">
+                                        <div class="card-body">
+                                             <i class="fas fa-dog fa-3x mb-3" style="color: #ff6b6b;"></i>
+                                             <h5 class="card-title" style="color: #333; text-decoration: underline;">🐶 Vendre des Chiens</h5>
+                                             <p class="card-text" style="color: #555;">Publiez vos annonces de chiens à vendre ou à adopter.</p>
+                                        </div>
+                                   </div>
+                              </a>
+                         </div>
+
+                         <!-- Service 2: Consultation -->
+                         <div class="col-md-4 mb-4">
+                              <a href="/consultation" class="card-link" style="text-decoration: none;">
+                                   <div class="card text-center" style="border: 1px solid #ddd; background-color: #e6f7ff; border-radius: 8px;">
+                                        <div class="card-body">
+                                             <i class="fas fa-comments fa-3x mb-3" style="color: #3498db;"></i>
+                                             <h5 class="card-title" style="color: #333; text-decoration: underline;">💬 Consultation</h5>
+                                             <p class="card-text" style="color: #555;">Obtenez des conseils sur l'élevage et le soin des chiens.</p>
+                                        </div>
+                                   </div>
+                              </a>
+                         </div>
+
+                         <!-- Service 3: Nos Articles -->
+                         <div class="col-md-4 mb-4">
+                              <a href="/articles" class="card-link" style="text-decoration: none;">
+                                   <div class="card text-center" style="border: 1px solid #ddd; background-color: #f0fff0; border-radius: 8px;">
+                                        <div class="card-body">
+                                             <i class="fas fa-newspaper fa-3x mb-3" style="color: #2ecc71;"></i>
+                                             <h5 class="card-title" style="color: #333; text-decoration: underline;">📄 Nos Articles</h5>
+                                             <p class="card-text" style="color: #555;">Découvrez des articles sur l'élevage, la santé, et les races de chiens.</p>
+                                        </div>
+                                   </div>
+                              </a>
+                         </div>
+                    </div>
+               </div>
+
+               <!-- About Us Section with SEO Keywords -->
+               <div class="container mt-5 mb-5">
+                    <h2 class="text-center mb-4" style="font-size: 2.5rem; font-weight: bold;">À propos de Ndressilik</h2>
+                    <p style="font-size: 1.1rem; color: #555;">
+                         Chez <strong>Ndressilik</strong>, nous sommes passionnés par tout ce qui concerne les chiens. Basé au Maroc, notre plateforme est dédiée à
+                         offrir les meilleures solutions pour ceux qui cherchent à <strong>vendre des chiens</strong>, <strong>adopter un chien</strong>, ou obtenir des
+                         <strong>conseils sur l'élevage de chiens</strong>. Nous croyons que chaque chien mérite un foyer aimant, et notre mission est de
+                         connecter les vendeurs de chiens et les acheteurs à travers le <strong>Maroc</strong>.
+                    </p>
+
+                    <p style="font-size: 1.1rem; color: #555;">
+                         Avec notre service de consultation, vous pouvez obtenir des <strong>conseils professionnels sur les soins et l'élevage des chiens</strong>. Que
+                         vous soyez un éleveur professionnel ou un particulier cherchant à offrir un nouveau foyer à un chien, <strong>Ndressilik</strong> vous
+                         accompagne dans chaque étape.
+                    </p>
+
+                    <p style="font-size: 1.1rem; color: #555;">
+                         Découvrez également notre vaste collection d'<strong>articles sur les races de chiens</strong>, les <strong>soins</strong>, et les <strong>astuces d'entraînement</strong>. Nous vous fournissons toutes les informations nécessaires pour garantir le bien-être de votre compagnon à quatre pattes.
+                    </p>
+
+                    <h3 class="text-center mt-4" style="font-size: 1.8rem;">Pourquoi choisir Ndressilik ?</h3>
+                    <ul class="list-unstyled" style="font-size: 1.1rem; color: #555;">
+                         <li><i class="fas fa-check-circle me-2" style="color: #3498db;"></i> Une plateforme dédiée aux chiens au <strong>Maroc</strong></li>
+                         <li><i class="fas fa-check-circle me-2" style="color: #3498db;"></i> Un service de consultation personnalisé</li>
+                         <li><i class="fas fa-check-circle me-2" style="color: #3498db;"></i> Des annonces pour <strong>vendre et adopter des chiens</strong></li>
+                         <li><i class="fas fa-check-circle me-2" style="color: #3498db;"></i> Des conseils sur les <strong>races de chiens</strong> et l'<strong>élevage</strong></li>
+                    </ul>
+               </div>
+
+               <%- include('partials/footer.ejs') %>

@@ -1,185 +1,207 @@
-const User = require('../models/user')
-const Review = require('../models/review')
+const User = require('../models/user');
+const Seller = require('../models/seller');
+const Article = require('../models/article');
 
+// Admin Dashboard
+exports.dashboard = (req, res) => {
+     res.render('admin/dashboard', { title: 'Admin Dashboard' });
+};
 
+// Get all sellers
+exports.getSellers = async (req, res) => {
+     try {
+          const sellers = await Seller.find();
+          res.render('admin/manageSellers', { sellers, title: 'Gérer les vendeurs' });
+     } catch (err) {
+          console.error(err);
+          res.status(500).render('error', { message: 'Erreur lors de la récupération des vendeurs.' });
+     }
+};
 
+// Get all announcements for a specific seller
+exports.getSellerAnnouncements = async (req, res) => {
+     try {
+          const seller = await Seller.findById(req.params.id);
+          if (!seller) {
+               return res.status(404).render('error', { message: 'Vendeur non trouvé.' });
+          }
+          const announcements = seller.announcements;
+          res.render('admin/manageAnnouncements', { announcements, title: `Annonces de ${seller.displayName}` });
+     } catch (err) {
+          console.error(err);
+          res.status(500).render('error', { message: 'Erreur lors de la récupération des annonces.' });
+     }
+};
 
-exports.getHome = async (req, res) => {
+// Get the form to edit a seller's profile
+exports.getEditSellerForm = async (req, res) => {
+     try {
+          const seller = await Seller.findById(req.params.id);
+          if (!seller) {
+               return res.status(404).render('error', { message: 'Vendeur non trouvé.' });
+          }
+          res.render('admin/editSeller', { seller, title: 'Modifier le vendeur' });
+     } catch (err) {
+          console.error(err);
+          res.status(500).render('error', { message: 'Erreur lors du chargement du formulaire.' });
+     }
+};
 
-     const totalTrainers = await User.countDocuments({ role: 'trainer' });
+// Update seller information
+exports.updateSeller = async (req, res) => {
+     const { displayName, email, phone } = req.body;
+     try {
+          const seller = await Seller.findById(req.params.id);
+          if (!seller) {
+               return res.status(404).render('error', { message: 'Vendeur non trouvé.' });
+          }
+          seller.displayName = displayName || seller.displayName;
+          seller.email = email || seller.email;
+          seller.phone = phone || seller.phone;
 
-     const oneWeekAgo = new Date();
-     oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-     const newUsers = await User.countDocuments({ createdAt: { $gte: oneWeekAgo } });
-     const recentReviews = await Review.find().sort({ createdAt: -1 }).limit(5);
+          await seller.save();
+          res.redirect('/admin/sellers');
+     } catch (err) {
+          console.error(err);
+          res.status(500).render('error', { message: 'Erreur lors de la mise à jour du vendeur.' });
+     }
+};
 
-     const approvedTrainers = await User.countDocuments({ role: 'trainer', status: 'approved' });
-     const pendingTrainers = await User.countDocuments({ role: 'trainer', status: 'Pending' });
-     const pendingTrainersList = await User.find({ role: 'trainer', status: 'Pending' });
+// Delete seller and their announcements
+exports.deleteSeller = async (req, res) => {
+     try {
+          const seller = await Seller.findById(req.params.id);
+          if (!seller) {
+               return res.status(404).render('error', { message: 'Vendeur non trouvé.' });
+          }
+          await seller.remove();
+          res.redirect('/admin/sellers');
+     } catch (err) {
+          console.error(err);
+          res.status(500).render('error', { message: 'Erreur lors de la suppression du vendeur.' });
+     }
+};
 
-     // console.log(recentReviews)
-     res.render('admin/home', {
-          totalTrainers,
-          oneWeekAgo,
-          newUsers,
-          recentReviews,
-          approvedTrainers,
-          pendingTrainers,
-          pendingTrainersList
+// Get All Announcements
+exports.getAnnouncements = async (req, res) => {
+     try {
+          const sellers = await Seller.find();
+          const announcements = sellers.reduce((acc, seller) => [...acc, ...seller.announcements], []);
+          res.render('admin/manageAnnouncements', { announcements, title: 'Manage Announcements' });
+     } catch (error) {
+          console.error(error);
+          res.status(500).send('Server Error');
+     }
+};
 
-     })
+// Approve Announcement
+exports.approveAnnouncement = async (req, res) => {
+     try {
+          const seller = await Seller.findOne({ 'announcements._id': req.params.id });
+          const announcement = seller.announcements.id(req.params.id);
+          announcement.status = 'approved';
+          await seller.save();
+          res.redirect('/admin/announcements');
+     } catch (error) {
+          console.error(error);
+          res.status(500).send('Server Error');
+     }
+};
+// Edit Announv=cement Page 
+exports.getEditAnnouncement = async (req, res) => {
+     try {
+          // Find the seller by the announcement ID
+          const seller = await Seller.findOne({ 'announcements._id': req.params.id });
+          if (!seller) {
+               return res.status(404).render('error', { message: 'Annonce non trouvée.' });
+          }
 
+          // Find the specific announcement within the seller's announcements
+          const announcement = seller.announcements.id(req.params.id);
+
+          // Render the edit announcement page
+          res.render('admin/editAnnouncement', { announcement, title: 'Modifier l\'annonce' });
+     } catch (error) {
+          console.error(error);
+          res.status(500).render('error', { message: 'Erreur lors du chargement de l\'annonce.' });
+     }
 }
-
-exports.getPendingTrainerProfile = async (req, res) => {
+// Edit Announcement
+exports.editAnnouncement = async (req, res) => {
      try {
-          const trainerId = req.params.id;
+          const { breed, description, price, location, images } = req.body;
+          console.log(req.body)
+          const seller = await Seller.findOne({ 'announcements._id': req.params.id });
+          const announcement = seller.announcements.id(req.params.id);
 
-          // Fetch the trainer details from the database
-          const trainer = await User.findById(trainerId);
-
-          if (!trainer) {
-               return res.status(404).send('Trainer not found');
-          }
-
-          // Render the trainer page, passing trainer data
-          res.render('admin/pendingTrainer', { trainer });
-     } catch (error) {
-          console.error(error);
-          res.status(500).send('Server error');
-     }
-}
-
-exports.getDashboardOverview = async (req, res) => {
-     try {
-          const totalUsers = await User.countDocuments();
-          const totalTrainers = await User.countDocuments();
-          const totalReviews = await Review.countDocuments();
-
-          res.render('admin/overview', {
-               totalUsers,
-               totalTrainers,
-               totalReviews
-          });
-     } catch (err) {
-          console.error(err);
-          res.status(500).send('Server Error');
-     }
-};
-
-exports.getStatistics = async (req, res) => {
-     try {
-          const totalUsers = await User.countDocuments();
-          const totalTrainers = await User.countDocuments();
-          const totalReviews = await Review.countDocuments();
-
-          res.render('admin/statistiques', {
-               totalUsers,
-               totalTrainers,
-               totalReviews
-          });
-     } catch (err) {
-          console.error(err);
-          res.status(500).send('Server Error');
-     }
-};
-
-exports.approveTrainer = async (req, res) => {
-     try {
-          const { trainerId } = req.params;
-
-          // Find the trainer by ID and update their status to approved
-          const trainer = await User.findByIdAndUpdate(trainerId, { status: 'Approved' }, { new: true });
-
-          if (!trainer) {
-               return res.status(404).send('Trainer not found');
-          }
-
-          // Redirect or send a response after successful update
-          res.redirect('/admin');
-     } catch (err) {
-          console.error(err);
-          res.status(500).send('Server Error');
-     }
-};
-
-// Fetch all approved trainers and render them in the EJS template
-exports.getApprovedTrainers = async (req, res) => {
-     try {
-          const approvedTrainers = await User.find({ role: 'trainer', status: 'Approved' });
-
-          // Render the EJS template and pass the approved trainers data
-          res.render('admin/approvedTrainers', { approvedTrainers });
+          announcement.breed = breed || announcement.breed;
+          announcement.description = description || announcement.description;
+          announcement.price = price || announcement.price;
+          announcement.location = location || announcement.location;
+          announcement.images = images || announcement.images;
+          console.log(seller)
+          await seller.save();
+          res.redirect('/admin/announcements');
      } catch (error) {
           console.error(error);
           res.status(500).send('Server Error');
      }
 };
 
-
-
-// Controller for deny and delete actions
-exports.updateTrainerStatus = async (req, res) => {
+// Delete Announcement
+exports.deleteAnnouncement = async (req, res) => {
      try {
-          const { trainerId, action } = req.params;
-
-          if (action === 'deny') {
-               // Change trainer status to 'Denied'
-               await User.findByIdAndUpdate(trainerId, { status: 'Denied' });
-          } else if (action === 'delete') {
-               // Delete the trainer from the database
-               await User.findByIdAndDelete(trainerId);
-          }
-
-          // Redirect back to the approved trainers page
-          res.redirect('/admin/trainers/approved');
+          const seller = await Seller.findOne({ 'announcements._id': req.params.id });
+          seller.announcements.pull({ _id: req.params.id });
+          await seller.save();
+          res.redirect('/admin/announcements');
      } catch (error) {
           console.error(error);
           res.status(500).send('Server Error');
      }
 };
 
-
-// Controller to render the Edit Trainer page
-exports.renderEditTrainerPage = async (req, res) => {
+// Get All Articles
+exports.getArticles = async (req, res) => {
      try {
-          const { trainerId } = req.params;
-          const trainer = await User.findById(trainerId);
-
-          if (!trainer) {
-               return res.status(404).send('Trainer not found');
-          }
-
-          // Render the edit page with the trainer data
-          res.render('admin/editTrainer', { trainer });
+          const articles = await Article.find();
+          res.render('admin/articles', { articles, title: 'Manage Articles' });
      } catch (error) {
           console.error(error);
           res.status(500).send('Server Error');
      }
 };
 
-
-exports.updateTrainerInfo = async (req, res) => {
+// Create New Article
+exports.createArticle = async (req, res) => {
      try {
-          const { trainerId } = req.params;
-          const updatedData = req.body;
+          const { title, content } = req.body;
+          const newArticle = new Article({ title, content });
+          await newArticle.save();
+          res.redirect('/admin/articles');
+     } catch (error) {
+          console.error(error);
+          res.status(500).send('Server Error');
+     }
+};
 
-          // Ensure nested objects exist before updating them
-          if (!updatedData.servicesOffered) updatedData.servicesOffered = {};
-          if (!updatedData.contactInfo) updatedData.contactInfo = {};
-          if (!updatedData.additionalInfo) updatedData.additionalInfo = {};
+// Edit Article
+exports.editArticle = async (req, res) => {
+     try {
+          const { title, content } = req.body;
+          await Article.findByIdAndUpdate(req.params.id, { title, content });
+          res.redirect('/admin/articles');
+     } catch (error) {
+          console.error(error);
+          res.status(500).send('Server Error');
+     }
+};
 
-          // Convert comma-separated strings back to arrays for fields like specializations, certifications, etc.
-          updatedData.specialization = updatedData.specialization ? updatedData.specialization.split(',').map(s => s.trim()) : [];
-          updatedData.certifications = updatedData.certifications ? updatedData.certifications.split(',').map(s => s.trim()) : [];
-          updatedData.servicesOffered.programs = updatedData.programs ? updatedData.programs.split(',').map(s => s.trim()) : [];
-          updatedData.contactInfo.socialMediaLinks = updatedData.socialMediaLinks ? updatedData.socialMediaLinks.split(',').map(s => s.trim()) : [];
-          updatedData.additionalInfo.languages = updatedData.languages ? updatedData.languages.split(',').map(l => l.trim()) : [];
-
-          // Update the trainer's info in the database
-          await User.findByIdAndUpdate(trainerId, updatedData);
-
-          res.redirect('/trainers/approved');
+// Delete Article
+exports.deleteArticle = async (req, res) => {
+     try {
+          await Article.findByIdAndDelete(req.params.id);
+          res.redirect('/admin/articles');
      } catch (error) {
           console.error(error);
           res.status(500).send('Server Error');

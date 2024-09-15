@@ -4,10 +4,13 @@ const upload = require('../config/multer'); // Import Multer
 const { marcheCanineController, ensureSellerAuthenticated } = require('../controllers/marcheCanineController');
 const filterController = require('../controllers/filterController')
 // GET: Retrieve all announcements (Home page)
-router.get('/', marcheCanineController.getAnnouncements);
+router.get('/announcements', marcheCanineController.getAnnouncements);
 
 // GET: Show form to create a new announcement (only sellers)
 router.get('/announcements/new', ensureSellerAuthenticated, marcheCanineController.showNewAnnouncementForm);
+
+// GET: Filter announcements based on criteria (e.g., location, price)
+router.get('/announcements/filter', filterController.filterAnnouncements);
 
 // POST: Create a new announcement (only sellers)
 router.post('/announcements', upload.array('images', 10), ensureSellerAuthenticated, marcheCanineController.addAnnouncement);
@@ -26,11 +29,8 @@ router.put('/announcements/:id', ensureSellerAuthenticated, marcheCanineControll
 // DELETE: Delete an existing announcement (only sellers)
 router.post('/announcements/:id/', ensureSellerAuthenticated, marcheCanineController.deleteAnnouncement);
 
-// GET: Filter announcements based on criteria (e.g., location, price)
-router.get('/announcements/filter', filterController.filterAnnouncements);
-
 // Dynamic route for scraping individual dog pages
-router.get('/chien/:slug', marcheCanineController.getDogDetails);
+// router.get('/chien/:slug', marcheCanineController.getDogDetails);
 
 
 module.exports = router;

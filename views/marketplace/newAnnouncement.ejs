@@ -2,10 +2,9 @@
      <%- include('partials/navbar.ejs') %>
 
           <div class="container mt-5">
-               <h1 class="text-center my-4">Créer une nouvelle annonce</h1>
+               <h1 class="text-center mb-4" style="color: #000;">Créer une nouvelle annonce</h1>
 
                <% var message=typeof message !=='undefined' ? message : '' ; %>
-
                     <% if (message) { %>
                          <div class="alert alert-danger">
                               <%= message %>
@@ -13,42 +12,125 @@
                          <% } %>
 
                               <form action="/announcements" method="POST" class="needs-validation" enctype="multipart/form-data" novalidate id="announcementForm">
+                                   <!-- Dog Breed Input with Autocomplete -->
                                    <div class="mb-3">
-                                        <label for="title" class="form-label">Titre de l'annonce</label>
-                                        <input type="text" class="form-control" id="title" name="title" placeholder="Entrez le titre de l'annonce" required>
-                                        <div class="invalid-feedback">Le titre est obligatoire.</div>
+                                        <label for="breed" class="form-label" style="color: #000;">Race de chien</label>
+
+                                        <!-- Input for the dog breed with autocomplete -->
+                                        <input type="text" class="form-control" id="breedInput" name="breed" placeholder="Entrez la race de chien" list="dogBreeds" required>
+
+                                        <!-- Datalist for predefined dog breeds -->
+                                        <datalist id="dogBreeds">
+                                             <option value="Berger Allemand">
+                                             <option value="Labrador Retriever">
+                                             <option value="Golden Retriever">
+                                             <option value="Bulldog Français">
+                                             <option value="Bouledogue Anglais">
+                                             <option value="Chihuahua">
+                                             <option value="Rottweiler">
+                                             <option value="Beagle">
+                                             <option value="Poodle">
+                                             <option value="Boxer">
+                                             <option value="Cocker Spaniel">
+                                                  <!-- Add more dog breeds as needed -->
+                                        </datalist>
+
+                                        <!-- Invalid feedback for validation -->
+                                        <div class="invalid-feedback">La race de chien est obligatoire.</div>
                                    </div>
 
+
+                                   <!-- Description -->
                                    <div class="mb-3">
-                                        <label for="description" class="form-label">Description</label>
+                                        <label for="description" class="form-label" style="color: #000;">Description</label>
                                         <textarea class="form-control" id="description" name="description" rows="4" placeholder="Entrez la description de l'annonce" required></textarea>
                                         <div class="invalid-feedback">La description est obligatoire.</div>
                                    </div>
 
+                                   <!-- Price -->
                                    <div class="mb-3">
-                                        <label for="price" class="form-label">Prix (MAD)</label>
+                                        <label for="price" class="form-label" style="color: #000;">Prix (MAD)</label>
                                         <input type="number" class="form-control" id="price" name="price" placeholder="Entrez le prix en MAD" min="0" required>
                                         <div class="invalid-feedback">Le prix est obligatoire et doit être un nombre positif.</div>
                                    </div>
 
+                                   <!-- Location (Dropdown with Moroccan Cities) -->
                                    <div class="mb-3">
-                                        <label for="location" class="form-label">Lieu</label>
-                                        <input type="text" class="form-control" id="location" name="location" placeholder="Entrez le lieu de l'annonce (ex: Casablanca)" required>
+                                        <label for="location" class="form-label" style="color: #000;">Lieu</label>
+                                        <select class="form-select" id="location" name="location" required>
+                                             <option value="Casablanca">Casablanca</option>
+                                             <option value="Rabat">Rabat</option>
+                                             <option value="Marrakech">Marrakech</option>
+                                             <option value="Fès">Fès</option>
+                                             <option value="Tanger">Tanger</option>
+                                             <option value="Agadir">Agadir</option>
+                                             <option value="Meknès">Meknès</option>
+                                             <option value="Oujda">Oujda</option>
+                                             <option value="Salé">Salé</option>
+                                             <option value="Kenitra">Kénitra</option>
+                                             <option value="Tetouan">Tétouan</option>
+                                             <option value="Mohammedia">Mohammédia</option>
+                                             <option value="El Jadida">El Jadida</option>
+                                             <option value="Beni Mellal">Béni Mellal</option>
+                                             <option value="Khouribga">Khouribga</option>
+                                             <option value="Settat">Settat</option>
+                                             <option value="Safi">Safi</option>
+                                             <option value="Essaouira">Essaouira</option>
+                                             <option value="Khémisset">Khémisset</option>
+                                             <option value="Taza">Taza</option>
+                                             <option value="Errachidia">Errachidia</option>
+                                             <option value="Larache">Larache</option>
+                                             <option value="Ksar El Kebir">Ksar El Kébir</option>
+                                             <option value="Sidi Kacem">Sidi Kacem</option>
+                                             <option value="Guelmim">Guelmim</option>
+                                             <option value="Tan-Tan">Tan-Tan</option>
+                                             <option value="Sidi Ifni">Sidi Ifni</option>
+                                             <option value="Al Hoceima">Al Hoceima</option>
+                                             <option value="Azrou">Azrou</option>
+                                             <option value="Ifrane">Ifrane</option>
+                                             <option value="Chefchaouen">Chefchaouen</option>
+                                             <option value="Ouarzazate">Ouarzazate</option>
+                                             <option value="Taroudant">Taroudant</option>
+                                             <option value="Tiznit">Tiznit</option>
+                                             <option value="Berkane">Berkane</option>
+                                             <option value="Guercif">Guercif</option>
+                                             <option value="Dakhla">Dakhla</option>
+                                             <option value="Sidi Bennour">Sidi Bennour</option>
+                                             <option value="Taounate">Taounate</option>
+                                             <option value="Tinghir">Tinghir</option>
+                                             <option value="Zagora">Zagora</option>
+                                             <option value="Boujdour">Boujdour</option>
+                                             <option value="Midelt">Midelt</option>
+                                             <option value="Chichaoua">Chichaoua</option>
+                                             <option value="Sefrou">Sefrou</option>
+                                             <option value="El Hajeb">El Hajeb</option>
+                                             <option value="Fkih Ben Salah">Fkih Ben Salah</option>
+                                             <option value="Boulemane">Boulemane</option>
+                                             <option value="Oulad Teima">Oulad Teima</option>
+                                             <option value="Ait Melloul">Aït Melloul</option>
+                                             <option value="Dcheira El Jihadia">Dcheira El Jihadia</option>
+                                             <option value="Youssoufia">Youssoufia</option>
+                                             <option value="El Aioun Sidi Mellouk">El Aïoun Sidi Mellouk</option>
+
+                                        </select>
                                         <div class="invalid-feedback">Le lieu est obligatoire.</div>
                                    </div>
 
+                                   <!-- Phone Number -->
                                    <div class="mb-3">
-                                        <label for="number" class="form-label">Numéro</label>
+                                        <label for="number" class="form-label" style="color: #000;">Numéro</label>
                                         <input type="text" class="form-control" id="number" name="number" placeholder="Entrez votre Numéro (ex: 0612345678)" required pattern="^0[5-7][0-9]{8}$">
                                         <div class="invalid-feedback">Le numéro est obligatoire et doit être au format valide (ex: 0612345678).</div>
                                    </div>
 
+                                   <!-- Images -->
                                    <div class="mb-3">
-                                        <label for="images" class="form-label">Images (sélectionnez plusieurs)</label>
+                                        <label for="images" class="form-label" style="color: #000;">Images (sélectionnez plusieurs)</label>
                                         <input type="file" class="form-control" id="images" name="images" multiple accept="image/*">
                                         <div class="invalid-feedback">Veuillez sélectionner au moins une image.</div>
                                    </div>
 
+                                   <!-- Submit Button -->
                                    <button type="submit" class="btn btn-primary">Publier l'annonce</button>
                               </form>
           </div>
@@ -58,7 +140,7 @@
                <script>
                     document.addEventListener('DOMContentLoaded', function () {
                          const form = document.getElementById('announcementForm');
-                         const inputs = form.querySelectorAll('input, textarea');  // Select all inputs and textareas
+                         const inputs = form.querySelectorAll('input, textarea, select');  // Include the select field
 
                          // Validate on input event
                          inputs.forEach(input => {
@@ -99,5 +181,32 @@
                                    field.classList.add('is-invalid');
                               }
                          }
+                    });
+               </script>
+               <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                         const breeds = [
+                              "Berger Allemand", "Labrador Retriever", "Golden Retriever", "Bulldog Français",
+                              "Bouledogue Anglais", "Chihuahua", "Rottweiler", "Beagle", "Poodle", "Boxer", "Cocker Spaniel"
+                              // Add more breeds here
+                         ];
+
+                         const breedInput = document.getElementById('breedInput');
+
+                         breedInput.addEventListener('input', function () {
+                              const value = breedInput.value.toLowerCase();
+
+                              // Filter suggestions based on input
+                              const suggestions = breeds.filter(breed => breed.toLowerCase().includes(value));
+
+                              const dataList = document.getElementById('dogBreeds');
+                              dataList.innerHTML = ''; // Clear previous options
+
+                              suggestions.forEach(breed => {
+                                   const option = document.createElement('option');
+                                   option.value = breed;
+                                   dataList.appendChild(option);
+                              });
+                         });
                     });
                </script>

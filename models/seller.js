@@ -19,8 +19,10 @@ const Seller = mongoose.models.Seller || mongoose.model('Seller', new Schema({
           type: String,
           required: true,
      },
+     role: { type: String, enum: ['user', 'admin'], default: 'user' }, // Add role field
+
      announcements: [{
-          title: {
+          breed: {
                type: String,
           },
           description: {
@@ -38,6 +40,8 @@ const Seller = mongoose.models.Seller || mongoose.model('Seller', new Schema({
           images: [{
                type: String, // URLs for images
           }],
+          status: { type: String, enum: ['pending', 'approved'], default: 'pending' }, // Add status field
+
           sellerDisplayName: {
                type: String, // Seller's display name
                // required: true

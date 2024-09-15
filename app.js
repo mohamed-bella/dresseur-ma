@@ -48,17 +48,20 @@ app.use((req, res, next) => {
 });
 
 
-// const publicRoutes = require('./routes/publicRoutes')
-// app.use(publicRoutes)
+const publicRoutes = require('./routes/publicRoutes')
+app.use(publicRoutes)
 
-// const marcheCanineRoutes = require('./routes/marcheCanineRoutes')
-// app.use(marcheCanineRoutes)
+const adminRoutes = require('./routes/adminRoutes')
+app.use('/admin', adminRoutes)
 
-// const authRoutes = require('./routes/authRoutes')
-// app.use('/auth', authRoutes)
+const marcheCanineRoutes = require('./routes/marcheCanineRoutes')
+app.use(marcheCanineRoutes)
 
-// const sellerRoutes = require('./routes/sellerRoutes')
-// app.use('/seller', sellerRoutes)
+const authRoutes = require('./routes/authRoutes')
+app.use('/auth', authRoutes)
+
+const sellerRoutes = require('./routes/sellerRoutes')
+app.use('/seller', sellerRoutes)
 
 
 // Other app configurations...

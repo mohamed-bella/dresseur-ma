@@ -1,0 +1,46 @@
+<%- include('../marketplace/partials/head.ejs') %>
+     <%- include('./partials/navbar.ejs') %>
+
+          <div class="container mt-5">
+               <h1 class="text-center mb-4">Admin Dashboard</h1>
+
+               <div class="row">
+                    <!-- Manage Users Section -->
+                    <div class="col-md-4 mb-4">
+                         <div class="card text-center">
+                              <div class="card-body">
+                                   <i class="fas fa-users fa-3x mb-3" style="color: #3498db;"></i>
+                                   <h5 class="card-title" style="color: #333;">👤 Manage Users</h5>
+                                   <p class="card-text">View, edit, or delete user profiles.</p>
+                                   <a href="/admin/sellers" class="btn btn-primary">Go to Users</a>
+                              </div>
+                         </div>
+                    </div>
+
+                    <!-- Manage Announcements Section -->
+                    <div class="col-md-4 mb-4">
+                         <div class="card text-center">
+                              <div class="card-body">
+                                   <i class="fas fa-bullhorn fa-3x mb-3" style="color: #e74c3c;"></i>
+                                   <h5 class="card-title" style="color: #333;">📢 Manage Announcements</h5>
+                                   <p class="card-text">Approve, edit, or delete announcements.</p>
+                                   <a href="/admin/announcements" class="btn btn-danger">Go to Announcements</a>
+                              </div>
+                         </div>
+                    </div>
+
+                    <!-- Manage Articles Section -->
+                    <div class="col-md-4 mb-4">
+                         <div class="card text-center">
+                              <div class="card-body">
+                                   <i class="fas fa-newspaper fa-3x mb-3" style="color: #2ecc71;"></i>
+                                   <h5 class="card-title" style="color: #333;">📰 Manage Articles</h5>
+                                   <p class="card-text">Write, edit, or delete articles.</p>
+                                   <a href="/admin/articles" class="btn btn-success">Go to Articles</a>
+                              </div>
+                         </div>
+                    </div>
+               </div>
+          </div>
+
+          <%- include('../marketplace/partials/footer.ejs') %>

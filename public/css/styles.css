@@ -6,7 +6,7 @@ body {
      background-repeat: repeat;
      /* This will make the background repeat */
      background-size: auto;
-     background-color: #fff;
+     background-color: #e9e4e470;
      /* Keeps the original size of the image */
 }
 
@@ -27,12 +27,6 @@ header {
      color: rgb(66, 66, 66)
 }
 
-/* To avoid content overlapping the fixed navbar */
-body {
-     padding-top: 40px;
-     /* Adjust this value based on the height of your navbar */
-     /* background-color: #2827b32e; */
-}
 
 /* General input styles */
 input[type="text"],
@@ -135,20 +129,18 @@ select {
      background-size: 10px 10px;
 }
 
-
 input {
      border-radius: 8px;
 }
-
 
 /* 
      =====================  HOME CARD STYLES  ==================
 */
 .dog-card:hover {
      cursor: pointer;
-     /* box-shadow: 0px 4px 4px black; */
+     /* box-shadow: -1px 2px 4px 0px #c3c2c2; */
      transition: border-color 0.3s ease;
-     outline: 5px solid #afaf1d;
+     background-color: #80808033;
 }
 
 .card-img-left {
@@ -215,13 +207,11 @@ input {
      /* Make sure the image takes up the full height */
      object-fit: cover;
      /* Keep the aspect ratio, crop any overflow */
-
 }
 
 /* 
 ================ DEATILS PAGE
 */
-
 #phoneNumber {
      background-color: #ffc107;
      padding: 5px;
@@ -233,10 +223,34 @@ input {
      position: absolute;
      right: 10px;
      bottom: 8px;
-     color: red;
+     color: #fbfbfb;
      font-size: larger;
-     font-weight: 800;
-     background-color: #ffd5d5;
+     /* font-weight: 800; */
+     background-color: #F44336;
      padding: 2px 5px;
      border-radius: 50px;
+}
+
+.card,
+.card img {
+     border-radius: 0px;
+}
+
+.footer {
+     background-color: #222;
+     color: #fff;
+     margin-top: 50px;
+}
+
+.footer a {
+     color: #fff;
+     transition: color 0.2s ease;
+}
+
+.footer a:hover {
+     color: #ddd;
+}
+
+.footer .social-icons i {
+     margin-right: 15px;
 }

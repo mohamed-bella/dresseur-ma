@@ -1,0 +1,53 @@
+<%- include('../marketplace/partials/head.ejs') %>
+     <%- include('./partials/navbar.ejs') %>
+
+          <div class="container mt-5">
+               <h1 class="text-center mb-4">Gérer les vendeurs</h1>
+
+               <% if (sellers && sellers.length> 0) { %>
+                    <table class="table table-bordered table-striped table-hover">
+                         <thead class="thead-dark">
+                              <tr>
+                                   <th scope="col">Nom</th>
+                                   <th scope="col">Email</th>
+                                   <th scope="col">Nombre d'annonces</th>
+                                   <th scope="col">Actions</th>
+                              </tr>
+                         </thead>
+                         <tbody>
+                              <% sellers.forEach(function(seller) { %>
+                                   <tr>
+                                        <td>
+                                             <%= seller.displayName %>
+                                        </td>
+                                        <td>
+                                             <%= seller.email %>
+                                        </td>
+                                        <td>
+                                             <%= seller.announcements.length %>
+                                        </td>
+                                        <td>
+                                             <!-- View Announcements -->
+                                             <a href="/admin/sellers/<%= seller._id %>/announcements" class="btn btn-info btn-sm">Voir les annonces</a>
+
+                                             <!-- Edit Seller -->
+                                             <a href="/admin/sellers/<%= seller._id %>/edit" class="btn btn-primary btn-sm">Modifier</a>
+
+                                             <!-- Delete Seller -->
+                                             <form action="/admin/sellers/<%= seller._id %>" method="POST" class="d-inline">
+                                                  <input type="hidden" name="_method" value="DELETE">
+                                                  <button class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce vendeur et ses annonces ?');">Supprimer</button>
+                                             </form>
+                                        </td>
+                                   </tr>
+                                   <% }) %>
+                         </tbody>
+                    </table>
+                    <% } else { %>
+                         <p class="text-center">Aucun vendeur trouvé.</p>
+                         <% } %>
+
+                              <a href="/admin/dashboard" class="btn btn-secondary mt-4">Retour au tableau de bord</a>
+          </div>
+
+          <%- include('../marketplace/partials/footer.ejs') %>

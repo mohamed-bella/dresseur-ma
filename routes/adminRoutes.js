@@ -1,34 +1,27 @@
-const express = require('express')
+const express = require('express');
 const router = express.Router();
+const adminController = require('../controllers/adminController');
 
-const adminController = require('../controllers/adminController.js')
+// Admin Dashboard
+router.get('/', adminController.dashboard);
 
-router.get('/', adminController.getHome)
-router.get('/pending-trainer/:id', adminController.getPendingTrainerProfile)
-// Route for the dashboard overview
-router.get('/dashboard/overview', adminController.getDashboardOverview);
-// Route for the statistics page
-router.get('/dashboard/stats', adminController.getStatistics);
-// Route to approve a trainer
-router.post('/pending-trainer/:trainerId/approve', adminController.approveTrainer);
+// Manage Sellers
+router.get('/sellers', adminController.getSellers);
+router.get('/sellers/:id/edit', adminController.getEditSellerForm);
+router.post('/sellers/:id/edit', adminController.updateSeller);
+router.post('/sellers/:id', adminController.deleteSeller);
 
+// Manage Announcements
+router.get('/announcements', adminController.getAnnouncements);
+router.post('/announcements/:id/approve', adminController.approveAnnouncement);
+router.get('/announcements/:id/edit', adminController.getEditAnnouncement);
+router.post('/announcements/:id/edit', adminController.editAnnouncement);
+router.post('/announcements/:id', adminController.deleteAnnouncement);
 
-
-
-// Route to render the Edit Trainer page
-router.get('/trainers/:trainerId/edit', adminController.renderEditTrainerPage);
-
-// Route to handle the Edit Trainer form submission
-router.post('/trainers/:trainerId/edit', adminController.updateTrainerInfo);
-
-// approved trainers router
-router.get('/trainers/approved', adminController.getApprovedTrainers)
-
-// Routes to deny or delete an approved trainer
-router.post('/trainers/:trainerId/:action', adminController.updateTrainerStatus);
-
-// Route to handle the Edit Trainer form submission (POST request)
-router.post('/trainers/:trainerId/edit', adminController.updateTrainerInfo);
-
+// Manage Articles
+router.get('/articles', adminController.getArticles);
+router.post('/articles/create', adminController.createArticle);
+router.post('/articles/:id/edit', adminController.editArticle);
+router.post('/articles/:id', adminController.deleteArticle);
 
 module.exports = router;

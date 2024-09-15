@@ -1,3 +1,5 @@
 exports.getHome = (req, res) => {
-     res.redirect('/marketplace')
+     res.render('marketplace/home', {
+          title: 'Home Page'
+     })
 }

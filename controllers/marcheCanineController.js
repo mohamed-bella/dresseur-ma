@@ -1,16 +1,18 @@
 const Seller = require('../models/seller');
 const axios = require('axios');
 const cheerio = require('cheerio');
+const mongoose = require('mongoose');
+
 const cloudinary = require('../config/cloudinary'); // Import Cloudinary configuration
 
 // Helper function to clean up text
-const cleanText = (text) => {
-     return text
-          .replace(/\n/g, ' ') // Replace newlines with spaces
-          .replace(/\t/g, '')  // Remove tabs
-          .replace(/\s+/g, ' ') // Remove excessive spaces
-          .trim(); // Remove leading/trailing spaces
-};
+// const cleanText = (text) => {
+//      return text
+//           .replace(/\n/g, ' ') // Replace newlines with spaces
+//           .replace(/\t/g, '')  // Remove tabs
+//           .replace(/\s+/g, ' ') // Remove excessive spaces
+//           .trim(); // Remove leading/trailing spaces
+// };
 
 // Middleware to ensure the user is authenticated as a seller
 const ensureSellerAuthenticated = async (req, res, next) => {
@@ -32,43 +34,15 @@ const ensureSellerAuthenticated = async (req, res, next) => {
 
 const marcheCanineController = {
 
-     // Helper function to clean up text
-     cleanText(text) {
-          return text
-               .replace(/\n/g, ' ') // Replace newlines with spaces
-               .replace(/\t/g, '') // Remove tabs
-               .replace(/\s+/g, ' ') // Remove excessive spaces
-               .trim(); // Remove leading/trailing spaces
-     },
-
      // GET: Fetch all announcements (Home Page)
      async getAnnouncements(req, res) {
-          const page = parseInt(req.query.page) || 1;
-          const totalPages = 100; // Adjust this based on the actual total number of pages
-          const url = `https://www.animalsouk.ma/Chiens?page=${page}`;
-
           try {
-               const response = await axios.get(url);
-               const html = response.data;
-               const $ = cheerio.load(html);
-
-               let scrapedData = [];
-
-               // Scraping data from the website
-               $('.card').each((index, element) => {
-                    const title = cleanText($(element).find('.font-weight-light').text());
-                    const price = cleanText($(element).find('.price').text());
-                    const description = cleanText($(element).find('.text-secondary').text());
-                    const link = $(element).attr('href');
-                    let image = $(element).find('img').attr('src') || $(element).find('img').attr('data-src') || 'https://via.placeholder.com/150';
-
-                    scrapedData.push({ title, price, description, image, link });
-               });
-
                const sellers = await Seller.find().select('announcements');
-               const announcements = sellers.reduce((acc, seller) => [...acc, ...seller.announcements], []);
+               const announcements = sellers.reduce((acc, seller) => [...acc, ...seller.announcements.filter(a => a.status === 'approved')], []);
 
-               res.render('marketplace/announcements', { announcements, scrapedData, currentPage: page, totalPages, title: 'Tous les annonces' });
+               res.render('marketplace/announcements', {
+                    announcements, title: 'Tous les annonces', successMsg: req.flash('success')
+               });
           } catch (err) {
                console.error(err);
                res.status(500).render('error', { message: 'Failed to fetch announcements' });
@@ -77,14 +51,15 @@ const marcheCanineController = {
 
      // GET: Show form to create a new announcement
      showNewAnnouncementForm(req, res) {
-          res.render('marketplace/newAnnouncement', { title: 'Créer une nouvelle annonce' });
+          res.render('marketplace/newAnnouncement', { title: 'Créer une nouvelle annonce', successMsg: req.flash('success') });
      },
 
      // POST: Add a new announcement (for sellers only)
      async addAnnouncement(req, res) {
-          const { title, description, price, location, number } = req.body;
+          const { breed, description, price, location, number } = req.body;
+          console.log(req.body)
 
-          if (!title || !description || !price || !location || !number) {
+          if (!breed || !description || !price || !location || !number) {
                return res.status(400).render('marketplace/newAnnouncement', { message: 'Please fill in all fields', title: 'Créer une nouvelle annonce' });
           }
 
@@ -94,24 +69,42 @@ const marcheCanineController = {
 
                const imageUrls = req.files.map(file => file.path);
 
-               const newAnnouncement = { title, description, price, location, number, images: imageUrls, sellerDisplayName: seller.displayName, sellerEmail: seller.email };
+               const newAnnouncement = { breed, description, price, location, number, images: imageUrls, sellerDisplayName: seller.displayName, sellerEmail: seller.email };
                seller.announcements.push(newAnnouncement);
+               req.flash('success', "en Attendant l'Aprouve")
 
                await seller.save();
-               res.redirect('/');
+               res.redirect('/announcements');
           } catch (err) {
                console.error(err);
                res.status(500).render('error', { message: 'Failed to add announcement' });
           }
      },
 
+
      // GET: Show details of a specific announcement by ID
      async getAnnouncementById(req, res) {
           try {
-               const seller = await Seller.findOne({ 'announcements._id': req.params.id });
-               if (!seller) return res.status(404).render('error', { message: 'Announcement not found' });
+               // Validate if req.params.id is a valid ObjectId
+               if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+                    return res.status(400).render('error', { message: 'Invalid announcement ID' });
+               }
 
+               // Find the seller that has the announcement with the provided ID
+               const seller = await Seller.findOne({ 'announcements._id': req.params.id });
+
+               // If no seller or announcement is found
+               if (!seller) {
+                    return res.status(404).render('error', { message: 'Announcement not found' });
+               }
+
+               // Find the announcement by its ID within the seller's announcements
                const announcement = seller.announcements.id(req.params.id);
+               if (!announcement) {
+                    return res.status(404).render('error', { message: 'Announcement not found' });
+               }
+
+               // Render the announcement details
                res.render('marketplace/announcementDetail', { announcement, title: 'Détails de l\'annonce' });
           } catch (err) {
                console.error(err);
@@ -136,7 +129,7 @@ const marcheCanineController = {
 
      // PUT: Update an existing announcement
      async updateAnnouncement(req, res) {
-          const { title, description, price, location, images } = req.body;
+          const { breed, description, price, location, images } = req.body;
 
           try {
                const seller = await Seller.findOne({ googleId: req.user.googleId });
@@ -144,7 +137,7 @@ const marcheCanineController = {
 
                if (!announcement) return res.status(404).render('error', { message: 'Announcement not found' });
 
-               announcement.title = title || announcement.title;
+               announcement.breed = breed || announcement.breed;
                announcement.description = description || announcement.description;
                announcement.price = price || announcement.price;
                announcement.location = location || announcement.location;
@@ -211,35 +204,6 @@ const marcheCanineController = {
      },
 
      // Controller function to handle scraping specific dog pages
-     async getDogDetails(req, res) {
-          try {
-               const dogSlug = req.params.slug;
-               const url = `https://www.animalsouk.ma/${dogSlug}`;
-               const response = await axios.get(url);
-               const html = response.data;
-               const $ = cheerio.load(html);
-
-               const name = this.cleanText($('.title').text().trim());
-               const price = this.cleanText($('.pricenormal').text().trim());
-               const description = this.cleanText($('.card-body p').text().trim());
-               const dateAndLocation = this.cleanText($('i.fa-clock-o').parent().text());
-               const location = this.cleanText($('i.fa-map-marker-alt').parent().text());
-               const number = this.cleanText($('#number3').text().trim());
-
-               let images = [];
-               const mainImage = $('.container-slide img.card-img-top').attr('src');
-               if (mainImage) images.push(mainImage);
-               $('.thumb-list li img').each((index, element) => {
-                    const thumbImage = $(element).attr('src');
-                    if (thumbImage) images.push(thumbImage);
-               });
-
-               res.render('marketplace/announcementDetailsScraped', { name, price, description, number, dateAndLocation, images, title: 'chien' });
-          } catch (err) {
-               console.error('Error scraping dog details:', err);
-               res.status(500).send('Error fetching dog details');
-          }
-     },
 
      // GET: Filter announcements based on criteria (price, location, etc.)
      async filterAnnouncements(req, res) {

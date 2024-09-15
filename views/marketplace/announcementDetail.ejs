@@ -2,23 +2,23 @@
      <%- include('partials/navbar.ejs') %>
 
           <div class="container mt-5">
-               <h1 class="text-center my-4">
-                    <%= announcement.title %>
+               <h1 class="text-center my-4" style="color: #000;">
+                    <%= announcement.breed %>
                </h1>
 
                <div class="row">
                     <!-- Image Gallery Section -->
                     <div class="col-md-8">
-                         <div class="card">
+                         <div class="card shadow-sm" style="border: 1px solid #ddd; border-radius: 5px; background-color: #fff;">
                               <div class="card-body">
                                    <!-- Large Image -->
                                    <div class="main-image mb-3">
-                                        <img id="mainImage" src="<%= announcement.images[0] || 'https://via.placeholder.com/600x400' %>" class="img-fluid" alt="Image for <%= announcement.title %>">
+                                        <img id="mainImage" src="<%= announcement.images[0] || 'https://via.placeholder.com/600x400' %>" class="img-fluid w-100" alt="Image for <%= announcement.title %>" style="object-fit: cover; border-radius: 4px;">
                                    </div>
                                    <!-- Thumbnail Images -->
-                                   <div class="thumbnail-images d-flex ">
+                                   <div class="thumbnail-images d-flex justify-content-center flex-wrap">
                                         <% announcement.images.forEach(function(image, index) { %>
-                                             <img src="<%= image %>" class="img-thumbnail small-image" alt="Thumbnail <%= index + 1 %>" style="cursor:pointer; max-width: 100px;">
+                                             <img src="<%= image %>" class="img-thumbnail small-image me-2 mb-2" alt="Thumbnail <%= index + 1 %>" style="cursor: pointer; width: 60px; height: 60px; object-fit: cover;">
                                              <% }); %>
                                    </div>
                               </div>
@@ -27,68 +27,94 @@
 
                     <!-- Seller Information Card -->
                     <div class="col-md-4">
-                         <div class="card">
+                         <div class="card shadow-sm" style="border: 1px solid #ddd; border-radius: 5px; background-color: #fff;">
                               <div class="card-body">
-                                   <div class="">
-                                        <h4>Vendeur</h4>
-                                        <hr>
-                                   </div>
-                                   <div class="row p-3 mb-2 " style="background-color: #ffc1072b;border: 1px solid #7c7c7c;margin: 0px;border-radius: 45px;">
-                                        <div class="col-md-4">
-                                             <i class="bi bi-person-circle"></i>
+                                   <h5 class="text-center" style="color: #000; font-size: 1.25rem;">Vendeur</h5>
+                                   <hr>
+                                   <div class="row align-items-center p-3 mb-2" style="background-color: #f8f9fa; border-radius: 10px;">
+                                        <div class="col-3 text-center">
+                                             <i class="bi bi-person-circle" style="font-size: 2rem; color: #6c757d;"></i>
                                         </div>
-                                        <div class="col-md-8">
-                                             <strong>
+                                        <div class="col-9">
+                                             <strong style="color: #000; font-size: 0.875rem;">
                                                   <%= announcement.sellerDisplayName %>
                                              </strong>
                                         </div>
                                    </div>
-                                   <p>
-                                   <p id="phoneNumber" style="display: none;">
-                                        Téléphone: <%= announcement.number %> <!-- Initial hidden part of the number -->
-                                   </p>
-                                   <button id="showNumberBtn" class="btn btn-warning mt-2" style="width: 100%;">
-                                        <i class="bi bi-telephone-fill"></i> Appeler
-                                   </button>
-                                   </p>
+
+                                   <!-- Phone Number and Call Button -->
+                                   <div class="text-center">
+                                        <a id="phoneNumber" href="tel:<%= announcement.number %>" style="display: none; color: #000; font-size: 0.875rem;">
+                                             Téléphone: <%= announcement.number %>
+                                        </a>
+
+                                        <button id="showNumberBtn" class="btn btn-warning mt-2 w-100" style="background-color: #f1c40f; border-color: #f1c40f; color: black;">
+                                             <i class="bi bi-telephone-fill"></i> Appeler
+                                        </button>
+                                   </div>
                               </div>
                          </div>
                     </div>
-
-                    <!-- Announcement Details Section -->
-
                </div>
 
+               <!-- Announcement Details Section -->
                <div class="row mt-4">
-                    <!-- Seller Information Card -->
                     <div class="col-md-12">
-                         <div class="card">
+                         <div class="card shadow-sm" style="border: 1px solid #ddd; border-radius: 5px; background-color: #fff;">
                               <div class="card-body">
-                                   <h4 class="display-6">Description</h4>
-                                   <p>
+
+                                   <!-- Description Section -->
+                                   <h5 class="d-flex align-items-center" style="color: #000; font-size: 1.25rem;">
+                                        <i class="bi bi-file-text-fill me-2" style="font-size: 1.5rem; color: #3498db;"></i> Description
+                                   </h5>
+                                   <p style="color: #000; font-size: 0.875rem;">
                                         <%= announcement.description %>
                                    </p>
 
-                                   <h4 class="display-6">Prix</h4>
-                                   <p><strong>
+                                   <hr style="margin: 1.5rem 0; border-color: #ddd;"> <!-- Line separator -->
+
+                                   <!-- Price Section -->
+                                   <h5 class="d-flex align-items-center" style="color: #000; font-size: 1.25rem;">
+                                        <i class="bi bi-currency-dollar me-2" style="font-size: 1.5rem; color: #27ae60;"></i> Prix
+                                   </h5>
+                                   <p style="color: #000; font-size: 0.875rem;"><strong>
                                              <%= announcement.price %> MAD
                                         </strong></p>
 
-                                   <h4 class="display-6">Lieu</h4>
-                                   <p>
+                                   <hr style="margin: 1.5rem 0; border-color: #ddd;"> <!-- Line separator -->
+
+                                   <!-- Location Section -->
+                                   <h5 class="d-flex align-items-center" style="color: #000; font-size: 1.25rem;">
+                                        <i class="bi bi-geo-alt-fill me-2" style="font-size: 1.5rem; color: #e74c3c;"></i> Lieu
+                                   </h5>
+                                   <p style="color: #000; font-size: 0.875rem;">
                                         <%= announcement.location %>
                                    </p>
 
-                                   <h4 class="display-6">Date de publication</h4>
-                                   <p>
+                                   <hr style="margin: 1.5rem 0; border-color: #ddd;"> <!-- Line separator -->
+
+                                   <!-- Date Section -->
+                                   <h5 class="d-flex align-items-center" style="color: #000; font-size: 1.25rem;">
+                                        <i class="bi bi-calendar3 me-2" style="font-size: 1.5rem; color: #f39c12;"></i> Date de publication
+                                   </h5>
+                                   <p style="color: #000; font-size: 0.875rem;">
                                         <%= announcement.datePosted.toLocaleDateString('fr-FR') %>
                                    </p>
 
-                                   <a href="/" class="btn btn-secondary mt-3">Retour à la liste</a>
+                                   <!-- Back Button -->
+                                   <a href="/" class="btn btn-secondary mt-3" style="font-size: 0.875rem;">Retour à la liste</a>
                               </div>
                          </div>
                     </div>
                </div>
+
+          </div>
+
+          <!-- Fixed Call Button for Mobile Devices -->
+          <div class="fixed-call-btn d-md-none">
+               <button id="fixedCallButton" class="btn btn-warning w-100" style="background-color: #f1c40f; border-color: #f1c40f; color: black;">
+                    <i class="bi bi-telephone-fill"></i> Appeler
+               </button>
           </div>
 
           <%- include('partials/footer.ejs') %>
@@ -103,14 +129,32 @@
                               mainImage.src = this.src;
                          });
                     });
-               </script>
 
-               <script>
                     // JavaScript to reveal the full phone number when the button is clicked
                     document.getElementById('showNumberBtn').addEventListener('click', function () {
                          const phoneNumberElement = document.getElementById('phoneNumber');
-                         phoneNumberElement.textContent = '<%= announcement.number %>'; // Full phone number from the announcement
-                         phoneNumberElement.style.display = 'block'
-                         this.style.display = 'none'; // Hide the button after showing the number
+                         phoneNumberElement.style.display = 'block';  // Show the phone number
+                         this.style.display = 'none';  // Hide the button after showing the number
+                    });
+
+                    // Same functionality for fixed call button on mobile
+                    document.getElementById('fixedCallButton').addEventListener('click', function () {
+                         const phoneNumberElement = document.getElementById('phoneNumber');
+                         phoneNumberElement.style.display = 'block';  // Show the phone number
+                         document.getElementById('showNumberBtn').style.display = 'none';  // Hide the button after showing the number
+                         this.style.display = 'none';  // Hide the button after showing the number
                     });
                </script>
+
+               <style>
+                    .fixed-call-btn {
+                         position: fixed;
+                         bottom: 0;
+                         left: 0;
+                         right: 0;
+                         padding: 10px;
+                         background-color: rgba(255, 255, 255, 0.9);
+                         z-index: 1000;
+                         border-top: 1px solid #ddd;
+                    }
+               </style>
