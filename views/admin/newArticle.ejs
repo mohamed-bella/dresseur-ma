@@ -1,5 +1,5 @@
 <%- include('../marketplace/partials/head.ejs') %>
-<script src="https://cdn.tiny.cloud/1/wzg195slfx5e31zpp941e1qriff7qy8oxp318ngoas5hp7hu/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+     <script src="https://cdn.tiny.cloud/1/wzg195slfx5e31zpp941e1qriff7qy8oxp318ngoas5hp7hu/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
 
      <%- include('partials/navbar.ejs') %>
 
@@ -44,17 +44,21 @@
                <!-- TinyMCE WYSIWYG Editor -->
                <script>
                     tinymce.init({
-                         plugins: [
-                              // Core editing features
-                              'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'image', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount',
-                              // Your account includes a free trial of TinyMCE premium features
-                              // Try the most popular premium features until Sep 29, 2024:
-                              'checklist', 'mediaembed', 'casechange', 'export', 'formatpainter', 'pageembed', 'a11ychecker', 'tinymcespellchecker', 'permanentpen', 'powerpaste', 'advtable', 'advcode', 'editimage', 'advtemplate', 'ai', 'mentions', 'tinycomments', 'tableofcontents', 'footnotes', 'mergetags', 'autocorrect', 'typography', 'inlinecss', 'markdown',
-                         ],
                          selector: '#content',
-                         height: 400,
-                         menubar: false,
-                         plugins: 'lists link image table',
-                         toolbar: 'undo redo | formatselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image'
+                         plugins: 'print preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor insertdatetime advlist lists wordcount imagetools textpattern help charmap quickbars',
+                         toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media template link anchor codesample | ltr rtl',
+                         height: 500,
+                         menubar: 'file edit view insert format tools table help',
+                         toolbar_sticky: true,
+                         autosave_ask_before_unload: true,
+                         autosave_interval: '30s',
+                         autosave_retention: '2m',
+                         image_advtab: true,
+                         content_css: 'https://www.tiny.cloud/css/codepen.min.css',
+                         setup: function (editor) {
+                              editor.on('init', function () {
+                                   editor.setContent('<p>Contenu initial de l\'article</p>');
+                              });
+                         }
                     });
                </script>
