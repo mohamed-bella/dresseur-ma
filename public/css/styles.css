@@ -222,7 +222,7 @@ input {
 .dog-price {
      position: absolute;
      right: 10px;
-     bottom: 8px;
+     bottom: -3px;
      color: #fbfbfb;
      font-size: larger;
      /* font-weight: 800; */
