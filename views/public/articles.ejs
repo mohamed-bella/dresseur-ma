@@ -9,7 +9,7 @@
                     <div class="row">
                          <% articles.forEach(function(article) { %>
                               <div class="col-md-4 mb-4">
-                                   <div class="card shadow-sm" style="border: 1px solid #ddd;">
+                                   <div onclick="window.location.href = '/articles/<%= article._id %>'" class="card shadow-sm" style="border: 1px solid #ddd; cursor: pointer;">
                                         <!-- Display banner image if it exists -->
                                         <% if (article.bannerImage) { %>
                                              <img src="<%= article.bannerImage %>" class="card-img-top" alt="<%= article.title %>" style="object-fit: cover; height: 200px;">

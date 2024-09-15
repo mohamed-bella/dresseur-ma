@@ -22,6 +22,7 @@
                                         <!-- Datalist for predefined dog breeds -->
                                         <datalist id="dogBreeds">
                                              <option value="Berger Allemand">
+                                             <option value="malinois">
                                              <option value="Labrador Retriever">
                                              <option value="Golden Retriever">
                                              <option value="Bulldog Français">
@@ -125,13 +126,21 @@
 
                                    <!-- Images -->
                                    <div class="mb-3">
-                                        <label for="images" class="form-label" style="color: #000;">Images (sélectionnez plusieurs)</label>
-                                        <input type="file" class="form-control" id="images" name="images" multiple accept="image/*">
-                                        <div class="invalid-feedback">Veuillez sélectionner au moins une image.</div>
+                                        <label for="images" class="form-label" style="color: #000;">
+                                             <i class="bi bi-images"></i> Images (sélectionnez plusieurs)
+                                        </label>
+                                        <div class="input-group">
+                                             <span class="input-group-text bg-light">
+                                                  <i class="bi bi-upload"></i>
+                                             </span>
+                                             <input type="file" class="form-control" id="images" name="images" multiple accept="image/*">
+                                             <div class="invalid-feedback">Veuillez sélectionner au moins une image.</div>
+                                        </div>
                                    </div>
 
+
                                    <!-- Submit Button -->
-                                   <button type="submit" class="btn btn-primary">Publier l'annonce</button>
+                                   <button type="submit" class="btn btn-warning btn-lg btn-block">Publier l'annonce</button>
                               </form>
           </div>
 
