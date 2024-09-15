@@ -7,9 +7,16 @@ const ArticleSchema = new Schema({
           type: String,
           required: true,
      },
+     description: {
+          type: String,
+          required: true
+     },
      content: {
           type: String,
           required: true,
+     },
+     bannerImage: {
+          type: String // URL for the image stored in Cloudinary
      },
      author: {
           type: String, // You can store the admin's name or id who created the article

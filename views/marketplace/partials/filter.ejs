@@ -1,107 +1,69 @@
-<div class="container">
-     <div class="card">
-          <div class="card-header">
-               Filtrer Les Resulats
-          </div>
-          <div class="card-body">
-               <form method="GET" action="/announcements/filter">
-                    <!-- Dog Breed Input with Autocomplete -->
-                    <div class="mb-3">
-                         <label for="breed" class="form-label" style="color: #000;">Race de chien</label>
+<div class="container justify-content-center">
+     <!-- Button to Open the Modal -->
+     <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#filterModal">
+          <i class="bi bi-funnel-fill"></i> Filtrer Les Résultats
+     </button>
+</div>
 
-                         <!-- Input for the dog breed with autocomplete -->
-                         <input type="text" class="form-control" id="breedInput" name="title" placeholder="Entrez la race de chien" list="dogBreeds">
+<!-- The Modal -->
+<div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+     <div class="modal-dialog">
+          <div class="modal-content">
+               <div class="modal-header">
+                    <h5 class="modal-title" id="filterModalLabel">Filtrer Les Résultats</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+               </div>
+               <div class="modal-body">
+                    <form method="GET" action="/announcements/filter">
+                         <!-- Dog Breed Input with Autocomplete -->
+                         <div class="mb-3">
+                              <label for="breed" class="form-label" style="color: #000;">Race de chien</label>
 
-                         <!-- Datalist for predefined dog breeds -->
-                         <datalist id="dogBreeds">
-                              <option value="Berger Allemand">
-                              <option value="Labrador Retriever">
-                              <option value="Golden Retriever">
-                              <option value="Bulldog Français">
-                              <option value="Bouledogue Anglais">
-                              <option value="Chihuahua">
-                              <option value="Rottweiler">
-                              <option value="Beagle">
-                              <option value="Poodle">
-                              <option value="Boxer">
-                              <option value="Cocker Spaniel">
-                                   <!-- Add more dog breeds as needed -->
-                         </datalist>
+                              <!-- Input for the dog breed with autocomplete -->
+                              <input type="text" class="form-control" id="breedInput" name="title" placeholder="Entrez la race de chien" list="dogBreeds">
 
-                         <!-- Invalid feedback for validation -->
-                         <div class="invalid-feedback">La race de chien est obligatoire.</div>
-                    </div>
+                              <!-- Datalist for predefined dog breeds -->
+                              <datalist id="dogBreeds">
+                                   <option value="Berger Allemand">
+                                   <option value="Labrador Retriever">
+                                   <option value="Golden Retriever">
+                                   <option value="Bulldog Français">
+                                   <option value="Bouledogue Anglais">
+                                   <option value="Chihuahua">
+                                   <option value="Rottweiler">
+                                   <option value="Beagle">
+                                   <option value="Poodle">
+                                   <option value="Boxer">
+                                   <option value="Cocker Spaniel">
+                              </datalist>
 
-                    <!-- Filter by Price Range -->
-                    <label for="minPrice">Prix Min:</label>
-                    <input type="number" id="minPrice" name="minPrice" placeholder="Prix minimum">
+                              <!-- Invalid feedback for validation -->
+                              <div class="invalid-feedback">La race de chien est obligatoire.</div>
+                         </div>
 
-                    <label for="maxPrice">Prix Max:</label>
-                    <input type="number" id="maxPrice" name="maxPrice" placeholder="Prix maximum">
+                         <!-- Filter by Price Range -->
+                         <label for="minPrice">Prix Min:</label>
+                         <input type="number" id="minPrice" name="minPrice" placeholder="Prix minimum" class="form-control mb-3">
 
-                    <!-- Location (Dropdown with Moroccan Cities) -->
-                    <div class="mb-3">
-                         <label for="location" class="form-label" style="color: #000;">Lieu</label>
-                         <select class="form-select" id="location" name="location" required>
-                              <option value="Casablanca">Casablanca</option>
-                              <option value="Rabat">Rabat</option>
-                              <option value="Marrakech">Marrakech</option>
-                              <option value="Fès">Fès</option>
-                              <option value="Tanger">Tanger</option>
-                              <option value="Agadir">Agadir</option>
-                              <option value="Meknès">Meknès</option>
-                              <option value="Oujda">Oujda</option>
-                              <option value="Salé">Salé</option>
-                              <option value="Kenitra">Kénitra</option>
-                              <option value="Tetouan">Tétouan</option>
-                              <option value="Mohammedia">Mohammédia</option>
-                              <option value="El Jadida">El Jadida</option>
-                              <option value="Beni Mellal">Béni Mellal</option>
-                              <option value="Khouribga">Khouribga</option>
-                              <option value="Settat">Settat</option>
-                              <option value="Safi">Safi</option>
-                              <option value="Essaouira">Essaouira</option>
-                              <option value="Khémisset">Khémisset</option>
-                              <option value="Taza">Taza</option>
-                              <option value="Errachidia">Errachidia</option>
-                              <option value="Larache">Larache</option>
-                              <option value="Ksar El Kebir">Ksar El Kébir</option>
-                              <option value="Sidi Kacem">Sidi Kacem</option>
-                              <option value="Guelmim">Guelmim</option>
-                              <option value="Tan-Tan">Tan-Tan</option>
-                              <option value="Sidi Ifni">Sidi Ifni</option>
-                              <option value="Al Hoceima">Al Hoceima</option>
-                              <option value="Azrou">Azrou</option>
-                              <option value="Ifrane">Ifrane</option>
-                              <option value="Chefchaouen">Chefchaouen</option>
-                              <option value="Ouarzazate">Ouarzazate</option>
-                              <option value="Taroudant">Taroudant</option>
-                              <option value="Tiznit">Tiznit</option>
-                              <option value="Berkane">Berkane</option>
-                              <option value="Guercif">Guercif</option>
-                              <option value="Dakhla">Dakhla</option>
-                              <option value="Sidi Bennour">Sidi Bennour</option>
-                              <option value="Taounate">Taounate</option>
-                              <option value="Tinghir">Tinghir</option>
-                              <option value="Zagora">Zagora</option>
-                              <option value="Boujdour">Boujdour</option>
-                              <option value="Midelt">Midelt</option>
-                              <option value="Chichaoua">Chichaoua</option>
-                              <option value="Sefrou">Sefrou</option>
-                              <option value="El Hajeb">El Hajeb</option>
-                              <option value="Fkih Ben Salah">Fkih Ben Salah</option>
-                              <option value="Boulemane">Boulemane</option>
-                              <option value="Oulad Teima">Oulad Teima</option>
-                              <option value="Ait Melloul">Aït Melloul</option>
-                              <option value="Dcheira El Jihadia">Dcheira El Jihadia</option>
-                              <option value="Youssoufia">Youssoufia</option>
-                              <option value="El Aioun Sidi Mellouk">El Aïoun Sidi Mellouk</option>
+                         <label for="maxPrice">Prix Max:</label>
+                         <input type="number" id="maxPrice" name="maxPrice" placeholder="Prix maximum" class="form-control mb-3">
 
-                         </select>
-                         <div class="invalid-feedback">Le lieu est obligatoire.</div>
-                    </div>
-                    <button type="submit" class="btn btn-dark">Filtrer</button>
-               </form>
+                         <!-- Location (Dropdown with Moroccan Cities) -->
+                         <div class="mb-3">
+                              <label for="location" class="form-label" style="color: #000;">Lieu</label>
+                              <select class="form-select" id="location" name="location" required>
+                                   <option value="Casablanca">Casablanca</option>
+                                   <option value="Rabat">Rabat</option>
+                                   <option value="Marrakech">Marrakech</option>
+                                   <!-- Add more cities as needed -->
+                              </select>
+                              <div class="invalid-feedback">Le lieu est obligatoire.</div>
+                         </div>
+
+                         <!-- Filter Button inside Modal -->
+                         <button type="submit" class="btn btn-dark"><i class="bi bi-funnel-fill"></i> Appliquer les filtres</button>
+                    </form>
+               </div>
           </div>
      </div>
 </div>

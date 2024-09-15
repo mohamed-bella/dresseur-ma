@@ -1,0 +1,44 @@
+<%- include('../marketplace/partials/head.ejs') %>
+     <%- include('partials/navbar.ejs') %>
+
+          <div class="container mt-5">
+               <h1 class="text-center mb-4">Modifier l'article</h1>
+
+               <form action="/admin/articles/<%= article._id %>/edit" method="POST" class="needs-validation" novalidate>
+                    <!-- Title Field -->
+                    <div class="mb-3">
+                         <label for="title" class="form-label">Titre de l'article</label>
+                         <input type="text" class="form-control" id="title" name="title" value="<%= article.title %>" placeholder="Entrez le titre de l'article" required>
+                         <div class="invalid-feedback">Le titre est obligatoire.</div>
+                    </div>
+
+                    <!-- Content Field -->
+                    <div class="mb-3">
+                         <label for="content" class="form-label">Contenu de l'article</label>
+                         <textarea class="form-control" id="content" name="content" rows="10" placeholder="Entrez le contenu de l'article" required><%= article.content %></textarea>
+                         <div class="invalid-feedback">Le contenu est obligatoire.</div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary">Mettre à jour l'article</button>
+               </form>
+          </div>
+
+          <%- include('../marketplace/partials/footer.ejs') %>
+
+               <script>
+                    // JavaScript for client-side validation
+                    (function () {
+                         'use strict';
+                         const forms = document.querySelectorAll('.needs-validation');
+                         Array.prototype.slice.call(forms).forEach(function (form) {
+                              form.addEventListener('submit', function (event) {
+                                   if (!form.checkValidity()) {
+                                        event.preventDefault();
+                                        event.stopPropagation();
+                                   }
+                                   form.classList.add('was-validated');
+                              }, false);
+                         });
+                    })();
+               </script>

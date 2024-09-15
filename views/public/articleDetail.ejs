@@ -1,0 +1,23 @@
+<%- include('partials/head.ejs') %>
+     <%- include('../marketplace/partials/navbar.ejs') %>
+
+          <div class="container mt-5">
+               <h1 class="text-center mb-5">
+                    <%= article.title %>
+               </h1>
+
+               <!-- Display banner image if available -->
+               <% if (article.bannerImage) { %>
+                    <img src="<%= article.bannerImage %>" class="img-fluid mb-4" alt="<%= article.title %>">
+                    <% } %>
+
+                         <div class="content">
+                              <p>
+                                   <%- article.content %>
+                              </p>
+                         </div>
+
+                         <a href="/articles" class="btn btn-secondary mt-3">Retour aux Articles</a>
+          </div>
+
+          <%- include('../marketplace/partials/footer.ejs') %>

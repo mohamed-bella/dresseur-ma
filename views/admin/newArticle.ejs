@@ -1,0 +1,52 @@
+<%- include('../marketplace/partials/head.ejs') %>
+     <%- include('partials/navbar.ejs') %>
+
+          <div class="container mt-5">
+               <h1 class="text-center mb-4">Créer un nouvel article</h1>
+
+               <form action="/admin/articles/create" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                    <!-- Title Field -->
+                    <div class="mb-3">
+                         <label for="title" class="form-label">Titre de l'article</label>
+                         <input type="text" class="form-control" id="title" name="title" placeholder="Entrez le titre de l'article" required>
+                         <div class="invalid-feedback">Le titre est obligatoire.</div>
+                    </div>
+
+                    <!-- Title Field -->
+                    <div class="mb-3">
+                         <label for="title" class="form-label">Description de l'article</label>
+                         <input type="text" class="form-control" id="title" name="description" placeholder="Entrez le titre de l'article" required>
+                         <div class="invalid-feedback">Le Description est obligatoire.</div>
+                    </div>
+
+                    <!-- Content Field (WYSIWYG Editor) -->
+                    <div class="mb-3">
+                         <label for="content" class="form-label">Contenu de l'article</label>
+                         <textarea class="form-control" id="content" name="content" rows="10" required></textarea>
+                         <div class="invalid-feedback">Le contenu est obligatoire.</div>
+                    </div>
+
+                    <!-- Banner Image Upload -->
+                    <div class="mb-3">
+                         <label for="bannerImage" class="form-label">Bannière de l'article</label>
+                         <input type="file" class="form-control" id="bannerImage" name="bannerImage" accept="image/*">
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary">Créer l'article</button>
+               </form>
+          </div>
+
+          <%- include('../marketplace/partials/footer.ejs') %>
+
+               <!-- TinyMCE WYSIWYG Editor -->
+               <script src="https://cdn.tiny.cloud/1/wzg195slfx5e31zpp941e1qriff7qy8oxp318ngoas5hp7hu/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+               <script>
+                    tinymce.init({
+                         selector: '#content',
+                         height: 400,
+                         menubar: false,
+                         plugins: 'lists link image table',
+                         toolbar: 'undo redo | formatselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image'
+                    });
+               </script>

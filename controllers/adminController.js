@@ -1,6 +1,22 @@
 const User = require('../models/user');
 const Seller = require('../models/seller');
 const Article = require('../models/article');
+const cloudinary = require('../config/cloudinary'); // Import Cloudinary configuration
+const multer = require('multer');
+const path = require('path');
+
+// Set up multer for file storage
+const storage = multer.diskStorage({
+     destination: function (req, file, cb) {
+          cb(null, 'uploads/');
+     },
+     filename: function (req, file, cb) {
+          cb(null, Date.now() + path.extname(file.originalname)); // Save with a unique name
+     }
+});
+
+const upload = multer({ storage });
+
 
 // Admin Dashboard
 exports.dashboard = (req, res) => {
@@ -172,16 +188,58 @@ exports.getArticles = async (req, res) => {
      }
 };
 
-// Create New Article
+// Get New Article Page
+exports.getNewArticleForm = (req, res) => {
+     res.render('admin/newArticle', { title: 'Créer un nouvel article' });
+};
+
+const fs = require('fs');
+
 exports.createArticle = async (req, res) => {
      try {
-          const { title, content } = req.body;
-          const newArticle = new Article({ title, content });
+          const { title, content, description } = req.body;
+          let bannerImageUrl = '';
+
+          // Check if an image is uploaded
+          if (req.file) {
+               const result = await cloudinary.uploader.upload(req.file.path, {
+                    resource_type: 'image',
+                    timeout: 120000 // Optional: to set a timeout if the image is large
+               });
+               bannerImageUrl = result.secure_url; // Cloudinary URL for the image
+
+               // Remove the file from local storage after upload
+               fs.unlinkSync(req.file.path);
+          }
+
+          // Create new article with the banner image URL
+          const newArticle = new Article({
+               title,
+               content,
+               description,
+               bannerImage: bannerImageUrl
+          });
+
           await newArticle.save();
           res.redirect('/admin/articles');
      } catch (error) {
           console.error(error);
-          res.status(500).send('Server Error');
+          res.status(500).send('Erreur serveur lors de la création de l\'article.');
+     }
+};
+
+
+// Get Edit Article Page
+exports.getEditArticleForm = async (req, res) => {
+     try {
+          const article = await Article.findById(req.params.id);
+          if (!article) {
+               return res.status(404).render('error', { message: 'Article non trouvé.' });
+          }
+          res.render('admin/editArticle', { article, title: 'Modifier l\'article' });
+     } catch (error) {
+          console.error(error);
+          res.status(500).send('Erreur serveur lors du chargement de l\'article.');
      }
 };
 

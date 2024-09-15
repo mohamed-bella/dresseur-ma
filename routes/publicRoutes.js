@@ -1,5 +1,7 @@
 const router = require('express').Router();
 
+const Article = require('../models/article')
+
 const publicController = require('../controllers/publicController')
 
 router.get('/', publicController.getHome)
@@ -18,6 +20,28 @@ router.get('/terms', (req, res) => {
 router.get('/cookies-policy', (req, res) => {
      res.render('cookie-policy', { title: 'Politique de cookies' });
 });
+
+router.get('/articles', async (req, res) => {
+     try {
+          const articles = await Article.find(); // Fetch all articles
+          res.render('public/articles', { articles, title: 'Nos Articles' });
+     } catch (err) {
+          console.error(err);
+          res.status(500).send('Erreur lors de la récupération des articles.');
+     }
+});
+
+
+router.get('/articles/:id', async (req, res) => {
+     try {
+          const article = await Article.findById(req.params.id);
+          res.render('public/articleDetail', { article, title: article.title });
+     } catch (err) {
+          console.error(err);
+          res.status(500).send('Erreur lors de la récupération de l\'article.');
+     }
+});
+
 
 // // About Us Page
 // router.get('/about-us', (req, res) => {
