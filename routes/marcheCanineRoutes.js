@@ -13,7 +13,7 @@ router.get('/announcements/new', ensureSellerAuthenticated, marcheCanineControll
 router.get('/announcements/filter', filterController.filterAnnouncements);
 
 // POST: Create a new announcement (only sellers)
-router.post('/announcements', upload.array('images', 10), ensureSellerAuthenticated, marcheCanineController.addAnnouncement);
+router.post('/announcements', upload.array('media', 10), ensureSellerAuthenticated, marcheCanineController.addAnnouncement);
 
 router.post('/seller/announcements/:id/images', ensureSellerAuthenticated, upload.array('newImages', 10), marcheCanineController.updateAnnouncementImages);
 

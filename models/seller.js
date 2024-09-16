@@ -37,7 +37,7 @@ const Seller = mongoose.models.Seller || mongoose.model('Seller', new Schema({
           number: {
                type: String,
           },
-          images: [{
+          media: [{
                type: String, // URLs for images
           }],
           status: { type: String, enum: ['pending', 'approved'], default: 'pending' }, // Add status field

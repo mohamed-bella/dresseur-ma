@@ -57,7 +57,6 @@ const marcheCanineController = {
      // POST: Add a new announcement (for sellers only)
      async addAnnouncement(req, res) {
           const { breed, description, price, location, number } = req.body;
-          console.log(req.body)
 
           if (!breed || !description || !price || !location || !number) {
                return res.status(400).render('marketplace/newAnnouncement', { message: 'Please fill in all fields', title: 'Créer une nouvelle annonce' });
@@ -67,11 +66,22 @@ const marcheCanineController = {
                const seller = await Seller.findOne({ googleId: req.user.googleId });
                if (!seller) return res.status(404).json({ message: 'Seller not found' });
 
-               const imageUrls = req.files.map(file => file.path);
+               // Handle file uploads (images and videos)
+               const mediaUrls = req.files.map(file => file.path); // URLs for both images and videos from Cloudinary
 
-               const newAnnouncement = { breed, description, price, location, number, images: imageUrls, sellerDisplayName: seller.displayName, sellerEmail: seller.email };
+               const newAnnouncement = {
+                    breed,
+                    description,
+                    price,
+                    location,
+                    number,
+                    media: mediaUrls, // Store media (images/videos) in an array
+                    sellerDisplayName: seller.displayName,
+                    sellerEmail: seller.email
+               };
+
                seller.announcements.push(newAnnouncement);
-               req.flash('success', "en Attendant l'Aprouve")
+               req.flash('success', "en Attendant l'Aprouve");
 
                await seller.save();
                res.redirect('/announcements');

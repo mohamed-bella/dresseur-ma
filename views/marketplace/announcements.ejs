@@ -4,97 +4,117 @@
           <% var successMsg=typeof successMsg !=='undefined' ? successMsg : '' ; %>
 
                <% if(successMsg) { %>
-                    <%= successMsg %>
-                         <% } %>
-                              </div>
-                              <%- include('partials/filter.ejs') %>
-                                   <div class="container mt-5">
-                                        <div class="card-container">
-                                             <div class="row">
-                                                  <% if(successMsg) { %>
+                    <div class="alert text-success" style="
+    background-color: #00800057;
+    text-align: center;
+    width: max-content;
+    margin: auto;
+    justify-content: center;
+    /* justify-items: center; */
+">
+                         <%= successMsg %>
+                    </div>
+                    <% } %>
+                         </div>
+                         <%- include('partials/filter.ejs') %>
+                              <div class="container mt-5">
+                                   <div class="card-container">
+                                        <div class="row">
+                                             <% if(successMsg) { %>
 
 
-                                                       <% } %>
-                                                            <% if (typeof announcements !=undefined) { %>
-                                                                 <% if (announcements && announcements.length> 0) { %>
-                                                                      <!-- Existing Announcements Loop -->
-                                                                      <% announcements.forEach(function(announcement) { %>
-                                                                           <div class="col-md-4 mb-4">
-                                                                                <div class="card dog-card" style="height: 100%;" onclick="window.location.href= '/announcements/<%= announcement._id %>'">
-                                                                                     <div class="row g-0">
-                                                                                          <!-- Image Section -->
-                                                                                          <div class="col-4 col-md-12 img-container" style="position: relative;">
-                                                                                               <img src="<%= announcement.images[0] || 'https://via.placeholder.com/150' %>" class="img-fluid card-img-left w-100" alt="Image annonce" style="object-fit: cover; height: 100%; aspect-ratio: 1;">
-                                                                                          </div>
+                                                  <% } %>
+                                                       <% if (typeof announcements !=undefined) { %>
+                                                            <% if (announcements && announcements.length> 0) { %>
+                                                                 <!-- Existing Announcements Loop -->
+                                                                 <% announcements.forEach(function(announcement) { %>
+                                                                      <div class="col-md-4 mb-4">
+                                                                           <div class="card dog-card" style="height: 100%;" onclick="window.location.href= '/announcements/<%= announcement._id %>'">
+                                                                                <div class="row g-0">
+                                                                                     <!-- Media Section (Image or Video) -->
+                                                                                     <div class="col-4 col-md-12 img-container" style="position: relative;">
+                                                                                          <% if (announcement.media[0].endsWith('.jpg') || announcement.media[0].endsWith('.jpeg') || announcement.media[0].endsWith('.png') || announcement.media[0].endsWith('.gif')) { %>
+                                                                                               <!-- Display image -->
+                                                                                               <img src="<%= announcement.media[0] || 'https://via.placeholder.com/150' %>" class="img-fluid card-img-left w-100" alt="Image annonce" style="object-fit: cover; height: 100%; aspect-ratio: 1;">
+                                                                                               <% } else if (announcement.media[0].endsWith('.mp4') || announcement.media[0].endsWith('.webm') || announcement.media[0].endsWith('.ogg')) { %>
+                                                                                                    <!-- Display video -->
+                                                                                                    <video src="<%= announcement.media[0] %>" class="img-fluid card-img-left w-100" style="object-fit: cover; height: 100%; aspect-ratio: 1;" controls>
+                                                                                                         Your browser does not support the video tag.
+                                                                                                    </video>
+                                                                                                    <% } else { %>
+                                                                                                         <!-- Default placeholder image if no media is found -->
+                                                                                                         <img src="https://via.placeholder.com/150" class="img-fluid card-img-left w-100" alt="Image annonce" style="object-fit: cover; height: 100%; aspect-ratio: 1;">
+                                                                                                         <% } %>
+                                                                                     </div>
 
-                                                                                          <!-- Card Body Section -->
-                                                                                          <div class="col-8 col-md-12">
-                                                                                               <div class="card-body d-flex flex-column">
-                                                                                                    <!-- Title -->
-                                                                                                    <h5 class="card-title mb-2" style="font-weight: bold; color: #343a40;">
-                                                                                                         <%= announcement.breed %>
-                                                                                                    </h5>
+                                                                                     <!-- Card Body Section -->
+                                                                                     <div class="col-8 col-md-12">
+                                                                                          <div class="card-body d-flex flex-column">
+                                                                                               <!-- Title -->
+                                                                                               <h5 class="card-title mb-2" style="font-weight: bold; color: #343a40;">
+                                                                                                    <%= announcement.breed %>
+                                                                                               </h5>
 
-                                                                                                    <!-- Location with Icon -->
-                                                                                                    <p class="card-text mb-1" style="font-size: 0.9rem;">
-                                                                                                         <i class="bi bi-geo-alt-fill" style="color: #6c757d;"></i>
-                                                                                                         <strong>Lieu:</strong>
-                                                                                                         <%= announcement.location %>
-                                                                                                    </p>
+                                                                                               <!-- Location with Icon -->
+                                                                                               <p class="card-text mb-1" style="font-size: 0.9rem;">
+                                                                                                    <i class="bi bi-geo-alt-fill" style="color: #6c757d;"></i>
+                                                                                                    <strong>Lieu:</strong>
+                                                                                                    <%= announcement.location %>
+                                                                                               </p>
 
-                                                                                                    <!-- Price with Icon -->
-                                                                                                    <p class="card-text mb-2 dog-price" style="font-size: 1rem; font-weight: bold;">
-                                                                                                         <%= announcement.price %> MAD
-                                                                                                    </p>
+                                                                                               <!-- Price with Icon -->
+                                                                                               <p class="card-text mb-2 dog-price" style="font-size: 1rem; font-weight: bold;">
+                                                                                                    <%= announcement.price %> MAD
+                                                                                               </p>
 
-                                                                                                    <!-- Description (Optional for compact layout) -->
-                                                                                                    <p class="card-text d-none d-md-block" style="font-size: 0.85rem; color: #6c757d;">
-                                                                                                         <%= announcement.description %>
-                                                                                                    </p>
+                                                                                               <!-- Description (Optional for compact layout) -->
+                                                                                               <p class="card-text d-none d-md-block" style="font-size: 0.85rem; color: #6c757d;">
+                                                                                                    <%= announcement.description %>
+                                                                                               </p>
 
-                                                                                                    <!-- Details Button (fixed at the bottom for visual hierarchy) -->
+                                                                                               <!-- Details Button (fixed at the bottom for visual hierarchy) -->
 
-                                                                                               </div>
                                                                                           </div>
                                                                                      </div>
                                                                                 </div>
                                                                            </div>
+                                                                      </div>
+                                                                      <% }); %>
 
-                                                                           <% }); %>
-                                                                                <% } else { %>
-                                                                                     <p class="text-center">Aucune annonce disponible pour le moment.</p>
+                                                                           <% } else { %>
+                                                                                <p class="text-center">Aucune annonce disponible pour le moment.</p>
+                                                                                <% } %>
                                                                                      <% } %>
-                                                                                          <% } %>
-                                             </div>
                                         </div>
-
                                    </div>
-                                   <script>
-                                        document.addEventListener('DOMContentLoaded', function () {
-                                             const breeds = [
-                                                  "Berger Allemand", "Labrador Retriever", "Golden Retriever", "Bulldog Français",
-                                                  "Bouledogue Anglais", "Chihuahua", "Rottweiler", "Beagle", "Poodle", "Boxer", "Cocker Spaniel"
-                                                  // Add more breeds here
-                                             ];
 
-                                             const breedInput = document.getElementById('breedInput');
+                              </div>
+                              <script>
+                                   document.addEventListener('DOMContentLoaded', function () {
+                                        const breeds = [
+                                             "Berger Allemand", "Labrador Retriever", "Golden Retriever", "Bulldog Français",
+                                             "Bouledogue Anglais", "Chihuahua", "Rottweiler", "Beagle", "Poodle", "Boxer", "Cocker Spaniel"
+                                             // Add more breeds here
+                                        ];
 
-                                             breedInput.addEventListener('input', function () {
-                                                  const value = breedInput.value.toLowerCase();
+                                        const breedInput = document.getElementById('breedInput');
 
-                                                  // Filter suggestions based on input
-                                                  const suggestions = breeds.filter(breed => breed.toLowerCase().includes(value));
+                                        breedInput.addEventListener('input', function () {
+                                             const value = breedInput.value.toLowerCase();
 
-                                                  const dataList = document.getElementById('dogBreeds');
-                                                  dataList.innerHTML = ''; // Clear previous options
+                                             // Filter suggestions based on input
+                                             const suggestions = breeds.filter(breed => breed.toLowerCase().includes(value));
 
-                                                  suggestions.forEach(breed => {
-                                                       const option = document.createElement('option');
-                                                       option.value = breed;
-                                                       dataList.appendChild(option);
-                                                  });
+                                             const dataList = document.getElementById('dogBreeds');
+                                             dataList.innerHTML = ''; // Clear previous options
+
+                                             suggestions.forEach(breed => {
+                                                  const option = document.createElement('option');
+                                                  option.value = breed;
+                                                  dataList.appendChild(option);
                                              });
                                         });
-                                   </script>
+                                   });
+                              </script>
 
-                                   <%- include('partials/footer.ejs') %>
+                              <%- include('partials/footer.ejs') %>

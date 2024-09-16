@@ -1,4 +1,31 @@
 <%- include('partials/head.ejs') %>
+
+     <!-- Dynamic Title -->
+     <title>
+          <%= article.title %> | Votre Site
+     </title>
+
+     <!-- Meta Tags -->
+     <meta name="description" content="<%= article.description %>">
+     <meta name="author" content="<%= article.author %>">
+     <meta name="keywords" content="<%= article.description %>">
+     <meta property="og:title" content="<%= article.title %>">
+     <meta property="og:description" content="<%= article.description %>">
+     <meta property="og:type" content="article">
+     <meta property="og:image" content="<%= article.bannerImage || '/default-image.jpg' %>">
+
+     <!-- Twitter Card meta tags -->
+     <meta name="twitter:card" content="summary_large_image">
+     <meta name="twitter:title" content="<%= article.title %>">
+     <meta name="twitter:description" content="<%= article.description %>">
+     <meta name="twitter:image" content="<%= article.bannerImage || '/default-image.jpg' %>">
+     <style>
+          @import url('https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400..800&family=Readex+Pro:wght@160..700&display=swap');
+
+          body {
+               font-family: "Baloo Bhaijaan 2", sans-serif;
+          }
+     </style>
      <%- include('../marketplace/partials/navbar.ejs') %>
 
           <div class="container mt-5">
