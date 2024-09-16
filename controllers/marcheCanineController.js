@@ -37,17 +37,28 @@ const marcheCanineController = {
      // GET: Fetch all announcements (Home Page)
      async getAnnouncements(req, res) {
           try {
-               const sellers = await Seller.find().select('announcements').sort({datePosted : -1});
-               const announcements = sellers.reduce((acc, seller) => [...acc, ...seller.announcements.filter(a => a.status === 'approved')], []);
+               const sellers = await Seller.find().select('announcements');
+
+               // Combine and filter announcements with approved status
+               const announcements = sellers.reduce((acc, seller) => [
+                    ...acc,
+                    ...seller.announcements.filter(a => a.status === 'approved')
+               ], []);
+
+               // Sort announcements by datePosted (newest first)
+               announcements.sort((a, b) => new Date(b.datePosted) - new Date(a.datePosted));
 
                res.render('marketplace/announcements', {
-                    announcements, title: 'Tous les annonces', successMsg: req.flash('success')
+                    announcements,
+                    title: 'Tous les annonces',
+                    successMsg: req.flash('success')
                });
           } catch (err) {
                console.error(err);
                res.status(500).render('error', { message: 'Failed to fetch announcements' });
           }
      },
+
 
      // GET: Show form to create a new announcement
      showNewAnnouncementForm(req, res) {

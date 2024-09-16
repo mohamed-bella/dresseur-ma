@@ -9,6 +9,21 @@ const storage = new CloudinaryStorage({
      params: {
           folder: 'announcements', // Folder name in Cloudinary
           resource_type: 'auto', // This will allow both images and videos to be uploaded
+          transformation: [
+               {
+                    overlay: {
+                         font_family: "Arial",
+                         font_size: 80, // Increase font size for a bigger watermark
+                         font_weight: "bold",
+                         text: "Ndressilik"
+                    },
+                    gravity: "center", // Center the watermark
+                    opacity: 50, // Adjust opacity as needed
+                    x: 0, // No horizontal offset
+                    y: 0  // No vertical offset
+               }
+          ]
+
      }
 });
 
