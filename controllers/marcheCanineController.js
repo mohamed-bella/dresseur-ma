@@ -37,7 +37,7 @@ const marcheCanineController = {
      // GET: Fetch all announcements (Home Page)
      async getAnnouncements(req, res) {
           try {
-               const sellers = await Seller.find().select('announcements');
+               const sellers = await Seller.find().select('announcements').sort({datePosted : -1});
                const announcements = sellers.reduce((acc, seller) => [...acc, ...seller.announcements.filter(a => a.status === 'approved')], []);
 
                res.render('marketplace/announcements', {
