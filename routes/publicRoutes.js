@@ -32,14 +32,23 @@ router.get('/articles', async (req, res) => {
 });
 
 
-router.get('/articles/:id', async (req, res) => {
+router.get('/articles/:slug', async (req, res) => {
      try {
-          const article = await Article.findById(req.params.id);
+          // Find the article by slug
+          const article = await Article.findOne({ slug: req.params.slug });
+
+          // Check if the article was found
+          if (!article) {
+               return res.status(404).send('Article non trouvé.');
+          }
+
+          // Render the article details page with the found article
           res.render('public/articleDetail', { article, title: article.title });
      } catch (err) {
           console.error(err);
           res.status(500).send('Erreur lors de la récupération de l\'article.');
      }
+
 });
 
 

@@ -1,6 +1,8 @@
 const Seller = require('../models/seller');
 const axios = require('axios');
 const cheerio = require('cheerio');
+const slugify = require('slugify');
+
 const mongoose = require('mongoose');
 
 const cloudinary = require('../config/cloudinary'); // Import Cloudinary configuration
@@ -69,8 +71,12 @@ const marcheCanineController = {
      async addAnnouncement(req, res) {
           const { breed, description, price, location, number } = req.body;
 
+          // Check if all required fields are filled
           if (!breed || !description || !price || !location || !number) {
-               return res.status(400).render('marketplace/newAnnouncement', { message: 'Please fill in all fields', title: 'Créer une nouvelle annonce' });
+               return res.status(400).render('marketplace/newAnnouncement', {
+                    message: 'Please fill in all fields',
+                    title: 'Créer une nouvelle annonce'
+               });
           }
 
           try {
@@ -80,6 +86,23 @@ const marcheCanineController = {
                // Handle file uploads (images and videos)
                const mediaUrls = req.files.map(file => file.path); // URLs for both images and videos from Cloudinary
 
+               // Generate a unique slug for the announcement
+               // Generate a unique slug for the announcement
+               const currentDate = new Date();
+               const formattedDate = `${currentDate.getFullYear()}${(currentDate.getMonth() + 1).toString().padStart(2, '0')}${currentDate.getDate().toString().padStart(2, '0')}`;
+               const formattedTime = `${currentDate.getHours().toString().padStart(2, '0')}${currentDate.getMinutes().toString().padStart(2, '0')}${currentDate.getSeconds().toString().padStart(2, '0')}`;
+               const slugBase = `${breed} ${location} ${formattedDate}-${formattedTime}`; // Include date and time in the slug
+               let slug = slugify(slugBase, { lower: true, strict: true });
+
+               // Ensure slug is unique by checking in the database
+               let slugExists = await Seller.findOne({ 'announcements.slug': slug });
+               let suffix = 1;
+               while (slugExists) {
+                    slug = `${slug}-${suffix}`;
+                    slugExists = await Seller.findOne({ 'announcements.slug': slug });
+                    suffix++;
+               }
+
                const newAnnouncement = {
                     breed,
                     description,
@@ -87,10 +110,12 @@ const marcheCanineController = {
                     location,
                     number,
                     media: mediaUrls, // Store media (images/videos) in an array
+                    slug, // Store the slug
                     sellerDisplayName: seller.displayName,
                     sellerEmail: seller.email
                };
 
+               // Add the new announcement to the seller's announcements
                seller.announcements.push(newAnnouncement);
                req.flash('success', "en Attendant l'Aprouve");
 
@@ -104,23 +129,18 @@ const marcheCanineController = {
 
 
      // GET: Show details of a specific announcement by ID
-     async getAnnouncementById(req, res) {
+     async getAnnouncementBySlug(req, res) {
           try {
-               // Validate if req.params.id is a valid ObjectId
-               if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-                    return res.status(400).render('error', { message: 'Invalid announcement ID' });
-               }
-
-               // Find the seller that has the announcement with the provided ID
-               const seller = await Seller.findOne({ 'announcements._id': req.params.id });
+               // Find the seller that has the announcement with the provided slug
+               const seller = await Seller.findOne({ 'announcements.slug': req.params.slug });
 
                // If no seller or announcement is found
                if (!seller) {
                     return res.status(404).render('error', { message: 'Announcement not found' });
                }
 
-               // Find the announcement by its ID within the seller's announcements
-               const announcement = seller.announcements.id(req.params.id);
+               // Find the announcement by its slug within the seller's announcements
+               const announcement = seller.announcements.find(ann => ann.slug === req.params.slug);
                if (!announcement) {
                     return res.status(404).render('error', { message: 'Announcement not found' });
                }

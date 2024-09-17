@@ -22,6 +22,11 @@ const Seller = mongoose.models.Seller || mongoose.model('Seller', new Schema({
      role: { type: String, enum: ['user', 'admin'], default: 'user' }, // Add role field
 
      announcements: [{
+          slug: {
+               type: String,
+               unique: true, // Ensure slugs are unique
+               required: true
+          },
           breed: {
                type: String,
           },

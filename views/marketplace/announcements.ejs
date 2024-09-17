@@ -52,7 +52,7 @@
 
                                                                  <% announcements.forEach(function(announcement) { %>
                                                                       <div class="col-md-4 mb-4">
-                                                                           <div class="card dog-card" style="height: 100%;" onclick="window.location.href= '/announcements/<%= announcement._id %>'">
+                                                                           <div class="card dog-card" style="height: 100%;" onclick="window.location.href= '/announcements/<%= announcement.slug %>'">
                                                                                 <div class="row g-0">
                                                                                      <!-- Media Section (Image or Video) -->
                                                                                      <div class="col-4 col-md-12 img-container" style="position: relative;">

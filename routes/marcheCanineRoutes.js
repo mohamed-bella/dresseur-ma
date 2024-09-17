@@ -18,7 +18,7 @@ router.post('/announcements', upload.array('media', 10), ensureSellerAuthenticat
 router.post('/seller/announcements/:id/images', ensureSellerAuthenticated, upload.array('newImages', 10), marcheCanineController.updateAnnouncementImages);
 
 // GET: View a specific announcement by ID
-router.get('/announcements/:id', marcheCanineController.getAnnouncementById);
+router.get('/announcements/:slug', marcheCanineController.getAnnouncementBySlug);
 
 // GET: Show form to edit an existing announcement (only sellers)
 router.get('/announcements/:id/edit', ensureSellerAuthenticated, marcheCanineController.showEditAnnouncementForm);

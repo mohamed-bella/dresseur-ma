@@ -4,6 +4,8 @@ const Article = require('../models/article');
 const cloudinary = require('../config/cloudinary'); // Import Cloudinary configuration
 const multer = require('multer');
 const path = require('path');
+const slugify = require('slugify');
+
 
 // Set up multer for file storage
 const storage = multer.diskStorage({
@@ -180,7 +182,7 @@ exports.deleteAnnouncement = async (req, res) => {
 exports.getArticles = async (req, res) => {
      try {
           // Sort by dateCreated in descending order to get the latest articles first
-          const articles = await Article.find().sort({ dateCreated: -2 });
+          const articles = await Article.find();
           res.render('admin/articles', { articles, title: 'Manage Articles' });
      } catch (error) {
           console.error(error);
@@ -214,12 +216,29 @@ exports.createArticle = async (req, res) => {
                fs.unlinkSync(req.file.path);
           }
 
-          // Create new article with the banner image URL
+          // Generate a unique slug based on the title
+          const currentDate = new Date();
+          const formattedDate = `${currentDate.getFullYear()}${(currentDate.getMonth() + 1).toString().padStart(2, '0')}${currentDate.getDate().toString().padStart(2, '0')}`;
+          const formattedTime = `${currentDate.getHours().toString().padStart(2, '0')}${currentDate.getMinutes().toString().padStart(2, '0')}${currentDate.getSeconds().toString().padStart(2, '0')}`;
+          const slugBase = `${title} ${formattedDate}-${formattedTime}`;
+          let slug = slugify(slugBase, { lower: true, strict: true });
+
+          // Ensure slug is unique by checking in the database
+          let slugExists = await Article.findOne({ slug });
+          let suffix = 1;
+          while (slugExists) {
+               slug = `${slug}-${suffix}`;
+               slugExists = await Article.findOne({ slug });
+               suffix++;
+          }
+
+          // Create new article with the banner image URL and generated slug
           const newArticle = new Article({
                title,
                content,
                description,
-               bannerImage: bannerImageUrl
+               bannerImage: bannerImageUrl,
+               slug // Store the slug
           });
 
           await newArticle.save();
@@ -229,6 +248,7 @@ exports.createArticle = async (req, res) => {
           res.status(500).send('Erreur serveur lors de la création de l\'article.');
      }
 };
+
 
 
 // Get Edit Article Page

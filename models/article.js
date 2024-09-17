@@ -3,6 +3,11 @@ const Schema = mongoose.Schema;
 
 // Define the Article schema
 const ArticleSchema = new Schema({
+     slug: {
+          type: String,
+          unique: true, // Ensure slugs are unique
+          required: true
+     },
      title: {
           type: String,
           required: true,
