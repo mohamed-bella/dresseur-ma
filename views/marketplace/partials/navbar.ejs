@@ -1,29 +1,38 @@
-<header class="p-2 bg-light navbar-light fixed-top nav" style="position: fixed; background-color: white !important;">
-     <div class="container mt-10">
-          <div class="d-flex flex-wrap align-items-center justify-content-between">
-               <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-decoration-none">
-                    <img src="https://res.cloudinary.com/dxg2nsnkj/image/upload/v1726071234/Untitled_design_8_b90gyq.png" class="bi me-2" style=' width:40px' role="img" aria-label="Bootstrap">
-                    <!-- <use xlink:href="#bootstrap"></use> -->
-                    </img>
-                    <!-- <span class="fs-4">Marche Canine</span> -->
-               </a>
+<header class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+     <div class="container">
+          <!-- Brand/Logo -->
+          <a class="navbar-brand" href="/">
+               <img src="https://res.cloudinary.com/dxg2nsnkj/image/upload/v1726071234/Untitled_design_8_b90gyq.png" style="width:40px" alt="Ndressilik">
+               Ndressilik</a>
 
+          <!-- Toggle Button for Small Devices -->
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+               <span class="navbar-toggler-icon"></span>
+          </button>
 
+          <!-- Collapsible Navbar Content -->
+          <div class="collapse navbar-collapse" id="navbarContent">
+               <!-- Left-aligned Links (optional) -->
+               <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <!-- Example Links -->
 
-               <div class="text-end">
+               </ul>
+
+               <!-- Right-aligned Buttons -->
+               <div class="d-flex">
                     <% if (user) { %>
                          <a href="/seller/dashboard" class="btn btn-outline-dark me-2"><i class="bi bi-speedometer2"></i> Dashboard</a>
-                         <a href="/announcements/new" class="btn btn-warning"><i class="bi bi-plus-square"></i> Ajouter Annonce</a>
+                         <a href="/announcements/new" class="btn btn-warning me-2"><i class="bi bi-plus-square"></i> Ajouter Annonce</a>
                          <a href="/auth/logout" class="btn btn-danger">Logout</a>
                          <% } else { %>
-                              <button data-bs-toggle="modal" data-bs-target="#exampleModal" class="pushy__btn pushy__btn--md pushy__btn--primary me-2">
-                                   <i class="bi bi-plus-square"></i> Ajouter une annonce</button>
+                              <button data-bs-toggle="modal" data-bs-target="#exampleModal" class="pushy__btn pushy__btn--md pushy__btn--primary"><i class="bi bi-plus-square"></i> Ajouter une annonce</button>
                               <% } %>
                </div>
           </div>
      </div>
 </header>
-<!-- Modal -->
+
+<!-- Modal for Adding Announcement -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
      <div class="modal-dialog">
           <div class="modal-content">
@@ -38,17 +47,13 @@
                               <input type="text" class="form-control" id="dogName" name="dogName" placeholder="Entrez le nom du chien" required>
                          </div>
                          <div class="form-group mb-3">
-                              <label for="location" class="form-label">Lieu</label>
-                              <input type="text" class="form-control" id="location" name="location" placeholder="Entrez votre localisation" required>
-                         </div>
-                         <div class="form-group mb-3">
                               <label for="phone" class="form-label">Numéro de téléphone</label>
                               <input type="tel" class="form-control" id="phone" name="phone" placeholder="Entrez votre numéro de téléphone" required>
                          </div>
                     </div>
                     <div class="modal-footer">
-                         <button type="button" class="pushy__btn pushy__btn--md pushy__btn--secondary" data-bs-dismiss="modal">Fermer</button>
-                         <button type="submit" class="pushy__btn pushy__btn--md pushy__btn--primary">Soumettre et Se Connecter</button>
+                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                         <button type="submit" class="btn btn-primary">Soumettre et Se Connecter</button>
                     </div>
                </form>
           </div>

@@ -11,21 +11,39 @@
                               <% announcements.forEach(function(announcement) { %>
                                    <div class="col-md-4 mb-4">
                                         <div class="card">
-                                             <img src="<%= announcement.images[0] || 'https://via.placeholder.com/150' %>" class="card-img-top" alt="Image de l'annonce">
-                                             <div class="card-body">
-                                                  <h5 class="card-title">
-                                                       <%= announcement.title %>
-                                                  </h5>
-                                                  <p class="card-text">
-                                                       <%= announcement.description %>
-                                                  </p>
-                                                  <a href="/seller/announcements/<%= announcement._id %>/edit" class="btn btn-warning">Modifier</a>
-                                                  <form action="/seller/announcements/<%= announcement._id %>/delete" method="POST" style="display:inline;">
-                                                       <!-- <input type="hidden" name="_method" value="DELETE"> -->
-                                                       <button type="submit" class="btn btn-danger">Supprimer</button>
-                                                  </form>
-                                             </div>
+                                             <!-- Media Section: Display Image or Video -->
+                                             <% if (announcement.media && announcement.media.length> 0) { %>
+                                                  <% if (announcement.media[0].endsWith('.jpg') || announcement.media[0].endsWith('.jpeg') || announcement.media[0].endsWith('.png') || announcement.media[0].endsWith('.gif')) { %>
+                                                       <!-- Display Image -->
+                                                       <img src="<%= announcement.media[0] %>" class="card-img-top" alt="Image de l'annonce" style="object-fit: cover; height: 200px;">
+                                                       <% } else if (announcement.media[0].endsWith('.mp4') || announcement.media[0].endsWith('.webm') || announcement.media[0].endsWith('.ogg')) { %>
+                                                            <!-- Display Video -->
+                                                            <video src="<%= announcement.media[0] %>" class="card-img-top" style="object-fit: cover; height: 200px;" controls></video>
+                                                            <% } else { %>
+                                                                 <!-- Fallback if media type is not recognized -->
+                                                                 <img src="https://via.placeholder.com/150" class="card-img-top" alt="Image de l'annonce" style="object-fit: cover; height: 200px;">
+                                                                 <% } %>
+                                                                      <% } else { %>
+                                                                           <!-- Default Placeholder if no media -->
+                                                                           <img src="https://via.placeholder.com/150" class="card-img-top" alt="Image de l'annonce" style="object-fit: cover; height: 200px;">
+                                                                           <% } %>
+
+                                                                                <!-- Card Body Section -->
+                                                                                <div class="card-body">
+                                                                                     <h5 class="card-title">
+                                                                                          <%= announcement.breed || 'Annonce sans titre' %>
+                                                                                     </h5>
+                                                                                     <p class="card-text">
+                                                                                          <%= announcement.description || 'Pas de description disponible' %>
+                                                                                     </p>
+                                                                                     <a href="/seller/announcements/<%= announcement._id %>/edit" class="btn btn-warning">Modifier</a>
+                                                                                     <form action="/seller/announcements/<%= announcement._id %>/delete" method="POST" style="display:inline;">
+                                                                                          <!-- <input type="hidden" name="_method" value="DELETE"> -->
+                                                                                          <button type="submit" class="btn btn-danger">Supprimer</button>
+                                                                                     </form>
+                                                                                </div>
                                         </div>
+
                                    </div>
                                    <% }); %>
                          </div>
