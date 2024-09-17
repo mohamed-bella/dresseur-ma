@@ -13,36 +13,63 @@
                               <div class="card-body">
                                    <!-- Large Media (Image or Video) -->
                                    <div class="main-image mb-3">
-                                        <% if (announcement.media[0].endsWith('.jpg') || announcement.media[0].endsWith('.jpeg') || announcement.media[0].endsWith('.png') || announcement.media[0].endsWith('.gif')) { %>
-                                             <!-- Display Image -->
-                                             <img id="mainImage" src="<%= announcement.media[0] || 'https://via.placeholder.com/600x400' %>" class="img-fluid w-100" alt="Media for <%= announcement.title %>" style="object-fit: cover; border-radius: 4px;">
-                                             <% } else if (announcement.media[0].endsWith('.mp4') || announcement.media[0].endsWith('.webm') || announcement.media[0].endsWith('.ogg')) { %>
-                                                  <!-- Display Video -->
-                                                  <video id="mainVideo" src="<%= announcement.media[0] %>" class="img-fluid w-100" style="object-fit: cover; border-radius: 4px;" controls>
-                                                       Your browser does not support the video tag.
-                                                  </video>
-                                                  <% } else { %>
-                                                       <!-- Default Placeholder -->
-                                                       <img id="mainImage" src="https://via.placeholder.com/600x400" class="img-fluid w-100" alt="Media for <%= announcement.title %>" style="object-fit: cover; border-radius: 4px;">
-                                                       <% } %>
+                                        <% if (announcement.media && announcement.media.length> 0) { %>
+                                             <% if (announcement.media[0] && (announcement.media[0].endsWith('.jpg') || announcement.media[0].endsWith('.jpeg') || announcement.media[0].endsWith('.png') || announcement.media[0].endsWith('.gif'))) { %>
+                                                  <!-- Display Image -->
+                                                  <img id="mainImage" src="<%= announcement.media[0] || 'https://via.placeholder.com/600x400' %>" class="img-fluid w-100" alt="Media for <%= announcement.title %>" style="object-fit: cover; border-radius: 4px;">
+                                                  <% } else if (announcement.media[0] && (announcement.media[0].endsWith('.mp4') || announcement.media[0].endsWith('.webm') || announcement.media[0].endsWith('.ogg'))) { %>
+                                                       <!-- Display Video -->
+                                                       <video id="mainVideo" src="<%= announcement.media[0] %>" class="img-fluid w-100" style="object-fit: cover; border-radius: 4px;" controls>
+                                                            Your browser does not support the video tag.
+                                                       </video>
+                                                       <% } else { %>
+                                                            <!-- Default Placeholder -->
+                                                            <img id="mainImage" src="https://via.placeholder.com/600x400" class="img-fluid w-100" alt="Media for <%= announcement.title %>" style="object-fit: cover; border-radius: 4px;">
+                                                            <% } %>
+                                                                 <% } else { %>
+                                                                      <!-- Default Placeholder if no media available -->
+                                                                      <img id="mainImage" src="https://via.placeholder.com/600x400" class="img-fluid w-100" alt="Media for <%= announcement.title %>" style="object-fit: cover; border-radius: 4px;">
+                                                                      <% } %>
                                    </div>
-                    
+
                                    <!-- Thumbnail Images/Videos -->
                                    <div class="thumbnail-images d-flex justify-content-center flex-wrap">
-                                        <% announcement.media.forEach(function(media, index) { %>
-                                             <% if (media.endsWith('.jpg') || media.endsWith('.jpeg') || media.endsWith('.png') || media.endsWith('.gif')) { %>
-                                                  <!-- Image Thumbnail -->
-                                                  <img src="<%= media %>" class="img-thumbnail small-image me-2 mb-2" alt="Thumbnail <%= index + 1 %>" style="cursor: pointer; width: 60px; height: 60px; object-fit: cover;" onclick="setMainMedia('<%= media %>')">
-                                                  <% } else if (media.endsWith('.mp4') || media.endsWith('.webm') || media.endsWith('.ogg')) { %>
-                                                       <!-- Video Thumbnail -->
-                                                       <video src="<%= media %>" class="img-thumbnail small-image me-2 mb-2" alt="Thumbnail <%= index + 1 %>" style="cursor: pointer; width: 60px; height: 60px; object-fit: cover;" onclick="setMainMedia('<%= media %>', 'video')"></video>
-                                                       <% } %>
-                                                            <% }); %>
+                                        <% if (announcement.media && announcement.media.length> 0) { %>
+                                             <% announcement.media.forEach(function(media, index) { %>
+                                                  <% if (media.endsWith('.jpg') || media.endsWith('.jpeg') || media.endsWith('.png') || media.endsWith('.gif')) { %>
+                                                       <!-- Image Thumbnail -->
+                                                       <img src="<%= media %>" class="img-thumbnail small-image me-2 mb-2" alt="Thumbnail <%= index + 1 %>" style="cursor: pointer; width: 60px; height: 60px; object-fit: cover;" onclick="setMainMedia('<%= media %>')">
+                                                       <% } else if (media.endsWith('.mp4') || media.endsWith('.webm') || media.endsWith('.ogg')) { %>
+                                                            <!-- Video Thumbnail -->
+                                                            <video src="<%= media %>" class="img-thumbnail small-image me-2 mb-2" alt="Thumbnail <%= index + 1 %>" style="cursor: pointer; width: 60px; height: 60px; object-fit: cover;" onclick="setMainMedia('<%= media %>', 'video')"></video>
+                                                            <% } %>
+                                                                 <% }); %>
+                                                                      <% } %>
                                    </div>
                               </div>
                          </div>
+
+                         <script>
+                              // Function to set the main media on click
+                              function setMainMedia(mediaUrl, mediaType = 'image') {
+                                   if (mediaType === 'video') {
+                                        document.getElementById('mainImage').style.display = 'none';
+                                        const videoElement = document.getElementById('mainVideo');
+                                        videoElement.src = mediaUrl;
+                                        videoElement.style.display = 'block';
+                                   } else {
+                                        const imageElement = document.getElementById('mainImage');
+                                        imageElement.src = mediaUrl;
+                                        imageElement.style.display = 'block';
+                                        if (document.getElementById('mainVideo')) {
+                                             document.getElementById('mainVideo').style.display = 'none';
+                                        }
+                                   }
+                              }
+                         </script>
+
                     </div>
-                    
+
                     <script>
                          function setMainMedia(mediaUrl, type = 'image') {
                               const mainImage = document.getElementById('mainImage');
@@ -84,14 +111,12 @@
 
                                    <!-- Phone Number and Call Button -->
                                    <div class="text-center">
-                                        <a id="phoneNumber" href="tel:<%= announcement.number %>" style="display: none; color: #000; font-size: 0.875rem;">
-                                             Téléphone: <%= announcement.number %>
+                                        <!-- WhatsApp Button -->
+                                        <a href="https://wa.me/<%= announcement.number.replace(/\s+/g, '') %>?text=Bonjour,%20je%20souhaite%20acheter%20le%20chien%20<%= encodeURIComponent(announcement.breed) %>" class="btn btn-success mt-2 w-100" style="background-color: #25D366; border-color: #25D366; color: white;" target="_blank">
+                                             <i class="bi bi-whatsapp"></i> WhatsApp
                                         </a>
-
-                                        <button id="showNumberBtn" class="btn btn-warning mt-2 w-100" style="background-color: #f1c40f; border-color: #f1c40f; color: black;">
-                                             <i class="bi bi-telephone-fill"></i> Appeler
-                                        </button>
                                    </div>
+
                               </div>
                          </div>
                     </div>
@@ -152,9 +177,12 @@
 
           <!-- Fixed Call Button for Mobile Devices -->
           <div class="fixed-call-btn d-md-none">
-               <button id="fixedCallButton" class="btn btn-warning w-100" style="background-color: #f1c40f; border-color: #f1c40f; color: black;">
-                    <i class="bi bi-telephone-fill"></i> Appeler
-               </button>
+               <div class="text-center">
+                    <!-- WhatsApp Button -->
+                    <a href="https://wa.me/<%= announcement.number.replace(/\s+/g, '') %>?text=Bonjour,%20je%20souhaite%20acheter%20le%20chien%20<%= encodeURIComponent(announcement.breed) %>" class="btn btn-success mt-2 w-100" style="background-color: #25D366; border-color: #25D366; color: white;" target="_blank">
+                         <i class="bi bi-whatsapp"></i> WhatsApp
+                    </a>
+               </div>
           </div>
 
           <%- include('partials/footer.ejs') %>

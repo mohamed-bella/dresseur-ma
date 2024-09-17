@@ -176,17 +176,19 @@ exports.deleteAnnouncement = async (req, res) => {
           res.status(500).send('Server Error');
      }
 };
-
 // Get All Articles
 exports.getArticles = async (req, res) => {
      try {
-          const articles = await Article.find();
+          // Sort by dateCreated in descending order to get the latest articles first
+          const articles = await Article.find().sort({ dateCreated: -2 });
           res.render('admin/articles', { articles, title: 'Manage Articles' });
      } catch (error) {
           console.error(error);
           res.status(500).send('Server Error');
      }
 };
+
+
 
 // Get New Article Page
 exports.getNewArticleForm = (req, res) => {
