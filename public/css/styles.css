@@ -249,15 +249,17 @@ input {
 }
 
 .dog-price {
-     position: absolute;
+     /* position: absolute; */
      right: 10px;
      bottom: -3px;
      color: #fbfbfb;
+     width: fit-content;
      font-size: larger;
      /* font-weight: 800; */
-     background-color: #F44336;
-     padding: 2px 5px;
+     background-color: #ff292938;
+     padding: 2px 7px;
      border-radius: 50px;
+     color: red;
 }
 
 .card,
