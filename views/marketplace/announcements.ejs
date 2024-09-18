@@ -84,34 +84,31 @@
                                                                                                </h5>
 
                                                                                                <!-- Location with Icon -->
-                                                                                               <p class="card-text " style="font-size: 0.9rem;">
-                                                                                                    <i class="bi bi-geo-alt-fill" style="color: #6c757d;"></i>
+                                                                                               <p class="card-text" style="font-size: 0.9rem;">
+                                                                                                    <img src="https://img.icons8.com/?size=100&id=3723&format=png&color=4D4D4D" alt="Location" style="width:16px; height:16px; margin-right:5px;">
                                                                                                     <strong>Lieu:</strong>
                                                                                                     <%= announcement.location %>
                                                                                                </p>
 
-                                                                                               <!-- Description (Optional for compact layout) -->
-                                                                                               <!-- <p class="card-text d-none d-md-block" style="font-size: 0.85rem; color: #6c757d;">
-                                                                                                    <%= announcement.description %>
-                                                                                               </p> -->
-
                                                                                                <!-- Date Posted (Time ago) -->
                                                                                                <p class="card-text" style="font-size: 0.85rem; color: #6c757d;">
-                                                                                                    <i class="bi bi-clock-history"></i> Posté il y a <span id="timeAgo-<%= announcement._id %>"></span>
+                                                                                                    <img src="https://img.icons8.com/?size=100&id=H0JqzxqGxPQm&format=png&color=4D4D4D" alt="Date Posted" style="width:16px; height:16px; margin-right:5px;">
+                                                                                                    Posté il y a <span id="timeAgo-<%= announcement._id %>"></span>
                                                                                                </p>
+
                                                                                                <!-- Views with Icon -->
                                                                                                <p class="card-text mb-2" style="font-size: 0.85rem; color: #6c757d;">
-                                                                                                    <i class="bi bi-eye"></i>
+                                                                                                    <img src="https://img.icons8.com/?size=100&id=986&format=png&color=4D4D4D" alt="Views" style="width:16px; height:16px; margin-right:5px;">
                                                                                                     <%= announcement.views || 0 %> vues
                                                                                                </p>
-                                                                                               <!-- Price with Icon -->
+
+                                                                                               <!-- Price -->
                                                                                                <p class="card-text mb-2 dog-price" style="font-size: 1rem; font-weight: bold;">
                                                                                                     <%= announcement.price %> dh
                                                                                                </p>
-
-
                                                                                           </div>
                                                                                      </div>
+
 
                                                                                 </div>
                                                                            </div>
