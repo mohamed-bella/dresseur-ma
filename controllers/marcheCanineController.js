@@ -129,10 +129,14 @@ const marcheCanineController = {
 
 
      // GET: Show details of a specific announcement by ID
+     // Controller to get announcement by slug and track views
      async getAnnouncementBySlug(req, res) {
           try {
+               const { slug } = req.params;
+               const cookieName = `viewed_${slug}`;
+
                // Find the seller that has the announcement with the provided slug
-               const seller = await Seller.findOne({ 'announcements.slug': req.params.slug });
+               const seller = await Seller.findOne({ 'announcements.slug': slug });
 
                // If no seller or announcement is found
                if (!seller) {
@@ -140,18 +144,31 @@ const marcheCanineController = {
                }
 
                // Find the announcement by its slug within the seller's announcements
-               const announcement = seller.announcements.find(ann => ann.slug === req.params.slug);
+               const announcement = seller.announcements.find(ann => ann.slug === slug);
                if (!announcement) {
                     return res.status(404).render('error', { message: 'Announcement not found' });
                }
 
+               // Check if the user has already viewed this announcement using cookies
+               if (!req.cookies[cookieName]) {
+                    // Increment view count if this is the first view
+                    announcement.views = (announcement.views || 0) + 1;
+
+                    // Save the updated announcement view count to the database
+                    await seller.save();
+
+                    // Set a cookie to mark that the user has viewed this announcement (expires in 24 hours)
+                    res.cookie(cookieName, true, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
+               }
+
                // Render the announcement details
-               res.render('marketplace/announcementDetail', { announcement, title: 'Détails de l\'annonce' });
+               res.render('marketplace/announcementDetail', { announcement, seller, title: 'Détails de l\'annonce' });
           } catch (err) {
                console.error(err);
                res.status(500).render('error', { message: 'Failed to retrieve announcement details' });
           }
      },
+
 
      // GET: Show form to edit an existing announcement
      async showEditAnnouncementForm(req, res) {

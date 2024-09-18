@@ -3,6 +3,7 @@ const morgan = require('morgan')
 const session = require('express-session')
 const mongoose = require('mongoose');
 const passport = require('passport');
+const cookieParser = require('cookie-parser');
 const MongoStore = require('connect-mongo');
 const methodOverride = require('method-override');
 const bodyParser = require('body-parser')
@@ -33,6 +34,7 @@ app.use(passport.session());
 
 // Method-override to support DELETE and PUT methods
 app.use(methodOverride('_method'));
+app.use(cookieParser());
 
 
 
@@ -60,6 +62,11 @@ app.use(marcheCanineRoutes)
 
 const authRoutes = require('./routes/authRoutes')
 app.use('/auth', authRoutes)
+
+
+const profileRoutes = require('./routes/profileRoutes')
+app.use('/profile', profileRoutes)
+
 
 const sellerRoutes = require('./routes/sellerRoutes')
 app.use('/seller', sellerRoutes)

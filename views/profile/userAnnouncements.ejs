@@ -1,0 +1,82 @@
+<%- include('../marketplace/partials/head.ejs') %>
+     <%- include('../marketplace/partials/navbar.ejs') %>
+
+          <div class="container mt-5">
+               <!-- Seller Info Section -->
+               <div class="row mb-4">
+                    <div class="col-md-4 text-center">
+                         <img src="<%= seller.image %>" alt="<%= seller.displayName %>" class="rounded-circle img-fluid" style="width: 150px; height: 150px; object-fit: cover;">
+                    </div>
+                    <div class="col-md-8 text-center">
+                         <h1 class="display-4">
+                              <%= seller.displayName %>
+                         </h1>
+                         <p class="text-muted">Joined: <%= seller.createdAt.toLocaleDateString() %>
+                         </p>
+                         <button id="copyLinkButton" class="btn btn-outline-primary" onclick="copyPageLink()">Copy Page Link</button>
+
+                    </div>
+               </div>
+               <hr>
+
+               <!-- Seller's Announcements Section -->
+               <div class="container">
+                    <div class="row">
+                         <div class="col-12">
+                              <h2 class="mb-4">Announcements</h2>
+
+                              <% if (announcements.length> 0) { %>
+                                   <div class="row">
+                                        <% announcements.forEach(function(announcement) { %>
+                                             <div class="col-md-6 mb-4">
+                                                  <div class="card shadow-sm">
+                                                       <img src="<%= announcement.media[0] %>" alt="<%= announcement.breed %>" class="card-img-top" style="height: 200px; object-fit: cover;">
+                                                       <div class="card-body">
+                                                            <h5 class="card-title">
+                                                                 <%= announcement.breed %> in <%= announcement.location %>
+                                                            </h5>
+                                                            <p class="card-text text-muted">
+                                                                 <%= announcement.description.substring(0, 100) %>...
+                                                            </p>
+                                                            <p class="font-weight-bold text-primary">Price: <%= announcement.price %> MAD</p>
+                                                            <a href="/announcements/<%= announcement.slug %>" class="btn btn-outline-primary">View Details</a>
+                                                       </div>
+                                                  </div>
+                                             </div>
+                                             <% }); %>
+                                   </div>
+                                   <% } else { %>
+                                        <div class="alert alert-warning text-center">
+                                             <p>No announcements found.</p>
+                                        </div>
+                                        <% } %>
+
+                                             <div class="text-center mt-5">
+                                                  <a href="/profile/<%= seller.slug %>" class="btn btn-secondary">Back to Profile</a>
+                                             </div>
+                         </div>
+                    </div>
+               </div>
+          </div>
+          <script>
+               function copyPageLink() {
+                    // Get the current page URL
+                    const pageLink = window.location.href;
+
+                    // Create a temporary input to copy the link
+                    const tempInput = document.createElement('input');
+                    document.body.appendChild(tempInput);
+                    tempInput.value = pageLink;
+
+                    // Select the input value and copy it to the clipboard
+                    tempInput.select();
+                    document.execCommand('copy');
+
+                    // Remove the temporary input element
+                    document.body.removeChild(tempInput);
+
+                    // Optionally, give feedback to the user that the link has been copied
+                    alert('Page link copied to clipboard!');
+               }
+          </script>
+          <%- include('../marketplace/partials/footer.ejs') %>
