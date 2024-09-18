@@ -4,6 +4,7 @@ const adminController = require('../controllers/adminController');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const { ensureAdminAuthenticated } = require('../middlewares/ensureAdminAuthenticated')
 // Set up multer for file storage
 const storage = multer.diskStorage({
      destination: function (req, file, cb) {

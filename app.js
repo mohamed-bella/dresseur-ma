@@ -8,6 +8,7 @@ const methodOverride = require('method-override');
 const bodyParser = require('body-parser')
 const flash = require('connect-flash')
 const consultationRoutes = require('./routes/consultationRoutes');
+const ensureAdminAuthenticated = require('./middlewares/ensureAdminAuthenticated')
 
 require('./config/passport')
 require('dotenv').config()
@@ -52,7 +53,7 @@ const publicRoutes = require('./routes/publicRoutes')
 app.use(publicRoutes)
 
 const adminRoutes = require('./routes/adminRoutes')
-app.use('/admin', adminRoutes)
+app.use('/admin', ensureAdminAuthenticated, adminRoutes)
 
 const marcheCanineRoutes = require('./routes/marcheCanineRoutes')
 app.use(marcheCanineRoutes)
