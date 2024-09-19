@@ -1,86 +1,177 @@
-<%- include('partials/head.ejs') %>
-     <style>
-          body {
-               background-color: white;
-          }
-     </style>
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+     <%- include('partials/head.ejs') %>
+          <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+          <style>
+               body {
+                    font-family: 'Poppins', sans-serif;
+                    background-color: #f8f9fa;
+                    color: #333;
+               }
+
+               .container {
+                    max-width: 1200px;
+               }
+
+               .section-title {
+                    font-size: 2rem;
+                    font-weight: 700;
+                    color: #2c3e50;
+                    margin-bottom: 2rem;
+                    text-align: center;
+               }
+
+               .card {
+                    border: none;
+                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                    transition: transform 0.3s ease-in-out;
+                    height: 100%;
+               }
+
+               .card:hover {
+                    transform: translateY(-5px);
+               }
+
+               .card-title {
+                    font-weight: 600;
+                    color: #2c3e50;
+               }
+
+               .card-text {
+                    color: #555;
+               }
+
+               .trust-badge {
+                    text-align: center;
+                    margin-bottom: 2rem;
+               }
+
+               .trust-badge i {
+                    font-size: 2.5rem;
+                    color: #3498db;
+                    margin-bottom: 1rem;
+               }
+
+               .about-section {
+                    background-color: #fff;
+                    padding: 3rem 0;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+               }
+
+               .about-list li {
+                    margin-bottom: 1rem;
+               }
+
+               .about-list i {
+                    color: #3498db;
+                    margin-right: 0.5rem;
+               }
+
+               @media (max-width: 768px) {
+                    .section-title {
+                         font-size: 1.75rem;
+                    }
+
+                    .card {
+                         margin-bottom: 1rem;
+                    }
+               }
+          </style>
+</head>
+
+<body>
      <%- include('partials/navbar.ejs') %>
           <%- include('partials/hero.ejs') %>
 
-
                <div class="container mt-5">
-                    <h2 class="text-center mb-5" style="font-size: 2.5rem; font-weight: bold;">Nos Services</h2>
+                    <h2 class="section-title">Nos Services</h2>
 
                     <div class="row">
-                         <!-- Service 1: Vendre des Chiens -->
                          <div class="col-md-4 mb-4">
-                              <a href="/announcements" class="card-link" style="text-decoration: none;">
-                                   <div class="card text-center" style="border: 1px solid #ddd; background-color: #ffefd5; border-radius: 8px;">
-                                        <div class="card-body">
-                                             <img src="https://img.icons8.com/?size=100&id=nz2BznVgHL0d&format=png&color=000000" alt="Dog Icon" style="width: 48px; height: 48px; margin-bottom: 10px;">
-                                             <h5 class="card-title" style="color: #333; text-decoration: underline;">🐶 Acheter et Vendre des Chiens</h5>
-                                             <p class="card-text" style="color: #555;">Publiez vos annonces de chiens à vendre ou à adopter.</p>
+                              <a href="/announcements" class="text-decoration-none">
+                                   <div class="card h-100">
+                                        <div class="card-body text-center">
+                                             <img src="https://img.icons8.com/?size=100&id=nz2BznVgHL0d&format=png&color=000000" alt="Dog Icon" class="mb-3" style="width: 64px;">
+                                             <h5 class="card-title">Acheter et Vendre des Chiens</h5>
+                                             <p class="card-text">Publiez vos annonces de chiens à vendre ou à adopter.</p>
                                         </div>
                                    </div>
                               </a>
                          </div>
 
-                         <!-- Service 2: Consultation -->
                          <div class="col-md-4 mb-4">
-                              <a href="/consultation" class="card-link" style="text-decoration: none;">
-                                   <div class="card text-center" style="border: 1px solid #ddd; background-color: #e6f7ff; border-radius: 8px;">
-                                        <div class="card-body">
-                                             <img src="https://img.icons8.com/?size=100&id=IA6GgS2nbpmB&format=png&color=000000" alt="Consultation Icon" style="width: 48px; height: 48px; margin-bottom: 10px;">
-                                             <h5 class="card-title" style="color: #333; text-decoration: underline;">💬 Consultation</h5>
-                                             <p class="card-text" style="color: #555;">Obtenez des conseils sur l'élevage et le soin des chiens.</p>
+                              <a href="/consultation" class="text-decoration-none">
+                                   <div class="card h-100">
+                                        <div class="card-body text-center">
+                                             <img src="https://img.icons8.com/?size=100&id=IA6GgS2nbpmB&format=png&color=000000" alt="Consultation Icon" class="mb-3" style="width: 64px;">
+                                             <h5 class="card-title">Consultation</h5>
+                                             <p class="card-text">Obtenez des conseils sur l'élevage et le soin des chiens.</p>
                                         </div>
                                    </div>
                               </a>
                          </div>
 
-                         <!-- Service 3: Nos Articles -->
                          <div class="col-md-4 mb-4">
-                              <a href="/articles" class="card-link" style="text-decoration: none;">
-                                   <div class="card text-center" style="border: 1px solid #ddd; background-color: #f0fff0; border-radius: 8px;">
-                                        <div class="card-body">
-                                             <img src="https://img.icons8.com/?size=100&id=v7EoCByoU6rv&format=png&color=40C057" alt="Articles Icon" style="width: 48px; height: 48px; margin-bottom: 10px;">
-                                             <h5 class="card-title" style="color: #333; text-decoration: underline;">📄 Nos Articles</h5>
-                                             <p class="card-text" style="color: #555;">Découvrez des articles sur l'élevage, la santé, et les races de chiens.</p>
+                              <a href="/articles" class="text-decoration-none">
+                                   <div class="card h-100">
+                                        <div class="card-body text-center">
+                                             <img src="https://img.icons8.com/?size=100&id=v7EoCByoU6rv&format=png&color=40C057" alt="Articles Icon" class="mb-3" style="width: 64px;">
+                                             <h5 class="card-title">Nos Articles</h5>
+                                             <p class="card-text">Découvrez des articles sur l'élevage, la santé, et les races de chiens.</p>
                                         </div>
                                    </div>
                               </a>
                          </div>
                     </div>
 
+                    <div class="row mt-5">
+                         <div class="col-md-4 trust-badge">
+                              <i class="fas fa-shield-alt"></i>
+                              <h5>Services Vérifiés</h5>
+                              <p>Tous nos services sont soigneusement vérifiés pour votre sécurité.</p>
+                         </div>
+                         <div class="col-md-4 trust-badge">
+                              <i class="fas fa-users"></i>
+                              <h5>Communauté de Confiance</h5>
+                              <p>Rejoignez notre communauté d'amoureux des chiens au Maroc.</p>
+                         </div>
+                         <div class="col-md-4 trust-badge">
+                              <i class="fas fa-headset"></i>
+                              <h5>Support 24/7</h5>
+                              <p>Notre équipe est toujours là pour vous aider.</p>
+                         </div>
+                    </div>
                </div>
 
-               <!-- About Us Section with SEO Keywords -->
-               <div class="container mt-5 mb-5">
-                    <h2 class="text-center mb-4" style="font-size: 2.5rem; font-weight: bold;">À propos de Ndressilik</h2>
-                    <p style="font-size: 1.1rem; color: #555;">
-                         Chez <strong>Ndressilik</strong>, nous sommes passionnés par tout ce qui concerne les chiens. Basé au Maroc, notre plateforme est dédiée à
-                         offrir les meilleures solutions pour ceux qui cherchent à <strong>vendre des chiens</strong>, <strong>adopter un chien</strong>, ou obtenir des
-                         <strong>conseils sur l'élevage de chiens</strong>. Nous croyons que chaque chien mérite un foyer aimant, et notre mission est de
-                         connecter les vendeurs de chiens et les acheteurs à travers le <strong>Maroc</strong>.
-                    </p>
-
-                    <p style="font-size: 1.1rem; color: #555;">
-                         Avec notre service de consultation, vous pouvez obtenir des <strong>conseils professionnels sur les soins et l'élevage des chiens</strong>. Que
-                         vous soyez un éleveur professionnel ou un particulier cherchant à offrir un nouveau foyer à un chien, <strong>Ndressilik</strong> vous
-                         accompagne dans chaque étape.
-                    </p>
-
-                    <p style="font-size: 1.1rem; color: #555;">
-                         Découvrez également notre vaste collection d'<strong>articles sur les races de chiens</strong>, les <strong>soins</strong>, et les <strong>astuces d'entraînement</strong>. Nous vous fournissons toutes les informations nécessaires pour garantir le bien-être de votre compagnon à quatre pattes.
-                    </p>
-
-                    <h3 class="text-center mt-4" style="font-size: 1.8rem;">Pourquoi choisir Ndressilik ?</h3>
-                    <ul class="list-unstyled" style="font-size: 1.1rem; color: #555;">
-                         <li><i class="fas fa-check-circle me-2" style="color: #3498db;"></i> Une plateforme dédiée aux chiens au <strong>Maroc</strong></li>
-                         <li><i class="fas fa-check-circle me-2" style="color: #3498db;"></i> Un service de consultation personnalisé</li>
-                         <li><i class="fas fa-check-circle me-2" style="color: #3498db;"></i> Des annonces pour <strong>vendre et adopter des chiens</strong></li>
-                         <li><i class="fas fa-check-circle me-2" style="color: #3498db;"></i> Des conseils sur les <strong>races de chiens</strong> et l'<strong>élevage</strong></li>
-                    </ul>
+               <div class="about-section mt-5">
+                    <div class="container">
+                         <h2 class="section-title">À propos de Ndressilik</h2>
+                         <p class="lead text-center mb-5">Votre partenaire de confiance pour tout ce qui concerne les chiens au Maroc</p>
+                         <div class="row">
+                              <div class="col-md-6">
+                                   <p>Chez <strong>Ndressilik</strong>, nous sommes passionnés par les chiens et dévoués à créer la meilleure expérience possible pour les propriétaires et les éleveurs au Maroc. Notre plateforme offre :</p>
+                                   <ul class="about-list">
+                                        <li><i class="fas fa-paw"></i> Un marché fiable pour acheter et vendre des chiens</li>
+                                        <li><i class="fas fa-comments"></i> Des consultations d'experts en soins canins</li>
+                                        <li><i class="fas fa-book-open"></i> Des articles informatifs sur l'élevage et les races</li>
+                                        <li><i class="fas fa-heart"></i> Une communauté dédiée aux amoureux des chiens</li>
+                                   </ul>
+                              </div>
+                              <div class="col-md-6">
+                                   <img src="/api/placeholder/600/400" alt="Happy dogs" class="img-fluid rounded">
+                              </div>
+                         </div>
+                    </div>
                </div>
 
                <%- include('partials/footer.ejs') %>
+
+                    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+                    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+                    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
