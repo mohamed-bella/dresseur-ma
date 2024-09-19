@@ -358,18 +358,18 @@ body {
 .hero-cta {
      font-size: 1.125rem;
      padding: 12px 30px;
-     background-color: #3498db;
+     background-color: #303030;
      border: none;
      transition: background-color 0.3s ease;
 }
 
 .hero-cta:hover {
-     background-color: #2980b9;
+     background-color: #242424;
 }
 
 
 .highlighted-text {
-     color: #3498db;
+     color: #1b1b1b;
 }
 
 @media (max-width: 768px) {
