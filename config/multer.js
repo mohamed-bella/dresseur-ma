@@ -13,12 +13,12 @@ const storage = new CloudinaryStorage({
                {
                     overlay: {
                          font_family: "Arial",
-                         font_size: 80, // Increase font size for a bigger watermark
+                         font_size: 50, // Increase font size for a bigger watermark
                          font_weight: "bold",
                          text: "Ndressilik"
                     },
                     gravity: "center", // Center the watermark
-                    opacity: 50, // Adjust opacity as needed
+                    opacity: 30, // Adjust opacity as needed
                     x: 0, // No horizontal offset
                     y: 0  // No vertical offset
                }
