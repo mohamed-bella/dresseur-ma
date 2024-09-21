@@ -8,7 +8,7 @@ const publicController = require('../controllers/publicController')
 
 router.get('/', (req, res) => {
      res.render('marketplace/home', {
-          title: 'First Dogs marketplace'
+          title: 'Annonces, Articles et Consultations Gratuitement Sur Ndressilik'
      })
 })
 
