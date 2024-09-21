@@ -1,0 +1,125 @@
+<%- include('../../marketplace/partials/head.ejs') %>
+     <%- include('../../marketplace/partials/navbar.ejs') %>
+
+          <div class="container mt-5">
+               <div class="row">
+                    <div class="col-md-6">
+                         <img src="<%= breed.breedImage %>" class="img-fluid rounded" alt="<%= breed.breedName %>">
+                    </div>
+                    <div class="col-md-6">
+                         <h1 class="display-4 mb-4">
+                              <%= breed.breedName %>
+                         </h1>
+
+                         <div class="card mb-3 shadow-sm">
+                              <div class="card-header bg-light text-dark">Description</div>
+                              <div class="card-body">
+                                   <p class="card-text">
+                                        <%= breed.description %>
+                                   </p>
+                              </div>
+                         </div>
+
+                         <div class="card mb-3 shadow-sm">
+                              <div class="card-header bg-light text-dark">Histoire</div>
+                              <div class="card-body">
+                                   <p class="card-text">
+                                        <%= breed.history %>
+                                   </p>
+                              </div>
+                         </div>
+
+                         <div class="card mb-3 shadow-sm">
+                              <div class="card-header bg-light text-dark">Caractéristiques Physiques</div>
+                              <div class="card-body">
+                                   <p class="card-text">
+                                        <%= breed.physicalCharacteristics %>
+                                   </p>
+                              </div>
+                         </div>
+
+                         <div class="card mb-3 shadow-sm">
+                              <div class="card-header bg-light text-dark">Comportement et Caractère</div>
+                              <div class="card-body">
+                                   <p class="card-text">
+                                        <%= breed.behaviorAndCharacter %>
+                                   </p>
+                              </div>
+                         </div>
+
+                         <div class="card mb-3 shadow-sm">
+                              <div class="card-header bg-light text-dark">Interaction avec les Autres</div>
+                              <div class="card-body">
+                                   <p class="card-text">
+                                        <%= breed.interactionWithOthers %>
+                                   </p>
+                              </div>
+                         </div>
+
+                         <div class="card mb-3 shadow-sm">
+                              <div class="card-header bg-light text-dark">Dressage</div>
+                              <div class="card-body">
+                                   <p class="card-text">
+                                        <%= breed.training %>
+                                   </p>
+                              </div>
+                         </div>
+
+                         <div class="card mb-3 shadow-sm">
+                              <div class="card-header bg-light text-dark">Conditions de Vie</div>
+                              <div class="card-body">
+                                   <p class="card-text">
+                                        <%= breed.livingConditions %>
+                                   </p>
+                              </div>
+                         </div>
+
+                         <div class="card mb-3 shadow-sm">
+                              <div class="card-header bg-light text-dark">Santé</div>
+                              <div class="card-body">
+                                   <p class="card-text">
+                                        <%= breed.health %>
+                                   </p>
+                              </div>
+                         </div>
+
+                         <div class="card mb-3 shadow-sm">
+                              <div class="card-header bg-light text-dark">Espérance de Vie</div>
+                              <div class="card-body">
+                                   <p class="card-text">
+                                        <%= breed.lifeExpectancy %>
+                                   </p>
+                              </div>
+                         </div>
+
+                         <div class="card mb-3 shadow-sm">
+                              <div class="card-header bg-light text-dark">Soins et Hygiène</div>
+                              <div class="card-body">
+                                   <p class="card-text">
+                                        <%= breed.careAndHygiene %>
+                                   </p>
+                              </div>
+                         </div>
+
+                         <div class="card mb-3 shadow-sm">
+                              <div class="card-header bg-light text-dark">Coût et Budget</div>
+                              <div class="card-body">
+                                   <p class="card-text">
+                                        <%= breed.costAndBudget %>
+                                   </p>
+                              </div>
+                         </div>
+
+                         <div class="card mb-3 shadow-sm">
+                              <div class="card-header bg-light text-dark">Activité Physique</div>
+                              <div class="card-body">
+                                   <p class="card-text">
+                                        <%= breed.physicalActivity %>
+                                   </p>
+                              </div>
+                         </div>
+                    </div>
+               </div>
+          </div>
+
+          <%- include('../../marketplace/partials/footer.ejs') %>

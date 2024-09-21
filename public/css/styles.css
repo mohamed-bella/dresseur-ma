@@ -389,3 +389,113 @@ body {
           margin-top: 2rem;
      }
 }
+
+.loader-container {
+     position: fixed;
+     top: 0;
+     left: 0;
+     width: 100%;
+     height: 100%;
+     background: url('https://source.unsplash.com/random/1920x1080?dog') no-repeat center center;
+     background-size: cover;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+}
+
+.blur-overlay {
+     position: absolute;
+     top: 0;
+     left: 0;
+     width: 100%;
+     height: 100%;
+     backdrop-filter: blur(10px);
+     background-color: rgba(255, 255, 255, 0.3);
+}
+
+.loader {
+     width: 200px;
+     height: 200px;
+     position: relative;
+     z-index: 1;
+}
+
+.dog-head {
+     width: 120px;
+     height: 120px;
+     background-color: #f3f3f3;
+     border-radius: 50%;
+     position: absolute;
+     top: 40px;
+     left: 40px;
+}
+
+.dog-ear {
+     width: 40px;
+     height: 60px;
+     background-color: #d4a373;
+     border-radius: 50% 50% 0 0;
+     position: absolute;
+}
+
+.dog-ear.left {
+     top: -20px;
+     left: 10px;
+     transform: rotate(-30deg);
+}
+
+.dog-ear.right {
+     top: -20px;
+     right: 10px;
+     transform: rotate(30deg);
+}
+
+.dog-eye {
+     width: 20px;
+     height: 20px;
+     background-color: #3498db;
+     border-radius: 50%;
+     position: absolute;
+     top: 40px;
+}
+
+.dog-eye.left {
+     left: 30px;
+}
+
+.dog-eye.right {
+     right: 30px;
+}
+
+.dog-nose {
+     width: 20px;
+     height: 10px;
+     background-color: #000;
+     border-radius: 0 0 10px 10px;
+     position: absolute;
+     bottom: 30px;
+     left: 50%;
+     transform: translateX(-50%);
+}
+
+.spinner {
+     border: 8px solid #f3f3f3;
+     border-top: 8px solid #3498db;
+     border-radius: 50%;
+     width: 200px;
+     height: 200px;
+     animation: spin 2s linear infinite;
+     position: absolute;
+     top: 0;
+     left: 0;
+}
+
+@keyframes spin {
+     0% {
+          transform: rotate(0deg);
+     }
+
+     100% {
+          transform: rotate(360deg);
+     }
+}

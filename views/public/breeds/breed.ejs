@@ -1,0 +1,126 @@
+<%- include('../../marketplace/partials/head.ejs') %>
+     <%- include('../../marketplace/partials/navbar.ejs') %>
+
+          <div class="container mt-5">
+               <h1 class="text-center mb-4">Dog Breeds</h1>
+               <style>
+                    .alphabet-filter {
+                         display: flex;
+                         flex-wrap: wrap;
+                         justify-content: center;
+                         gap: 0.5rem;
+                         padding: 1rem;
+                         background-color: #f3f4f6;
+                         border-radius: 0.5rem;
+                    }
+
+                    .filter-letter {
+                         flex: 0 0 calc(20% - 0.5rem);
+                         /* 5 columns on mobile */
+                         display: flex;
+                         align-items: center;
+                         justify-content: center;
+                         font-size: 1rem;
+                         font-weight: 600;
+                         color: #374151;
+                         background-color: white;
+                         border: 1px solid #d1d5db;
+                         border-radius: 0.25rem;
+                         cursor: pointer;
+                         transition: all 0.2s ease-in-out;
+                    }
+
+                    .filter-letter:hover,
+                    .filter-letter:focus {
+                         background-color: #e5e7eb;
+                         outline: none;
+                    }
+
+                    .filter-letter:active {
+                         background-color: #d1d5db;
+                    }
+
+                    /* Tablet and larger screens */
+                    @media (min-width: 640px) {
+                         .filter-letter {
+                              flex: 0 0 calc(11.11% - 0.5rem);
+                              /* 9 columns on tablet */
+                              font-size: 1.125rem;
+                         }
+                    }
+
+                    /* Desktop and larger screens */
+                    @media (min-width: 1024px) {
+                         .filter-letter {
+                              flex: 0 0 calc(7.69% - 0.5rem);
+                              /* 13 columns on desktop */
+                              font-size: 1.25rem;
+                         }
+                    }
+               </style>
+
+               <!-- Alphabet Filter Buttons -->
+               <div class="alphabet-filter text-center">
+                    <% for(let letter of "ABCDEFGHIJKLMNOPQRSTUVWXYZ" ) { %>
+                         <button class="btn btn-outline-primary filter-letter" data-letter="<%= letter %>">
+                              <%= letter %>
+                         </button>
+                         <% } %>
+               </div>
+
+               <!-- Breeds List -->
+               <div class="row" id="breeds-container">
+                    <% breeds.forEach(function(breed) { %>
+                         <div class="col-md-4 mb-4 breed-item" data-breed-name="<%= breed.breedName %>">
+                              <div class="card h-100" onclick="window.location.href = '/tous-les-races-des-chiens/<%= breed.breedId%>'">
+                                   <!-- Breed Image -->
+                                   <img src="<%= breed.breedImage %>" class="card-img-top" alt="<%= breed.breedName %>" style="object-fit: cover; height: 250px;">
+
+                                   <div class="card-body">
+                                        <!-- Breed Name -->
+                                        <h5 class="card-title">
+                                             <%= breed.breedName %>
+                                        </h5>
+
+                                        <!-- Breed Description -->
+                                        <p class="card-text">
+                                             <%= breed.breedDescription %>
+                                        </p>
+
+                                        <!-- Breed Characteristics -->
+                                        <p class="card-text"><strong>Characteristics:</strong>
+                                             <%= breed.breedCaracteristiques %>
+                                        </p>
+                                   </div>
+                              </div>
+                         </div>
+                         <% }) %>
+               </div>
+          </div>
+
+          <!-- JavaScript for Filtering -->
+          <script>
+               document.addEventListener('DOMContentLoaded', function () {
+                    const breeds = document.querySelectorAll('.breed-item');
+                    const filterButtons = document.querySelectorAll('.filter-letter');
+
+                    // Add event listeners to all filter buttons
+                    filterButtons.forEach(button => {
+                         button.addEventListener('click', function () {
+                              const selectedLetter = this.getAttribute('data-letter').toLowerCase();
+
+                              // Loop through each breed item and display only the matching breeds
+                              breeds.forEach(breed => {
+                                   const breedName = breed.getAttribute('data-breed-name').toLowerCase();
+                                   if (breedName.startsWith(selectedLetter)) {
+                                        breed.style.display = 'block'; // Show breed
+                                   } else {
+                                        breed.style.display = 'none'; // Hide breed
+                                   }
+                              });
+                         });
+                    });
+               });
+          </script>
+
+          <%- include('../../marketplace/partials/footer.ejs') %>

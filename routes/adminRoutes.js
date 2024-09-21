@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const adminController = require('../controllers/adminController');
+const dogBreedController = require('../controllers/dogBreedController');
+
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
@@ -48,5 +50,14 @@ router.post('/articles/create', upload.single('bannerImage'), adminController.cr
 router.get('/articles/:id/edit', adminController.getEditArticleForm);
 router.post('/articles/:id/edit', adminController.editArticle);
 router.post('/articles/:id', adminController.deleteArticle);
+
+
+// Routes for managing dog breeds
+router.get('/breed/add', dogBreedController.getAddDogBreed); // Show form
+router.post('/breed/add', dogBreedController.postAddDogBreed); // Handle form submission
+router.get('/breed/edit/:id', dogBreedController.getEditDogBreed); // Edit form
+router.post('/breed/edit/:id', dogBreedController.postEditDogBreed); // Handle edit form submission
+router.get('/breed/list', dogBreedController.getDogBreeds); // List all breeds
+router.post('/breed/delete/:id', dogBreedController.deleteDogBreed); // Delete a breed
 
 module.exports = router;

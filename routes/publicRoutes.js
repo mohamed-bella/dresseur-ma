@@ -4,7 +4,11 @@ const Article = require('../models/article')
 
 const publicController = require('../controllers/publicController')
 
-router.get('/', publicController.getHome)
+router.get('/', (req, res) => {
+     res.render('marketplace/home', {
+          title: 'First Dogs marketplace'
+     })
+})
 
 // Privacy Policy Page
 router.get('/privacy-policy', (req, res) => {
@@ -52,13 +56,13 @@ router.get('/articles/:slug', async (req, res) => {
 });
 
 
-// // About Us Page
-// router.get('/about-us', (req, res) => {
-//      res.render('about-us', { title: 'À propos de nous' });
-// });
+// About Us Page
+router.get('/tous-les-races-des-chiens', publicController.getAllBreeds);
+router.get('/tous-les-races-des-chiens/:id', publicController.getBreed);
 
 // Contact Us Page
 router.get('/contact-us', (req, res) => {
      res.render('contact-us', { title: 'Contactez-nous' });
 });
+
 module.exports = router;
