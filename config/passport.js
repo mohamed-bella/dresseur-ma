@@ -1,15 +1,8 @@
-const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const User = require('../models/user'); // For trainers
-const Seller = require('../models/seller'); // For sellers
-const slugify = require('slugify')
-require('dotenv').config();
-
 passport.use(
      new GoogleStrategy({
           clientID: process.env.GOOGLE_CLIENT_ID,
           clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-          callbackURL: '/auth/google/cb'
+          callbackURL: '/auth/google/cb',
      },
           async (accessToken, refreshToken, profile, done) => {
                try {
@@ -22,21 +15,30 @@ passport.use(
                     // If not a trainer, check if the user is a seller
                     let seller = await Seller.findOne({ googleId: profile.id });
                     if (!seller) {
+                         // Try to generate a unique slug
+                         let slug;
+                         let isUniqueSlug = false;
+                         while (!isUniqueSlug) {
+                              const randomNum = Math.floor(1000 + Math.random() * 9000);
+                              slug = slugify(`${profile.displayName}-${randomNum}`, { lower: true, strict: true });
 
-                         const randomNum = Math.floor(1000 + Math.random() * 9000);
-                         const slug = slugify(`${profile.displayName}-${randomNum}`, { lower: true, strict: true });
+                              // Check if the slug already exists
+                              const existingSeller = await Seller.findOne({ slug });
+                              if (!existingSeller) {
+                                   isUniqueSlug = true; // Slug is unique, exit the loop
+                              }
+                         }
 
-                         // If neither exist, create a new seller (you can also modify this for trainers)
+                         // Create a new seller if the seller does not exist
                          seller = new Seller({
                               slug: slug,
-
                               googleId: profile.id,
                               displayName: profile.displayName,
                               image: profile.photos[0].value,
                               email: profile.emails[0].value,
                               announcements: []
-
                          });
+
                          await seller.save();
                     }
 
@@ -47,22 +49,3 @@ passport.use(
                }
           })
 );
-
-passport.serializeUser((user, done) => {
-     done(null, user.id);
-});
-
-passport.deserializeUser(async (id, done) => {
-     try {
-          // Check both User (trainer) and Seller (seller) collections
-          let user = await User.findById(id);
-          if (user) {
-               done(null, user);
-          } else {
-               let seller = await Seller.findById(id);
-               done(null, seller);
-          }
-     } catch (err) {
-          done(err, null);
-     }
-});

@@ -77,15 +77,18 @@ const sellerSchema = new Schema({
      }],
 });
 
-// Pre-save hook for seller to generate a slug if it's missing
+// Pre-save hook to generate slugs for sellers and announcements
 sellerSchema.pre('save', function (next) {
-     if (this.isNew || this.isModified('displayName')) {
+     const seller = this;
+
+     // Generate slug for the seller if needed
+     if (seller.isNew || seller.isModified('displayName')) {
           const randomNum = Math.floor(1000 + Math.random() * 9000);
-          this.slug = slugify(`${this.displayName}-${randomNum}`, { lower: true, strict: true });
+          seller.slug = slugify(`${seller.displayName}-${randomNum}`, { lower: true, strict: true });
      }
 
-     // Check for each announcement and generate slugs if missing
-     this.announcements.forEach((announcement) => {
+     // Ensure each announcement has a slug generated
+     seller.announcements.forEach((announcement) => {
           if (!announcement.slug) {
                const randomNum = Math.floor(1000 + Math.random() * 9000);
                announcement.slug = slugify(`${announcement.breed}-${randomNum}`, { lower: true, strict: true });
@@ -96,4 +99,4 @@ sellerSchema.pre('save', function (next) {
 });
 
 const Seller = mongoose.models.Seller || mongoose.model('Seller', sellerSchema);
-module.exports = Seller;
+module.exports = Seller; 
