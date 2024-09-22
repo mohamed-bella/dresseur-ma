@@ -11,6 +11,7 @@ const sellerSchema = new Schema({
      slug: {
           type: String,
           unique: true,
+          required: true, // Ensure slug is required for the seller
      },
      displayName: {
           type: String,
@@ -33,63 +34,68 @@ const sellerSchema = new Schema({
           type: Date,
           default: Date.now,
      },
-     announcements: [
-          {
-               views: { type: Number, default: 0 },
-               slug: {
-                    type: String,
-               },
-               breed: String,
-               description: String,
-               price: Number,
-               location: String,
-               number: String,
-               media: [
-                    {
-                         type: String, // URLs for images
-                    },
-               ],
-               status: {
-                    type: String,
-                    enum: ['pending', 'approved'],
-                    default: 'pending',
-               },
-               sellerDisplayName: {
-                    type: String,
-                    required: true,
-               },
-               sellerEmail: {
-                    type: String,
-                    required: true,
-               },
-               datePosted: {
-                    type: Date,
-                    default: Date.now,
-               },
+     announcements: [{
+          views: { type: Number, default: 0 },
+          slug: {
+               type: String,
+               unique: true,
+               required: true,
           },
-     ],
+          breed: {
+               type: String,
+          },
+          description: {
+               type: String,
+          },
+          price: {
+               type: Number,
+          },
+          location: {
+               type: String,
+          },
+          number: {
+               type: String,
+          },
+          media: [{
+               type: String,
+          }],
+          status: {
+               type: String,
+               enum: ['pending', 'approved'],
+               default: 'pending',
+          },
+          sellerDisplayName: {
+               type: String,
+               required: true,
+          },
+          sellerEmail: {
+               type: String,
+               required: true,
+          },
+          datePosted: {
+               type: Date,
+               default: Date.now,
+          },
+     }],
 });
 
-// Generate a slug for the seller's display name
+// Pre-save hook for seller to generate a slug if it's missing
 sellerSchema.pre('save', function (next) {
      if (this.isNew || this.isModified('displayName')) {
-          const randomNum = Math.floor(1000 + Math.random() * 9000); // Random 4-digit number
+          const randomNum = Math.floor(1000 + Math.random() * 9000);
           this.slug = slugify(`${this.displayName}-${randomNum}`, { lower: true, strict: true });
      }
-     next();
-});
 
-// Pre-save hook for announcements to generate unique slugs for each announcement
-sellerSchema.pre('save', function (next) {
+     // Check for each announcement and generate slugs if missing
      this.announcements.forEach((announcement) => {
           if (!announcement.slug) {
-               const randomNum = Math.floor(1000 + Math.random() * 9000); // Random 4-digit number
+               const randomNum = Math.floor(1000 + Math.random() * 9000);
                announcement.slug = slugify(`${announcement.breed}-${randomNum}`, { lower: true, strict: true });
           }
      });
+
      next();
 });
 
-const Seller = mongoose.model('Seller', sellerSchema);
-
+const Seller = mongoose.models.Seller || mongoose.model('Seller', sellerSchema);
 module.exports = Seller;
