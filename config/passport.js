@@ -2,6 +2,7 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User = require('../models/user'); // For trainers
 const Seller = require('../models/seller'); // For sellers
 require('dotenv').config();
+const passport = require('passport')
 
 
 passport.use(
@@ -73,3 +74,4 @@ passport.deserializeUser(async (id, done) => {
           done(err, null);
      }
 });
+
