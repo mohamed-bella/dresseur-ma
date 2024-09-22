@@ -37,13 +37,6 @@ const sellerSchema = new Schema({
      }
 });
 
-sellerSchema.pre('save', function (next) {
-     if (this.isNew || this.isModified('displayName')) {
-          const randomNum = Math.floor(1000 + Math.random() * 9000);
-          this.slug = slugify(`${this.displayName}-${randomNum}`, { lower: true, strict: true });
-     }
-     next();
-});
 
 const Seller = mongoose.model('Seller', sellerSchema);
 module.exports = Seller;

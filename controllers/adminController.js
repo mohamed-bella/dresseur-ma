@@ -1,11 +1,11 @@
-const User = require('../models/user');
 const Seller = require('../models/seller');
+const Announcement = require('../models/announcement');
 const Article = require('../models/article');
-const cloudinary = require('../config/cloudinary'); // Import Cloudinary configuration
+const cloudinary = require('../config/cloudinary');
 const multer = require('multer');
 const path = require('path');
 const slugify = require('slugify');
-
+const fs = require('fs');
 
 // Set up multer for file storage
 const storage = multer.diskStorage({
@@ -18,7 +18,6 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
-
 
 // Admin Dashboard
 exports.dashboard = (req, res) => {
@@ -39,12 +38,11 @@ exports.getSellers = async (req, res) => {
 // Get all announcements for a specific seller
 exports.getSellerAnnouncements = async (req, res) => {
      try {
-          const seller = await Seller.findById(req.params.id);
-          if (!seller) {
-               return res.status(404).render('error', { message: 'Vendeur non trouvé.' });
+          const announcements = await Announcement.find({ seller: req.params.id });
+          if (!announcements) {
+               return res.status(404).render('error', { message: 'Aucune annonce trouvée pour ce vendeur.' });
           }
-          const announcements = seller.announcements;
-          res.render('admin/manageAnnouncements', { announcements, title: `Annonces de ${seller.displayName}` });
+          res.render('admin/manageAnnouncements', { announcements, title: `Annonces du vendeur` });
      } catch (err) {
           console.error(err);
           res.status(500).render('error', { message: 'Erreur lors de la récupération des annonces.' });
@@ -92,6 +90,7 @@ exports.deleteSeller = async (req, res) => {
           if (!seller) {
                return res.status(404).render('error', { message: 'Vendeur non trouvé.' });
           }
+          await Announcement.deleteMany({ seller: seller._id }); // Delete all announcements for this seller
           await seller.remove();
           res.redirect('/admin/sellers');
      } catch (err) {
@@ -103,142 +102,116 @@ exports.deleteSeller = async (req, res) => {
 // Get All Announcements
 exports.getAnnouncements = async (req, res) => {
      try {
-          const sellers = await Seller.find();
-          const announcements = sellers.reduce((acc, seller) => [...acc, ...seller.announcements], []);
-          res.render('admin/manageAnnouncements', { announcements, title: 'Manage Announcements' });
+          const announcements = await Announcement.find().populate('seller');
+          res.render('admin/manageAnnouncements', { announcements, title: 'Gérer les annonces' });
      } catch (error) {
           console.error(error);
-          res.status(500).send('Server Error');
+          res.status(500).send('Erreur du serveur lors de la récupération des annonces.');
      }
 };
 
 // Approve Announcement
 exports.approveAnnouncement = async (req, res) => {
      try {
-          const seller = await Seller.findOne({ 'announcements._id': req.params.id });
-          const announcement = seller.announcements.id(req.params.id);
+          const announcement = await Announcement.findById(req.params.id);
+          if (!announcement) {
+               return res.status(404).send('Annonce non trouvée.');
+          }
           announcement.status = 'approved';
-          await seller.save();
+          await announcement.save();
           res.redirect('/admin/announcements');
      } catch (error) {
           console.error(error);
-          res.status(500).send('Server Error');
+          res.status(500).send('Erreur du serveur lors de l\'approbation de l\'annonce.');
      }
 };
-// Edit Announv=cement Page 
+
+// Edit Announcement Page
 exports.getEditAnnouncement = async (req, res) => {
      try {
-          // Find the seller by the announcement ID
-          const seller = await Seller.findOne({ 'announcements._id': req.params.id });
-          if (!seller) {
+          const announcement = await Announcement.findById(req.params.id);
+          if (!announcement) {
                return res.status(404).render('error', { message: 'Annonce non trouvée.' });
           }
-
-          // Find the specific announcement within the seller's announcements
-          const announcement = seller.announcements.id(req.params.id);
-
-          // Render the edit announcement page
           res.render('admin/editAnnouncement', { announcement, title: 'Modifier l\'annonce' });
      } catch (error) {
           console.error(error);
           res.status(500).render('error', { message: 'Erreur lors du chargement de l\'annonce.' });
      }
-}
+};
+
 // Edit Announcement
 exports.editAnnouncement = async (req, res) => {
      try {
           const { breed, description, price, location, images } = req.body;
-          console.log(req.body)
-          const seller = await Seller.findOne({ 'announcements._id': req.params.id });
-          const announcement = seller.announcements.id(req.params.id);
+          const announcement = await Announcement.findById(req.params.id);
 
           announcement.breed = breed || announcement.breed;
           announcement.description = description || announcement.description;
           announcement.price = price || announcement.price;
           announcement.location = location || announcement.location;
           announcement.images = images || announcement.images;
-          console.log(seller)
-          await seller.save();
+
+          await announcement.save();
           res.redirect('/admin/announcements');
      } catch (error) {
           console.error(error);
-          res.status(500).send('Server Error');
+          res.status(500).send('Erreur du serveur lors de la mise à jour de l\'annonce.');
      }
 };
 
 // Delete Announcement
 exports.deleteAnnouncement = async (req, res) => {
      try {
-          const seller = await Seller.findOne({ 'announcements._id': req.params.id });
-          seller.announcements.pull({ _id: req.params.id });
-          await seller.save();
+          await Announcement.findByIdAndDelete(req.params.id);
           res.redirect('/admin/announcements');
      } catch (error) {
           console.error(error);
-          res.status(500).send('Server Error');
+          res.status(500).send('Erreur du serveur lors de la suppression de l\'annonce.');
      }
 };
+
 // Get All Articles
 exports.getArticles = async (req, res) => {
      try {
-          // Sort by dateCreated in descending order to get the latest articles first
-          const articles = await Article.find();
-          res.render('admin/articles', { articles, title: 'Manage Articles' });
+          const articles = await Article.find().sort({ createdAt: -1 });
+          res.render('admin/articles', { articles, title: 'Gérer les articles' });
      } catch (error) {
           console.error(error);
-          res.status(500).send('Server Error');
+          res.status(500).send('Erreur du serveur lors de la récupération des articles.');
      }
 };
-
-
 
 // Get New Article Page
 exports.getNewArticleForm = (req, res) => {
      res.render('admin/newArticle', { title: 'Créer un nouvel article' });
 };
 
-const fs = require('fs');
-
+// Create Article
 exports.createArticle = async (req, res) => {
      try {
           const { title, content, description } = req.body;
           let bannerImageUrl = '';
 
-          // Check if an image is uploaded
           if (req.file) {
                const result = await cloudinary.uploader.upload(req.file.path, {
                     resource_type: 'image',
-                    timeout: 120000 // Optional: to set a timeout if the image is large
+                    timeout: 120000 // Set a timeout if the image is large
                });
-               bannerImageUrl = result.secure_url; // Cloudinary URL for the image
-
-               // Remove the file from local storage after upload
-               fs.unlinkSync(req.file.path);
+               bannerImageUrl = result.secure_url;
+               fs.unlinkSync(req.file.path); // Delete the file from local storage
           }
 
-          // Generate a unique slug based on the title
-          const currentDate = new Date();
-          const formattedDate = `${currentDate.getFullYear()}${(currentDate.getMonth() + 1).toString().padStart(2, '0')}${currentDate.getDate().toString().padStart(2, '0')}`;
-          const formattedTime = `${currentDate.getHours().toString().padStart(2, '0')}${currentDate.getMinutes().toString().padStart(2, '0')}${currentDate.getSeconds().toString().padStart(2, '0')}`;
-          const slugBase = `${title} ${formattedDate}-${formattedTime}`;
-          let slug = slugify(slugBase, { lower: true, strict: true });
+          let slug = slugify(title, { lower: true, strict: true });
+          const slugExists = await Article.exists({ slug });
+          if (slugExists) slug += '-' + Date.now();
 
-          // Ensure slug is unique by checking in the database
-          let slugExists = await Article.findOne({ slug });
-          let suffix = 1;
-          while (slugExists) {
-               slug = `${slug}-${suffix}`;
-               slugExists = await Article.findOne({ slug });
-               suffix++;
-          }
-
-          // Create new article with the banner image URL and generated slug
           const newArticle = new Article({
                title,
                content,
                description,
                bannerImage: bannerImageUrl,
-               slug // Store the slug
+               slug
           });
 
           await newArticle.save();
@@ -248,8 +221,6 @@ exports.createArticle = async (req, res) => {
           res.status(500).send('Erreur serveur lors de la création de l\'article.');
      }
 };
-
-
 
 // Get Edit Article Page
 exports.getEditArticleForm = async (req, res) => {
@@ -273,7 +244,7 @@ exports.editArticle = async (req, res) => {
           res.redirect('/admin/articles');
      } catch (error) {
           console.error(error);
-          res.status(500).send('Server Error');
+          res.status(500).send('Erreur serveur lors de la mise à jour de l\'article.');
      }
 };
 
@@ -284,6 +255,6 @@ exports.deleteArticle = async (req, res) => {
           res.redirect('/admin/articles');
      } catch (error) {
           console.error(error);
-          res.status(500).send('Server Error');
+          res.status(500).send('Erreur serveur lors de la suppression de l\'article.');
      }
 };

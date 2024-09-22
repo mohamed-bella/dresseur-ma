@@ -7,20 +7,20 @@
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
      <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
      <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
      <link rel="manifest" href="/site.webmanifest">
      <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
      <meta name="msapplication-TileColor" content="#da532c">
      <meta name="theme-color" content="#FCDE70">
+
      <!-- SEO Meta Tags -->
-     <meta name="description" content="<%= announcement.description %> | Découvrez et publiez des annonces pour l'adoption, la vente, ou les services pour chiens. Trouvez votre futur compagnon ou aidez d'autres à trouver le leur.">
-     <meta name="keywords" content="chiens, adoption de chiens, acheter des chiens, vendre des chiens, services pour chiens, annonces pour chiens, animaux, Chien Maroc, كلب المغرب, كلب فالمغرب, Race de chien marocain, سلالة الكلاب المغربية, نوع الكلاب مغربية, Aidi, الكلب الأيدي, أيدي, Sloughi, السلوقي, سلوقي, Chien Atlas, كلب الأطلس, كلب لطلس, Adoption chien Maroc, تبني كلب في المغرب, تبنى كلب فالمغرب, Élevage chien Maroc, تربية الكلاب في المغرب, تربية الكلاب فالمغرب, Vétérinaire chien Casablanca, طبيب بيطري للكلاب في الدار البيضاء, بيطري كلاب فكازا, Pension chien Rabat, فندق الكلاب في الرباط, بونسيون كلاب فالرباط, Dressage chien Marrakech, تدريب الكلاب في مراكش, دريساج كلاب فمراكش, Toilettage chien Tanger, تنظيف الكلاب في طنجة, تواليت كلاب فطنجة, Nourriture chien Maroc, طعام الكلاب في المغرب, ماكلة الكلاب فالمغرب, Accessoires chien Maroc, إكسسوارات الكلاب في المغرب, أكسيسوار كلاب فالمغرب, Vaccin chien Maroc, لقاح الكلاب في المغرب, فاكسان كلاب فالمغرب, Chien perdu Maroc, كلب ضائع في المغرب, كلب ضايع فالمغرب, SPA Maroc, جمعية حماية الحيوانات في المغرب, سبا فالمغرب, Chien garde Maroc, كلب حراسة في المغرب, كلب الحراسة فالمغرب, Chien berger Maroc, كلب راعي في المغرب, كلب الراعي فالمغرب, Chien de chasse Maroc, كلب صيد في المغرب, كلب الصيد فالمغرب, Chien de compagnie Maroc, كلب رفقة في المغرب, كلب الرفقة فالمغرب, Loi chien Maroc, قانون الكلاب في المغرب, قانون الكلاب فالمغرب, Refuge chien Maroc, ملجأ الكلاب في المغرب, ملجأ الكلاب فالمغرب, Achat chien Maroc, شراء كلب في المغرب, شرا كلب فالمغرب, Vente chien Maroc, بيع كلب في المغرب, بيع كلب فالمغرب, Chien race pure Maroc, كلب من سلالة نقية في المغرب, كلب أصيل فالمغرب, Chien croisé Maroc, كلب مهجن في المغرب, كلب مخلط فالمغرب, Chiot Maroc, جرو في المغرب, شيو فالمغرب, Éducation chien Maroc, تعليم الكلاب في المغرب, تربية الكلاب فالمغرب, Comportement chien Maroc, سلوك الكلاب في المغرب, تصرفات الكلاب فالمغرب, Santé chien Maroc, صحة الكلاب في المغرب, صحة الكلاب فالمغرب, Maladie chien Maroc, أمراض الكلاب في المغرب, مرض الكلاب فالمغرب, Assurance chien Maroc, تأمين الكلاب في المغرب, أسورونس كلاب فالمغرب, Transport chien Maroc, نقل الكلاب في المغرب, ترانسبور كلاب فالمغرب, Hôtel chien Maroc, فندق للكلاب في المغرب, أوتيل كلاب فالمغرب">
+     <meta name="description" content="<%= announcement.description %>">
+     <meta name="keywords" content="chiens, adoption de chiens, acheter des chiens, vendre des chiens, services pour chiens, annonces pour chiens">
      <meta name="author" content="Ndressilik">
 
-     <!-- Open Graph Meta Tags (pour le partage sur les réseaux sociaux) -->
+     <!-- Open Graph Meta Tags -->
      <meta property="og:title" content="<%= title %> Prix Maroc - Ndressilik">
-     <meta property="og:description" content="<%= announcement.breed %> - <%= announcement.description %>Retrouvez les dernières annonces pour l'adoption, la vente ou les services pour chiens. Connectez-vous avec des vendeurs et des amoureux des chiens partout dans le pays.">
-     <meta property="og:image" content='<%= announcement.media[0] ||"https://res.cloudinary.com/dxg2nsnkj/image/upload/v1726159468/dogs/hsdy0nueyyjulhocok6w.png" %>'>
+     <meta property="og:description" content="<%= announcement.breed %> - <%= announcement.description %>">
+     <meta property="og:image" content='<%= announcement.media[0] || "https://res.cloudinary.com/default-image.png" %>'>
      <meta property="og:url" content="https://ndressilik.com/">
      <meta property="og:type" content="website">
 
@@ -28,44 +28,16 @@
      <meta name="twitter:card" content="summary_large_image">
      <meta name="twitter:title" content="<%= title %> | Ndressilik - Annonces et Adoption de Chiens">
      <meta name="twitter:description" content="<%= announcement.breed %> | <%= announcement.description %>">
-     <meta name="twitter:image" content='<%= announcement.media[0] ||"https://res.cloudinary.com/dxg2nsnkj/image/upload/v1726159468/dogs/hsdy0nueyyjulhocok6w.png" %>'>
-
-     <!-- Structured Data (JSON-LD pour SEO) -->
-     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebPage",
-      "name": "<%= title %> | Ndressilik",
-      "description": "Découvrez les annonces pour l'adoption, la vente ou les services pour chiens sur Ndressilik.",
-      "url": "https://ndressilik.com",
-      "author": {
-        "@type": "Organization",
-        "name": "Ndressilik"
-      }
-    }
-    </script>
+     <meta name="twitter:image" content='<%= announcement.media[0] || "https://res.cloudinary.com/default-image.png" %>'>
 
      <!-- Font Awesome -->
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
-
-     <!-- buttonn -->
-     <link rel="stylesheet" href="https://iraul.github.io/pushy-buttons/css/pushy-buttons.css">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
 
      <!-- Bootstrap CDN -->
      <link rel="stylesheet" href="https://getbootstrap.com/docs/5.3/dist/css/bootstrap.min.css">
-     <!-- Bootstrap Icons -->
-     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
-     <!-- Preload Key Resources -->
-     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" as="style">
-     <link rel="preload" href="/css/styles.css" as="style">
-
-     <!-- Google Fonts -->
-     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
-
      <!-- Custom CSS -->
      <link rel="stylesheet" href="/css/styles.css">
-     <!-- SEO-Optimized Title -->
+
      <title>
           <%= title %> | Ndressilik - Annonces et Adoption de Chiens
      </title>
@@ -84,183 +56,101 @@
                     <div class="col-md-8">
                          <div class="card shadow-sm" style="border: 1px solid #ddd; border-radius: 5px; background-color: #fff;">
                               <div class="card-body">
-                                   <!-- Large Media (Image or Video) -->
                                    <div class="main-image mb-3">
                                         <% if (announcement.media && announcement.media.length> 0) { %>
-                                             <% if (announcement.media[0] && (announcement.media[0].endsWith('.jpg') || announcement.media[0].endsWith('.jpeg') || announcement.media[0].endsWith('.png') || announcement.media[0].endsWith('.gif'))) { %>
-                                                  <!-- Display Image -->
-                                                  <img id="mainImage" src="<%= announcement.media[0] || 'https://via.placeholder.com/600x400' %>" class="img-fluid w-100" alt="Media for <%= announcement.title %>" style="object-fit: cover; border-radius: 4px;">
-                                                  <% } else if (announcement.media[0] && (announcement.media[0].endsWith('.mp4') || announcement.media[0].endsWith('.webm') || announcement.media[0].endsWith('.ogg'))) { %>
-                                                       <!-- Display Video -->
-                                                       <video id="mainVideo" src="<%= announcement.media[0] %>" class="img-fluid w-100" style="object-fit: cover; border-radius: 4px;" controls>
-                                                            Your browser does not support the video tag.
-                                                       </video>
+                                             <% if (announcement.media[0].match(/\.(jpg|jpeg|png|gif)$/i)) { %>
+                                                  <img id="mainImage" src="<%= announcement.media[0] %>" class="img-fluid w-100" alt="Image for <%= announcement.breed %>" style="object-fit: cover; border-radius: 4px;">
+                                                  <% } else if (announcement.media[0].match(/\.(mp4|webm|ogg)$/i)) { %>
+                                                       <video id="mainVideo" src="<%= announcement.media[0] %>" class="img-fluid w-100" controls style="object-fit: cover; border-radius: 4px;"></video>
                                                        <% } else { %>
-                                                            <!-- Default Placeholder -->
-                                                            <img id="mainImage" src="https://via.placeholder.com/600x400" class="img-fluid w-100" alt="Media for <%= announcement.title %>" style="object-fit: cover; border-radius: 4px;">
+                                                            <img id="mainImage" src="https://via.placeholder.com/600x400" class="img-fluid w-100" alt="No media available" style="object-fit: cover; border-radius: 4px;">
                                                             <% } %>
-                                                                 <% } else { %>
-                                                                      <!-- Default Placeholder if no media available -->
-                                                                      <img id="mainImage" src="https://via.placeholder.com/600x400" class="img-fluid w-100" alt="Media for <%= announcement.title %>" style="object-fit: cover; border-radius: 4px;">
-                                                                      <% } %>
+                                                                 <% } %>
                                    </div>
 
-                                   <!-- Thumbnail Images/Videos -->
+                                   <!-- Thumbnails -->
                                    <div class="thumbnail-images d-flex justify-content-center flex-wrap">
                                         <% if (announcement.media && announcement.media.length> 0) { %>
-                                             <% announcement.media.forEach(function(media, index) { %>
-                                                  <% if (media.endsWith('.jpg') || media.endsWith('.jpeg') || media.endsWith('.png') || media.endsWith('.gif')) { %>
-                                                       <!-- Image Thumbnail -->
-                                                       <img src="<%= media %>" class="img-thumbnail small-image me-2 mb-2" alt="Thumbnail <%= index + 1 %>" style="cursor: pointer; width: 60px; height: 60px; object-fit: cover;" onclick="setMainMedia('<%= media %>')">
-                                                       <% } else if (media.endsWith('.mp4') || media.endsWith('.webm') || media.endsWith('.ogg')) { %>
-                                                            <!-- Video Thumbnail -->
-                                                            <video src="<%= media %>" class="img-thumbnail small-image me-2 mb-2" alt="Thumbnail <%= index + 1 %>" style="cursor: pointer; width: 60px; height: 60px; object-fit: cover;" onclick="setMainMedia('<%= media %>', 'video')"></video>
+                                             <% announcement.media.forEach(function (media, index) { %>
+                                                  <% if (media.match(/\.(jpg|jpeg|png|gif)$/i)) { %>
+                                                       <img src="<%= media %>" class="img-thumbnail small-image me-2 mb-2" style="width: 60px; height: 60px; object-fit: cover;" onclick="setMainMedia('<%= media %>')">
+                                                       <% } else if (media.match(/\.(mp4|webm|ogg)$/i)) { %>
+                                                            <video src="<%= media %>" class="img-thumbnail small-image me-2 mb-2" style="width: 60px; height: 60px; object-fit: cover;" onclick="setMainMedia('<%= media %>', 'video')"></video>
                                                             <% } %>
                                                                  <% }); %>
                                                                       <% } %>
                                    </div>
                               </div>
                          </div>
-
-                         <script>
-                              // Function to set the main media on click
-                              function setMainMedia(mediaUrl, mediaType = 'image') {
-                                   if (mediaType === 'video') {
-                                        document.getElementById('mainImage').style.display = 'none';
-                                        const videoElement = document.getElementById('mainVideo');
-                                        videoElement.src = mediaUrl;
-                                        videoElement.style.display = 'block';
-                                   } else {
-                                        const imageElement = document.getElementById('mainImage');
-                                        imageElement.src = mediaUrl;
-                                        imageElement.style.display = 'block';
-                                        if (document.getElementById('mainVideo')) {
-                                             document.getElementById('mainVideo').style.display = 'none';
-                                        }
-                                   }
-                              }
-                         </script>
-
                     </div>
 
-                    <script>
-                         function setMainMedia(mediaUrl, type = 'image') {
-                              const mainImage = document.getElementById('mainImage');
-                              const mainVideo = document.getElementById('mainVideo');
-
-                              if (type === 'video') {
-                                   if (mainImage) mainImage.style.display = 'none';
-                                   if (mainVideo) {
-                                        mainVideo.src = mediaUrl;
-                                        mainVideo.style.display = 'block';
-                                   }
-                              } else {
-                                   if (mainVideo) mainVideo.style.display = 'none';
-                                   if (mainImage) {
-                                        mainImage.src = mediaUrl;
-                                        mainImage.style.display = 'block';
-                                   }
-                              }
-                         }
-                    </script>
-
-
-                    <!-- Seller Information Card -->
+                    <!-- Seller Information -->
                     <div class="col-md-4">
-                         <div class="card shadow-sm" style="border: 1px solid #ddd; border-radius: 5px; background-color: #fff;">
+                         <div class="card shadow-sm">
                               <div class="card-body">
-                                   <h5 class="text-center" style="color: #000; font-size: 1.25rem;">Vendeur</h5>
+                                   <h5 class="text-center">Vendeur</h5>
                                    <hr>
-                                   <div class="row align-items-center p-3 mb-2" style="background-color: #f8f9fa; border-radius: 10px;">
+                                   <div class="row align-items-center">
                                         <div class="col-3 text-center">
-                                             <i class="bi bi-person-circle" style="font-size: 2rem; color: #6c757d;"></i>
+                                             <i class="bi bi-person-circle" style="font-size: 2rem;"></i>
                                         </div>
                                         <div class="col-9">
-                                             <a href="/profile/<%= seller.slug %>"><strong style="color: #000; font-size: 0.875rem;">
-                                                       <%= announcement.sellerDisplayName %>
-                                                  </strong></a>
+                                             <strong>
+                                                  <%= announcement.sellerDisplayName %>
+                                             </strong></a>
                                         </div>
                                    </div>
-
-                                   <!-- Phone Number and Call Button -->
-                                   <div class="text-center">
-                                        <!-- WhatsApp Button -->
-                                        <a href="https://wa.me/<%= announcement.number.replace(/\s+/g, '') %>?text=Bonjour,%20je%20souhaite%20acheter%20le%20chien%20<%= encodeURIComponent(announcement.breed) %>" class="btn btn-success mt-2 w-100" style="background-color: #25D366; border-color: #25D366; color: white;" target="_blank">
+                                   <div class="text-center mt-3">
+                                        <a href="https://wa.me/212<%=announcement.number.replace(/\s+/g, '') %>?text=Bonjour,%20je%20souhaite%20acheter%20le%20chien%20<%= encodeURIComponent(announcement.breed) %>" class="btn btn-success w-100">
                                              <i class="bi bi-whatsapp"></i> WhatsApp
                                         </a>
                                    </div>
-
                               </div>
                          </div>
                     </div>
                </div>
 
-               <!-- Announcement Details Section -->
+               <!-- Announcement Details -->
                <div class="row mt-4">
                     <div class="col-md-12">
-                         <div class="card shadow-sm" style="border: 1px solid #ddd; border-radius: 5px; background-color: #fff;">
+                         <div class="card shadow-sm">
                               <div class="card-body">
-
-                                   <!-- Description Section -->
-                                   <h5 class="d-flex align-items-center" style="color: #000; font-size: 1.25rem;">
-                                        <img src="https://img.icons8.com/?size=48&id=52207&format=png&color=FAB005" alt="Description Icon" style="width: 24px; height: 24px; margin-right: 10px;">
-                                        Description
-                                   </h5>
-                                   <p style="color: #000; font-size: 0.875rem;">
+                                   <h5>Description</h5>
+                                   <p>
                                         <%= announcement.description %>
                                    </p>
 
-                                   <hr style="margin: 1.5rem 0; border-color: #ddd;"> <!-- Line separator -->
+                                   <hr>
 
-                                   <!-- Price Section -->
-                                   <h5 class="d-flex align-items-center" style="color: #000; font-size: 1.25rem;">
-                                        <img src="https://img.icons8.com/?size=48&id=119&format=png&color=FAB005" alt="Price Icon" style="width: 24px; height: 24px; margin-right: 10px;">
-                                        Prix
-                                   </h5>
-                                   <p style="color: #000; font-size: 0.875rem;"><strong>
+                                   <h5>Prix</h5>
+                                   <p><strong>
                                              <%= announcement.price %> MAD
                                         </strong></p>
 
-                                   <hr style="margin: 1.5rem 0; border-color: #ddd;"> <!-- Line separator -->
+                                   <hr>
 
-                                   <!-- Location Section -->
-                                   <h5 class="d-flex align-items-center" style="color: #000; font-size: 1.25rem;">
-                                        <img src="https://img.icons8.com/?size=48&id=3723&format=png&color=FAB005" alt="Location Icon" style="width: 24px; height: 24px; margin-right: 10px;">
-                                        Lieu
-                                   </h5>
-                                   <p style="color: #000; font-size: 0.875rem;">
+                                   <h5>Lieu</h5>
+                                   <p>
                                         <%= announcement.location %>
                                    </p>
 
-                                   <hr style="margin: 1.5rem 0; border-color: #ddd;"> <!-- Line separator -->
+                                   <hr>
 
-                                   <!-- Date Section -->
-                                   <h5 class="d-flex align-items-center" style="color: #000; font-size: 1.25rem;">
-                                        <img src="https://img.icons8.com/?size=48&id=23&format=png&color=FAB005" alt="Date Icon" style="width: 24px; height: 24px; margin-right: 10px;">
-                                        Date de publication
-                                   </h5>
-                                   <p style="color: #000; font-size: 0.875rem;">
+                                   <h5>Date de publication</h5>
+                                   <p>
                                         <%= announcement.datePosted.toLocaleDateString('fr-FR') %>
                                    </p>
 
-                                   <!-- Back Button -->
-                                   <a href="/announcements" class="btn btn-secondary mt-3" style="font-size: 0.875rem;">
-                                        <img src="https://img.icons8.com/?size=48&id=11623&format=png&color=FAB005" alt="Back Icon" style="width: 16px; height: 16px; margin-right: 5px;">
-                                        Retour à la liste
-                                   </a>
+                                   <a href="/announcements" class="btn btn-secondary">Retour à la liste</a>
                               </div>
                          </div>
                     </div>
                </div>
-
-
           </div>
 
-          <!-- Fixed Call Button for Mobile Devices -->
           <div class="fixed-call-btn d-md-none">
                <div class="text-center">
-                    <!-- WhatsApp Button -->
-                    <a href="https://wa.me/<%= announcement.number.replace(/\s+/g, '') %>?text=Bonjour,%20je%20souhaite%20acheter%20le%20chien%20<%= encodeURIComponent(announcement.breed) %>" class="btn btn-success mt-2 w-100" style="background-color: #25D366; border-color: #25D366; color: white;" target="_blank">
+                    <a href="https://wa.me/<%= announcement.number.replace(/\s+/g, '') %>?text=Bonjour,%20je%20souhaite%20acheter%20le%20chien%20<%= encodeURIComponent(announcement.breed) %>" class="btn btn-success w-100">
                          <i class="bi bi-whatsapp"></i> WhatsApp
                     </a>
                </div>
@@ -269,30 +159,24 @@
           <%- include('partials/footer.ejs') %>
 
                <script>
-                    // JavaScript to change the main image when a thumbnail is clicked
-                    const thumbnailImages = document.querySelectorAll('.small-image');
-                    const mainImage = document.getElementById('mainImage');
+                    function setMainMedia(mediaUrl, type = 'image') {
+                         const mainImage = document.getElementById('mainImage');
+                         const mainVideo = document.getElementById('mainVideo');
 
-                    thumbnailImages.forEach(img => {
-                         img.addEventListener('click', function () {
-                              mainImage.src = this.src;
-                         });
-                    });
-
-                    // JavaScript to reveal the full phone number when the button is clicked
-                    document.getElementById('showNumberBtn').addEventListener('click', function () {
-                         const phoneNumberElement = document.getElementById('phoneNumber');
-                         phoneNumberElement.style.display = 'block';  // Show the phone number
-                         this.style.display = 'none';  // Hide the button after showing the number
-                    });
-
-                    // Same functionality for fixed call button on mobile
-                    document.getElementById('fixedCallButton').addEventListener('click', function () {
-                         const phoneNumberElement = document.getElementById('phoneNumber');
-                         phoneNumberElement.style.display = 'block';  // Show the phone number
-                         document.getElementById('showNumberBtn').style.display = 'none';  // Hide the button after showing the number
-                         this.style.display = 'none';  // Hide the button after showing the number
-                    });
+                         if (type === 'video') {
+                              if (mainImage) mainImage.style.display = 'none';
+                              if (mainVideo) {
+                                   mainVideo.src = mediaUrl;
+                                   mainVideo.style.display = 'block';
+                              }
+                         } else {
+                              if (mainVideo) mainVideo.style.display = 'none';
+                              if (mainImage) {
+                                   mainImage.src = mediaUrl;
+                                   mainImage.style.display = 'block';
+                              }
+                         }
+                    }
                </script>
 
                <style>

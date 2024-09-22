@@ -3,27 +3,27 @@ const Seller = require('../models/seller');
 const cloudinary = require('../config/cloudinary');
 const slugify = require('slugify');
 // Middleware to ensure the user is authenticated as a seller
-// const ensureSellerAuthenticated = async (req, res, next) => {
-//      if (req.isAuthenticated() && req.user.googleId) {
-//           try {
-//                const seller = await Seller.findOne({ googleId: req.user.googleId });
-//                if (!seller) {
-//                     return res.status(403).render('error', { message: 'Unauthorized access. Seller not found.' });
-//                }
-//                next();
-//           } catch (err) {
-//                console.error(err);
-//                return res.status(500).render('error', { message: 'Server error during seller authentication.' });
-//           }
-//      } else {
-//           res.redirect('/auth/google'); // Redirect to Google login if not authenticated
-//      }
-// };
+const ensureSellerAuthenticated = async (req, res, next) => {
+     if (req.isAuthenticated() && req.user.googleId) {
+          try {
+               const seller = await Seller.findOne({ googleId: req.user.googleId });
+               if (!seller) {
+                    return res.status(403).render('error', { message: 'Unauthorized access. Seller not found.' });
+               }
+               next();
+          } catch (err) {
+               console.error(err);
+               return res.status(500).render('error', { message: 'Server error during seller authentication.' });
+          }
+     } else {
+          res.redirect('/auth/google'); // Redirect to Google login if not authenticated
+     }
+};
 const marcheCanineController = {
      // GET: Fetch all announcements (Home Page)
      async getAnnouncements(req, res) {
           try {
-               const announcements = await Announcement.find({ status: 'approved' }).sort({ datePosted: -1 });
+               const announcements = await Announcement.find({ status: 'approved' }).sort({ datePosted: -1 }); // Fetch all approved announcements sorted by date
 
                res.render('marketplace/announcements', {
                     announcements,
@@ -31,7 +31,7 @@ const marcheCanineController = {
                     successMsg: req.flash('success')
                });
           } catch (err) {
-               console.error(err);
+               console.error('Failed to fetch announcements:', err);
                res.status(500).render('error', { message: 'Failed to fetch announcements' });
           }
      },
@@ -58,15 +58,19 @@ const marcheCanineController = {
                if (!seller) return res.status(404).json({ message: 'Seller not found' });
 
                // Handle file uploads (images and videos)
-               const mediaUrls = req.files.map(file => file.path);
+               const mediaUrls = req.files.map(file => file.path); // URLs for both images and videos from Cloudinary
 
-               // Generate slug for the announcement
+               // Generate a unique slug for the announcement
                const randomNum = Math.floor(1000 + Math.random() * 9000);
                let slug = slugify(`${breed}-${location}-${randomNum}`, { lower: true, strict: true });
 
-               // Ensure slug is unique
-               while (await Announcement.findOne({ slug })) {
-                    slug = `${slug}-${Math.floor(Math.random() * 100)}`;
+               // Ensure slug is unique by checking in the database
+               let slugExists = await Announcement.findOne({ slug });
+               let suffix = 1;
+               while (slugExists) {
+                    slug = `${slug}-${suffix}`;
+                    slugExists = await Announcement.findOne({ slug });
+                    suffix++;
                }
 
                const newAnnouncement = new Announcement({
@@ -75,8 +79,9 @@ const marcheCanineController = {
                     price,
                     location,
                     number,
-                    media: mediaUrls,
-                    slug,
+                    media: mediaUrls, // Store media (images/videos) in an array
+                    slug, // Store the slug
+                    seller: seller._id, // Reference to the seller's ObjectId
                     sellerDisplayName: seller.displayName,
                     sellerEmail: seller.email
                });
@@ -85,8 +90,41 @@ const marcheCanineController = {
                req.flash('success', "en Attendant l'Aprouve");
                res.redirect('/announcements');
           } catch (err) {
-               console.error(err);
+               console.error('Error adding announcement:', err);
                res.status(500).render('error', { message: 'Failed to add announcement' });
+          }
+     },
+
+     // POST: Update announcement images
+     async updateAnnouncementImages(req, res) {
+          const { deletedImages } = req.body;
+          const newImages = req.files;
+
+          try {
+               const announcement = await Announcement.findById(req.params.id);
+
+               if (!announcement) return res.status(404).render('error', { message: 'Announcement not found' });
+
+               // Handle image deletions
+               if (deletedImages) {
+                    const imagesToDelete = deletedImages.split(',');
+                    for (let imageUrl of imagesToDelete) {
+                         const publicId = imageUrl.split('/').pop().split('.')[0];
+                         await cloudinary.uploader.destroy(publicId);
+                         announcement.media = announcement.media.filter(image => image !== imageUrl);
+                    }
+               }
+
+               // Handle new image uploads
+               if (newImages && newImages.length > 0) {
+                    newImages.forEach(file => announcement.media.push(file.path));
+               }
+
+               await announcement.save();
+               res.redirect(`/announcements/${req.params.id}/edit`);
+          } catch (err) {
+               console.error(err);
+               res.status(500).render('error', { message: 'Failed to update images' });
           }
      },
 
@@ -111,6 +149,20 @@ const marcheCanineController = {
           } catch (err) {
                console.error(err);
                res.status(500).render('error', { message: 'Failed to retrieve announcement details' });
+          }
+     },
+
+     // GET: Show form to edit an existing announcement
+     async showEditAnnouncementForm(req, res) {
+          try {
+               const announcement = await Announcement.findById(req.params.id);
+
+               if (!announcement) return res.status(404).render('error', { message: 'Announcement not found' });
+
+               res.render('marketplace/editAnnouncement', { announcement, title: 'Modifier l\'annonce' });
+          } catch (err) {
+               console.error(err);
+               res.status(500).render('error', { message: 'Failed to load announcement for editing' });
           }
      },
 
@@ -146,30 +198,7 @@ const marcheCanineController = {
                console.error(err);
                res.status(500).render('error', { message: 'Failed to delete announcement' });
           }
-     },
-
-     // GET: Filter announcements based on criteria (price, location, etc.)
-     async filterAnnouncements(req, res) {
-          const { location, price, breed } = req.query;
-
-          try {
-               const filterQuery = {};
-
-               if (location) filterQuery.location = { $regex: new RegExp(location, 'i') };
-               if (price) filterQuery.price = { $lte: price };
-               if (breed) filterQuery.breed = { $regex: new RegExp(breed, 'i') };
-
-               const announcements = await Announcement.find(filterQuery).sort({ datePosted: -1 });
-
-               res.render('marketplace/announcements', {
-                    announcements,
-                    title: 'Annonces filtrées'
-               });
-          } catch (err) {
-               console.error(err);
-               res.status(500).render('error', { message: 'Failed to filter announcements' });
-          }
      }
 };
 
-module.exports = { marcheCanineController };
+module.exports = { marcheCanineController, ensureSellerAuthenticated };

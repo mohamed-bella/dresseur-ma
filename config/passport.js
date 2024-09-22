@@ -2,14 +2,14 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User = require('../models/user'); // For trainers
 const Seller = require('../models/seller'); // For sellers
 require('dotenv').config();
-const passport = require('passport')
-const slugify = require('slugify')
+const passport = require('passport');
+const slugify = require('slugify');
 
 passport.use(
      new GoogleStrategy({
           clientID: process.env.GOOGLE_CLIENT_ID,
           clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-          callbackURL: '/auth/google/cb',
+          callbackURL: '/auth/google/cb', // Ensure this matches the Google Developer Console
      },
           async (accessToken, refreshToken, profile, done) => {
                try {
@@ -25,7 +25,9 @@ passport.use(
                          // Try to generate a unique slug
                          let slug;
                          let isUniqueSlug = false;
-                         while (!isUniqueSlug) {
+                         let attemptCount = 0;  // Add a counter to avoid an infinite loop
+
+                         while (!isUniqueSlug && attemptCount < 10) { // Limit slug generation attempts to 10
                               const randomNum = Math.floor(1000 + Math.random() * 9000);
                               slug = slugify(`${profile.displayName}-${randomNum}`, { lower: true, strict: true });
 
@@ -34,7 +36,11 @@ passport.use(
                               if (!existingSeller) {
                                    isUniqueSlug = true; // Slug is unique, exit the loop
                               }
+                              attemptCount++; // Increment the counter
                          }
+
+                         // Check if emails exist in the Google profile
+                         const email = profile.emails && profile.emails.length > 0 ? profile.emails[0].value : null;
 
                          // Create a new seller if the seller does not exist
                          seller = new Seller({
@@ -42,8 +48,7 @@ passport.use(
                               googleId: profile.id,
                               displayName: profile.displayName,
                               image: profile.photos[0].value,
-                              email: profile.emails[0].value,
-                              announcements: []
+                              email: email || 'noemail@unknown.com' // Handle the case where no email is returned
                          });
 
                          await seller.save();
@@ -56,6 +61,7 @@ passport.use(
                }
           })
 );
+
 passport.serializeUser((user, done) => {
      done(null, user.id);
 });
@@ -74,4 +80,3 @@ passport.deserializeUser(async (id, done) => {
           done(err, null);
      }
 });
-

@@ -8,8 +8,8 @@ const announcementSchema = new Schema({
      views: { type: Number, default: 0 },
      slug: {
           type: String,
-          unique: true,
-          required: true
+          // unique: true,
+          // required: true,
      },
      breed: {
           type: String,
@@ -41,7 +41,15 @@ const announcementSchema = new Schema({
      },
      seller: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'Seller', // Link to Seller
+          ref: 'Seller', // Reference to Seller
+          required: true
+     },
+     sellerDisplayName: {
+          type: String,
+          required: true
+     },
+     sellerEmail: {
+          type: String,
           required: true
      },
      datePosted: {
