@@ -100,6 +100,6 @@ sellerSchema.pre('save', function (next) {
 });
 
 
-javascriptCopyannouncemen
+
 const Seller = mongoose.models.Seller || mongoose.model('Seller', sellerSchema);
 module.exports = Seller; 
