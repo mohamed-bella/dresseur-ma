@@ -38,7 +38,7 @@ const sellerSchema = new Schema({
           views: { type: Number, default: 0 },
           slug: {
                type: String,
-               default: 'annnoncement-3449829482734'
+               index: { unique: true, sparse: true }
           },
           breed: {
                type: String,
@@ -78,7 +78,6 @@ const sellerSchema = new Schema({
      }],
 });
 
-// Pre-save hook to generate slugs for sellers and announcements
 sellerSchema.pre('save', function (next) {
      const seller = this;
 
@@ -89,15 +88,18 @@ sellerSchema.pre('save', function (next) {
      }
 
      // Ensure each announcement has a slug generated
-     seller.announcements.forEach((announcement) => {
+     seller.announcements.forEach((announcement, index) => {
           if (!announcement.slug) {
                const randomNum = Math.floor(1000 + Math.random() * 9000);
-               announcement.slug = slugify(`${announcement.breed}-${randomNum}`, { lower: true, strict: true });
+               const breedOrFallback = announcement.breed || `announcement-${index + 1}`;
+               announcement.slug = slugify(`${breedOrFallback}-${randomNum}`, { lower: true, strict: true });
           }
      });
 
      next();
 });
 
+
+javascriptCopyannouncemen
 const Seller = mongoose.models.Seller || mongoose.model('Seller', sellerSchema);
 module.exports = Seller; 
