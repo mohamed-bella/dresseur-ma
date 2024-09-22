@@ -38,7 +38,6 @@ const sellerSchema = new Schema({
           views: { type: Number, default: 0 },
           slug: {
                type: String,
-               unique: true,
           },
           breed: {
                type: String,
