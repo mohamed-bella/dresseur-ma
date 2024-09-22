@@ -1,3 +1,9 @@
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const User = require('../models/user'); // For trainers
+const Seller = require('../models/seller'); // For sellers
+require('dotenv').config();
+
+
 passport.use(
      new GoogleStrategy({
           clientID: process.env.GOOGLE_CLIENT_ID,
@@ -49,3 +55,21 @@ passport.use(
                }
           })
 );
+passport.serializeUser((user, done) => {
+     done(null, user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+     try {
+          // Check both User (trainer) and Seller (seller) collections
+          let user = await User.findById(id);
+          if (user) {
+               done(null, user);
+          } else {
+               let seller = await Seller.findById(id);
+               done(null, seller);
+          }
+     } catch (err) {
+          done(err, null);
+     }
+});
