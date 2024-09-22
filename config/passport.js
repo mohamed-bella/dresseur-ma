@@ -3,7 +3,7 @@ const User = require('../models/user'); // For trainers
 const Seller = require('../models/seller'); // For sellers
 require('dotenv').config();
 const passport = require('passport')
-
+const slugify = require('slugify')
 
 passport.use(
      new GoogleStrategy({
