@@ -37,7 +37,7 @@ const announcementSchema = new Schema({
      status: {
           type: String,
           enum: ['pending', 'approved'],
-          default: 'pending'
+          default: 'approved'
      },
      seller: {
           type: mongoose.Schema.Types.ObjectId,
