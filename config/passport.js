@@ -2,6 +2,7 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User = require('../models/user'); // For trainers
 const Seller = require('../models/seller'); // For sellers
+const slugify = require('slugify')
 require('dotenv').config();
 
 passport.use(
