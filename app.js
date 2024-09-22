@@ -54,30 +54,27 @@ app.use((req, res, next) => {
 const publicRoutes = require('./routes/publicRoutes')
 app.use(publicRoutes)
 
-const adminRoutes = require('./routes/adminRoutes')
-app.use('/admin', ensureAdminAuthenticated, adminRoutes)
+// const adminRoutes = require('./routes/adminRoutes')
+// app.use('/admin', ensureAdminAuthenticated, adminRoutes)
 
-const marcheCanineRoutes = require('./routes/marcheCanineRoutes')
-app.use(marcheCanineRoutes)
+// const marcheCanineRoutes = require('./routes/marcheCanineRoutes')
+// app.use(marcheCanineRoutes)
 
-const authRoutes = require('./routes/authRoutes')
-app.use('/auth', authRoutes)
-
-
-const profileRoutes = require('./routes/profileRoutes')
-app.use('/profile', profileRoutes)
+// const authRoutes = require('./routes/authRoutes')
+// app.use('/auth', authRoutes)
 
 
-const sellerRoutes = require('./routes/sellerRoutes')
-app.use('/seller', sellerRoutes)
+// const profileRoutes = require('./routes/profileRoutes')
+// app.use('/profile', profileRoutes)
 
 
-// Other app configurations...
+// const sellerRoutes = require('./routes/sellerRoutes')
+// app.use('/seller', sellerRoutes)
 
-app.use(consultationRoutes);
+// app.use(consultationRoutes);
 
 app.use((req, res) => {
-     res.render('404', {
-          title: 'page Not Found'
+     res.render('marketplace/error', {
+          title: 'عذرًا، الموقع تحت الصيانة'
      })
 })

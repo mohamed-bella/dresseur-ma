@@ -1,54 +1,29 @@
+const Announcement = require('../models/announcement');
 const Seller = require('../models/seller');
-const axios = require('axios');
-const cheerio = require('cheerio');
+const cloudinary = require('../config/cloudinary');
 const slugify = require('slugify');
-
-const mongoose = require('mongoose');
-
-const cloudinary = require('../config/cloudinary'); // Import Cloudinary configuration
-
-// Helper function to clean up text
-// const cleanText = (text) => {
-//      return text
-//           .replace(/\n/g, ' ') // Replace newlines with spaces
-//           .replace(/\t/g, '')  // Remove tabs
-//           .replace(/\s+/g, ' ') // Remove excessive spaces
-//           .trim(); // Remove leading/trailing spaces
-// };
-
 // Middleware to ensure the user is authenticated as a seller
-const ensureSellerAuthenticated = async (req, res, next) => {
-     if (req.isAuthenticated() && req.user.googleId) {
-          try {
-               const seller = await Seller.findOne({ googleId: req.user.googleId });
-               if (!seller) {
-                    return res.status(403).render('error', { message: 'Unauthorized access. Seller not found.' });
-               }
-               next();
-          } catch (err) {
-               console.error(err);
-               return res.status(500).render('error', { message: 'Server error during seller authentication.' });
-          }
-     } else {
-          res.redirect('/auth/google'); // Redirect to Google login if not authenticated
-     }
-};
-
+// const ensureSellerAuthenticated = async (req, res, next) => {
+//      if (req.isAuthenticated() && req.user.googleId) {
+//           try {
+//                const seller = await Seller.findOne({ googleId: req.user.googleId });
+//                if (!seller) {
+//                     return res.status(403).render('error', { message: 'Unauthorized access. Seller not found.' });
+//                }
+//                next();
+//           } catch (err) {
+//                console.error(err);
+//                return res.status(500).render('error', { message: 'Server error during seller authentication.' });
+//           }
+//      } else {
+//           res.redirect('/auth/google'); // Redirect to Google login if not authenticated
+//      }
+// };
 const marcheCanineController = {
-
      // GET: Fetch all announcements (Home Page)
      async getAnnouncements(req, res) {
           try {
-               const sellers = await Seller.find().select('announcements');
-
-               // Combine and filter announcements with approved status
-               const announcements = sellers.reduce((acc, seller) => [
-                    ...acc,
-                    ...seller.announcements.filter(a => a.status === 'approved')
-               ], []);
-
-               // Sort announcements by datePosted (newest first)
-               announcements.sort((a, b) => new Date(b.datePosted) - new Date(a.datePosted));
+               const announcements = await Announcement.find({ status: 'approved' }).sort({ datePosted: -1 });
 
                res.render('marketplace/announcements', {
                     announcements,
@@ -60,7 +35,6 @@ const marcheCanineController = {
                res.status(500).render('error', { message: 'Failed to fetch announcements' });
           }
      },
-
 
      // GET: Show form to create a new announcement
      showNewAnnouncementForm(req, res) {
@@ -84,42 +58,31 @@ const marcheCanineController = {
                if (!seller) return res.status(404).json({ message: 'Seller not found' });
 
                // Handle file uploads (images and videos)
-               const mediaUrls = req.files.map(file => file.path); // URLs for both images and videos from Cloudinary
+               const mediaUrls = req.files.map(file => file.path);
 
-               // Generate a unique slug for the announcement
-               // Generate a unique slug for the announcement
-               const currentDate = new Date();
-               const formattedDate = `${currentDate.getFullYear()}${(currentDate.getMonth() + 1).toString().padStart(2, '0')}${currentDate.getDate().toString().padStart(2, '0')}`;
-               const formattedTime = `${currentDate.getHours().toString().padStart(2, '0')}${currentDate.getMinutes().toString().padStart(2, '0')}${currentDate.getSeconds().toString().padStart(2, '0')}`;
-               const slugBase = `${breed} ${location} ${formattedDate}-${formattedTime}`; // Include date and time in the slug
-               let slug = slugify(slugBase, { lower: true, strict: true });
+               // Generate slug for the announcement
+               const randomNum = Math.floor(1000 + Math.random() * 9000);
+               let slug = slugify(`${breed}-${location}-${randomNum}`, { lower: true, strict: true });
 
-               // Ensure slug is unique by checking in the database
-               let slugExists = await Seller.findOne({ 'announcements.slug': slug });
-               let suffix = 1;
-               while (slugExists) {
-                    slug = `${slug}-${suffix}`;
-                    slugExists = await Seller.findOne({ 'announcements.slug': slug });
-                    suffix++;
+               // Ensure slug is unique
+               while (await Announcement.findOne({ slug })) {
+                    slug = `${slug}-${Math.floor(Math.random() * 100)}`;
                }
 
-               const newAnnouncement = {
+               const newAnnouncement = new Announcement({
                     breed,
                     description,
                     price,
                     location,
                     number,
-                    media: mediaUrls, // Store media (images/videos) in an array
-                    slug, // Store the slug
+                    media: mediaUrls,
+                    slug,
                     sellerDisplayName: seller.displayName,
                     sellerEmail: seller.email
-               };
+               });
 
-               // Add the new announcement to the seller's announcements
-               seller.announcements.push(newAnnouncement);
+               await newAnnouncement.save();
                req.flash('success', "en Attendant l'Aprouve");
-
-               await seller.save();
                res.redirect('/announcements');
           } catch (err) {
                console.error(err);
@@ -127,61 +90,27 @@ const marcheCanineController = {
           }
      },
 
-
-     // GET: Show details of a specific announcement by ID
-     // Controller to get announcement by slug and track views
+     // GET: Show details of a specific announcement by slug
      async getAnnouncementBySlug(req, res) {
           try {
                const { slug } = req.params;
-               const cookieName = `viewed_${slug}`;
+               const announcement = await Announcement.findOne({ slug });
 
-               // Find the seller that has the announcement with the provided slug
-               const seller = await Seller.findOne({ 'announcements.slug': slug });
-
-               // If no seller or announcement is found
-               if (!seller) {
-                    return res.status(404).render('error', { message: 'Announcement not found' });
-               }
-
-               // Find the announcement by its slug within the seller's announcements
-               const announcement = seller.announcements.find(ann => ann.slug === slug);
                if (!announcement) {
                     return res.status(404).render('error', { message: 'Announcement not found' });
                }
 
-               // Check if the user has already viewed this announcement using cookies
-               if (!req.cookies[cookieName]) {
-                    // Increment view count if this is the first view
-                    announcement.views = (announcement.views || 0) + 1;
-
-                    // Save the updated announcement view count to the database
-                    await seller.save();
-
-                    // Set a cookie to mark that the user has viewed this announcement (expires in 24 hours)
-                    res.cookie(cookieName, true, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
+               // Increment views if this is the first time the user is viewing the announcement
+               if (!req.cookies[`viewed_${slug}`]) {
+                    announcement.views++;
+                    await announcement.save();
+                    res.cookie(`viewed_${slug}`, true, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
                }
 
-               // Render the announcement details
-               res.render('marketplace/announcementDetail', { announcement, seller, title: 'Détails de l\'annonce' });
+               res.render('marketplace/announcementDetail', { announcement, title: 'Détails de l\'annonce' });
           } catch (err) {
                console.error(err);
                res.status(500).render('error', { message: 'Failed to retrieve announcement details' });
-          }
-     },
-
-
-     // GET: Show form to edit an existing announcement
-     async showEditAnnouncementForm(req, res) {
-          try {
-               const seller = await Seller.findOne({ googleId: req.user.googleId });
-               const announcement = seller.announcements.id(req.params.id);
-
-               if (!announcement) return res.status(404).render('error', { message: 'Announcement not found' });
-
-               res.render('marketplace/editAnnouncement', { announcement, title: 'Modifier l\'annonce' });
-          } catch (err) {
-               console.error(err);
-               res.status(500).render('error', { message: 'Failed to load announcement for editing' });
           }
      },
 
@@ -190,8 +119,7 @@ const marcheCanineController = {
           const { breed, description, price, location, images } = req.body;
 
           try {
-               const seller = await Seller.findOne({ googleId: req.user.googleId });
-               const announcement = seller.announcements.id(req.params.id);
+               const announcement = await Announcement.findById(req.params.id);
 
                if (!announcement) return res.status(404).render('error', { message: 'Announcement not found' });
 
@@ -199,89 +127,49 @@ const marcheCanineController = {
                announcement.description = description || announcement.description;
                announcement.price = price || announcement.price;
                announcement.location = location || announcement.location;
-               announcement.images = images ? images.split(',') : announcement.images;
+               announcement.media = images ? images.split(',') : announcement.media;
 
-               await seller.save();
-               res.redirect('/');
+               await announcement.save();
+               res.redirect('/announcements');
           } catch (err) {
                console.error(err);
                res.status(500).render('error', { message: 'Failed to update announcement' });
           }
      },
 
-     // POST: Add/Delete Images for an Announcement
-     async updateAnnouncementImages(req, res) {
-          const { deletedImages } = req.body;
-          const newImages = req.files;
-
-          try {
-               const seller = await Seller.findOne({ googleId: req.user.googleId });
-               const announcement = seller.announcements.id(req.params.id);
-
-               if (!announcement) return res.status(404).render('error', { message: 'Announcement not found' });
-
-               // Handle image deletions
-               if (deletedImages) {
-                    const imagesToDelete = deletedImages.split(',');
-                    for (let imageUrl of imagesToDelete) {
-                         const publicId = imageUrl.split('/').pop().split('.')[0];
-                         await cloudinary.uploader.destroy(publicId);
-                         announcement.images = announcement.images.filter(image => image !== imageUrl);
-                    }
-               }
-
-               // Handle new image uploads
-               if (newImages && newImages.length > 0) {
-                    newImages.forEach(file => announcement.images.push(file.path));
-               }
-
-               await seller.save();
-               res.redirect(`/seller/announcements/${req.params.id}/edit`);
-          } catch (err) {
-               console.error(err);
-               res.status(500).render('error', { message: 'Failed to update images' });
-          }
-     },
-
      // DELETE: Remove an existing announcement
      async deleteAnnouncement(req, res) {
           try {
-               const seller = await Seller.findOne({ googleId: req.user.googleId });
-               const announcement = seller.announcements.id(req.params.id);
-
-               if (!announcement) return res.status(404).render('error', { message: 'Announcement not found' });
-
-               announcement.remove();
-               await seller.save();
-
-               res.redirect('/');
+               await Announcement.findByIdAndDelete(req.params.id);
+               res.redirect('/announcements');
           } catch (err) {
                console.error(err);
                res.status(500).render('error', { message: 'Failed to delete announcement' });
           }
      },
 
-     // Controller function to handle scraping specific dog pages
-
      // GET: Filter announcements based on criteria (price, location, etc.)
      async filterAnnouncements(req, res) {
-          const { location, price, type } = req.query;
+          const { location, price, breed } = req.query;
 
           try {
-               const sellers = await Seller.find().select('announcements');
-               let announcements = sellers.reduce((acc, seller) => [...acc, ...seller.announcements], []);
+               const filterQuery = {};
 
-               if (location) announcements = announcements.filter(a => a.location.toLowerCase().includes(location.toLowerCase()));
-               if (price) announcements = announcements.filter(a => a.price <= price);
-               if (type) announcements = announcements.filter(a => a.type === type);
+               if (location) filterQuery.location = { $regex: new RegExp(location, 'i') };
+               if (price) filterQuery.price = { $lte: price };
+               if (breed) filterQuery.breed = { $regex: new RegExp(breed, 'i') };
 
-               res.render('marketplace/announcements', { announcements, title: 'Annonces filtrées' });
+               const announcements = await Announcement.find(filterQuery).sort({ datePosted: -1 });
+
+               res.render('marketplace/announcements', {
+                    announcements,
+                    title: 'Annonces filtrées'
+               });
           } catch (err) {
                console.error(err);
                res.status(500).render('error', { message: 'Failed to filter announcements' });
           }
      }
-
 };
 
-module.exports = { marcheCanineController, ensureSellerAuthenticated };
+module.exports = { marcheCanineController };
