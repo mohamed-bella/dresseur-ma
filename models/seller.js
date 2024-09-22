@@ -11,7 +11,6 @@ const sellerSchema = new Schema({
      slug: {
           type: String,
           unique: true,
-          // required: 3true
      },
      displayName: {
           type: String,
@@ -30,35 +29,25 @@ const sellerSchema = new Schema({
           type: String,
           enum: ['user', 'admin'],
           default: 'user'
-     }, // Add role field
+     },
      createdAt: {
           type: Date,
-          default: Date.now, // Automatically set the creation date when a new seller is created
+          default: Date.now,
      },
 
      announcements: [{
-          views: { type: Number, default: 0 },  // Add views field
+          views: { type: Number, default: 0 },
 
           slug: {
                type: String,
                unique: true, // Ensure slugs are unique
                required: true
           },
-          breed: {
-               type: String,
-          },
-          description: {
-               type: String,
-          },
-          price: {
-               type: Number,
-          },
-          location: {
-               type: String,
-          },
-          number: {
-               type: String,
-          },
+          breed: String,
+          description: String,
+          price: Number,
+          location: String,
+          number: String,
           media: [{
                type: String, // URLs for images
           }],
@@ -66,8 +55,7 @@ const sellerSchema = new Schema({
                type: String,
                enum: ['pending', 'approved'],
                default: 'pending'
-          }, // Add status field
-
+          },
           sellerDisplayName: {
                type: String, // Seller's display name
                required: true
@@ -83,11 +71,24 @@ const sellerSchema = new Schema({
      }],
 });
 
-// Generate a slug based on the display name and a random number
+// Generate a slug for the seller's display name
 sellerSchema.pre('save', function (next) {
      if (this.isNew || this.isModified('displayName')) {
           const randomNum = Math.floor(1000 + Math.random() * 9000); // Random 4-digit number
           this.slug = slugify(`${this.displayName}-${randomNum}`, { lower: true, strict: true });
+     }
+     next();
+});
+
+// Pre-save hook for announcements to generate unique slugs
+sellerSchema.pre('save', function (next) {
+     if (this.isModified('announcements')) {
+          this.announcements.forEach((announcement) => {
+               if (!announcement.slug) {
+                    const randomNum = Math.floor(1000 + Math.random() * 9000); // Random 4-digit number
+                    announcement.slug = slugify(`${announcement.breed}-${randomNum}`, { lower: true, strict: true });
+               }
+          });
      }
      next();
 });
