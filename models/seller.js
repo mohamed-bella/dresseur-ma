@@ -38,7 +38,7 @@ const sellerSchema = new Schema({
           views: { type: Number, default: 0 },
           slug: {
                type: String,
-               default: Date.now
+               default: 'annnoncement-3449829482734'
           },
           breed: {
                type: String,
