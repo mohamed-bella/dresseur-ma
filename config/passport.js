@@ -21,8 +21,14 @@ passport.use(
                     // If not a trainer, check if the user is a seller
                     let seller = await Seller.findOne({ googleId: profile.id });
                     if (!seller) {
+
+                         const randomNum = Math.floor(1000 + Math.random() * 9000);
+                         const slug = slugify(`${profile.displayName}-${randomNum}`, { lower: true, strict: true });
+
                          // If neither exist, create a new seller (you can also modify this for trainers)
                          seller = new Seller({
+                              slug: slug,
+
                               googleId: profile.id,
                               displayName: profile.displayName,
                               image: profile.photos[0].value,
