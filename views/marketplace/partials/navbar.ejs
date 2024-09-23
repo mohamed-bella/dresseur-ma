@@ -66,7 +66,7 @@
 
                          <% } %>
                               <% if (user.role==='user' ) { %>
-                                   <a href="/announcements" class="btn btn-warning pulse-button">ajouter annonce</a>
+                                   <a href="/announcements/new" class="btn btn-warning pulse-button">ajouter annonce</a>
                                    <% } %>
 
                                         <% if(user.role==='admin' ) { %>
@@ -76,7 +76,7 @@
                                                   <% } %>
                                                        <!-- public -->
                                                        <% if (!user) { %>
-                                                            <a class="btn btn-warning pulse-button" href="/auth/google">Ajouter une Annonce</a>
+                                                            <a class="btn btn-warning pulse-button" href="/announcements/new">Ajouter une Annonce</a>
 
                                                             <% } %>
 
@@ -118,7 +118,7 @@
 
                                    <% } %>
                                         <% if (user.role==='user' ) { %>
-                                             <a href="/announcements" class="btn btn-warning pulse-button">ajouter une annonce</a>
+                                             <a href="/announcements/new" class="btn btn-warning pulse-button">ajouter une annonce</a>
                                              <% } %>
 
                                                   <% if(user.role==='admin' ) { %>
@@ -128,7 +128,7 @@
                                                             <% } %>
                                                                  <!-- public -->
                                                                  <% if (!user) { %>
-                                                                      <a class="btn btn-warning" href="/auth/google">Ajouter une Annonce</a>
+                                                                      <a class="btn btn-warning" href="/announcements/new">Ajouter une Annonce</a>
 
                                                                       <% } %>
 
