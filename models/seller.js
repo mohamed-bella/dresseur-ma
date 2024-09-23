@@ -22,13 +22,19 @@ const sellerSchema = new Schema({
           type: String,
           required: true
      },
+     author: {
+
+          type: String,
+          // required: true
+
+     },
      email: {
           type: String,
           required: true
      },
      role: {
           type: String,
-          enum: ['user', 'admin'],
+          enum: ['user', 'writer', 'admin'],
           default: 'user'
      },
      createdAt: {

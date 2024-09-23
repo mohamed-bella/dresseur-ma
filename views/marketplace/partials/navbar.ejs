@@ -1,69 +1,105 @@
-<header class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+<!-- <header class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+
      <div class="container">
-          <!-- Brand/Logo -->
           <a class="navbar-brand" href="/">
                <img src="https://res.cloudinary.com/dxg2nsnkj/image/upload/v1726071234/Untitled_design_8_b90gyq.png" style="width:40px" alt="Ndressilik">
                Ndressilik</a>
 
-          <!-- Toggle Button for Small Devices -->
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
                <span class="navbar-toggler-icon"></span>
           </button>
 
-          <!-- Collapsible Navbar Content -->
           <div class="collapse navbar-collapse" id="navbarContent">
-               <!-- Left-aligned Links (optional) -->
                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <!-- Example Links -->
-
                </ul>
-
-               <!-- Right-aligned Buttons -->
                <div class="d-flex">
                     <% if (user) { %>
-                         <a href="/seller/dashboard" class="btn btn-outline-dark me-2"><i class="bi bi-speedometer2"></i> Dashboard</a>
-                         <a href="/announcements/new" class="btn btn-warning me-2"><i class="bi bi-plus-square"></i> Ajouter Annonce</a>
-                         <a href="/auth/logout" class="btn btn-danger">Logout</a>
-                         <% } else { %>
-                              <button data-bs-toggle="modal" data-bs-target="#exampleModal" class="pushy__btn pushy__btn--md pushy__btn--primary"><i class="bi bi-plus-square"></i> Ajouter une annonce</button>
+                         <% if (user && user.role==='writer' ) { %>
+                              <a class="btn btn-success mb-2" href="/write-article/new">Partager un article</a>
                               <% } %>
+
+                                   <a href="/seller/dashboard" class="btn btn-outline-dark me-2">Dashboard</a>
+                                   <a href="/announcements/new" class="btn btn-warning me-2"> Ajouter Annonce</a>
+                                   <a href="/auth/logout" class="btn btn-danger">Logout</a>
+                                   <% } else { %>
+                                        <a href="/auth/google" class="btn btn-link"> Ajouter une annonce</a>
+                                        <% } %>
                </div>
           </div>
      </div>
-</header>
+</header> -->
 
-<!-- Modal for Adding Announcement -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
-     <div class="modal-dialog">
-          <div class="modal-content">
-               <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Informations sur le Chien</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+
+<style>
+     a {
+          font-size: 14px;
+          font-weight: 700
+     }
+
+     .superNav {
+          font-size: 13px;
+          background-color: #ffeb3b91 !important;
+     }
+
+     .form-control {
+          outline: none !important;
+          box-shadow: none !important;
+     }
+
+     @media screen and (max-width:540px) {
+          .centerOnMobile {
+               text-align: center
+          }
+     }
+</style>
+
+<nav class="navbar navbar-expand-lg bg-white sticky-top navbar-light p-3 shadow-sm">
+     <div class="container">
+          <a class="navbar-brand" href="/"> <strong>NDRESSILIK</strong></a>
+
+          <button class="navbar-toggler">
+               <a href="/announcements" class="btn btn-warning">ajouter annonce</a>
+          </button>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+               <span class="navbar-toggler-icon"></span>
+          </button>
+
+
+          <div class=" collapse navbar-collapse" id="navbarNavDropdown">
+               <div class="ms-auto d-none d-lg-block">
+                    <div class="input-group">
+                         <!-- <span class="border-warning input-group-text bg-warning text-white"><i class="fa-solid fa-magnifying-glass"></i></span> -->
+                         <!-- <input type="text" class="form-control border-warning" style="color:#7a7a7a"> -->
+                         <!-- <button class="btn btn-warning text-white">Search</button> -->
+                    </div>
                </div>
-               <form id="dogInfoForm" action="/auth/google" method="GET">
-                    <div class="modal-body">
-                         <div class="form-group mb-3">
-                              <label for="dogName" class="form-label">Nom du chien</label>
-                              <input type="text" class="form-control" id="dogName" name="dogName" placeholder="Entrez le nom du chien" required>
-                         </div>
-                         <div class="form-group mb-3">
-                              <label for="phone" class="form-label">Numéro de téléphone</label>
-                              <input type="number" class="form-control" id="phone" name="phone" placeholder="Entrez votre numéro de téléphone" required>
-                         </div>
-                    </div>
-                    <div class="modal-footer">
-                         <button type="button" class="btn btn-link" data-bs-dismiss="modal">Fermer</button>
-                         <button type="submit" class="btn btn-primary">Soumettre et Se Connecter</button>
-                    </div>
-               </form>
-          </div>
-     </div>
-</div>
+               <ul class="navbar-nav ms-auto ">
 
-<script>
-     // Redirect to Google login after form submission
-     document.getElementById('dogInfoForm').addEventListener('submit', function (e) {
-          e.preventDefault();
-          window.location.href = '/auth/google';
-     });
-</script>
+                    <li class="nav-item">
+                         <a class="nav-link mx-2 text-uppercase" href="/announcements">Les Annonces</a>
+                    </li>
+                    <li class="nav-item">
+                         <a class="nav-link mx-2 text-uppercase" href="/consultation">Consultation</a>
+                    </li>
+                    <li class="nav-item">
+                         <a class="nav-link mx-2 text-uppercase" href="/articles">Les Articles</a>
+                    </li>
+                    <li class="nav-item">
+                         <a class="nav-link mx-2 text-uppercase" href="/tous-les-races-des-chiens">Les Races Des Chiens</a>
+                    </li>
+               </ul>
+
+               <ul class="navbar-nav ms-auto ">
+                    <li class="nav-item">
+                         <% if (user && user.role==='writer' ) { %>
+                              <a class="btn btn-success mb-2" href="/write-article/new">Partager un article</a>
+                              <% } else { %>
+                                   <a href="/auth/google" class="btn btn-warning"> Creer un Compte</a>
+                                   <% } %>
+                    </li>
+               </ul>
+          </div>
+
+     </div>
+</nav>

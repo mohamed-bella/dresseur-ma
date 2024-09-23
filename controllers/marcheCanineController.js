@@ -87,7 +87,7 @@ const marcheCanineController = {
                });
 
                await newAnnouncement.save();
-               req.flash('success', "en Attendant l'Aprouve");
+               req.flash('success', "تم نشر إعلانك بنجاح ✅");
                res.redirect('/announcements');
           } catch (err) {
                console.error('Error adding announcement:', err);

@@ -16,45 +16,21 @@
                          </div>
                          <% } %>
 
-                              <form action="/announcements" method="POST" class="needs-validation" enctype="multipart/form-data" novalidate id="announcementForm">
+                              <form action="/announcements" method="POST" class=" needs-validation" enctype="multipart/form-data" novalidate id="announcementForm">
                                    <!-- Dog Breed Input with Autocomplete -->
-                                   <div class="card mb-3">
+                                   <div class=" mb-3">
                                         <div class="card-body">
                                              <label for="breed" class="form-label" style="color: #000;">
                                                   <i class="bi bi-list-stars"></i> Race de chien
                                              </label>
-                                             <input type="text" class="form-control" id="breedInput" name="breed" placeholder="Entrez la race de chien" list="dogBreeds" required>
-                                             <datalist id="dogBreeds">
-                                                  <option value="Berger Allemand">Berger Allemand</option>
-                                                  <option value="Malinois">Malinois</option>
-                                                  <option value="Labrador Retriever">Labrador Retriever</option>
-                                                  <option value="Golden Retriever">Golden Retriever</option>
-                                                  <option value="Bulldog Français">Bulldog Français</option>
-                                                  <option value="Bouledogue Anglais">Bouledogue Anglais</option>
-                                                  <option value="Chihuahua">Chihuahua</option>
-                                                  <option value="Rottweiler">Rottweiler</option>
-                                                  <option value="Beagle">Beagle</option>
-                                                  <option value="Poodle">Poodle</option>
-                                                  <option value="Boxer">Boxer</option>
-                                                  <option value="Cocker Spaniel">Cocker Spaniel</option>
-                                                  <option value="Dalmatian">Dalmatian</option>
-                                                  <option value="Doberman">Doberman</option>
-                                                  <option value="Husky Sibérien">Husky Sibérien</option>
-                                                  <option value="Pitbull">Pitbull</option>
-                                                  <option value="Shih Tzu">Shih Tzu</option>
-                                                  <option value="Basset Hound">Basset Hound</option>
-                                                  <option value="Akita Inu">Akita Inu</option>
-                                                  <option value="Shar Pei">Shar Pei</option>
-                                                  <option value="Jack Russell Terrier">Jack Russell Terrier</option>
-                                                  <option value="Teckel">Teckel</option>
-                                                  <option value="Samoyed">Samoyed</option>
-                                             </datalist>
+                                             <input type="text" class="form-control" id="breedInput" name="breed" placeholder="Entrez la race de chien" required>
+
                                              <div class="invalid-feedback">La race de chien est obligatoire.</div>
                                         </div>
                                    </div>
 
                                    <!-- Price -->
-                                   <div class="card mb-3">
+                                   <div class=" mb-3">
                                         <div class="card-body">
                                              <label for="price" class="form-label" style="color: #000;">
                                                   <i class="bi bi-cash"></i> Prix (DH)
@@ -66,7 +42,7 @@
                                    </div>
 
                                    <!-- Location -->
-                                   <div class="card mb-3">
+                                   <div class=" mb-3">
                                         <div class="card-body">
                                              <label for="location" class="form-label" style="color: #000;">
                                                   <i class="bi bi-geo-alt"></i> Lieu
@@ -132,7 +108,7 @@
                                    </div>
 
                                    <!-- Phone Number -->
-                                   <div class="card mb-3">
+                                   <div class=" mb-3">
                                         <div class="card-body">
                                              <label for="number" class="form-label" style="color: #000;">
                                                   <i class="bi bi-telephone"></i> Numéro de Whatsapp
@@ -143,7 +119,7 @@
                                    </div>
 
                                    <!-- Description -->
-                                   <div class="card mb-3">
+                                   <div class=" mb-3">
                                         <div class="card-body">
                                              <label for="description" class="form-label" style="color: #000;">
                                                   <i class="bi bi-file-text"></i> Description
@@ -153,23 +129,74 @@
                                         </div>
                                    </div>
                                    <!-- Images and Videos -->
-                                   <div class="card mb-3">
-                                        <div class="card-body">
-                                             <label for="media" class="form-label" style="color: #000;">
-                                                  <i class="bi bi-images"></i> Images/Videos (sélectionnez plusieurs)
+                                   <!-- Images and Videos Upload -->
+                                   <div class="mb-3">
+                                        <div class="card-body text-center">
+                                             <label for="media" class="form-label" style="color: #000; display:block;">
+                                                  <strong>Images/Videos</strong>
                                              </label>
-                                             <div class="input-group">
-                                                  <span class="input-group-text bg-light">
-                                                       <i class="bi bi-upload"></i>
-                                                  </span>
-                                                  <input type="file" class="form-control" id="media" name="media" multiple accept="image/*,video/*">
-                                                  <div class="invalid-feedback">Veuillez sélectionner au moins une image ou vidéo.</div>
+                                             <div class="upload-box text-center p-4 border rounded">
+                                                  <div class="upload-icon mb-2">
+                                                       <i class="bi bi-upload" style="font-size: 40px; color: #d5b753;"></i>
+                                                  </div>
+                                                  <div class="upload-text mb-3" style="color: #d5b753;">
+                                                       <span>Upload file</span>
+                                                  </div>
+                                                  <input type="file" id="media" name="media" multiple accept="image/*, video/*" class="form-control-file" style="display: none;">
                                              </div>
+                                             <small class="form-text text-muted mt-2">Select multiple images or videos</small>
+                                             <div class="invalid-feedback">Veuillez sélectionner au moins une image ou vidéo.</div>
                                         </div>
                                    </div>
 
+                                   <!-- Add some custom styling -->
+                                   <style>
+                                        .upload-box {
+                                             border: 2px dashed #6c63ff;
+                                             cursor: pointer;
+                                             transition: border-color 0.3s ease;
+                                             max-width: 200px;
+                                             margin: 0 auto;
+                                        }
+
+                                        .upload-box:hover {
+                                             border-color: #d5b753;
+                                        }
+
+                                        .upload-icon {
+                                             font-size: 40px;
+                                             color: #d5b753;
+                                        }
+
+                                        .upload-box input[type="file"] {
+                                             display: none;
+                                        }
+
+                                        .upload-text {
+                                             font-size: 16px;
+                                             font-weight: 500;
+                                             color: #d5b753;
+                                        }
+
+                                        /* Ensure mobile responsiveness */
+                                        @media (max-width: 576px) {
+                                             .upload-box {
+                                                  width: 100%;
+                                                  max-width: 300px;
+                                             }
+                                        }
+                                   </style>
+
+                                   <!-- Add JavaScript to trigger the file input on box click -->
+                                   <script>
+                                        document.querySelector('.upload-box').addEventListener('click', function () {
+                                             document.getElementById('media').click();
+                                        });
+                                   </script>
+
+
                                    <!-- Submit Button -->
-                                   <div class="card mb-3">
+                                   <div class=" mb-3">
                                         <div class="card-body">
                                              <button type="submit" class="btn btn-warning btn-lg btn-block">
                                                   <i class="bi bi-send"></i> Publier l'annonce
@@ -216,7 +243,7 @@
                               form.classList.add('was-validated');
                          }, false);
 
-                         // Function to validate individual form fields
+                         // Add fade-in animation to error messages
                          function validateField(field) {
                               if (field.checkValidity()) {
                                    field.classList.remove('is-invalid');
@@ -224,8 +251,16 @@
                               } else {
                                    field.classList.remove('is-valid');
                                    field.classList.add('is-invalid');
+                                   // Add fade-in effect
+                                   const invalidFeedback = field.nextElementSibling;
+                                   invalidFeedback.style.opacity = '0';
+                                   setTimeout(() => {
+                                        invalidFeedback.style.opacity = '1';
+                                        invalidFeedback.style.transition = 'opacity 0.3s ease-in-out';
+                                   }, 100);
                               }
                          }
+
                     });
                </script>
                <script>
@@ -254,4 +289,6 @@
                               });
                          });
                     });
+
+
                </script>

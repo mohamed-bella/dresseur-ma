@@ -1,8 +1,57 @@
 const router = require('express').Router();
 const cloudinary = require('cloudinary').v2;
 const path = require('path');
+const slugify = require('slugify')
+const upload = require('../config/multer'); // Import Multer
+
+
+const ensureWriter = (req, res, next) => {
+     if (req.isAuthenticated() && req.user.role === 'writer') {
+          return next();
+     } else {
+          res.status(403).send('Access denied. You are not authorized to post articles.');
+     }
+};
 
 const Article = require('../models/article')
+
+
+// Route to show the form to write a new article
+router.get('/write-article/new', ensureWriter, (req, res) => {
+     res.render('public/newArticle', { title: 'Partager un nouvel article' });
+
+});
+
+// Route to handle creating a new article
+router.post('/write-article', ensureWriter, upload.single('bannerImage'), async (req, res) => {
+     try {
+          const { title, content, description } = req.body;
+          const user = req.user; // Get the writer from session
+          let bannerImageUrl = '';
+
+          if (req.file) {
+               const result = await cloudinary.uploader.upload(req.file.path);
+               bannerImageUrl = result.secure_url;
+          }
+
+          const newArticle = new Article({
+               title,
+               content,
+               description,
+               bannerImage: bannerImageUrl,
+               author: user.displayName,
+               slug: slugify(title, { lower: true }),
+          });
+
+          await newArticle.save();
+          res.redirect('/articles');
+     } catch (err) {
+          console.error(err);
+          res.status(500).send('Erreur lors de la création de l\'article.');
+     }
+});
+
+
 
 const publicController = require('../controllers/publicController')
 

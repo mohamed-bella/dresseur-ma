@@ -2,7 +2,7 @@
 
 body {
      font-family: 'Lexend', sans-serif;
-     padding-top: 70px;
+     /* padding-top: 70px; */
      /* This will make the background repeat */
      background-size: auto;
      background-color: #e9e4e470;
@@ -67,9 +67,9 @@ input[type="password"] {
      font-size: 16px;
      transition: border-color 0.3s ease; */
      border: 1px solid #b9b9b9;
-     border-radius: 22px;
+     /* border-radius: 22px; */
      padding: 7px 28px;
-     background-color: #ffd66359;
+     /* background-color: #ffd66359; */
      color: #000000;
 }
 
@@ -498,4 +498,49 @@ body {
      100% {
           transform: rotate(360deg);
      }
+}
+
+@media screen and (max-width: 540px) {
+     .btn {
+          font-size: 12px;
+          padding: 10px 12px;
+     }
+
+     .navbar-brand {
+          font-size: 20px;
+     }
+}
+
+@media screen and (max-width: 540px) {
+     .form-control {
+          margin-bottom: 15px;
+     }
+
+     .card-body {
+          padding: 10px;
+     }
+}
+
+.btn-warning {
+     background-color: #f0ad4e;
+     border-color: #f0ad4e;
+     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+     transition: all 0.2s ease;
+}
+
+.btn-warning:hover {
+     background-color: #ec971f;
+     border-color: #ec971f;
+     box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.navbar-toggler {
+     font-size: 20px;
+     padding: 10px;
+     border: 0px;
+}
+
+.navbar-toggler-icon {
+     background-color: #ffffff;
+     border-radius: 5px;
 }
