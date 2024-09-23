@@ -547,13 +547,13 @@ body {
 
 .pulse-button {
      position: relative;
-     border: 3px solid transparent;
+     border: 0px solid transparent;
      /* Initial border is transparent */
      border-radius: 5px;
      /* Optional: adjust border radius */
      color: white;
      text-decoration: none;
-     font-weight: bold;
+     /* font-weight: bold; */
      display: inline-block;
      transition: border-color 0.3s ease-in-out;
 }
