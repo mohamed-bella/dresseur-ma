@@ -59,7 +59,26 @@
           <a class="navbar-brand" href="/"> <strong>NDRESSILIK</strong></a>
 
           <button class="navbar-toggler">
-               <a href="/announcements" class="btn btn-warning">ajouter annonce</a>
+               <% if(user) { %>
+                    <% if(user.role==='writer' ) { %>
+                         <a class="btn btn-success mb-2" href="/write-article/new">Partager un article</a>
+
+                         <% } %>
+                              <% if (user.role==='user' ) { %>
+                                   <a href="/announcements" class="btn btn-warning">ajouter annonce</a>
+                                   <% } %>
+
+                                        <% if(user.role==='admin' ) { %>
+                                             <a class="btn btn-danger mb-2" href="/admin">admin</a>
+
+                                             <% } %>
+                                                  <% } %>
+                                                       <!-- public -->
+                                                       <% if (!user) { %>
+                                                            <a class="btn btn-warning" href="/auth/google">Ajouter un Annonce</a>
+
+                                                            <% } %>
+
           </button>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                <span class="navbar-toggler-icon"></span>
@@ -92,11 +111,27 @@
 
                <ul class="navbar-nav ms-auto ">
                     <li class="nav-item">
-                         <% if (user && user.role==='writer' ) { %>
-                              <a class="btn btn-success mb-2" href="/write-article/new">Partager un article</a>
-                              <% } else { %>
-                                   <a href="/auth/google" class="btn btn-warning"> Creer un Compte</a>
+                         <% if(user) { %>
+                              <% if(user.role==='writer' ) { %>
+                                   <a class="btn btn-success mb-2" href="/write-article/new">Partager un article</a>
+
                                    <% } %>
+                                        <% if (user.role==='user' ) { %>
+                                             <a href="/announcements" class="btn btn-warning">ajouter annonce</a>
+                                             <% } %>
+
+                                                  <% if(user.role==='admin' ) { %>
+                                                       <a class="btn btn-danger mb-2" href="/admin">admin</a>
+
+                                                       <% } %>
+                                                            <% } %>
+                                                                 <!-- public -->
+                                                                 <% if (!user) { %>
+                                                                      <a class="btn btn-warning" href="/auth/google">Ajouter un Annonce</a>
+
+                                                                      <% } %>
+
+
                     </li>
                </ul>
           </div>
