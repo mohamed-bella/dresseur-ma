@@ -54,18 +54,19 @@
      }
 </style>
 
-<nav class="navbar navbar-expand-lg bg-white sticky-top navbar-light p-3 shadow-sm">
-     <div class="container">
+<nav class="navbar navbar-expand-lg bg-white sticky-top navbar-light shadow-sm">
+     <div class="container" style="padding: 1px;">
           <a class="navbar-brand" href="/"> <strong>NDRESSILIK</strong></a>
 
           <button class="navbar-toggler">
+               <!-- phone -->
                <% if(user) { %>
                     <% if(user.role==='writer' ) { %>
-                         <a class="btn btn-success mb-2" href="/write-article/new">Partager un article</a>
+                         <a class="btn btn-success mb-2" href="/write-article/new">Partager une article</a>
 
                          <% } %>
                               <% if (user.role==='user' ) { %>
-                                   <a href="/announcements" class="btn btn-warning">ajouter annonce</a>
+                                   <a href="/announcements" class="btn btn-warning pulse-button">ajouter annonce</a>
                                    <% } %>
 
                                         <% if(user.role==='admin' ) { %>
@@ -75,7 +76,7 @@
                                                   <% } %>
                                                        <!-- public -->
                                                        <% if (!user) { %>
-                                                            <a class="btn btn-warning" href="/auth/google">Ajouter un Annonce</a>
+                                                            <a class="btn btn-warning pulse-button" href="/auth/google">Ajouter une Annonce</a>
 
                                                             <% } %>
 
@@ -117,7 +118,7 @@
 
                                    <% } %>
                                         <% if (user.role==='user' ) { %>
-                                             <a href="/announcements" class="btn btn-warning">ajouter annonce</a>
+                                             <a href="/announcements" class="btn btn-warning pulse-button">ajouter une annonce</a>
                                              <% } %>
 
                                                   <% if(user.role==='admin' ) { %>

@@ -544,3 +544,48 @@ body {
      background-color: #ffffff;
      border-radius: 5px;
 }
+
+.pulse-button {
+     position: relative;
+     border: 3px solid transparent;
+     /* Initial border is transparent */
+     border-radius: 5px;
+     /* Optional: adjust border radius */
+     color: white;
+     text-decoration: none;
+     font-weight: bold;
+     display: inline-block;
+     transition: border-color 0.3s ease-in-out;
+}
+
+.pulse-button::before {
+     content: "";
+     position: absolute;
+     top: -5px;
+     left: -5px;
+     right: -5px;
+     bottom: -5px;
+     border-radius: 10px;
+     /* Adjust border radius */
+     border: 3px solid #8f0505;
+     /* Color of the animated border */
+     opacity: 0;
+     animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+     0% {
+          opacity: 0;
+          transform: scale(0.9);
+     }
+
+     50% {
+          opacity: 1;
+          transform: scale(1);
+     }
+
+     100% {
+          opacity: 0;
+          transform: scale(1.1);
+     }
+}
