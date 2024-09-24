@@ -210,7 +210,7 @@ exports.createArticle = async (req, res) => {
                title,
                content,
                description,
-               author: user.displayName,
+               author: req.user.displayName,
                bannerImage: bannerImageUrl,
                slug
           });
