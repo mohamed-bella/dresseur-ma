@@ -1,3 +1,30 @@
+<div id="backToTop" style="display: none; position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
+     <button class="btn btn-warning" style="border-radius: 50%; width: 50px; height: 50px;">
+          <i class="bi bi-arrow-up"></i>
+     </button>
+</div>
+<script>
+     // Get the button
+     const backToTopButton = document.getElementById("backToTop");
+
+     // When the user scrolls down 100px from the top, show the button
+     window.onscroll = function () {
+          if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+               backToTopButton.style.display = "block";
+          } else {
+               backToTopButton.style.display = "none";
+          }
+     };
+
+     // When the user clicks on the button, scroll to the top of the document
+     backToTopButton.addEventListener("click", function () {
+          window.scrollTo({
+               top: 0,
+               behavior: "smooth"  // Smooth scroll to top
+          });
+     });
+</script>
+
 <script type="text/javascript" src="//www.topcreativeformat.com/d20b049d82c8e72c1f2174e9befd7efd/invoke.js"></script>
 <footer class="footer py-5" style="background-color: #222; color: #fff;">
      <div class="container">

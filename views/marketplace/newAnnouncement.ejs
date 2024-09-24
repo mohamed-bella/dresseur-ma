@@ -36,7 +36,7 @@
                                                   <i class="bi bi-cash"></i> Prix (DH)
                                              </label>
                                              <input type="number" class="form-control" id="price" name="price" placeholder="Entrez le prix en MAD" min="0" required>
-                                             <small>0 DH = Chien Pour Adoption</small>
+                                             <span style="background-color: rgb(95, 3, 26);" class="badge badge-danger">0 DH = Chien Pour Adoption</span>
                                              <div class="invalid-feedback">Le prix est obligatoire et doit être un nombre positif.</div>
                                         </div>
                                    </div>
@@ -137,12 +137,12 @@
                                              </label>
                                              <div class="upload-box text-center p-4 border rounded">
                                                   <div class="upload-icon mb-2">
-                                                       <i class="bi bi-upload" style="font-size: 40px; color: #d5b753;"></i>
+                                                       <i class="bi bi-image" style="font-size: 40px; color: #d5b753;"></i>
                                                   </div>
                                                   <div class="upload-text mb-3" style="color: #d5b753;">
-                                                       <span>Upload file</span>
+                                                       <span>Upload images</span>
                                                   </div>
-                                                  <input type="file" id="media" name="media" multiple accept="image/*, video/*" class="form-control-file" style="display: none;">
+                                                  <input type="file" id="media" name="media" multiple accept="image/*, video/*" class="form-control-file" style="display: none;" required>
                                              </div>
                                              <small class="form-text text-muted mt-2">Select multiple images or videos</small>
                                              <div class="invalid-feedback">Veuillez sélectionner au moins une image ou vidéo.</div>
@@ -152,11 +152,12 @@
                                    <!-- Add some custom styling -->
                                    <style>
                                         .upload-box {
-                                             border: 2px dashed #6c63ff;
+                                             border: 2px dashed #ff6a00 !important;
                                              cursor: pointer;
                                              transition: border-color 0.3s ease;
                                              max-width: 200px;
                                              margin: 0 auto;
+                                             background-color: #ffdf4429;
                                         }
 
                                         .upload-box:hover {

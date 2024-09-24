@@ -1,201 +1,197 @@
-<!DOCTYPE html>
-<html lang="fr">
+<%- include('partials/head.ejs') %>
+     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+     <style>
+          body {
+               font-family: 'Poppins', sans-serif;
+               background-color: #f8f9fa;
+               color: #333;
+          }
 
-<head>
-     <%- include('partials/head.ejs') %>
-          <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-          <style>
-               body {
-                    font-family: 'Poppins', sans-serif;
-                    background-color: #f8f9fa;
-                    color: #333;
-               }
+          .container {
+               max-width: 1200px;
+          }
 
-               .container {
-                    max-width: 1200px;
-               }
+          .section-title {
+               font-size: 2rem;
+               font-weight: 700;
+               color: #2c3e50;
+               margin-bottom: 2rem;
+               text-align: center;
+          }
 
+          .card {
+               border: none;
+               box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+               transition: transform 0.3s ease-in-out;
+               height: 100%;
+          }
+
+          .card:hover {
+               transform: translateY(-5px);
+          }
+
+          .card-title {
+               font-weight: 600;
+               color: #2c3e50;
+               text-decoration: underline;
+          }
+
+          .card-text {
+               color: #555;
+          }
+
+          .trust-badge {
+               text-align: center;
+               margin-bottom: 2rem;
+          }
+
+          .trust-badge i {
+               font-size: 2.5rem;
+               color: #3498db;
+               margin-bottom: 1rem;
+          }
+
+          .about-section {
+               background-color: #fff;
+               padding: 3rem 0;
+               border-radius: 10px;
+               box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          }
+
+          .about-list li {
+               margin-bottom: 1rem;
+          }
+
+          .about-list i {
+               color: #3498db;
+               margin-right: 0.5rem;
+          }
+
+          @media (max-width: 768px) {
                .section-title {
-                    font-size: 2rem;
-                    font-weight: 700;
-                    color: #2c3e50;
-                    margin-bottom: 2rem;
-                    text-align: center;
+                    font-size: 1.75rem;
                }
 
                .card {
-                    border: none;
-                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                    transition: transform 0.3s ease-in-out;
-                    height: 100%;
-               }
-
-               .card:hover {
-                    transform: translateY(-5px);
-               }
-
-               .card-title {
-                    font-weight: 600;
-                    color: #2c3e50;
-                    text-decoration: underline;
-               }
-
-               .card-text {
-                    color: #555;
-               }
-
-               .trust-badge {
-                    text-align: center;
-                    margin-bottom: 2rem;
-               }
-
-               .trust-badge i {
-                    font-size: 2.5rem;
-                    color: #3498db;
                     margin-bottom: 1rem;
                }
+          }
+     </style>
+     </head>
 
-               .about-section {
-                    background-color: #fff;
-                    padding: 3rem 0;
-                    border-radius: 10px;
-                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-               }
+     <body>
+          <%- include('partials/navbar.ejs') %>
+               <%- include('partials/hero.ejs') %>
 
-               .about-list li {
-                    margin-bottom: 1rem;
-               }
-
-               .about-list i {
-                    color: #3498db;
-                    margin-right: 0.5rem;
-               }
-
-               @media (max-width: 768px) {
-                    .section-title {
-                         font-size: 1.75rem;
-                    }
-
-                    .card {
-                         margin-bottom: 1rem;
-                    }
-               }
-          </style>
-</head>
-
-<body>
-     <%- include('partials/navbar.ejs') %>
-          <%- include('partials/hero.ejs') %>
-
-               <div class="container mt-5">
-                    <h2 class="section-title">Nos Services</h2>
-                    <div class="row">
-                         <div class="col-md-4 mb-4">
-                              <a href="/announcements" class="text-decoration-none">
-                                   <div class="card h-100" style="
+                    <div class="container mt-5">
+                         <h2 class="section-title">Nos Services</h2>
+                         <div class="row">
+                              <div class="col-md-4 mb-4">
+                                   <a href="/announcements" class="text-decoration-none">
+                                        <div class="card h-100" style="
     background-color: #ffff0061;
     border: 1px solid #bfbf10;
 ">
-                                        <div class="card-body text-center">
-                                             <img src="https://img.icons8.com/?size=100&amp;id=nz2BznVgHL0d&amp;format=png&amp;color=000000" alt="Dog Icon" class="mb-3" style="width: 64px;">
-                                             <h5 class="card-title">Acheter et Vendre des Chiens</h5>
-                                             <p class="card-text">Publiez vos annonces de chiens à vendre ou à adopter.</p>
+                                             <div class="card-body text-center">
+                                                  <img src="https://img.icons8.com/?size=100&amp;id=nz2BznVgHL0d&amp;format=png&amp;color=000000" alt="Dog Icon" class="mb-3" style="width: 64px;">
+                                                  <h5 class="card-title">Acheter et Vendre des Chiens</h5>
+                                                  <p class="card-text">Publiez vos annonces de chiens à vendre ou à adopter.</p>
+                                             </div>
                                         </div>
-                                   </div>
-                              </a>
-                         </div>
+                                   </a>
+                              </div>
 
-                         <div class="col-md-4 mb-4">
-                              <a href="/consultation" class="text-decoration-none">
-                                   <div class="card h-100" style="
+                              <div class="col-md-4 mb-4">
+                                   <a href="/consultation" class="text-decoration-none">
+                                        <div class="card h-100" style="
     background-color: #00adff26;
     border: 1px solid #3658ff61;
 ">
-                                        <div class="card-body text-center">
-                                             <img src="https://img.icons8.com/?size=100&amp;id=IA6GgS2nbpmB&amp;format=png&amp;color=000000" alt="Consultation Icon" class="mb-3" style="width: 64px;">
-                                             <h5 class="card-title">Consultation</h5>
-                                             <p class="card-text">Obtenez des conseils sur l'élevage et le soin des chiens.</p>
+                                             <div class="card-body text-center">
+                                                  <img src="https://img.icons8.com/?size=100&amp;id=IA6GgS2nbpmB&amp;format=png&amp;color=000000" alt="Consultation Icon" class="mb-3" style="width: 64px;">
+                                                  <h5 class="card-title">Consultation</h5>
+                                                  <p class="card-text">Obtenez des conseils sur l'élevage et le soin des chiens.</p>
+                                             </div>
                                         </div>
-                                   </div>
-                              </a>
-                         </div>
+                                   </a>
+                              </div>
 
-                         <div class="col-md-4 mb-4">
-                              <a href="/articles" class="text-decoration-none">
-                                   <div class="card h-100" style="
+                              <div class="col-md-4 mb-4">
+                                   <a href="/articles" class="text-decoration-none">
+                                        <div class="card h-100" style="
     background-color: #10ff0030;
     border: 1px solid #4CAF50;
 ">
-                                        <div class="card-body text-center">
-                                             <img src="https://img.icons8.com/?size=100&amp;id=v7EoCByoU6rv&amp;format=png&amp;color=40C057" alt="Articles Icon" class="mb-3" style="width: 64px;">
-                                             <h5 class="card-title">Nos Articles</h5>
-                                             <p class="card-text">Découvrez des articles sur l'élevage, la santé, et les races de chiens.</p>
+                                             <div class="card-body text-center">
+                                                  <img src="https://img.icons8.com/?size=100&amp;id=v7EoCByoU6rv&amp;format=png&amp;color=40C057" alt="Articles Icon" class="mb-3" style="width: 64px;">
+                                                  <h5 class="card-title">Nos Articles</h5>
+                                                  <p class="card-text">Découvrez des articles sur l'élevage, la santé, et les races de chiens.</p>
+                                             </div>
                                         </div>
-                                   </div>
-                              </a>
-                         </div>
+                                   </a>
+                              </div>
 
-                         <div class="col-md-4 mb-4">
-                              <a href="/tous-les-races-des-chiens" class="text-decoration-none">
-                                   <div class="card h-100" style="
+                              <div class="col-md-4 mb-4">
+                                   <a href="/tous-les-races-des-chiens" class="text-decoration-none">
+                                        <div class="card h-100" style="
     background-color: #f4433659;
     border: 1px solid #F44336;
 ">
-                                        <div class="card-body text-center">
-                                             <img src="https://img.icons8.com/?size=100&amp;id=nBQK4qguAC5t&amp;format=png&amp;color=FA5252" alt="Articles Icon" class="mb-3" style="width: 64px;">
-                                             <h5 class="card-title">Tous Les Races Des Chiens</h5>
-                                             <p class="card-text">Tous Les Races Des Chien de A a Z.</p>
+                                             <div class="card-body text-center">
+                                                  <img src="https://img.icons8.com/?size=100&amp;id=nBQK4qguAC5t&amp;format=png&amp;color=FA5252" alt="Articles Icon" class="mb-3" style="width: 64px;">
+                                                  <h5 class="card-title">Tous Les Races Des Chiens</h5>
+                                                  <p class="card-text">Tous Les Races Des Chien de A a Z.</p>
+                                             </div>
                                         </div>
+                                   </a>
+                              </div>
+
+
+                         </div>
+                         <div class="row mt-5">
+                              <div class="col-md-4 trust-badge">
+                                   <i class="fas fa-shield-alt"></i>
+                                   <h5>Services Vérifiés</h5>
+                                   <p>Tous nos services sont soigneusement vérifiés pour votre sécurité.</p>
+                              </div>
+                              <div class="col-md-4 trust-badge">
+                                   <i class="fas fa-users"></i>
+                                   <h5>Communauté de Confiance</h5>
+                                   <p>Rejoignez notre communauté d'amoureux des chiens au Maroc.</p>
+                              </div>
+                              <div class="col-md-4 trust-badge">
+                                   <i class="fas fa-headset"></i>
+                                   <h5>Support 24/7</h5>
+                                   <p>Notre équipe est toujours là pour vous aider.</p>
+                              </div>
+                         </div>
+                    </div>
+
+                    <div class="about-section mt-5">
+                         <div class="container">
+                              <h2 class="section-title">À propos de Ndressilik</h2>
+                              <p class="lead text-center mb-5">Votre partenaire de confiance pour tout ce qui concerne les chiens au Maroc</p>
+                              <div class="row">
+                                   <div class="col-md-6">
+                                        <p>Chez <strong>Ndressilik</strong>, nous sommes passionnés par les chiens et dévoués à créer la meilleure expérience possible pour les propriétaires et les éleveurs au Maroc. Notre plateforme offre :</p>
+                                        <ul class="about-list">
+                                             <li><i class="fas fa-paw"></i> Un marché fiable pour acheter et vendre des chiens</li>
+                                             <li><i class="fas fa-comments"></i> Des consultations d'experts en soins canins</li>
+                                             <li><i class="fas fa-book-open"></i> Des articles informatifs sur l'élevage et les races</li>
+                                             <li><i class="fas fa-heart"></i> Une communauté dédiée aux amoureux des chiens</li>
+                                        </ul>
                                    </div>
-                              </a>
-                         </div>
-
-
-                    </div>
-                    <div class="row mt-5">
-                         <div class="col-md-4 trust-badge">
-                              <i class="fas fa-shield-alt"></i>
-                              <h5>Services Vérifiés</h5>
-                              <p>Tous nos services sont soigneusement vérifiés pour votre sécurité.</p>
-                         </div>
-                         <div class="col-md-4 trust-badge">
-                              <i class="fas fa-users"></i>
-                              <h5>Communauté de Confiance</h5>
-                              <p>Rejoignez notre communauté d'amoureux des chiens au Maroc.</p>
-                         </div>
-                         <div class="col-md-4 trust-badge">
-                              <i class="fas fa-headset"></i>
-                              <h5>Support 24/7</h5>
-                              <p>Notre équipe est toujours là pour vous aider.</p>
-                         </div>
-                    </div>
-               </div>
-
-               <div class="about-section mt-5">
-                    <div class="container">
-                         <h2 class="section-title">À propos de Ndressilik</h2>
-                         <p class="lead text-center mb-5">Votre partenaire de confiance pour tout ce qui concerne les chiens au Maroc</p>
-                         <div class="row">
-                              <div class="col-md-6">
-                                   <p>Chez <strong>Ndressilik</strong>, nous sommes passionnés par les chiens et dévoués à créer la meilleure expérience possible pour les propriétaires et les éleveurs au Maroc. Notre plateforme offre :</p>
-                                   <ul class="about-list">
-                                        <li><i class="fas fa-paw"></i> Un marché fiable pour acheter et vendre des chiens</li>
-                                        <li><i class="fas fa-comments"></i> Des consultations d'experts en soins canins</li>
-                                        <li><i class="fas fa-book-open"></i> Des articles informatifs sur l'élevage et les races</li>
-                                        <li><i class="fas fa-heart"></i> Une communauté dédiée aux amoureux des chiens</li>
-                                   </ul>
-                              </div>
-                              <div class="col-md-6">
+                                   <div class="col-md-6">
+                                   </div>
                               </div>
                          </div>
                     </div>
-               </div>
 
-               <%- include('partials/footer.ejs') %>
+                    <%- include('partials/footer.ejs') %>
 
-                    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-                    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-                    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
+                         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+                         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+                         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+     </body>
 
-</html>
+     </html>

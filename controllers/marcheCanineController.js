@@ -20,13 +20,24 @@ const ensureSellerAuthenticated = async (req, res, next) => {
      }
 };
 const marcheCanineController = {
-     // GET: Fetch all announcements (Home Page)
+     // GET: Fetch all announcements (Home Page with Pagination)
      async getAnnouncements(req, res) {
           try {
-               const announcements = await Announcement.find({ status: 'approved' }).sort({ datePosted: -1 }); // Fetch all approved announcements sorted by date
+               const perPage = parseInt(req.query.limit) || 9;  // Default items per page
+               const page = parseInt(req.query.page) || 1;      // Current page number, defaults to 1
 
+               const totalAnnouncements = await Announcement.countDocuments({ status: 'approved' }); // Count total announcements
+               const announcements = await Announcement.find({ status: 'approved' })
+                    .sort({ datePosted: -1 })
+                    .skip((page - 1) * perPage)
+                    .limit(perPage);
+               // console.log(announcements)
                res.render('marketplace/announcements', {
                     announcements,
+                    current: page,
+                    pages: Math.ceil(totalAnnouncements / perPage),
+                    total: totalAnnouncements,
+                    perPage,
                     title: 'Tous les annonces',
                     successMsg: req.flash('success')
                });

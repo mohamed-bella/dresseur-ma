@@ -1,9 +1,9 @@
 <div class="container justify-content-center">
      <!-- Button to Open the Modal -->
-     <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#filterModal">
+     <button type="button" class="btn btn-dark mb-2" data-bs-toggle="modal" data-bs-target="#filterModal">
           <i class="bi bi-funnel-fill"></i> Filtrer Les Résultats
      </button>
-     <a href="/announcements/new" class="btn btn-warning me-2 mt-2"><i class="bi bi-plus-square"></i> Ajouter Annonce</a>
+     <a href="/announcements/new" class="btn btn-warning me-2 mb-2"><i class="bi bi-plus-square"></i> Ajouter Annonce</a>
 
 </div>
 
@@ -16,12 +16,10 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                </div>
                <div class="modal-body">
-                    <form method="GET" action="/announcements/filter">
+                    <form method="GET" action="/announcements/filter" novalidate>
                          <!-- Dog Breed Input with Autocomplete -->
                          <div class="mb-3">
-                              <label for="breed" class="form-label" style="color: #000;">Race de chien</label>
-
-                              <!-- Input for the dog breed with autocomplete -->
+                              <label for="breedInput" class="form-label" style="color: #000;">Race de chien</label>
                               <input type="text" class="form-control" id="breedInput" name="breed" placeholder="Entrez la race de chien" list="dogBreeds">
 
                               <!-- Datalist for predefined dog breeds -->
@@ -38,22 +36,23 @@
                                    <option value="Boxer">
                                    <option value="Cocker Spaniel">
                               </datalist>
-
-                              <!-- Invalid feedback for validation -->
-                              <div class="invalid-feedback">La race de chien est obligatoire.</div>
                          </div>
 
                          <!-- Filter by Price Range -->
-                         <label for="minPrice">Prix Min:</label>
-                         <input type="number" id="minPrice" name="minPrice" placeholder="Prix minimum" class="form-control mb-3">
-
-                         <label for="maxPrice">Prix Max:</label>
-                         <input type="number" id="maxPrice" name="maxPrice" placeholder="Prix maximum" class="form-control mb-3">
+                         <div class="mb-3">
+                              <label for="minPrice" class="form-label" style="color: #000;">Prix Min:</label>
+                              <input type="number" id="minPrice" name="minPrice" placeholder="Prix minimum" class="form-control">
+                         </div>
+                         <div class="mb-3">
+                              <label for="maxPrice" class="form-label" style="color: #000;">Prix Max:</label>
+                              <input type="number" id="maxPrice" name="maxPrice" placeholder="Prix maximum" class="form-control">
+                         </div>
 
                          <!-- Location (Dropdown with Moroccan Cities) -->
                          <div class="mb-3">
                               <label for="location" class="form-label" style="color: #000;">Lieu</label>
-                              <select class="form-select" id="location" name="location" required>
+                              <select class="form-select" id="location" name="location">
+                                   <option value="" disabled selected>Choisissez une ville</option>
                                    <option value="Casablanca">Casablanca</option>
                                    <option value="Rabat">Rabat</option>
                                    <option value="Marrakech">Marrakech</option>
@@ -107,9 +106,7 @@
                                    <option value="Dcheira El Jihadia">Dcheira El Jihadia</option>
                                    <option value="Youssoufia">Youssoufia</option>
                                    <option value="El Aïoun Sidi Mellouk">El Aïoun Sidi Mellouk</option>
-
                               </select>
-                              <div class="invalid-feedback">Le lieu est obligatoire.</div>
                          </div>
 
                          <!-- Filter Button inside Modal -->
