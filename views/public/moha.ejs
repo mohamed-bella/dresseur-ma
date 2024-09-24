@@ -1,0 +1,161 @@
+<%- include('../marketplace/partials/head.ejs') %>
+     <%- include('../marketplace/partials/navbar.ejs') %>
+
+          <style>
+               body {
+                    background-color: aliceblue;
+               }
+          </style>
+
+          <div class="container mt-5 text-center">
+               <!-- Logo at the top -->
+               <img src="https://yt3.googleusercontent.com/bOVT7EPOgmVJQX_9nB1J4jGgP-eg4RsZcSZTlzOcCrNeNZKImd_zrMqtug2QBiYMPTLtRose=s900-c-k-c0x00ffffff-no-rj" alt="Moha Chnider Kefta" class="mb-4 rounded-circle" style="max-width: 150px;">
+               <h2 class="mb-4">كفتة موحا شنايدر</h2>
+
+               <div class="row justify-content-center">
+                    <div class="col-md-8">
+                         <form id="keftaForm" novalidate>
+                              <!-- Quantity Input -->
+                              <div class="mb-4">
+                                   <label for="quantity" class="form-label fw-bold">الكمية (بالكيلوغرام)</label>
+                                   <input type="number" id="quantity" name="quantity" class="form-control" min="10" value="10" required>
+                                   <small class="form-text text-muted">الحد الأدنى للطلب هو 10 كيلوغرام.</small>
+                              </div>
+
+                              <!-- City Selection using Card-style with Icons -->
+                              <div class="mb-4">
+                                   <label class="form-label fw-bold">اختر مدينتك</label>
+                                   <div class="row">
+                                        <!-- Casablanca Card -->
+                                        <div class="col-6">
+                                             <input type="radio" class="btn-check" name="city" id="casablanca" value="Casablanca" autocomplete="off" checked required>
+                                             <label class="btn btn-outline-secondary w-100" for="casablanca">
+                                                  <img src="https://img.icons8.com/?size=100&id=53426&format=png&color=FAB005" alt="Casablanca" class="img-fluid mb-2">
+                                                  <br> الدار البيضاء
+                                             </label>
+                                        </div>
+                                        <!-- Other Cities Card -->
+                                        <div class="col-6">
+                                             <input type="radio" class="btn-check" name="city" id="autre" value="Autre" autocomplete="off" required>
+                                             <label class="btn btn-outline-secondary w-100" for="autre">
+                                                  <img src="https://img.icons8.com/?size=100&id=U2rfVevdGDVK&format=png&color=000000" alt="Autre Ville" class="img-fluid mb-2">
+                                                  <br> مدينة مغربية أخرى
+                                             </label>
+                                        </div>
+                                   </div>
+                              </div>
+
+                              <!-- Phone Number -->
+                              <div class="mb-4">
+                                   <label for="phone" class="form-label fw-bold">رقم الهاتف</label>
+                                   <input type="tel" id="phone" name="phone" class="form-control" placeholder="أدخل رقم هاتفك" required>
+                              </div>
+
+                              <!-- Display the total price -->
+                              <div class="mb-4">
+                                   <h4>المجموع: <span id="totalPrice">170 درهم</span></h4> <!-- Default price for 10kg in Casablanca -->
+                              </div>
+
+                              <!-- Confirm Button -->
+                              <button type="button" id="confirmButton" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#orderModal">تأكيد الطلب</button>
+                         </form>
+                    </div>
+               </div>
+          </div>
+
+          <!-- Modal for showing order confirmation -->
+          <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
+               <div class="modal-dialog">
+                    <div class="modal-content">
+                         <div class="modal-header">
+                              <h5 class="modal-title" id="orderModalLabel">تأكيد طلبك</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                         </div>
+                         <div class="modal-body">
+                              <p><strong>الكمية:</strong> <span id="modalQuantity">10kg</span></p>
+                              <p><strong>المدينة:</strong> <span id="modalCity">الدار البيضاء</span></p>
+                              <p><strong>رقم الهاتف:</strong> <span id="modalPhone">0000000000</span></p>
+                              <p><strong>المجموع:</strong> <span id="modalTotalPrice">170 درهم</span></p>
+                         </div>
+                         <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">تعديل</button>
+                              <a href="#" id="whatsappButton" target="_blank" class="btn btn-success">طلب عبر الواتساب</a>
+                         </div>
+                    </div>
+               </div>
+          </div>
+
+          <script>
+               const keftaPricePerKg = 15;
+               const deliveryCasablanca = 20;
+               const deliveryOtherCities = 50;
+
+               const quantityInput = document.getElementById('quantity');
+               const cityInputs = document.querySelectorAll('input[name="city"]');
+               const totalPriceElement = document.getElementById('totalPrice');
+               const confirmButton = document.getElementById('confirmButton');
+               const whatsappButton = document.getElementById('whatsappButton');
+
+               const modalQuantity = document.getElementById('modalQuantity');
+               const modalCity = document.getElementById('modalCity');
+               const modalPhone = document.getElementById('modalPhone');
+               const modalTotalPrice = document.getElementById('modalTotalPrice');
+
+               // Function to calculate and display total price
+               function calculateTotalPrice() {
+                    const quantity = parseInt(quantityInput.value);
+                    let city = 'Casablanca'; // Default city
+                    cityInputs.forEach(input => {
+                         if (input.checked) {
+                              city = input.value;
+                         }
+                    });
+                    const deliveryCost = city === 'Casablanca' ? deliveryCasablanca : deliveryOtherCities;
+
+                    // Calculate total price
+                    const totalPrice = (quantity * keftaPricePerKg) + deliveryCost;
+
+                    // Update the price in the UI
+                    totalPriceElement.textContent = totalPrice + ' درهم';
+               }
+
+               // Event listeners for real-time price update
+               quantityInput.addEventListener('input', calculateTotalPrice);
+               cityInputs.forEach(input => {
+                    input.addEventListener('change', calculateTotalPrice);
+               });
+
+               // When user clicks confirm button, show modal with order info
+               confirmButton.addEventListener('click', function () {
+                    const quantity = parseInt(quantityInput.value);
+                    let city = 'Casablanca'; // Default city
+                    cityInputs.forEach(input => {
+                         if (input.checked) {
+                              city = input.value;
+                         }
+                    });
+                    const phone = document.getElementById('phone').value;
+                    const totalPrice = totalPriceElement.textContent;
+
+                    // Validate phone and quantity
+                    if (phone.trim() === '' || quantity < 10) {
+                         alert('يرجى إدخال كمية صالحة ورقم هاتف.');
+                         return;
+                    }
+
+                    // Update modal content with order details
+                    modalQuantity.textContent = quantity + 'kg';
+                    modalCity.textContent = city;
+                    modalPhone.textContent = phone;
+                    modalTotalPrice.textContent = totalPrice;
+
+                    // Prepare WhatsApp URL with order details
+                    const message = `مرحبًا، أود طلب ${quantity}kg من الكفتة. مدينتي هي ${city}. المجموع الكلي هو ${totalPrice}. رقم هاتفي هو ${phone}.`;
+                    const whatsappUrl = `https://wa.me/+212668712726?text=${encodeURIComponent(message)}`;
+
+                    // Set the WhatsApp button URL
+                    whatsappButton.href = whatsappUrl;
+               });
+          </script>
+          <br>
+          <%- include('../marketplace/partials/footer.ejs') %>
