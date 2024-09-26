@@ -19,6 +19,8 @@
      <meta name="twitter:title" content="<%= article.title %>">
      <meta name="twitter:description" content="<%= article.description %>">
      <meta name="twitter:image" content="<%= article.bannerImage || '/default-image.jpg' %>">
+
+     <!-- Styles for a clean look -->
      <style>
           @import url('https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400..800&family=Readex+Pro:wght@160..700&display=swap');
 
@@ -27,17 +29,87 @@
           }
 
           img {
-               max-width: 100% !important;
-               height: auto !important;
-               display: block !important;
+               max-width: 100%;
+               height: auto;
+               display: block;
+          }
+
+          /* Social Share Buttons */
+          .share-buttons {
+               display: flex;
+               justify-content: center;
+               gap: 8px;
+               margin: 20px 0;
+          }
+
+          .share-button {
+               display: inline-flex;
+               align-items: center;
+               padding: 5px 10px;
+               font-size: 12px;
+               text-decoration: none;
+               border-radius: 4px;
+               color: white;
+               transition: background-color 0.2s ease;
+          }
+
+          /* Specific platform button styles */
+          .share-button.facebook {
+               background-color: #3b5998;
+          }
+
+          .share-button.linkedin {
+               background-color: #0077b5;
+          }
+
+          .share-button.copy-link {
+               background-color: #343a40;
+          }
+
+          .share-button i {
+               margin-right: 5px;
+               font-size: 16px;
+          }
+
+          .share-button:hover {
+               opacity: 0.8;
+          }
+
+          .share-indicator {
+               text-align: center;
+               font-size: 14px;
+               color: #6c757d;
+               margin-bottom: 10px;
           }
      </style>
+
      <%- include('../marketplace/partials/navbar.ejs') %>
 
           <div class="container mt-5">
-               <h1 class="text-center mb-5">
+               <h1 class="text-center mb-4">
                     <%= article.title %>
                </h1>
+
+               <!-- Share Indicator -->
+               <div class="share-indicator">Partagez cet article :</div>
+
+               <!-- Social Share Buttons -->
+               <div class="share-buttons">
+                    <!-- Facebook Share -->
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=<%= encodeURIComponent('https://ndressilik.com/articles/' + article.slug) %>" target="_blank" class="share-button facebook">
+                         <i class="bi bi-facebook"></i> Facebook
+                    </a>
+
+                    <!-- LinkedIn Share -->
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=<%= encodeURIComponent('https://ndressilik.com/articles/' + article.slug) %>" target="_blank" class="share-button linkedin">
+                         <i class="bi bi-linkedin"></i> LinkedIn
+                    </a>
+
+                    <!-- Copy Link Button -->
+                    <button class="share-button copy-link" id="copyLinkButton">
+                         <i class="bi bi-clipboard"></i> Copier le lien
+                    </button>
+               </div>
 
                <!-- Display banner image if available -->
                <% if (article.bannerImage) { %>
@@ -52,5 +124,17 @@
 
                          <a href="/articles" class="btn btn-secondary mt-3">Retour aux Articles</a>
           </div>
+
+          <!-- Copy Link Script -->
+          <script>
+               document.getElementById('copyLinkButton').addEventListener('click', function () {
+                    const articleUrl = 'https://ndressilik.com/articles/<%= article.slug %>';
+                    navigator.clipboard.writeText(articleUrl).then(function () {
+                         alert('Link copied to clipboard!');
+                    }, function (err) {
+                         alert('Failed to copy link.');
+                    });
+               });
+          </script>
 
           <%- include('../marketplace/partials/footer.ejs') %>
