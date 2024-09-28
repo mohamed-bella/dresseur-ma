@@ -51,6 +51,10 @@
                     color: rgb(255, 254, 254)
                }
 
+               .nav-link:hover {
+                    color: rgb(245, 155, 38)
+               }
+
                /* General input styles */
                input[type="text"],
                input[type="email"],
@@ -321,6 +325,7 @@
                     background-color: #fffff0;
                     padding: 80px 0;
                     position: relative;
+                    text-align: center;
                     overflow: hidden;
                }
 
@@ -331,9 +336,10 @@
                     left: 0;
                     right: 0;
                     bottom: 0;
-                    background: url('https://cdn.pixabay.com/photo/2022/05/02/11/39/floral-7169439_1280.png') no-repeat center center;
+                    /* background: url('https://st.depositphotos.com/4218696/57873/i/450/depositphotos_578733588-stock-photo-golden-retriever-dog-sitting-hind.jpg') no-repeat center center; */
                     background-size: cover;
-                    opacity: 0.1;
+                    background-color: #ffe600;
+                    opacity: 0.4;
                     z-index: 1;
                }
 
@@ -545,15 +551,12 @@
                     border-radius: 5px;
                }
 
-               .pulse-button {
+               /* .pulse-button {
                     position: relative;
                     border: 0px solid transparent;
-                    /* Initial border is transparent */
                     border-radius: 5px;
-                    /* Optional: adjust border radius */
                     color: white;
                     text-decoration: none;
-                    /* font-weight: bold; */
                     display: inline-block;
                     transition: border-color 0.3s ease-in-out;
                }
@@ -566,12 +569,10 @@
                     right: -5px;
                     bottom: -5px;
                     border-radius: 10px;
-                    /* Adjust border radius */
                     border: 3px solid #8f0505;
-                    /* Color of the animated border */
                     opacity: 0;
                     animation: pulse 1.5s infinite;
-               }
+               } */
 
                @keyframes pulse {
                     0% {
