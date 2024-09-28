@@ -3,56 +3,47 @@
           <i class="bi bi-arrow-up"></i>
      </button>
 </div>
-<script>
-     // Get the button
-     const backToTopButton = document.getElementById("backToTop");
 
-     // When the user scrolls down 100px from the top, show the button
-     window.onscroll = function () {
-          if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
-               backToTopButton.style.display = "block";
-          } else {
-               backToTopButton.style.display = "none";
-          }
-     };
-
-     // When the user clicks on the button, scroll to the top of the document
-     backToTopButton.addEventListener("click", function () {
-          window.scrollTo({
-               top: 0,
-               behavior: "smooth"  // Smooth scroll to top
-          });
-     });
-</script>
-
-<script type="text/javascript" src="//www.topcreativeformat.com/d20b049d82c8e72c1f2174e9befd7efd/invoke.js"></script>
-<footer class="footer py-5" style="background-color: #222; color: #fff;">
-     <div class="container">
+<footer class="footer py-5 bg-dark text-white">
+     <div class="container-footer">
           <div class="row">
-               <!-- Logo Section -->
-               <div class="col-md-4 mb-4">
-                    <a href="/" class="d-flex align-items-center mb-2 link-light text-decoration-none">
+               <!-- Logo and Description Section -->
+               <div class="col-md-4 mb-4 text-center text-md-start">
+                    <a href="/" class="d-flex align-items-center mb-2 link-light text-decoration-none justify-content-center justify-content-md-start">
                          <img src="https://res.cloudinary.com/dxg2nsnkj/image/upload/v1726159468/dogs/hsdy0nueyyjulhocok6w.png" alt="Ndressilik Logo" style="width: 80px;">
                     </a>
-                    <p class="text-muted" style="font-size: 0.875rem;">Votre plateforme idéale pour tout sur les chiens au Maroc.</p>
+                    <p class="" style="font-size: 0.875rem;">Votre plateforme idéale pour tout sur les chiens au Maroc.</p>
                </div>
 
                <!-- Social Links Section -->
-               <div class="col-md-4 mb-4">
+               <div class="col-md-4 mb-4 text-center text-md-start">
                     <h5 class="text-light">Suivez-nous</h5>
-                    <ul class="list-unstyled d-flex">
-
+                    <ul class="list-unstyled d-flex justify-content-center justify-content-md-start">
                          <li class="me-3">
                               <a href="https://instagram.com/ndressilik" target="_blank" class="link-light" aria-label="Instagram">
-                                   <i class="fab fa-instagram fa-2x"></i>
+                                   <i class="bi bi-instagram fs-3"></i>
                               </a>
                          </li>
-
+                         <li class="me-3">
+                              <a href="https://facebook.com/ndressilik" target="_blank" class="link-light" aria-label="Facebook">
+                                   <i class="bi bi-facebook fs-3"></i>
+                              </a>
+                         </li>
+                         <li class="me-3">
+                              <a href="https://www.linkedin.com/in/ndressilik-ndressilik-770630329/?originalSubdomain=ma" target="_blank" class="link-light" aria-label="LinkedIn">
+                                   <i class="bi bi-linkedin fs-3"></i>
+                              </a>
+                         </li>
+                         <!-- <li class="me-3">
+                              <a href="https://twitter.com/ndressilik" target="_blank" class="link-light" aria-label="Twitter">
+                                   <i class="bi bi-twitter fs-3"></i>
+                              </a>
+                         </li> -->
                     </ul>
                </div>
 
                <!-- Navigation Links Section -->
-               <div class="col-md-4 mb-4">
+               <div class="col-md-4 mb-4 text-center text-md-start">
                     <h5 class="text-light">Liens utiles</h5>
                     <ul class="list-unstyled">
                          <li><a href="/announcements" class="link-light text-decoration-none">Vendre des Chiens</a></li>
@@ -60,52 +51,37 @@
                          <li><a href="/articles" class="link-light text-decoration-none">Nos Articles</a></li>
                     </ul>
 
-                    <hr>
+                    <hr class="border-secondary">
                     <ul class="list-unstyled">
-                         <li><a href="/privacy-policy" class="text-light">Politique de confidentialité</a></li>
-                         <li><a href="/terms" class="text-light">Conditions générales</a></li>
-                         <li><a href="/cookies-policy" class="text-light">Politique de cookies</a></li>
+                         <li><a href="/privacy-policy" class="link-light text-decoration-none">Politique de confidentialité</a></li>
+                         <li><a href="/terms" class="link-light text-decoration-none">Conditions générales</a></li>
+                         <li><a href="/cookies-policy" class="link-light text-decoration-none">Politique de cookies</a></li>
                     </ul>
                </div>
           </div>
 
-          <div class="text-center pt-4 border-top" style="border-color: #444;">
-               <p class="text-white" style="font-size: 0.875rem;">&copy; <%= new Date().getFullYear() %> Ndressilik. Tous droits réservés.</p>
+          <div class="text-center pt-4 border-top border-secondary">
+               <p class="mb-0" style="font-size: 0.875rem;">&copy; <%= new Date().getFullYear() %> Ndressilik. Tous droits réservés.</p>
           </div>
      </div>
 </footer>
 
-</body>
 <script>
-     // Promo Banner Dismiss Functionality
-     const promoBanner = document.getElementById('promoBanner');
-     const closeBanner = document.getElementById('closeBanner');
-
-     closeBanner.addEventListener('click', function () {
-          promoBanner.style.display = 'none';
-     });
-
-
-</script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
-<!-- <script>
-     let lastScrollTop = 0;
-     const navbar = document.querySelector('.nav');
-
-     window.addEventListener('scroll', function () {
-          let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-          if (scrollTop > lastScrollTop) {
-               // Scrolling down: hide the navbar
-               navbar.style.top = '-100px'; // Adjust the value to match your navbar height
+     // Show back-to-top button when scrolling down
+     window.onscroll = function () {
+          const backToTopButton = document.getElementById("backToTop");
+          if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+               backToTopButton.style.display = "block";
           } else {
-               // Scrolling up: show the navbar
-               navbar.style.top = '0';
+               backToTopButton.style.display = "none";
           }
+     };
 
-          lastScrollTop = scrollTop;
+     // Scroll smoothly to top when clicking back-to-top button
+     document.getElementById("backToTop").addEventListener("click", function () {
+          window.scrollTo({
+               top: 0,
+               behavior: "smooth"
+          });
      });
-</script> -->
-
-</html>
+</script>
