@@ -16,16 +16,20 @@
                          <% consultations.forEach(function(consultation) { %>
                               <tr>
                                    <td>
-                                        <a href="https://wa.me/212<%= consultation.whatsappNumber %>">
+                              <tr>
+                                   <td>
+                                        <a href="https://wa.me/212<%= consultation.whatsappNumber %>?text=<%= encodeURIComponent(' Bonjour 👋, je suis membre de l\'équipe Ndressilik , chargé des consultations. Mon rôle est de répondre aux problèmes des propriétaires de chiens. Voici le problème que vous avez mentionné : ' + consultation.problemDescription + ' 🐾') %>">
                                              <%= consultation.whatsappNumber %>
                                         </a>
                                    </td>
                                    <td>
                                         <%= consultation.problemDescription %>
                                    </td>
-                                   <td>
-                                        <%= consultation.dateSubmitted.toLocaleString() %>
-                                   </td>
+                              </tr>
+
+                              <td>
+                                   <%= consultation.dateSubmitted.toLocaleString() %>
+                              </td>
                               </tr>
                               <% }); %>
                     </tbody>
