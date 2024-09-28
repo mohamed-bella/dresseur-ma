@@ -28,9 +28,10 @@
                }
 
                .hero-section {
-                    /* background-image: url('https://png.pngtree.com/background/20210710/original/pngtree-yellow-child-fun-background-promotion-main-map-picture-image_1001601.jpg'); */
+                    background-image: url('https://i.postimg.cc/d18HVvrd/you-are.png');
                     background-repeat: repeat;
-                    background-color: rgba(252, 252, 146, 0.692);
+                    background-size: cover;
+                    background-color: rgba(252, 252, 146, 0.24) !important;
                }
 
                .hero-section::after {

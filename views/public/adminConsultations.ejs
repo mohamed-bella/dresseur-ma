@@ -16,7 +16,9 @@
                          <% consultations.forEach(function(consultation) { %>
                               <tr>
                                    <td>
-                                        <%= consultation.whatsappNumber %>
+                                        <a href="https://wa.me/212<%= consultation.whatsappNumber %>">
+                                             <%= consultation.whatsappNumber %>
+                                        </a>
                                    </td>
                                    <td>
                                         <%= consultation.problemDescription %>
