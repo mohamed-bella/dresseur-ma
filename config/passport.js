@@ -29,7 +29,7 @@ passport.use(
 
                          while (!isUniqueSlug && attemptCount < 10) {
                               const randomNum = Math.floor(1000 + Math.random() * 9000);
-                              slug = slugify(${profile.displayName}-${randomNum}, { lower: true, strict: true });
+                              slug = slugify(${ profile.displayName } - ${ randomNum }, { lower: true, strict: true });
 
                               const existingSeller = await Seller.findOne({ slug });
                               if (!existingSeller) {
@@ -51,23 +51,23 @@ passport.use(
                               googleId: profile.id,
                               displayName: profile.displayName || 'Unknown User',
                               image: profile.photos && profile.photos.length > 0 ? profile.photos[0].value : null,
-                              email: email || noemail_${profile.id}@unknown.com
+                              email: email || noemail_${ profile.id }@unknown.com
                          });
 
-                         await seller.save();
+await seller.save();
                     }
 
-                    return done(null, seller);
+return done(null, seller);
                } catch (err) {
-                    console.error('Google OAuth Error:', err);
+     console.error('Google OAuth Error:', err);
 
-                    // Custom error handling logic for known cases
-                    if (err.message.includes('Failed to generate a unique slug')) {
-                         return done(null, false, { message: 'Unable to complete registration. Please try again.' });
-                    }
+     // Custom error handling logic for known cases
+     if (err.message.includes('Failed to generate a unique slug')) {
+          return done(null, false, { message: 'Unable to complete registration. Please try again.' });
+     }
 
-                    return done(err, null);
-               }
+     return done(err, null);
+}
           })
 );
 
