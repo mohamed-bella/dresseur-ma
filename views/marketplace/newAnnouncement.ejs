@@ -1,295 +1,97 @@
 <%- include('partials/head.ejs') %>
-     <style>
-          .card {
-               border-radius: 10px;
-          }
-     </style>
      <%- include('partials/navbar.ejs') %>
 
           <div class="container mt-5" style="max-width: 800px;">
                <h1 class="text-center mb-4" style="color: #000;">Créer une nouvelle annonce</h1>
 
-               <% var message=typeof message !=='undefined' ? message : '' ; %>
-                    <% if (message) { %>
-                         <div class="alert alert-danger">
-                              <%= message %>
-                         </div>
-                         <% } %>
+               <% if (typeof message !=='undefined' && message) { %>
+                    <div class="alert alert-danger">
+                         <%= message %>
+                    </div>
+                    <% } %>
 
-                              <form action="/announcements" method="POST" class=" needs-validation" enctype="multipart/form-data" novalidate id="announcementForm">
-                                   <!-- Dog Breed Input with Autocomplete -->
-                                   <div class=" mb-3">
-                                        <div class="card-body">
-                                             <label for="breed" class="form-label" style="color: #000;">
-                                                  <i class="bi bi-list-stars"></i> Race de chien
-                                             </label>
-                                             <input type="text" class="form-control" id="breedInput" name="breed" placeholder="Entrez la race de chien" required>
+                         <form action="/announcements" method="POST" enctype="multipart/form-data" id="announcementForm" novalidate>
+                              <!-- Dog Breed Input -->
+                              <div class="mb-3">
+                                   <label for="breed" class="form-label">
+                                        <i class="bi bi-list-stars"></i> Race de chien
+                                   </label>
+                                   <input type="text" class="form-control" id="breed" name="breed" required>
+                                   <div class="invalid-feedback">La race de chien est obligatoire.</div>
+                              </div>
 
-                                             <div class="invalid-feedback">La race de chien est obligatoire.</div>
-                                        </div>
-                                   </div>
+                              <!-- Price -->
+                              <div class="mb-3">
+                                   <label for="price" class="form-label">
+                                        <i class="bi bi-cash"></i> Prix (DH)
+                                   </label>
+                                   <input type="number" class="form-control" id="price" name="price" min="0" required>
+                                   <span class="badge bg-danger">0 DH = Chien Pour Adoption</span>
+                                   <div class="invalid-feedback">Le prix est obligatoire et doit être un nombre positif.</div>
+                              </div>
 
-                                   <!-- Price -->
-                                   <div class=" mb-3">
-                                        <div class="card-body">
-                                             <label for="price" class="form-label" style="color: #000;">
-                                                  <i class="bi bi-cash"></i> Prix (DH)
-                                             </label>
-                                             <input type="number" class="form-control" id="price" name="price" placeholder="Entrez le prix en MAD" min="0" required>
-                                             <span style="background-color: rgb(95, 3, 26);" class="badge badge-danger">0 DH = Chien Pour Adoption</span>
-                                             <div class="invalid-feedback">Le prix est obligatoire et doit être un nombre positif.</div>
-                                        </div>
-                                   </div>
+                              <!-- Location -->
+                              <div class="mb-3">
+                                   <label for="location" class="form-label">
+                                        <i class="bi bi-geo-alt"></i> Lieu
+                                   </label>
+                                   <select class="form-select" id="location" name="location" required>
+                                        <option value="" selected disabled>Choisissez un lieu</option>
+                                        <option value="Rabat">Rabat</option>
+                                        <option value="Casablanca">Casablanca</option>
+                                        <option value="Marrakech">Marrakech</option>
+                                        <!-- Add more options as needed -->
+                                   </select>
+                                   <div class="invalid-feedback">Le lieu est obligatoire.</div>
+                              </div>
 
-                                   <!-- Location -->
-                                   <div class=" mb-3">
-                                        <div class="card-body">
-                                             <label for="location" class="form-label" style="color: #000;">
-                                                  <i class="bi bi-geo-alt"></i> Lieu
-                                             </label>
-                                             <select class="form-select" id="location" name="location" required>
-                                                  <option value="Casablanca">Casablanca</option>
-                                                  <option value="Rabat">Rabat</option>
-                                                  <option value="Marrakech">Marrakech</option>
-                                                  <option value="Fès">Fès</option>
-                                                  <option value="Tanger">Tanger</option>
-                                                  <option value="Agadir">Agadir</option>
-                                                  <option value="Meknès">Meknès</option>
-                                                  <option value="Oujda">Oujda</option>
-                                                  <option value="Salé">Salé</option>
-                                                  <option value="Kénitra">Kénitra</option>
-                                                  <option value="Tétouan">Tétouan</option>
-                                                  <option value="Mohammédia">Mohammédia</option>
-                                                  <option value="El Jadida">El Jadida</option>
-                                                  <option value="Béni Mellal">Béni Mellal</option>
-                                                  <option value="Khouribga">Khouribga</option>
-                                                  <option value="Settat">Settat</option>
-                                                  <option value="Safi">Safi</option>
-                                                  <option value="Essaouira">Essaouira</option>
-                                                  <option value="Khémisset">Khémisset</option>
-                                                  <option value="Taza">Taza</option>
-                                                  <option value="Errachidia">Errachidia</option>
-                                                  <option value="Larache">Larache</option>
-                                                  <option value="Ksar El Kébir">Ksar El Kébir</option>
-                                                  <option value="Sidi Kacem">Sidi Kacem</option>
-                                                  <option value="Guelmim">Guelmim</option>
-                                                  <option value="Tan-Tan">Tan-Tan</option>
-                                                  <option value="Sidi Ifni">Sidi Ifni</option>
-                                                  <option value="Al Hoceima">Al Hoceima</option>
-                                                  <option value="Azrou">Azrou</option>
-                                                  <option value="Ifrane">Ifrane</option>
-                                                  <option value="Chefchaouen">Chefchaouen</option>
-                                                  <option value="Ouarzazate">Ouarzazate</option>
-                                                  <option value="Taroudant">Taroudant</option>
-                                                  <option value="Tiznit">Tiznit</option>
-                                                  <option value="Berkane">Berkane</option>
-                                                  <option value="Guercif">Guercif</option>
-                                                  <option value="Dakhla">Dakhla</option>
-                                                  <option value="Sidi Bennour">Sidi Bennour</option>
-                                                  <option value="Taounate">Taounate</option>
-                                                  <option value="Tinghir">Tinghir</option>
-                                                  <option value="Zagora">Zagora</option>
-                                                  <option value="Boujdour">Boujdour</option>
-                                                  <option value="Midelt">Midelt</option>
-                                                  <option value="Chichaoua">Chichaoua</option>
-                                                  <option value="Sefrou">Sefrou</option>
-                                                  <option value="El Hajeb">El Hajeb</option>
-                                                  <option value="Fkih Ben Salah">Fkih Ben Salah</option>
-                                                  <option value="Boulemane">Boulemane</option>
-                                                  <option value="Oulad Teima">Oulad Teima</option>
-                                                  <option value="Aït Melloul">Aït Melloul</option>
-                                                  <option value="Dcheira El Jihadia">Dcheira El Jihadia</option>
-                                                  <option value="Youssoufia">Youssoufia</option>
-                                                  <option value="El Aïoun Sidi Mellouk">El Aïoun Sidi Mellouk</option>
+                              <!-- Phone Number -->
+                              <div class="mb-3">
+                                   <label for="number" class="form-label">
+                                        <i class="bi bi-telephone"></i> Numéro de Whatsapp
+                                   </label>
+                                   <input type="tel" class="form-control" id="number" name="number" pattern="^0[5-7][0-9]{8}$" required>
+                                   <div class="invalid-feedback">Le numéro est obligatoire et doit être au format valide (ex: 0612345678).</div>
+                              </div>
 
-                                             </select>
-                                             <div class="invalid-feedback">Le lieu est obligatoire.</div>
-                                        </div>
-                                   </div>
+                              <!-- Description -->
+                              <div class="mb-3">
+                                   <label for="description" class="form-label">
+                                        <i class="bi bi-file-text"></i> Description
+                                   </label>
+                                   <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+                                   <div class="invalid-feedback">La description est obligatoire.</div>
+                              </div>
 
-                                   <!-- Phone Number -->
-                                   <div class=" mb-3">
-                                        <div class="card-body">
-                                             <label for="number" class="form-label" style="color: #000;">
-                                                  <i class="bi bi-telephone"></i> Numéro de Whatsapp
-                                             </label>
-                                             <input type="text" class="form-control" id="number" name="number" placeholder="Entrez votre Numéro (ex: 0612345678)" required pattern="^0[5-7][0-9]{8}$">
-                                             <div class="invalid-feedback">Le numéro est obligatoire et doit être au format valide (ex: 0612345678).</div>
-                                        </div>
-                                   </div>
+                              <!-- Media Upload -->
+                              <div class="mb-3">
+                                   <label for="media" class="form-label">
+                                        <i class="bi bi-image"></i> Images/Videos
+                                   </label>
+                                   <input type="file" class="form-control" id="media" name="media" multiple accept="image/*, video/*" required>
+                                   <div class="invalid-feedback">Veuillez sélectionner au moins une image ou vidéo.</div>
+                              </div>
 
-                                   <!-- Description -->
-                                   <div class=" mb-3">
-                                        <div class="card-body">
-                                             <label for="description" class="form-label" style="color: #000;">
-                                                  <i class="bi bi-file-text"></i> Description
-                                             </label>
-                                             <textarea class="form-control" id="description" name="description" rows="4" placeholder="Entrez la description de l'annonce" required></textarea>
-                                             <div class="invalid-feedback">La description est obligatoire.</div>
-                                        </div>
-                                   </div>
-                                   <!-- Images and Videos -->
-                                   <!-- Images and Videos Upload -->
-                                   <div class="mb-3">
-                                        <!-- <div class="card-body text-center">
-                                             <label for="media" class="form-label" style="color: #000; display:block;">
-                                                  <strong>Images/Videos</strong>
-                                             </label>
-                                             <div class="upload-box text-center p-4 border rounded">
-                                                  <div class="upload-icon mb-2">
-                                                       <i class="bi bi-image" style="font-size: 40px; color: #d5b753;"></i>
-                                                  </div>
-                                                  <div class="upload-text mb-3" style="color: #d5b753;">
-                                                       <span>Upload images</span>
-                                                  </div>
-                                                  <input type="file" id="media" name="media" multiple accept="image/*, video/*" class="form-control-file" style="display: none;" required>
-                                             </div>
-                                             <small class="form-text text-muted mt-2">Select multiple images or videos</small>
-                                             <div class="invalid-feedback">Veuillez sélectionner au moins une image ou vidéo.</div>
-                                        </div> -->
-                                   </div>
-
-                                   <!-- Add some custom styling -->
-                                   <style>
-                                        .upload-box {
-                                             border: 2px dashed #ff6a00 !important;
-                                             cursor: pointer;
-                                             transition: border-color 0.3s ease;
-                                             max-width: 200px;
-                                             margin: 0 auto;
-                                             background-color: #ffdf4429;
-                                        }
-
-                                        .upload-box:hover {
-                                             border-color: #d5b753;
-                                        }
-
-                                        .upload-icon {
-                                             font-size: 40px;
-                                             color: #d5b753;
-                                        }
-
-                                        .upload-box input[type="file"] {
-                                             display: none;
-                                        }
-
-                                        .upload-text {
-                                             font-size: 16px;
-                                             font-weight: 500;
-                                             color: #d5b753;
-                                        }
-
-                                        /* Ensure mobile responsiveness */
-                                        @media (max-width: 576px) {
-                                             .upload-box {
-                                                  width: 100%;
-                                                  max-width: 300px;
-                                             }
-                                        }
-                                   </style>
-
-                                   <!-- Add JavaScript to trigger the file input on box click -->
-                                   <script>
-                                        document.querySelector('.upload-box').addEventListener('click', function () {
-                                             document.getElementById('media').click();
-                                        });
-                                   </script>
-
-
-                                   <!-- Submit Button -->
-                                   <div class=" mb-3">
-                                        <div class="card-body">
-                                             <button type="submit" class="btn btn-warning btn-lg btn-block">
-                                                  <i class="bi bi-send"></i> Publier l'annonce
-                                             </button>
-                                        </div>
-                                   </div>
-                              </form>
-
+                              <!-- Submit Button -->
+                              <button type="submit" class="btn btn-primary btn-lg btn-block">
+                                   <i class="bi bi-send"></i> Publier l'annonce
+                              </button>
+                         </form>
           </div>
 
           <%- include('partials/footer.ejs') %>
 
                <script>
-                    document.addEventListener('DOMContentLoaded', function () {
-                         const form = document.getElementById('announcementForm');
-                         const inputs = form.querySelectorAll('input, textarea, select');  // Include the select field
-
-                         // Validate on input event
-                         inputs.forEach(input => {
-                              input.addEventListener('input', function () {
-                                   validateField(input);
-                              });
-                         });
-
-                         // Add submit listener to check full form validity
+                    // Form validation script
+                    (function () {
+                         'use strict'
+                         var form = document.getElementById('announcementForm')
                          form.addEventListener('submit', function (event) {
-                              // Check form validity
                               if (!form.checkValidity()) {
-                                   event.preventDefault();
-                                   event.stopPropagation();
+                                   event.preventDefault()
+                                   event.stopPropagation()
                               }
-
-                              // Custom validation for images (at least one image must be selected)
-                              const imageInput = document.getElementById('images');
-                              if (imageInput.files.length === 0) {
-                                   event.preventDefault();
-                                   event.stopPropagation();
-                                   imageInput.classList.add('is-invalid');
-                              } else {
-                                   imageInput.classList.remove('is-invalid');
-                                   imageInput.classList.add('is-valid');
-                              }
-
-                              form.classList.add('was-validated');
-                         }, false);
-
-                         // Add fade-in animation to error messages
-                         function validateField(field) {
-                              if (field.checkValidity()) {
-                                   field.classList.remove('is-invalid');
-                                   field.classList.add('is-valid');
-                              } else {
-                                   field.classList.remove('is-valid');
-                                   field.classList.add('is-invalid');
-                                   // Add fade-in effect
-                                   const invalidFeedback = field.nextElementSibling;
-                                   invalidFeedback.style.opacity = '0';
-                                   setTimeout(() => {
-                                        invalidFeedback.style.opacity = '1';
-                                        invalidFeedback.style.transition = 'opacity 0.3s ease-in-out';
-                                   }, 100);
-                              }
-                         }
-
-                    });
-               </script>
-               <script>
-                    document.addEventListener('DOMContentLoaded', function () {
-                         const breeds = [
-                              "Berger Allemand", "Labrador Retriever", "Golden Retriever", "Bulldog Français",
-                              "Bouledogue Anglais", "Chihuahua", "Rottweiler", "Beagle", "Poodle", "Boxer", "Cocker Spaniel"
-                              // Add more breeds here
-                         ];
-
-                         const breedInput = document.getElementById('breedInput');
-
-                         breedInput.addEventListener('input', function () {
-                              const value = breedInput.value.toLowerCase();
-
-                              // Filter suggestions based on input
-                              const suggestions = breeds.filter(breed => breed.toLowerCase().includes(value));
-
-                              const dataList = document.getElementById('dogBreeds');
-                              dataList.innerHTML = ''; // Clear previous options
-
-                              suggestions.forEach(breed => {
-                                   const option = document.createElement('option');
-                                   option.value = breed;
-                                   dataList.appendChild(option);
-                              });
-                         });
-                    });
-
-
+                              form.classList.add('was-validated')
+                         }, false)
+                    })()
                </script>

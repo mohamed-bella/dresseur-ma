@@ -11,10 +11,13 @@ router.get('/announcements/new', ensureSellerAuthenticated, marcheCanineControll
 
 // GET: Filter announcements based on criteria (e.g., location, price)
 router.get('/announcements/filter', filterController.filterAnnouncements);
-
-// POST: Create a new announcement (only sellers)
-router.post('/announcements', upload.array('media', 10), ensureSellerAuthenticated, marcheCanineController.addAnnouncement);
-
+// POST: Add a new announcement with media upload (for sellers only)
+router.post(
+     '/announcements',
+     ensureSellerAuthenticated,
+     upload.array('media', 10),  // Upload up to 10 images/videos
+     marcheCanineController.addAnnouncement
+);
 router.post('/seller/announcements/:id/images', ensureSellerAuthenticated, upload.array('newImages', 10), marcheCanineController.updateAnnouncementImages);
 
 // GET: View a specific announcement by ID

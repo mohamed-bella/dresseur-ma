@@ -2,6 +2,7 @@ const Announcement = require('../models/announcement');
 const Seller = require('../models/seller');
 const cloudinary = require('../config/cloudinary');
 const slugify = require('slugify');
+
 // Middleware to ensure the user is authenticated as a seller
 const ensureSellerAuthenticated = async (req, res, next) => {
      if (req.isAuthenticated() && req.user.googleId) {
@@ -19,19 +20,21 @@ const ensureSellerAuthenticated = async (req, res, next) => {
           res.redirect('/auth/google'); // Redirect to Google login if not authenticated
      }
 };
+
 const marcheCanineController = {
+
      // GET: Fetch all announcements (Home Page with Pagination)
      async getAnnouncements(req, res) {
           try {
-               const perPage = parseInt(req.query.limit) || 9;  // Default items per page
-               const page = parseInt(req.query.page) || 1;      // Current page number, defaults to 1
+               const perPage = parseInt(req.query.limit) || 9;
+               const page = parseInt(req.query.page) || 1;
 
-               const totalAnnouncements = await Announcement.countDocuments({ status: 'approved' }); // Count total announcements
+               const totalAnnouncements = await Announcement.countDocuments({ status: 'approved' });
                const announcements = await Announcement.find({ status: 'approved' })
                     .sort({ datePosted: -1 })
                     .skip((page - 1) * perPage)
                     .limit(perPage);
-               // console.log(announcements)
+
                res.render('marketplace/announcements', {
                     announcements,
                     current: page,
@@ -53,10 +56,10 @@ const marcheCanineController = {
      },
 
      // POST: Add a new announcement (for sellers only)
+     // POST: Add a new announcement (for sellers only)
      async addAnnouncement(req, res) {
           const { breed, description, price, location, number } = req.body;
 
-          // Check if all required fields are filled
           if (!breed || !description || !price || !location || !number) {
                return res.status(400).render('marketplace/newAnnouncement', {
                     message: 'Please fill in all fields',
@@ -65,48 +68,17 @@ const marcheCanineController = {
           }
 
           try {
-               // Ensure the user is authenticated and has a Google ID
-               if (!req.user || !req.user.googleId) {
-                    return res.status(400).render('marketplace/newAnnouncement', {
-                         message: 'User authentication error. Please login again.',
-                         title: 'Créer une nouvelle annonce'
-                    });
-               }
-
-               // Check if the seller exists
                const seller = await Seller.findOne({ googleId: req.user.googleId });
-               if (!seller) {
-                    return res.status(404).json({ message: 'Seller not found' });
-               }
+               if (!seller) return res.status(404).json({ message: 'Seller not found' });
 
-               // Check if files are uploaded
-               //   if (!req.files || req.files.length === 0) {
-               //       return res.status(400).render('marketplace/newAnnouncement', {
-               //           message: 'Please upload at least one image or video',
-               //           title: 'Créer une nouvelle annonce'
-               //       });
-               //}
-
-               // Process media files (image/video uploads)
-               //   let mediaUrls = [];
-               //   try {
-               //       mediaUrls = req.files.map(file => file.path); // Assuming multer is used
-               //   } catch (cloudinaryError) {
-               //       console.error('Cloudinary upload error:', cloudinaryError);
-               //       return res.status(500).render('error', { message: 'Error uploading media to Cloudinary' });
-               //   }
-
-               // Generate a unique slug for the announcement
-               const randomNum = Math.floor(1000 + Math.random() * 9000);
-               let slug = slugify(`${breed}-${location}-${randomNum}`, { lower: true, strict: true });
-
-               // Ensure slug is unique by checking in the database
-               let slugExists = await Announcement.findOne({ slug });
-               let suffix = 1;
-               while (slugExists) {
-                    slug = `${slug}-${suffix}`;
-                    slugExists = await Announcement.findOne({ slug });
-                    suffix++;
+               // Handle media uploads (images/videos) using Cloudinary
+               let mediaUrls = [];
+               if (req.files && req.files.length > 0) {
+                    const uploadPromises = req.files.map(file =>
+                         cloudinary.uploader.upload(file.path, { resource_type: "auto" })
+                    );
+                    const results = await Promise.all(uploadPromises);
+                    mediaUrls = results.map(result => result.secure_url);
                }
 
                // Create a new announcement document
@@ -116,9 +88,8 @@ const marcheCanineController = {
                     price,
                     location,
                     number,
-                    //  media: mediaUrls, // Store media (images/videos) in an array
-                    slug, // Store the slug
-                    seller: seller._id, // Reference to the seller's ObjectId
+                    media: mediaUrls,
+                    seller: seller._id,
                     sellerDisplayName: seller.displayName,
                     sellerEmail: seller.email
                });
@@ -126,11 +97,9 @@ const marcheCanineController = {
                // Save the announcement to the database
                await newAnnouncement.save();
 
-               // Success message and redirect
                req.flash('success', "تم نشر إعلانك بنجاح ✅");
                res.redirect('/announcements');
           } catch (err) {
-               // Log the error for debugging purposes
                console.error('Error adding announcement:', err);
                res.status(500).render('error', { message: 'Failed to add announcement' });
           }
@@ -143,10 +112,9 @@ const marcheCanineController = {
 
           try {
                const announcement = await Announcement.findById(req.params.id);
-
                if (!announcement) return res.status(404).render('error', { message: 'Announcement not found' });
 
-               // Handle image deletions
+               // Handle image deletions from Cloudinary
                if (deletedImages) {
                     const imagesToDelete = deletedImages.split(',');
                     for (let imageUrl of imagesToDelete) {
@@ -158,7 +126,12 @@ const marcheCanineController = {
 
                // Handle new image uploads
                if (newImages && newImages.length > 0) {
-                    newImages.forEach(file => announcement.media.push(file.path));
+                    const uploadPromises = newImages.map(file =>
+                         cloudinary.uploader.upload(file.path, { resource_type: "auto" })
+                    );
+                    const results = await Promise.all(uploadPromises);
+                    const newMediaUrls = results.map(result => result.secure_url);
+                    announcement.media.push(...newMediaUrls);
                }
 
                await announcement.save();
@@ -179,7 +152,6 @@ const marcheCanineController = {
                     return res.status(404).render('error', { message: 'Announcement not found' });
                }
 
-               // Increment views if this is the first time the user is viewing the announcement
                if (!req.cookies[`viewed_${slug}`]) {
                     announcement.views++;
                     await announcement.save();
@@ -197,7 +169,6 @@ const marcheCanineController = {
      async showEditAnnouncementForm(req, res) {
           try {
                const announcement = await Announcement.findById(req.params.id);
-
                if (!announcement) return res.status(404).render('error', { message: 'Announcement not found' });
 
                res.render('marketplace/editAnnouncement', { announcement, title: 'Modifier l\'annonce' });
@@ -213,7 +184,6 @@ const marcheCanineController = {
 
           try {
                const announcement = await Announcement.findById(req.params.id);
-
                if (!announcement) return res.status(404).render('error', { message: 'Announcement not found' });
 
                announcement.breed = breed || announcement.breed;
