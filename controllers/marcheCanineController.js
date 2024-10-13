@@ -53,88 +53,88 @@ const marcheCanineController = {
      },
 
      // POST: Add a new announcement (for sellers only)
-      async addAnnouncement(req, res) {
-        const { breed, description, price, location, number } = req.body;
+     async addAnnouncement(req, res) {
+          const { breed, description, price, location, number } = req.body;
 
-        // Check if all required fields are filled
-        if (!breed || !description || !price || !location || !number) {
-            return res.status(400).render('marketplace/newAnnouncement', {
-                message: 'Please fill in all fields',
-                title: 'Créer une nouvelle annonce'
-            });
-        }
-
-        try {
-            // Ensure the user is authenticated and has a Google ID
-            if (!req.user || !req.user.googleId) {
-                return res.status(400).render('marketplace/newAnnouncement', {
-                    message: 'User authentication error. Please login again.',
+          // Check if all required fields are filled
+          if (!breed || !description || !price || !location || !number) {
+               return res.status(400).render('marketplace/newAnnouncement', {
+                    message: 'Please fill in all fields',
                     title: 'Créer une nouvelle annonce'
-                });
-            }
+               });
+          }
 
-            // Check if the seller exists
-            const seller = await Seller.findOne({ googleId: req.user.googleId });
-            if (!seller) {
-                return res.status(404).json({ message: 'Seller not found' });
-            }
+          try {
+               // Ensure the user is authenticated and has a Google ID
+               if (!req.user || !req.user.googleId) {
+                    return res.status(400).render('marketplace/newAnnouncement', {
+                         message: 'User authentication error. Please login again.',
+                         title: 'Créer une nouvelle annonce'
+                    });
+               }
 
-            // Check if files are uploaded
-            if (!req.files || req.files.length === 0) {
-                return res.status(400).render('marketplace/newAnnouncement', {
-                    message: 'Please upload at least one image or video',
-                    title: 'Créer une nouvelle annonce'
-                });
-            }
+               // Check if the seller exists
+               const seller = await Seller.findOne({ googleId: req.user.googleId });
+               if (!seller) {
+                    return res.status(404).json({ message: 'Seller not found' });
+               }
 
-            // Process media files (image/video uploads)
-            let mediaUrls = [];
-            try {
-                mediaUrls = req.files.map(file => file.path); // Assuming multer is used
-            } catch (cloudinaryError) {
-                console.error('Cloudinary upload error:', cloudinaryError);
-                return res.status(500).render('error', { message: 'Error uploading media to Cloudinary' });
-            }
+               // Check if files are uploaded
+               //   if (!req.files || req.files.length === 0) {
+               //       return res.status(400).render('marketplace/newAnnouncement', {
+               //           message: 'Please upload at least one image or video',
+               //           title: 'Créer une nouvelle annonce'
+               //       });
+               //}
 
-            // Generate a unique slug for the announcement
-            const randomNum = Math.floor(1000 + Math.random() * 9000);
-            let slug = slugify(`${breed}-${location}-${randomNum}`, { lower: true, strict: true });
+               // Process media files (image/video uploads)
+               //   let mediaUrls = [];
+               //   try {
+               //       mediaUrls = req.files.map(file => file.path); // Assuming multer is used
+               //   } catch (cloudinaryError) {
+               //       console.error('Cloudinary upload error:', cloudinaryError);
+               //       return res.status(500).render('error', { message: 'Error uploading media to Cloudinary' });
+               //   }
 
-            // Ensure slug is unique by checking in the database
-            let slugExists = await Announcement.findOne({ slug });
-            let suffix = 1;
-            while (slugExists) {
-                slug = `${slug}-${suffix}`;
-                slugExists = await Announcement.findOne({ slug });
-                suffix++;
-            }
+               // Generate a unique slug for the announcement
+               const randomNum = Math.floor(1000 + Math.random() * 9000);
+               let slug = slugify(`${breed}-${location}-${randomNum}`, { lower: true, strict: true });
 
-            // Create a new announcement document
-            const newAnnouncement = new Announcement({
-                breed,
-                description,
-                price,
-                location,
-                number,
-                media: mediaUrls, // Store media (images/videos) in an array
-                slug, // Store the slug
-                seller: seller._id, // Reference to the seller's ObjectId
-                sellerDisplayName: seller.displayName,
-                sellerEmail: seller.email
-            });
+               // Ensure slug is unique by checking in the database
+               let slugExists = await Announcement.findOne({ slug });
+               let suffix = 1;
+               while (slugExists) {
+                    slug = `${slug}-${suffix}`;
+                    slugExists = await Announcement.findOne({ slug });
+                    suffix++;
+               }
 
-            // Save the announcement to the database
-            await newAnnouncement.save();
+               // Create a new announcement document
+               const newAnnouncement = new Announcement({
+                    breed,
+                    description,
+                    price,
+                    location,
+                    number,
+                    //  media: mediaUrls, // Store media (images/videos) in an array
+                    slug, // Store the slug
+                    seller: seller._id, // Reference to the seller's ObjectId
+                    sellerDisplayName: seller.displayName,
+                    sellerEmail: seller.email
+               });
 
-            // Success message and redirect
-            req.flash('success', "تم نشر إعلانك بنجاح ✅");
-            res.redirect('/announcements');
-        } catch (err) {
-            // Log the error for debugging purposes
-            console.error('Error adding announcement:', err);
-            res.status(500).render('error', { message: 'Failed to add announcement' });
-        }
-    },
+               // Save the announcement to the database
+               await newAnnouncement.save();
+
+               // Success message and redirect
+               req.flash('success', "تم نشر إعلانك بنجاح ✅");
+               res.redirect('/announcements');
+          } catch (err) {
+               // Log the error for debugging purposes
+               console.error('Error adding announcement:', err);
+               res.status(500).render('error', { message: 'Failed to add announcement' });
+          }
+     },
 
      // POST: Update announcement images
      async updateAnnouncementImages(req, res) {
