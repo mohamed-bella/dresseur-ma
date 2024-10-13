@@ -1,122 +1,138 @@
+<nav class="custom-navbar">
+    <div class="navbar-container">
+        <a href="/" class="navbar-logo">
+            <img src="https://res.cloudinary.com/dxg2nsnkj/image/upload/v1726159468/dogs/hsdy0nueyyjulhocok6w.png" alt="logo">
+            <span>NDRESSILIK</span>
+        </a>
+        <div class="navbar-toggle" id="navbar-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <ul class="navbar-menu" id="navbar-menu">
+            <li><a href="#announcements">ANNONCES</a></li>
+            <li><a href="#breeds">RACES</a></li>
+            <li><a href="#services">SERVICES</a></li>
+            <li><a href="#contact">CONTACT</a></li>
+        </ul>
+        <a href="/announcements/new" class="navbar-cta">AJOUTER ANNONCE</a>
+    </div>
+</nav>
+
 <style>
-     a {
-          font-size: 14px;
-          font-weight: 700;
-     }
+    .custom-navbar {
+        background-color: #1a2930;
+        padding: 1rem 0;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
 
-     .superNav {
-          font-size: 13px;
-          background-color: #ffeb3b91 !important;
-     }
+    .navbar-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 1rem;
+    }
 
-     .form-control {
-          outline: none !important;
-          box-shadow: none !important;
-     }
+    .navbar-logo {
+        display: flex;
+        align-items: center;
+        color: #f7ce3e;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 1.5rem;
+    }
 
-     /* Mobile Styles */
-     @media screen and (max-width: 540px) {
+    .navbar-logo img {
+        height: 40px;
+        margin-right: 10px;
+    }
 
-          /* Center logo and menu */
-          .navbar-brand {
-               margin: 0 auto;
-               text-align: center;
-               padding-left: 0 !important;
-          }
+    .navbar-menu {
+        display: flex;
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
 
-          /* Full width for the button on mobile */
-          .mobile-action-btn {
-               width: 100%;
-               position: fixed;
-               bottom: 0;
-               left: 0;
-               right: 0;
-               z-index: 999;
-               padding: 10px;
-               text-align: center;
-               background-color: white;
-               box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-          }
+    .navbar-menu li a {
+        color: #ffffff;
+        text-decoration: none;
+        padding: 0.5rem 1rem;
+        transition: color 0.3s ease;
+    }
 
-          .mobile-action-btn .btn {
-               width: 100%;
-               padding: 12px;
-               font-size: 16px;
-          }
+    .navbar-menu li a:hover {
+        color: #f7ce3e;
+    }
 
-          /* Add small padding for left and right */
-          .container {
-               padding-left: 10px;
-               padding-right: 10px;
-          }
-     }
+    .navbar-cta {
+        background-color: #f7ce3e;
+        color: #1a2930;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
+
+    .navbar-cta:hover {
+        background-color: #e5b82a;
+    }
+
+    .navbar-toggle {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+    }
+
+    .navbar-toggle span {
+        width: 25px;
+        height: 3px;
+        background-color: #ffffff;
+        margin: 2px 0;
+        transition: 0.4s;
+    }
+
+    @media (max-width: 768px) {
+        .navbar-menu {
+            display: none;
+            flex-direction: column;
+            position: absolute;
+            top: 70px;
+            left: 0;
+            width: 100%;
+            background-color: #1a2930;
+            padding: 1rem 0;
+        }
+
+        .navbar-menu.active {
+            display: flex;
+        }
+
+        .navbar-menu li {
+            margin: 0.5rem 0;
+        }
+
+        .navbar-toggle {
+            display: flex;
+        }
+
+        .navbar-cta {
+            display: none;
+        }
+    }
 </style>
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg bg-white sticky-top navbar-light shadow-sm" style="
-    background-color: #303030 !important;">
-     <div class="container" style="padding: 1px;">
-          <!-- Logo centered on mobile -->
-          <a class="navbar-brand" href="/" style="
-    color: white;
-">
-               <img src="https://res.cloudinary.com/dxg2nsnkj/image/upload/v1726159468/dogs/hsdy0nueyyjulhocok6w.png" alt="logo" style="width: 50px;">
-               <strong>NDRESSILIK</strong>
-          </a>
-
-          <!-- Action button for medium and large devices -->
-          <div class="d-none d-lg-block ms-auto">
-               <% if (user) { %>
-                    <% if (user.role==='writer' ) { %>
-                         <a class="btn btn-success" href="/write-article/new">Partager une article</a>
-                         <% } else if (user.role==='user' ) { %>
-                              <a href="/announcements/new" class="btn btn-warning">Ajouter une annonce</a>
-                              <% } else if (user.role==='admin' ) { %>
-                                   <a class="btn btn-danger" href="/admin">Admin</a>
-                                   <% } %>
-                                        <% } else { %>
-                                             <a class="btn btn-warning" href="/announcements/new">Ajouter une Annonce</a>
-                                             <% } %>
-          </div>
-
-          <!-- Menu Toggle Button for Mobile -->
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-               <span class="navbar-toggler-icon"></span>
-          </button>
-
-          <!-- Collapsed Menu -->
-          <div class="collapse navbar-collapse" id="navbarNavDropdown">
-               <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                         <a class="nav-link mx-2 text-uppercase" href="/announcements">Les Annonces</a>
-                    </li>
-                    <li class="nav-item">
-                         <a class="nav-link mx-2 text-uppercase" href="/consultation">Consultation</a>
-                    </li>
-                    <li class="nav-item">
-                         <a class="nav-link mx-2 text-uppercase" href="/articles">Les Articles</a>
-                    </li>
-                    <li class="nav-item">
-                         <a class="nav-link mx-2 text-uppercase" href="/tous-les-races-des-chiens">Les Races Des Chiens</a>
-                    </li>
-               </ul>
-          </div>
-
-          <!-- Mobile action button at the bottom (only visible on small screens) -->
-          <% if (user) { %>
-               <div class="mobile-action-btn d-lg-none">
-                    <% if (user.role==='writer' ) { %>
-                         <a class="btn btn-success" href="/write-article/new">Partager une article</a>
-                         <% } else if (user.role==='user' ) { %>
-                              <a href="/announcements/new" class="btn btn-warning">Ajouter une annonce</a>
-                              <% } else if (user.role==='admin' ) { %>
-                                   <a class="btn btn-danger" href="/admin">Admin</a>
-                                   <% } %>
-               </div>
-               <% } else { %>
-                    <div class="mobile-action-btn d-lg-none">
-                         <a class="btn btn-warning pulse-button" href="/announcements/new">Ajouter une Annonce</a>
-                    </div>
-                    <% } %>
-     </div>
-</nav>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const navbarToggle = document.getElementById('navbar-toggle');
+        const navbarMenu = document.getElementById('navbar-menu');
+        navbarToggle.addEventListener('click', function () {
+            navbarMenu.classList.toggle('active');
+        });
+    });
+</script>

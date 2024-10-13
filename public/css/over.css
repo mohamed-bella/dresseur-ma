@@ -1,0 +1,463 @@
+/* Strong Dog-Themed Bootstrap Override Styles */
+
+:root {
+     --primary: #2C3E50;
+     --secondary: #E74C3C;
+     --success: #27AE60;
+     --info: #3498DB;
+     --warning: #F39C12;
+     --danger: #C0392B;
+     --light: #ECF0F1;
+     --dark: #34495E;
+     --body-bg: #F5F5F5;
+     --body-color: #333333;
+}
+
+body {
+     background-color: var(--body-bg);
+     color: var(--body-color);
+     font-family: 'Roboto', sans-serif;
+     background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 1px;
+}
+
+/* Buttons */
+.btn {
+     border-radius: 0;
+     text-transform: uppercase;
+     font-weight: 700;
+     letter-spacing: 1px;
+     border: 2px solid transparent;
+     transition: all 0.3s ease;
+}
+
+.btn:hover {
+     transform: translateY(-2px);
+     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary {
+     background-color: var(--primary);
+     border-color: var(--primary);
+}
+
+.btn-secondary {
+     background-color: var(--secondary);
+     border-color: var(--secondary);
+}
+
+/* Cards */
+.card {
+     border-radius: 0;
+     border: none;
+     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+     transition: all 0.3s ease;
+}
+
+.card:hover {
+     transform: translateY(-5px);
+     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.card-header {
+     background-color: var(--primary);
+     color: white;
+     text-transform: uppercase;
+     font-weight: 700;
+     letter-spacing: 1px;
+}
+
+/* Forms */
+.form-control {
+     border-radius: 0;
+     border: 2px solid var(--primary);
+}
+
+.form-control:focus {
+     box-shadow: none;
+     border-color: var(--secondary);
+}
+
+/* Navbar */
+.navbar {
+     background-color: var(--primary);
+     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+     font-weight: 900;
+     text-transform: uppercase;
+     letter-spacing: 2px;
+}
+
+.nav-link {
+     text-transform: uppercase;
+     font-weight: 700;
+}
+
+/* Alerts */
+.alert {
+     border-radius: 0;
+     border-left: 5px solid transparent;
+}
+
+.alert-primary {
+     border-left-color: var(--primary);
+}
+
+.alert-secondary {
+     border-left-color: var(--secondary);
+}
+
+/* Badges */
+.badge {
+     border-radius: 0;
+     text-transform: uppercase;
+     font-weight: 700;
+     padding: 0.5em 1em;
+}
+
+/* List Groups */
+.list-group-item {
+     border-left: 5px solid var(--primary);
+     transition: all 0.3s ease;
+}
+
+.list-group-item:hover {
+     background-color: var(--light);
+     transform: translateX(5px);
+}
+
+/* Modals */
+.modal-content {
+     border-radius: 0;
+     border: none;
+     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+     background-color: var(--primary);
+     color: white;
+     text-transform: uppercase;
+     letter-spacing: 1px;
+}
+
+/* Progress Bars */
+.progress {
+     border-radius: 0;
+     height: 10px;
+}
+
+.progress-bar {
+     background-color: var(--primary);
+}
+
+/* Tables */
+.table thead th {
+     background-color: var(--primary);
+     color: white;
+     text-transform: uppercase;
+     letter-spacing: 1px;
+     border-bottom: none;
+}
+
+/* Custom Dog-related Styles */
+.dog-paw-bullet {
+     list-style-type: none;
+     padding-left: 1.5em;
+}
+
+.dog-paw-bullet li::before {
+     content: '🐾';
+     display: inline-block;
+     margin-left: -1.5em;
+     width: 1.5em;
+}
+
+.dog-collar-border {
+     border: 10px solid transparent;
+     border-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="100" height="100" fill="none" stroke="%232C3E50" stroke-width="20" stroke-dasharray="20,20" /></svg>') 20 round;
+}
+
+.bone-shape {
+     position: relative;
+     padding: 20px;
+     background-color: var(--light);
+     border-radius: 50px;
+}
+
+.bone-shape::before,
+.bone-shape::after {
+     content: '';
+     position: absolute;
+     width: 40px;
+     height: 100%;
+     background-color: var(--light);
+     top: 0;
+     border-radius: 20px;
+}
+
+.bone-shape::before {
+     left: -15px;
+}
+
+.bone-shape::after {
+     right: -15px;
+}
+
+/* Extended Dog-Themed Robust Styles */
+
+/* Dog Tag Card */
+.dog-tag-card {
+     position: relative;
+     background-color: var(--light);
+     border-radius: 10px;
+     padding: 20px;
+     margin-bottom: 20px;
+     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+     transition: all 0.3s ease;
+}
+
+.dog-tag-card::before {
+     content: '';
+     position: absolute;
+     top: -10px;
+     left: 50%;
+     transform: translateX(-50%);
+     width: 20px;
+     height: 20px;
+     background-color: var(--primary);
+     border-radius: 50%;
+}
+
+.dog-tag-card:hover {
+     transform: translateY(-5px) rotate(2deg);
+     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Paw Print Background */
+.paw-print-bg {
+     background-color: var(--light);
+     background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000000' fill-opacity='0.05'%3E%3Cpath d='M30 30c-4 0-7-3-7-7s3-7 7-7 7 3 7 7-3 7-7 7zm-15-8c-3 0-5-2-5-5s2-5 5-5 5 2 5 5-2 5-5 5zm30 0c-3 0-5-2-5-5s2-5 5-5 5 2 5 5-2 5-5 5zm-15 18c-3 0-5-2-5-5s2-5 5-5 5 2 5 5-2 5-5 5z'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Dog Collar Separator */
+.dog-collar-separator {
+     height: 20px;
+     background-image: repeating-linear-gradient(90deg,
+               var(--primary),
+               var(--primary) 20px,
+               var(--secondary) 20px,
+               var(--secondary) 40px);
+     margin: 30px 0;
+}
+
+/* Bark Button */
+.btn-bark {
+     position: relative;
+     overflow: hidden;
+     background-color: var(--warning);
+     color: var(--dark);
+     border: none;
+     padding: 10px 20px;
+     text-transform: uppercase;
+     font-weight: 700;
+     transition: all 0.3s ease;
+}
+
+.btn-bark::before {
+     content: '🐾';
+     position: absolute;
+     top: 50%;
+     left: -20px;
+     transform: translateY(-50%);
+     opacity: 0;
+     transition: all 0.3s ease;
+}
+
+.btn-bark:hover {
+     padding-left: 40px;
+     background-color: var(--warning);
+     color: var(--dark);
+}
+
+.btn-bark:hover::before {
+     left: 10px;
+     opacity: 1;
+}
+
+/* Dog House Tab */
+.dog-house-tab .nav-link {
+     position: relative;
+     background-color: var(--light);
+     color: var(--dark);
+     border-top-left-radius: 15px;
+     border-top-right-radius: 15px;
+     padding: 10px 20px;
+     margin-right: 5px;
+     transition: all 0.3s ease;
+}
+
+.dog-house-tab .nav-link::before {
+     content: '';
+     position: absolute;
+     top: -10px;
+     left: 50%;
+     transform: translateX(-50%);
+     border-left: 10px solid transparent;
+     border-right: 10px solid transparent;
+     border-bottom: 10px solid var(--light);
+}
+
+.dog-house-tab .nav-link.active {
+     background-color: var(--primary);
+     color: var(--light);
+}
+
+.dog-house-tab .nav-link.active::before {
+     border-bottom-color: var(--primary);
+}
+
+/* Paw Checkbox */
+.paw-checkbox {
+     position: relative;
+     padding-left: 35px;
+     cursor: pointer;
+     font-size: 16px;
+     user-select: none;
+}
+
+.paw-checkbox input {
+     position: absolute;
+     opacity: 0;
+     cursor: pointer;
+     height: 0;
+     width: 0;
+}
+
+.paw-checkbox .checkmark {
+     position: absolute;
+     top: 0;
+     left: 0;
+     height: 25px;
+     width: 25px;
+     background-color: var(--light);
+     border: 2px solid var(--primary);
+     border-radius: 5px;
+}
+
+.paw-checkbox:hover input~.checkmark {
+     background-color: var(--primary);
+}
+
+.paw-checkbox input:checked~.checkmark {
+     background-color: var(--primary);
+}
+
+.paw-checkbox .checkmark:after {
+     content: '🐾';
+     position: absolute;
+     display: none;
+     font-size: 20px;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+}
+
+.paw-checkbox input:checked~.checkmark:after {
+     display: block;
+}
+
+/* Utility Classes */
+.text-bark {
+     font-family: 'Comic Sans MS', cursive;
+     font-weight: bold;
+     color: var(--primary);
+     text-shadow: 1px 1px 0 var(--secondary);
+}
+
+.border-paw {
+     border: 2px solid var(--primary);
+     border-radius: 20px 20px 20px 5px;
+}
+
+.shadow-woof {
+     box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.1);
+}
+
+/* Animated Dog Ear Corner */
+.dog-ear-corner {
+     position: relative;
+     overflow: hidden;
+}
+
+.dog-ear-corner::before {
+     content: '';
+     position: absolute;
+     top: -50px;
+     right: -50px;
+     width: 100px;
+     height: 100px;
+     background-color: var(--secondary);
+     transform: rotate(45deg);
+     transition: all 0.3s ease;
+}
+
+.dog-ear-corner:hover::before {
+     top: -25px;
+     right: -25px;
+}
+
+/* Dog Bone Loading Spinner */
+@keyframes bone-spin {
+     0% {
+          transform: rotate(0deg);
+     }
+
+     100% {
+          transform: rotate(360deg);
+     }
+}
+
+.bone-spinner {
+     display: inline-block;
+     width: 50px;
+     height: 50px;
+     border: 5px solid var(--light);
+     border-radius: 50%;
+     border-top-color: var(--primary);
+     animation: bone-spin 1s ease-in-out infinite;
+}
+
+.bone-spinner::before,
+.bone-spinner::after {
+     content: '';
+     position: absolute;
+     width: 15px;
+     height: 30px;
+     background-color: var(--primary);
+     border-radius: 15px;
+}
+
+.bone-spinner::before {
+     top: -20px;
+     left: 50%;
+     transform: translateX(-50%);
+}
+
+.bone-spinner::after {
+     bottom: -20px;
+     left: 50%;
+     transform: translateX(-50%);
+}

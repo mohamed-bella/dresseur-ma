@@ -9,7 +9,7 @@ const authController = {
 
                if (seller) {
                     // Redirect to seller dashboard or home page after login
-                    return res.redirect('/announcements/new');
+                    return res.redirect('/dashboard');
                }
 
                // If user is not a seller, redirect to home or an onboarding page

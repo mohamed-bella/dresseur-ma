@@ -1,80 +1,86 @@
-<div class="wrapper">
-     <!-- Sidebar  -->
-     <nav id="sidebar">
-          <div class="sidebar-header">
-               <h3>Dashboard</h3>
+<!-- Header -->
+<header class="header">
+     <h1>Tableau de bord Utilisateur</h1>
+     <div class="profile">
+          <img src="https://via.placeholder.com/50" alt="Photo de profil">
+          <span class="username">Nom d'utilisateur</span>
+          <div class="profile-actions">
+               <button class="btn btn-light btn-sm"><i class="bi bi-box-arrow-right"></i> Déconnexion</button>
           </div>
+     </div>
+</header>
 
-          <ul class="list-unstyled components">
-               <p>Settings</p>
-               <li class="">
-                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Profile</a>
-                    <ul class="collapse list-unstyled" id="homeSubmenu">
-                         <li>
-                              <a href="/trainer/<%= user._id %>">Mon profile</a>
-                         </li>
-                         <li>
-                              <a href="/dashboard/update-profile">Update Mon Profile</a>
-                         </li>
-                    </ul>
-               </li>
-               <!-- <li>
-                    <a href="#">About</a>
-               </li> -->
-               <li>
-                    <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Marche Canine</a>
-                    <ul class="collapse list-unstyled" id="pageSubmenu">
-                         <li>
-                              <a href="#">marche Canine</a>
-                         </li>
-                         <li>
-                              <a href="#">Ajouter Votre Chien</a>
-                         </li>
-                         <li>
-                              <a href="#">Mes Chiens</a>
-                         </li>
-                    </ul>
-               </li>
-               <li>
-                    <a href="#">Portfolio</a>
-               </li>
-               <li>
-                    <a href="#">Contact</a>
-               </li>
-          </ul>
-
-          <ul class="list-unstyled CTAs">
-               <!-- <li>
-                    <a href="https://bootstrapious.com/tutorial/files/sidebar.zip" class="download">Download source</a>
-               </li>
-               <li>
-                    <a href="https://bootstrapious.com/p/bootstrap-sidebar" class="article">Back to article</a>
-               </li> -->
-          </ul>
+<!-- Dashboard Wrapper -->
+<div class="dashboard-wrapper">
+     <!-- Sidebar -->
+     <nav class="sidebar">
+          <a href="/dashboard"><i class="bi bi-speedometer2"></i> Tableau de bord</a>
+          <a href="/announcements"><i class="bi bi-list-task"></i> Mes annonces</a>
+          <a href="/elevage"><i class="bi bi-building"></i> Mon élevage</a>
+          <a href="/settings"><i class="bi bi-gear"></i> Paramètres</a>
      </nav>
 
-     <div id="content">
-
-          <nav class="navbar navbar-expand-lg navbar-light bg-light">
-               <div class="container-fluid">
-
-                    <button type="button" id="sidebarCollapse" class="btn btn-secondary">
-                         <i class="bi bi-three-dots-vertical"></i>
-                         <span></span>
-                    </button>
-                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                         <i class="fas fa-align-justify"></i>
-                    </button>
-
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                         <ul class="nav navbar-nav ml-auto">
-                              <li class="nav-item active">
-                                   <a class="nav-link" href="#">Mon Profile</a>
-                              </li>
-                              <li class="nav-item">
-                                   <a class="nav-link" href="#">Sign out</a>
-                              </li>
-                         </ul>
+     <!-- Main Content -->
+     <div class="content">
+          <!-- Statistiques Section -->
+          <div class="row stat-section">
+               <div class="col-md-4">
+                    <div class="stat-card">
+                         <i class="bi bi-eye"></i>
+                         <h5>Nombre de vues</h5>
+                         <p class="stat-value">5,340</p>
                     </div>
                </div>
-          </nav>
+               <div class="col-md-4">
+                    <div class="stat-card">
+                         <i class="bi bi-megaphone"></i>
+                         <h5>Annonces Actives</h5>
+                         <p class="stat-value">12</p>
+                    </div>
+               </div>
+               <div class="col-md-4">
+                    <div class="stat-card">
+                         <i class="bi bi-currency-euro"></i>
+                         <h5>Revenus Totals</h5>
+                         <p class="stat-value">4,500€</p>
+                    </div>
+               </div>
+          </div>
+
+          <!-- Actions Section -->
+          <div class="row actions-section">
+               <div class="col-md-6">
+                    <div class="card bg-light text-center">
+                         <div class="card-body">
+                              <a href="/announcement/new" class="btn btn-dog"><i class="bi bi-megaphone"></i> Publier une annonce de chien</a>
+                         </div>
+                    </div>
+               </div>
+               <div class="col-md-6">
+                    <div class="card bg-light text-center">
+                         <div class="card-body">
+                              <a href="/dashboard/elevage/new" class="btn btn-elevage"><i class="bi bi-building"></i> Créer un nouvel élevage</a>
+                         </div>
+                    </div>
+               </div>
+          </div>
+
+          <!-- Settings Section -->
+          <div class="row mt-4">
+               <div class="col-md-6">
+                    <div class="card bg-light text-center">
+                         <div class="card-body">
+                              <a href="/settings/profile" class="btn btn-secondary"><i class="bi bi-person"></i> Paramètres du profil</a>
+                         </div>
+                    </div>
+               </div>
+               <div class="col-md-6">
+                    <div class="card bg-light text-center">
+                         <div class="card-body">
+                              <a href="/settings/security" class="btn btn-secondary"><i class="bi bi-shield-lock"></i> Paramètres de sécurité</a>
+                         </div>
+                    </div>
+               </div>
+          </div>
+     </div>
+</div>

@@ -1,90 +1,134 @@
-<div id="backToTop" style="display: none; position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
-     <button class="btn btn-warning" style="border-radius: 50%; width: 50px; height: 50px;">
-          <i class="bi bi-arrow-up"></i>
-     </button>
-</div>
-
-<footer class="footer py-5 bg-dark text-white">
-     <div class="container-footer">
-          <div class="row">
-               <!-- Logo and Description Section -->
-               <div class="col-md-4 mb-4 text-center text-md-start">
-                    <a href="/" class="d-flex align-items-center mb-2 link-light text-decoration-none justify-content-center justify-content-md-start">
-                         <img src="https://res.cloudinary.com/dxg2nsnkj/image/upload/v1726159468/dogs/hsdy0nueyyjulhocok6w.png" alt="Ndressilik Logo" style="width: 80px;">
-                    </a>
-                    <p class="" style="font-size: 0.875rem;">Votre plateforme idéale pour tout sur les chiens au Maroc.</p>
-               </div>
-
-               <!-- Social Links Section -->
-               <div class="col-md-4 mb-4 text-center text-md-start">
-                    <h5 class="text-light">Suivez-nous</h5>
-                    <ul class="list-unstyled d-flex justify-content-center justify-content-md-start">
-                         <li class="me-3">
-                              <a href="https://instagram.com/ndressilik" target="_blank" class="link-light" aria-label="Instagram">
-                                   <i class="bi bi-instagram fs-3"></i>
-                              </a>
-                         </li>
-                         <li class="me-3">
-                              <a href="https://facebook.com/ndressilik" target="_blank" class="link-light" aria-label="Facebook">
-                                   <i class="bi bi-facebook fs-3"></i>
-                              </a>
-                         </li>
-                         <li class="me-3">
-                              <a href="https://www.linkedin.com/in/ndressilik-ndressilik-770630329/?originalSubdomain=ma" target="_blank" class="link-light" aria-label="LinkedIn">
-                                   <i class="bi bi-linkedin fs-3"></i>
-                              </a>
-                         </li>
-                         <!-- <li class="me-3">
-                              <a href="https://twitter.com/ndressilik" target="_blank" class="link-light" aria-label="Twitter">
-                                   <i class="bi bi-twitter fs-3"></i>
-                              </a>
-                         </li> -->
-                    </ul>
-               </div>
-
-               <!-- Navigation Links Section -->
-               <div class="col-md-4 mb-4 text-center text-md-start">
-                    <h5 class="text-light">Liens utiles</h5>
-                    <ul class="list-unstyled">
-                         <li><a href="/announcements" class="link-light text-decoration-none">Vendre des Chiens</a></li>
-                         <li><a href="/consultation" class="link-light text-decoration-none">Consultation</a></li>
-                         <li><a href="/articles" class="link-light text-decoration-none">Nos Articles</a></li>
-                    </ul>
-
-                    <hr class="border-secondary">
-                    <ul class="list-unstyled">
-                         <li><a href="/privacy-policy" class="link-light text-decoration-none">Politique de confidentialité</a></li>
-                         <li><a href="/terms" class="link-light text-decoration-none">Conditions générales</a></li>
-                         <li><a href="/cookies-policy" class="link-light text-decoration-none">Politique de cookies</a></li>
-                    </ul>
-               </div>
-          </div>
-
-          <div class="text-center pt-4 border-top border-secondary">
-               <p class="mb-0" style="font-size: 0.875rem;">&copy; <%= new Date().getFullYear() %> Ndressilik. Tous droits réservés.</p>
-          </div>
-     </div>
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <h5>À Propos de Ndressilik</h5>
+                <p>Plateforme leader au Maroc pour le dressage et l'adoption de chiens.</p>
+            </div>
+            <div class="col-md-4">
+                <h5>Liens Rapides</h5>
+                <ul class="list-unstyled">
+                    <li><a href="/announcements">Annonces</a></li>
+                    <li><a href="/tous-les-races-des-chiens">Races de Chiens</a></li>
+                    <li><a href="/articles">Articles</a></li>
+                    <li><a href="/consultation">Consultation</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h5>Contactez-nous</h5>
+                <p><i class="fas fa-envelope me-2"></i> contact@ndressilik.com</p>
+                <p><i class="fas fa-phone me-2"></i> +212 5XX-XXXXXX</p>
+                <div class="social-icons mt-3">
+                    <a href="#" class="me-2"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="me-2"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="me-2"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <hr class="mt-4 mb-4" style="background-color: var(--secondary-color);">
+        <div class="row">
+            <div class="col-md-6">
+                <p>&copy; 2024 Ndressilik. Tous droits réservés.</p>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <a href="/privacy-policy" class="me-3">Politique de confidentialité</a>
+                <a href="/terms-of-service">Conditions d'utilisation</a>
+            </div>
+        </div>
+    </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-     // Show back-to-top button when scrolling down
-     window.onscroll = function () {
-          const backToTopButton = document.getElementById("backToTop");
-          if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
-               backToTopButton.style.display = "block";
-          } else {
-               backToTopButton.style.display = "none";
-          }
-     };
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
 
-     // Scroll smoothly to top when clicking back-to-top button
-     document.getElementById("backToTop").addEventListener("click", function () {
-          window.scrollTo({
-               top: 0,
-               behavior: "smooth"
-          });
-     });
+    // Add active class to navbar items on scroll
+    window.addEventListener('scroll', () => {
+        let current = '';
+        document.querySelectorAll('section').forEach(section => {
+            const sectionTop = section.offsetTop;
+            if (pageYOffset >= sectionTop - 60) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        document.querySelectorAll('.nav-link').forEach(li => {
+            li.classList.remove('active');
+            if (li.getAttribute('href').includes(current)) {
+                li.classList.add('active');
+            }
+        });
+    });
 </script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
-<!-- <script>
+<script>
+    function slideAnnouncements(direction) {
+        const slider = document.getElementById('announcements-slider');
+        const scrollAmount = slider.offsetWidth;
+        slider.scrollBy({
+            left: direction * scrollAmount,
+            behavior: 'smooth'
+        });
+    }
+
+    function slideArticles(direction) {
+        const slider = document.getElementById('articles-slider');
+        const scrollAmount = slider.offsetWidth;
+        slider.scrollBy({
+            left: direction * scrollAmount,
+            behavior: 'smooth'
+        });
+    }
+
+    function slideBreeds(direction) {
+        const slider = document.getElementById('breeds-slider');
+        const scrollAmount = slider.offsetWidth;
+        slider.scrollBy({
+            left: direction * scrollAmount,
+            behavior: 'smooth'
+        });
+    }
+
+    // Optional: Add event listeners to hide/show arrows based on scroll position
+    document.querySelectorAll('.slider').forEach(slider => {
+        slider.addEventListener('scroll', () => {
+            const parent = slider.closest('.slider-container');
+            const leftArrow = parent.querySelector('.slider-arrow-left');
+            const rightArrow = parent.querySelector('.slider-arrow-right');
+
+            leftArrow.style.display = slider.scrollLeft > 0 ? 'flex' : 'none';
+            rightArrow.style.display = slider.scrollLeft < (slider.scrollWidth - slider.clientWidth) ? 'flex' : 'none';
+        });
+    });
+</script>
+<script>
+    let currentSlide = 0;
+    const slider = document.getElementById('announcements-slider');
+    const totalSlides = slider.querySelectorAll('.slider-item').length;
+
+    function moveSlide(direction) {
+        const slideWidth = slider.querySelector('.slider-item').offsetWidth;
+        currentSlide += direction;
+
+        // Wrap around
+        if (currentSlide < 0) {
+            currentSlide = totalSlides - 1;
+        } else if (currentSlide >= totalSlides) {
+            currentSlide = 0;
+        }
+
+        // Move the slider
+        slider.style.transform = `translateX(-${currentSlide * slideWidth}px)`;
+    }
+</script>
+</body>
+
+</html>
