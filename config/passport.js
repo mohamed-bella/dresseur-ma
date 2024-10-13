@@ -13,9 +13,12 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
         try {
-            console.log('Google Profile ID:', profile.id); // Log Google profile ID
+            // Log Google profile information for debugging
+            console.log('Google Profile ID:', profile.id);
+            console.log('Google Profile Emails:', profile.emails);
+            console.log('Google Profile Display Name:', profile.displayName);
 
-            // Check if the user is a trainer
+            // Check if the user is a trainer (User)
             let user = await User.findOne({ googleId: profile.id });
             if (user) {
                 console.log('Trainer user found:', user); // Log if user is found
@@ -29,10 +32,10 @@ passport.use(
                 return done(null, seller);
             }
 
-            // Seller not found, create new one
+            // Seller not found, create a new one
             console.log('No seller found, creating new seller for Google ID:', profile.id);
 
-            // Try to generate a unique slug
+            // Generate a unique slug for the seller
             let slug;
             let isUniqueSlug = false;
             let attemptCount = 0;
@@ -60,9 +63,8 @@ passport.use(
 
             // Handle the case where no email is returned
             const email = profile.emails && profile.emails.length > 0 ? profile.emails[0].value : null;
-
             if (!email) {
-                console.warn(`No email returned for user with Google ID: ${profile.id}`); // Log warning if no email is available
+                console.warn(`No email returned for user with Google ID: ${profile.id}`); // Log warning if no email
             }
 
             // Create a new seller
@@ -82,9 +84,14 @@ passport.use(
         } catch (err) {
             console.error('Google OAuth Error:', err);
 
-            // Custom error handling logic for known cases
-            if (err.message.includes('Failed to generate a unique slug')) {
-                return done(null, false, { message: 'Unable to complete registration. Please try again.' });
+            // Check if there is an OAuth-specific error and log the detailed response
+            if (err.oauthError) {
+                try {
+                    const response = JSON.parse(err.oauthError.data); // Parse error response body
+                    console.error('OAuth Error Response:', response); // Log detailed error response
+                } catch (parseError) {
+                    console.error('Error parsing OAuth error response:', parseError);
+                }
             }
 
             return done(err, null);
@@ -113,10 +120,10 @@ passport.deserializeUser(async (id, done) => {
             return done(null, seller);
         }
 
-        console.error('User not found during deserialization'); // Log if user is not found
+        console.error('User not found during deserialization'); // Log if user not found
         return done(new Error('User not found'), null);
     } catch (err) {
-        console.error('Deserialization error:', err); // Log any deserialization errors
+        console.error('Deserialization error:', err); // Log deserialization error
         done(err, null);
     }
 });
