@@ -61,6 +61,7 @@ const marcheCanineController = {
           console.log("Form Data:", req.body); // Log form data
           console.log("Uploaded Files:", req.files); // Log uploaded media
           const { breed, description, price, location, number } = req.body;
+          console.log(req.body)
 
           if (!breed || !description || !price || !location || !number) {
                return res.status(400).render('marketplace/newAnnouncement', {
@@ -94,6 +95,7 @@ const marcheCanineController = {
                          return res.status(500).render('error', { message: 'Error uploading media files', error: JSON.stringify(uploadError, null, 2) });
                     }
                }
+               console.log(mediaUrls)
 
                // Create a new announcement document
                const newAnnouncement = new Announcement({
