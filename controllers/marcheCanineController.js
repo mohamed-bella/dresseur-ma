@@ -59,6 +59,7 @@ const marcheCanineController = {
      // POST: Add a new announcement (for sellers only)
      async addAnnouncement(req, res) {
           const { breed, description, price, location, number } = req.body;
+          console.log(req.body)
 
           if (!breed || !description || !price || !location || !number) {
                return res.status(400).render('marketplace/newAnnouncement', {
@@ -80,6 +81,7 @@ const marcheCanineController = {
                     const results = await Promise.all(uploadPromises);
                     mediaUrls = results.map(result => result.secure_url);
                }
+               console.log(mediaUrls)
 
                // Create a new announcement document
                const newAnnouncement = new Announcement({
