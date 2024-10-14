@@ -45,8 +45,8 @@ const marcheCanineController = {
                     successMsg: req.flash('success')
                });
           } catch (err) {
-               console.error('Failed to fetch announcements:', err);
-               res.status(500).render('error', { message: 'Failed to fetch announcements' });
+               console.error('Error adding announcement:', JSON.stringify(err, null, 2)); // Detailed logging
+               res.status(500).render('error', { message: 'Failed to add announcement', error: JSON.stringify(err, null, 2) });
           }
      },
 
@@ -58,6 +58,8 @@ const marcheCanineController = {
      // POST: Add a new announcement (for sellers only)
      // POST: Add a new announcement (for sellers only)
      async addAnnouncement(req, res) {
+          console.log("Form Data:", req.body); // Log form data
+          console.log("Uploaded Files:", req.files); // Log uploaded media
           const { breed, description, price, location, number } = req.body;
 
           if (!breed || !description || !price || !location || !number) {
@@ -73,12 +75,24 @@ const marcheCanineController = {
 
                // Handle media uploads (images/videos) using Cloudinary
                let mediaUrls = [];
+
+               if (!req.files || req.files.length === 0) {
+                    return res.status(400).render('marketplace/newAnnouncement', {
+                         message: 'Please upload at least one image or video',
+                         title: 'Créer une nouvelle annonce'
+                    });
+               }
                if (req.files && req.files.length > 0) {
-                    const uploadPromises = req.files.map(file =>
-                         cloudinary.uploader.upload(file.path, { resource_type: "auto" })
-                    );
-                    const results = await Promise.all(uploadPromises);
-                    mediaUrls = results.map(result => result.secure_url);
+                    try {
+                         const uploadPromises = req.files.map(file =>
+                              cloudinary.uploader.upload(file.path, { resource_type: "auto" })
+                         );
+                         const results = await Promise.all(uploadPromises);
+                         mediaUrls = results.map(result => result.secure_url);
+                    } catch (uploadError) {
+                         console.error('Cloudinary upload error:', JSON.stringify(uploadError, null, 2)); // Log Cloudinary errors
+                         return res.status(500).render('error', { message: 'Error uploading media files', error: JSON.stringify(uploadError, null, 2) });
+                    }
                }
 
                // Create a new announcement document
@@ -95,13 +109,18 @@ const marcheCanineController = {
                });
 
                // Save the announcement to the database
-               await newAnnouncement.save();
+               try {
+                    await newAnnouncement.save();
+                    req.flash('success', "تم نشر إعلانك بنجاح ✅");
+                    res.redirect('/announcements');
+               } catch (dbError) {
+                    console.error('Database save error:', JSON.stringify(dbError, null, 2)); // Detailed DB error logging
+                    res.status(500).render('error', { message: 'Failed to save announcement to database', error: JSON.stringify(dbError, null, 2) });
+               }
 
-               req.flash('success', "تم نشر إعلانك بنجاح ✅");
-               res.redirect('/announcements');
           } catch (err) {
-               console.error('Error adding announcement:', err);
-               res.status(500).render('error', { message: 'Failed to add announcement' });
+               console.error('Error adding announcement:', JSON.stringify(err, null, 2)); // Detailed logging
+               res.status(500).render('error', { message: 'Failed to add announcement', error: JSON.stringify(err, null, 2) });
           }
      },
 

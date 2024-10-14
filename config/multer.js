@@ -6,26 +6,35 @@ const cloudinary = require('./cloudinary'); // Import the Cloudinary configurati
 // Configure multer to store files on Cloudinary
 const storage = new CloudinaryStorage({
      cloudinary: cloudinary,
-     params: {
-          folder: 'announcements', // Folder name in Cloudinary
-          resource_type: 'auto', // This will allow both images and videos to be uploaded
-          transformation: [
-               {
-                    overlay: {
-                         font_family: "Arial",
-                         font_size: 50, // Increase font size for a bigger watermark
-                         font_weight: "bold",
-                         text: "Ndressilik"
-                    },
-                    gravity: "center", // Center the watermark
-                    opacity: 30, // Adjust opacity as needed
-                    x: 0, // No horizontal offset
-                    y: 0  // No vertical offset
-               }
-          ]
+     params: async (req, file) => {
+          const isImage = file.mimetype.startsWith('image/');
 
+          // Apply transformations only if the file is an image
+          const transformations = isImage
+               ? [
+                    {
+                         overlay: {
+                              font_family: "Arial",
+                              font_size: 50,
+                              font_weight: "bold",
+                              text: "Ndressilik"
+                         },
+                         gravity: "center",
+                         opacity: 30,
+                         x: 0,
+                         y: 0
+                    }
+               ]
+               : [];
+
+          return {
+               folder: 'announcements',
+               resource_type: 'auto',
+               transformation: transformations,
+          };
      }
 });
+
 
 const upload = multer({ storage });
 
