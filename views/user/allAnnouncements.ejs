@@ -1,5 +1,6 @@
 <%- include('include/head.ejs') %>
      <%- include('include/navbar.ejs') %>
+
           <style>
                body {
                     font-family: 'Circular', -apple-system, BlinkMacSystemFont, Roboto, Helvetica Neue, sans-serif;
@@ -12,7 +13,7 @@
                     padding: 20px;
                }
 
-               .filter-section {
+               .sidebar {
                     background-color: white;
                     border-radius: 12px;
                     padding: 20px;
@@ -118,97 +119,155 @@
                     background-color: #000000;
                }
 
-               .sticky-filter-btn {
-                    position: fixed;
-                    bottom: 20px;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    background-color: #222222;
-                    color: white;
-                    border: none;
-                    padding: 12px 20px;
-                    border-radius: 24px;
-                    font-size: 16px;
-                    font-weight: 600;
-                    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-                    z-index: 1000;
-                    transition: all 0.3s ease;
+               .filter-tags {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 10px;
+                    margin-bottom: 20px;
                }
 
-               .sticky-filter-btn:hover {
-                    background-color: #000000;
+               .filter-tag {
+                    background-color: #F0F0F0;
+                    color: #222222;
+                    padding: 5px 10px;
+                    border-radius: 20px;
+                    font-size: 14px;
+                    display: flex;
+                    align-items: center;
                }
 
-               @media (min-width: 768px) {
+               .filter-tag .close {
+                    margin-left: 5px;
+                    cursor: pointer;
+               }
+
+               @media (max-width: 768px) {
+                    .sidebar {
+                         position: fixed;
+                         top: 0;
+                         left: -100%;
+                         width: 100%;
+                         height: 100%;
+                         z-index: 1000;
+                         transition: left 0.3s ease;
+                    }
+
+                    .sidebar.active {
+                         left: 0;
+                    }
+
                     .sticky-filter-btn {
-                         display: none;
+                         position: fixed;
+                         bottom: 20px;
+                         left: 50%;
+                         transform: translateX(-50%);
+                         background-color: #222222;
+                         color: white;
+                         border: none;
+                         padding: 12px 20px;
+                         border-radius: 24px;
+                         font-size: 16px;
+                         font-weight: 600;
+                         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+                         z-index: 1000;
                     }
                }
           </style>
 
           <div class="container-fluid">
-               <h1 class="text-center mb-4">Toutes les annonces</h1>
-
-               <!-- Filter Section (Hidden on Mobile) -->
-               <div class="filter-section d-none d-md-block" id="filterSection">
-                    <h2 class="filter-title">Filtrer les annonces</h2>
-                    <form action="/tous-les-annonces" method="GET">
-                         <input type="text" class="form-control" id="quickSearch" name="quickSearch" placeholder="Rechercher par race (ex: Labrador)" value="<%= filters.quickSearch || '' %>">
-
-                         <select class="form-select" id="animalType" name="animalType">
-                              <option value="">Tous les types d'animaux</option>
-                              <option value="dog" <%=filters.animalType==='dog' ? 'selected' : '' %>>Chien</option>
-                              <option value="cat" <%=filters.animalType==='cat' ? 'selected' : '' %>>Chat</option>
-                         </select>
-
-                         <select class="form-select" id="location" name="location">
-                              <option value="">Toutes les villes</option>
-                              <option value="casablanca" <%=filters.location==='casablanca' ? 'selected' : '' %>>Casablanca</option>
-                              <option value="rabat" <%=filters.location==='rabat' ? 'selected' : '' %>>Rabat</option>
-                              <option value="marrakech" <%=filters.location==='marrakech' ? 'selected' : '' %>>Marrakech</option>
-                         </select>
-
-                         <select class="form-select" id="gender" name="gender">
-                              <option value="">Tous les sexes</option>
-                              <option value="male" <%=filters.gender==='male' ? 'selected' : '' %>>Mâle</option>
-                              <option value="female" <%=filters.gender==='female' ? 'selected' : '' %>>Femelle</option>
-                         </select>
-
-                         <button type="submit" class="btn-filter">Appliquer les filtres</button>
-                    </form>
-
-               </div>
-
-               <!-- Announcements Listing -->
                <div class="row">
-                    <% if (announcements.length===0) { %>
-                         <div class="col-12">
-                              <p class="text-center">Aucune annonce trouvée. Essayez de modifier vos filtres.</p>
+                    <!-- Sidebar Filter (Hidden on Mobile) -->
+                    <div class="col-md-3 sidebar" id="filterSection">
+                         <h2 class="filter-title">Filtrer les annonces</h2>
+                         <form action="/tous-les-annonces" method="GET">
+                              <input type="text" class="form-control" id="quickSearch" name="quickSearch" placeholder="Rechercher par race (ex: Labrador)" value="<%= filters.quickSearch || '' %>">
+
+                              <select class="form-select" id="animalType" name="animalType">
+                                   <option value="">Tous les types d'animaux</option>
+                                   <option value="dog" <%=filters.animalType==='dog' ? 'selected' : '' %>>Chien</option>
+                                   <option value="cat" <%=filters.animalType==='cat' ? 'selected' : '' %>>Chat</option>
+                              </select>
+
+                              <select class="form-select" id="location" name="location">
+                                   <option value="">Toutes les villes</option>
+                                   <option value="casablanca" <%=filters.location==='casablanca' ? 'selected' : '' %>>Casablanca</option>
+                                   <option value="rabat" <%=filters.location==='rabat' ? 'selected' : '' %>>Rabat</option>
+                                   <option value="marrakech" <%=filters.location==='marrakech' ? 'selected' : '' %>>Marrakech</option>
+                              </select>
+
+                              <select class="form-select" id="gender" name="gender">
+                                   <option value="">Tous les sexes</option>
+                                   <option value="male" <%=filters.gender==='male' ? 'selected' : '' %>>Mâle</option>
+                                   <option value="female" <%=filters.gender==='female' ? 'selected' : '' %>>Femelle</option>
+                              </select>
+
+                              <button type="submit" class="btn-filter">Appliquer les filtres</button>
+                         </form>
+                    </div>
+
+                    <!-- Announcements Listing -->
+                    <div class="col-md-9">
+                         <h1 class="text-center mb-4">Toutes les annonces</h1>
+
+                         <!-- Filter Tags -->
+                         <div class="filter-tags">
+                              <% if (filters.quickSearch) { %>
+                                   <span class="filter-tag">
+                                        <%= filters.quickSearch %>
+                                             <span class="close">&times;</span>
+                                   </span>
+                                   <% } %>
+                                        <% if (filters.animalType) { %>
+                                             <span class="filter-tag">
+                                                  <%= filters.animalType==='dog' ? 'Chien' : 'Chat' %>
+                                                       <span class="close">&times;</span>
+                                             </span>
+                                             <% } %>
+                                                  <% if (filters.location) { %>
+                                                       <span class="filter-tag">
+                                                            <%= filters.location %>
+                                                                 <span class="close">&times;</span>
+                                                       </span>
+                                                       <% } %>
+                                                            <% if (filters.gender) { %>
+                                                                 <span class="filter-tag">
+                                                                      <%= filters.gender==='male' ? 'Mâle' : 'Femelle' %>
+                                                                           <span class="close">&times;</span>
+                                                                 </span>
+                                                                 <% } %>
                          </div>
-                         <% } else { %>
-                              <% announcements.forEach(announcement=> { %>
-                                   <div class="col-md-6 col-lg-4">
-                                        <div class="announcement-card">
-                                             <img src="<%= announcement.images[0] %>" class="announcement-image" alt="<%= announcement.breed %>">
-                                             <div class="card-body">
-                                                  <h3 class="card-title">
-                                                       <%= announcement.breed %>
-                                                  </h3>
-                                                  <p class="location"><i class="fas fa-map-marker-alt"></i>
-                                                       <%= announcement.location %>
-                                                  </p>
-                                                  <p class="gender"><i class="fas fa-venus-mars"></i>
-                                                       <%= announcement.gender==='male' ? 'Mâle' : 'Femelle' %>
-                                                  </p>
-                                                  <p class="card-text">
-                                                       <%= announcement.description.substring(0, 100) %>...
-                                                  </p>
-                                                  <a href="/announcement/<%= announcement._id %>" class="btn-details">Voir les détails</a>
-                                             </div>
-                                        </div>
+
+                         <div class="row">
+                              <% if (announcements.length===0) { %>
+                                   <div class="col-12">
+                                        <p class="text-center">Aucune annonce trouvée. Essayez de modifier vos filtres.</p>
                                    </div>
-                                   <% }) %>
-                                        <% } %>
+                                   <% } else { %>
+                                        <% announcements.forEach(announcement=> { %>
+                                             <div class="col-md-6 col-lg-4 col-6">
+                                                  <div class="announcement-card">
+                                                       <img src="<%= announcement.images[0] %>" class="announcement-image" alt="<%= announcement.breed %>">
+                                                       <div class="card-body">
+                                                            <h3 class="card-title">
+                                                                 <%= announcement.breed %>
+                                                            </h3>
+                                                            <p class="location"><i class="fas fa-map-marker-alt"></i>
+                                                                 <%= announcement.location %>
+                                                            </p>
+                                                            <p class="gender"><i class="fas fa-venus-mars"></i>
+                                                                 <%= announcement.gender==='male' ? 'Mâle' : 'Femelle' %>
+                                                            </p>
+                                                            <p class="card-text">
+                                                                 <%= announcement.description.substring(0, 100) %>...
+                                                            </p>
+                                                            <a href="/announcement/<%= announcement._id %>" class="btn-details">Voir les détails</a>
+                                                       </div>
+                                                  </div>
+                                             </div>
+                                             <% }) %>
+                                                  <% } %>
+                         </div>
+                    </div>
                </div>
           </div>
 
@@ -218,14 +277,16 @@
           <script>
                function toggleFilters() {
                     const filterSection = document.getElementById('filterSection');
-                    filterSection.classList.toggle('d-none');
-                    filterSection.classList.toggle('d-block');
-
-                    // Scroll to filters if they're now visible
-                    if (filterSection.classList.contains('d-block')) {
-                         filterSection.scrollIntoView({ behavior: 'smooth' });
-                    }
+                    filterSection.classList.toggle('active');
                }
+
+               // Close filter tags
+               document.querySelectorAll('.filter-tag .close').forEach(closeBtn => {
+                    closeBtn.addEventListener('click', function () {
+                         this.parentElement.remove();
+                         // Here you would also update the filter and reload the page
+                    });
+               });
           </script>
 
           <%- include('include/footer.ejs') %>

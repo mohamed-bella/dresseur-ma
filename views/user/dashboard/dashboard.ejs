@@ -2,169 +2,221 @@
      <%- include('includes/navbar.ejs') %>
           <%- include('includes/content.ejs') %>
                <!-- Add Announcement Modal -->
-          <div class="modal fade" id="announcementModal" tabindex="-1" aria-labelledby="announcementModalLabel" aria-hidden="true">
-               <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                         <div class="modal-header bg-primary text-white">
-                              <h5 class="modal-title" id="announcementModalLabel">Ajouter une Nouvelle Annonce</h5>
-                              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fermer"></button>
-                         </div>
-                         <div class="modal-body">
-                              <div class="progress mb-4">
-                                   <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+               <div class="modal fade" id="announcementModal" tabindex="-1" aria-labelledby="announcementModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                         <div class="modal-content">
+                              <div class="modal-header bg-primary text-white">
+                                   <h5 class="modal-title" id="announcementModalLabel">Ajouter une Nouvelle Annonce</h5>
+                                   <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fermer"></button>
                               </div>
-                              <form id="announcementForm" action="/announcements/new" method="POST" enctype="multipart/form-data">
-                                   <!-- Étape 1 : Type d'Annonce et Informations de Base -->
-                                   <div class="form-step" data-step="1">
-                                        <div class="text-center mb-4">
-                                             <!-- SVG remains unchanged -->
-                                        </div>
-                                        <h4 class="mb-3">Informations de Base</h4>
-                                        <div class="mb-3">
-                                             <label for="announcementType" class="form-label">Type d'Annonce*</label>
-                                             <select class="form-select" id="announcementType" name="announcementType" required>
-                                                  <option value="">Sélectionnez le type</option>
-                                                  <option value="sale">À Vendre</option>
-                                                  <option value="adoption">Pour Adoption</option>
-                                             </select>
-                                        </div>
-                                        <div class="mb-3">
-                                             <label for="animalType" class="form-label">Type d'Animal*</label>
-                                             <select class="form-select" id="animalType" name="animalType" required>
-                                                  <option value="">Sélectionnez le type d'animal</option>
-                                                  <option value="dog">Chien</option>
-                                                  <option value="cat">Chat</option>
-                                                  <option value="other">Autre</option>
-                                             </select>
-                                        </div>
-                                        <div class="mb-3">
-                                             <label for="breed" class="form-label">Race*</label>
-                                             <input type="text" class="form-control" id="breed" name="breed" required>
-                                        </div>
+                              <div class="modal-body">
+                                   <div class="progress mb-4">
+                                        <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
                                    </div>
-          
-                                   <!-- Étape 2 : Détails de l'Animal -->
-                                   <div class="form-step" data-step="2" style="display: none;">
-                                        <div class="text-center mb-4">
-                                             <!-- SVG remains unchanged -->
-                                        </div>
-                                        <h4 class="mb-3">Détails de l'Animal</h4>
-                                        <div class="mb-3">
-                                             <label class="form-label">Âge*</label>
-                                             <div class="btn-group w-100" role="group" aria-label="Groupe d'âge">
-                                                  <input type="radio" class="btn-check" name="age" id="agePuppy" value="puppy" required>
-                                                  <label class="btn btn-outline-primary" for="agePuppy">Chiot/Chaton</label>
-                                                  <input type="radio" class="btn-check" name="age" id="ageAdult" value="adult">
-                                                  <label class="btn btn-outline-primary" for="ageAdult">Adulte</label>
-                                                  <input type="radio" class="btn-check" name="age" id="ageSenior" value="senior">
-                                                  <label class="btn btn-outline-primary" for="ageSenior">Senior</label>
+                                   <form id="announcementForm" action="/announcements/new" method="POST" enctype="multipart/form-data">
+                                        <!-- Étape 1 : Type d'Annonce et Informations de Base -->
+                                        <div class="form-step" data-step="1">
+                                             <div class="text-center mb-4">
+                                                  <!-- SVG remains unchanged -->
+                                             </div>
+                                             <h4 class="mb-3">Informations de Base</h4>
+                                             <div class="mb-3">
+                                                  <label for="announcementType" class="form-label">Type d'Annonce*</label>
+                                                  <select class="form-select" id="announcementType" name="announcementType" required>
+                                                       <option value="">Sélectionnez le type</option>
+                                                       <option value="sale">À Vendre</option>
+                                                       <option value="adoption">Pour Adoption</option>
+                                                  </select>
+                                             </div>
+                                             <div class="mb-3">
+                                                  <label for="animalType" class="form-label">Type d'Animal*</label>
+                                                  <select class="form-select" id="animalType" name="animalType" required>
+                                                       <option value="">Sélectionnez le type d'animal</option>
+                                                       <option value="dog">Chien</option>
+                                                       <option value="cat">Chat</option>
+                                                  </select>
+                                             </div>
+                                             <div class="mb-3">
+                                                  <label for="breed" class="form-label">Race*</label>
+                                                  <input type="text" class="form-control" id="breed" name="breed" required>
                                              </div>
                                         </div>
-                                        <div class="mb-3">
-                                             <label class="form-label">Sexe*</label>
-                                             <div class="btn-group w-100" role="group" aria-label="Groupe de sexe">
-                                                  <input type="radio" class="btn-check" name="gender" id="genderMale" value="male" required>
-                                                  <label class="btn btn-outline-primary" for="genderMale">Mâle</label>
-                                                  <input type="radio" class="btn-check" name="gender" id="genderFemale" value="female">
-                                                  <label class="btn btn-outline-primary" for="genderFemale">Femelle</label>
-                                                  <input type="radio" class="btn-check" name="gender" id="genderUnknown" value="unknown">
-                                                  <label class="btn btn-outline-primary" for="genderUnknown">Je ne sais pas</label>
+
+                                        <!-- Étape 2 : Détails de l'Animal -->
+                                        <div class="form-step" data-step="2" style="display: none;">
+                                             <div class="text-center mb-4">
+                                                  <!-- SVG remains unchanged -->
+                                             </div>
+                                             <h4 class="mb-3">Détails de l'Animal</h4>
+                                             <div class="mb-3">
+                                                  <label class="form-label">Âge*</label>
+                                                  <div class="btn-group w-100" role="group" aria-label="Groupe d'âge">
+                                                       <input type="radio" class="btn-check" name="age" id="agePuppy" value="puppy" required>
+                                                       <label class="btn btn-outline-primary" for="agePuppy">Chiot/Chaton</label>
+                                                       <input type="radio" class="btn-check" name="age" id="ageAdult" value="adult">
+                                                       <label class="btn btn-outline-primary" for="ageAdult">Adulte</label>
+                                                       <input type="radio" class="btn-check" name="age" id="ageSenior" value="senior">
+                                                       <label class="btn btn-outline-primary" for="ageSenior">Senior</label>
+                                                  </div>
+                                             </div>
+                                             <div class="mb-3">
+                                                  <label class="form-label">Sexe*</label>
+                                                  <div class="btn-group w-100" role="group" aria-label="Groupe de sexe">
+                                                       <input type="radio" class="btn-check" name="gender" id="genderMale" value="male" required>
+                                                       <label class="btn btn-outline-primary" for="genderMale">Mâle</label>
+                                                       <input type="radio" class="btn-check" name="gender" id="genderFemale" value="female">
+                                                       <label class="btn btn-outline-primary" for="genderFemale">Femelle</label>
+                                                       <input type="radio" class="btn-check" name="gender" id="genderUnknown" value="unknown">
+                                                       <label class="btn btn-outline-primary" for="genderUnknown">Je ne sais pas</label>
+                                                  </div>
+                                             </div>
+                                             <div class="mb-3">
+                                                  <label class="form-label">Statut de Vaccination*</label>
+                                                  <div class="btn-group w-100" role="group" aria-label="Groupe de vaccination">
+                                                       <input type="radio" class="btn-check" name="vaccination" id="vaccinatedYes" value="yes" required>
+                                                       <label class="btn btn-outline-primary" for="vaccinatedYes">Vacciné</label>
+                                                       <input type="radio" class="btn-check" name="vaccination" id="vaccinatedNo" value="no">
+                                                       <label class="btn btn-outline-primary" for="vaccinatedNo">Non Vacciné</label>
+                                                       <input type="radio" class="btn-check" name="vaccination" id="vaccinatedUnknown" value="unknown">
+                                                       <label class="btn btn-outline-primary" for="vaccinatedUnknown">Inconnu</label>
+                                                  </div>
+                                             </div>
+                                             <div class="mb-3">
+                                                  <label class="form-label">Statut de Stérilisation*</label>
+                                                  <div class="btn-group w-100" role="group" aria-label="Groupe de stérilisation">
+                                                       <input type="radio" class="btn-check" name="sterilization" id="sterilizedYes" value="yes" required>
+                                                       <label class="btn btn-outline-primary" for="sterilizedYes">Stérilisé</label>
+                                                       <input type="radio" class="btn-check" name="sterilization" id="sterilizedNo" value="no">
+                                                       <label class="btn btn-outline-primary" for="sterilizedNo">Non Stérilisé</label>
+                                                       <input type="radio" class="btn-check" name="sterilization" id="sterilizedUnknown" value="unknown">
+                                                       <label class="btn btn-outline-primary" for="sterilizedUnknown">Inconnu</label>
+                                                  </div>
                                              </div>
                                         </div>
-                                        <div class="mb-3">
-                                             <label class="form-label">Statut de Vaccination*</label>
-                                             <div class="btn-group w-100" role="group" aria-label="Groupe de vaccination">
-                                                  <input type="radio" class="btn-check" name="vaccination" id="vaccinatedYes" value="yes" required>
-                                                  <label class="btn btn-outline-primary" for="vaccinatedYes">Vacciné</label>
-                                                  <input type="radio" class="btn-check" name="vaccination" id="vaccinatedNo" value="no">
-                                                  <label class="btn btn-outline-primary" for="vaccinatedNo">Non Vacciné</label>
-                                                  <input type="radio" class="btn-check" name="vaccination" id="vaccinatedUnknown" value="unknown">
-                                                  <label class="btn btn-outline-primary" for="vaccinatedUnknown">Inconnu</label>
+
+                                        <!-- Étape 3 : Prix et Localisation -->
+                                        <div class="form-step" data-step="3" style="display: none;">
+                                             <div class="text-center mb-4">
+                                                  <!-- SVG remains unchanged -->
+                                             </div>
+                                             <h4 class="mb-3">Prix et Localisation</h4>
+                                             <div class="mb-3" id="priceField">
+                                                  <label for="price" class="form-label">Prix (MAD)*</label>
+                                                  <input type="number" class="form-control" id="price" name="price" min="0" required>
+                                             </div>
+                                             <div class="mb-3" id="adoptionFeeField" style="display: none;">
+                                                  <label for="adoptionFee" class="form-label">Frais d'Adoption (MAD)</label>
+                                                  <input type="number" class="form-control" id="adoptionFee" name="adoptionFee" min="0">
+                                             </div>
+                                             <div class="mb-3">
+                                                  <label for="location" class="form-label">Localisation*</label>
+                                                  <select class="form-select" id="location" name="location" required>
+                                                       <option value="" selected disabled>Choisissez une ville</option>
+
+                                                       <!-- Top 5 cities -->
+                                                       <option value="casablanca">Casablanca</option>
+                                                       <option value="rabat">Rabat</option>
+                                                       <option value="marrakech">Marrakech</option>
+                                                       <option value="fes">Fès</option>
+                                                       <option value="tanger">Tanger</option>
+
+                                                       <!-- Cities A to Z -->
+                                                       <option value="agadir">Agadir</option>
+                                                       <option value="ait_melloul">Aït Melloul</option>
+                                                       <option value="al_hoceima">Al Hoceïma</option>
+                                                       <option value="assilah">Asilah</option>
+                                                       <option value="azrou">Azrou</option>
+                                                       <option value="beni_mellal">Béni Mellal</option>
+                                                       <option value="ben_guerir">Ben Guerir</option>
+                                                       <option value="berkane">Berkane</option>
+                                                       <option value="berrechid">Berrechid</option>
+                                                       <option value="boujdour">Boujdour</option>
+                                                       <option value="chefchaouen">Chefchaouen</option>
+                                                       <option value="dakhla">Dakhla</option>
+                                                       <option value="el_hajeb">El Hajeb</option>
+                                                       <option value="el_jadida">El Jadida</option>
+                                                       <option value="errachidia">Errachidia</option>
+                                                       <option value="essaouira">Essaouira</option>
+                                                       <option value="fes">Fès</option>
+                                                       <option value="guelmim">Guelmim</option>
+                                                       <option value="ifran">Ifrane</option>
+                                                       <option value="kenitra">Kénitra</option>
+                                                       <option value="khemisset">Khémisset</option>
+                                                       <option value="khouribga">Khouribga</option>
+                                                       <option value="ksar_el_kebir">Ksar El Kébir</option>
+                                                       <option value="laayoune">Laâyoune</option>
+                                                       <option value="larache">Larache</option>
+                                                       <option value="marrakech">Marrakech</option>
+                                                       <option value="martil">Martil</option>
+                                                       <option value="meknes">Meknès</option>
+                                                       <option value="midelt">Midelt</option>
+                                                       <option value="mohammedia">Mohammedia</option>
+                                                       <option value="nador">Nador</option>
+                                                       <option value="ouarzazate">Ouarzazate</option>
+                                                       <option value="oujda">Oujda</option>
+                                                       <option value="safi">Safi</option>
+                                                       <option value="sale">Salé</option>
+                                                       <option value="settat">Settat</option>
+                                                       <option value="sidi_ifni">Sidi Ifni</option>
+                                                       <option value="sidi_kacem">Sidi Kacem</option>
+                                                       <option value="smara">Smara</option>
+                                                       <option value="tangier">Tanger</option>
+                                                       <option value="tan_tan">Tan-Tan</option>
+                                                       <option value="tarfaya">Tarfaya</option>
+                                                       <option value="taourirt">Taourirt</option>
+                                                       <option value="taza">Taza</option>
+                                                       <option value="tetouan">Tétouan</option>
+                                                       <option value="tinghir">Tinghir</option>
+                                                       <option value="tiznit">Tiznit</option>
+                                                       <option value="zagora">Zagora</option>
+
+                                                  </select>
                                              </div>
                                         </div>
-                                        <div class="mb-3">
-                                             <label class="form-label">Statut de Stérilisation*</label>
-                                             <div class="btn-group w-100" role="group" aria-label="Groupe de stérilisation">
-                                                  <input type="radio" class="btn-check" name="sterilization" id="sterilizedYes" value="yes" required>
-                                                  <label class="btn btn-outline-primary" for="sterilizedYes">Stérilisé</label>
-                                                  <input type="radio" class="btn-check" name="sterilization" id="sterilizedNo" value="no">
-                                                  <label class="btn btn-outline-primary" for="sterilizedNo">Non Stérilisé</label>
-                                                  <input type="radio" class="btn-check" name="sterilization" id="sterilizedUnknown" value="unknown">
-                                                  <label class="btn btn-outline-primary" for="sterilizedUnknown">Inconnu</label>
+
+                                        <!-- Étape 4 : Informations de Contact et Description -->
+                                        <div class="form-step" data-step="4" style="display: none;">
+                                             <div class="text-center mb-4">
+                                                  <!-- SVG remains unchanged -->
+                                             </div>
+                                             <h4 class="mb-3">Contact et Description</h4>
+                                             <div class="mb-3">
+                                                  <label for="whatsapp" class="form-label">Numéro WhatsApp*</label>
+                                                  <input type="tel" class="form-control" id="whatsapp" name="whatsapp" required>
+                                             </div>
+                                             <div class="mb-3">
+                                                  <label for="email" class="form-label">Email (Optionnel)</label>
+                                                  <input type="email" class="form-control" id="email" name="email">
+                                             </div>
+                                             <div class="mb-3">
+                                                  <label for="description" class="form-label">Description*</label>
+                                                  <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
                                              </div>
                                         </div>
-                                   </div>
-          
-                                   <!-- Étape 3 : Prix et Localisation -->
-                                   <div class="form-step" data-step="3" style="display: none;">
-                                        <div class="text-center mb-4">
-                                             <!-- SVG remains unchanged -->
+
+                                        <!-- Étape 5 : Téléchargement d'Images -->
+                                        <div class="form-step" data-step="5" style="display: none;">
+                                             <div class="text-center mb-4">
+                                                  <!-- SVG remains unchanged -->
+                                             </div>
+                                             <h4 class="mb-3">Télécharger des Images</h4>
+                                             <div class="mb-3">
+                                                  <label for="images" class="form-label">Télécharger des Images*</label>
+                                                  <input class="form-control" type="file" id="images" name="images" multiple accept="image/*" required>
+                                             </div>
+                                             <div id="imagePreview" class="mb-3 d-flex flex-wrap gap-2"></div>
                                         </div>
-                                        <h4 class="mb-3">Prix et Localisation</h4>
-                                        <div class="mb-3" id="priceField">
-                                             <label for="price" class="form-label">Prix (MAD)*</label>
-                                             <input type="number" class="form-control" id="price" name="price" min="0" required>
+
+                                        <div class="d-flex justify-content-between mt-4">
+                                             <button type="button" class="btn btn-secondary" id="prevBtn" style="display: none;">Précédent</button>
+                                             <button type="button" class="btn btn-primary" id="nextBtn">Suivant</button>
+                                             <button type="submit" class="btn btn-success" id="submitBtn" style="display: none;">Soumettre</button>
                                         </div>
-                                        <div class="mb-3" id="adoptionFeeField" style="display: none;">
-                                             <label for="adoptionFee" class="form-label">Frais d'Adoption (MAD)</label>
-                                             <input type="number" class="form-control" id="adoptionFee" name="adoptionFee" min="0">
-                                        </div>
-                                        <div class="mb-3">
-                                             <label for="location" class="form-label">Localisation*</label>
-                                             <select class="form-select" id="location" name="location" required>
-                                                  <option value="">Sélectionnez la ville</option>
-                                                  <option value="casablanca">Casablanca</option>
-                                                  <option value="rabat">Rabat</option>
-                                                  <option value="marrakech">Marrakech</option>
-                                                  <option value="fes">Fès</option>
-                                                  <!-- Ajoutez plus de villes marocaines si nécessaire -->
-                                             </select>
-                                        </div>
-                                   </div>
-          
-                                   <!-- Étape 4 : Informations de Contact et Description -->
-                                   <div class="form-step" data-step="4" style="display: none;">
-                                        <div class="text-center mb-4">
-                                             <!-- SVG remains unchanged -->
-                                        </div>
-                                        <h4 class="mb-3">Contact et Description</h4>
-                                        <div class="mb-3">
-                                             <label for="whatsapp" class="form-label">Numéro WhatsApp*</label>
-                                             <input type="tel" class="form-control" id="whatsapp" name="whatsapp" required>
-                                        </div>
-                                        <div class="mb-3">
-                                             <label for="email" class="form-label">Email (Optionnel)</label>
-                                             <input type="email" class="form-control" id="email" name="email">
-                                        </div>
-                                        <div class="mb-3">
-                                             <label for="description" class="form-label">Description*</label>
-                                             <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
-                                        </div>
-                                   </div>
-          
-                                   <!-- Étape 5 : Téléchargement d'Images -->
-                                   <div class="form-step" data-step="5" style="display: none;">
-                                        <div class="text-center mb-4">
-                                             <!-- SVG remains unchanged -->
-                                        </div>
-                                        <h4 class="mb-3">Télécharger des Images</h4>
-                                        <div class="mb-3">
-                                             <label for="images" class="form-label">Télécharger des Images*</label>
-                                             <input class="form-control" type="file" id="images" name="images" multiple accept="image/*" required>
-                                        </div>
-                                        <div id="imagePreview" class="mb-3 d-flex flex-wrap gap-2"></div>
-                                   </div>
-          
-                                   <div class="d-flex justify-content-between mt-4">
-                                        <button type="button" class="btn btn-secondary" id="prevBtn" style="display: none;">Précédent</button>
-                                        <button type="button" class="btn btn-primary" id="nextBtn">Suivant</button>
-                                        <button type="submit" class="btn btn-success" id="submitBtn" style="display: none;">Soumettre</button>
-                                   </div>
-                              </form>
+                                   </form>
+                              </div>
                          </div>
                     </div>
                </div>
-          </div>
 
                <style>
                     .form-step {
