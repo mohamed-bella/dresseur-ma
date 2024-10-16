@@ -1,0 +1,158 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-white py-2 fixed-top">
+     <div class="container">
+          <a class="navbar-brand" href="#">Ndressilik</a>
+
+          <!-- Mobile view buttons -->
+          <div class="d-flex align-items-center d-lg-none  d-md-none">
+               <a href="/auth/google" class="btn btn-pink me-2">Ajouter</a>
+               <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarOffcanvas" aria-controls="navbarOffcanvas">
+                    <span class="navbar-toggler-icon"></span>
+               </button>
+          </div>
+
+          <!-- Desktop view menu -->
+          <div class="collapse navbar-collapse" id="navbarNav">
+               <ul class="navbar-nav ms-auto align-items-center">
+
+                    <% if (user) { %>
+                         <li class="nav-item">
+                              <a class="nav-link" href="/dashboard"><i class="bi bi-speedometer2"></i> Dashboard</a>
+                         </li>
+                         <li class="nav-item">
+                              <a class="nav-link" href="/logout"><i class="bi bi-box-arrow-right"></i> Logout</a>
+                         </li>
+                         <% } else { %>
+                              <li class="nav-item">
+                                   <a class="nav-link" href="/auth/google"><i class="bi bi-google"></i> Log in with Google</a>
+                              </li>
+                              <% } %>
+                                   <li class="nav-item d-none d-lg-block">
+                                        <a href="/auth/google" class="btn btn-pink ms-2">Ajouter une annonce</a>
+                                   </li>
+               </ul>
+          </div>
+
+          <!-- Mobile view offcanvas -->
+          <div class="offcanvas offcanvas-end d-lg-none" tabindex="-1" id="navbarOffcanvas" aria-labelledby="navbarOffcanvasLabel">
+               <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="navbarOffcanvasLabel">Menu</h5>
+                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+               </div>
+               <div class="offcanvas-body">
+                    <ul class="navbar-nav">
+
+                         <% if (user) { %>
+                              <li class="nav-item">
+                                   <a class="nav-link" href="/dashboard"><i class="bi bi-speedometer2"></i> Dashboard</a>
+                              </li>
+                              <li class="nav-item">
+                                   <a class="nav-link" href="/logout"><i class="bi bi-box-arrow-right"></i> Logout</a>
+                              </li>
+                              <% } else { %>
+                                   <li class="nav-item">
+                                        <a class="nav-link" href="/auth/google"><i class="bi bi-google"></i> Log in with Google</a>
+                                   </li>
+                                   <% } %>
+                    </ul>
+               </div>
+          </div>
+     </div>
+</nav>
+
+
+<style>
+     /* Custom CSS for responsive navbar */
+     body {
+          padding-top: 56px;
+          /* Adjust this value based on your navbar height */
+     }
+
+     .navbar {
+          box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
+     }
+
+     .navbar-spacer {
+          height: 56px;
+          /* Should match the navbar height */
+     }
+
+     .navbar-brand {
+          font-size: 1.2rem;
+     }
+
+     .btn-pink {
+          background-color: #FF385C;
+          color: white;
+          border: none;
+          padding: 8px 16px;
+          border-radius: 24px;
+          font-weight: bold;
+          transition: background-color 0.3s ease;
+     }
+
+     .btn-pink:hover {
+          background-color: #E61E4D;
+          color: white;
+     }
+
+     .navbar-toggler {
+          padding: 4px 8px;
+          font-size: 1rem;
+     }
+
+     @media (max-width: 991.98px) {
+          .offcanvas {
+               width: 75%;
+               max-width: 300px;
+          }
+
+     }
+
+     .offcanvas-header,
+     .offcanvas-body {
+          padding-left: 20px;
+          padding-right: 20px;
+     }
+
+     .offcanvas-title {
+          font-weight: bold;
+     }
+
+     .navbar-nav .nav-link {
+          padding: 10px 0;
+     }
+
+     @media (min-width: 992px) {
+          body {
+               padding-top: 72px;
+               /* Adjust for larger navbar on desktop */
+          }
+
+          .navbar-spacer {
+               height: 72px;
+          }
+
+          .navbar-nav .nav-link {
+               padding: 8px 16px;
+          }
+
+          .btn-pink {
+               padding: 8px 16px;
+          }
+     }
+</style>
+
+<script>
+     document.addEventListener('DOMContentLoaded', function () {
+          var offcanvas = document.getElementById('navbarOffcanvas');
+          var bsOffcanvas = new bootstrap.Offcanvas(offcanvas);
+
+          // Close the offcanvas when a nav link is clicked
+          var navLinks = offcanvas.querySelectorAll('.nav-link');
+          navLinks.forEach(function (navLink) {
+               navLink.addEventListener('click', function () {
+                    bsOffcanvas.hide();
+               });
+          });
+     });
+</script>

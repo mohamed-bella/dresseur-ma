@@ -1,0 +1,51 @@
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+     document.addEventListener('DOMContentLoaded', function () {
+          const sidebar = document.getElementById('sidebar');
+          const content = document.getElementById('content');
+          const sidebarCollapse = document.getElementById('sidebarCollapse');
+
+          sidebarCollapse.addEventListener('click', function () {
+               sidebar.classList.toggle('active');
+               content.classList.toggle('active');
+          });
+
+          const addAnnouncementBtn = document.getElementById('addAnnouncementBtn');
+          const announcementModal = new bootstrap.Modal(document.getElementById('announcementModal'));
+
+          addAnnouncementBtn.addEventListener('click', function (e) {
+               e.preventDefault();
+               announcementModal.show();
+          });
+
+          const imageInput = document.getElementById('images');
+          const imagePreview = document.getElementById('imagePreview');
+
+          imageInput.addEventListener('change', function () {
+               imagePreview.innerHTML = '';
+               for (let i = 0; i < this.files.length; i++) {
+                    const file = this.files[i];
+                    if (file.type.startsWith('image/')) {
+                         const img = document.createElement('img');
+                         img.classList.add('img-thumbnail', 'm-1');
+                         img.style.width = '100px';
+                         img.style.height = '100px';
+                         img.style.objectFit = 'cover';
+                         img.file = file;
+                         imagePreview.appendChild(img);
+
+                         const reader = new FileReader();
+                         reader.onload = (function (aImg) {
+                              return function (e) {
+                                   aImg.src = e.target.result;
+                              };
+                         })(img);
+                         reader.readAsDataURL(file);
+                    }
+               }
+          });
+     });
+</script>
+</body>
+
+</html>

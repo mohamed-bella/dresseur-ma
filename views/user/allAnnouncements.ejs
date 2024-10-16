@@ -1,0 +1,231 @@
+<%- include('include/head.ejs') %>
+     <%- include('include/navbar.ejs') %>
+          <style>
+               body {
+                    font-family: 'Circular', -apple-system, BlinkMacSystemFont, Roboto, Helvetica Neue, sans-serif;
+                    color: #222222;
+                    background-color: #f7f7f7;
+                    line-height: 1.43;
+               }
+
+               .container-fluid {
+                    padding: 20px;
+               }
+
+               .filter-section {
+                    background-color: white;
+                    border-radius: 12px;
+                    padding: 20px;
+                    margin-bottom: 20px;
+                    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+               }
+
+               .filter-title {
+                    font-size: 18px;
+                    font-weight: 600;
+                    margin-bottom: 15px;
+               }
+
+               .form-control,
+               .form-select {
+                    margin-bottom: 15px;
+                    border: 1px solid #ddd;
+                    border-radius: 8px;
+                    padding: 12px;
+                    font-size: 16px;
+                    transition: border-color 0.3s ease;
+               }
+
+               .form-control:focus,
+               .form-select:focus {
+                    border-color: #222222;
+                    outline: none;
+                    box-shadow: none;
+               }
+
+               .btn-filter {
+                    background-color: #FF385C;
+                    color: white;
+                    border: none;
+                    padding: 12px 20px;
+                    border-radius: 8px;
+                    font-size: 16px;
+                    font-weight: 600;
+                    width: 100%;
+                    transition: background-color 0.3s ease;
+               }
+
+               .btn-filter:hover {
+                    background-color: #E31C5F;
+               }
+
+               .announcement-card {
+                    background-color: white;
+                    border-radius: 12px;
+                    overflow: hidden;
+                    margin-bottom: 20px;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                    transition: transform 0.3s ease, box-shadow 0.3s ease;
+               }
+
+               .announcement-card:hover {
+                    transform: translateY(-5px);
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+               }
+
+               .announcement-image {
+                    width: 100%;
+                    height: 200px;
+                    object-fit: cover;
+               }
+
+               .card-body {
+                    padding: 16px;
+               }
+
+               .card-title {
+                    font-size: 18px;
+                    font-weight: 600;
+                    margin-bottom: 8px;
+               }
+
+               .card-text {
+                    font-size: 14px;
+                    color: #717171;
+                    margin-bottom: 12px;
+               }
+
+               .location,
+               .gender {
+                    font-size: 14px;
+                    color: #717171;
+                    margin-bottom: 4px;
+               }
+
+               .btn-details {
+                    background-color: #222222;
+                    color: white;
+                    border: none;
+                    padding: 10px 15px;
+                    border-radius: 8px;
+                    font-size: 14px;
+                    font-weight: 600;
+                    width: 100%;
+                    transition: background-color 0.3s ease;
+               }
+
+               .btn-details:hover {
+                    background-color: #000000;
+               }
+
+               .sticky-filter-btn {
+                    position: fixed;
+                    bottom: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background-color: #222222;
+                    color: white;
+                    border: none;
+                    padding: 12px 20px;
+                    border-radius: 24px;
+                    font-size: 16px;
+                    font-weight: 600;
+                    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+                    z-index: 1000;
+                    transition: all 0.3s ease;
+               }
+
+               .sticky-filter-btn:hover {
+                    background-color: #000000;
+               }
+
+               @media (min-width: 768px) {
+                    .sticky-filter-btn {
+                         display: none;
+                    }
+               }
+          </style>
+
+          <div class="container-fluid">
+               <h1 class="text-center mb-4">Toutes les annonces</h1>
+
+               <!-- Filter Section (Hidden on Mobile) -->
+               <div class="filter-section d-none d-md-block" id="filterSection">
+                    <h2 class="filter-title">Filtrer les annonces</h2>
+                    <form action="/tous-les-annonces" method="GET">
+                         <input type="text" class="form-control" id="quickSearch" name="quickSearch" placeholder="Rechercher par race (ex: Labrador)" value="<%= filters.quickSearch || '' %>">
+
+                         <select class="form-select" id="animalType" name="animalType">
+                              <option value="">Tous les types d'animaux</option>
+                              <option value="dog" <%=filters.animalType==='dog' ? 'selected' : '' %>>Chien</option>
+                              <option value="cat" <%=filters.animalType==='cat' ? 'selected' : '' %>>Chat</option>
+                         </select>
+
+                         <select class="form-select" id="location" name="location">
+                              <option value="">Toutes les villes</option>
+                              <option value="casablanca" <%=filters.location==='casablanca' ? 'selected' : '' %>>Casablanca</option>
+                              <option value="rabat" <%=filters.location==='rabat' ? 'selected' : '' %>>Rabat</option>
+                              <option value="marrakech" <%=filters.location==='marrakech' ? 'selected' : '' %>>Marrakech</option>
+                         </select>
+
+                         <select class="form-select" id="gender" name="gender">
+                              <option value="">Tous les sexes</option>
+                              <option value="male" <%=filters.gender==='male' ? 'selected' : '' %>>Mâle</option>
+                              <option value="female" <%=filters.gender==='female' ? 'selected' : '' %>>Femelle</option>
+                         </select>
+
+                         <button type="submit" class="btn-filter">Appliquer les filtres</button>
+                    </form>
+
+               </div>
+
+               <!-- Announcements Listing -->
+               <div class="row">
+                    <% if (announcements.length===0) { %>
+                         <div class="col-12">
+                              <p class="text-center">Aucune annonce trouvée. Essayez de modifier vos filtres.</p>
+                         </div>
+                         <% } else { %>
+                              <% announcements.forEach(announcement=> { %>
+                                   <div class="col-md-6 col-lg-4">
+                                        <div class="announcement-card">
+                                             <img src="<%= announcement.images[0] %>" class="announcement-image" alt="<%= announcement.breed %>">
+                                             <div class="card-body">
+                                                  <h3 class="card-title">
+                                                       <%= announcement.breed %>
+                                                  </h3>
+                                                  <p class="location"><i class="fas fa-map-marker-alt"></i>
+                                                       <%= announcement.location %>
+                                                  </p>
+                                                  <p class="gender"><i class="fas fa-venus-mars"></i>
+                                                       <%= announcement.gender==='male' ? 'Mâle' : 'Femelle' %>
+                                                  </p>
+                                                  <p class="card-text">
+                                                       <%= announcement.description.substring(0, 100) %>...
+                                                  </p>
+                                                  <a href="/announcement/<%= announcement._id %>" class="btn-details">Voir les détails</a>
+                                             </div>
+                                        </div>
+                                   </div>
+                                   <% }) %>
+                                        <% } %>
+               </div>
+          </div>
+
+          <!-- Sticky Filter Button (Mobile Only) -->
+          <button class="sticky-filter-btn d-md-none" onclick="toggleFilters()">Filtrer les annonces</button>
+
+          <script>
+               function toggleFilters() {
+                    const filterSection = document.getElementById('filterSection');
+                    filterSection.classList.toggle('d-none');
+                    filterSection.classList.toggle('d-block');
+
+                    // Scroll to filters if they're now visible
+                    if (filterSection.classList.contains('d-block')) {
+                         filterSection.scrollIntoView({ behavior: 'smooth' });
+                    }
+               }
+          </script>
+
+          <%- include('include/footer.ejs') %>

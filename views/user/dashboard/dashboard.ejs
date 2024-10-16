@@ -1,0 +1,343 @@
+<%- include('includes/head.ejs') %>
+     <%- include('includes/navbar.ejs') %>
+          <%- include('includes/content.ejs') %>
+               <!-- Add Announcement Modal -->
+          <div class="modal fade" id="announcementModal" tabindex="-1" aria-labelledby="announcementModalLabel" aria-hidden="true">
+               <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                         <div class="modal-header bg-primary text-white">
+                              <h5 class="modal-title" id="announcementModalLabel">Ajouter une Nouvelle Annonce</h5>
+                              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                         </div>
+                         <div class="modal-body">
+                              <div class="progress mb-4">
+                                   <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                              </div>
+                              <form id="announcementForm" action="/announcements/new" method="POST" enctype="multipart/form-data">
+                                   <!-- Étape 1 : Type d'Annonce et Informations de Base -->
+                                   <div class="form-step" data-step="1">
+                                        <div class="text-center mb-4">
+                                             <!-- SVG remains unchanged -->
+                                        </div>
+                                        <h4 class="mb-3">Informations de Base</h4>
+                                        <div class="mb-3">
+                                             <label for="announcementType" class="form-label">Type d'Annonce*</label>
+                                             <select class="form-select" id="announcementType" name="announcementType" required>
+                                                  <option value="">Sélectionnez le type</option>
+                                                  <option value="sale">À Vendre</option>
+                                                  <option value="adoption">Pour Adoption</option>
+                                             </select>
+                                        </div>
+                                        <div class="mb-3">
+                                             <label for="animalType" class="form-label">Type d'Animal*</label>
+                                             <select class="form-select" id="animalType" name="animalType" required>
+                                                  <option value="">Sélectionnez le type d'animal</option>
+                                                  <option value="dog">Chien</option>
+                                                  <option value="cat">Chat</option>
+                                                  <option value="other">Autre</option>
+                                             </select>
+                                        </div>
+                                        <div class="mb-3">
+                                             <label for="breed" class="form-label">Race*</label>
+                                             <input type="text" class="form-control" id="breed" name="breed" required>
+                                        </div>
+                                   </div>
+          
+                                   <!-- Étape 2 : Détails de l'Animal -->
+                                   <div class="form-step" data-step="2" style="display: none;">
+                                        <div class="text-center mb-4">
+                                             <!-- SVG remains unchanged -->
+                                        </div>
+                                        <h4 class="mb-3">Détails de l'Animal</h4>
+                                        <div class="mb-3">
+                                             <label class="form-label">Âge*</label>
+                                             <div class="btn-group w-100" role="group" aria-label="Groupe d'âge">
+                                                  <input type="radio" class="btn-check" name="age" id="agePuppy" value="puppy" required>
+                                                  <label class="btn btn-outline-primary" for="agePuppy">Chiot/Chaton</label>
+                                                  <input type="radio" class="btn-check" name="age" id="ageAdult" value="adult">
+                                                  <label class="btn btn-outline-primary" for="ageAdult">Adulte</label>
+                                                  <input type="radio" class="btn-check" name="age" id="ageSenior" value="senior">
+                                                  <label class="btn btn-outline-primary" for="ageSenior">Senior</label>
+                                             </div>
+                                        </div>
+                                        <div class="mb-3">
+                                             <label class="form-label">Sexe*</label>
+                                             <div class="btn-group w-100" role="group" aria-label="Groupe de sexe">
+                                                  <input type="radio" class="btn-check" name="gender" id="genderMale" value="male" required>
+                                                  <label class="btn btn-outline-primary" for="genderMale">Mâle</label>
+                                                  <input type="radio" class="btn-check" name="gender" id="genderFemale" value="female">
+                                                  <label class="btn btn-outline-primary" for="genderFemale">Femelle</label>
+                                                  <input type="radio" class="btn-check" name="gender" id="genderUnknown" value="unknown">
+                                                  <label class="btn btn-outline-primary" for="genderUnknown">Je ne sais pas</label>
+                                             </div>
+                                        </div>
+                                        <div class="mb-3">
+                                             <label class="form-label">Statut de Vaccination*</label>
+                                             <div class="btn-group w-100" role="group" aria-label="Groupe de vaccination">
+                                                  <input type="radio" class="btn-check" name="vaccination" id="vaccinatedYes" value="yes" required>
+                                                  <label class="btn btn-outline-primary" for="vaccinatedYes">Vacciné</label>
+                                                  <input type="radio" class="btn-check" name="vaccination" id="vaccinatedNo" value="no">
+                                                  <label class="btn btn-outline-primary" for="vaccinatedNo">Non Vacciné</label>
+                                                  <input type="radio" class="btn-check" name="vaccination" id="vaccinatedUnknown" value="unknown">
+                                                  <label class="btn btn-outline-primary" for="vaccinatedUnknown">Inconnu</label>
+                                             </div>
+                                        </div>
+                                        <div class="mb-3">
+                                             <label class="form-label">Statut de Stérilisation*</label>
+                                             <div class="btn-group w-100" role="group" aria-label="Groupe de stérilisation">
+                                                  <input type="radio" class="btn-check" name="sterilization" id="sterilizedYes" value="yes" required>
+                                                  <label class="btn btn-outline-primary" for="sterilizedYes">Stérilisé</label>
+                                                  <input type="radio" class="btn-check" name="sterilization" id="sterilizedNo" value="no">
+                                                  <label class="btn btn-outline-primary" for="sterilizedNo">Non Stérilisé</label>
+                                                  <input type="radio" class="btn-check" name="sterilization" id="sterilizedUnknown" value="unknown">
+                                                  <label class="btn btn-outline-primary" for="sterilizedUnknown">Inconnu</label>
+                                             </div>
+                                        </div>
+                                   </div>
+          
+                                   <!-- Étape 3 : Prix et Localisation -->
+                                   <div class="form-step" data-step="3" style="display: none;">
+                                        <div class="text-center mb-4">
+                                             <!-- SVG remains unchanged -->
+                                        </div>
+                                        <h4 class="mb-3">Prix et Localisation</h4>
+                                        <div class="mb-3" id="priceField">
+                                             <label for="price" class="form-label">Prix (MAD)*</label>
+                                             <input type="number" class="form-control" id="price" name="price" min="0" required>
+                                        </div>
+                                        <div class="mb-3" id="adoptionFeeField" style="display: none;">
+                                             <label for="adoptionFee" class="form-label">Frais d'Adoption (MAD)</label>
+                                             <input type="number" class="form-control" id="adoptionFee" name="adoptionFee" min="0">
+                                        </div>
+                                        <div class="mb-3">
+                                             <label for="location" class="form-label">Localisation*</label>
+                                             <select class="form-select" id="location" name="location" required>
+                                                  <option value="">Sélectionnez la ville</option>
+                                                  <option value="casablanca">Casablanca</option>
+                                                  <option value="rabat">Rabat</option>
+                                                  <option value="marrakech">Marrakech</option>
+                                                  <option value="fes">Fès</option>
+                                                  <!-- Ajoutez plus de villes marocaines si nécessaire -->
+                                             </select>
+                                        </div>
+                                   </div>
+          
+                                   <!-- Étape 4 : Informations de Contact et Description -->
+                                   <div class="form-step" data-step="4" style="display: none;">
+                                        <div class="text-center mb-4">
+                                             <!-- SVG remains unchanged -->
+                                        </div>
+                                        <h4 class="mb-3">Contact et Description</h4>
+                                        <div class="mb-3">
+                                             <label for="whatsapp" class="form-label">Numéro WhatsApp*</label>
+                                             <input type="tel" class="form-control" id="whatsapp" name="whatsapp" required>
+                                        </div>
+                                        <div class="mb-3">
+                                             <label for="email" class="form-label">Email (Optionnel)</label>
+                                             <input type="email" class="form-control" id="email" name="email">
+                                        </div>
+                                        <div class="mb-3">
+                                             <label for="description" class="form-label">Description*</label>
+                                             <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+                                        </div>
+                                   </div>
+          
+                                   <!-- Étape 5 : Téléchargement d'Images -->
+                                   <div class="form-step" data-step="5" style="display: none;">
+                                        <div class="text-center mb-4">
+                                             <!-- SVG remains unchanged -->
+                                        </div>
+                                        <h4 class="mb-3">Télécharger des Images</h4>
+                                        <div class="mb-3">
+                                             <label for="images" class="form-label">Télécharger des Images*</label>
+                                             <input class="form-control" type="file" id="images" name="images" multiple accept="image/*" required>
+                                        </div>
+                                        <div id="imagePreview" class="mb-3 d-flex flex-wrap gap-2"></div>
+                                   </div>
+          
+                                   <div class="d-flex justify-content-between mt-4">
+                                        <button type="button" class="btn btn-secondary" id="prevBtn" style="display: none;">Précédent</button>
+                                        <button type="button" class="btn btn-primary" id="nextBtn">Suivant</button>
+                                        <button type="submit" class="btn btn-success" id="submitBtn" style="display: none;">Soumettre</button>
+                                   </div>
+                              </form>
+                         </div>
+                    </div>
+               </div>
+          </div>
+
+               <style>
+                    .form-step {
+                         transition: opacity 0.3s ease-in-out;
+                    }
+
+                    .btn-check:checked+.btn-outline-primary {
+                         background-color: #4A90E2;
+                         border-color: #4A90E2;
+                         color: white;
+                    }
+               </style>
+
+               <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                         const form = document.getElementById('announcementForm');
+                         const steps = form.querySelectorAll('.form-step');
+                         const progressBar = document.querySelector('.progress-bar');
+                         const prevBtn = document.getElementById('prevBtn');
+                         const nextBtn = document.getElementById('nextBtn');
+                         const submitBtn = document.getElementById('submitBtn');
+                         let currentStep = 0;
+
+                         // Function to show current form step
+                         function showStep(stepIndex) {
+                              steps.forEach((step, index) => {
+                                   step.style.display = index === stepIndex ? 'block' : 'none';
+                              });
+                              updateProgressBar();
+                              updateButtons();
+                         }
+
+                         // Update progress bar as user navigates through steps
+                         function updateProgressBar() {
+                              const progress = ((currentStep + 1) / steps.length) * 100;
+                              progressBar.style.width = `${progress}%`;
+                              progressBar.setAttribute('aria-valuenow', progress);
+                              progressBar.textContent = `${Math.round(progress)}%`;
+                         }
+
+                         // Update visibility of Next, Previous, and Submit buttons
+                         function updateButtons() {
+                              prevBtn.style.display = currentStep > 0 ? 'block' : 'none';
+                              nextBtn.style.display = currentStep < steps.length - 1 ? 'block' : 'none';
+                              submitBtn.style.display = currentStep === steps.length - 1 ? 'block' : 'none';
+                         }
+
+                         // Handle going to the next step
+                         nextBtn.addEventListener('click', () => {
+                              if (validateStep(currentStep)) {
+                                   if (currentStep < steps.length - 1) {
+                                        currentStep++;
+                                        showStep(currentStep);
+                                   }
+                              }
+                         });
+
+                         // Handle going to the previous step
+                         prevBtn.addEventListener('click', () => {
+                              if (currentStep > 0) {
+                                   currentStep--;
+                                   showStep(currentStep);
+                              }
+                         });
+
+                         // Validate the current step
+                         function validateStep(stepIndex) {
+                              const currentStepElement = steps[stepIndex];
+                              const inputs = currentStepElement.querySelectorAll('input[required], select[required], textarea[required]');
+                              let isValid = true;
+
+                              inputs.forEach(input => {
+                                   if (!input.value.trim()) {
+                                        isValid = false;
+                                        input.classList.add('is-invalid');
+                                   } else {
+                                        input.classList.remove('is-invalid');
+                                   }
+                              });
+
+                              return isValid;
+                         }
+
+                         // Handle conditional fields for price and adoption
+                         const announcementType = document.getElementById('announcementType');
+                         const priceField = document.getElementById('priceField');
+                         const adoptionFeeField = document.getElementById('adoptionFeeField');
+
+                         announcementType.addEventListener('change', function () {
+                              if (this.value === 'adoption') {
+                                   priceField.style.display = 'none';
+                                   adoptionFeeField.style.display = 'block';
+                                   document.getElementById('price').removeAttribute('required');
+                                   document.getElementById('adoptionFee').setAttribute('required', 'required');
+                              } else {
+                                   priceField.style.display = 'block';
+                                   adoptionFeeField.style.display = 'none';
+                                   document.getElementById('price').setAttribute('required', 'required');
+                                   document.getElementById('adoptionFee').removeAttribute('required');
+                              }
+                         });
+
+                         // Image preview functionality
+                         const imageInput = document.getElementById('images');
+                         const imagePreview = document.getElementById('imagePreview');
+
+                         imageInput.addEventListener('change', function () {
+                              imagePreview.innerHTML = '';
+                              for (let i = 0; i < this.files.length; i++) {
+                                   const file = this.files[i];
+                                   if (file.type.startsWith('image/')) {
+                                        const img = document.createElement('img');
+                                        img.classList.add('img-thumbnail');
+                                        img.width = 100;
+                                        img.height = 100;
+                                        img.file = file;
+                                        imagePreview.appendChild(img);
+
+                                        const reader = new FileReader();
+                                        reader.onload = (function (aImg) {
+                                             return function (e) {
+                                                  aImg.src = e.target.result;
+                                             };
+                                        })(img);
+                                        reader.readAsDataURL(file);
+                                   }
+                              }
+                         });
+
+                         // Handle form submission with AJAX
+                         form.addEventListener('submit', function (e) {
+                              e.preventDefault();
+
+                              // Validate the current step before submitting
+                              if (!validateStep(currentStep)) {
+                                   return;
+                              }
+
+                              // Show loading state on the submit button
+                              submitBtn.disabled = true;
+                              submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Submitting...`;
+
+                              // Create FormData object for form submission
+                              const formData = new FormData(form);
+
+                              // Send form data using fetch
+                              fetch('/announcements/new', {
+                                   method: 'POST',
+                                   body: formData
+                              })
+                                   .then(response => response.json())
+                                   .then(data => {
+                                        if (data.success) {
+                                             // Redirect to dashboard after success
+                                             window.location.href = '/dashboard';
+                                        } else {
+                                             alert('There was an error submitting your announcement.');
+                                        }
+                                   })
+                                   .catch(error => {
+                                        console.error('Error submitting form:', error);
+                                        alert('An error occurred. Please try again.');
+                                   })
+                                   .finally(() => {
+                                        // Reset the submit button after the request
+                                        submitBtn.disabled = false;
+                                        submitBtn.innerHTML = 'Submit';
+                                   });
+                         });
+
+                         // Initialize the form
+                         showStep(currentStep);
+                    });
+               </script>
+
+               <%- include('includes/footer.ejs') %>

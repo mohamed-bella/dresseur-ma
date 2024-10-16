@@ -1,32 +1,42 @@
 const express = require('express');
-const router = express.Router();
 const passport = require('passport');
-const authController = require('../controllers/authController');
+const router = express.Router();
 
-// Middleware to check if the user is authenticated
-const isAuth = (req, res, next) => {
-     if (!req.isAuthenticated()) {
-          return next();
+// Redirect the user to Google for authentication
+router.get('/auth/google',
+     passport.authenticate('google', { scope: ['profile', 'email'] })
+);
+
+// Google callback URL after authentication
+router.get('/auth/google/cb',
+     passport.authenticate('google', { failureRedirect: '/' }),
+     (req, res) => {
+          // Successful login
+          res.redirect('/dashboard');  // Redirect to dashboard or any other route after login
      }
-     res.redirect('/profile');  // Redirect to profile if already logged in
-};
+);
 
-// Route for the sign-in page
-router.get('/', isAuth, (req, res) => {
-     res.render('public/auth', {
-          title: 'Sign in with Google',
-          heroTitle: 'Sign in with Google',
-          heroDescription: 'Creating an account will allow you to access more features.',
+// Logout route
+router.get('/logout', (req, res) => {
+     req.logout(() => {
+          res.redirect('/');
      });
 });
 
-// Google authentication route
-router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+// Protect dashboard route (or other routes)
+router.get('/dashboard', (req, res) => {
+     if (req.isAuthenticated()) {
+          res.render('user/dashboard/dashboard', { user: req.user });
+     } else {
+          res.redirect('/');
+     }
+});
 
-// Google authentication callback
-router.get('/google/cb', passport.authenticate('google', { failureRedirect: '/' }), authController.loginSuccess);
-
-// Logout route
-router.get('/logout', authController.logout);
+// GET: Logout
+router.get('/logout', (req, res) => {
+     req.logout(() => {
+          res.redirect('/');
+     });
+});
 
 module.exports = router;
