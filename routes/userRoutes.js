@@ -8,8 +8,7 @@ const slugify = require('slugify');
 const sharp = require('sharp');
 // const upload = require('../config/multer'); // Multer config with Cloudinary
 const Announcement = require('../models/announcement'); // Your announcement model
-const csurf = require('csurf');
-const csrfProtection = csurf({ cookie: true })
+
 
 
 // Set up multer for file uploads (saving locally)
@@ -66,7 +65,7 @@ router.get('/dashboard', async (req, res) => {
                ];
 
                // Render the dashboard with real data
-               res.render('user/dashboard/dashboard', { csrfToken: req.csrfToken() }, {
+               res.render('user/dashboard/dashboard', {
                     user: req.user,
                     announcementsCount,
                     totalViews,
