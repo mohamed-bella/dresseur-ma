@@ -8,6 +8,8 @@ const slugify = require('slugify');
 const sharp = require('sharp');
 // const upload = require('../config/multer'); // Multer config with Cloudinary
 const Announcement = require('../models/announcement'); // Your announcement model
+const csurf = require('csurf');
+const csrfProtection = csurf({ cookie: true })
 
 
 // Set up multer for file uploads (saving locally)
@@ -40,6 +42,7 @@ router.get('/', async (req, res) => {
 
 // GET: User Dashboard with Real Data
 router.get('/dashboard', async (req, res) => {
+
      if (req.isAuthenticated()) {
           try {
                // Fetch user's announcements
@@ -63,7 +66,7 @@ router.get('/dashboard', async (req, res) => {
                ];
 
                // Render the dashboard with real data
-               res.render('user/dashboard/dashboard', {
+               res.render('user/dashboard/dashboard', { csrfToken: req.csrfToken() }, {
                     user: req.user,
                     announcementsCount,
                     totalViews,
@@ -128,10 +131,15 @@ router.post('/announcements/new', upload.array('images', 10), async (req, res) =
                imageUrls.push(`/uploads/${path.basename(webpFilePath)}`);
           }
 
-          // Generate a slug from breed, gender, type, date, and "Maroc"
+          // Generate a slug from breed, gender, type, date, and "Maroc" with a random number
           const date = new Date().toISOString().slice(0, 10); // Current date in YYYY-MM-DD format
           const typeInFrench = announcementType === 'sale' ? 'vendre' : 'adoption'; // Convert type to French
-          const slug = slugify(`${breed}-${gender}-${typeInFrench}-${date}-maroc`, { lower: true, strict: true });
+
+          // Generate a random 4-digit number
+          const randomNum = Math.floor(1000 + Math.random() * 9000);
+
+          // Generate the slug with the random number
+          const slug = slugify(`${breed}-${gender}-${typeInFrench}-${date}-${randomNum}-maroc`, { lower: true, strict: true });
 
           // Create a new announcement
           const newAnnouncement = new Announcement({
