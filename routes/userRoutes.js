@@ -1,8 +1,31 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+const slugify = require('slugify');
+const sharp = require('sharp');
 // const upload = require('../config/multer'); // Multer config with Cloudinary
 const Announcement = require('../models/announcement'); // Your announcement model
+
+
+// Set up multer for file uploads (saving locally)
+const storage = multer.diskStorage({
+     destination: (req, file, cb) => {
+          const uploadDir = path.join(__dirname, '../uploads');
+          if (!fs.existsSync(uploadDir)) {
+               fs.mkdirSync(uploadDir);
+          }
+          cb(null, uploadDir);
+     },
+     filename: (req, file, cb) => {
+          cb(null, Date.now() + path.extname(file.originalname));  // Original extension
+     }
+});
+
+const upload = multer({ storage: storage });
+
 
 // GET: Homepage with Announcements Slider
 router.get('/', async (req, res) => {
@@ -59,27 +82,7 @@ router.get('/dashboard', async (req, res) => {
 });
 
 
-const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
-const sharp = require('sharp');
-
-// Set up multer for file uploads (saving locally)
-const storage = multer.diskStorage({
-     destination: (req, file, cb) => {
-          const uploadDir = path.join(__dirname, '../uploads');
-          if (!fs.existsSync(uploadDir)) {
-               fs.mkdirSync(uploadDir);
-          }
-          cb(null, uploadDir);
-     },
-     filename: (req, file, cb) => {
-          cb(null, Date.now() + path.extname(file.originalname));  // Original extension
-     }
-});
-
-const upload = multer({ storage: storage });
-
+// POST route to create a new announcement
 router.post('/announcements/new', upload.array('images', 10), async (req, res) => {
      console.log('Image upload started');
 
@@ -125,6 +128,11 @@ router.post('/announcements/new', upload.array('images', 10), async (req, res) =
                imageUrls.push(`/uploads/${path.basename(webpFilePath)}`);
           }
 
+          // Generate a slug from breed, gender, type, date, and "Maroc"
+          const date = new Date().toISOString().slice(0, 10); // Current date in YYYY-MM-DD format
+          const typeInFrench = announcementType === 'sale' ? 'vendre' : 'adoption'; // Convert type to French
+          const slug = slugify(`${breed}-${gender}-${typeInFrench}-${date}-maroc`, { lower: true, strict: true });
+
           // Create a new announcement
           const newAnnouncement = new Announcement({
                description,
@@ -141,6 +149,7 @@ router.post('/announcements/new', upload.array('images', 10), async (req, res) =
                images: imageUrls,  // Store WebP URLs
                whatsapp,
                email,
+               slug,  // Store the generated slug
                user: req.user._id  // Link announcement to the logged-in user
           });
 

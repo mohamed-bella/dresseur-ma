@@ -1,6 +1,7 @@
 <%- include('includes/head.ejs') %>
      <%- include('includes/navbar.ejs') %>
           <%- include('includes/content.ejs') %>
+
                <!-- Add Announcement Modal -->
                <div class="modal fade" id="announcementModal" tabindex="-1" aria-labelledby="announcementModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-lg">
@@ -10,96 +11,163 @@
                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fermer"></button>
                               </div>
                               <div class="modal-body">
-                                   <div class="progress mb-4">
-                                        <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                                   <div class="step-indicator mb-4">
+                                        <div class="step active" data-step="1">1</div>
+                                        <div class="step" data-step="2">2</div>
+                                        <div class="step" data-step="3">3</div>
+                                        <div class="step" data-step="4">4</div>
+                                        <div class="step" data-step="5">5</div>
                                    </div>
                                    <form id="announcementForm" action="/announcements/new" method="POST" enctype="multipart/form-data">
-                                        <!-- Étape 1 : Type d'Annonce et Informations de Base -->
+                                        <!-- Step 1: Type d'Annonce et Informations de Base -->
                                         <div class="form-step" data-step="1">
-                                             <div class="text-center mb-4">
-                                                  <!-- SVG remains unchanged -->
+                                             <h4 class="mb-4">Que voulez-vous faire ?</h4>
+                                             <div class="option-grid">
+                                                  <label class="option-card">
+                                                       <input type="radio" name="announcementType" value="sale" required>
+                                                       <div class="option-content">
+                                                            <i class="fas fa-tag fa-2x mb-2"></i>
+                                                            <span>Vendre</span>
+                                                       </div>
+                                                  </label>
+                                                  <label class="option-card">
+                                                       <input type="radio" name="announcementType" value="adoption" required>
+                                                       <div class="option-content">
+                                                            <i class="fas fa-home fa-2x mb-2"></i>
+                                                            <span>Adoption</span>
+                                                       </div>
+                                                  </label>
                                              </div>
-                                             <h4 class="mb-3">Informations de Base</h4>
-                                             <div class="mb-3">
-                                                  <label for="announcementType" class="form-label">Type d'Annonce*</label>
-                                                  <select class="form-select" id="announcementType" name="announcementType" required>
-                                                       <option value="">Sélectionnez le type</option>
-                                                       <option value="sale">À Vendre</option>
-                                                       <option value="adoption">Pour Adoption</option>
-                                                  </select>
+                                             <div class="mt-4">
+                                                  <h5>Type d'Animal</h5>
+                                                  <div class="option-grid">
+                                                       <label class="option-card">
+                                                            <input type="radio" name="animalType" value="dog" required>
+                                                            <div class="option-content">
+                                                                 <i class="fas fa-dog fa-2x mb-2"></i>
+                                                                 <span>Chien</span>
+                                                            </div>
+                                                       </label>
+                                                       <label class="option-card">
+                                                            <input type="radio" name="animalType" value="cat" required>
+                                                            <div class="option-content">
+                                                                 <i class="fas fa-cat fa-2x mb-2"></i>
+                                                                 <span>Chat</span>
+                                                            </div>
+                                                       </label>
+                                                  </div>
                                              </div>
-                                             <div class="mb-3">
-                                                  <label for="animalType" class="form-label">Type d'Animal*</label>
-                                                  <select class="form-select" id="animalType" name="animalType" required>
-                                                       <option value="">Sélectionnez le type d'animal</option>
-                                                       <option value="dog">Chien</option>
-                                                       <option value="cat">Chat</option>
-                                                  </select>
-                                             </div>
-                                             <div class="mb-3">
-                                                  <label for="breed" class="form-label">Race*</label>
+                                             <div class="form-floating mt-4">
                                                   <input type="text" class="form-control" id="breed" name="breed" required>
+                                                  <label for="breed">Race</label>
                                              </div>
                                         </div>
 
-                                        <!-- Étape 2 : Détails de l'Animal -->
+                                        <!-- Step 2: Détails de l'Animal -->
                                         <div class="form-step" data-step="2" style="display: none;">
-                                             <div class="text-center mb-4">
-                                                  <!-- SVG remains unchanged -->
-                                             </div>
-                                             <h4 class="mb-3">Détails de l'Animal</h4>
+                                             <h4 class="mb-4">Détails de l'Animal</h4>
                                              <div class="mb-3">
                                                   <label class="form-label">Âge*</label>
-                                                  <div class="btn-group w-100" role="group" aria-label="Groupe d'âge">
-                                                       <input type="radio" class="btn-check" name="age" id="agePuppy" value="puppy" required>
-                                                       <label class="btn btn-outline-primary" for="agePuppy">Chiot/Chaton</label>
-                                                       <input type="radio" class="btn-check" name="age" id="ageAdult" value="adult">
-                                                       <label class="btn btn-outline-primary" for="ageAdult">Adulte</label>
-                                                       <input type="radio" class="btn-check" name="age" id="ageSenior" value="senior">
-                                                       <label class="btn btn-outline-primary" for="ageSenior">Senior</label>
+                                                  <div class="option-grid">
+                                                       <label class="option-card">
+                                                            <input type="radio" name="age" value="puppy" required>
+                                                            <div class="option-content">
+                                                                 <i class="fas fa-baby fa-2x mb-2"></i>
+                                                                 <span>Chiot/Chaton</span>
+                                                            </div>
+                                                       </label>
+                                                       <label class="option-card">
+                                                            <input type="radio" name="age" value="adult">
+                                                            <div class="option-content">
+                                                                 <i class="fas fa-user fa-2x mb-2"></i>
+                                                                 <span>Adulte</span>
+                                                            </div>
+                                                       </label>
+                                                       <label class="option-card">
+                                                            <input type="radio" name="age" value="senior">
+                                                            <div class="option-content">
+                                                                 <i class="fas fa-user-tie fa-2x mb-2"></i>
+                                                                 <span>Senior</span>
+                                                            </div>
+                                                       </label>
                                                   </div>
                                              </div>
                                              <div class="mb-3">
                                                   <label class="form-label">Sexe*</label>
-                                                  <div class="btn-group w-100" role="group" aria-label="Groupe de sexe">
-                                                       <input type="radio" class="btn-check" name="gender" id="genderMale" value="male" required>
-                                                       <label class="btn btn-outline-primary" for="genderMale">Mâle</label>
-                                                       <input type="radio" class="btn-check" name="gender" id="genderFemale" value="female">
-                                                       <label class="btn btn-outline-primary" for="genderFemale">Femelle</label>
-                                                       <input type="radio" class="btn-check" name="gender" id="genderUnknown" value="unknown">
-                                                       <label class="btn btn-outline-primary" for="genderUnknown">Je ne sais pas</label>
+                                                  <div class="option-grid">
+                                                       <label class="option-card">
+                                                            <input type="radio" name="gender" value="male" required>
+                                                            <div class="option-content">
+                                                                 <i class="fas fa-mars fa-2x mb-2"></i>
+                                                                 <span>Mâle</span>
+                                                            </div>
+                                                       </label>
+                                                       <label class="option-card">
+                                                            <input type="radio" name="gender" value="female">
+                                                            <div class="option-content">
+                                                                 <i class="fas fa-venus fa-2x mb-2"></i>
+                                                                 <span>Femelle</span>
+                                                            </div>
+                                                       </label>
                                                   </div>
                                              </div>
                                              <div class="mb-3">
                                                   <label class="form-label">Statut de Vaccination*</label>
-                                                  <div class="btn-group w-100" role="group" aria-label="Groupe de vaccination">
-                                                       <input type="radio" class="btn-check" name="vaccination" id="vaccinatedYes" value="yes" required>
-                                                       <label class="btn btn-outline-primary" for="vaccinatedYes">Vacciné</label>
-                                                       <input type="radio" class="btn-check" name="vaccination" id="vaccinatedNo" value="no">
-                                                       <label class="btn btn-outline-primary" for="vaccinatedNo">Non Vacciné</label>
-                                                       <input type="radio" class="btn-check" name="vaccination" id="vaccinatedUnknown" value="unknown">
-                                                       <label class="btn btn-outline-primary" for="vaccinatedUnknown">Inconnu</label>
+                                                  <div class="option-grid">
+                                                       <label class="option-card">
+                                                            <input type="radio" name="vaccination" value="yes" required>
+                                                            <div class="option-content">
+                                                                 <i class="fas fa-syringe fa-2x mb-2"></i>
+                                                                 <span>Vacciné</span>
+                                                            </div>
+                                                       </label>
+                                                       <label class="option-card">
+                                                            <input type="radio" name="vaccination" value="no">
+                                                            <div class="option-content">
+                                                                 <i class="fas fa-times-circle fa-2x mb-2"></i>
+                                                                 <span>Non Vacciné</span>
+                                                            </div>
+                                                       </label>
+                                                       <label class="option-card">
+                                                            <input type="radio" name="vaccination" value="unknown">
+                                                            <div class="option-content">
+                                                                 <i class="fas fa-question-circle fa-2x mb-2"></i>
+                                                                 <span>Inconnu</span>
+                                                            </div>
+                                                       </label>
                                                   </div>
                                              </div>
                                              <div class="mb-3">
                                                   <label class="form-label">Statut de Stérilisation*</label>
-                                                  <div class="btn-group w-100" role="group" aria-label="Groupe de stérilisation">
-                                                       <input type="radio" class="btn-check" name="sterilization" id="sterilizedYes" value="yes" required>
-                                                       <label class="btn btn-outline-primary" for="sterilizedYes">Stérilisé</label>
-                                                       <input type="radio" class="btn-check" name="sterilization" id="sterilizedNo" value="no">
-                                                       <label class="btn btn-outline-primary" for="sterilizedNo">Non Stérilisé</label>
-                                                       <input type="radio" class="btn-check" name="sterilization" id="sterilizedUnknown" value="unknown">
-                                                       <label class="btn btn-outline-primary" for="sterilizedUnknown">Inconnu</label>
+                                                  <div class="option-grid">
+                                                       <label class="option-card">
+                                                            <input type="radio" name="sterilization" value="yes" required>
+                                                            <div class="option-content">
+                                                                 <i class="fas fa-check-circle fa-2x mb-2"></i>
+                                                                 <span>Stérilisé</span>
+                                                            </div>
+                                                       </label>
+                                                       <label class="option-card">
+                                                            <input type="radio" name="sterilization" value="no">
+                                                            <div class="option-content">
+                                                                 <i class="fas fa-times-circle fa-2x mb-2"></i>
+                                                                 <span>Non Stérilisé</span>
+                                                            </div>
+                                                       </label>
+                                                       <label class="option-card">
+                                                            <input type="radio" name="sterilization" value="unknown">
+                                                            <div class="option-content">
+                                                                 <i class="fas fa-question-circle fa-2x mb-2"></i>
+                                                                 <span>Inconnu</span>
+                                                            </div>
+                                                       </label>
                                                   </div>
                                              </div>
                                         </div>
 
-                                        <!-- Étape 3 : Prix et Localisation -->
+                                        <!-- Step 3: Prix et Localisation -->
                                         <div class="form-step" data-step="3" style="display: none;">
-                                             <div class="text-center mb-4">
-                                                  <!-- SVG remains unchanged -->
-                                             </div>
-                                             <h4 class="mb-3">Prix et Localisation</h4>
+                                             <h4 class="mb-4">Prix et Localisation</h4>
                                              <div class="mb-3" id="priceField">
                                                   <label for="price" class="form-label">Prix (MAD)*</label>
                                                   <input type="number" class="form-control" id="price" name="price" min="0" required>
@@ -112,94 +180,36 @@
                                                   <label for="location" class="form-label">Localisation*</label>
                                                   <select class="form-select" id="location" name="location" required>
                                                        <option value="" selected disabled>Choisissez une ville</option>
-
-                                                       <!-- Top 5 cities -->
                                                        <option value="casablanca">Casablanca</option>
                                                        <option value="rabat">Rabat</option>
                                                        <option value="marrakech">Marrakech</option>
                                                        <option value="fes">Fès</option>
                                                        <option value="tanger">Tanger</option>
-
-                                                       <!-- Cities A to Z -->
-                                                       <option value="agadir">Agadir</option>
-                                                       <option value="ait_melloul">Aït Melloul</option>
-                                                       <option value="al_hoceima">Al Hoceïma</option>
-                                                       <option value="assilah">Asilah</option>
-                                                       <option value="azrou">Azrou</option>
-                                                       <option value="beni_mellal">Béni Mellal</option>
-                                                       <option value="ben_guerir">Ben Guerir</option>
-                                                       <option value="berkane">Berkane</option>
-                                                       <option value="berrechid">Berrechid</option>
-                                                       <option value="boujdour">Boujdour</option>
-                                                       <option value="chefchaouen">Chefchaouen</option>
-                                                       <option value="dakhla">Dakhla</option>
-                                                       <option value="el_hajeb">El Hajeb</option>
-                                                       <option value="el_jadida">El Jadida</option>
-                                                       <option value="errachidia">Errachidia</option>
-                                                       <option value="essaouira">Essaouira</option>
-                                                       <option value="fes">Fès</option>
-                                                       <option value="guelmim">Guelmim</option>
-                                                       <option value="ifran">Ifrane</option>
-                                                       <option value="kenitra">Kénitra</option>
-                                                       <option value="khemisset">Khémisset</option>
-                                                       <option value="khouribga">Khouribga</option>
-                                                       <option value="ksar_el_kebir">Ksar El Kébir</option>
-                                                       <option value="laayoune">Laâyoune</option>
-                                                       <option value="larache">Larache</option>
-                                                       <option value="marrakech">Marrakech</option>
-                                                       <option value="martil">Martil</option>
-                                                       <option value="meknes">Meknès</option>
-                                                       <option value="midelt">Midelt</option>
-                                                       <option value="mohammedia">Mohammedia</option>
-                                                       <option value="nador">Nador</option>
-                                                       <option value="ouarzazate">Ouarzazate</option>
-                                                       <option value="oujda">Oujda</option>
-                                                       <option value="safi">Safi</option>
-                                                       <option value="sale">Salé</option>
-                                                       <option value="settat">Settat</option>
-                                                       <option value="sidi_ifni">Sidi Ifni</option>
-                                                       <option value="sidi_kacem">Sidi Kacem</option>
-                                                       <option value="smara">Smara</option>
-                                                       <option value="tangier">Tanger</option>
-                                                       <option value="tan_tan">Tan-Tan</option>
-                                                       <option value="tarfaya">Tarfaya</option>
-                                                       <option value="taourirt">Taourirt</option>
-                                                       <option value="taza">Taza</option>
-                                                       <option value="tetouan">Tétouan</option>
-                                                       <option value="tinghir">Tinghir</option>
-                                                       <option value="tiznit">Tiznit</option>
-                                                       <option value="zagora">Zagora</option>
-
+                                                       <!-- Add other cities here -->
                                                   </select>
                                              </div>
                                         </div>
 
-                                        <!-- Étape 4 : Informations de Contact et Description -->
+                                        <!-- Step 4: Informations de Contact et Description -->
                                         <div class="form-step" data-step="4" style="display: none;">
-                                             <div class="text-center mb-4">
-                                                  <!-- SVG remains unchanged -->
-                                             </div>
-                                             <h4 class="mb-3">Contact et Description</h4>
-                                             <div class="mb-3">
-                                                  <label for="whatsapp" class="form-label">Numéro WhatsApp*</label>
+                                             <h4 class="mb-4">Contact et Description</h4>
+                                             <div class="form-floating mb-3">
                                                   <input type="tel" class="form-control" id="whatsapp" name="whatsapp" required>
+                                                  <label for="whatsapp">Numéro WhatsApp*</label>
                                              </div>
-                                             <div class="mb-3">
-                                                  <label for="email" class="form-label">Email (Optionnel)</label>
+                                             <div class="form-floating mb-3">
                                                   <input type="email" class="form-control" id="email" name="email">
+                                                  <label for="email">Email (Optionnel)</label>
                                              </div>
-                                             <div class="mb-3">
-                                                  <label for="description" class="form-label">Description*</label>
-                                                  <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+                                             <div class="form-floating mb-3">
+                                                  <textarea class="form-control" id="description" name="description" style="height: 100px" required></textarea>
+                                                  <label for="description">Description*</label>
                                              </div>
                                         </div>
 
-                                        <!-- Étape 5 : Téléchargement d'Images -->
+                                        <!-- Step 5: Téléchargement d'Images -->
                                         <div class="form-step" data-step="5" style="display: none;">
-                                             <div class="text-center mb-4">
-                                                  <!-- SVG remains unchanged -->
-                                             </div>
-                                             <h4 class="mb-3">Télécharger des Images</h4>
+                                             <h4 class="mb-4">Télécharger des Images</h4>
                                              <div class="mb-3">
                                                   <label for="images" class="form-label">Télécharger des Images*</label>
                                                   <input class="form-control" type="file" id="images" name="images" multiple accept="image/*" required>
@@ -219,14 +229,70 @@
                </div>
 
                <style>
-                    .form-step {
-                         transition: opacity 0.3s ease-in-out;
+                    .step-indicator {
+                         display: flex;
+                         justify-content: space-between;
+                         margin-bottom: 2rem;
                     }
 
-                    .btn-check:checked+.btn-outline-primary {
-                         background-color: #4A90E2;
-                         border-color: #4A90E2;
+                    .step {
+                         width: 30px;
+                         height: 30px;
+                         border-radius: 50%;
+                         background-color: #e0e0e0;
+                         display: flex;
+                         align-items: center;
+                         justify-content: center;
+                         font-weight: bold;
+                    }
+
+                    .step.active {
+                         background-color: #007bff;
                          color: white;
+                    }
+
+                    .option-grid {
+                         display: grid;
+                         grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                         gap: 1rem;
+                    }
+
+                    .option-card {
+                         border: 2px solid #e0e0e0;
+                         border-radius: 8px;
+                         padding: 1rem;
+                         text-align: center;
+                         cursor: pointer;
+                         transition: all 0.3s ease;
+                    }
+
+                    .option-card:hover {
+                         border-color: #007bff;
+                    }
+
+                    .option-card input[type="radio"] {
+                         display: none;
+                    }
+
+                    .option-card input[type="radio"]:checked+.option-content {
+                         background-color: #e6f2ff;
+                         border-color: #007bff;
+                    }
+
+                    .option-content {
+                         display: flex;
+                         flex-direction: column;
+                         align-items: center;
+                    }
+
+                    .form-floating {
+                         margin-bottom: 1rem;
+                    }
+
+                    @media (max-width: 768px) {
+                         .option-grid {
+                              grid-template-columns: 1fr 1fr;
+                         }
                     }
                </style>
 
@@ -234,37 +300,36 @@
                     document.addEventListener('DOMContentLoaded', function () {
                          const form = document.getElementById('announcementForm');
                          const steps = form.querySelectorAll('.form-step');
-                         const progressBar = document.querySelector('.progress-bar');
+                         const stepIndicators = document.querySelectorAll('.step-indicator .step');
                          const prevBtn = document.getElementById('prevBtn');
                          const nextBtn = document.getElementById('nextBtn');
                          const submitBtn = document.getElementById('submitBtn');
                          let currentStep = 0;
 
-                         // Function to show current form step
                          function showStep(stepIndex) {
                               steps.forEach((step, index) => {
                                    step.style.display = index === stepIndex ? 'block' : 'none';
                               });
-                              updateProgressBar();
+                              updateStepIndicator(stepIndex);
                               updateButtons();
                          }
 
-                         // Update progress bar as user navigates through steps
-                         function updateProgressBar() {
-                              const progress = ((currentStep + 1) / steps.length) * 100;
-                              progressBar.style.width = `${progress}%`;
-                              progressBar.setAttribute('aria-valuenow', progress);
-                              progressBar.textContent = `${Math.round(progress)}%`;
+                         function updateStepIndicator(stepIndex) {
+                              stepIndicators.forEach((indicator, index) => {
+                                   if (index === stepIndex) {
+                                        indicator.classList.add('active');
+                                   } else {
+                                        indicator.classList.remove('active');
+                                   }
+                              });
                          }
 
-                         // Update visibility of Next, Previous, and Submit buttons
                          function updateButtons() {
                               prevBtn.style.display = currentStep > 0 ? 'block' : 'none';
                               nextBtn.style.display = currentStep < steps.length - 1 ? 'block' : 'none';
                               submitBtn.style.display = currentStep === steps.length - 1 ? 'block' : 'none';
                          }
 
-                         // Handle going to the next step
                          nextBtn.addEventListener('click', () => {
                               if (validateStep(currentStep)) {
                                    if (currentStep < steps.length - 1) {
@@ -274,7 +339,6 @@
                               }
                          });
 
-                         // Handle going to the previous step
                          prevBtn.addEventListener('click', () => {
                               if (currentStep > 0) {
                                    currentStep--;
@@ -282,14 +346,22 @@
                               }
                          });
 
-                         // Validate the current step
                          function validateStep(stepIndex) {
                               const currentStepElement = steps[stepIndex];
                               const inputs = currentStepElement.querySelectorAll('input[required], select[required], textarea[required]');
                               let isValid = true;
 
                               inputs.forEach(input => {
-                                   if (!input.value.trim()) {
+                                   if (input.type === 'radio') {
+                                        const radioGroup = currentStepElement.querySelectorAll(`input[name="${input.name}"]`);
+                                        const isChecked = Array.from(radioGroup).some(radio => radio.checked);
+                                        if (!isChecked) {
+                                             isValid = false;
+                                             input.closest('.option-grid').classList.add('is-invalid');
+                                        } else {
+                                             input.closest('.option-grid').classList.remove('is-invalid');
+                                        }
+                                   } else if (!input.value.trim()) {
                                         isValid = false;
                                         input.classList.add('is-invalid');
                                    } else {
@@ -300,26 +372,26 @@
                               return isValid;
                          }
 
-                         // Handle conditional fields for price and adoption
                          const announcementType = document.getElementById('announcementType');
                          const priceField = document.getElementById('priceField');
                          const adoptionFeeField = document.getElementById('adoptionFeeField');
 
-                         announcementType.addEventListener('change', function () {
-                              if (this.value === 'adoption') {
-                                   priceField.style.display = 'none';
-                                   adoptionFeeField.style.display = 'block';
-                                   document.getElementById('price').removeAttribute('required');
-                                   document.getElementById('adoptionFee').setAttribute('required', 'required');
-                              } else {
-                                   priceField.style.display = 'block';
-                                   adoptionFeeField.style.display = 'none';
-                                   document.getElementById('price').setAttribute('required', 'required');
-                                   document.getElementById('adoptionFee').removeAttribute('required');
-                              }
+                         document.querySelectorAll('input[name="announcementType"]').forEach(input => {
+                              input.addEventListener('change', function () {
+                                   if (this.value === 'adoption') {
+                                        priceField.style.display = 'none';
+                                        adoptionFeeField.style.display = 'block';
+                                        document.getElementById('price').removeAttribute('required');
+                                        document.getElementById('adoptionFee').setAttribute('required', 'required');
+                                   } else {
+                                        priceField.style.display = 'block';
+                                        adoptionFeeField.style.display = 'none';
+                                        document.getElementById('price').setAttribute('required', 'required');
+                                        document.getElementById('adoptionFee').removeAttribute('required');
+                                   }
+                              });
                          });
 
-                         // Image preview functionality
                          const imageInput = document.getElementById('images');
                          const imagePreview = document.getElementById('imagePreview');
 
@@ -330,8 +402,9 @@
                                    if (file.type.startsWith('image/')) {
                                         const img = document.createElement('img');
                                         img.classList.add('img-thumbnail');
-                                        img.width = 100;
-                                        img.height = 100;
+                                        img.style.width = '100px';
+                                        img.style.height = '100px';
+                                        img.style.objectFit = 'cover';
                                         img.file = file;
                                         imagePreview.appendChild(img);
 
@@ -346,23 +419,18 @@
                               }
                          });
 
-                         // Handle form submission with AJAX
                          form.addEventListener('submit', function (e) {
                               e.preventDefault();
 
-                              // Validate the current step before submitting
                               if (!validateStep(currentStep)) {
                                    return;
                               }
 
-                              // Show loading state on the submit button
                               submitBtn.disabled = true;
-                              submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Submitting...`;
+                              submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Envoi en cours...`;
 
-                              // Create FormData object for form submission
                               const formData = new FormData(form);
 
-                              // Send form data using fetch
                               fetch('/announcements/new', {
                                    method: 'POST',
                                    body: formData
@@ -370,24 +438,21 @@
                                    .then(response => response.json())
                                    .then(data => {
                                         if (data.success) {
-                                             // Redirect to dashboard after success
                                              window.location.href = '/dashboard';
                                         } else {
-                                             alert('There was an error submitting your announcement.');
+                                             alert('Une erreur est survenue lors de la soumission de votre annonce.');
                                         }
                                    })
                                    .catch(error => {
-                                        console.error('Error submitting form:', error);
-                                        alert('An error occurred. Please try again.');
+                                        console.error('Erreur lors de la soumission du formulaire:', error);
+                                        alert('Une erreur est survenue. Veuillez réessayer.');
                                    })
                                    .finally(() => {
-                                        // Reset the submit button after the request
                                         submitBtn.disabled = false;
-                                        submitBtn.innerHTML = 'Submit';
+                                        submitBtn.innerHTML = 'Soumettre';
                                    });
                          });
 
-                         // Initialize the form
                          showStep(currentStep);
                     });
                </script>

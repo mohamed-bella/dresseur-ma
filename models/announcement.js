@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-
 const announcementSchema = new Schema({
      description: { type: String, required: true },
      announcementType: { type: String, enum: ['sale', 'adoption'], required: true }, // Sale or Adoption
@@ -13,9 +12,10 @@ const announcementSchema = new Schema({
      price: { type: Number }, // Price (only if it's for sale)
      adoptionFee: { type: Number }, // Adoption fee (only if it's for adoption)
      location: { type: String, required: true }, // Location (city)
-     images: [{ type: String }], // Array of image URLs from Cloudinary
+     images: [{ type: String }], // Array of image URLs
      whatsapp: { type: String, required: true }, // Contact WhatsApp number
      email: { type: String }, // Optional contact email
+     slug: { type: String, required: true, unique: true }, // Slug for the announcement
      user: { type: Schema.Types.ObjectId, ref: 'User', required: true }, // Link to the user who posted
      createdAt: { type: Date, default: Date.now }
 });

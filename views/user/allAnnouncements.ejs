@@ -161,7 +161,7 @@
                          bottom: 20px;
                          left: 50%;
                          transform: translateX(-50%);
-                         background-color: #222222;
+                         background-color: #e00043;
                          color: white;
                          border: none;
                          padding: 12px 20px;
@@ -189,10 +189,59 @@
                               </select>
 
                               <select class="form-select" id="location" name="location">
-                                   <option value="">Toutes les villes</option>
+                                   <option value="" selected disabled>Choisissez une ville</option>
                                    <option value="casablanca" <%=filters.location==='casablanca' ? 'selected' : '' %>>Casablanca</option>
                                    <option value="rabat" <%=filters.location==='rabat' ? 'selected' : '' %>>Rabat</option>
                                    <option value="marrakech" <%=filters.location==='marrakech' ? 'selected' : '' %>>Marrakech</option>
+                                   <option value="fes" <%=filters.location==='fes' ? 'selected' : '' %>>Fès</option>
+                                   <option value="tanger" <%=filters.location==='tanger' ? 'selected' : '' %>>Tanger</option>
+
+                                   <option value="agadir" <%=filters.location==='agadir' ? 'selected' : '' %>>Agadir</option>
+                                   <option value="ait_melloul" <%=filters.location==='ait_melloul' ? 'selected' : '' %>>Aït Melloul</option>
+                                   <option value="al_hoceima" <%=filters.location==='al_hoceima' ? 'selected' : '' %>>Al Hoceïma</option>
+                                   <option value="assilah" <%=filters.location==='assilah' ? 'selected' : '' %>>Asilah</option>
+                                   <option value="azrou" <%=filters.location==='azrou' ? 'selected' : '' %>>Azrou</option>
+                                   <option value="beni_mellal" <%=filters.location==='beni_mellal' ? 'selected' : '' %>>Béni Mellal</option>
+                                   <option value="ben_guerir" <%=filters.location==='ben_guerir' ? 'selected' : '' %>>Ben Guerir</option>
+                                   <option value="berkane" <%=filters.location==='berkane' ? 'selected' : '' %>>Berkane</option>
+                                   <option value="berrechid" <%=filters.location==='berrechid' ? 'selected' : '' %>>Berrechid</option>
+                                   <option value="boujdour" <%=filters.location==='boujdour' ? 'selected' : '' %>>Boujdour</option>
+                                   <option value="chefchaouen" <%=filters.location==='chefchaouen' ? 'selected' : '' %>>Chefchaouen</option>
+                                   <option value="dakhla" <%=filters.location==='dakhla' ? 'selected' : '' %>>Dakhla</option>
+                                   <option value="el_hajeb" <%=filters.location==='el_hajeb' ? 'selected' : '' %>>El Hajeb</option>
+                                   <option value="el_jadida" <%=filters.location==='el_jadida' ? 'selected' : '' %>>El Jadida</option>
+                                   <option value="errachidia" <%=filters.location==='errachidia' ? 'selected' : '' %>>Errachidia</option>
+                                   <option value="essaouira" <%=filters.location==='essaouira' ? 'selected' : '' %>>Essaouira</option>
+                                   <option value="guelmim" <%=filters.location==='guelmim' ? 'selected' : '' %>>Guelmim</option>
+                                   <option value="ifran" <%=filters.location==='ifran' ? 'selected' : '' %>>Ifrane</option>
+                                   <option value="kenitra" <%=filters.location==='kenitra' ? 'selected' : '' %>>Kénitra</option>
+                                   <option value="khemisset" <%=filters.location==='khemisset' ? 'selected' : '' %>>Khémisset</option>
+                                   <option value="khouribga" <%=filters.location==='khouribga' ? 'selected' : '' %>>Khouribga</option>
+                                   <option value="ksar_el_kebir" <%=filters.location==='ksar_el_kebir' ? 'selected' : '' %>>Ksar El Kébir</option>
+                                   <option value="laayoune" <%=filters.location==='laayoune' ? 'selected' : '' %>>Laâyoune</option>
+                                   <option value="larache" <%=filters.location==='larache' ? 'selected' : '' %>>Larache</option>
+                                   <option value="martil" <%=filters.location==='martil' ? 'selected' : '' %>>Martil</option>
+                                   <option value="meknes" <%=filters.location==='meknes' ? 'selected' : '' %>>Meknès</option>
+                                   <option value="midelt" <%=filters.location==='midelt' ? 'selected' : '' %>>Midelt</option>
+                                   <option value="mohammedia" <%=filters.location==='mohammedia' ? 'selected' : '' %>>Mohammedia</option>
+                                   <option value="nador" <%=filters.location==='nador' ? 'selected' : '' %>>Nador</option>
+                                   <option value="ouarzazate" <%=filters.location==='ouarzazate' ? 'selected' : '' %>>Ouarzazate</option>
+                                   <option value="oujda" <%=filters.location==='oujda' ? 'selected' : '' %>>Oujda</option>
+                                   <option value="safi" <%=filters.location==='safi' ? 'selected' : '' %>>Safi</option>
+                                   <option value="sale" <%=filters.location==='sale' ? 'selected' : '' %>>Salé</option>
+                                   <option value="settat" <%=filters.location==='settat' ? 'selected' : '' %>>Settat</option>
+                                   <option value="sidi_ifni" <%=filters.location==='sidi_ifni' ? 'selected' : '' %>>Sidi Ifni</option>
+                                   <option value="sidi_kacem" <%=filters.location==='sidi_kacem' ? 'selected' : '' %>>Sidi Kacem</option>
+                                   <option value="smara" <%=filters.location==='smara' ? 'selected' : '' %>>Smara</option>
+                                   <option value="tan_tan" <%=filters.location==='tan_tan' ? 'selected' : '' %>>Tan-Tan</option>
+                                   <option value="tarfaya" <%=filters.location==='tarfaya' ? 'selected' : '' %>>Tarfaya</option>
+                                   <option value="taourirt" <%=filters.location==='taourirt' ? 'selected' : '' %>>Taourirt</option>
+                                   <option value="taza" <%=filters.location==='taza' ? 'selected' : '' %>>Taza</option>
+                                   <option value="tetouan" <%=filters.location==='tetouan' ? 'selected' : '' %>>Tétouan</option>
+                                   <option value="tinghir" <%=filters.location==='tinghir' ? 'selected' : '' %>>Tinghir</option>
+                                   <option value="tiznit" <%=filters.location==='tiznit' ? 'selected' : '' %>>Tiznit</option>
+                                   <option value="zagora" <%=filters.location==='zagora' ? 'selected' : '' %>>Zagora</option>
+
                               </select>
 
                               <select class="form-select" id="gender" name="gender">
@@ -248,22 +297,128 @@
                                                   <div class="announcement-card">
                                                        <img src="<%= announcement.images[0] %>" class="announcement-image" alt="<%= announcement.breed %>">
                                                        <div class="card-body">
-                                                            <h3 class="card-title">
-                                                                 <%= announcement.breed %>
-                                                            </h3>
-                                                            <p class="location"><i class="fas fa-map-marker-alt"></i>
-                                                                 <%= announcement.location %>
-                                                            </p>
-                                                            <p class="gender"><i class="fas fa-venus-mars"></i>
-                                                                 <%= announcement.gender==='male' ? 'Mâle' : 'Femelle' %>
-                                                            </p>
+                                                            <div class="card-header">
+                                                                 <h3 class="card-title">
+                                                                      <%= announcement.breed %>
+                                                                 </h3>
+                                                                 <span class="card-date"><i class="far fa-calendar-alt"></i>
+                                                                      <%= new Date(announcement.createdAt).toLocaleDateString('fr-FR', { day: 'numeric' , month: 'short' , year: 'numeric' }) %>
+                                                                 </span>
+                                                            </div>
+                                                            <div class="card-details">
+                                                                 <p class="location"><i class="fas fa-map-marker-alt"></i>
+                                                                      <%= announcement.location %>
+                                                                 </p>
+                                                                 <p class="gender"><i class="fas fa-venus-mars"></i>
+                                                                      <%= announcement.gender==='male' ? 'Mâle' : 'Femelle' %>
+                                                                 </p>
+                                                                 <p class="age"><i class="fas fa-birthday-cake"></i>
+                                                                      <%= announcement.age || 'Non spécifié' %>
+                                                                 </p>
+                                                            </div>
                                                             <p class="card-text">
-                                                                 <%= announcement.description.substring(0, 100) %>...
+                                                                 <%= announcement.description.substring(0, 80) %>...
                                                             </p>
-                                                            <a href="/announcement/<%= announcement._id %>" class="btn-details">Voir les détails</a>
+                                                            <a href="/announcement/<%= announcement._id %>" class="btn-details">Voir les détails <i class="fas fa-arrow-right"></i></a>
                                                        </div>
                                                   </div>
                                              </div>
+
+                                             <style>
+                                                  .announcement-card {
+                                                       background-color: white;
+                                                       border-radius: 12px;
+                                                       overflow: hidden;
+                                                       margin-bottom: 20px;
+                                                       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                                                       transition: transform 0.3s ease, box-shadow 0.3s ease;
+                                                  }
+
+                                                  .announcement-card:hover {
+                                                       transform: translateY(-5px);
+                                                       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                                                  }
+
+                                                  .announcement-image {
+                                                       width: 100%;
+                                                       height: 200px;
+                                                       object-fit: cover;
+                                                  }
+
+                                                  .card-body {
+                                                       padding: 16px;
+                                                  }
+
+                                                  .card-header {
+                                                       display: flex;
+                                                       justify-content: space-between;
+                                                       align-items: center;
+                                                       margin-bottom: 12px;
+                                                  }
+
+                                                  .card-title {
+                                                       font-size: 18px;
+                                                       font-weight: 600;
+                                                       margin: 0;
+                                                  }
+
+                                                  .card-date {
+                                                       font-size: 12px;
+                                                       color: #717171;
+                                                  }
+
+                                                  .card-details {
+                                                       display: flex;
+                                                       flex-wrap: wrap;
+                                                       gap: 8px;
+                                                       margin-bottom: 12px;
+                                                  }
+
+                                                  .card-details p {
+                                                       font-size: 14px;
+                                                       color: #717171;
+                                                       margin: 0;
+                                                       display: flex;
+                                                       align-items: center;
+                                                  }
+
+                                                  .card-details i {
+                                                       margin-right: 5px;
+                                                       color: #FF385C;
+                                                  }
+
+                                                  .card-text {
+                                                       font-size: 14px;
+                                                       color: #484848;
+                                                       margin-bottom: 16px;
+                                                       line-height: 1.4;
+                                                  }
+
+                                                  .btn-details {
+                                                       background-color: #FF385C;
+                                                       color: white;
+                                                       border: none;
+                                                       padding: 10px 15px;
+                                                       border-radius: 8px;
+                                                       font-size: 14px;
+                                                       font-weight: 600;
+                                                       width: 100%;
+                                                       transition: background-color 0.3s ease;
+                                                       text-align: center;
+                                                       text-decoration: none;
+                                                       display: inline-block;
+                                                  }
+
+                                                  .btn-details:hover {
+                                                       background-color: #E31C5F;
+                                                       color: white;
+                                                       text-decoration: none;
+                                                  }
+
+                                                  .btn-details i {
+                                                       margin-left: 5px;
+                                                  }
+                                             </style>
                                              <% }) %>
                                                   <% } %>
                          </div>

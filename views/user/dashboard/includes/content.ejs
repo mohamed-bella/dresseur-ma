@@ -1,273 +1,190 @@
 <!-- Page Content -->
-<div id="content">
+<div id="content" class="dashboard">
      <nav class="navbar navbar-expand-lg mb-4">
           <div class="container-fluid">
-               <button type="button" id="sidebarCollapse" class="btn btn-dark">
-                    <i class="fas fa-align-left"></i>
-                    <span>Toggle Sidebar</span>
+               <button type="button" id="sidebarCollapse" class="btn btn-primary">
+                    <i class="fas fa-bars"></i>
+                    <span class="ml-2">Menu</span>
                </button>
           </div>
      </nav>
 
-     <h2 class="mb-4">Bonjour , <%= user.displayName %>!</h2>
-     <div class="row">
-          <!-- Recent Announcements -->
-          <div class="col-md-12 mb-12">
-               <div class="card shadow-sm">
-                    <div class="card-header bg-primary text-white">
-                         Recent Announcements
-                    </div>
-                    <div class="card-body p-0">
-                         <table class="table table-striped table-hover mb-0">
-                              <thead>
-                                   <tr>
-                                        <th>Image</th>
-                                        <th>Breed</th>
-                                        <th>Actions</th>
-                                   </tr>
-                              </thead>
-                              <tbody>
-                                   <% recentAnnouncements.forEach(announcement=> { %>
-                                        <tr>
+     <h1 class="dashboard-title">Bonjour, <%= user.displayName %>!</h1>
 
-                                             <td>
-                                                  <% if (announcement.images && announcement.images.length> 0) { %>
-                                                       <img src="<%= announcement.images[0] %>" alt="Announcement Image" class="img-thumbnail" style="width: 60px; height: 60px; object-fit: cover;">
-                                                       <% } else { %>
-                                                            <span>No Image</span>
-                                                            <% } %>
-                                             </td>
-                                             <td>
-                                                  <%= announcement.breed %>
-                                             </td>
-                                             <td>
-                                                  <a href="/announcement/<%= announcement._id %>" class="btn btn-sm btn-primary">
-                                                       View
-                                                  </a>
-                                                  <form action="/announcements/<%= announcement._id %>/delete" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this announcement?');">
-                                                       <button type="submit" class="btn btn-sm btn-danger">
-                                                            Delete
-                                                       </button>
-                                                  </form>
-                                             </td>
-                                        </tr>
-                                        <% }) %>
-                                             <% if (recentAnnouncements.length===0) { %>
-                                                  <tr>
-                                                       <td colspan="3" class="text-center">No recent announcements available.</td>
-                                                  </tr>
-                                                  <% } %>
-                              </tbody>
-                         </table>
-
-                    </div>
-               </div>
+     <div class="card shadow-sm">
+          <div class="card-header">
+               Annonces Récentes
           </div>
-
-          <!-- Recent Activity -->
-          <!-- <div class="col-md-6 mb-4">
-               <div class="card shadow-sm">
-                    <div class="card-header bg-secondary text-white">
-                         Recent Activity
-                    </div>
-                    <ul class="list-group list-group-flush">
-                         <% recentActivity.forEach(activity=> { %>
-                              <li class="list-group-item">
-                                   <%= activity.description %>
-                              </li>
-                              <% }) %>
-                                   <% if (recentActivity.length===0) { %>
-                                        <li class="list-group-item">No recent activity available.</li>
-                                        <% } %>
-                    </ul>
-               </div>
-          </div> -->
+          <div class="card-body p-0">
+               <% if (recentAnnouncements.length===0) { %>
+                    <p class="text-center py-4">Aucune annonce récente disponible.</p>
+                    <% } else { %>
+                         <div class="announcement-list">
+                              <% recentAnnouncements.forEach(announcement=> { %>
+                                   <div class="announcement-item">
+                                        <div class="announcement-image">
+                                             <% if (announcement.images && announcement.images.length> 0) { %>
+                                                  <img src="<%= announcement.images[0] %>" alt="<%= announcement.breed %>">
+                                                  <% } else { %>
+                                                       <div class="no-image">Pas d'image</div>
+                                                       <% } %>
+                                        </div>
+                                        <div class="announcement-details">
+                                             <h3>
+                                                  <%= announcement.breed %>
+                                             </h3>
+                                             <div class="announcement-actions">
+                                                  <a href="/announcement/<%= announcement._id %>" class="btn btn-outline-primary btn-sm">Voir</a>
+                                                  <form action="/announcements/<%= announcement._id %>/delete" method="POST" class="d-inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette annonce ?');">
+                                                       <button type="submit" class="btn btn-outline-danger btn-sm">Supprimer</button>
+                                                  </form>
+                                             </div>
+                                        </div>
+                                   </div>
+                                   <% }) %>
+                         </div>
+                         <% } %>
+          </div>
      </div>
-
 </div>
 
-<!-- Styles for Dashboard -->
-
-<!-- Your existing HTML structure here -->
-
 <style>
-     body {
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-          background-color: #f0f2f5;
-          color: #1c1e21;
-          line-height: 1.34;
+     :root {
+          --primary-color: #4a90e2;
+          --secondary-color: #f5f6fa;
+          --text-color: #333;
+          --action-color: #4caf50;
+          --danger-color: #f44336;
+          --border-color: #e0e0e0;
      }
 
-     #content {
-          padding: 20px;
+     body {
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          background-color: var(--secondary-color);
+          color: var(--text-color);
+          line-height: 1.6;
+     }
+
+     .dashboard {
+          max-width: 1200px;
           margin: 0 auto;
+          padding: 2rem;
      }
 
      .navbar {
-          background-color: #ffffff;
-          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-          padding: 8px 0;
-     }
-
-     #sidebarCollapse {
-          background-color: #e4e6eb;
-          color: #050505;
-          border: none;
-          padding: 8px 12px;
-          border-radius: 6px;
-          font-weight: 600;
-          font-size: 15px;
-     }
-
-     #sidebarCollapse:hover {
-          background-color: #d8dadf;
-     }
-
-     h2 {
-          color: #1877f2;
-          font-size: 24px;
-          font-weight: bold;
-          margin-bottom: 20px;
-     }
-
-     .card-counter {
-          background-color: #ffffff;
-          border-radius: 8px;
-          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-          padding: 20px;
-          margin-bottom: 20px;
-          transition: box-shadow 0.3s ease;
-     }
-
-     .card-counter:hover {
-          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-     }
-
-     .card-counter i {
-          font-size: 3em;
-          color: #1877f2;
-     }
-
-     .card-counter .count-numbers {
-          font-size: 36px;
-          font-weight: bold;
-          color: #1c1e21;
-     }
-
-     .card-counter .count-name {
-          font-size: 14px;
-          color: #65676b;
-          text-transform: uppercase;
-     }
-
-     .btn-success {
-          background-color: #42b72a;
-          border: none;
-          padding: 8px 16px;
-          font-size: 15px;
-          font-weight: bold;
-          border-radius: 6px;
-          transition: background-color 0.3s ease;
-     }
-
-     .btn-success:hover {
-          background-color: #36a420;
-     }
-
-     .card {
-          background-color: #ffffff;
-          border: none;
-          border-radius: 8px;
-          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-          margin-bottom: 20px;
-     }
-
-     .card-header {
-          background-color: #f0f2f5;
-          border-bottom: 1px solid #dadde1;
-          font-weight: bold;
-          font-size: 16px;
-          padding: 12px 16px;
-     }
-
-     .table {
-          color: #050505;
-     }
-
-     .table th {
-          font-weight: 600;
-          color: #65676b;
-          border-top: none;
-     }
-
-     .table td {
-          vertical-align: middle;
-     }
-
-     .img-thumbnail {
-          border-radius: 8px;
-          border: 1px solid #dadde1;
-     }
-
-     .btn-sm {
-          padding: 5px 10px;
-          font-size: 12px;
-          border-radius: 4px;
+          background-color: white;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          margin-bottom: 2rem;
      }
 
      .btn-primary {
-          background-color: #1877f2;
+          background-color: var(--primary-color);
           border: none;
      }
 
      .btn-primary:hover {
-          background-color: #166fe5;
+          background-color: #3a7bd5;
      }
 
-     .btn-danger {
-          background-color: #fa3e3e;
+     .dashboard-title {
+          font-size: 2rem;
+          margin-bottom: 2rem;
+          color: var(--primary-color);
+     }
+
+     .card {
+          background-color: white;
           border: none;
+          border-radius: 8px;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          margin-bottom: 2rem;
      }
 
-     .btn-danger:hover {
-          background-color: #e4393e;
+     .card-header {
+          background-color: var(--primary-color);
+          color: white;
+          font-weight: bold;
+          padding: 1rem;
+          border-bottom: none;
      }
 
-     .list-group-item {
-          border-color: #dadde1;
-          padding: 12px 16px;
+     .announcement-list {
+          display: flex;
+          flex-direction: column;
      }
 
-     .list-group-item:hover {
-          background-color: #f0f2f5;
+     .announcement-item {
+          display: flex;
+          align-items: center;
+          padding: 1rem;
+          border-bottom: 1px solid var(--border-color);
      }
 
-     /* Facebook-style custom scrollbar */
-     ::-webkit-scrollbar {
-          width: 8px;
+     .announcement-item:last-child {
+          border-bottom: none;
      }
 
-     ::-webkit-scrollbar-track {
-          background: #f0f2f5;
+     .announcement-image {
+          width: 80px;
+          height: 80px;
+          margin-right: 1rem;
      }
 
-     ::-webkit-scrollbar-thumb {
-          background: #bcc0c4;
+     .announcement-image img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
           border-radius: 4px;
      }
 
-     ::-webkit-scrollbar-thumb:hover {
-          background: #909398;
+     .no-image {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: #f0f0f0;
+          color: #999;
+          font-size: 0.8rem;
+          border-radius: 4px;
      }
 
-     @media (max-width: 768px) {
-          .card-counter {
-               margin-bottom: 15px;
-          }
+     .announcement-details {
+          flex-grow: 1;
+     }
 
-          .btn-success {
-               width: 100%;
-               margin-top: 15px;
-          }
+     .announcement-details h3 {
+          margin: 0 0 0.5rem 0;
+          font-size: 1.1rem;
+     }
+
+     .announcement-actions {
+          display: flex;
+          gap: 0.5rem;
+     }
+
+     .btn-sm {
+          padding: 0.25rem 0.5rem;
+          font-size: 0.875rem;
+     }
+
+     .btn-outline-primary {
+          color: var(--primary-color);
+          border-color: var(--primary-color);
+     }
+
+     .btn-outline-primary:hover {
+          background-color: var(--primary-color);
+          color: white;
+     }
+
+     .btn-outline-danger {
+          color: var(--danger-color);
+          border-color: var(--danger-color);
+     }
+
+     .btn-outline-danger:hover {
+          background-color: var(--danger-color);
+          color: white;
      }
 </style>
