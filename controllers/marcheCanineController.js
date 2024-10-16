@@ -58,11 +58,9 @@ const marcheCanineController = {
      // POST: Add a new announcement (for sellers only)
      // POST: Add a new announcement (for sellers only)
      async addAnnouncement(req, res) {
-          console.log("Form Data:", req.body); // Log form data
-          console.log("Uploaded Files:", req.files); // Log uploaded media
           const { breed, description, price, location, number } = req.body;
-          console.log(req.body)
 
+          // Validate the form data
           if (!breed || !description || !price || !location || !number) {
                return res.status(400).render('marketplace/newAnnouncement', {
                     message: 'Please fill in all fields',
@@ -72,57 +70,25 @@ const marcheCanineController = {
 
           try {
                const seller = await Seller.findOne({ googleId: req.user.googleId });
-               if (!seller) return res.status(404).json({ message: 'Seller not found' });
-
-               // Handle media uploads (images/videos) using Cloudinary
-               let mediaUrls = [];
-
-               if (!req.files || req.files.length === 0) {
-                    return res.status(400).render('marketplace/newAnnouncement', {
-                         message: 'Please upload at least one image or video',
-                         title: 'Créer une nouvelle annonce'
-                    });
+               if (!seller) {
+                    return res.status(404).json({ message: 'Seller not found' });
                }
-               if (req.files && req.files.length > 0) {
-                    try {
-                         const uploadPromises = req.files.map(file =>
-                              cloudinary.uploader.upload(file.path, { resource_type: "auto" })
-                         );
-                         const results = await Promise.all(uploadPromises);
-                         mediaUrls = results.map(result => result.secure_url);
-                    } catch (uploadError) {
-                         console.error('Cloudinary upload error:', JSON.stringify(uploadError, null, 2)); // Log Cloudinary errors
-                         return res.status(500).render('error', { message: 'Error uploading media files', error: JSON.stringify(uploadError, null, 2) });
-                    }
-               }
-               console.log(mediaUrls)
 
-               // Create a new announcement document
-               const newAnnouncement = new Announcement({
+               // Save the text information in a temporary storage (session or database)
+               req.session.newAnnouncement = {
                     breed,
                     description,
                     price,
                     location,
                     number,
-                    media: mediaUrls,
-                    seller: seller._id,
-                    sellerDisplayName: seller.displayName,
-                    sellerEmail: seller.email
-               });
+                    seller: seller._id
+               };
 
-               // Save the announcement to the database
-               try {
-                    await newAnnouncement.save();
-                    req.flash('success', "تم نشر إعلانك بنجاح ✅");
-                    res.redirect('/announcements');
-               } catch (dbError) {
-                    console.error('Database save error:', JSON.stringify(dbError, null, 2)); // Detailed DB error logging
-                    res.status(500).render('error', { message: 'Failed to save announcement to database', error: JSON.stringify(dbError, null, 2) });
-               }
-
+               // Redirect to the media upload page
+               res.redirect('/announcements/upload-media');
           } catch (err) {
-               console.error('Error adding announcement:', JSON.stringify(err, null, 2)); // Detailed logging
-               res.status(500).render('error', { message: 'Failed to add announcement', error: JSON.stringify(err, null, 2) });
+               console.error(err);
+               res.status(500).render('error', { message: 'Failed to save the announcement' });
           }
      },
 

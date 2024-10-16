@@ -1,0 +1,44 @@
+<%- include('partials/head.ejs') %>
+     <%- include('partials/navbar.ejs') %>
+
+          <div class="container mt-5" style="max-width: 800px;">
+               <h1 class="text-center mb-4" style="color: #000;">Télécharger des images ou vidéos</h1>
+
+               <% if (typeof message !=='undefined' && message) { %>
+                    <div class="alert alert-danger">
+                         <%= message %>
+                    </div>
+                    <% } %>
+
+                         <form action="/announcements/upload-media" method="POST" enctype="multipart/form-data" id="mediaForm" novalidate>
+                              <!-- Media Upload -->
+                              <div class="mb-3">
+                                   <label for="media" class="form-label">
+                                        <i class="bi bi-image"></i> Images/Videos
+                                   </label>
+                                   <input type="file" class="form-control" id="media" name="media" multiple accept="image/*, video/*" required>
+                                   <div class="invalid-feedback">Veuillez sélectionner au moins une image ou vidéo.</div>
+                              </div>
+
+                              <!-- Submit Button -->
+                              <button type="submit" class="btn btn-primary btn-lg btn-block">
+                                   <i class="bi bi-upload"></i> Télécharger
+                              </button>
+                         </form>
+          </div>
+
+          <%- include('partials/footer.ejs') %>
+
+               <script>
+                    (function () {
+                         'use strict'
+                         var form = document.getElementById('mediaForm')
+                         form.addEventListener('submit', function (event) {
+                              if (!form.checkValidity()) {
+                                   event.preventDefault()
+                                   event.stopPropagation()
+                              }
+                              form.classList.add('was-validated')
+                         }, false)
+                    })()
+               </script>

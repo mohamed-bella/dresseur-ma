@@ -10,7 +10,7 @@
                     </div>
                     <% } %>
 
-                         <form action="/announcements" method="POST" enctype="multipart/form-data" id="announcementForm" novalidate>
+                         <form action="/announcements" method="POST" id="announcementForm" novalidate>
                               <!-- Dog Breed Input -->
                               <div class="mb-3">
                                    <label for="breed" class="form-label">
@@ -40,7 +40,6 @@
                                         <option value="Rabat">Rabat</option>
                                         <option value="Casablanca">Casablanca</option>
                                         <option value="Marrakech">Marrakech</option>
-                                        <!-- Add more options as needed -->
                                    </select>
                                    <div class="invalid-feedback">Le lieu est obligatoire.</div>
                               </div>
@@ -63,18 +62,9 @@
                                    <div class="invalid-feedback">La description est obligatoire.</div>
                               </div>
 
-                              <!-- Media Upload -->
-                              <div class="mb-3">
-                                   <label for="media" class="form-label">
-                                        <i class="bi bi-image"></i> Images/Videos
-                                   </label>
-                                   <input type="file" class="form-control" id="media" name="media" multiple accept="image/*, video/*" required>
-                                   <div class="invalid-feedback">Veuillez sélectionner au moins une image ou vidéo.</div>
-                              </div>
-
                               <!-- Submit Button -->
                               <button type="submit" class="btn btn-primary btn-lg btn-block">
-                                   <i class="bi bi-send"></i> Publier l'annonce
+                                   <i class="bi bi-send"></i> Enregistrer et Continuer
                               </button>
                          </form>
           </div>
@@ -82,7 +72,6 @@
           <%- include('partials/footer.ejs') %>
 
                <script>
-                    // Form validation script
                     (function () {
                          'use strict'
                          var form = document.getElementById('announcementForm')
