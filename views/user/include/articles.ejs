@@ -1,34 +1,26 @@
-<!-- Pet Announcements Slider Section -->
-<section class="pet-announcements py-5">
+<!-- Latest Articles Slider Section -->
+<section class="latest-articles py-5">
      <div class="container">
-          <h2 class="section-title text-center mb-4">Dernières Annonces</h2>
+          <h2 class="section-title text-center mb-4">Derniers Articles</h2>
 
-          <div class="position-relative announcement-slider-container">
-               <div class="swiper-container announcement-slider">
+          <div class="position-relative article-slider-container">
+               <div class="swiper-container article-slider">
                     <div class="swiper-wrapper">
-                         <% announcements.forEach(announcement=> { %>
+                         <% articles.forEach(article=> { %>
                               <div class="swiper-slide">
-                                   <div class="card announcement-card h-100">
-                                        <img src="<%= announcement.images[0] %>" alt="<%= announcement.title %>" class="card-img-top announcement-image">
+                                   <div class="card article-card h-100">
+                                        <img src="<%= article.featuredImage %>" alt="<%= article.title %>" class="card-img-top article-image">
                                         <div class="card-body d-flex flex-column">
+                                             <span class="category-label mb-2">
+                                                  <%= article.category || 'Non catégorisé' %>
+                                             </span>
                                              <h5 class="card-title">
-                                                  <%= announcement.title %>
+                                                  <%= article.title %>
                                              </h5>
-                                             <ul class="puppy-details list-unstyled mb-3">
-                                                  <li><i class="fas fa-paw"></i>
-                                                       <%= announcement.breed %>
-                                                  </li>
-                                                  <li><i class="fas fa-birthday-cake"></i>
-                                                       <%= announcement.age %>
-                                                  </li>
-                                                  <li><i class="fas fa-map-marker-alt"></i>
-                                                       <%= announcement.location %>
-                                                  </li>
-                                             </ul>
                                              <p class="card-text flex-grow-1">
-                                                  <%= announcement.description.substring(0, 60) %>...
+                                                  <%= article.summary.substring(0, 100) %>...
                                              </p>
-                                             <a href="/announcement/<%= announcement._id %>" class="btn btn-add-interest mt-auto">Voir Détails</a>
+                                             <a href="/articles/<%= article.slug %>" class="btn btn-read-more mt-auto">Lire Plus</a>
                                         </div>
                                    </div>
                               </div>
@@ -46,101 +38,115 @@
           </div>
 
           <div class="text-center mt-4">
-               <a href="/tous-les-annonces" class="btn btn-primary">Voir toutes les annonces</a>
+               <a href="/articles" class="btn btn-primary">Voir tous les articles</a>
           </div>
      </div>
 </section>
 
 <style>
-     .pet-announcements {
-          background-color: #fff;
+     .latest-articles {
+          background-color: #f5f5f5;
           position: relative;
           overflow: hidden;
      }
 
-     .section-title {
-          color: #000;
-          font-weight: bold;
-          font-size: 24px;
-          text-transform: uppercase;
+     .latest-articles::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="%23FFFFFF" opacity="0.5"/></svg>');
+          opacity: 0.3;
+          z-index: 0;
      }
 
-     .announcement-slider-container {
+     .latest-articles .container {
+          position: relative;
+          z-index: 1;
+     }
+
+     .section-title {
+          color: #333;
+          font-weight: 600;
+     }
+
+     .article-slider-container {
+          overflow: hidden;
           padding: 20px 0;
      }
 
-     .announcement-card {
-          border: none;
-          background-color: #fff;
-          color: #000;
-          transition: transform 0.3s ease;
+     .article-card {
+          border-radius: 15px;
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+          overflow: hidden;
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
      }
 
-     .announcement-card:hover {
-          transform: scale(1.03);
+     .article-card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
      }
 
-     .announcement-image {
+     .article-image {
           height: 200px;
           object-fit: cover;
-          width: 100%;
+     }
+
+     .category-label {
+          background-color: #e7e7e7;
+          color: #333;
+          padding: 5px 15px;
+          border-radius: 15px;
+          font-size: 0.9em;
+          font-weight: 600;
+          display: inline-block;
      }
 
      .card-title {
-          font-size: 1.2rem;
-          font-weight: bold;
-          margin: 10px 0;
-          color: #000;
-     }
-
-     .puppy-details li {
-          font-size: 1rem;
-          color: #000;
-          margin-bottom: 0.25rem;
-     }
-
-     .puppy-details i {
-          width: 20px;
-          color: #000;
-          margin-right: 5px;
+          font-size: 1.1rem;
+          font-weight: 600;
+          margin-top: 0.5rem;
      }
 
      .card-text {
-          font-size: 1rem;
-          color: #000;
+          font-size: 0.9rem;
+          color: #666;
      }
 
-     .btn-add-interest {
-          background-color: #000;
-          color: #fff;
+     .btn-read-more {
+          background-color: #333;
+          color: white;
           border: none;
           padding: 10px 20px;
+          border-radius: 20px;
           font-weight: bold;
-          text-transform: uppercase;
           transition: background-color 0.3s ease;
-          width: 100%;
      }
 
-     .btn-add-interest:hover {
-          background-color: #333;
+     .btn-read-more:hover {
+          background-color: #555;
      }
 
      .slider-nav {
           position: absolute;
           top: 50%;
           left: 0;
+          z-index: 10;
           right: 0;
+          transform: translateY(-50%);
           display: flex;
           justify-content: space-between;
-          transform: translateY(-50%);
           pointer-events: none;
      }
 
      .slider-nav-btn {
-          background-color: #000;
-          color: #fff;
-          width: 50px;
-          height: 50px;
+          background-color: rgba(141, 141, 255, 0.8);
+          color: #ffffff;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
           border: none;
           display: flex;
           justify-content: center;
@@ -155,12 +161,11 @@
      }
 
      @media (max-width: 768px) {
-          .announcement-slider .swiper-slide {
+          .article-slider .swiper-slide {
                width: 85%;
           }
      }
 </style>
-
 
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
@@ -168,7 +173,7 @@
 
 <script>
      document.addEventListener('DOMContentLoaded', function () {
-          const swiper = new Swiper('.announcement-slider', {
+          const swiper = new Swiper('.article-slider', {
                slidesPerView: 'auto',
                spaceBetween: 20,
                loop: true,

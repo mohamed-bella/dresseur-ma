@@ -4,6 +4,7 @@ const passport = require('passport');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const Article = require('../models/article');
 const slugify = require('slugify');
 const sharp = require('sharp');
 // const upload = require('../config/multer'); // Multer config with Cloudinary
@@ -28,16 +29,26 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 
-// GET: Homepage with Announcements Slider
+// GET: Homepage with Announcements and Articles Slider
 router.get('/', async (req, res) => {
      try {
-          const announcements = await Announcement.find().limit(6); // Get the latest 6 announcements
-          res.render('user/index', { announcements });
+          // Fetch the latest 6 announcements
+          const announcements = await Announcement.find().limit(6);
+
+          // Fetch the latest 6 articles
+          const articles = await Article.find().limit(6);
+
+          // Render both announcements and articles to the homepage view
+          res.render('user/index', {
+               announcements,
+               articles // Pass the articles to the view
+          });
      } catch (error) {
-          console.error('Error fetching announcements:', error);
+          console.error('Error fetching announcements and articles:', error);
           res.status(500).send('Server Error');
      }
 });
+
 
 // GET: User Dashboard with Real Data
 router.get('/dashboard', async (req, res) => {
