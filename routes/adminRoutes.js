@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
-const Admin = require('../models/Admin'); // Assuming you have an Admin model
+const Admin = require('../models/admin'); // Assuming you have an Admin model
 require('dotenv').config();
 
 // Handle Admin Login
