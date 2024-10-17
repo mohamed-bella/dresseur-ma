@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>
+          <%= article.title %>
+     </title>
+     <link href="https://fonts.googleapis.com/css2?family=Source+Serif+Pro:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+     <style>
+          :root {
+               --primary-color: #000;
+               --secondary-color: #fff;
+               --text-color: #292929;
+               --light-gray: #e6e6e6;
+               --medium-gray: #757575;
+          }
+
+          * {
+               box-sizing: border-box;
+               margin: 0;
+               padding: 0;
+          }
+
+          body {
+               font-family: 'Source Serif Pro', serif;
+               line-height: 1.6;
+               color: var(--text-color);
+               background-color: var(--secondary-color);
+          }
+
+          .container {
+               max-width: 700px;
+               margin: 0 auto;
+               padding: 20px;
+          }
+
+          header {
+               margin-bottom: 40px;
+          }
+
+          h1 {
+               font-size: 40px;
+               font-weight: 700;
+               margin-bottom: 20px;
+               line-height: 1.2;
+          }
+
+          .meta {
+               font-family: 'Open Sans', sans-serif;
+               font-size: 14px;
+               color: var(--medium-gray);
+               margin-bottom: 20px;
+               display: flex;
+               align-items: center;
+          }
+
+          .author-image {
+               width: 48px;
+               height: 48px;
+               border-radius: 50%;
+               margin-right: 15px;
+          }
+
+          .author-info {
+               display: flex;
+               flex-direction: column;
+          }
+
+          .author-name {
+               font-weight: 600;
+               color: var(--primary-color);
+          }
+
+          .article-date {
+               color: var(--medium-gray);
+          }
+
+          .article-image {
+               width: 100%;
+               max-height: 400px;
+               object-fit: cover;
+               margin-bottom: 40px;
+          }
+
+          article {
+               font-size: 21px;
+               line-height: 1.8;
+               margin-bottom: 40px;
+          }
+
+          article p {
+               margin-bottom: 30px;
+          }
+
+          .social-share {
+               display: flex;
+               justify-content: flex-start;
+               margin-bottom: 30px;
+               font-family: 'Open Sans', sans-serif;
+          }
+
+          .social-share a {
+               margin-right: 15px;
+               color: var(--medium-gray);
+               font-size: 18px;
+               text-decoration: none;
+          }
+
+          #comments {
+               border-top: 1px solid var(--light-gray);
+               padding-top: 30px;
+               font-family: 'Open Sans', sans-serif;
+          }
+
+          .comment {
+               margin-bottom: 20px;
+               padding-bottom: 20px;
+               border-bottom: 1px solid var(--light-gray);
+          }
+
+          .comment-meta {
+               font-size: 14px;
+               color: var(--medium-gray);
+               margin-bottom: 10px;
+          }
+
+          form {
+               margin-top: 30px;
+          }
+
+          .form-group {
+               margin-bottom: 20px;
+          }
+
+          label {
+               display: block;
+               margin-bottom: 5px;
+               font-weight: 600;
+          }
+
+          input[type="text"],
+          input[type="email"],
+          textarea {
+               width: 100%;
+               padding: 10px;
+               border: 1px solid var(--light-gray);
+               font-family: 'Open Sans', sans-serif;
+               font-size: 16px;
+          }
+
+          button {
+               background-color: var(--primary-color);
+               color: var(--secondary-color);
+               padding: 10px 20px;
+               border: none;
+               cursor: pointer;
+               font-family: 'Open Sans', sans-serif;
+               font-size: 16px;
+          }
+
+          button:hover {
+               background-color: #333;
+          }
+
+          .alert {
+               padding: 10px;
+               margin-bottom: 20px;
+               border: 1px solid transparent;
+               font-family: 'Open Sans', sans-serif;
+          }
+
+          .alert-danger {
+               background-color: #fbe9e7;
+               border-color: #f4c7c2;
+               color: #c62828;
+          }
+
+          .alert-success {
+               background-color: #e8f5e9;
+               border-color: #c8e6c9;
+               color: #2e7d32;
+          }
+
+          @media (max-width: 768px) {
+               .container {
+                    padding: 15px;
+               }
+
+               h1 {
+                    font-size: 32px;
+               }
+
+               article {
+                    font-size: 18px;
+               }
+          }
+     </style>
+</head>
+
+<body>
+     <div class="container">
+          <header>
+               <h1>
+                    <%= article.title %>
+               </h1>
+               <div class="meta">
+                    <img src="https://yt3.googleusercontent.com/-ipzLVONJ8tydLvEwhiZm7t2SFWGLxwb0Hzd8LoSxzi9I0-I1I_VmDWYZQKYUyuiFUWpthqoiA=s900-c-k-c0x00ffffff-no-rj" alt="<%= article.author %>" class="author-image">
+                    <div class="author-info">
+                         <span class="author-name">
+                              <%= article.author %>
+                         </span>
+                         <span class="article-date">
+                              <%= article.createdAt.toDateString() %> · <%= article.readTime %> min read
+                         </span>
+                    </div>
+               </div>
+          </header>
+
+          <main>
+               <img src="<%= article.featuredImage %>" alt="<%= article.title %>" class="article-image">
+
+               <article>
+                    <%- article.content %>
+               </article>
+
+               <div class="social-share">
+                    <a href="#" title="Share on Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" title="Share on Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" title="Share on LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" title="Copy link"><i class="fas fa-link"></i></a>
+               </div>
+
+               <section id="comments">
+                    <h2>Responses</h2>
+                    <% if (comments.length===0) { %>
+                         <p>No responses yet. Be the first to respond!</p>
+                         <% } else { %>
+                              <% comments.forEach(comment=> { %>
+                                   <div class="comment">
+                                        <div class="comment-meta">
+                                             <strong>
+                                                  <%= comment.name %>
+                                             </strong> · <%= comment.createdAt.toDateString() %>
+                                        </div>
+                                        <p>
+                                             <%= comment.comment %>
+                                        </p>
+                                   </div>
+                                   <% }) %>
+                                        <% } %>
+
+                                             <h3>Write a response</h3>
+                                             <% if (error) { %>
+                                                  <div class="alert alert-danger">
+                                                       <%= error %>
+                                                  </div>
+                                                  <% } %>
+                                                       <% if (success) { %>
+                                                            <div class="alert alert-success">
+                                                                 <%= success %>
+                                                            </div>
+                                                            <% } %>
+                                                                 <form action="/articles/<%= article.slug %>/comments" method="POST">
+                                                                      <div class="form-group">
+                                                                           <label for="name">Name</label>
+                                                                           <input type="text" id="name" name="name" required>
+                                                                      </div>
+                                                                      <div class="form-group">
+                                                                           <label for="email">Email</label>
+                                                                           <input type="email" id="email" name="email" required>
+                                                                      </div>
+                                                                      <div class="form-group">
+                                                                           <label for="comment">Response</label>
+                                                                           <textarea id="comment" name="comment" rows="4" required></textarea>
+                                                                      </div>
+                                                                      <button type="submit">Publish</button>
+                                                                 </form>
+               </section>
+          </main>
+     </div>
+</body>
+
+</html>

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>New Article</title>
+     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+     <script src="https://cdn.tiny.cloud/1/wzg195slfx5e31zpp941e1qriff7qy8oxp318ngoas5hp7hu/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+     <style>
+          :root {
+               --primary-color: #000;
+               --secondary-color: #fff;
+               --border-color: #ccc;
+          }
+
+          body {
+               font-family: 'Roboto', sans-serif;
+               background-color: var(--secondary-color);
+               color: var(--primary-color);
+               line-height: 1.6;
+               margin: 0;
+               padding: 20px;
+          }
+
+          .container {
+               max-width: 1200px;
+               margin: 0 auto;
+          }
+
+          h1 {
+               margin-bottom: 20px;
+          }
+
+          .form-group {
+               margin-bottom: 20px;
+          }
+
+          label {
+               display: block;
+               margin-bottom: 10px;
+               font-weight: bold;
+          }
+
+          input[type="text"],
+          select,
+          textarea {
+               width: 100%;
+               padding: 15px;
+               border: 1px solid var(--border-color);
+               background-color: var(--secondary-color);
+               color: var(--primary-color);
+               font-size: 18px;
+          }
+
+          input[type="text"]:focus,
+          select:focus,
+          textarea:focus {
+               outline: none;
+               border-color: var(--primary-color);
+          }
+
+          button {
+               background-color: var(--primary-color);
+               color: var(--secondary-color);
+               border: none;
+               padding: 15px 30px;
+               font-size: 18px;
+               cursor: pointer;
+               transition: background-color 0.3s ease;
+          }
+
+          button:hover {
+               background-color: #333;
+          }
+
+          .tag-container {
+               display: flex;
+               flex-wrap: wrap;
+               gap: 10px;
+               margin-top: 10px;
+          }
+
+          .tag {
+               background-color: var(--secondary-color);
+               border: 1px solid var(--primary-color);
+               padding: 5px 10px;
+               display: flex;
+               align-items: center;
+          }
+
+          .tag-remove {
+               margin-left: 5px;
+               cursor: pointer;
+          }
+
+          .back-button {
+               margin-bottom: 20px;
+          }
+
+          #imagePreview {
+               max-width: 100%;
+               margin-top: 10px;
+          }
+
+          @media (max-width: 768px) {
+
+               input[type="text"],
+               select,
+               textarea {
+                    padding: 10px;
+                    font-size: 16px;
+               }
+
+               button {
+                    padding: 10px 20px;
+                    font-size: 16px;
+               }
+          }
+     </style>
+</head>
+
+<body>
+     <div class="container">
+          <button class="back-button" onclick="history.back()">← Back</button>
+          <h1>New Article</h1>
+          <form id="articleForm" action="/admin/articles" method="POST" enctype="multipart/form-data">
+               <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" name="title" required>
+               </div>
+
+               <div class="form-group">
+                    <label for="category">Category</label>
+                    <select id="category" name="category" required>
+                         <option value="News">News</option>
+                         <option value="Tutorial">Tutorial</option>
+                         <option value="Review">Review</option>
+                         <option value="Opinion">Opinion</option>
+                         <option value="Other">Other</option>
+                    </select>
+               </div>
+
+               <div class="form-group">
+                    <label for="summary">Summary</label>
+                    <textarea id="summary" name="summary" rows="3" required></textarea>
+               </div>
+
+               <div class="form-group">
+                    <label for="tags">Tags</label>
+                    <input type="text" id="tags" name="tags">
+                    <div id="tagContainer" class="tag-container"></div>
+               </div>
+
+               <div class="form-group">
+                    <label for="content">Content</label>
+                    <textarea id="content" name="content"></textarea>
+               </div>
+
+               <div class="form-group">
+                    <label for="featuredImage">Featured Image</label>
+                    <input type="file" id="featuredImage" name="featuredImage" accept="image/*">
+                    <img id="imagePreview" src="" alt="Featured Image Preview" style="display: none;">
+               </div>
+
+               <div class="form-group">
+                    <label for="seoTitle">SEO Title</label>
+                    <input type="text" id="seoTitle" name="seoTitle">
+               </div>
+
+               <div class="form-group">
+                    <label for="seoDescription">SEO Description</label>
+                    <textarea id="seoDescription" name="seoDescription" rows="3"></textarea>
+               </div>
+
+               <div class="form-group">
+                    <label for="keywords">Keywords (comma-separated)</label>
+                    <input type="text" id="keywords" name="keywords">
+               </div>
+               <div class="form-group">
+                    <label for="author">author</label>
+                    <input type="text" id="author" name="author">
+               </div>
+               <button type="submit">Publish Article</button>
+          </form>
+     </div>
+
+     <script>
+          tinymce.init({
+               selector: '#content',
+               plugins: 'autolink lists link image charmap print preview anchor',
+               toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
+               height: 500
+          });
+
+          const tagInput = document.getElementById('tags');
+          const tagContainer = document.getElementById('tagContainer');
+          const tagSet = new Set();
+
+          tagInput.addEventListener('keydown', function (e) {
+               if (e.key === 'Enter' || e.key === ',') {
+                    e.preventDefault();
+                    addTag();
+               }
+          });
+
+          function addTag() {
+               const tag = tagInput.value.trim();
+               if (tag && !tagSet.has(tag)) {
+                    tagSet.add(tag);
+                    renderTags();
+                    tagInput.value = '';
+               }
+          }
+
+          function removeTag(tag) {
+               tagSet.delete(tag);
+               renderTags();
+          }
+
+          function renderTags() {
+               tagContainer.innerHTML = '';
+               tagSet.forEach(tag => {
+                    const tagElement = document.createElement('span');
+                    tagElement.classList.add('tag');
+                    tagElement.textContent = tag;
+
+                    const removeButton = document.createElement('span');
+                    removeButton.classList.add('tag-remove');
+                    removeButton.textContent = '×';
+                    removeButton.onclick = () => removeTag(tag);
+
+                    tagElement.appendChild(removeButton);
+                    tagContainer.appendChild(tagElement);
+               });
+          }
+
+          // Featured image preview
+          document.getElementById('featuredImage').addEventListener('change', function (e) {
+               const file = e.target.files[0];
+               if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (event) {
+                         const img = document.getElementById('imagePreview');
+                         img.src = event.target.result;
+                         img.style.display = 'block';
+                    }
+                    reader.readAsDataURL(file);
+               }
+          });
+
+          // Form submission handling
+          document.getElementById('articleForm').addEventListener('submit', function (e) {
+               e.preventDefault();
+
+               // Get TinyMCE content
+               const content = tinymce.get('content').getContent();
+
+               // Create FormData object for submission
+               const formData = new FormData(this);
+
+               // Append TinyMCE content to formData
+               formData.append('content', content);
+
+               // Append tags as a comma-separated string
+               const tagsValue = Array.from(tagSet).join(',');
+               formData.append('tags', tagsValue);
+
+               // Disable submit button and show loading state
+               const submitButton = this.querySelector('button[type="submit"]');
+               submitButton.disabled = true;
+               submitButton.textContent = 'Publishing...';
+
+               // Send data to server
+               fetch('/admin/articles', {
+                    method: 'POST',
+                    body: formData
+               })
+                    .then(response => response.json())
+                    .then(data => {
+                         if (data.success) {
+                              // Redirect to the article's page using the returned articleId
+                              window.location.href = `/article/${data.slug}`;
+                         } else {
+                              // Show error message
+                              alert('Error publishing article: ' + data.message);
+                         }
+                    })
+                    .catch(error => {
+                         console.error('Error:', error);
+                         alert('An error occurred while publishing the article. Please try again.');
+                    })
+                    .finally(() => {
+                         // Re-enable submit button only if there's an error
+                         submitButton.disabled = false;
+                         submitButton.textContent = 'Publish Article';
+                    });
+          });
+     </script>
+
+</body>
+
+</html>

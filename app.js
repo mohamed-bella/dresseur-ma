@@ -8,6 +8,8 @@ const cookieParser = require('cookie-parser');
 const MongoStore = require('connect-mongo');
 const methodOverride = require('method-override');
 const bodyParser = require('body-parser')
+const minifyHTML = require('express-minify-html');
+
 const flash = require('connect-flash')
 // const consultationRoutes = require('./routes/consultationRoutes');
 // const ensureAdminAuthenticated = require('./middlewares/ensureAdminAuthenticated')
@@ -25,7 +27,9 @@ app.use(session({
      resave: false,
      saveUninitialized: true,
      store: MongoStore.create({
-          mongoUrl: process.env.DATABASE_URI
+          mongoUrl: process.env.DATABASE_URI,
+          ttl: 14 * 24 * 60 * 60, // Keep session for 14 days
+          autoRemove: 'native' // Automatically remove expired sessions
      })
 }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -48,15 +52,34 @@ app.use((req, res, next) => {
      next();
 });
 
+// Middleware to make flash messages available in all views
+app.use((req, res, next) => {
+     res.locals.messages = req.flash();
+     next();
+});
+app.use(minifyHTML({
+     override: true,
+     htmlMinifier: {
+          removeComments: true,
+          collapseWhitespace: true,
+          minifyJS: true,
+          minifyCSS: true
+     }
+}));
 // ROUTES
 const userRoutes = require('./routes/userRoutes')
 app.use(userRoutes)
 
 const authRoutes = require('./routes/authRoutes')
 app.use(authRoutes)
-// const adminRoutes = require('./routes/adminRoutes')
-// app.use('/admin', ensureAdminAuthenticated, adminRoutes)
 
+
+const adminRoutes = require('./routes/adminRoutes')
+app.use(adminRoutes)
+
+
+const articleRoutes = require('./routes/articleRoutes')
+app.use(articleRoutes)
 // const marcheCanineRoutes = require('./routes/marcheCanineRoutes')
 // app.use(marcheCanineRoutes)
 
@@ -72,6 +95,7 @@ app.use(authRoutes)
 // app.use(consultationRoutes);
 
 // 404 page
+
 app.use((req, res) => {
      res.send('404')
 })
