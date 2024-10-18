@@ -1,10 +1,10 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-white py-2 fixed-top">
      <div class="container">
-          <a class="navbar-brand" href="/"><img src="/uploads/logo-top-navbar.png" alt="ndressilik logo-top-navbar" style="height: 52px;" srcset=""></a>
+          <a class="navbar-brand" href="/"><img src="/uploads/logo-top-navbar.png" alt="ndressilik logo-top-navbar" style="height: 40px;"></a>
 
           <!-- Mobile view buttons -->
-          <div class="d-flex align-items-center d-lg-none  d-md-none">
-               <a href="/auth/google" class="btn btn-pink me-2">Ajouter</a>
+          <div class="d-flex align-items-center d-lg-none">
+               <a href="/auth/google" class="btn btn-dark me-2">Ajouter</a>
                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarOffcanvas" aria-controls="navbarOffcanvas">
                     <span class="navbar-toggler-icon"></span>
                </button>
@@ -13,21 +13,20 @@
           <!-- Desktop view menu -->
           <div class="collapse navbar-collapse" id="navbarNav">
                <ul class="navbar-nav ms-auto align-items-center">
-
                     <% if (user) { %>
                          <li class="nav-item">
-                              <a class="nav-link" href="/dashboard"><i class="bi bi-speedometer2"></i> Dashboard</a>
+                              <a class="nav-link" href="/dashboard">Dashboard</a>
                          </li>
                          <li class="nav-item">
-                              <a class="nav-link" href="/logout"><i class="bi bi-box-arrow-right"></i> Logout</a>
+                              <a class="nav-link" href="/logout">Logout</a>
                          </li>
                          <% } else { %>
                               <li class="nav-item">
-                                   <a class="nav-link" href="/auth/google"><i class="bi bi-google"></i> Log in with Google</a>
+                                   <a class="nav-link" href="/auth/google">Log in with Google</a>
                               </li>
                               <% } %>
                                    <li class="nav-item d-none d-lg-block">
-                                        <a href="/auth/google" class="btn btn-pink ms-2">Ajouter une annonce</a>
+                                        <a href="/auth/google" class="btn btn-dark ms-2">Ajouter une annonce</a>
                                    </li>
                </ul>
           </div>
@@ -40,17 +39,16 @@
                </div>
                <div class="offcanvas-body">
                     <ul class="navbar-nav">
-
                          <% if (user) { %>
                               <li class="nav-item">
-                                   <a class="nav-link" href="/dashboard"><i class="bi bi-speedometer2"></i> Dashboard</a>
+                                   <a class="nav-link" href="/dashboard">Dashboard</a>
                               </li>
                               <li class="nav-item">
-                                   <a class="nav-link" href="/logout"><i class="bi bi-box-arrow-right"></i> Logout</a>
+                                   <a class="nav-link" href="/logout">Logout</a>
                               </li>
                               <% } else { %>
                                    <li class="nav-item">
-                                        <a class="nav-link" href="/auth/google"><i class="bi bi-google"></i> Log in with Google</a>
+                                        <a class="nav-link" href="/auth/google">Log in with Google</a>
                                    </li>
                                    <% } %>
                     </ul>
@@ -59,52 +57,53 @@
      </div>
 </nav>
 
-
 <style>
-     /* Custom CSS for responsive navbar */
      body {
-          padding-top: 56px;
-          /* Adjust this value based on your navbar height */
+          padding-top: 60px;
      }
 
      .navbar {
-          box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
-          padding: 0px !important;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+          padding: 10px 0 !important;
      }
 
      .nav-link {
-          font-size: 1.2rem;
-          font-weight: bold;
-          color: #181818;
+          font-size: 1rem;
+          font-weight: 500;
+          color: #000;
+          transition: color 0.3s ease;
      }
 
-     .navbar-spacer {
-          height: 56px;
-          /* Should match the navbar height */
+     .nav-link:hover {
+          color: #333;
      }
 
      .navbar-brand {
           font-size: 1.2rem;
      }
 
-     .btn-pink {
-          background-color: #FF385C;
-          color: white;
+     .btn-dark {
+          background-color: #000;
+          color: #fff;
           border: none;
           padding: 8px 16px;
-          border-radius: 24px;
-          font-weight: bold;
+          font-weight: 500;
           transition: background-color 0.3s ease;
      }
 
-     .btn-pink:hover {
-          background-color: #E61E4D;
-          color: white;
+     .btn-dark:hover {
+          background-color: #333;
+          color: #fff;
      }
 
      .navbar-toggler {
+          border: none;
           padding: 4px 8px;
           font-size: 1rem;
+     }
+
+     .navbar-toggler:focus {
+          box-shadow: none;
      }
 
      @media (max-width: 991.98px) {
@@ -112,7 +111,6 @@
                width: 75%;
                max-width: 300px;
           }
-
      }
 
      .offcanvas-header,
@@ -122,7 +120,7 @@
      }
 
      .offcanvas-title {
-          font-weight: bold;
+          font-weight: 600;
      }
 
      .navbar-nav .nav-link {
@@ -131,19 +129,10 @@
 
      @media (min-width: 992px) {
           body {
-               padding-top: 72px;
-               /* Adjust for larger navbar on desktop */
-          }
-
-          .navbar-spacer {
-               height: 72px;
+               padding-top: 70px;
           }
 
           .navbar-nav .nav-link {
-               padding: 8px 16px;
-          }
-
-          .btn-pink {
                padding: 8px 16px;
           }
      }

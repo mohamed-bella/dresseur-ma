@@ -46,6 +46,7 @@
                border-radius: 10px;
                cursor: pointer;
                transition: opacity 0.3s;
+               display: none;
           }
 
           .gallery-image:hover {
@@ -241,6 +242,18 @@
                                    </span>
                               </div>
                               <div class="col-6 feature-item">
+                                   <i class="fas fa-syringe feature-icon"></i>
+                                   <span>
+                                        Vaccination : <%= announcement.vaccination==='yes' ? 'Oui' : announcement.vaccination==='no' ? 'Non' : 'Inconnu' %>
+                                   </span>
+                              </div>
+                              <div class="col-6 feature-item">
+                                   <i class="fas fa-briefcase-medical feature-icon"></i>
+                                   <span>
+                                        Stérilisation : <%= announcement.sterilization==='yes' ? 'Oui' : announcement.sterilization==='no' ? 'Non' : 'Inconnu' %>
+                                   </span>
+                              </div>
+                              <div class="col-6 feature-item">
                                    <i class="fas fa-map-marker-alt feature-icon"></i>
                                    <span>
                                         <%= announcement.location || 'Non spécifié' %>
@@ -285,7 +298,6 @@
                     </div>
                </div>
           </div>
-
      </div>
 
      <!-- Full Gallery Modal -->

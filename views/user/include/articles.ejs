@@ -1,7 +1,6 @@
-<!-- Latest Articles Slider Section -->
 <section class="latest-articles py-5">
      <div class="container">
-          <h2 class="section-title text-center mb-4">Derniers Articles</h2>
+          <h2 class="section-title text-center mb-5">Explorez Nos Articles</h2>
 
           <div class="position-relative article-slider-container">
                <div class="swiper-container article-slider">
@@ -9,16 +8,18 @@
                          <% articles.forEach(article=> { %>
                               <div class="swiper-slide">
                                    <div class="card article-card h-100">
-                                        <img src="<%= article.featuredImage %>" alt="<%= article.title %>" class="card-img-top article-image">
-                                        <div class="card-body d-flex flex-column">
-                                             <span class="category-label mb-2">
+                                        <div class="card-image-wrapper">
+                                             <img src="<%= article.featuredImage %>" alt="<%= article.title %>" class="card-img-top article-image">
+                                             <span class="category-label">
                                                   <%= article.category || 'Non catégorisé' %>
                                              </span>
+                                        </div>
+                                        <div class="card-body d-flex flex-column">
                                              <h5 class="card-title">
                                                   <%= article.title %>
                                              </h5>
                                              <p class="card-text flex-grow-1">
-                                                  <%= article.summary.substring(0, 100) %>...
+                                                  <%= article.summary.substring(0, 120) %>...
                                              </p>
                                              <a href="/articles/<%= article.slug %>" class="btn btn-read-more mt-auto">Lire Plus</a>
                                         </div>
@@ -29,15 +30,19 @@
                </div>
                <div class="slider-nav">
                     <button class="slider-nav-btn slider-nav-prev">
-                         <i class="fas fa-chevron-left"></i>
+                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                         </svg>
                     </button>
                     <button class="slider-nav-btn slider-nav-next">
-                         <i class="fas fa-chevron-right"></i>
+                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                         </svg>
                     </button>
                </div>
           </div>
 
-          <div class="text-center mt-4">
+          <div class="text-center mt-5">
                <a href="/articles" class="btn btn-primary">Voir tous les articles</a>
           </div>
      </div>
@@ -45,161 +50,203 @@
 
 <style>
      .latest-articles {
-          background-color: #f5f5f5;
+          background-color: #F5FAF9;
           position: relative;
-          overflow: hidden;
-     }
-
-     .latest-articles::before {
-          content: "";
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="%23FFFFFF" opacity="0.5"/></svg>');
-          opacity: 0.3;
-          z-index: 0;
-     }
-
-     .latest-articles .container {
-          position: relative;
-          z-index: 1;
+          padding: 80px 0;
      }
 
      .section-title {
           color: #333;
-          font-weight: 600;
+          font-weight: 700;
+          font-size: 2.5rem;
+          margin-bottom: 2rem;
      }
 
      .article-slider-container {
-          overflow: hidden;
+          overflow: visible;
           padding: 20px 0;
      }
 
      .article-card {
+          border: none;
           border-radius: 15px;
-          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-          overflow: hidden;
+          box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
           transition: transform 0.3s ease, box-shadow 0.3s ease;
+          max-width: 340px;
+          margin: 0 auto;
+          background-color: #fff;
+          overflow: hidden;
      }
 
      .article-card:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+          transform: translateY(-10px);
+          box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+     }
+
+     .card-image-wrapper {
+          position: relative;
+          overflow: hidden;
      }
 
      .article-image {
           height: 200px;
           object-fit: cover;
+          transition: transform 0.3s ease;
+     }
+
+     .article-card:hover .article-image {
+          transform: scale(1.05);
      }
 
      .category-label {
-          background-color: #e7e7e7;
-          color: #333;
-          padding: 5px 15px;
-          border-radius: 15px;
-          font-size: 0.9em;
+          position: absolute;
+          top: 10px;
+          left: 10px;
+          background-color: #3FB1B0;
+          color: #fff;
+          padding: 5px 10px;
+          border-radius: 20px;
+          font-size: 0.8rem;
           font-weight: 600;
-          display: inline-block;
      }
 
      .card-title {
-          font-size: 1.1rem;
-          font-weight: 600;
-          margin-top: 0.5rem;
+          font-size: 1.2rem;
+          font-weight: 700;
+          margin-top: 1rem;
+          color: #333;
+          line-height: 1.4;
      }
 
      .card-text {
           font-size: 0.9rem;
           color: #666;
+          line-height: 1.6;
      }
 
      .btn-read-more {
-          background-color: #333;
-          color: white;
+          background-color: #3FB1B0;
+          color: #fff;
           border: none;
           padding: 10px 20px;
-          border-radius: 20px;
-          font-weight: bold;
-          transition: background-color 0.3s ease;
+          font-size: 1rem;
+          font-weight: 600;
+          border-radius: 25px;
+          transition: background-color 0.3s ease, transform 0.3s ease;
      }
 
      .btn-read-more:hover {
-          background-color: #555;
+          background-color: #338F8E;
+          transform: translateY(-2px);
      }
 
      .slider-nav {
           position: absolute;
           top: 50%;
-          left: 0;
-          z-index: 10;
-          right: 0;
+          left: -30px;
+          right: -30px;
           transform: translateY(-50%);
           display: flex;
           justify-content: space-between;
           pointer-events: none;
+          z-index: 10;
      }
 
      .slider-nav-btn {
-          background-color: rgba(141, 141, 255, 0.8);
-          color: #ffffff;
-          width: 40px;
-          height: 40px;
-          border-radius: 50%;
+          background-color: #3FB1B0;
+          color: #fff;
+          width: 50px;
+          height: 50px;
           border: none;
+          border-radius: 50%;
           display: flex;
           justify-content: center;
           align-items: center;
           cursor: pointer;
-          transition: background-color 0.3s ease;
+          transition: background-color 0.3s ease, transform 0.3s ease;
           pointer-events: auto;
      }
 
      .slider-nav-btn:hover {
-          background-color: #333;
+          background-color: #338F8E;
+          transform: scale(1.1);
+     }
+
+     .slider-nav-btn svg {
+          width: 30px;
+          height: 30px;
+     }
+
+     .btn-primary {
+          background-color: #3FB1B0;
+          color: #fff;
+          border: none;
+          padding: 12px 30px;
+          font-size: 1.1rem;
+          font-weight: 600;
+          border-radius: 30px;
+          transition: background-color 0.3s ease, transform 0.3s ease;
+     }
+
+     .btn-primary:hover {
+          background-color: #338F8E;
+          transform: translateY(-3px);
      }
 
      @media (max-width: 768px) {
           .article-slider .swiper-slide {
                width: 85%;
           }
+
+          .section-title {
+               font-size: 2rem;
+          }
+
+          .slider-nav {
+               left: 10px;
+               right: 10px;
+          }
+
+          .slider-nav-btn {
+               width: 40px;
+               height: 40px;
+          }
+
+          .slider-nav-btn svg {
+               width: 24px;
+               height: 24px;
+          }
      }
 </style>
 
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-
 <script>
      document.addEventListener('DOMContentLoaded', function () {
-          const swiper = new Swiper('.article-slider', {
+          new Swiper('.article-slider', {
                slidesPerView: 'auto',
-               spaceBetween: 20,
+               spaceBetween: 30,
                loop: true,
                centeredSlides: true,
+               navigation: {
+                    nextEl: '.slider-nav-next',
+                    prevEl: '.slider-nav-prev',
+               },
                breakpoints: {
                     320: {
                          slidesPerView: 1.2,
+                         spaceBetween: 20,
                     },
                     640: {
                          slidesPerView: 2,
+                         spaceBetween: 30,
                     },
                     1024: {
                          slidesPerView: 3,
+                         spaceBetween: 40,
                     },
                },
-               autoplay: {
-                    delay: 3000,
-                    disableOnInteraction: false,
-               },
-          });
-
-          document.querySelector('.slider-nav-prev').addEventListener('click', () => {
-               swiper.slidePrev();
-          });
-          document.querySelector('.slider-nav-next').addEventListener('click', () => {
-               swiper.slideNext();
           });
      });
 </script>
+
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />

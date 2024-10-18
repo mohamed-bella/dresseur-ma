@@ -4,7 +4,7 @@
           <div class="row justify-content-center">
                <div class="col-md-10">
                     <div class="search-container">
-                         <h2 class="search-title mb-4">Votre Compagnon à Quatre Pattes</h2>
+                         <h2 class="search-title mb-4">Trouvez le Compagnon Parfait</h2>
                          <form action="/tous-les-annonces" method="GET">
                               <div class="mb-4">
                                    <select class="form-select search-input" name="location">
@@ -12,63 +12,13 @@
                                         <option value="casablanca">Casablanca</option>
                                         <option value="rabat">Rabat</option>
                                         <option value="marrakech">Marrakech</option>
-                                        <option value="fes">Fès</option>
-                                        <option value="tanger">Tanger</option>
-                                        <option value="agadir">Agadir</option>
-                                        <option value="ait_melloul">Aït Melloul</option>
-                                        <option value="al_hoceima">Al Hoceïma</option>
-                                        <option value="assilah">Asilah</option>
-                                        <option value="azrou">Azrou</option>
-                                        <option value="beni_mellal">Béni Mellal</option>
-                                        <option value="ben_guerir">Ben Guerir</option>
-                                        <option value="berkane">Berkane</option>
-                                        <option value="berrechid">Berrechid</option>
-                                        <option value="boujdour">Boujdour</option>
-                                        <option value="chefchaouen">Chefchaouen</option>
-                                        <option value="dakhla">Dakhla</option>
-                                        <option value="el_hajeb">El Hajeb</option>
-                                        <option value="el_jadida">El Jadida</option>
-                                        <option value="errachidia">Errachidia</option>
-                                        <option value="essaouira">Essaouira</option>
-                                        <option value="fes">Fès</option>
-                                        <option value="guelmim">Guelmim</option>
-                                        <option value="ifran">Ifrane</option>
-                                        <option value="kenitra">Kénitra</option>
-                                        <option value="khemisset">Khémisset</option>
-                                        <option value="khouribga">Khouribga</option>
-                                        <option value="ksar_el_kebir">Ksar El Kébir</option>
-                                        <option value="laayoune">Laâyoune</option>
-                                        <option value="larache">Larache</option>
-                                        <option value="marrakech">Marrakech</option>
-                                        <option value="martil">Martil</option>
-                                        <option value="meknes">Meknès</option>
-                                        <option value="midelt">Midelt</option>
-                                        <option value="mohammedia">Mohammedia</option>
-                                        <option value="nador">Nador</option>
-                                        <option value="ouarzazate">Ouarzazate</option>
-                                        <option value="oujda">Oujda</option>
-                                        <option value="safi">Safi</option>
-                                        <option value="sale">Salé</option>
-                                        <option value="settat">Settat</option>
-                                        <option value="sidi_ifni">Sidi Ifni</option>
-                                        <option value="sidi_kacem">Sidi Kacem</option>
-                                        <option value="smara">Smara</option>
-                                        <option value="tangier">Tanger</option>
-                                        <option value="tan_tan">Tan-Tan</option>
-                                        <option value="tarfaya">Tarfaya</option>
-                                        <option value="taourirt">Taourirt</option>
-                                        <option value="taza">Taza</option>
-                                        <option value="tetouan">Tétouan</option>
-                                        <option value="tinghir">Tinghir</option>
-                                        <option value="tiznit">Tiznit</option>
-                                        <option value="zagora">Zagora</option>
-
+                                        <!-- Add other cities here -->
                                    </select>
-                                   <small class="form-text text-muted mt-2">Sélectionnez la ville où vous recherchez des services</small>
+                                   <small class="form-text mt-2">Sélectionnez la ville où vous recherchez des services</small>
                               </div>
 
                               <div class="animal-types mb-4">
-                                   <p class="mb-3">Quel type d'animal avez-vous ?</p>
+                                   <p class="mb-3">Quel type d'animal recherchez-vous ?</p>
                                    <div class="row">
                                         <div class="col-6">
                                              <label class="animal-card">
@@ -100,42 +50,11 @@
                                                   </div>
                                              </label>
                                         </div>
-                                        <!-- <div class="col-4">
-                                             <label class="animal-card">
-                                                  <input type="radio" name="animalType" value="other">
-                                                  <div class="card-content text-center">
-                                                       <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg">
-                                                            <circle cx="12" cy="12" r="10" />
-                                                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-                                                            <path d="M12 17h.01" />
-                                                       </svg>
-                                                       <span>Autres</span>
-                                                  </div>
-                                             </label>
-                                        </div> -->
                                    </div>
-                                   <small class="form-text text-muted mt-2">Choisissez le type d'animal pour lequel vous recherchez des services</small>
+                                   <small class="form-text mt-2">Choisissez le type d'animal pour lequel vous recherchez des services</small>
                               </div>
 
-                              <style>
-                                   /* Add this to your existing styles */
-                                   .icon-svg {
-                                        width: 48px;
-                                        height: 48px;
-                                        margin-bottom: 10px;
-                                        color: #FF69B4;
-                                   }
-
-                                   .animal-card input[type="radio"]:checked+.card-content .icon-svg {
-                                        color: #FF1493;
-                                   }
-
-                                   .animal-card:hover .icon-svg {
-                                        color: #FF1493;
-                                   }
-                              </style>
-
-                              <button type="submit" class="search-btn btn btn-lg btn-block">Chercher</button>
+                              <button type="submit" class="search-btn btn btn-lg btn-block">Trouver mon compagnon</button>
                          </form>
                     </div>
                </div>
@@ -145,11 +64,10 @@
 
 <style>
      .hero {
-          background-image: url('https://img.freepik.com/free-vector/cute-animal-pattern-background-wallpaper-paw-print-vector-illustration_53876-146422.jpg?t=st=1729082078~exp=1729085678~hmac=9d4a0b8080e725f4cdb3a4578b304888541681ca35e534ff71d45f7569d7dcfa&w=740');
+          background-image: url('https://example.com/path-to-your-image.jpg');
           background-size: cover;
           background-position: center;
-          background-repeat: no-repeat;
-          padding: 100px 0;
+          padding: 120px 0;
           position: relative;
      }
 
@@ -164,47 +82,49 @@
      }
 
      .search-container {
-          background-color: rgb(255, 255, 255);
-          padding: 30px;
-          border-radius: 8px;
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          background-color: rgba(255, 255, 255, 0.9);
+          padding: 40px;
+          border-radius: 10px;
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
           position: relative;
           z-index: 2;
      }
 
      .search-title {
-          font-size: 24px;
+          font-size: 32px;
           font-weight: bold;
           color: #333;
           text-align: center;
+          margin-bottom: 30px;
      }
 
      .search-input {
-          height: 50px;
-          border-radius: 25px;
-          border: 2px solid #e0e0e0;
-          padding: 10px 20px;
-          font-size: 16px;
+          height: 60px;
+          border: 2px solid #ddd;
+          border-radius: 30px;
+          padding: 10px 25px;
+          font-size: 18px;
           transition: all 0.3s ease;
      }
 
      .search-input:focus {
-          border-color: #007bff;
-          box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+          border-color: #3FB1B0;
+          box-shadow: 0 0 0 0.2rem rgba(63, 177, 176, 0.25);
      }
 
      .animal-card {
           display: block;
           cursor: pointer;
-          border: 2px solid #a7a3a3;
-          border-radius: 8px;
-          /* padding: 15px; */
+          border: 2px solid #ddd;
+          border-radius: 10px;
           text-align: center;
           transition: all 0.3s ease;
+          overflow: hidden;
      }
 
      .animal-card:hover {
-          border-color: #FF69B4;
+          transform: translateY(-5px);
+          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
      }
 
      .animal-card input[type="radio"] {
@@ -212,68 +132,70 @@
      }
 
      .animal-card input[type="radio"]:checked+.card-content {
-          background-color: #FFB6C1;
-          border-color: #FF69B4;
+          background-color: #3FB1B0;
+          color: #fff;
      }
 
      .card-content {
-          border: 2px solid transparent;
-          border-radius: 6px;
-          padding: 10px 6px;
+          padding: 20px 10px;
           transition: all 0.3s ease;
      }
 
-     .card-content img {
-          width: 50px;
-          height: 50px;
-          margin-bottom: 10px;
+     .icon-svg {
+          width: 64px;
+          height: 64px;
+          margin-bottom: 15px;
      }
 
      .card-content span {
           display: block;
           font-weight: bold;
+          font-size: 18px;
      }
 
      .search-btn {
           height: 60px;
-          border-radius: 30px;
-          font-size: 18px;
+          font-size: 20px;
           font-weight: bold;
           text-transform: uppercase;
           letter-spacing: 1px;
           width: 100%;
-          margin-top: 20px;
-          background-color: #FF69B4;
-          border-color: #FF69B4;
-          color: white;
+          margin-top: 30px;
+          background-color: #3FB1B0;
+          border-color: #3FB1B0;
+          color: #fff;
+          border-radius: 30px;
+          transition: all 0.3s ease;
      }
 
      .search-btn:hover {
-          background-color: #FF1493;
-          border-color: #FF1493;
+          background-color: #338F8E;
+          border-color: #338F8E;
+          transform: translateY(-2px);
+          box-shadow: 0 5px 15px rgba(63, 177, 176, 0.3);
      }
 
      .form-text {
           font-size: 14px;
-          color: #6c757d;
+          color: #666;
      }
 
      @media (max-width: 768px) {
           .hero {
-               padding: 50px 0;
+               padding: 80px 0;
           }
 
           .search-container {
-               padding: 20px;
+               padding: 30px;
           }
 
           .search-title {
-               font-size: 20px;
+               font-size: 28px;
           }
 
           .search-btn {
-               font-size: 16px;
-               height: 50px;
+               font-size: 18px;
+               height: 55px;
           }
      }
 </style>

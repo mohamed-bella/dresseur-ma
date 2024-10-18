@@ -1,7 +1,6 @@
-<!-- Pet Announcements Slider Section -->
 <section class="pet-announcements py-5">
      <div class="container">
-          <h2 class="section-title text-center mb-4">Dernières Annonces</h2>
+          <h2 class="section-title text-center mb-5">Découvrez Nos Compagnons</h2>
 
           <div class="position-relative announcement-slider-container">
                <div class="swiper-container announcement-slider">
@@ -9,19 +8,34 @@
                          <% announcements.forEach(announcement=> { %>
                               <div class="swiper-slide">
                                    <div class="card announcement-card h-100">
-                                        <img src="<%= announcement.images[0] %>" alt="<%= announcement.title %>" class="card-img-top announcement-image">
+                                        <div class="card-image-wrapper">
+                                             <img src="<%= announcement.images[0] %>" alt="<%= announcement.title %>" class="card-img-top announcement-image">
+                                             <span class="category-label">
+                                                  <%= announcement.category || 'Chiot' %>
+                                             </span>
+                                        </div>
                                         <div class="card-body d-flex flex-column">
                                              <h5 class="card-title">
                                                   <%= announcement.title %>
                                              </h5>
                                              <ul class="puppy-details list-unstyled mb-3">
-                                                  <li><i class="fas fa-paw"></i>
+                                                  <li>
+                                                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M12 2L15 9L22 10L17 15L18 22L12 19L6 22L7 15L2 10L9 9L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                                       </svg>
                                                        <%= announcement.breed %>
                                                   </li>
-                                                  <li><i class="fas fa-birthday-cake"></i>
+                                                  <li>
+                                                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M12 2V6M12 18V22M4.93 4.93L7.76 7.76M16.24 16.24L19.07 19.07M2 12H6M18 12H22M4.93 19.07L7.76 16.24M16.24 7.76L19.07 4.93" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                                       </svg>
                                                        <%= announcement.age %>
                                                   </li>
-                                                  <li><i class="fas fa-map-marker-alt"></i>
+                                                  <li>
+                                                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                                            <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                                       </svg>
                                                        <%= announcement.location %>
                                                   </li>
                                              </ul>
@@ -37,15 +51,19 @@
                </div>
                <div class="slider-nav">
                     <button class="slider-nav-btn slider-nav-prev">
-                         <i class="fas fa-chevron-left"></i>
+                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                         </svg>
                     </button>
                     <button class="slider-nav-btn slider-nav-next">
-                         <i class="fas fa-chevron-right"></i>
+                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                         </svg>
                     </button>
                </div>
           </div>
 
-          <div class="text-center mt-4">
+          <div class="text-center mt-5">
                <a href="/tous-les-annonces" class="btn btn-primary">Voir toutes les annonces</a>
           </div>
      </div>
@@ -53,148 +71,200 @@
 
 <style>
      .pet-announcements {
-          background-color: #fff;
+          background-color: #F0F7F4;
           position: relative;
-          overflow: hidden;
+          padding: 80px 0;
      }
 
      .section-title {
-          color: #000;
-          font-weight: bold;
-          font-size: 24px;
-          text-transform: uppercase;
+          color: #333;
+          font-weight: 700;
+          font-size: 2.5rem;
+          margin-bottom: 2rem;
      }
 
      .announcement-slider-container {
+          overflow: hidden;
           padding: 20px 0;
      }
 
      .announcement-card {
           border: none;
+          border-radius: 15px;
+          box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+          max-width: 320px;
+          margin: 0 auto;
           background-color: #fff;
-          color: #000;
-          transition: transform 0.3s ease;
+          overflow: hidden;
      }
 
      .announcement-card:hover {
-          transform: scale(1.03);
+          transform: translateY(-10px);
+          box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+     }
+
+     .card-image-wrapper {
+          position: relative;
+          overflow: hidden;
      }
 
      .announcement-image {
           height: 200px;
           object-fit: cover;
-          width: 100%;
+          transition: transform 0.3s ease;
+     }
+
+     .announcement-card:hover .announcement-image {
+          transform: scale(1.05);
+     }
+
+     .category-label {
+          position: absolute;
+          top: 10px;
+          left: 10px;
+          background-color: rgba(0, 0, 0, 0.6);
+          color: #fff;
+          padding: 5px 10px;
+          border-radius: 20px;
+          font-size: 0.8rem;
+          font-weight: 600;
      }
 
      .card-title {
           font-size: 1.2rem;
-          font-weight: bold;
-          margin: 10px 0;
-          color: #000;
+          font-weight: 700;
+          margin-top: 1rem;
+          color: #333;
      }
 
      .puppy-details li {
-          font-size: 1rem;
-          color: #000;
-          margin-bottom: 0.25rem;
+          font-size: 0.9rem;
+          color: #666;
+          margin-bottom: 0.5rem;
+          display: flex;
+          align-items: center;
      }
 
-     .puppy-details i {
-          width: 20px;
-          color: #000;
-          margin-right: 5px;
+     .puppy-details li svg {
+          margin-right: 8px;
+          color: #3FB1B0;
      }
 
      .card-text {
-          font-size: 1rem;
-          color: #000;
+          font-size: 0.9rem;
+          color: #666;
+          line-height: 1.5;
      }
 
      .btn-add-interest {
-          background-color: #000;
+          background-color: #3FB1B0;
           color: #fff;
           border: none;
           padding: 10px 20px;
-          font-weight: bold;
-          text-transform: uppercase;
-          transition: background-color 0.3s ease;
-          width: 100%;
+          font-size: 1rem;
+          font-weight: 600;
+          border-radius: 25px;
+          transition: background-color 0.3s ease, transform 0.3s ease;
      }
 
      .btn-add-interest:hover {
-          background-color: #333;
+          background-color: #338F8E;
+          transform: translateY(-2px);
      }
 
      .slider-nav {
           position: absolute;
           top: 50%;
-          left: 0;
-          right: 0;
+          left: -20px;
+          right: -20px;
+          transform: translateY(-50%);
           display: flex;
           justify-content: space-between;
-          transform: translateY(-50%);
           pointer-events: none;
+          z-index: 10;
      }
 
      .slider-nav-btn {
-          background-color: #000;
+          background-color: #3FB1B0;
           color: #fff;
           width: 50px;
           height: 50px;
           border: none;
+          border-radius: 50%;
           display: flex;
           justify-content: center;
           align-items: center;
           cursor: pointer;
-          transition: background-color 0.3s ease;
+          transition: background-color 0.3s ease, transform 0.3s ease;
           pointer-events: auto;
      }
 
      .slider-nav-btn:hover {
-          background-color: #333;
+          background-color: #338F8E;
+          transform: scale(1.1);
+     }
+
+     .btn-primary {
+          background-color: #3FB1B0;
+          color: #fff;
+          border: none;
+          padding: 12px 30px;
+          font-size: 1.1rem;
+          font-weight: 600;
+          border-radius: 30px;
+          transition: background-color 0.3s ease, transform 0.3s ease;
+     }
+
+     .btn-primary:hover {
+          background-color: #338F8E;
+          transform: translateY(-3px);
      }
 
      @media (max-width: 768px) {
           .announcement-slider .swiper-slide {
                width: 85%;
           }
+
+          .section-title {
+               font-size: 2rem;
+          }
+
+          .slider-nav {
+               left: 0;
+               right: 0;
+          }
      }
 </style>
 
-
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-
 <script>
      document.addEventListener('DOMContentLoaded', function () {
-          const swiper = new Swiper('.announcement-slider', {
+          new Swiper('.announcement-slider', {
                slidesPerView: 'auto',
-               spaceBetween: 20,
+               spaceBetween: 30,
                loop: true,
                centeredSlides: true,
+               navigation: {
+                    nextEl: '.slider-nav-next',
+                    prevEl: '.slider-nav-prev',
+               },
                breakpoints: {
                     320: {
                          slidesPerView: 1.2,
+                         spaceBetween: 20,
                     },
                     640: {
                          slidesPerView: 2,
+                         spaceBetween: 30,
                     },
                     1024: {
                          slidesPerView: 3,
+                         spaceBetween: 40,
                     },
                },
-               autoplay: {
-                    delay: 3000,
-                    disableOnInteraction: false,
-               },
-          });
-
-          document.querySelector('.slider-nav-prev').addEventListener('click', () => {
-               swiper.slidePrev();
-          });
-          document.querySelector('.slider-nav-next').addEventListener('click', () => {
-               swiper.slideNext();
           });
      });
 </script>
+
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
