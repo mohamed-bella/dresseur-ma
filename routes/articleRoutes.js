@@ -153,7 +153,7 @@ router.get('/articles/:slug', async (req, res) => {
           // Find comments related to this article
           const comments = await Comment.find({ article: article._id });
 
-          res.render('USER/article', {
+          res.render('user/article', {
                article,
                comments,
                success: req.flash('success'),
