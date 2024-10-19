@@ -131,15 +131,20 @@
                </div>
 
                <div class="form-group">
-                    <label for="category">Category</label>
+                    <label for="category">Catégorie</label>
                     <select id="category" name="category" required>
-                         <option value="News">News</option>
-                         <option value="Tutorial">Tutorial</option>
-                         <option value="Review">Review</option>
-                         <option value="Opinion">Opinion</option>
-                         <option value="Other">Other</option>
+                         <option value="">-- Sélectionnez une catégorie --</option>
+                         <option value="dog-trainers">Dresseurs de chiens</option>
+                         <option value="veterinarians">Vétérinaires</option>
+                         <option value="pet-stores">Magasins pour animaux</option>
+                         <option value="dog-sitters">Gardiens de chiens</option>
+                         <option value="behavioral-psychology">Psychologie comportementale</option>
+                         <option value="educational-training">Formation éducative</option>
+                         <option value="puppy-training">Formation des chiots</option>
+                         <option value="obedience-training">Formation à l'obéissance</option>
                     </select>
                </div>
+
 
                <div class="form-group">
                     <label for="summary">Summary</label>
@@ -280,7 +285,7 @@
                     .then(data => {
                          if (data.success) {
                               // Redirect to the article's page using the returned articleId
-                              window.location.href = `/article/${data.slug}`;
+                              window.location.href = `/articles/${data.slug}`;
                          } else {
                               // Show error message
                               alert('Error publishing article: ' + data.message);

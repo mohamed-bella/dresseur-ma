@@ -1,14 +1,61 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
      <meta charset="UTF-8">
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
      <title>
-          <%= article.title %>
+          <%= article.title %> - Meilleurs Conseils en Dressage de Chiens et Comportement Canin
      </title>
+
+     <!-- Balises Meta pour SEO -->
+     <meta name="description" content="Découvrez les meilleurs conseils de dressage de chiens avec des astuces expertes de <%= article.author %>. Améliorez le comportement de votre chien grâce à ce guide essentiel.">
+     <meta name="keywords" content="dressage de chiens, dresseurs de chiens, comportement canin, formation animale, obéissance, soins des chiens">
+     <meta name="author" content="<%= article.author %>">
+
+     <!-- Balises Open Graph pour le partage social -->
+     <meta property="og:title" content="<%= article.title %>">
+     <meta property="og:description" content="Découvrez des conseils essentiels en dressage de chiens et des astuces expertes de <%= article.author %>.">
+     <meta property="og:image" content="<%= article.featuredImage %>">
+     <meta property="og:url" content="<%=  %>">
+
+     <!-- Balises Twitter -->
+     <meta name="twitter:card" content="summary_large_image">
+
+     <!-- Robots meta tag -->
+     <meta name="robots" content="index, follow">
+
+     <!-- URL Canonique -->
+     <link rel="canonical" href="<%=  %>">
+
+     <!-- Balises de schéma pour l'article -->
+     <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "<%= article.title %>",
+        "author": {
+            "@type": "Person",
+            "name": "<%= article.author %>"
+        },
+        "datePublished": "<%= article.createdAt.toISOString() %>",
+        "image": "<%= article.featuredImage %>",
+        "publisher": {
+            "@type": "Organization",
+            "name": "Ndressilik",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://yourlogo.com/logo.png"
+            }
+        },
+        "description": "Conseils de dressage de chiens de <%= article.author %>, couvrant l'obéissance, le comportement, et bien plus encore."
+    }
+    </script>
+
+     <!-- Liens vers les polices et feuilles de style -->
      <link href="https://fonts.googleapis.com/css2?family=Source+Serif+Pro:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
      <style>
           :root {
                --primary-color: #000;
@@ -202,41 +249,65 @@
 
 <body>
      <div class="container">
+          <!-- Go Back Button -->
+          <a href="javascript:history.back()" class="go-back-btn">Retour</a>
+
           <header>
                <h1>
                     <%= article.title %>
                </h1>
                <div class="meta">
-                    <img src="https://yt3.googleusercontent.com/-ipzLVONJ8tydLvEwhiZm7t2SFWGLxwb0Hzd8LoSxzi9I0-I1I_VmDWYZQKYUyuiFUWpthqoiA=s900-c-k-c0x00ffffff-no-rj" alt="<%= article.author %>" class="author-image">
+                    <img src="<%= article.authorImage %>" alt="<%= article.author %>" class="author-image">
                     <div class="author-info">
                          <span class="author-name">
                               <%= article.author %>
                          </span>
                          <span class="article-date">
-                              <%= article.createdAt.toDateString() %> · <%= article.readTime %> min read
+                              <%= article.createdAt.toDateString() %> · <%= article.readTime %> min de lecture
                          </span>
                     </div>
                </div>
           </header>
 
           <main>
-               <img src="<%= article.featuredImage %>" alt="<%= article.title %>" class="article-image">
+               <img src="<%= article.featuredImage %>" alt="<%= article.title %>" class="article-image" style="max-width: 100%; height: auto; object-fit: cover;">
 
                <article>
                     <%- article.content %>
                </article>
 
+               <!-- Display Tags -->
+               <div class="tags">
+                    <h3>Tags :</h3>
+                    <% article.tags.forEach(tag=> { %>
+                         <span class="tag">
+                              <%= tag %>
+                         </span>
+                         <% }) %>
+               </div>
+
+               <!-- Display Category and Publication Status -->
+               <div class="category-status">
+                    <p>Catégorie : <strong>
+                              <%= article.category %>
+                         </strong></p>
+                    <p>Statut de publication : <strong>
+                              <%= article.status %>
+                         </strong></p>
+               </div>
+
+               <!-- Social Share Buttons -->
                <div class="social-share">
-                    <a href="#" title="Share on Twitter"><i class="fab fa-twitter"></i></a>
-                    <a href="#" title="Share on Facebook"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" title="Share on LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="#" title="Copy link"><i class="fas fa-link"></i></a>
+                    <a href="https://twitter.com/share?url=<%= pageUrl %>&text=<%= article.title %>" target="_blank" title="Partager sur Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.facebook.com/sharer.php?u=<%= pageUrl %>" target="_blank" title="Partager sur Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=<%= pageUrl %>" target="_blank" title="Partager sur LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" onclick="copyLink('<%= pageUrl %>')" title="Copier le lien"><i class="fas fa-link"></i></a>
                </div>
 
                <section id="comments">
-                    <h2>Responses</h2>
+                    <h2>Réponses</h2>
                     <% if (comments.length===0) { %>
-                         <p>No responses yet. Be the first to respond!</p>
+                         <p>Aucune réponse pour le moment. Soyez le premier à répondre !</p>
                          <% } else { %>
                               <% comments.forEach(comment=> { %>
                                    <div class="comment">
@@ -252,7 +323,7 @@
                                    <% }) %>
                                         <% } %>
 
-                                             <h3>Write a response</h3>
+                                             <h3>Écrire une réponse</h3>
                                              <% if (error) { %>
                                                   <div class="alert alert-danger">
                                                        <%= error %>
@@ -265,7 +336,7 @@
                                                             <% } %>
                                                                  <form action="/articles/<%= article.slug %>/comments" method="POST">
                                                                       <div class="form-group">
-                                                                           <label for="name">Name</label>
+                                                                           <label for="name">Nom</label>
                                                                            <input type="text" id="name" name="name" required>
                                                                       </div>
                                                                       <div class="form-group">
@@ -273,14 +344,56 @@
                                                                            <input type="email" id="email" name="email" required>
                                                                       </div>
                                                                       <div class="form-group">
-                                                                           <label for="comment">Response</label>
+                                                                           <label for="comment">Réponse</label>
                                                                            <textarea id="comment" name="comment" rows="4" required></textarea>
                                                                       </div>
-                                                                      <button type="submit">Publish</button>
+                                                                      <button type="submit">Publier</button>
                                                                  </form>
                </section>
           </main>
      </div>
+
+     <!-- JavaScript for Copy Link -->
+     <script>
+          function copyLink(url) {
+               navigator.clipboard.writeText(url);
+               alert('Lien copié dans le presse-papiers');
+          }
+     </script>
+
+     <style>
+          .go-back-btn {
+               text-decoration: none;
+               color: #333;
+               background-color: #f5f5f5;
+               padding: 8px 16px;
+               border-radius: 5px;
+               display: inline-block;
+               margin-bottom: 20px;
+          }
+
+          .author-image {
+               width: 48px;
+               height: 48px;
+               border-radius: 50%;
+               margin-right: 15px;
+          }
+
+          .social-share a {
+               margin-right: 15px;
+               color: #757575;
+               font-size: 18px;
+          }
+
+          .tags .tag {
+               display: inline-block;
+               background-color: #f0f0f0;
+               padding: 5px 10px;
+               margin-right: 10px;
+               border-radius: 20px;
+          }
+     </style>
+
 </body>
 
 </html>

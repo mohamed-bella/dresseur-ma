@@ -145,6 +145,7 @@ router.get('/articles/:slug', async (req, res) => {
      try {
           // Find the article by slug
           const article = await Article.findOne({ slug });
+          const pageUrl = `https://www.ndressilik.com/articles/${article.slug}`;
 
           if (!article) {
                return res.status(404).send('Article not found');
@@ -156,6 +157,7 @@ router.get('/articles/:slug', async (req, res) => {
           res.render('user/article', {
                article,
                comments,
+               pageUrl,
                success: req.flash('success'),
                error: req.flash('error')
           });

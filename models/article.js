@@ -35,7 +35,7 @@ const articleSchema = new Schema({
      status: {
           type: String,
           enum: ['Published', 'Draft'],
-          default: 'Draft',
+          default: 'Published',
      },
      seo: {
           title: {
