@@ -1,0 +1,51 @@
+<%- include('include/head.ejs') %>
+     <%- include('include/navbar.ejs') %>
+
+          <div class="container">
+               <h1 class="my-4">Nos Annonces</h1>
+               <div class="row">
+                    <!-- Iterate over each announcement -->
+                    <% announcements.forEach((announcement, index)=> { %>
+                         <div class="col-lg-4 col-md-6 mb-4">
+                              <div class="card h-100">
+                                   <!-- Announcement Image -->
+                                   <img class="card-img-top" src="<%= announcement.images[0] %>" alt="<%= announcement.breed %>">
+                                   <div class="card-body">
+                                        <h4 class="card-title">
+                                             <a href="/announcements/<%= announcement.slug %>">
+                                                  <%= announcement.breed %>
+                                             </a>
+                                        </h4>
+                                        <p class="card-text"><strong>Description:</strong>
+                                             <%= announcement.description %>
+                                        </p>
+                                        <ul class="list-unstyled">
+                                             <li><strong>Type d'annonce :</strong>
+                                                  <%= announcement.announcementType==='sale' ? 'Vente' : 'Adoption' %>
+                                             </li>
+                                             <li><strong>Âge :</strong>
+                                                  <%= announcement.age %>
+                                             </li>
+                                             <li><strong>Genre :</strong>
+                                                  <%= announcement.gender==='male' ? 'Mâle' : 'Femelle' %>
+                                             </li>
+                                             <li><strong>Localisation :</strong>
+                                                  <%= announcement.location %>
+                                             </li>
+                                             <li><strong>Prix :</strong>
+                                                  <%= announcement.price ? announcement.price + ' MAD' : 'Non spécifié' %>
+                                             </li>
+                                        </ul>
+                                   </div>
+                                   <div class="card-footer d-flex justify-content-between align-items-center">
+                                        <a href="/announcements/<%= announcement.slug %>" class="btn btn-primary">Voir l'annonce</a>
+                                        <small class="text-muted">Publié le <%= announcement.createdAt.toDateString() %></small>
+                                   </div>
+                              </div>
+                         </div>
+                         <% }) %>
+               </div>
+          </div>
+
+          <!-- include footer -->
+          <%- include('include/footer.ejs') %>

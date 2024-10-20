@@ -204,6 +204,18 @@ router.post('/announcements/new', upload.array('images', 10), async (req, res) =
 });
 
 
+// GET adopted dogs only
+router.get('/adoptions', async (req, res) => {
+     try {
+          // Fetch only adopted dogs from the database
+          const adoptedDogs = await Announcement.find({ announcementType: 'adopted' }); // assuming 'status' field in Dog model
+
+          res.render('user/adoption', { announcements: adoptedDogs });
+     } catch (error) {
+          console.error('Error fetching adopted dogs:', error);
+          res.status(500).send('Server Error');
+     }
+});
 
 
 
@@ -339,6 +351,26 @@ router.get('/tous-les-annonces', async (req, res) => {
           res.status(500).send('Internal Server Error');
      }
 });
+// Route for Privacy Policy Page
+router.get('/politique-de-confidentialite', (req, res) => {
+     res.render('user/privacyPolicy');
+});
+// Route for Terms of Use Page
+router.get('/conditions-d-utilisation', (req, res) => {
+     res.render('user/terms');
+});
+
+// Route for FAQ Page
+router.get('/faq', (req, res) => {
+     res.render('user/faq');
+});
+
+
+// Route for contact
+router.get('/contact', (req, res) => {
+     res.render('user/contact', { formData: {} });
+});
+
 
 
 module.exports = router;

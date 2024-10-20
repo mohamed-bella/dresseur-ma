@@ -35,7 +35,13 @@ app.use(session({
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use(flash());
-// Passport middleware
+
+// Global variables for flash messages
+app.use((req, res, next) => {
+     res.locals.success = req.flash('success');
+     res.locals.error = req.flash('error');
+     next();
+});// Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -80,6 +86,10 @@ app.use(adminRoutes)
 
 const articleRoutes = require('./routes/articleRoutes')
 app.use(articleRoutes)
+
+
+const contactRoute = require('./routes/contactRoute')
+app.use(contactRoute)
 // const marcheCanineRoutes = require('./routes/marcheCanineRoutes')
 // app.use(marcheCanineRoutes)
 

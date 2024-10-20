@@ -26,14 +26,14 @@
                                                   <label class="option-card">
                                                        <input type="radio" name="announcementType" value="sale" required>
                                                        <div class="option-content">
-                                                            <i class="fas fa-tag fa-2x mb-2"></i>
+                                                            <img src="https://img.icons8.com/ios-filled/50/000000/sell.png" alt="Vendre" class="mb-2" style="width: 50px;">
                                                             <span>Vendre</span>
                                                        </div>
                                                   </label>
                                                   <label class="option-card">
                                                        <input type="radio" name="announcementType" value="adoption" required>
                                                        <div class="option-content">
-                                                            <i class="fas fa-home fa-2x mb-2"></i>
+                                                            <img src="https://img.icons8.com/ios-filled/50/000000/pet-home.png" alt="Adoption" class="mb-2" style="width: 50px;">
                                                             <span>Adoption</span>
                                                        </div>
                                                   </label>
@@ -44,14 +44,14 @@
                                                        <label class="option-card">
                                                             <input type="radio" name="animalType" value="dog" required>
                                                             <div class="option-content">
-                                                                 <i class="fas fa-dog fa-2x mb-2"></i>
+                                                                 <img src="https://img.icons8.com/ios-filled/50/000000/dog.png" alt="Chien" class="mb-2" style="width: 50px;">
                                                                  <span>Chien</span>
                                                             </div>
                                                        </label>
                                                        <label class="option-card">
                                                             <input type="radio" name="animalType" value="cat" required>
                                                             <div class="option-content">
-                                                                 <i class="fas fa-cat fa-2x mb-2"></i>
+                                                                 <img src="https://img.icons8.com/ios-filled/50/000000/cat.png" alt="Chat" class="mb-2" style="width: 50px;">
                                                                  <span>Chat</span>
                                                             </div>
                                                        </label>
@@ -72,22 +72,22 @@
                                                        <label class="option-card">
                                                             <input type="radio" name="age" value="puppy" required>
                                                             <div class="option-content">
-                                                                 <i class="fas fa-baby fa-3x mb-2"></i>
+                                                                 <img src="https://img.icons8.com/ios-filled/20/000000/dog.png" alt="Chien" class="mb-2" style="width: 20px;">
                                                                  <span>Chiot/Chaton</span>
                                                             </div>
                                                        </label>
                                                        <label class="option-card">
                                                             <input type="radio" name="age" value="adult">
                                                             <div class="option-content">
-                                                                 <i class="fas fa-user fa-2x mb-2"></i>
+                                                                 <img src="https://img.icons8.com/ios-filled/40/000000/dog.png" alt="Chien" class="mb-2" style="width: 40px;">
                                                                  <span>Adulte</span>
                                                             </div>
                                                        </label>
                                                        <label class="option-card">
                                                             <input type="radio" name="age" value="senior">
                                                             <div class="option-content">
-                                                                 <i class="fas fa-user-tie fa-1x mb-2"></i>
-                                                                 <span>Senior</span>
+                                                                 <img src="https://img.icons8.com/ios-filled/60/000000/dog.png" alt="Chien" class="mb-2" style="width: 60px;">
+                                                                 <span>chien Age</span>
                                                             </div>
                                                        </label>
                                                   </div>
@@ -98,19 +98,20 @@
                                                        <label class="option-card">
                                                             <input type="radio" name="gender" value="male" required>
                                                             <div class="option-content">
-                                                                 <i class="fas fa-mars fa-2x mb-2"></i>
+                                                                 <img src="https://img.icons8.com/ios-filled/50/000000/male.png" alt="Mâle" class="mb-2" style="width: 50px;">
                                                                  <span>Mâle</span>
                                                             </div>
                                                        </label>
                                                        <label class="option-card">
                                                             <input type="radio" name="gender" value="female">
                                                             <div class="option-content">
-                                                                 <i class="fas fa-venus fa-2x mb-2"></i>
+                                                                 <img src="https://img.icons8.com/ios-filled/50/000000/female.png" alt="Femelle" class="mb-2" style="width: 50px;">
                                                                  <span>Femelle</span>
                                                             </div>
                                                        </label>
                                                   </div>
                                              </div>
+                                             <!-- </div> -->
                                              <div class="mb-3">
                                                   <label class="form-label">Statut de Vaccination*</label>
                                                   <div class="option-grid">
@@ -197,10 +198,7 @@
                                                   <input type="tel" class="form-control" id="whatsapp" name="whatsapp" required>
                                                   <label for="whatsapp">Numéro WhatsApp*</label>
                                              </div>
-                                             <div class="form-floating mb-3">
-                                                  <input type="email" class="form-control" id="email" name="email">
-                                                  <label for="email">Email (Optionnel)</label>
-                                             </div>
+
                                              <div class="form-floating mb-3">
                                                   <textarea class="form-control" id="description" name="description" style="height: 100px" required></textarea>
                                                   <label for="description">Description*</label>
@@ -260,7 +258,7 @@
                     .option-card {
                          border: 2px solid #e0e0e0;
                          border-radius: 8px;
-                         padding: 1rem;
+                         /* padding: 1rem; */
                          text-align: center;
                          cursor: pointer;
                          transition: all 0.3s ease;
@@ -281,6 +279,10 @@
 
                     .option-content {
                          display: flex;
+                         padding: 1em;
+                         justify-content: center;
+                         align-items: center;
+
                          flex-direction: column;
                          align-items: center;
                     }
