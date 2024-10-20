@@ -186,88 +186,97 @@
                     <div class="col-lg-8">
                          <!-- Article Info -->
                          <p class="article-meta">
-                              Publié le <%= article.createdAt.toDateString() %> · <%= article.readTime %> min de lecture
+                              Publié le <%= article.createdAt.toDateString() %> · <%= readTime %> min de lecture
                          </p>
 
-                         <div class="article-content">
-                              <%- article.content %>
-                         </div>
+                         <!-- Article Image (Check if article has a featured image) -->
+                         <% if (article.featuredImage) { %>
+                              <div class="article-image mb-4">
+                                   <img src="<%= article.featuredImage %>" alt="<%= article.title %>" class="img-fluid">
+                              </div>
+                              <% } %>
 
-                         <!-- Tags Section -->
-                         <div class="tags my-4">
-                              <% article.tags.forEach(tag=> { %>
-                                   <span class="badge rounded-pill">
-                                        <%= tag %>
-                                   </span>
-                                   <% }) %>
-                         </div>
+                                   <!-- Article Content -->
+                                   <div class="article-content">
+                                        <%- article.content %>
+                                   </div>
 
-                         <!-- Social Share Buttons -->
-                         <div class="social-share my-4">
-                              <a href="https://twitter.com/share?url=<%= pageUrl %>&text=<%= article.title %>" target="_blank" title="Partager sur Twitter">
-                                   <i class="fab fa-twitter"></i>
-                              </a>
-                              <a href="https://www.facebook.com/sharer.php?u=<%= pageUrl %>" target="_blank" title="Partager sur Facebook">
-                                   <i class="fab fa-facebook"></i>
-                              </a>
-                              <a href="https://www.linkedin.com/sharing/share-offsite/?url=<%= pageUrl %>" target="_blank" title="Partager sur LinkedIn">
-                                   <i class="fab fa-linkedin"></i>
-                              </a>
-                              <a href="#" onclick="copyLink('<%= pageUrl %>')" title="Copier le lien">
-                                   <i class="fas fa-link"></i>
-                              </a>
-                         </div>
-
-                         <!-- Comments Section -->
-                         <hr>
-                         <section id="comments">
-                              <h2>Réponses</h2>
-                              <% if (comments.length===0) { %>
-                                   <p>Aucune réponse pour le moment. Soyez le premier à répondre !</p>
-                                   <% } else { %>
-                                        <% comments.forEach(comment=> { %>
-                                             <div class="comment mb-4">
-                                                  <strong>
-                                                       <%= comment.name %>
-                                                  </strong> · <%= comment.createdAt.toDateString() %>
-                                                       <p>
-                                                            <%= comment.comment %>
-                                                       </p>
-                                             </div>
+                                   <!-- Tags Section -->
+                                   <div class="tags my-4">
+                                        <% article.tags.forEach(tag=> { %>
+                                             <span class="badge rounded-pill">
+                                                  <%= tag %>
+                                             </span>
                                              <% }) %>
-                                                  <% } %>
-                                                       <hr>
+                                   </div>
 
-                                                       <h3>Écrire une réponse</h3>
-                                                       <% if (error && error.length> 0) { %>
-                                                            <div class="alert alert-danger">
-                                                                 <%= error %>
-                                                            </div>
+                                   <!-- Social Share Buttons -->
+                                   <div class="social-share my-4">
+                                        <a href="https://twitter.com/share?url=<%= pageUrl %>&text=<%= article.title %>" target="_blank" title="Partager sur Twitter">
+                                             <i class="fab fa-twitter"></i>
+                                        </a>
+                                        <a href="https://www.facebook.com/sharer.php?u=<%= pageUrl %>" target="_blank" title="Partager sur Facebook">
+                                             <i class="fab fa-facebook"></i>
+                                        </a>
+                                        <a href="https://www.linkedin.com/sharing/share-offsite/?url=<%= pageUrl %>" target="_blank" title="Partager sur LinkedIn">
+                                             <i class="fab fa-linkedin"></i>
+                                        </a>
+                                        <a href="#" onclick="copyLink('<%= pageUrl %>')" title="Copier le lien">
+                                             <i class="fas fa-link"></i>
+                                        </a>
+                                   </div>
+
+                                   <!-- Comments Section -->
+                                   <hr>
+                                   <section id="comments">
+                                        <h2>Réponses</h2>
+                                        <% if (comments.length===0) { %>
+                                             <p>Aucune réponse pour le moment. Soyez le premier à répondre !</p>
+                                             <% } else { %>
+                                                  <% comments.forEach(comment=> { %>
+                                                       <div class="comment mb-4">
+                                                            <strong>
+                                                                 <%= comment.name %>
+                                                            </strong> · <%= comment.createdAt.toDateString() %>
+                                                                 <p>
+                                                                      <%= comment.comment %>
+                                                                 </p>
+                                                       </div>
+                                                       <% }) %>
                                                             <% } %>
+                                                                 <hr>
 
-                                                                 <% if (success && success.length> 0) { %>
-                                                                      <div class="alert alert-success">
-                                                                           <%= success %>
+                                                                 <h3>Écrire une réponse</h3>
+                                                                 <% if (error && error.length> 0) { %>
+                                                                      <div class="alert alert-danger">
+                                                                           <%= error %>
                                                                       </div>
                                                                       <% } %>
 
-                                                                           <form action="/articles/<%= article.slug %>/comments" method="POST" class="mb-5">
-                                                                                <div class="mb-3">
-                                                                                     <label for="name" class="form-label">Nom</label>
-                                                                                     <input type="text" id="name" name="name" class="form-control" required>
+                                                                           <% if (success && success.length> 0) { %>
+                                                                                <div class="alert alert-success">
+                                                                                     <%= success %>
                                                                                 </div>
-                                                                                <div class="mb-3">
-                                                                                     <label for="email" class="form-label">Email</label>
-                                                                                     <input type="email" id="email" name="email" class="form-control" required>
-                                                                                </div>
-                                                                                <div class="mb-3">
-                                                                                     <label for="comment" class="form-label">Réponse</label>
-                                                                                     <textarea id="comment" name="comment" rows="4" class="form-control" required></textarea>
-                                                                                </div>
-                                                                                <button type="submit" class="btn btn-primary">Publier</button>
-                                                                           </form>
-                         </section>
+                                                                                <% } %>
+
+                                                                                     <form action="/articles/<%= article.slug %>/comments" method="POST" class="mb-5">
+                                                                                          <div class="mb-3">
+                                                                                               <label for="name" class="form-label">Nom</label>
+                                                                                               <input type="text" id="name" name="name" class="form-control" required>
+                                                                                          </div>
+                                                                                          <div class="mb-3">
+                                                                                               <label for="email" class="form-label">Email</label>
+                                                                                               <input type="email" id="email" name="email" class="form-control" required>
+                                                                                          </div>
+                                                                                          <div class="mb-3">
+                                                                                               <label for="comment" class="form-label">Réponse</label>
+                                                                                               <textarea id="comment" name="comment" rows="4" class="form-control" required></textarea>
+                                                                                          </div>
+                                                                                          <button type="submit" class="btn btn-primary">Publier</button>
+                                                                                     </form>
+                                   </section>
                     </div>
+
 
                     <!-- Suggested Articles Section -->
                     <div class="col-lg-4">

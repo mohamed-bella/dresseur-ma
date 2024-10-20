@@ -332,27 +332,16 @@
                          flex-direction: column;
                          margin: 1rem auto;
                          background: #fff;
-                         border-radius: 12px;
                          overflow: hidden;
-                         border-radius: 5px !important;
-                         border: 1px solid #979696;
                     }
 
 
 
-                    .blog-card a {
-                         color: inherit;
-                         text-decoration: none;
-                         transition: color 0.3s ease;
-                    }
 
-                    .blog-card a:hover {
-                         color: #3498db;
-                    }
 
                     .blog-card .meta {
                          position: relative;
-                         height: 250px;
+                         height: 200px;
                     }
 
                     .blog-card .photo {
@@ -366,9 +355,7 @@
                          transition: transform 0.3s ease;
                     }
 
-                    .blog-card:hover .photo {
-                         transform: scale(1.05);
-                    }
+
 
                     .blog-card .details {
                          position: absolute;
@@ -378,8 +365,9 @@
                          display: none;
                          width: 100%;
                          padding: 15px;
-                         background: rgba(0, 0, 0, 0.7);
+                         background: rgba(0, 0, 0, 0.253);
                          color: #fff;
+
                          font-size: 0.9rem;
                          transition: left 0.3s ease;
                     }
@@ -416,8 +404,9 @@
                     }
 
                     .blog-card .description {
-                         padding: 10px;
-                         background: #fff;
+                         background: #ffffff52;
+                         background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+
                     }
 
                     .blog-card .description h1 {
@@ -453,10 +442,7 @@
                          transition: all 0.3s ease;
                     }
 
-                    .blog-card .description .read-more a:hover {
-                         background-color: #2980b9;
-                         transform: translateX(5px);
-                    }
+
 
                     @media (max-width: 768px) {
                          .blog-card {

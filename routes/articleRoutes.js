@@ -29,6 +29,9 @@ const s3 = new S3Client({
      }
 });
 
+
+
+
 // GET: Create new article
 router.get('/admin/articles/new', isAuthor, (req, res) => {
      res.render('admin/newArticle', { title: 'New Article' });
@@ -178,6 +181,17 @@ router.post('/admin/articles/:slug/delete', isAuthor, async (req, res) => {
 
 // GET THE ARTICLE BY SLUG AND DISPLAY IT IN THE ARTICLE PAGE
 router.get('/articles/:slug', async (req, res) => {
+
+     const calculateReadingTime = (content) => {
+          const wordsPerMinute = 200; // Average reading speed
+          const text = content.replace(/<[^>]*>/g, ''); // Remove HTML tags if any
+          const wordCount = text.trim().split(/\s+/).length; // Count the words
+          const readingTime = Math.ceil(wordCount / wordsPerMinute); // Calculate the reading time
+          return readingTime;
+     };
+
+
+
      const slug = req.params.slug;
 
      try {
@@ -197,11 +211,13 @@ router.get('/articles/:slug', async (req, res) => {
                category: article.category,
                _id: { $ne: article._id } // Exclude the current article
           }).limit(5);
-
+          const readTime = calculateReadingTime(article.content);
+          console.log(readTime)
           res.render('user/article', {
                article,
                comments,
                pageUrl,
+               readTime,
                suggestedArticles, // Pass the suggested articles to the template
                success: req.flash('success'),
                error: req.flash('error')
