@@ -13,7 +13,6 @@ const articleSchema = new Schema({
      category: {
           type: String,
           required: true,
-          enum: ['News', 'Tutorial', 'Review', 'Opinion', 'Other'],
      },
      tags: [String],
      summary: {

@@ -3,21 +3,31 @@ const router = express.Router();
 const Article = require('../models/article');
 const { isAuthor } = require('../middlewares/auth');
 const multer = require('multer');
+const { S3Client } = require('@aws-sdk/client-s3');
+const { Upload } = require('@aws-sdk/lib-storage');
 const path = require('path');
+require('dotenv').config();
+const sharp = require('sharp');
 const slugify = require('slugify');
 const Comment = require('../models/comment');
 
-// Set up multer for file uploads
-const storage = multer.diskStorage({
-     destination: function (req, file, cb) {
-          cb(null, 'uploads');
-     },
-     filename: function (req, file, cb) {
-          cb(null, Date.now() + path.extname(file.originalname));
-     }
+// Set up multer for file uploads (saving locally)
+const storage = multer.memoryStorage();
+
+
+const upload = multer({
+     storage: storage, // Use memory storage to hold files in buffer
+     limits: { fileSize: 10 * 1024 * 1024 } // Limit file size to 10MB (adjust as needed)
 });
 
-const upload = multer({ storage: storage });
+// Configure AWS S3 Client with the correct region
+const s3 = new S3Client({
+     region: 'eu-north-1', // Ensure the region matches your S3 bucket
+     credentials: {
+          accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+          secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+     }
+});
 
 // GET: Create new article
 router.get('/admin/articles/new', isAuthor, (req, res) => {
@@ -48,6 +58,34 @@ router.post('/admin/articles', isAuthor, upload.single('featuredImage'), async (
      const slug = slugify(`${title}-${currentDate}-${randomNum}`, { lower: true, strict: true });
 
      try {
+          // Initialize imageUrl as null (for when no image is uploaded)
+          let imageUrl = null;
+
+          // Handle image upload to S3 if a file was uploaded
+          if (req.file) {
+               const buffer = await sharp(req.file.buffer)
+                    .webp({ quality: 80 })
+                    .toBuffer();
+
+               const key = `uploads/${Date.now()}-${Math.round(Math.random() * 1E9)}.webp`;
+
+               const uploadParams = {
+                    Bucket: process.env.AWS_S3_BUCKET_NAME, // Your S3 bucket name
+                    Key: key,
+                    Body: buffer,
+                    ContentType: 'image/webp'
+               };
+
+               const parallelUploads3 = new Upload({
+                    client: s3,
+                    params: uploadParams
+               });
+
+               const data = await parallelUploads3.done();
+               imageUrl = data.Location; // Save the uploaded image URL
+          }
+
+          // Create new article
           const newArticle = new Article({
                title,
                slug, // Save the generated slug
@@ -55,14 +93,16 @@ router.post('/admin/articles', isAuthor, upload.single('featuredImage'), async (
                category,
                tags: tags.split(',').map(tag => tag.trim()),
                summary,
-               featuredImage: req.file ? `/uploads/${req.file.filename}` : null,
-               author: author,
+               featuredImage: imageUrl, // Store the S3 URL or null if no image was uploaded
+               author,
                seo: {
                     title: seoTitle,
                     description: seoDescription,
                     keywords: keywords.split(',').map(keyword => keyword.trim())
                }
           });
+
+          // Save the new article in the database
           await newArticle.save();
 
           // Send back a proper JSON response
@@ -81,7 +121,6 @@ router.post('/admin/articles', isAuthor, upload.single('featuredImage'), async (
           });
      }
 });
-
 // GET: Edit article
 router.get('/admin/articles/:slug/edit', isAuthor, async (req, res) => {
      try {
