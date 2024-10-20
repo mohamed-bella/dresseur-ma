@@ -137,8 +137,7 @@ router.post('/admin/articles/:slug/delete', isAuthor, async (req, res) => {
      }
 });
 
-
-// GET THE ARTICLE BY SLUG AND DISPLAY IT IN THE ARTICLE PAGE 
+// GET THE ARTICLE BY SLUG AND DISPLAY IT IN THE ARTICLE PAGE
 router.get('/articles/:slug', async (req, res) => {
      const slug = req.params.slug;
 
@@ -154,10 +153,17 @@ router.get('/articles/:slug', async (req, res) => {
           // Find comments related to this article
           const comments = await Comment.find({ article: article._id });
 
+          // Fetch suggested articles from the same category, limit to 5
+          const suggestedArticles = await Article.find({
+               category: article.category,
+               _id: { $ne: article._id } // Exclude the current article
+          }).limit(5);
+
           res.render('user/article', {
                article,
                comments,
                pageUrl,
+               suggestedArticles, // Pass the suggested articles to the template
                success: req.flash('success'),
                error: req.flash('error')
           });
@@ -166,6 +172,7 @@ router.get('/articles/:slug', async (req, res) => {
           res.status(500).send('Server Error');
      }
 });
+
 
 // POST comment on an article
 router.post('/articles/:slug/comments', async (req, res) => {

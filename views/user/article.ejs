@@ -5,395 +5,299 @@
      <meta charset="UTF-8">
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
      <title>
-          <%= article.title %> - Meilleurs Conseils en Dressage de Chiens et Comportement Canin
+          <%= article.title %> - Meilleurs Conseils en Dressage de Chiens
      </title>
 
-     <!-- Balises Meta pour SEO -->
-     <meta name="description" content="Découvrez les meilleurs conseils de dressage de chiens avec des astuces expertes de <%= article.author %>. Améliorez le comportement de votre chien grâce à ce guide essentiel.">
-     <meta name="keywords" content="dressage de chiens, dresseurs de chiens, comportement canin, formation animale, obéissance, soins des chiens">
+     <!-- Meta Tags for SEO -->
+     <meta name="description" content="Découvrez les meilleurs conseils de dressage de chiens avec des astuces expertes de <%= article.author %>.">
+     <meta name="keywords" content="dressage de chiens, comportement canin, obéissance">
      <meta name="author" content="<%= article.author %>">
 
-     <!-- Balises Open Graph pour le partage social -->
+     <!-- Open Graph Meta Tags -->
      <meta property="og:title" content="<%= article.title %>">
-     <meta property="og:description" content="Découvrez des conseils essentiels en dressage de chiens et des astuces expertes de <%= article.author %>.">
+     <meta property="og:description" content="Découvrez des conseils essentiels en dressage de chiens de <%= article.author %>.">
      <meta property="og:image" content="<%= article.featuredImage %>">
-     <meta property="og:url" content="<%=  %>">
+     <meta property="og:url" content="<%= pageUrl %>">
 
-     <!-- Balises Twitter -->
+     <!-- Twitter Card -->
      <meta name="twitter:card" content="summary_large_image">
 
-     <!-- Robots meta tag -->
-     <meta name="robots" content="index, follow">
+     <!-- Canonical URL -->
+     <link rel="canonical" href="<%= pageUrl %>">
 
-     <!-- URL Canonique -->
-     <link rel="canonical" href="<%=  %>">
-
-     <!-- Balises de schéma pour l'article -->
+     <!-- Schema.org Article Markup -->
      <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "<%= article.title %>",
-        "author": {
-            "@type": "Person",
-            "name": "<%= article.author %>"
-        },
-        "datePublished": "<%= article.createdAt.toISOString() %>",
-        "image": "<%= article.featuredImage %>",
-        "publisher": {
-            "@type": "Organization",
-            "name": "Ndressilik",
-            "logo": {
-                "@type": "ImageObject",
-                "url": "https://yourlogo.com/logo.png"
-            }
-        },
-        "description": "Conseils de dressage de chiens de <%= article.author %>, couvrant l'obéissance, le comportement, et bien plus encore."
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "<%= article.title %>",
+            "author": {
+                "@type": "Person",
+                "name": "<%= article.author %>"
+            },
+            "datePublished": "<%= article.createdAt.toISOString() %>",
+            "image": "<%= article.featuredImage %>",
+            "publisher": {
+                "@type": "Organization",
+                "name": "Ndressilik",
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": "https://yourlogo.com/logo.png"
+                }
+            },
+            "description": "Conseils de dressage de chiens par <%= article.author %>."
+        }
     </script>
 
-     <!-- Liens vers les polices et feuilles de style -->
-     <link href="https://fonts.googleapis.com/css2?family=Source+Serif+Pro:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+     <!-- Bootstrap CSS -->
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 
+     <!-- Custom Styles -->
      <style>
-          :root {
-               --primary-color: #000;
-               --secondary-color: #fff;
-               --text-color: #292929;
-               --light-gray: #e6e6e6;
-               --medium-gray: #757575;
-          }
-
-          * {
-               box-sizing: border-box;
-               margin: 0;
-               padding: 0;
-          }
-
           body {
-               font-family: 'Source Serif Pro', serif;
-               line-height: 1.6;
-               color: var(--text-color);
-               background-color: var(--secondary-color);
+               background-color: #f8f9fa;
+               color: #212529;
+               font-family: 'Inter', sans-serif;
+          }
+
+          .jumbotron {
+               background-color: #f8fdc8;
+               /* Couleur de fond claire */
+               border-radius: 10px;
+               padding: 2rem;
+               /* box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); */
+          }
+
+          .jumbotron h1 {
+               font-size: 3rem;
+               font-weight: bold;
+          }
+
+          .jumbotron p {
+               font-size: 1.25rem;
+          }
+
+          .jumbotron .btn-lg {
+               padding: 0.75rem 1.5rem;
+               font-size: 1.2rem;
+          }
+
+          /* Blog card styles */
+          .blog-card {
+               background: white;
+               border-radius: 10px;
+               box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+               overflow: hidden;
+               transition: transform 0.3s ease;
+          }
+
+          .blog-card:hover {
+               transform: translateY(-5px);
+          }
+
+          .blog-card .photo {
+               height: 200px;
+               background-size: cover;
+               background-position: center;
+          }
+
+          .blog-card .description {
+               padding: 15px;
+          }
+
+          .blog-card .read-more a {
+               text-decoration: none;
+               color: #007bff;
+          }
+
+          .blog-card .read-more a:hover {
+               text-decoration: underline;
+               color: #0056b3;
           }
 
           .container {
-               max-width: 700px;
-               margin: 0 auto;
-               padding: 20px;
+               /* padding: 40px 0; */
           }
 
-          header {
-               margin-bottom: 40px;
-          }
-
-          h1 {
-               font-size: 40px;
-               font-weight: 700;
+          .suggested-articles .card {
                margin-bottom: 20px;
-               line-height: 1.2;
           }
 
-          .meta {
-               font-family: 'Open Sans', sans-serif;
-               font-size: 14px;
-               color: var(--medium-gray);
-               margin-bottom: 20px;
-               display: flex;
-               align-items: center;
-          }
-
-          .author-image {
-               width: 48px;
-               height: 48px;
-               border-radius: 50%;
-               margin-right: 15px;
-          }
-
-          .author-info {
-               display: flex;
-               flex-direction: column;
-          }
-
-          .author-name {
-               font-weight: 600;
-               color: var(--primary-color);
-          }
-
-          .article-date {
-               color: var(--medium-gray);
-          }
-
-          .article-image {
-               width: 100%;
-               max-height: 400px;
-               object-fit: cover;
-               margin-bottom: 40px;
-          }
-
-          article {
-               font-size: 21px;
+          .article-content {
+               font-size: 18px;
                line-height: 1.8;
-               margin-bottom: 40px;
           }
 
-          article p {
-               margin-bottom: 30px;
+          .article-meta {
+               font-size: 14px;
+               color: #6c757d;
+               margin-bottom: 20px;
           }
 
-          .social-share {
-               display: flex;
-               justify-content: flex-start;
-               margin-bottom: 30px;
-               font-family: 'Open Sans', sans-serif;
+          .tags .badge {
+               background-color: #6c757d;
+               margin-right: 10px;
           }
 
           .social-share a {
+               color: #6c757d;
                margin-right: 15px;
-               color: var(--medium-gray);
-               font-size: 18px;
-               text-decoration: none;
+               font-size: 1.2rem;
           }
 
-          #comments {
-               border-top: 1px solid var(--light-gray);
-               padding-top: 30px;
-               font-family: 'Open Sans', sans-serif;
+          .social-share a:hover {
+               color: #495057;
           }
 
-          .comment {
-               margin-bottom: 20px;
-               padding-bottom: 20px;
-               border-bottom: 1px solid var(--light-gray);
-          }
-
-          .comment-meta {
-               font-size: 14px;
-               color: var(--medium-gray);
-               margin-bottom: 10px;
-          }
-
-          form {
-               margin-top: 30px;
-          }
-
-          .form-group {
-               margin-bottom: 20px;
-          }
-
-          label {
-               display: block;
-               margin-bottom: 5px;
-               font-weight: 600;
-          }
-
-          input[type="text"],
-          input[type="email"],
-          textarea {
-               width: 100%;
-               padding: 10px;
-               border: 1px solid var(--light-gray);
-               font-family: 'Open Sans', sans-serif;
-               font-size: 16px;
-          }
-
-          button {
-               background-color: var(--primary-color);
-               color: var(--secondary-color);
-               padding: 10px 20px;
-               border: none;
-               cursor: pointer;
-               font-family: 'Open Sans', sans-serif;
-               font-size: 16px;
-          }
-
-          button:hover {
-               background-color: #333;
-          }
-
-          .alert {
-               padding: 10px;
-               margin-bottom: 20px;
-               border: 1px solid transparent;
-               font-family: 'Open Sans', sans-serif;
-          }
-
-          .alert-danger {
-               background-color: #fbe9e7;
-               border-color: #f4c7c2;
-               color: #c62828;
-          }
-
-          .alert-success {
-               background-color: #e8f5e9;
-               border-color: #c8e6c9;
-               color: #2e7d32;
-          }
-
+          /* Adjust responsive layout */
           @media (max-width: 768px) {
-               .container {
-                    padding: 15px;
+               .hero-content h1 {
+                    font-size: 2rem;
                }
 
-               h1 {
-                    font-size: 32px;
-               }
-
-               article {
-                    font-size: 18px;
+               .hero-content p {
+                    font-size: 1rem;
                }
           }
      </style>
 </head>
 
 <body>
-     <div class="container">
-          <!-- Go Back Button -->
-          <a href="javascript:history.back()" class="go-back-btn">Retour</a>
-
-          <header>
-               <h1>
-                    <%= article.title %>
-               </h1>
-               <div class="meta">
-                    <img src="<%= article.authorImage %>" alt="<%= article.author %>" class="author-image">
-                    <div class="author-info">
-                         <span class="author-name">
-                              <%= article.author %>
-                         </span>
-                         <span class="article-date">
-                              <%= article.createdAt.toDateString() %> · <%= article.readTime %> min de lecture
-                         </span>
+     <%- include('include/navbar.ejs') %>
+          <div class="container-fluid bg-light py-5 mb-4">
+               <div class="container">
+                    <div class="jumbotron py-5">
+                         <h1 class="display-4">
+                              <%= article.title %>
+                         </h1>
+                         <p class="lead">
+                              Publié par <%= article.author %> le <%= article.createdAt.toDateString() %>
+                         </p>
                     </div>
                </div>
-          </header>
+          </div>
+          <div class="container">
+               <div class="row">
+                    <!-- Main Article Content -->
+                    <div class="col-lg-8">
+                         <!-- Article Info -->
+                         <p class="article-meta">
+                              Publié le <%= article.createdAt.toDateString() %> · <%= article.readTime %> min de lecture
+                         </p>
 
-          <main>
-               <img src="<%= article.featuredImage %>" alt="<%= article.title %>" class="article-image" style="max-width: 100%; height: auto; object-fit: cover;">
+                         <div class="article-content">
+                              <%- article.content %>
+                         </div>
 
-               <article>
-                    <%- article.content %>
-               </article>
-
-               <!-- Display Tags -->
-               <div class="tags">
-                    <h3>Tags :</h3>
-                    <% article.tags.forEach(tag=> { %>
-                         <span class="tag">
-                              <%= tag %>
-                         </span>
-                         <% }) %>
-               </div>
-
-               <!-- Display Category and Publication Status -->
-               <div class="category-status">
-                    <p>Catégorie : <strong>
-                              <%= article.category %>
-                         </strong></p>
-                    <p>Statut de publication : <strong>
-                              <%= article.status %>
-                         </strong></p>
-               </div>
-
-               <!-- Social Share Buttons -->
-               <div class="social-share">
-                    <a href="https://twitter.com/share?url=<%= pageUrl %>&text=<%= article.title %>" target="_blank" title="Partager sur Twitter"><i class="fab fa-twitter"></i></a>
-                    <a href="https://www.facebook.com/sharer.php?u=<%= pageUrl %>" target="_blank" title="Partager sur Facebook"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=<%= pageUrl %>" target="_blank" title="Partager sur LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="#" onclick="copyLink('<%= pageUrl %>')" title="Copier le lien"><i class="fas fa-link"></i></a>
-               </div>
-
-               <section id="comments">
-                    <h2>Réponses</h2>
-                    <% if (comments.length===0) { %>
-                         <p>Aucune réponse pour le moment. Soyez le premier à répondre !</p>
-                         <% } else { %>
-                              <% comments.forEach(comment=> { %>
-                                   <div class="comment">
-                                        <div class="comment-meta">
-                                             <strong>
-                                                  <%= comment.name %>
-                                             </strong> · <%= comment.createdAt.toDateString() %>
-                                        </div>
-                                        <p>
-                                             <%= comment.comment %>
-                                        </p>
-                                   </div>
+                         <!-- Tags Section -->
+                         <div class="tags my-4">
+                              <% article.tags.forEach(tag=> { %>
+                                   <span class="badge rounded-pill">
+                                        <%= tag %>
+                                   </span>
                                    <% }) %>
-                                        <% } %>
+                         </div>
 
-                                             <h3>Écrire une réponse</h3>
-                                             <% if (error) { %>
-                                                  <div class="alert alert-danger">
-                                                       <%= error %>
-                                                  </div>
+                         <!-- Social Share Buttons -->
+                         <div class="social-share my-4">
+                              <a href="https://twitter.com/share?url=<%= pageUrl %>&text=<%= article.title %>" target="_blank" title="Partager sur Twitter">
+                                   <i class="fab fa-twitter"></i>
+                              </a>
+                              <a href="https://www.facebook.com/sharer.php?u=<%= pageUrl %>" target="_blank" title="Partager sur Facebook">
+                                   <i class="fab fa-facebook"></i>
+                              </a>
+                              <a href="https://www.linkedin.com/sharing/share-offsite/?url=<%= pageUrl %>" target="_blank" title="Partager sur LinkedIn">
+                                   <i class="fab fa-linkedin"></i>
+                              </a>
+                              <a href="#" onclick="copyLink('<%= pageUrl %>')" title="Copier le lien">
+                                   <i class="fas fa-link"></i>
+                              </a>
+                         </div>
+
+                         <!-- Comments Section -->
+                         <hr>
+                         <section id="comments">
+                              <h2>Réponses</h2>
+                              <% if (comments.length===0) { %>
+                                   <p>Aucune réponse pour le moment. Soyez le premier à répondre !</p>
+                                   <% } else { %>
+                                        <% comments.forEach(comment=> { %>
+                                             <div class="comment mb-4">
+                                                  <strong>
+                                                       <%= comment.name %>
+                                                  </strong> · <%= comment.createdAt.toDateString() %>
+                                                       <p>
+                                                            <%= comment.comment %>
+                                                       </p>
+                                             </div>
+                                             <% }) %>
                                                   <% } %>
-                                                       <% if (success) { %>
-                                                            <div class="alert alert-success">
-                                                                 <%= success %>
+                                                       <hr>
+
+                                                       <h3>Écrire une réponse</h3>
+                                                       <% if (error && error.length> 0) { %>
+                                                            <div class="alert alert-danger">
+                                                                 <%= error %>
                                                             </div>
                                                             <% } %>
-                                                                 <form action="/articles/<%= article.slug %>/comments" method="POST">
-                                                                      <div class="form-group">
-                                                                           <label for="name">Nom</label>
-                                                                           <input type="text" id="name" name="name" required>
+
+                                                                 <% if (success && success.length> 0) { %>
+                                                                      <div class="alert alert-success">
+                                                                           <%= success %>
                                                                       </div>
-                                                                      <div class="form-group">
-                                                                           <label for="email">Email</label>
-                                                                           <input type="email" id="email" name="email" required>
-                                                                      </div>
-                                                                      <div class="form-group">
-                                                                           <label for="comment">Réponse</label>
-                                                                           <textarea id="comment" name="comment" rows="4" required></textarea>
-                                                                      </div>
-                                                                      <button type="submit">Publier</button>
-                                                                 </form>
-               </section>
-          </main>
-     </div>
+                                                                      <% } %>
 
-     <!-- JavaScript for Copy Link -->
-     <script>
-          function copyLink(url) {
-               navigator.clipboard.writeText(url);
-               alert('Lien copié dans le presse-papiers');
-          }
-     </script>
+                                                                           <form action="/articles/<%= article.slug %>/comments" method="POST" class="mb-5">
+                                                                                <div class="mb-3">
+                                                                                     <label for="name" class="form-label">Nom</label>
+                                                                                     <input type="text" id="name" name="name" class="form-control" required>
+                                                                                </div>
+                                                                                <div class="mb-3">
+                                                                                     <label for="email" class="form-label">Email</label>
+                                                                                     <input type="email" id="email" name="email" class="form-control" required>
+                                                                                </div>
+                                                                                <div class="mb-3">
+                                                                                     <label for="comment" class="form-label">Réponse</label>
+                                                                                     <textarea id="comment" name="comment" rows="4" class="form-control" required></textarea>
+                                                                                </div>
+                                                                                <button type="submit" class="btn btn-primary">Publier</button>
+                                                                           </form>
+                         </section>
+                    </div>
 
-     <style>
-          .go-back-btn {
-               text-decoration: none;
-               color: #333;
-               background-color: #f5f5f5;
-               padding: 8px 16px;
-               border-radius: 5px;
-               display: inline-block;
-               margin-bottom: 20px;
-          }
+                    <!-- Suggested Articles Section -->
+                    <div class="col-lg-4">
+                         <h3>Articles suggérés</h3>
+                         <div class="suggested-articles">
+                              <% suggestedArticles.forEach(suggestion=> { %>
+                                   <div class="card">
+                                        <img src="<%= suggestion.featuredImage %>" class="card-img-top" alt="<%= suggestion.title %>">
+                                        <div class="card-body">
+                                             <h5 class="card-title">
+                                                  <%= suggestion.title %>
+                                             </h5>
+                                             <p class="card-text">
+                                                  <%= suggestion.summary %>
+                                             </p>
+                                             <a href="/articles/<%= suggestion.slug %>" class="btn btn-sm btn-outline-primary">Lire l'article</a>
+                                        </div>
+                                   </div>
+                                   <% }) %>
+                         </div>
+                    </div>
+               </div>
+          </div>
 
-          .author-image {
-               width: 48px;
-               height: 48px;
-               border-radius: 50%;
-               margin-right: 15px;
-          }
+          <!-- Bootstrap JS -->
+          <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
-          .social-share a {
-               margin-right: 15px;
-               color: #757575;
-               font-size: 18px;
-          }
-
-          .tags .tag {
-               display: inline-block;
-               background-color: #f0f0f0;
-               padding: 5px 10px;
-               margin-right: 10px;
-               border-radius: 20px;
-          }
-     </style>
-
+          <!-- JavaScript for Copy Link -->
+          <script>
+               function copyLink(url) {
+                    navigator.clipboard.writeText(url);
+                    alert('Lien copié dans le presse-papiers');
+               }
+          </script>
 </body>
 
 </html>

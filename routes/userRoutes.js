@@ -48,6 +48,27 @@ router.get('/', async (req, res) => {
           res.status(500).send('Server Error');
      }
 });
+// GET ALL ARTICLES
+router.get('/articles', async (req, res) => {
+     try {
+          // Fetch all articles
+          const articles = await Article.find();
+
+          // Get unique categories from articles
+          const categories = [...new Set(articles.map(article => article.category.trim()))];
+
+          // Extract tags from all articles, flatten them, and get unique, non-empty tags
+          const allTags = articles.flatMap(article => article.tags);
+          const topics = [...new Set(allTags.filter(tag => tag && tag.trim().length > 0))]; // Filter out empty tags
+
+          // Render the page with articles, categories, and tags
+          res.render('user/articles', { articles, categories, topics });
+     } catch (error) {
+          console.error('Error fetching articles:', error);
+          res.status(500).send('Server Error');
+     }
+});
+
 
 
 // GET: User Dashboard with Real Data

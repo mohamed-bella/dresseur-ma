@@ -1,49 +1,15 @@
 <section class="latest-articles py-5">
      <div class="container">
-          <h2 class="section-title text-center mb-5">Explorez Nos Articles</h2>
 
-          <div class="position-relative article-slider-container">
-               <div class="swiper-container article-slider">
-                    <div class="swiper-wrapper">
-                         <% articles.forEach(article=> { %>
-                              <div class="swiper-slide">
-                                   <div class="card article-card h-100">
-                                        <div class="card-image-wrapper">
-                                             <img src="<%= article.featuredImage %>" alt="<%= article.title %>" class="card-img-top article-image">
-                                             <span class="category-label">
-                                                  <%= article.category || 'Non catégorisé' %>
-                                             </span>
-                                        </div>
-                                        <div class="card-body d-flex flex-column">
-                                             <h5 class="card-title">
-                                                  <%= article.title %>
-                                             </h5>
-                                             <p class="card-text flex-grow-1">
-                                                  <%= article.summary.substring(0, 120) %>...
-                                             </p>
-                                             <a href="/articles/<%= article.slug %>" class="btn btn-read-more mt-auto">Lire Plus</a>
-                                        </div>
-                                   </div>
-                              </div>
-                              <% }) %>
+          <div class="articles-container">
+               <div class="articles-content">
+                    <div class="articles-image">
+                         <img src="https://img.icons8.com/fluency/240/000000/blog.png" alt="Articles icon" />
                     </div>
+                    <h3>Découvrez nos derniers articles</h3>
+                    <p>Restez informé sur les meilleures pratiques d'éducation canine, les conseils de santé, et les histoires inspirantes d'adoptions réussies.</p>
+                    <a href="/articles" class="btn btn-primary">Voir tous les articles</a>
                </div>
-               <div class="slider-nav">
-                    <button class="slider-nav-btn slider-nav-prev">
-                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                         </svg>
-                    </button>
-                    <button class="slider-nav-btn slider-nav-next">
-                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                         </svg>
-                    </button>
-               </div>
-          </div>
-
-          <div class="text-center mt-5">
-               <a href="/articles" class="btn btn-primary">Voir tous les articles</a>
           </div>
      </div>
 </section>
@@ -51,7 +17,6 @@
 <style>
      .latest-articles {
           background-color: #F5FAF9;
-          position: relative;
           padding: 80px 0;
      }
 
@@ -62,124 +27,60 @@
           margin-bottom: 2rem;
      }
 
-     .article-slider-container {
-          overflow: visible;
-          padding: 20px 0;
-     }
-
-     .article-card {
-          border: none;
-          border-radius: 15px;
-          box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-          transition: transform 0.3s ease, box-shadow 0.3s ease;
-          max-width: 340px;
-          margin: 0 auto;
-          background-color: #fff;
-          overflow: hidden;
-     }
-
-     .article-card:hover {
-          transform: translateY(-10px);
-          box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-     }
-
-     .card-image-wrapper {
+     .articles-container {
+          background-color: #4A90E2;
+          border-radius: 20px;
+          padding: 40px;
           position: relative;
           overflow: hidden;
      }
 
-     .article-image {
-          height: 200px;
-          object-fit: cover;
-          transition: transform 0.3s ease;
-     }
-
-     .article-card:hover .article-image {
-          transform: scale(1.05);
-     }
-
-     .category-label {
+     .articles-container::before {
+          content: '';
           position: absolute;
-          top: 10px;
-          left: 10px;
-          background-color: #3FB1B0;
-          color: #fff;
-          padding: 5px 10px;
-          border-radius: 20px;
-          font-size: 0.8rem;
-          font-weight: 600;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+          /* opacity: 0.1; */
+          mix-blend-mode: soft-light;
      }
 
-     .card-title {
-          font-size: 1.2rem;
+     .articles-content {
+          position: relative;
+          z-index: 1;
+          color: #fff;
+          text-align: center;
+     }
+
+     .articles-image {
+          margin-bottom: 20px;
+     }
+
+     .articles-image img {
+          width: 120px;
+          height: 120px;
+          /* filter: brightness(0) invert(1); */
+     }
+
+     .articles-content h3 {
+          font-size: 2rem;
           font-weight: 700;
-          margin-top: 1rem;
-          color: #333;
-          line-height: 1.4;
+          margin-bottom: 1rem;
      }
 
-     .card-text {
-          font-size: 0.9rem;
-          color: #666;
-          line-height: 1.6;
-     }
-
-     .btn-read-more {
-          background-color: #3FB1B0;
-          color: #fff;
-          border: none;
-          padding: 10px 20px;
-          font-size: 1rem;
-          font-weight: 600;
-          border-radius: 25px;
-          transition: background-color 0.3s ease, transform 0.3s ease;
-     }
-
-     .btn-read-more:hover {
-          background-color: #338F8E;
-          transform: translateY(-2px);
-     }
-
-     .slider-nav {
-          position: absolute;
-          top: 50%;
-          left: -30px;
-          right: -30px;
-          transform: translateY(-50%);
-          display: flex;
-          justify-content: space-between;
-          pointer-events: none;
-          z-index: 10;
-     }
-
-     .slider-nav-btn {
-          background-color: #3FB1B0;
-          color: #fff;
-          width: 50px;
-          height: 50px;
-          border: none;
-          border-radius: 50%;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          cursor: pointer;
-          transition: background-color 0.3s ease, transform 0.3s ease;
-          pointer-events: auto;
-     }
-
-     .slider-nav-btn:hover {
-          background-color: #338F8E;
-          transform: scale(1.1);
-     }
-
-     .slider-nav-btn svg {
-          width: 30px;
-          height: 30px;
+     .articles-content p {
+          font-size: 1.1rem;
+          margin-bottom: 2rem;
+          max-width: 600px;
+          margin-left: auto;
+          margin-right: auto;
      }
 
      .btn-primary {
-          background-color: #3FB1B0;
-          color: #fff;
+          background-color: #fff;
+          color: #4A90E2;
           border: none;
           padding: 12px 30px;
           font-size: 1.1rem;
@@ -189,64 +90,36 @@
      }
 
      .btn-primary:hover {
-          background-color: #338F8E;
+          background-color: #F0F7F4;
+          color: #4A90E2;
           transform: translateY(-3px);
      }
 
      @media (max-width: 768px) {
-          .article-slider .swiper-slide {
-               width: 85%;
-          }
-
           .section-title {
                font-size: 2rem;
           }
 
-          .slider-nav {
-               left: 10px;
-               right: 10px;
+          .articles-container {
+               padding: 30px;
           }
 
-          .slider-nav-btn {
-               width: 40px;
-               height: 40px;
+          .articles-content h3 {
+               font-size: 1.5rem;
           }
 
-          .slider-nav-btn svg {
-               width: 24px;
-               height: 24px;
+          .articles-content p {
+               font-size: 1rem;
+          }
+
+          .btn-primary {
+               font-size: 1rem;
+               padding: 10px 20px;
+          }
+
+          .articles-image img {
+               width: 80px;
+               height: 80px;
           }
      }
 </style>
-
-<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-<script>
-     document.addEventListener('DOMContentLoaded', function () {
-          new Swiper('.article-slider', {
-               slidesPerView: 'auto',
-               spaceBetween: 30,
-               loop: true,
-               centeredSlides: true,
-               navigation: {
-                    nextEl: '.slider-nav-next',
-                    prevEl: '.slider-nav-prev',
-               },
-               breakpoints: {
-                    320: {
-                         slidesPerView: 1.2,
-                         spaceBetween: 20,
-                    },
-                    640: {
-                         slidesPerView: 2,
-                         spaceBetween: 30,
-                    },
-                    1024: {
-                         slidesPerView: 3,
-                         spaceBetween: 40,
-                    },
-               },
-          });
-     });
-</script>
-
-<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
