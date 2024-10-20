@@ -3,6 +3,9 @@ const router = express.Router();
 const passport = require('passport');
 const multer = require('multer');
 const path = require('path');
+const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
+const { Upload } = require('@aws-sdk/lib-storage');
+
 const fs = require('fs');
 const Article = require('../models/article');
 const slugify = require('slugify');
@@ -13,22 +16,13 @@ const Announcement = require('../models/announcement'); // Your announcement mod
 
 
 // Set up multer for file uploads (saving locally)
-const storage = multer.diskStorage({
-     destination: (req, file, cb) => {
-          const uploadDir = path.join(__dirname, '../uploads');
-          if (!fs.existsSync(uploadDir)) {
-               fs.mkdirSync(uploadDir);
-          }
-          cb(null, uploadDir);
-     },
-     filename: (req, file, cb) => {
-          cb(null, Date.now() + path.extname(file.originalname));  // Original extension
-     }
+const storage = multer.memoryStorage();
+
+
+const upload = multer({
+     storage: storage, // Use memory storage to hold files in buffer
+     limits: { fileSize: 10 * 1024 * 1024 } // Limit file size to 10MB (adjust as needed)
 });
-
-const upload = multer({ storage: storage });
-
-
 // GET: Homepage with Announcements and Articles Slider
 router.get('/', async (req, res) => {
      try {
@@ -116,9 +110,18 @@ router.get('/dashboard', async (req, res) => {
 });
 
 
+// Configure AWS S3 Client for SDK v3
+const s3 = new S3Client({
+     region: process.env.AWS_REGION,
+     credentials: {
+          accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+          secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+     }
+});
+
 // POST route to create a new announcement
 router.post('/announcements/new', upload.array('images', 10), async (req, res) => {
-     console.log('Image upload started');
+     console.log('Image upload to S3 started');
 
      try {
           // Extract form data
@@ -138,6 +141,11 @@ router.post('/announcements/new', upload.array('images', 10), async (req, res) =
                email
           } = req.body;
 
+          // Validate required fields
+          if (!description || !announcementType || !animalType || !breed || !age || !gender || !location || !whatsapp) {
+               return res.status(400).json({ success: false, message: 'All required fields must be filled out.' });
+          }
+
           // Check if files were uploaded
           if (!req.files || req.files.length === 0) {
                return res.status(400).json({ success: false, message: 'No images uploaded' });
@@ -145,31 +153,44 @@ router.post('/announcements/new', upload.array('images', 10), async (req, res) =
 
           const imageUrls = [];
 
-          // Convert uploaded images to WebP format and save them
+          // Convert uploaded images to WebP format and upload to S3
           for (const file of req.files) {
-               const localFilePath = path.join(__dirname, '../uploads', file.filename);
-               const webpFilePath = path.join(__dirname, '../uploads', Date.now() + '.webp');
+               try {
+                    // Convert image buffer to WebP format
+                    const buffer = await sharp(file.buffer)
+                         .webp({ quality: 80 })
+                         .toBuffer();
 
-               // Convert to WebP using sharp
-               await sharp(localFilePath)
-                    .webp({ quality: 80 })
-                    .toFile(webpFilePath);
+                    // Generate unique file name for WebP image
+                    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+                    const key = `uploads/${uniqueSuffix}.webp`;
 
-               // Remove the original image
-               fs.unlinkSync(localFilePath);
+                    // Upload the WebP image to S3
+                    const uploadParams = {
+                         Bucket: process.env.AWS_S3_BUCKET_NAME,
+                         Key: key,
+                         Body: buffer,
+                         ContentType: 'image/webp',
+                         ACL: 'public-read' // Make the image public
+                    };
 
-               // Save the WebP file URL
-               imageUrls.push(`/uploads/${path.basename(webpFilePath)}`);
+                    const parallelUploads3 = new Upload({
+                         client: s3,
+                         params: uploadParams
+                    });
+
+                    const data = await parallelUploads3.done();
+                    imageUrls.push(data.Location); // Store the URL of the uploaded image
+               } catch (sharpError) {
+                    console.error('Error processing image:', sharpError);
+                    return res.status(500).json({ success: false, message: 'Image processing failed', error: sharpError });
+               }
           }
 
-          // Generate a slug from breed, gender, type, date, and "Maroc" with a random number
-          const date = new Date().toISOString().slice(0, 10); // Current date in YYYY-MM-DD format
-          const typeInFrench = announcementType === 'sale' ? 'vendre' : 'adoption'; // Convert type to French
-
-          // Generate a random 4-digit number
+          // Generate a slug for the announcement
+          const date = new Date().toISOString().slice(0, 10);
+          const typeInFrench = announcementType === 'sale' ? 'vendre' : 'adoption';
           const randomNum = Math.floor(1000 + Math.random() * 9000);
-
-          // Generate the slug with the random number
           const slug = slugify(`${breed}-${gender}-${typeInFrench}-${date}-${randomNum}-maroc`, { lower: true, strict: true });
 
           // Create a new announcement
@@ -182,14 +203,14 @@ router.post('/announcements/new', upload.array('images', 10), async (req, res) =
                gender,
                vaccination,
                sterilization,
-               price: announcementType === 'sale' ? price : null,  // Only store price for sale announcements
-               adoptionFee: announcementType === 'adoption' ? adoptionFee : null,  // Only store adoption fee for adoption
+               price: announcementType === 'sale' ? price : null,
+               adoptionFee: announcementType === 'adoption' ? adoptionFee : null,
                location,
-               images: imageUrls,  // Store WebP URLs
+               images: imageUrls, // Store the S3 URLs
                whatsapp,
                email,
-               slug,  // Store the generated slug
-               user: req.user._id  // Link announcement to the logged-in user
+               slug,
+               user: req.user._id // Link announcement to the logged-in user
           });
 
           // Save the announcement to the database
@@ -202,7 +223,6 @@ router.post('/announcements/new', upload.array('images', 10), async (req, res) =
           res.status(500).json({ success: false, message: 'Internal Server Error' });
      }
 });
-
 
 // GET adopted dogs only
 router.get('/adoptions', async (req, res) => {
