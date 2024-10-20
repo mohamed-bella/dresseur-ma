@@ -1,5 +1,4 @@
-<!-- Page Content -->
-<div id="content" class="dashboard">
+<div id="content" class="dashboard" style="background-color: rgb(197, 220, 250);">
      <nav class="navbar navbar-expand-lg mb-4">
           <div class="container-fluid">
                <button type="button" id="sidebarCollapse" class="btn btn-primary">
@@ -11,180 +10,67 @@
 
      <h1 class="dashboard-title">Bonjour, <%= user.displayName %>!</h1>
 
-     <div class="card shadow-sm">
-          <div class="card-header">
-               Annonces Récentes
-          </div>
-          <div class="card-body p-0">
-               <% if (recentAnnouncements.length===0) { %>
-                    <p class="text-center py-4">Aucune annonce récente disponible.</p>
-                    <% } else { %>
-                         <div class="announcement-list">
-                              <% recentAnnouncements.forEach(announcement=> { %>
-                                   <div class="announcement-item">
-                                        <div class="announcement-image">
-                                             <% if (announcement.images && announcement.images.length> 0) { %>
-                                                  <img src="<%= announcement.images[0] %>" alt="<%= announcement.breed %>">
-                                                  <% } else { %>
-                                                       <div class="no-image">Pas d'image</div>
-                                                       <% } %>
-                                        </div>
-                                        <div class="announcement-details">
-                                             <h3>
-                                                  <%= announcement.breed %>
-                                             </h3>
-                                             <div class="announcement-actions">
-                                                  <a href="/announcement/<%= announcement._id %>" class="btn btn-outline-primary btn-sm">Voir</a>
-                                                  <form action="/announcements/<%= announcement._id %>/delete" method="POST" class="d-inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette annonce ?');">
-                                                       <button type="submit" class="btn btn-outline-danger btn-sm">Supprimer</button>
-                                                  </form>
-                                             </div>
-                                        </div>
-                                   </div>
-                                   <% }) %>
-                         </div>
-                         <% } %>
+     <style>
+          @import url('https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css');
+     </style>
+
+     <div class="container mx-auto px-4 py-8">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+               <!-- Card 1: Dressage -->
+               <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer" data-bs-toggle="modal" data-bs-target="#dressageModal">
+                    <div class="p-6 text-center">
+                         <img src="https://img.icons8.com/?size=100&id=02AbFTOZGc7a&format=png&color=000000" class=" w-24 h-24 mx-auto mb-4" alt="Dressage">
+                         <h3 class="text-xl font-semibold mb-2">Dressage</h3>
+                         <p class="text-gray-600">Proposez des services de dressage pour les chiens.</p>
+                    </div>
+               </div>
+
+               <!-- Card 2: Toilettage -->
+               <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer" data-bs-toggle="modal" data-bs-target="#toilettageModal">
+                    <div class="p-6 text-center">
+                         <img src="https://img.icons8.com/?size=100&id=eSFW8g06YlXi&format=png&color=000000" class="w-24 h-24 mx-auto mb-4" alt="Toilettage">
+                         <h3 class="text-xl font-semibold mb-2">Toilettage</h3>
+                         <p class="text-gray-600">Offrez des services de toilettage pour chiens.</p>
+                    </div>
+               </div>
+
+               <!-- Card 3: Promenade -->
+               <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer" data-bs-toggle="modal" data-bs-target="#promenadeModal">
+                    <div class="p-6 text-center">
+                         <img src="https://img.icons8.com/?size=100&id=W8jJ6qfM7hcV&format=png&color=000000" class="w-24 h-24 mx-auto mb-4" alt="Promenade">
+                         <h3 class="text-xl font-semibold mb-2">Promenade</h3>
+                         <p class="text-gray-600">Proposez des promenades pour les chiens.</p>
+                    </div>
+               </div>
+
+               <!-- Card 4: Vétérinaire -->
+               <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer" data-bs-toggle="modal" data-bs-target="#veterinaireModal">
+                    <div class="p-6 text-center">
+                         <img src="https://img.icons8.com/?size=100&id=s6qCmDA9s4w6&format=png&color=000000" class="w-24 h-24 mx-auto mb-4" alt="Vétérinaire">
+                         <h3 class="text-xl font-semibold mb-2">Vétérinaire</h3>
+                         <p class="text-gray-600">Fournissez des services vétérinaires pour les animaux.</p>
+                    </div>
+               </div>
+
+               <!-- Card 5: Pension -->
+               <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer" data-bs-toggle="modal" data-bs-target="#pensionModal">
+                    <div class="p-6 text-center">
+                         <img src="https://img.icons8.com/?size=100&id=rine6jqhXEly&format=png&color=000000" class="w-24 h-24 mx-auto mb-4" alt="Pension">
+                         <h3 class="text-xl font-semibold mb-2">Pension</h3>
+                         <p class="text-gray-600">Proposez des services de pension pour chiens.</p>
+                    </div>
+               </div>
+
+               <!-- Card 6: Transport -->
+               <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer" data-bs-toggle="modal" data-bs-target="#transportModal">
+                    <div class="p-6 text-center">
+                         <img src="https://img.icons8.com/?size=100&id=p0LDtHcHd2Xg&format=png&color=000000" class="w-24 h-24 mx-auto mb-4" alt="Transport">
+                         <h3 class="text-xl font-semibold mb-2">Transport</h3>
+                         <p class="text-gray-600">Proposez des services de transport pour chiens.</p>
+                    </div>
+               </div>
           </div>
      </div>
 </div>
 
-<style>
-     :root {
-          --primary-color: #4a90e2;
-          --secondary-color: #f5f6fa;
-          --text-color: #333;
-          --action-color: #4caf50;
-          --danger-color: #f44336;
-          --border-color: #e0e0e0;
-     }
-
-     body {
-          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-          background-color: var(--secondary-color);
-          color: var(--text-color);
-          line-height: 1.6;
-     }
-
-     .dashboard {
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 2rem;
-     }
-
-     .navbar {
-          background-color: white;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-          margin-bottom: 2rem;
-     }
-
-     .btn-primary {
-          background-color: var(--primary-color);
-          border: none;
-     }
-
-     .btn-primary:hover {
-          background-color: #3a7bd5;
-     }
-
-     .dashboard-title {
-          font-size: 2rem;
-          margin-bottom: 2rem;
-          color: var(--primary-color);
-     }
-
-     .card {
-          background-color: white;
-          border: none;
-          border-radius: 8px;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-          margin-bottom: 2rem;
-     }
-
-     .card-header {
-          background-color: var(--primary-color);
-          color: white;
-          font-weight: bold;
-          padding: 1rem;
-          border-bottom: none;
-     }
-
-     .announcement-list {
-          display: flex;
-          flex-direction: column;
-     }
-
-     .announcement-item {
-          display: flex;
-          align-items: center;
-          padding: 1rem;
-          border-bottom: 1px solid var(--border-color);
-     }
-
-     .announcement-item:last-child {
-          border-bottom: none;
-     }
-
-     .announcement-image {
-          width: 80px;
-          height: 80px;
-          margin-right: 1rem;
-     }
-
-     .announcement-image img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          border-radius: 4px;
-     }
-
-     .no-image {
-          width: 100%;
-          height: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background-color: #f0f0f0;
-          color: #999;
-          font-size: 0.8rem;
-          border-radius: 4px;
-     }
-
-     .announcement-details {
-          flex-grow: 1;
-     }
-
-     .announcement-details h3 {
-          margin: 0 0 0.5rem 0;
-          font-size: 1.1rem;
-     }
-
-     .announcement-actions {
-          display: flex;
-          gap: 0.5rem;
-     }
-
-     .btn-sm {
-          padding: 0.25rem 0.5rem;
-          font-size: 0.875rem;
-     }
-
-     .btn-outline-primary {
-          color: var(--primary-color);
-          border-color: var(--primary-color);
-     }
-
-     .btn-outline-primary:hover {
-          background-color: var(--primary-color);
-          color: white;
-     }
-
-     .btn-outline-danger {
-          color: var(--danger-color);
-          border-color: var(--danger-color);
-     }
-
-     .btn-outline-danger:hover {
-          background-color: var(--danger-color);
-          color: white;
-     }
-</style>
+<%- include('modals') %>

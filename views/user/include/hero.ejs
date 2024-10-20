@@ -4,57 +4,85 @@
           <div class="row justify-content-center">
                <div class="col-md-10">
                     <div class="search-container">
-                         <h2 class="search-title mb-4">Trouvez le Compagnon Parfait</h2>
-                         <form action="/tous-les-annonces" method="GET">
+                         <h2 class="search-title mb-4">Trouvez le Service Parfait pour Votre Animal</h2>
+                         <form action="/services/search" method="GET">
+
+                              <!-- Dynamic Location Dropdown -->
                               <div class="mb-4">
                                    <select class="form-select search-input" name="location">
                                         <option value="" selected disabled>Choisissez une ville</option>
-                                        <option value="casablanca">Casablanca</option>
-                                        <option value="rabat">Rabat</option>
-                                        <option value="marrakech">Marrakech</option>
-                                        <!-- Add other cities here -->
+                                        <% locations.forEach(location=> { %>
+                                             <option value="<%= location %>">
+                                                  <%= location %>
+                                             </option>
+                                             <% }) %>
                                    </select>
                                    <small class="form-text mt-2">Sélectionnez la ville où vous recherchez des services</small>
                               </div>
 
-                              <div class="animal-types mb-4">
-                                   <p class="mb-3">Quel type d'animal recherchez-vous ?</p>
-                                   <div class="row">
-                                        <div class="col-6">
-                                             <label class="animal-card">
-                                                  <input type="radio" name="animalType" value="dog" checked>
+                              <!-- Service Types Section (One Selected) -->
+                              <div class="service-types mb-4">
+                                   <p class="mb-3">Quel type de service recherchez-vous ?</p>
+                                   <div class="row g-3">
+                                        <div class="col-md-4 col-6">
+                                             <label class="service-card">
+                                                  <input type="radio" name="serviceType" value="dressage" class="service-radio">
                                                   <div class="card-content text-center">
-                                                       <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg">
-                                                            <path d="M10 5.172C10 3.782 8.423 2.679 6.5 3c-2.823.47-4.113 6.006-4 7 .08.703 1.725 1.722 3.656 1 1.261-.472 1.96-1.45 2.344-2.5" />
-                                                            <path d="M14.267 5.172c0-1.39 1.577-2.493 3.5-2.172 2.823.47 4.113 6.006 4 7-.08.703-1.725 1.722-3.656 1-1.261-.472-1.855-1.45-2.239-2.5" />
-                                                            <path d="M8 14v.5" />
-                                                            <path d="M16 14v.5" />
-                                                            <path d="M11.25 16.25h1.5L12 17l-.75-.75z" />
-                                                            <path d="M4.42 11.247A13.152 13.152 0 0 0 4 14.556C4 18.728 7.582 21 12 21s8-2.272 8-6.444c0-1.061-.162-2.2-.493-3.309m-9.243-6.082A8.801 8.801 0 0 1 12 5c.78 0 1.5.108 2.161.306" />
-                                                       </svg>
-                                                       <span>Chien</span>
+                                                       <img src="https://img.icons8.com/?size=100&id=02AbFTOZGc7a&format=png&color=000000" alt="Dressage" class="icon-svg">
+                                                       <span>Dressage</span>
                                                   </div>
                                              </label>
                                         </div>
-                                        <div class="col-6">
-                                             <label class="animal-card">
-                                                  <input type="radio" name="animalType" value="cat">
+                                        <div class="col-md-4 col-6">
+                                             <label class="service-card">
+                                                  <input type="radio" name="serviceType" value="toilettage" class="service-radio">
                                                   <div class="card-content text-center">
-                                                       <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg">
-                                                            <path d="M12 5c.67 0 1.35.09 2 .26 1.78-2 5.03-2.84 6.42-2.26 1.4.58-.42 7-.42 7 .57 1.07 1 2.24 1 3.44C21 17.9 16.97 21 12 21s-9-3.1-9-7.56c0-1.25.5-2.4 1-3.44 0 0-1.89-6.42-.5-7 1.39-.58 4.72.23 6.5 2.23A9.04 9.04 0 0 1 12 5Z" />
-                                                            <path d="M8 14v.5" />
-                                                            <path d="M16 14v.5" />
-                                                            <path d="M11.25 16.25h1.5L12 17l-.75-.75Z" />
-                                                       </svg>
-                                                       <span>Chat</span>
+                                                       <img src="https://img.icons8.com/?size=100&id=eSFW8g06YlXi&format=png&color=000000" alt="Toilettage" class="icon-svg">
+                                                       <span>Toilettage</span>
+                                                  </div>
+                                             </label>
+                                        </div>
+                                        <div class="col-md-4 col-6">
+                                             <label class="service-card">
+                                                  <input type="radio" name="serviceType" value="promenade" class="service-radio">
+                                                  <div class="card-content text-center">
+                                                       <img src="https://img.icons8.com/?size=100&id=W8jJ6qfM7hcV&format=png&color=000000" alt="Promenade" class="icon-svg">
+                                                       <span>Promenade</span>
+                                                  </div>
+                                             </label>
+                                        </div>
+                                        <div class="col-md-4 col-6">
+                                             <label class="service-card">
+                                                  <input type="radio" name="serviceType" value="veterinaire" class="service-radio">
+                                                  <div class="card-content text-center">
+                                                       <img src="https://img.icons8.com/?size=100&id=s6qCmDA9s4w6&format=png&color=000000" alt="Vétérinaire" class="icon-svg">
+                                                       <span>Vétérinaire</span>
+                                                  </div>
+                                             </label>
+                                        </div>
+                                        <div class="col-md-4 col-6">
+                                             <label class="service-card">
+                                                  <input type="radio" name="serviceType" value="pension" class="service-radio">
+                                                  <div class="card-content text-center">
+                                                       <img src="https://img.icons8.com/?size=100&id=rine6jqhXEly&format=png&color=000000" alt="Pension" class="icon-svg">
+                                                       <span>Pension</span>
+                                                  </div>
+                                             </label>
+                                        </div>
+                                        <div class="col-md-4 col-6">
+                                             <label class="service-card">
+                                                  <input type="radio" name="serviceType" value="transport" class="service-radio">
+                                                  <div class="card-content text-center">
+                                                       <img src="https://img.icons8.com/?size=100&id=p0LDtHcHd2Xg&format=png&color=000000" alt="Transport" class="icon-svg">
+                                                       <span>Transport</span>
                                                   </div>
                                              </label>
                                         </div>
                                    </div>
-                                   <small class="form-text mt-2">Choisissez le type d'animal pour lequel vous recherchez des services</small>
+                                   <small class="form-text mt-2">Sélectionnez le service que vous recherchez</small>
                               </div>
 
-                              <button type="submit" class="search-btn btn btn-lg btn-block">Trouver mon compagnon</button>
+                              <button type="submit" class="search-btn btn btn-lg btn-block">Rechercher les Services</button>
                          </form>
                     </div>
                </div>
@@ -62,12 +90,10 @@
      </div>
 </section>
 
+<!-- Hero Section Styles -->
 <style>
      .hero {
-          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='7.45' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
           background-color: #f3f379;
-          background-size: cover;
-          background-position: center;
           padding: 120px 0;
           position: relative;
      }
@@ -94,26 +120,19 @@
      .search-title {
           font-size: 32px;
           font-weight: bold;
-          color: #333;
           text-align: center;
           margin-bottom: 30px;
      }
 
      .search-input {
           height: 60px;
-          border: 2px solid #ddd;
           border-radius: 30px;
           padding: 10px 25px;
           font-size: 18px;
           transition: all 0.3s ease;
      }
 
-     .search-input:focus {
-          border-color: #3FB1B0;
-          box-shadow: 0 0 0 0.2rem rgba(63, 177, 176, 0.25);
-     }
-
-     .animal-card {
+     .service-card {
           display: block;
           cursor: pointer;
           border: 2px solid #ddd;
@@ -123,16 +142,16 @@
           overflow: hidden;
      }
 
-     .animal-card:hover {
+     .service-card:hover {
           transform: translateY(-5px);
           box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
      }
 
-     .animal-card input[type="radio"] {
+     .service-card input[type="radio"] {
           display: none;
      }
 
-     .animal-card input[type="radio"]:checked+.card-content {
+     .service-card input[type="radio"]:checked+.card-content {
           background-color: #3FB1B0;
           color: #fff;
      }
@@ -143,8 +162,8 @@
      }
 
      .icon-svg {
-          width: 64px;
-          height: 64px;
+          width: 48px;
+          height: 48px;
           margin-bottom: 15px;
      }
 
@@ -198,20 +217,32 @@
                font-size: 18px;
                height: 55px;
           }
+
+          /* 2 cards per row for mobile devices */
+          .service-types .row {
+               display: flex;
+               flex-wrap: wrap;
+          }
+
+          .service-types .col-6 {
+               flex: 0 0 50%;
+               max-width: 50%;
+          }
      }
 </style>
 
+<!-- JavaScript to Handle Radio Selection Logic -->
 <script>
      document.addEventListener('DOMContentLoaded', function () {
-          const animalCards = document.querySelectorAll('.animal-card');
+          const serviceCards = document.querySelectorAll('.service-card');
 
-          animalCards.forEach(card => {
+          serviceCards.forEach(card => {
                card.addEventListener('click', function () {
                     const radio = this.querySelector('input[type="radio"]');
                     radio.checked = true;
 
                     // Remove active class from all cards
-                    animalCards.forEach(c => c.classList.remove('active'));
+                    serviceCards.forEach(c => c.classList.remove('active'));
 
                     // Add active class to clicked card
                     this.classList.add('active');

@@ -90,6 +90,10 @@ app.use(articleRoutes)
 
 const contactRoute = require('./routes/contactRoute')
 app.use(contactRoute)
+
+
+const serviceRoutes = require('./routes/serviceRoutes')
+app.use(serviceRoutes)
 // const marcheCanineRoutes = require('./routes/marcheCanineRoutes')
 // app.use(marcheCanineRoutes)
 

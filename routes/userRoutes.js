@@ -12,6 +12,7 @@ const slugify = require('slugify');
 const sharp = require('sharp');
 // const upload = require('../config/multer'); // Multer config with Cloudinary
 const Announcement = require('../models/announcement'); // Your announcement model
+const Service = require('../models/service');
 
 
 
@@ -23,7 +24,7 @@ const upload = multer({
      storage: storage, // Use memory storage to hold files in buffer
      limits: { fileSize: 10 * 1024 * 1024 } // Limit file size to 10MB (adjust as needed)
 });
-// GET: Homepage with Announcements and Articles Slider
+
 router.get('/', async (req, res) => {
      try {
           // Fetch the latest 6 announcements
@@ -32,16 +33,25 @@ router.get('/', async (req, res) => {
           // Fetch the latest 6 articles
           const articles = await Article.find().limit(6);
 
-          // Render both announcements and articles to the homepage view
+          // Fetch unique locations from both Announcement and Service models
+          const announcementLocations = await Announcement.distinct('location');
+          const serviceLocations = await Service.distinct('location');
+
+          // Combine and filter out duplicate locations
+          const uniqueLocations = [...new Set([...announcementLocations, ...serviceLocations])];
+
+          // Render the homepage view with announcements, articles, and unique locations
           res.render('user/index', {
                announcements,
-               articles // Pass the articles to the view
+               articles, // Pass the articles to the view
+               locations: uniqueLocations // Pass the dynamic locations to the view
           });
      } catch (error) {
-          console.error('Error fetching announcements and articles:', error);
+          console.error('Error fetching announcements, articles, or locations:', error);
           res.status(500).send('Server Error');
      }
 });
+
 // GET ALL ARTICLES
 router.get('/articles', async (req, res) => {
      try {

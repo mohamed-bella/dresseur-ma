@@ -1,0 +1,578 @@
+<div class="modal fade" id="dressageModal" tabindex="-1" aria-labelledby="dressageModalLabel" aria-hidden="true">
+     <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+               <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title fs-4" id="dressageModalLabel">Proposer un Service de Dressage</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+               </div>
+               <div class="modal-body p-4">
+                    <form id="dressageForm" action="/services/new" method="POST">
+                         <input type="hidden" name="serviceName" value="Dressage">
+
+                         <!-- Description Section -->
+                         <div class="mb-4">
+                              <label for="descriptionDressage" class="form-label fw-bold">Description du service</label>
+                              <textarea class="form-control" id="descriptionDressage" name="description" rows="4" placeholder="Décrivez le service de dressage que vous proposez" required></textarea>
+                         </div>
+
+                         <!-- Price and Location Section -->
+                         <div class="row mb-4">
+                              <div class="col-md-6 mb-3 mb-md-0">
+                                   <label for="priceRangeDressage" class="form-label fw-bold">Prix</label>
+                                   <input type="text" class="form-control" id="priceRangeDressage" name="priceRange" placeholder="Exemple : 200 - 500 MAD" required>
+                              </div>
+                              <div class="col-md-6">
+                                   <label for="locationDressage" class="form-label fw-bold">Lieu</label>
+                                   <input type="text" class="form-control" id="locationDressage" name="location" placeholder="Votre ville" required>
+                              </div>
+                         </div>
+
+                         <!-- Service Options -->
+                         <div class="mb-4">
+                              <label class="form-label fw-bold mb-3">Options de Dressage</label>
+                              <div class="row g-3">
+                                   <div class="col-md-6 col-lg-4">
+                                        <div class="form-check card shadow-sm h-100">
+                                             <div class="card-body">
+                                                  <input class="form-check-input" type="checkbox" value="Obéissance de base" id="obedienceBasic" name="serviceOptions[]">
+                                                  <label class="form-check-label d-flex align-items-center" for="obedienceBasic">
+                                                       <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                                       <span>Obéissance de base</span>
+                                                  </label>
+                                             </div>
+                                        </div>
+                                   </div>
+                                   <div class="col-md-6 col-lg-4">
+                                        <div class="form-check card shadow-sm h-100">
+                                             <div class="card-body">
+                                                  <input class="form-check-input" type="checkbox" value="Dressage avancé" id="advancedTraining" name="serviceOptions[]">
+                                                  <label class="form-check-label d-flex align-items-center" for="advancedTraining">
+                                                       <i class="bi bi-trophy-fill text-warning me-2"></i>
+                                                       <span>Dressage avancé</span>
+                                                  </label>
+                                             </div>
+                                        </div>
+                                   </div>
+                                   <div class="col-md-6 col-lg-4">
+                                        <div class="form-check card shadow-sm h-100">
+                                             <div class="card-body">
+                                                  <input class="form-check-input" type="checkbox" value="Dressage pour chiots" id="puppyTraining" name="serviceOptions[]">
+                                                  <label class="form-check-label d-flex align-items-center" for="puppyTraining">
+                                                       <i class="bi bi-emoji-smile-fill text-info me-2"></i>
+                                                       <span>Dressage pour chiots</span>
+                                                  </label>
+                                             </div>
+                                        </div>
+                                   </div>
+                                   <div class="col-md-6 col-lg-4">
+                                        <div class="form-check card shadow-sm h-100">
+                                             <div class="card-body">
+                                                  <input class="form-check-input" type="checkbox" value="Dressage de protection" id="protectionTraining" name="serviceOptions[]">
+                                                  <label class="form-check-label d-flex align-items-center" for="protectionTraining">
+                                                       <i class="bi bi-shield-lock-fill text-danger me-2"></i>
+                                                       <span>Dressage de protection</span>
+                                                  </label>
+                                             </div>
+                                        </div>
+                                   </div>
+                                   <div class="col-md-6 col-lg-4">
+                                        <div class="form-check card shadow-sm h-100">
+                                             <div class="card-body">
+                                                  <input class="form-check-input" type="checkbox" value="Agility" id="agilityTraining" name="serviceOptions[]">
+                                                  <label class="form-check-label d-flex align-items-center" for="agilityTraining">
+                                                       <i class="bi bi-lightning-fill text-primary me-2"></i>
+                                                       <span>Agility</span>
+                                                  </label>
+                                             </div>
+                                        </div>
+                                   </div>
+                                   <div class="col-md-6 col-lg-4">
+                                        <div class="form-check card shadow-sm h-100">
+                                             <div class="card-body">
+                                                  <input class="form-check-input" type="checkbox" value="Dressage comportemental" id="behavioralTraining" name="serviceOptions[]">
+                                                  <label class="form-check-label d-flex align-items-center" for="behavioralTraining">
+                                                       <i class="bi bi-people-fill text-secondary me-2"></i>
+                                                       <span>Dressage comportemental</span>
+                                                  </label>
+                                             </div>
+                                        </div>
+                                   </div>
+                              </div>
+                         </div>
+
+                         <!-- Submit Button -->
+                         <div class="d-grid">
+                              <button type="submit" class="btn btn-primary btn-lg">Enregistrer le service</button>
+                         </div>
+                    </form>
+               </div>
+          </div>
+     </div>
+</div>
+
+<style>
+     .card {
+          transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+     }
+
+     .card:hover {
+          box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+          transform: translateY(-3px);
+     }
+
+     .form-check-input {
+          margin-top: 0.3em;
+     }
+</style>
+
+<!-- Modal for Toilettage -->
+<div class="modal fade" id="toilettageModal" tabindex="-1" aria-labelledby="toilettageModalLabel" aria-hidden="true">
+     <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+               <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title fs-4" id="toilettageModalLabel">Proposer un Service de Toilettage</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+               </div>
+               <div class="modal-body p-4">
+                    <form id="toilettageForm" action="/services/new" method="POST">
+                         <input type="hidden" name="serviceName" value="Toilettage">
+
+                         <!-- Description Section -->
+                         <div class="mb-4">
+                              <label for="descriptionToilettage" class="form-label fw-bold">Description du service</label>
+                              <textarea class="form-control" id="descriptionToilettage" name="description" rows="4" placeholder="Décrivez le service de toilettage que vous proposez" required></textarea>
+                         </div>
+
+                         <!-- Price and Location Section -->
+                         <div class="row mb-4">
+                              <div class="col-md-6 mb-3 mb-md-0">
+                                   <label for="priceRangeToilettage" class="form-label fw-bold">Prix</label>
+                                   <input type="text" class="form-control" id="priceRangeToilettage" name="priceRange" placeholder="Exemple : 100 - 300 MAD" required>
+                              </div>
+                              <div class="col-md-6">
+                                   <label for="locationToilettage" class="form-label fw-bold">Lieu</label>
+                                   <input type="text" class="form-control" id="locationToilettage" name="location" placeholder="Votre ville" required>
+                              </div>
+                         </div>
+
+                         <!-- Service Options -->
+                         <div class="mb-4">
+                              <label class="form-label fw-bold mb-3">Options de Toilettage</label>
+                              <div class="row g-3">
+                                   <div class="col-md-6 col-lg-4">
+                                        <div class="form-check card shadow-sm h-100">
+                                             <div class="card-body">
+                                                  <input class="form-check-input" type="checkbox" value="Bain et brushing" id="bathBrushing" name="serviceOptions[]">
+                                                  <label class="form-check-label d-flex align-items-center" for="bathBrushing">
+                                                       <i class="bi bi-droplet-fill text-info me-2"></i>
+                                                       <span>Bain et brushing</span>
+                                                  </label>
+                                             </div>
+                                        </div>
+                                   </div>
+                                   <div class="col-md-6 col-lg-4">
+                                        <div class="form-check card shadow-sm h-100">
+                                             <div class="card-body">
+                                                  <input class="form-check-input" type="checkbox" value="Coupe" id="haircut" name="serviceOptions[]">
+                                                  <label class="form-check-label d-flex align-items-center" for="haircut">
+                                                       <i class="bi bi-scissors text-success me-2"></i>
+                                                       <span>Coupe</span>
+                                                  </label>
+                                             </div>
+                                        </div>
+                                   </div>
+                                   <div class="col-md-6 col-lg-4">
+                                        <div class="form-check card shadow-sm h-100">
+                                             <div class="card-body">
+                                                  <input class="form-check-input" type="checkbox" value="Tonte" id="shaving" name="serviceOptions[]">
+                                                  <label class="form-check-label d-flex align-items-center" for="shaving">
+                                                       <i class="bi bi-lightning-fill text-warning me-2"></i>
+                                                       <span>Tonte</span>
+                                                  </label>
+                                             </div>
+                                        </div>
+                                   </div>
+                                   <div class="col-md-6 col-lg-4">
+                                        <div class="form-check card shadow-sm h-100">
+                                             <div class="card-body">
+                                                  <input class="form-check-input" type="checkbox" value="Soins des oreilles" id="earCare" name="serviceOptions[]">
+                                                  <label class="form-check-label d-flex align-items-center" for="earCare">
+                                                       <i class="bi bi-ear-fill text-danger me-2"></i>
+                                                       <span>Soins des oreilles</span>
+                                                  </label>
+                                             </div>
+                                        </div>
+                                   </div>
+                                   <div class="col-md-6 col-lg-4">
+                                        <div class="form-check card shadow-sm h-100">
+                                             <div class="card-body">
+                                                  <input class="form-check-input" type="checkbox" value="Coupe des ongles" id="nailTrim" name="serviceOptions[]">
+                                                  <label class="form-check-label d-flex align-items-center" for="nailTrim">
+                                                       <i class="bi bi-file-earmark-medical-fill text-primary me-2"></i>
+                                                       <span>Coupe des ongles</span>
+                                                  </label>
+                                             </div>
+                                        </div>
+                                   </div>
+                                   <div class="col-md-6 col-lg-4">
+                                        <div class="form-check card shadow-sm h-100">
+                                             <div class="card-body">
+                                                  <input class="form-check-input" type="checkbox" value="Détartrage des dents" id="teethCleaning" name="serviceOptions[]">
+                                                  <label class="form-check-label d-flex align-items-center" for="teethCleaning">
+                                                       <i class="bi bi-emoji-smile-fill text-secondary me-2"></i>
+                                                       <span>Détartrage des dents</span>
+                                                  </label>
+                                             </div>
+                                        </div>
+                                   </div>
+                              </div>
+                         </div>
+
+                         <!-- Submit Button -->
+                         <div class="d-grid">
+                              <button type="submit" class="btn btn-primary btn-lg">Enregistrer le service</button>
+                         </div>
+                    </form>
+               </div>
+          </div>
+     </div>
+</div>
+
+<!-- Modal for Promenade -->
+<div class="modal fade" id="promenadeModal" tabindex="-1" aria-labelledby="promenadeModalLabel" aria-hidden="true">
+     <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+               <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title fs-4" id="promenadeModalLabel">Proposer un Service de Promenade</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+               </div>
+               <div class="modal-body p-4">
+                    <form id="promenadeForm" action="/services/new" method="POST">
+                         <input type="hidden" name="serviceName" value="Promenade">
+
+                         <div class="mb-4">
+                              <label for="descriptionPromenade" class="form-label fw-bold">Description du service</label>
+                              <textarea class="form-control" id="descriptionPromenade" name="description" rows="4" placeholder="Décrivez le service de promenade que vous proposez" required></textarea>
+                         </div>
+
+                         <div class="row mb-4">
+                              <div class="col-md-6 mb-3 mb-md-0">
+                                   <label for="priceRangePromenade" class="form-label fw-bold">Prix</label>
+                                   <input type="text" class="form-control" id="priceRangePromenade" name="priceRange" placeholder="Exemple : 50 - 200 MAD" required>
+                              </div>
+                              <div class="col-md-6">
+                                   <label for="locationPromenade" class="form-label fw-bold">Lieu</label>
+                                   <input type="text" class="form-control" id="locationPromenade" name="location" placeholder="Votre ville" required>
+                              </div>
+                         </div>
+
+                         <div class="mb-4">
+                              <label class="form-label fw-bold mb-3">Options de Promenade</label>
+                              <div class="row g-3">
+                                   <div class="col-md-6 col-lg-4">
+                                        <div class="form-check card shadow-sm h-100">
+                                             <div class="card-body">
+                                                  <input class="form-check-input" type="checkbox" value="Promenade individuelle" id="individualWalk" name="serviceOptions[]">
+                                                  <label class="form-check-label d-flex align-items-center" for="individualWalk">
+                                                       <i class="bi bi-person-walking me-2 text-success"></i>
+                                                       <span>Promenade individuelle</span>
+                                                  </label>
+                                             </div>
+                                        </div>
+                                   </div>
+                                   <div class="col-md-6 col-lg-4">
+                                        <div class="form-check card shadow-sm h-100">
+                                             <div class="card-body">
+                                                  <input class="form-check-input" type="checkbox" value="Promenade en groupe" id="groupWalk" name="serviceOptions[]">
+                                                  <label class="form-check-label d-flex align-items-center" for="groupWalk">
+                                                       <i class="bi bi-people-fill me-2 text-primary"></i>
+                                                       <span>Promenade en groupe</span>
+                                                  </label>
+                                             </div>
+                                        </div>
+                                   </div>
+                                   <div class="col-md-6 col-lg-4">
+                                        <div class="form-check card shadow-sm h-100">
+                                             <div class="card-body">
+                                                  <input class="form-check-input" type="checkbox" value="Jogging avec chien" id="dogJogging" name="serviceOptions[]">
+                                                  <label class="form-check-label d-flex align-items-center" for="dogJogging">
+                                                       <i class="bi bi-wind me-2 text-info"></i>
+                                                       <span>Jogging avec chien</span>
+                                                  </label>
+                                             </div>
+                                        </div>
+                                   </div>
+                              </div>
+                         </div>
+
+                         <div class="d-grid">
+                              <button type="submit" class="btn btn-success btn-lg">Enregistrer le service</button>
+                         </div>
+                    </form>
+               </div>
+          </div>
+     </div>
+</div>
+
+<!-- Modal for Vétérinaire -->
+<div class="modal fade" id="veterinaireModal" tabindex="-1" aria-labelledby="veterinaireModalLabel" aria-hidden="true">
+     <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+               <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title fs-4" id="veterinaireModalLabel">Proposer un Service Vétérinaire</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+               </div>
+               <div class="modal-body p-4">
+                    <form id="veterinaireForm" action="/services/new" method="POST">
+                         <input type="hidden" name="serviceName" value="Vétérinaire">
+
+                         <div class="mb-4">
+                              <label for="descriptionVeterinaire" class="form-label fw-bold">Description du service</label>
+                              <textarea class="form-control" id="descriptionVeterinaire" name="description" rows="4" placeholder="Décrivez le service vétérinaire que vous proposez" required></textarea>
+                         </div>
+
+                         <div class="row mb-4">
+                              <div class="col-md-6 mb-3 mb-md-0">
+                                   <label for="priceRangeVeterinaire" class="form-label fw-bold">Prix</label>
+                                   <input type="text" class="form-control" id="priceRangeVeterinaire" name="priceRange" placeholder="Exemple : 500 - 1500 MAD" required>
+                              </div>
+                              <div class="col-md-6">
+                                   <label for="locationVeterinaire" class="form-label fw-bold">Lieu</label>
+                                   <input type="text" class="form-control" id="locationVeterinaire" name="location" placeholder="Votre ville" required>
+                              </div>
+                         </div>
+
+                         <div class="mb-4">
+                              <label class="form-label fw-bold mb-3">Services Vétérinaires</label>
+                              <div class="row g-3">
+                                   <div class="col-md-6 col-lg-4">
+                                        <div class="form-check card shadow-sm h-100">
+                                             <div class="card-body">
+                                                  <input class="form-check-input" type="checkbox" value="Consultation générale" id="generalConsult" name="serviceOptions[]">
+                                                  <label class="form-check-label d-flex align-items-center" for="generalConsult">
+                                                       <i class="bi bi-clipboard2-pulse me-2 text-primary"></i>
+                                                       <span>Consultation générale</span>
+                                                  </label>
+                                             </div>
+                                        </div>
+                                   </div>
+                                   <div class="col-md-6 col-lg-4">
+                                        <div class="form-check card shadow-sm h-100">
+                                             <div class="card-body">
+                                                  <input class="form-check-input" type="checkbox" value="Vaccination" id="vaccination" name="serviceOptions[]">
+                                                  <label class="form-check-label d-flex align-items-center" for="vaccination">
+                                                       <i class="bi bi-shield-fill-check me-2 text-success"></i>
+                                                       <span>Vaccination</span>
+                                                  </label>
+                                             </div>
+                                        </div>
+                                   </div>
+                                   <div class="col-md-6 col-lg-4">
+                                        <div class="form-check card shadow-sm h-100">
+                                             <div class="card-body">
+                                                  <input class="form-check-input" type="checkbox" value="Chirurgie" id="surgery" name="serviceOptions[]">
+                                                  <label class="form-check-label d-flex align-items-center" for="surgery">
+                                                       <i class="bi bi-bandaid-fill me-2 text-danger"></i>
+                                                       <span>Chirurgie</span>
+                                                  </label>
+                                             </div>
+                                        </div>
+                                   </div>
+                              </div>
+                         </div>
+
+                         <div class="d-grid">
+                              <button type="submit" class="btn btn-danger btn-lg">Enregistrer le service</button>
+                         </div>
+                    </form>
+               </div>
+          </div>
+     </div>
+</div>
+
+<!-- Modal for Pension -->
+<div class="modal fade" id="pensionModal" tabindex="-1" aria-labelledby="pensionModalLabel" aria-hidden="true">
+     <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+               <div class="modal-header bg-warning text-dark">
+                    <h5 class="modal-title fs-4" id="pensionModalLabel">Proposer un Service de Pension</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+               </div>
+               <div class="modal-body p-4">
+                    <form id="pensionForm" action="/services/new" method="POST">
+                         <input type="hidden" name="serviceName" value="Pension">
+
+                         <div class="mb-4">
+                              <label for="descriptionPension" class="form-label fw-bold">Description du service</label>
+                              <textarea class="form-control" id="descriptionPension" name="description" rows="4" placeholder="Décrivez le service de pension que vous proposez" required></textarea>
+                         </div>
+
+                         <div class="row mb-4">
+                              <div class="col-md-6 mb-3 mb-md-0">
+                                   <label for="priceRangePension" class="form-label fw-bold">Prix</label>
+                                   <input type="text" class="form-control" id="priceRangePension" name="priceRange" placeholder="Exemple : 300 - 700 MAD" required>
+                              </div>
+                              <div class="col-md-6">
+                                   <label for="locationPension" class="form-label fw-bold">Lieu</label>
+                                   <input type="text" class="form-control" id="locationPension" name="location" placeholder="Votre ville" required>
+                              </div>
+                         </div>
+
+                         <div class="mb-4">
+                              <label class="form-label fw-bold mb-3">Options de Pension</label>
+                              <div class="row g-3">
+                                   <div class="col-md-6 col-lg-4">
+                                        <div class="form-check card shadow-sm h-100">
+                                             <div class="card-body">
+                                                  <input class="form-check-input" type="checkbox" value="Pension journalière" id="daycare" name="serviceOptions[]">
+                                                  <label class="form-check-label d-flex align-items-center" for="daycare">
+                                                       <i class="bi bi-sun-fill me-2 text-warning"></i>
+                                                       <span>Pension journalière</span>
+                                                  </label>
+                                             </div>
+                                        </div>
+                                   </div>
+                                   <div class="col-md-6 col-lg-4">
+                                        <div class="form-check card shadow-sm h-100">
+                                             <div class="card-body">
+                                                  <input class="form-check-input" type="checkbox" value="Pension longue durée" id="longTerm" name="serviceOptions[]">
+                                                  <label class="form-check-label d-flex align-items-center" for="longTerm">
+                                                       <i class="bi bi-calendar-week me-2 text-primary"></i>
+                                                       <span>Pension longue durée</span>
+                                                  </label>
+                                             </div>
+                                        </div>
+                                   </div>
+                                   <div class="col-md-6 col-lg-4">
+                                        <div class="form-check card shadow-sm h-100">
+                                             <div class="card-body">
+                                                  <input class="form-check-input" type="checkbox" value="Pension avec activités" id="activities" name="serviceOptions[]">
+                                                  <label class="form-check-label d-flex align-items-center" for="activities">
+                                                       <i class="bi bi-dice-5 me-2 text-success"></i>
+                                                       <span>Pension avec activités</span>
+                                                  </label>
+                                             </div>
+                                        </div>
+                                   </div>
+                              </div>
+                         </div>
+
+                         <div class="d-grid">
+                              <button type="submit" class="btn btn-warning btn-lg text-dark">Enregistrer le service</button>
+                         </div>
+                    </form>
+               </div>
+          </div>
+     </div>
+</div>
+
+<!-- Modal for Transport -->
+<div class="modal fade" id="transportModal" tabindex="-1" aria-labelledby="transportModalLabel" aria-hidden="true">
+     <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+               <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title fs-4" id="transportModalLabel">Proposer un Service de Transport</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+               </div>
+               <div class="modal-body p-4">
+                    <form id="transportForm" action="/services/new" method="POST">
+                         <input type="hidden" name="serviceName" value="Transport">
+
+                         <div class="mb-4">
+                              <label for="descriptionTransport" class="form-label fw-bold">Description du service</label>
+                              <textarea class="form-control" id="descriptionTransport" name="description" rows="4" placeholder="Décrivez le service de transport que vous proposez" required></textarea>
+                         </div>
+
+                         <div class="row mb-4">
+                              <div class="col-md-6 mb-3 mb-md-0">
+                                   <label for="priceRangeTransport" class="form-label fw-bold">Prix</label>
+                                   <!-- Modal for Transport (Continued) -->
+                                   <input type="text" class="form-control" id="priceRangeTransport" name="priceRange" placeholder="Exemple : 100 - 400 MAD" required>
+                              </div>
+                              <div class="col-md-6">
+                                   <label for="locationTransport" class="form-label fw-bold">Lieu</label>
+                                   <input type="text" class="form-control" id="locationTransport" name="location" placeholder="Votre ville" required>
+                              </div>
+                         </div>
+
+                         <div class="mb-4">
+                              <label class="form-label fw-bold mb-3">Options de Transport</label>
+                              <div class="row g-3">
+                                   <div class="col-md-6 col-lg-4">
+                                        <div class="form-check card shadow-sm h-100">
+                                             <div class="card-body">
+                                                  <input class="form-check-input" type="checkbox" value="Transport local" id="localTransport" name="serviceOptions[]">
+                                                  <label class="form-check-label d-flex align-items-center" for="localTransport">
+                                                       <i class="bi bi-geo-alt-fill me-2 text-success"></i>
+                                                       <span>Transport local</span>
+                                                  </label>
+                                             </div>
+                                        </div>
+                                   </div>
+                                   <div class="col-md-6 col-lg-4">
+                                        <div class="form-check card shadow-sm h-100">
+                                             <div class="card-body">
+                                                  <input class="form-check-input" type="checkbox" value="Transport longue distance" id="longDistanceTransport" name="serviceOptions[]">
+                                                  <label class="form-check-label d-flex align-items-center" for="longDistanceTransport">
+                                                       <i class="bi bi-truck me-2 text-primary"></i>
+                                                       <span>Transport longue distance</span>
+                                                  </label>
+                                             </div>
+                                        </div>
+                                   </div>
+                                   <div class="col-md-6 col-lg-4">
+                                        <div class="form-check card shadow-sm h-100">
+                                             <div class="card-body">
+                                                  <input class="form-check-input" type="checkbox" value="Transport d'urgence" id="emergencyTransport" name="serviceOptions[]">
+                                                  <label class="form-check-label d-flex align-items-center" for="emergencyTransport">
+                                                       <i class="bi bi-exclamation-triangle-fill me-2 text-danger"></i>
+                                                       <span>Transport d'urgence</span>
+                                                  </label>
+                                             </div>
+                                        </div>
+                                   </div>
+                              </div>
+                         </div>
+
+                         <div class="d-grid">
+                              <button type="submit" class="btn btn-info btn-lg text-white">Enregistrer le service</button>
+                         </div>
+                    </form>
+               </div>
+          </div>
+     </div>
+</div>
+<script>
+     document.getElementById('dressageForm').addEventListener('submit', function (e) {
+          e.preventDefault();
+
+          // Basic client-side validation (you can enhance this)
+          let valid = true;
+          const description = document.getElementById('descriptionDressage').value;
+          const priceRange = document.getElementById('priceRangeDressage').value;
+          const location = document.getElementById('locationDressage').value;
+
+          if (description.length < 10) {
+               valid = false;
+               alert('La description doit contenir au moins 10 caractères.');
+          }
+          if (!priceRange) {
+               valid = false;
+               alert('Veuillez entrer une plage de prix.');
+          }
+          if (!location) {
+               valid = false;
+               alert('Veuillez entrer un lieu.');
+          }
+
+          if (valid) {
+               // Show spinner
+               const submitButton = document.querySelector('button[type="submit"]');
+               submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enregistrement...';
+               submitButton.disabled = true;
+
+               // Submit the form after validation
+               this.submit();
+          }
+     });
+</script>
