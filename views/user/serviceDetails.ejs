@@ -1,0 +1,276 @@
+<%- include('include/head.ejs') %>
+     <%- include('include/navbar.ejs') %>
+
+          <div class="service-details-container">
+               <div class="service-hero">
+                    <h1 class="service-title">
+                         <%= service.serviceName %>
+                    </h1>
+                    <div class="service-provider">
+                         <img src="<%= service.createdBy.image %>" alt="<%= service.createdBy.name %>" class="provider-image">
+                         <div class="provider-info">
+                              <h3>
+                                   <%= service.createdBy.name %>
+                              </h3>
+                              <p><i class="bi bi-envelope"></i>
+                                   <%= service.createdBy.email %>
+                              </p>
+                              <p><i class="bi bi-geo-alt"></i>
+                                   <%= service.location %>
+                              </p>
+                         </div>
+                    </div>
+               </div>
+
+               <div class="service-content">
+                    <div class="service-description">
+                         <h2>À propos de ce service</h2>
+                         <p>
+                              <%= service.description %>
+                         </p>
+                    </div>
+
+                    <div class="service-details">
+                         <div class="detail-card price-card">
+                              <h3>Prix</h3>
+                              <p class="price-amount">DH <%= service.priceRange %>
+                              </p>
+                         </div>
+                         <div class="detail-card options-card">
+                              <h3>Options de service</h3>
+                              <ul class="options-list">
+                                   <% service.serviceOptions.forEach(option=> { %>
+                                        <li><i class="bi bi-check-circle"></i>
+                                             <%= option %>
+                                        </li>
+                                        <% }) %>
+                              </ul>
+                         </div>
+                    </div>
+
+                    <div class="service-actions">
+                         <button class="action-btn like-btn" data-service-id="<%= service._id %>">
+                              <i class="bi bi-heart"></i> <span class="like-count">
+                                   <%= service.likes %>
+                              </span>
+                         </button>
+
+                         <button class="action-btn book-btn">Réserver maintenant</button>
+                    </div>
+               </div>
+          </div>
+
+          <style>
+               body {
+                    font-family: 'Poppins', sans-serif;
+                    background-color: #f5f7fa;
+                    color: #333;
+               }
+
+               .service-details-container {
+                    max-width: 1000px;
+                    margin: 40px auto;
+                    background-color: #fff;
+                    border-radius: 12px;
+                    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+                    overflow: hidden;
+               }
+
+               .service-hero {
+                    background: linear-gradient(135deg, #3498db, #8e44ad);
+                    color: #fff;
+                    padding: 40px;
+                    position: relative;
+               }
+
+               .service-title {
+                    font-size: 2.5em;
+                    margin-bottom: 20px;
+               }
+
+               .service-provider {
+                    display: flex;
+                    align-items: center;
+               }
+
+               .provider-image {
+                    width: 80px;
+                    height: 80px;
+                    border-radius: 50%;
+                    object-fit: cover;
+                    border: 3px solid #fff;
+               }
+
+               .provider-info {
+                    margin-left: 20px;
+               }
+
+               .provider-info h3 {
+                    margin: 0;
+                    font-size: 1.2em;
+               }
+
+               .provider-info p {
+                    margin: 5px 0;
+                    font-size: 0.9em;
+               }
+
+               .service-content {
+                    padding: 40px;
+               }
+
+               .service-description h2 {
+                    color: #2c3e50;
+                    margin-bottom: 20px;
+               }
+
+               .service-details {
+                    display: flex;
+                    justify-content: space-between;
+                    margin-top: 40px;
+               }
+
+               .detail-card {
+                    background-color: #f8f9fa;
+                    border-radius: 8px;
+                    padding: 20px;
+                    width: 48%;
+                    transition: transform 0.3s ease;
+               }
+
+               .detail-card:hover {
+                    transform: translateY(-5px);
+               }
+
+               .detail-card h3 {
+                    color: #2c3e50;
+                    margin-bottom: 15px;
+               }
+
+               .price-amount {
+                    font-size: 1.5em;
+                    font-weight: bold;
+                    color: #27ae60;
+               }
+
+               .options-list {
+                    list-style-type: none;
+                    padding: 0;
+               }
+
+               .options-list li {
+                    margin-bottom: 10px;
+               }
+
+               .options-list i {
+                    color: #27ae60;
+                    margin-right: 10px;
+               }
+
+               .service-actions {
+                    display: flex;
+                    justify-content: space-between;
+                    margin-top: 40px;
+               }
+
+               .action-btn {
+                    padding: 10px 20px;
+                    border: none;
+                    border-radius: 25px;
+                    font-size: 1em;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+               }
+
+               .like-btn,
+               .dislike-btn {
+                    background-color: #f8f9fa;
+                    color: #333;
+               }
+
+               .like-btn:hover {
+                    background-color: #e74c3c;
+                    color: #fff;
+               }
+
+               .dislike-btn:hover {
+                    background-color: #3498db;
+                    color: #fff;
+               }
+
+               .book-btn {
+                    background-color: #27ae60;
+                    color: #fff;
+               }
+
+               .book-btn:hover {
+                    background-color: #2ecc71;
+               }
+
+               @media (max-width: 768px) {
+                    .service-details {
+                         flex-direction: column;
+                    }
+
+                    .detail-card {
+                         width: 100%;
+                         margin-bottom: 20px;
+                    }
+
+                    .service-actions {
+                         flex-wrap: wrap;
+                    }
+
+                    .action-btn {
+                         width: 100%;
+                         margin-bottom: 10px;
+                    }
+               }
+          </style>
+
+          <script>
+               document.addEventListener('DOMContentLoaded', function () {
+                    const likeBtn = document.querySelector('.like-btn');
+                    const dislikeBtn = document.querySelector('.dislike-btn');
+
+                    function updateCount(button, increment = true) {
+                         const countSpan = button.querySelector('span');
+                         let count = parseInt(countSpan.textContent);
+                         countSpan.textContent = increment ? count + 1 : count - 1;
+                    }
+
+                    function animateButton(button) {
+                         button.classList.add('animate__animated', 'animate__rubberBand');
+                         setTimeout(() => button.classList.remove('animate__animated', 'animate__rubberBand'), 1000);
+                    }
+
+                    likeBtn.addEventListener('click', function () {
+                         const serviceId = this.getAttribute('data-service-id');
+                         fetch(`/services/${serviceId}/like`, { method: 'POST' })
+                              .then(response => response.json())
+                              .then(data => {
+                                   if (data.success) {
+                                        updateCount(this);
+                                        animateButton(this);
+                                   }
+                              })
+                              .catch(err => console.error('Error liking service:', err));
+                    });
+
+                    dislikeBtn.addEventListener('click', function () {
+                         const serviceId = this.getAttribute('data-service-id');
+                         fetch(`/services/${serviceId}/dislike`, { method: 'POST' })
+                              .then(response => response.json())
+                              .then(data => {
+                                   if (data.success) {
+                                        updateCount(this);
+                                        animateButton(this);
+                                   }
+                              })
+                              .catch(err => console.error('Error disliking service:', err));
+                    });
+               });
+          </script>
+
+          <!-- Add Animate.css for animations -->
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">

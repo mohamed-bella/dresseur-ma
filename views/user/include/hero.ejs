@@ -4,86 +4,61 @@
           <div class="row justify-content-center">
                <div class="col-md-10">
                     <div class="search-container">
-                         <h2 class="search-title mb-4">Trouvez le Service Parfait pour Votre Animal</h2>
-                         <form action="/services/search" method="GET">
-
-                              <!-- Dynamic Location Dropdown -->
-                              <div class="mb-4">
-                                   <select class="form-select search-input" name="location">
-                                        <option value="" selected disabled>Choisissez une ville</option>
-                                        <% locations.forEach(location=> { %>
-                                             <option value="<%= location %>">
-                                                  <%= location %>
-                                             </option>
-                                             <% }) %>
-                                   </select>
-                                   <small class="form-text mt-2">Sélectionnez la ville où vous recherchez des services</small>
-                              </div>
-
-                              <!-- Service Types Section (One Selected) -->
-                              <div class="service-types mb-4">
-                                   <p class="mb-3">Quel type de service recherchez-vous ?</p>
-                                   <div class="row g-3">
-                                        <div class="col-md-4 col-6">
-                                             <label class="service-card">
-                                                  <input type="radio" name="serviceType" value="dressage" class="service-radio">
-                                                  <div class="card-content text-center">
-                                                       <img src="https://img.icons8.com/?size=100&id=02AbFTOZGc7a&format=png&color=000000" alt="Dressage" class="icon-svg">
-                                                       <span>Dressage</span>
-                                                  </div>
-                                             </label>
-                                        </div>
-                                        <div class="col-md-4 col-6">
-                                             <label class="service-card">
-                                                  <input type="radio" name="serviceType" value="toilettage" class="service-radio">
-                                                  <div class="card-content text-center">
-                                                       <img src="https://img.icons8.com/?size=100&id=eSFW8g06YlXi&format=png&color=000000" alt="Toilettage" class="icon-svg">
-                                                       <span>Toilettage</span>
-                                                  </div>
-                                             </label>
-                                        </div>
-                                        <div class="col-md-4 col-6">
-                                             <label class="service-card">
-                                                  <input type="radio" name="serviceType" value="promenade" class="service-radio">
-                                                  <div class="card-content text-center">
-                                                       <img src="https://img.icons8.com/?size=100&id=W8jJ6qfM7hcV&format=png&color=000000" alt="Promenade" class="icon-svg">
-                                                       <span>Promenade</span>
-                                                  </div>
-                                             </label>
-                                        </div>
-                                        <div class="col-md-4 col-6">
-                                             <label class="service-card">
-                                                  <input type="radio" name="serviceType" value="veterinaire" class="service-radio">
-                                                  <div class="card-content text-center">
-                                                       <img src="https://img.icons8.com/?size=100&id=s6qCmDA9s4w6&format=png&color=000000" alt="Vétérinaire" class="icon-svg">
-                                                       <span>Vétérinaire</span>
-                                                  </div>
-                                             </label>
-                                        </div>
-                                        <div class="col-md-4 col-6">
-                                             <label class="service-card">
-                                                  <input type="radio" name="serviceType" value="pension" class="service-radio">
-                                                  <div class="card-content text-center">
-                                                       <img src="https://img.icons8.com/?size=100&id=rine6jqhXEly&format=png&color=000000" alt="Pension" class="icon-svg">
-                                                       <span>Pension</span>
-                                                  </div>
-                                             </label>
-                                        </div>
-                                        <div class="col-md-4 col-6">
-                                             <label class="service-card">
-                                                  <input type="radio" name="serviceType" value="transport" class="service-radio">
-                                                  <div class="card-content text-center">
-                                                       <img src="https://img.icons8.com/?size=100&id=p0LDtHcHd2Xg&format=png&color=000000" alt="Transport" class="icon-svg">
-                                                       <span>Transport</span>
-                                                  </div>
-                                             </label>
-                                        </div>
+                         <div class="service-types mb-4">
+                              <h1 class="mb-3">Quel type de service recherchez-vous ?</h1>
+                              <div class="row g-3">
+                                   <div class="col-md-4 col-6">
+                                        <a href="/services/dressage" class="service-card">
+                                             <div class="card-content text-center">
+                                                  <img src="https://img.icons8.com/?size=100&id=02AbFTOZGc7a&format=png&color=000000" alt="Dressage" class="icon-svg">
+                                                  <span>Dressage</span>
+                                             </div>
+                                        </a>
                                    </div>
-                                   <small class="form-text mt-2">Sélectionnez le service que vous recherchez</small>
+                                   <div class="col-md-4 col-6">
+                                        <a href="/services/toilettage" class="service-card">
+                                             <div class="card-content text-center">
+                                                  <img src="https://img.icons8.com/?size=100&id=eSFW8g06YlXi&format=png&color=000000" alt="Toilettage" class="icon-svg">
+                                                  <span>Toilettage</span>
+                                             </div>
+                                        </a>
+                                   </div>
+                                   <div class="col-md-4 col-6">
+                                        <a href="/services/promenade" class="service-card">
+                                             <div class="card-content text-center">
+                                                  <img src="https://img.icons8.com/?size=100&id=W8jJ6qfM7hcV&format=png&color=000000" alt="Promenade" class="icon-svg">
+                                                  <span>Promenade</span>
+                                             </div>
+                                        </a>
+                                   </div>
+                                   <div class="col-md-4 col-6">
+                                        <a href="/services/veterinaire" class="service-card">
+                                             <div class="card-content text-center">
+                                                  <img src="https://img.icons8.com/?size=100&id=s6qCmDA9s4w6&format=png&color=000000" alt="Vétérinaire" class="icon-svg">
+                                                  <span>Vétérinaire</span>
+                                             </div>
+                                        </a>
+                                   </div>
+                                   <div class="col-md-4 col-6">
+                                        <a href="/services/pension" class="service-card">
+                                             <div class="card-content text-center">
+                                                  <img src="https://img.icons8.com/?size=100&id=rine6jqhXEly&format=png&color=000000" alt="Pension" class="icon-svg">
+                                                  <span>Pension</span>
+                                             </div>
+                                        </a>
+                                   </div>
+                                   <div class="col-md-4 col-6">
+                                        <a href="/services/transport" class="service-card">
+                                             <div class="card-content text-center">
+                                                  <img src="https://img.icons8.com/?size=100&id=p0LDtHcHd2Xg&format=png&color=000000" alt="Transport" class="icon-svg">
+                                                  <span>Transport</span>
+                                             </div>
+                                        </a>
+                                   </div>
                               </div>
+                              <small class="form-text mt-2">Sélectionnez le service que vous recherchez</small>
+                         </div>
 
-                              <button type="submit" class="search-btn btn btn-lg btn-block">Rechercher les Services</button>
-                         </form>
                     </div>
                </div>
           </div>
@@ -138,6 +113,7 @@
           border: 2px solid #ddd;
           border-radius: 10px;
           text-align: center;
+          text-decoration: none;
           transition: all 0.3s ease;
           overflow: hidden;
      }
@@ -158,6 +134,7 @@
 
      .card-content {
           padding: 20px 10px;
+          color: #000;
           transition: all 0.3s ease;
      }
 
@@ -171,6 +148,8 @@
           display: block;
           font-weight: bold;
           font-size: 18px;
+          color: #000;
+          text-decoration: none;
      }
 
      .search-btn {

@@ -66,64 +66,57 @@ router.post('/services/:id/like', async (req, res) => {
      }
 });
 
+// Utility function for case-insensitive regex
+const getCaseInsensitiveRegex = (value) => new RegExp(value, 'i');
 
-
-// POST: Dislike a service
-router.post('/services/:id/dislike', async (req, res) => {
-     const serviceId = req.params.id;
-     const dislikedServices = req.cookies.dislikedServices || [];
-
-     // Check if the user has already disliked this service
-     if (dislikedServices.includes(serviceId)) {
-          req.flash('error', 'Vous avez déjà disliké ce service.');
-          return res.redirect('back');
-     }
-
+// GET: Search for services by serviceName and optionally location
+router.get('/services/:serviceName/:location?', async (req, res) => {
      try {
-          // Update the dislike counter
-          await Service.findByIdAndUpdate(serviceId, { $inc: { dislikes: 1 } });
+          const { serviceName, location } = req.params;
 
-          // Set a cookie to remember the interaction
-          dislikedServices.push(serviceId);
-          res.cookie('dislikedServices', dislikedServices, { maxAge: 30 * 24 * 60 * 60 * 1000 }); // 30 days
+          // Query to find services based on serviceName and optionally location
+          const serviceQuery = {
+               serviceName: getCaseInsensitiveRegex(serviceName)
+          };
 
-          req.flash('success', 'Merci d\'avoir disliké ce service.');
-          res.json({ success: true });
+          if (location) {
+               serviceQuery.location = getCaseInsensitiveRegex(location);  // Add location to query if present
+          }
+
+          // Fetch services with populated 'createdBy' field to get user data
+          const [services, locations] = await Promise.all([
+               Service.find(serviceQuery)
+                    .populate('createdBy', 'email image displayName')  // Populate the 'createdBy' field with 'name' and 'email' from User
+                    .limit(6),  // Limit services to 6
+               Service.distinct('location', { serviceName: getCaseInsensitiveRegex(serviceName) })
+          ]);
+
+          // console.log(services)
+
+          // Render the filtered services, locations, and current user data
+          res.render('user/services', { services, locations, serviceName, location });
      } catch (err) {
-          console.error(err);
-          req.flash('error', 'Erreur serveur.');
-          res.json({ success: false });
+          console.error('Error fetching services:', err);
+          res.status(500).json({ success: false, message: 'Erreur serveur.' });
      }
 });
 
-// GET: Search for services
-router.get('/services/search', async (req, res) => {
+// GET: Service Details
+router.get('/service/:serviceId', async (req, res) => {
      try {
+          const serviceId = req.params.serviceId;
 
-          const { location, serviceName } = req.query;  // Extract location, and serviceType
+          // Fetch the service by ID and populate the `createdBy` field to get user data
+          const service = await Service.findById(serviceId).populate('createdBy');
 
-          // Build the search query
-          let searchQuery = {};
-
-          if (location) {
-               searchQuery.location = location;
+          if (!service) {
+               return res.status(404).send('Service not found');
           }
 
-
-
-          if (serviceName) {
-               searchQuery.serviceName = serviceName; // Case-insensitive search for serviceType
-          }
-
-          // Find services matching the search query
-          const services = await Service.find(searchQuery);
-          console.log(searchQuery)
-
-
-          // Render the filtered services and available locations to the view
-          res.render('user/services', { services });
+          // Render the service details view
+          res.render('user/serviceDetails', { service });
      } catch (err) {
-          console.error('Error fetching services:', err);
+          console.error('Error fetching service details:', err);
           res.status(500).json({ success: false, message: 'Erreur serveur.' });
      }
 });
