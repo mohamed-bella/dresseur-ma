@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Page Non Trouvée - Erreur 404 - Ndressilik</title>
+     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+     <style>
+          body,
+          html {
+               height: 100%;
+               margin: 0;
+               font-family: 'Nunito', sans-serif;
+               background-color: #f0f7f4;
+               display: flex;
+               align-items: center;
+               justify-content: center;
+               color: #333;
+               overflow: hidden;
+          }
+
+          .container {
+               text-align: center;
+               padding: 2rem;
+               max-width: 600px;
+               position: relative;
+          }
+
+          h1 {
+               font-size: 3rem;
+               margin-bottom: 0.5rem;
+               color: #3FB1B0;
+          }
+
+          .error-code {
+               font-size: 1.5rem;
+               font-weight: 600;
+               color: #FF6B6B;
+               margin-bottom: 1rem;
+          }
+
+          p {
+               font-size: 1.2rem;
+               margin-bottom: 2rem;
+               line-height: 1.6;
+          }
+
+          .btn {
+               display: inline-block;
+               padding: 12px 24px;
+               background-color: #3FB1B0;
+               color: white;
+               text-decoration: none;
+               border-radius: 30px;
+               font-size: 1.1rem;
+               font-weight: 600;
+               transition: all 0.3s ease;
+               box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          }
+
+          .btn:hover,
+          .btn:focus {
+               background-color: #2C7A7B;
+               transform: translateY(-2px);
+               box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+          }
+
+          .dog-scene {
+               width: 300px;
+               height: 200px;
+               margin: 0 auto 2rem;
+               position: relative;
+               overflow: hidden;
+          }
+
+          .dog {
+               width: 100px;
+               height: 60px;
+               background-color: #A0522D;
+               border-radius: 50px 50px 0 0;
+               position: absolute;
+               bottom: 20px;
+               left: -100px;
+               animation: runDog 4s linear infinite;
+          }
+
+          .dog::before {
+               content: '';
+               width: 60px;
+               height: 60px;
+               background-color: #A0522D;
+               border-radius: 50%;
+               position: absolute;
+               top: -30px;
+               left: 20px;
+          }
+
+          .dog::after {
+               content: '🦴';
+               font-size: 24px;
+               position: absolute;
+               top: -40px;
+               right: -20px;
+          }
+
+          @keyframes runDog {
+               0% {
+                    left: -100px;
+               }
+
+               50% {
+                    left: 300px;
+               }
+
+               50.01% {
+                    left: -100px;
+                    transform: scaleX(-1);
+               }
+
+               100% {
+                    left: 300px;
+                    transform: scaleX(-1);
+               }
+          }
+
+          .hole {
+               width: 60px;
+               height: 30px;
+               background-color: #8B4513;
+               border-radius: 50%;
+               position: absolute;
+               bottom: 0;
+               left: 50%;
+               transform: translateX(-50%);
+          }
+
+          #fetch-button {
+               background-color: #FF6B6B;
+               margin-top: 1rem;
+          }
+
+          #fetch-button:hover,
+          #fetch-button:focus {
+               background-color: #e05252;
+          }
+
+          @media (max-width: 480px) {
+               h1 {
+                    font-size: 2.5rem;
+               }
+
+               .error-code {
+                    font-size: 1.2rem;
+               }
+
+               p {
+                    font-size: 1rem;
+               }
+
+               .dog-scene {
+                    transform: scale(0.8);
+               }
+          }
+     </style>
+</head>
+
+<body>
+     <div class="container">
+          <div class="dog-scene">
+               <div class="dog"></div>
+               <div class="hole"></div>
+          </div>
+          <h1>Oups ! Page Non Trouvée</h1>
+          <p class="error-code">Erreur 404</p>
+          <p>Il semble que notre chien ait enterré cette page quelque part dans le jardin. Nous allons lui apprendre à ne pas faire ça !</p>
+          <p>En attendant, pourquoi ne pas retourner à l'accueil pour explorer d'autres parties de notre site ?</p>
+          <a href="/" class="btn">Retourner à l'accueil</a>
+          <button id="fetch-button" class="btn">Rapporte, mon chien !</button>
+     </div>
+
+     <script>
+          document.addEventListener('DOMContentLoaded', (event) => {
+               const container = document.querySelector('.container');
+               const fetchButton = document.getElementById('fetch-button');
+               const dog = document.querySelector('.dog');
+
+               // Initial animation
+               container.style.opacity = '0';
+               container.style.transform = 'translateY(20px)';
+               container.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
+
+               setTimeout(() => {
+                    container.style.opacity = '1';
+                    container.style.transform = 'translateY(0)';
+               }, 100);
+
+               fetchButton.addEventListener('click', () => {
+                    dog.style.animationPlayState = 'paused';
+                    setTimeout(() => {
+                         dog.style.animationPlayState = 'running';
+                    }, 1000);
+
+                    fetchButton.disabled = true;
+                    fetchButton.textContent = 'Bon chien !';
+                    setTimeout(() => {
+                         fetchButton.disabled = false;
+                         fetchButton.textContent = 'Rapporte encore !';
+                    }, 2000);
+               });
+          });
+     </script>
+</body>
+
+</html>

@@ -82,7 +82,6 @@ router.get('/dashboard', async (req, res) => {
           try {
                // Fetch user's announcements
                const announcements = await Announcement.find({ user: req.user._id });
-               console.log(announcements)
                // Ensure announcements is always an array, even if it's empty
                const announcementsCount = announcements ? announcements.length : 0;
 

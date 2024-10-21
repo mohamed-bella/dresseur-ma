@@ -3,6 +3,10 @@ const router = express.Router();
 const { body, validationResult } = require('express-validator');
 const Service = require('../models/service'); // Your Service model
 
+
+
+
+
 // POST: Create new service
 router.post('/services/new', [
      body('description').isLength({ min: 10 }).withMessage('La description doit contenir au moins 10 caractères.'),
@@ -44,7 +48,7 @@ router.post('/services/:id/like', async (req, res) => {
 
      // Check if the user has already liked this service
      if (likedServices.includes(serviceId)) {
-          return res.status(400).json({ success: false, message: 'Vous avez déjà aimé ce service.' });
+          return res.json({ success: false, message: 'Vous avez déjà aimé ce service.' });
      }
 
      try {
@@ -62,6 +66,8 @@ router.post('/services/:id/like', async (req, res) => {
      }
 });
 
+
+
 // POST: Dislike a service
 router.post('/services/:id/dislike', async (req, res) => {
      const serviceId = req.params.id;
@@ -69,7 +75,8 @@ router.post('/services/:id/dislike', async (req, res) => {
 
      // Check if the user has already disliked this service
      if (dislikedServices.includes(serviceId)) {
-          return res.status(400).json({ success: false, message: 'Vous avez déjà disliké ce service.' });
+          req.flash('error', 'Vous avez déjà disliké ce service.');
+          return res.redirect('back');
      }
 
      try {
@@ -80,17 +87,20 @@ router.post('/services/:id/dislike', async (req, res) => {
           dislikedServices.push(serviceId);
           res.cookie('dislikedServices', dislikedServices, { maxAge: 30 * 24 * 60 * 60 * 1000 }); // 30 days
 
-          res.json({ success: true, message: 'Service disliké.' });
+          req.flash('success', 'Merci d\'avoir disliké ce service.');
+          res.json({ success: true });
      } catch (err) {
           console.error(err);
-          res.status(500).json({ success: false, message: 'Erreur serveur.' });
+          req.flash('error', 'Erreur serveur.');
+          res.json({ success: false });
      }
 });
 
 // GET: Search for services
 router.get('/services/search', async (req, res) => {
      try {
-          const { location, serviceName, serviceType } = req.query;  // Extract location, serviceName, and serviceType
+
+          const { location, serviceName } = req.query;  // Extract location, and serviceType
 
           // Build the search query
           let searchQuery = {};
@@ -101,12 +111,13 @@ router.get('/services/search', async (req, res) => {
 
 
 
-          if (serviceType) {
-               searchQuery.serviceType = new RegExp(serviceType, 'i'); // Case-insensitive search for serviceType
+          if (serviceName) {
+               searchQuery.serviceName = serviceName; // Case-insensitive search for serviceType
           }
 
           // Find services matching the search query
           const services = await Service.find(searchQuery);
+          console.log(searchQuery)
 
 
           // Render the filtered services and available locations to the view
