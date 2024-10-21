@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 const Admin = require('../models/admin'); // Assuming you have an Admin model
+const Article = require('../models/article'); // Assuming you have an Article model
 require('dotenv').config();
 
 // Handle Admin Login
@@ -47,22 +48,31 @@ router.post('/admin/login', async (req, res) => {
 });
 
 
-
 // Dashboard Route
-router.get('/admin/dashboard', (req, res) => {
+router.get('/admin/dashboard', async (req, res) => {
      if (!req.session.isAuthenticated) {
           return res.redirect('/admin/login');
      }
 
-     // Only allow admins to view the full dashboard
-     if (req.session.adminRole === 'admin') {
-          return res.render('admin/dashboard', { role: 'admin' });
-     } else if (req.session.adminRole === 'author') {
-          return res.render('admin/dashboard', { role: 'author' });
-     } else {
-          return res.redirect('/admin/login');
+     try {
+          // Only allow admins to view the full dashboard
+          if (req.session.adminRole === 'admin') {
+               return res.render('admin/dashboard', { role: 'admin' });
+          } else if (req.session.adminRole === 'author') {
+               // Fetch articles for the logged-in author
+               const articles = await Article.find(); // Assuming you store the user ID in the session
+               return res.render('admin/dashboard', { role: 'author', articles });
+          } else {
+               return res.redirect('/admin/login');
+          }
+     } catch (error) {
+          console.error('Error fetching dashboard data:', error);
+          res.status(500).send('Server Error');
      }
 });
+
+module.exports = router;
+
 
 // Logout Route
 router.get('/admin/logout', (req, res) => {

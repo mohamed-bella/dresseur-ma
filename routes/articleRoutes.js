@@ -10,6 +10,8 @@ require('dotenv').config();
 const sharp = require('sharp');
 const slugify = require('slugify');
 const Comment = require('../models/comment');
+const { body, validationResult } = require('express-validator');
+
 
 // Set up multer for file uploads (saving locally)
 const storage = multer.memoryStorage();
@@ -127,48 +129,54 @@ router.post('/admin/articles', isAuthor, upload.single('featuredImage'), async (
 // GET: Edit article
 router.get('/admin/articles/:slug/edit', isAuthor, async (req, res) => {
      try {
-          const article = await Article.findById(req.params.id);
-          res.render('admin/editArticle', { article });
+          const article = await Article.find({ slug: req.params.slug });
+          res.render('admin/editArticle', { article: article[0] });
      } catch (err) {
           console.error('Error fetching article:', err);
           res.redirect('/admin/dashboard');
      }
 });
 
-// POST: Update article
-router.post('/admin/articles/:slug', isAuthor, upload.single('featuredImage'), async (req, res) => {
-     const { title, content, category, tags, summary, seoTitle, seoDescription, keywords, status } = req.body;
+router.post('/admin/articles/:slug/edit', async (req, res) => {
+     const { slug } = req.params;
+     console.log(req.body)
+
+     // Validation errors
+
 
      try {
-          const updateData = {
-               title,
-               content,
-               category,
-               tags: tags.split(',').map(tag => tag.trim()),
-               summary,
-               status,
+          const updatedData = {
+               title: req.body.title,
+               summary: req.body.summary,
+               content: req.body.content,
+               category: req.body.category,
                seo: {
-                    title: seoTitle,
-                    description: seoDescription,
-                    keywords: keywords.split(',').map(keyword => keyword.trim())
-               }
+                    title: req.body.seoTitle,
+                    description: req.body.seoDescription,
+                    keywords: req.body.keywords ? req.body.keywords.split(',').map(keyword => keyword.trim()) : []
+               },
+               tags: req.body.tags ? req.body.tags.split(',').map(tag => tag.trim()) : [],
+               author: req.body.author
           };
 
-          if (req.file) {
-               updateData.featuredImage = `/uploads/${req.file.filename}`;
-          }
 
-          await Article.findByIdAndUpdate(req.params.id, updateData);
-          req.flash('success', 'Article updated successfully');
+
+          // console.log(updatedData)
+
+          // Update article in the database
+          await Article.findOneAndUpdate({ slug }, updatedData, { new: true });
+
+          req.flash('success', 'Article updated successfully.');
           res.redirect('/admin/dashboard');
-     } catch (err) {
-          console.error('Error updating article:', err);
-          res.redirect(`/admin/articles/${req.params.id}/edit`);
+     } catch (error) {
+          console.error(error);
+          req.flash('error', 'Error updating article.');
+          res.redirect(`/admin/articles/${slug}/edit`);
      }
 });
 
 // DELETE: Delete article
-router.post('/admin/articles/:slug/delete', isAuthor, async (req, res) => {
+router.post('/admin/articles/:id/delete', isAuthor, async (req, res) => {
      try {
           await Article.findByIdAndDelete(req.params.id);
           req.flash('success', 'Article deleted successfully');
