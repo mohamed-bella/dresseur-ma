@@ -12,6 +12,7 @@ const minifyHTML = require('express-minify-html');
 const flash = require('connect-flash');
 require('dotenv').config();
 require('./config/passport');
+const morgan = require('morgan')
 
 const app = express();
 
