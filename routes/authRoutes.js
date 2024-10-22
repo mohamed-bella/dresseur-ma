@@ -9,12 +9,18 @@ router.get('/auth/google',
 
 // Google callback URL after authentication
 router.get('/auth/google/cb',
-     passport.authenticate('google', { failureRedirect: '/' }),
+     passport.authenticate('google', { failureRedirect: '/', failureMessage: true }),
      (req, res) => {
-          // Successful login
-          res.redirect('/dashboard');  // Redirect to dashboard or any other route after login
+          if (req.authInfo) {
+               console.log('Authentication Info:', req.authInfo);
+          }
+          if (req.user) {
+               console.log('User Info:', req.user);  // This should log the authenticated user.
+          }
+          res.redirect('/dashboard');
      }
 );
+
 
 // Logout route
 router.get('/logout', (req, res) => {
