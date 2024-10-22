@@ -1,5 +1,4 @@
 const express = require('express');
-const morgan = require('morgan');
 const session = require('express-session');
 const path = require('path');
 const mongoose = require('mongoose');
@@ -12,7 +11,6 @@ const minifyHTML = require('express-minify-html');
 const flash = require('connect-flash');
 require('dotenv').config();
 require('./config/passport');
-const morgan = require('morgan')
 
 const app = express();
 
