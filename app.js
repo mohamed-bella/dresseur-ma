@@ -16,7 +16,7 @@ require('./config/passport');
 const app = express();
 
 // Middleware
-app.use(morgan('dev')); // Logger for development
+// app.use(morgan('dev')); // Logger for development
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser()); // Ensure cookieParser is before session middleware
@@ -92,6 +92,9 @@ const articleRoutes = require('./routes/articleRoutes');
 const contactRoute = require('./routes/contactRoute');
 const serviceRoutes = require('./routes/serviceRoutes');
 
+
+
+app
 app.use(userRoutes);
 app.use(authRoutes);
 app.use(adminRoutes);
