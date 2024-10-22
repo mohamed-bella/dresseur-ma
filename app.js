@@ -17,7 +17,6 @@ const morgan = require('morgan')
 const app = express();
 
 // Middleware
-app.use(morgan('dev')); // Logger for development
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser()); // Ensure cookieParser is before session middleware
