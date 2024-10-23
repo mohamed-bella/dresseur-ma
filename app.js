@@ -33,13 +33,9 @@ app.use(session({
      saveUninitialized: true,
      store: MongoStore.create({
           mongoUrl: process.env.DATABASE_URI,
-          ttl: 14 * 24 * 60 * 60, // Session expires in 14 days
-          autoRemove: 'native',
-     }),
-     cookie: {
-          secure: process.env.NODE_ENV === 'production',  // Secure cookies only in production
-          httpOnly: true,  // Prevent client-side access to the cookie
-     },
+          ttl: 14 * 24 * 60 * 60, // Keep session for 14 days
+          autoRemove: 'native' // Automatically remove expired sessions
+     })
 }));
 
 
