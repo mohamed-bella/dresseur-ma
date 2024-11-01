@@ -30,19 +30,7 @@ router.get('/logout', (req, res) => {
 });
 
 // Protect dashboard route (or other routes)
-router.get('/dashboard', (req, res) => {
-     if (!req.isAuthenticated()) {
-          res.redirect('/not-auth');
-     }
 
-     if (req.isAuthenticated()) {
-          console.log('User:', req.user);
-          res.render('user/dashboard/dashboard', { user: req.user });
-     } else {
-          console.log('User is not authenticated');
-          res.redirect('/');
-     }
-});
 
 // GET: Logout
 router.get('/logout', (req, res) => {
@@ -50,5 +38,7 @@ router.get('/logout', (req, res) => {
           res.redirect('/');
      });
 });
+
+
 
 module.exports = router;

@@ -1,155 +1,476 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-white py-2 fixed-top">
-     <div class="container">
-          <a class="navbar-brand" href="/">
-               NDRESSILIK
-          </a>
+<script src="https://unpkg.com/next-themes"></script>
 
-          <!-- Mobile view buttons -->
-          <div class="d-flex align-items-center d-lg-none">
-               <a href="/auth/google" class="btn btn-dark me-2 btn-sm">Ajouter un service</a>
-               <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarOffcanvas" aria-controls="navbarOffcanvas">
-                    <span class="navbar-toggler-icon"></span>
-               </button>
-          </div>
+<!-- Theme initialization script -->
+<script>
+     // Configure Tailwind for dark mode
+     tailwind.config = {
+          darkMode: 'class',
+          theme: {
+               extend: {
+                    // Add any theme extensions here
+               }
+          }
+     }
 
-          <!-- Desktop view menu -->
-          <div class="collapse navbar-collapse" id="navbarNav">
-               <ul class="navbar-nav ms-auto align-items-center">
-                    <% if (user) { %>
-                         <li class="nav-item">
-                              <a class="nav-link" href="/dashboard">Dashboard</a>
-                         </li>
-                         <li class="nav-item">
-                              <a class="nav-link" href="/logout">Logout</a>
-                         </li>
-                         <% } else { %>
-                              <li class="nav-item">
-                                   <a class="nav-link" href="/auth/google">Log in with Google</a>
-                              </li>
-                              <% } %>
-                                   <li class="nav-item d-none d-lg-block">
-                                        <a href="/auth/google" class="btn btn-dark ms-2">Ajouter un Service</a>
-                                   </li>
-               </ul>
-          </div>
+     // Initialize ThemeProvider
+     const themeProvider = new NextThemes.ThemeProvider({
+          attribute: 'class',
+          defaultTheme: 'system',
+          disableTransitionOnChange: false,
+          themes: ['light', 'dark']
+     });
 
-          <!-- Mobile view offcanvas -->
-          <div class="offcanvas offcanvas-end d-lg-none" tabindex="-1" id="navbarOffcanvas" aria-labelledby="navbarOffcanvasLabel">
-               <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="navbarOffcanvasLabel">Menu</h5>
-                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-               </div>
-               <div class="offcanvas-body">
-                    <ul class="navbar-nav">
+     // Helper functions for theme management
+     const ThemeManager = {
+          // Get current theme
+          getCurrentTheme() {
+               return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+          },
+
+          // Toggle theme
+          toggleTheme() {
+               const currentTheme = this.getCurrentTheme();
+               const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+               themeProvider.setTheme(newTheme);
+               this.updateThemeUI(newTheme);
+          },
+
+          // Set specific theme
+          setTheme(theme) {
+               themeProvider.setTheme(theme);
+               this.updateThemeUI(theme);
+          },
+
+          // Update UI elements based on theme
+          updateThemeUI(theme) {
+               const isDark = theme === 'dark';
+
+               // Update toggle button icons
+               document.querySelectorAll('[data-theme-toggle]').forEach(button => {
+                    const lightIcon = button.querySelector('[data-theme-icon="light"]');
+                    const darkIcon = button.querySelector('[data-theme-icon="dark"]');
+
+                    if (lightIcon) lightIcon.classList.toggle('hidden', isDark);
+                    if (darkIcon) darkIcon.classList.toggle('hidden', !isDark);
+               });
+
+               // Update meta theme color for mobile browsers
+               const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+               if (metaThemeColor) {
+                    metaThemeColor.content = isDark ? '#1f2937' : '#ffffff';
+               }
+          }
+     };
+
+     // Initialize on page load
+     document.addEventListener('DOMContentLoaded', () => {
+          // Create theme toggle button if it doesn't exist
+          if (!document.querySelector('[data-theme-toggle]')) {
+               const toggleButton = document.createElement('button');
+               toggleButton.setAttribute('data-theme-toggle', '');
+               toggleButton.className = 'fixed top-4 right-4 z-50 p-2 rounded-lg bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-all duration-300';
+               toggleButton.innerHTML = `
+                    <svg data-theme-icon="light" class="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    </svg>
+                    <svg data-theme-icon="dark" class="hidden w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                    </svg>
+                `;
+               document.body.appendChild(toggleButton);
+          }
+
+          // Add click handlers to toggle buttons
+          document.querySelectorAll('[data-theme-toggle]').forEach(button => {
+               button.addEventListener('click', () => ThemeManager.toggleTheme());
+          });
+
+          // Initial UI update
+          ThemeManager.updateThemeUI(ThemeManager.getCurrentTheme());
+     });
+
+     // Optional: Listen for system theme changes
+     if (window.matchMedia) {
+          window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+               if (themeProvider.theme === 'system') {
+                    ThemeManager.updateThemeUI(e.matches ? 'dark' : 'light');
+               }
+          });
+     }
+</script>
+
+<!-- Add base styles for theme transitions -->
+<style>
+     /* Smooth theme transitions */
+     * {
+          transition: background-color 0.3s ease,
+               border-color 0.3s ease,
+               color 0.3s ease,
+               fill 0.3s ease;
+     }
+
+     /* Disable transitions on page load */
+     .disable-transitions * {
+          transition: none !important;
+     }
+</style>
+<nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
+     <div class="container mx-auto px-4">
+          <div class="flex items-center justify-between h-16">
+               <!-- Logo -->
+               <a href="/" class="flex-shrink-0 flex items-center space-x-3 group">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-teal-500 flex items-center justify-center text-white font-bold text-xl transform group-hover:rotate-6 transition-transform duration-300">
+                         N
+                    </div>
+                    <span class="text-xl font-bold bg-gradient-to-r from-blue-600 to-teal-500 bg-clip-text text-transparent hidden sm:block">
+                         NDRESSILIK
+                    </span>
+               </a>
+
+               <!-- Desktop Navigation -->
+               <div class="hidden lg:flex lg:items-center lg:space-x-8">
+                    <!-- Main Navigation -->
+                    <div class="flex space-x-1">
+                         <% const navItems=[ { href: '/' , label: 'Accueil' , icon: 'fa-home' }, { href: '/services' , label: 'Services' , icon: 'fa-concierge-bell' }, { href: '/about' , label: 'À propos' , icon: 'fa-info-circle' }, { href: '/contact' , label: 'Contact' , icon: 'fa-envelope' } ] %>
+
+                              <% navItems.forEach(item=> { %>
+                                   <a href="<%= item.href %>" class="group px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200">
+                                        <span class="flex items-center space-x-2">
+                                             <i class="fas <%= item.icon %> opacity-70 group-hover:opacity-100 transform group-hover:scale-110 transition-all duration-200"></i>
+                                             <span>
+                                                  <%= item.label %>
+                                             </span>
+                                        </span>
+                                   </a>
+                                   <% }) %>
+                    </div>
+
+                    <!-- Desktop Auth Buttons -->
+                    <div class="flex items-center space-x-4">
                          <% if (user) { %>
-                              <li class="nav-item">
-                                   <a class="nav-link" href="/dashboard">Dashboard</a>
-                              </li>
-                              <li class="nav-item">
-                                   <a class="nav-link" href="/logout">Logout</a>
-                              </li>
+                              <!-- User Menu Dropdown -->
+                              <div class="relative" x-data="{ open: false }">
+                                   <button @click="open = !open" class="flex items-center gap-2 text-sm bg-gray-50 dark:bg-gray-800 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200 group">
+                                        <div class="relative">
+                                             <img class="w-8 h-8 rounded-full ring-2 ring-offset-2 ring-blue-500 dark:ring-blue-400 group-hover:ring-teal-500 transition-all duration-200" src="<%= user.image || '/default-avatar.png' %>" alt="user photo">
+                                             <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white dark:border-gray-800 rounded-full"></div>
+                                        </div>
+                                        <span class="font-medium text-gray-900 dark:text-white hidden sm:block">
+                                             <%= user.name %>
+                                        </span>
+                                        <svg class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                        </svg>
+                                   </button>
+
+                                   <!-- Dropdown Menu -->
+                                   <div x-show="open" @click.away="open = false" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="transform opacity-0 scale-95" x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="transform opacity-100 scale-100" x-transition:leave-end="transform opacity-0 scale-95" class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-lg py-2 border border-gray-100 dark:border-gray-700" style="display: none;">
+
+                                        <div class="px-4 py-2 border-b border-gray-100 dark:border-gray-700">
+                                             <p class="text-sm text-gray-500 dark:text-gray-400">Connecté en tant que</p>
+                                             <p class="text-sm font-medium text-gray-900 dark:text-white truncate">
+                                                  <%= user.email %>
+                                             </p>
+                                        </div>
+
+                                        <a href="/dashboard" class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                             <i class="fas fa-tachometer-alt w-5 h-5 mr-3"></i>
+                                             Dashboard
+                                        </a>
+                                        <a href="/profile" class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                             <i class="fas fa-user w-5 h-5 mr-3"></i>
+                                             Profile
+                                        </a>
+                                        <div class="border-t border-gray-100 dark:border-gray-700 my-1"></div>
+                                        <a href="/logout" class="flex items-center px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20">
+                                             <i class="fas fa-sign-out-alt w-5 h-5 mr-3"></i>
+                                             Déconnexion
+                                        </a>
+                                   </div>
+                              </div>
                               <% } else { %>
-                                   <li class="nav-item">
-                                        <a class="nav-link" href="/auth/google">Log in with Google</a>
-                                   </li>
+                                   <a href="/auth/google" class="flex items-center space-x-2 px-4 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200">
+                                        <svg class="w-5 h-5" viewBox="0 0 24 24">
+                                             <path fill="currentColor" d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z" />
+                                        </svg>
+                                        <span>Connexion avec Google</span>
+                                   </a>
                                    <% } %>
-                    </ul>
+
+                                        <% if (user) { %>
+                                             <!-- Add Service Btn If User Is Authenticated. -->
+                                             <a href="/dashboard/new-service" class="inline-flex items-center px-4 py-2 rounded-lg text-white bg-gradient-to-r from-blue-500 to-teal-500 hover:from-blue-600 hover:to-teal-600 transform hover:-translate-y-0.5 transition-all duration-200">
+                                                  <i class="fas fa-plus mr-2"></i>
+                                                  Ajouter un Service
+                                             </a>
+                                             <% } else { %>
+                                                  <!-- No Auth Yet  -->
+                                                  <a href="/auth/google" class="inline-flex items-center px-4 py-2 rounded-lg text-white bg-gradient-to-r from-blue-500 to-teal-500 hover:from-blue-600 hover:to-teal-600 transform hover:-translate-y-0.5 transition-all duration-200">
+                                                       <i class="fas fa-plus mr-2"></i>
+                                                       Ajouter un Service
+                                                  </a>
+                                                  <% } %>
+
+                                                       <!-- Dark Mode Toggle -->
+                                                       <button id="theme-toggle" class="p-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200">
+                                                            <i class="fas fa-sun text-xl dark:hidden"></i>
+                                                            <i class="fas fa-moon text-xl hidden dark:block"></i>
+                                                       </button>
+                    </div>
+               </div>
+
+               <!-- Mobile Navigation -->
+               <div class="flex lg:hidden items-center space-x-4">
+                    <!-- Action Button -->
+                    <a href="/services/new" class="inline-flex items-center px-3 py-1.5 rounded-lg text-white bg-gradient-to-r from-blue-500 to-teal-500 hover:from-blue-600 hover:to-teal-600 transition-all duration-200">
+                         <i class="fas fa-plus mr-1"></i>
+                         <span>Ajouter</span>
+                    </a>
+
+                    <!-- Dark Mode Toggle (Mobile) -->
+                    <button id="theme-toggle-mobile" class="p-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200">
+                         <i class="fas fa-sun text-lg dark:hidden"></i>
+                         <i class="fas fa-moon text-lg hidden dark:block"></i>
+                    </button>
+
+                    <!-- Mobile Menu Button -->
+                    <button type="button" class="mobile-menu-button inline-flex items-center justify-center p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors duration-200" aria-controls="mobile-menu" aria-expanded="false">
+                         <i class="fas fa-bars text-xl"></i>
+                    </button>
                </div>
           </div>
      </div>
+
+     <!-- Mobile Menu -->
+     <div id="mobile-menu" class="hidden lg:hidden border-t border-gray-200 dark:border-gray-700" x-show="mobileMenuOpen" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="transform opacity-0 scale-95" x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="transform opacity-100 scale-100" x-transition:leave-end="transform opacity-0 scale-95">
+
+          <div class="px-4 pt-2 pb-3 space-y-1 bg-white dark:bg-gray-900">
+               <% navItems.forEach(item=> { %>
+                    <a href="<%= item.href %>" class="flex items-center space-x-2 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200">
+                         <i class="fas <%= item.icon %>"></i>
+                         <span>
+                              <%= item.label %>
+                         </span>
+                    </a>
+                    <% }) %>
+
+                         <!-- Mobile Auth Section -->
+                         <div class="pt-4 pb-3 border-t border-gray-200 dark:border-gray-700">
+                              <% if (user) { %>
+                                   <div class="flex items-center px-3">
+                                        <div class="flex-shrink-0">
+                                             <img src="<%= user.image || 'https://img.icons8.com/?size=100&id=c2egtkdAFOMH&format=png&color=FAB005' %>" alt="Profile" class="h-10 w-10 rounded-full">
+                                        </div>
+                                        <div class="ml-3">
+                                             <div class="text-base font-medium text-gray-800 dark:text-white">
+                                                  <%= user.name %>
+                                             </div>
+                                             <div class="text-sm font-medium text-gray-500 dark:text-gray-400">
+                                                  <%= user.email %>
+                                             </div>
+                                        </div>
+                                   </div>
+                                   <div class="mt-3 space-y-1">
+                                        <a href="/dashboard" class="flex items-center px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800">
+                                             <i class="fas fa-tachometer-alt mr-3"></i>
+                                             Dashboard
+                                        </a>
+                                        <a href="/profile" class="flex items-center px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800">
+                                             <i class="fas fa-user mr-3"></i>
+                                             Profile
+                                        </a>
+                                        <a href="/logout" class="flex items-center px-3 py-2 rounded-lg text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20">
+                                             <i class="fas fa-sign-out-alt mr-3"></i>
+                                             Déconnexion
+                                        </a>
+                                   </div>
+                                   <% } else { %>
+                                        <a href="/auth/google" class="flex items-center space-x-2 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800">
+                                             <svg class="w-5 h-5" viewBox="0 0 24 24">
+                                                  <path fill="currentColor" d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z" />
+                                             </svg>
+                                             <span>Connexion avec Google</span>
+                                        </a>
+                                        <% } %>
+                         </div>
+          </div>
+     </div>
+     </div>
 </nav>
 
+<!-- Styles -->
 <style>
+     /* Smooth scrolling for whole page */
+     html {
+          scroll-behavior: smooth;
+     }
+
+     /* Body padding to account for fixed navbar */
      body {
-          padding-top: 60px;
+          padding-top: 64px;
      }
 
-     .navbar {
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+     /* Navbar blur effect */
+     .backdrop-blur-lg {
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
      }
 
-     .nav-link {
-          font-size: 1rem;
-          font-weight: 500;
-          color: #000;
-          transition: color 0.3s ease;
+     /* Gradient animation for logo */
+     .gradient-text {
+          background-size: 200% auto;
+          animation: shine 2s linear infinite;
      }
 
-     .nav-link:hover {
-          color: #333;
-     }
-
-     .navbar-brand {
-          font-size: 1.2rem;
-     }
-
-     .btn-dark {
-          background-color: #000;
-          color: #fff;
-          border: none;
-          padding: 8px 16px;
-          font-weight: 500;
-          transition: background-color 0.3s ease;
-     }
-
-     .btn-dark:hover {
-          background-color: #333;
-          color: #fff;
-     }
-
-     .navbar-toggler {
-          border: none;
-          padding: 4px 8px;
-          font-size: 1rem;
-     }
-
-     .navbar-toggler:focus {
-          box-shadow: none;
-     }
-
-     @media (max-width: 991.98px) {
-          .offcanvas {
-               width: 75%;
-               max-width: 300px;
+     @keyframes shine {
+          to {
+               background-position: 200% center;
           }
      }
 
-     .offcanvas-header,
-     .offcanvas-body {
-          padding-left: 20px;
-          padding-right: 20px;
+     /* Custom scrollbar for the whole page */
+     ::-webkit-scrollbar {
+          width: 8px;
+          height: 8px;
      }
 
-     .offcanvas-title {
-          font-weight: 600;
+     ::-webkit-scrollbar-track {
+          background: transparent;
      }
 
-     .navbar-nav .nav-link {
-          padding: 10px 0;
+     ::-webkit-scrollbar-thumb {
+          background: #94a3b8;
+          border-radius: 4px;
      }
 
-     @media (min-width: 992px) {
-          body {
-               padding-top: 70px;
-          }
+     .dark ::-webkit-scrollbar-thumb {
+          background: #475569;
+     }
 
-          .navbar-nav .nav-link {
-               padding: 8px 16px;
-          }
+     /* Mobile menu animation */
+     .mobile-menu-enter {
+          opacity: 0;
+          transform: scale(0.95);
+     }
+
+     .mobile-menu-enter-active {
+          opacity: 1;
+          transform: scale(1);
+          transition: opacity 200ms ease-out, transform 200ms ease-out;
+     }
+
+     .mobile-menu-exit {
+          opacity: 1;
+          transform: scale(1);
+     }
+
+     .mobile-menu-exit-active {
+          opacity: 0;
+          transform: scale(0.95);
+          transition: opacity 150ms ease-in, transform 150ms ease-in;
      }
 </style>
 
+<!-- Scripts -->
 <script>
      document.addEventListener('DOMContentLoaded', function () {
-          var offcanvas = document.getElementById('navbarOffcanvas');
-          var bsOffcanvas = new bootstrap.Offcanvas(offcanvas);
+          // Initialize Alpine.js data
+          window.Alpine = window.Alpine || {};
 
-          // Close the offcanvas when a nav link is clicked
-          var navLinks = offcanvas.querySelectorAll('.nav-link');
-          navLinks.forEach(function (navLink) {
-               navLink.addEventListener('click', function () {
-                    bsOffcanvas.hide();
-               });
+          // Mobile menu functionality
+          const mobileMenuButton = document.querySelector('.mobile-menu-button');
+          const mobileMenu = document.getElementById('mobile-menu');
+          let mobileMenuOpen = false;
+
+          function toggleMobileMenu() {
+               mobileMenuOpen = !mobileMenuOpen;
+               if (mobileMenuOpen) {
+                    mobileMenu.classList.remove('hidden');
+                    document.body.style.overflow = 'hidden';
+               } else {
+                    mobileMenu.classList.add('hidden');
+                    document.body.style.overflow = '';
+               }
+          }
+
+          mobileMenuButton.addEventListener('click', toggleMobileMenu);
+
+          // Close mobile menu when clicking outside
+          document.addEventListener('click', function (event) {
+               if (!mobileMenuButton.contains(event.target) &&
+                    !mobileMenu.contains(event.target) &&
+                    mobileMenuOpen) {
+                    toggleMobileMenu();
+               }
+          });
+
+          // Dark mode functionality
+          const themeToggleBtns = document.querySelectorAll('#theme-toggle, #theme-toggle-mobile');
+
+          // Check for saved theme preference or system preference
+          const savedTheme = localStorage.getItem('theme');
+          const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+          if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
+               document.documentElement.classList.add('dark');
+          }
+
+          function toggleTheme() {
+               if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('theme', 'light');
+               } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('theme', 'dark');
+               }
+          }
+
+          themeToggleBtns.forEach(btn => {
+               btn.addEventListener('click', toggleTheme);
+          });
+
+          // Navbar scroll behavior
+          let lastScroll = 0;
+          const navbar = document.querySelector('nav');
+
+          window.addEventListener('scroll', () => {
+               const currentScroll = window.pageYOffset;
+
+               if (currentScroll <= 0) {
+                    navbar.classList.remove('shadow-lg');
+                    return;
+               }
+
+               if (currentScroll > lastScroll && currentScroll > 64) {
+                    // Scrolling down & past navbar height
+                    navbar.classList.add('-translate-y-full');
+                    navbar.classList.remove('shadow-lg');
+               } else {
+                    // Scrolling up
+                    navbar.classList.remove('-translate-y-full');
+                    navbar.classList.add('shadow-lg');
+               }
+
+               lastScroll = currentScroll;
+          });
+
+          // Escape key handler
+          document.addEventListener('keydown', function (e) {
+               if (e.key === 'Escape') {
+                    // Close mobile menu
+                    if (mobileMenuOpen) {
+                         toggleMobileMenu();
+                    }
+                    // Close all Alpine.js dropdowns
+                    document.querySelectorAll('[x-data]').forEach(el => {
+                         if (el.__x) {
+                              el.__x.$data.open = false;
+                         }
+                    });
+               }
           });
      });
 </script>
+
+<!-- Make sure to include Alpine.js -->
+<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
