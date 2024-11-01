@@ -1,0 +1,163 @@
+<!-- views/partials/dashboard/profile/score-card.ejs -->
+<div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+     <!-- Score Header -->
+     <div class="p-6 bg-gradient-to-r from-blue-600 to-blue-700 text-white">
+          <div class="flex items-center justify-between mb-4">
+               <h3 class="text-lg font-semibold">Score NDRESSILIK</h3>
+               <div class="flex items-center">
+                    <% if (user.isVerified) { %>
+                         <span class="flex items-center text-sm">
+                              <i class="fas fa-check-circle mr-1"></i>
+                              Vérifié
+                         </span>
+                         <% } %>
+               </div>
+          </div>
+
+          <!-- Score Circle -->
+          <div class="flex justify-center">
+               <div class="relative">
+                    <svg class="transform -rotate-90 w-36 h-36">
+                         <!-- Background Circle -->
+                         <circle cx="72" cy="72" r="60" stroke="currentColor" stroke-width="8" fill="none" class="text-blue-300 opacity-25" />
+
+                         <!-- Score Circle -->
+                         <circle cx="72" cy="72" r="60" stroke="currentColor" stroke-width="8" fill="none" stroke-dasharray="376.8" stroke-dashoffset="<%= 376.8 - (376.8 * user.ndressilikScore / 100) %>" class="text-white" />
+                    </svg>
+                    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
+                         <span class="text-3xl font-bold">
+                              <%= user.ndressilikScore %>
+                         </span>
+                         <span class="text-sm block">/ 100</span>
+                    </div>
+               </div>
+          </div>
+     </div>
+
+     <!-- Performance Metrics -->
+     <div class="p-6 space-y-6">
+          <!-- Response Rate -->
+          <div>
+               <div class="flex justify-between mb-2">
+                    <span class="text-sm font-medium text-gray-600">Taux de réponse</span>
+                    <span class="text-sm font-semibold">
+                         <%= Math.round(user.trustFactors.responseRate * 100) %>%
+                    </span>
+               </div>
+               <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="bg-green-500 h-2 rounded-full" style="width: <%= user.trustFactors.responseRate * 100 %>%"></div>
+               </div>
+               <p class="mt-1 text-xs text-gray-500">
+                    Rapidité moyenne de réponse: <%= user.metrics.averageResponseTime || 'N/A' %>
+               </p>
+          </div>
+
+          <!-- Completion Rate -->
+          <div>
+               <div class="flex justify-between mb-2">
+                    <span class="text-sm font-medium text-gray-600">Taux de complétion</span>
+                    <span class="text-sm font-semibold">
+                         <%= Math.round(user.trustFactors.completionRate * 100) %>%
+                    </span>
+               </div>
+               <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="bg-blue-500 h-2 rounded-full" style="width: <%= user.trustFactors.completionRate * 100 %>%"></div>
+               </div>
+               <p class="mt-1 text-xs text-gray-500">
+                    Services complétés: <%= user.metrics.completedBookings %> sur <%= user.metrics.totalBookings %>
+               </p>
+          </div>
+
+          <!-- On-Time Rate -->
+          <div>
+               <div class="flex justify-between mb-2">
+                    <span class="text-sm font-medium text-gray-600">Ponctualité</span>
+                    <span class="text-sm font-semibold">
+                         <%= Math.round(user.trustFactors.onTimeRate * 100) %>%
+                    </span>
+               </div>
+               <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="bg-purple-500 h-2 rounded-full" style="width: <%= user.trustFactors.onTimeRate * 100 %>%"></div>
+               </div>
+               <p class="mt-1 text-xs text-gray-500">
+                    Services à l'heure: <%= Math.round(user.trustFactors.onTimeRate * user.metrics.completedBookings) %> services
+               </p>
+          </div>
+
+          <!-- Satisfaction Rate -->
+          <div>
+               <div class="flex justify-between mb-2">
+                    <span class="text-sm font-medium text-gray-600">Satisfaction client</span>
+                    <span class="text-sm font-semibold flex items-center">
+                         <%= user.metrics.averageRating.toFixed(1) %>
+                              <i class="fas fa-star text-yellow-400 ml-1"></i>
+                    </span>
+               </div>
+               <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="bg-yellow-500 h-2 rounded-full" style="width: <%= (user.metrics.averageRating / 5) * 100 %>%"></div>
+               </div>
+               <p class="mt-1 text-xs text-gray-500">
+                    Basé sur <%= user.metrics.totalReviews %> avis clients
+               </p>
+          </div>
+
+          <!-- Badges Section -->
+          <div class="border-t pt-6">
+               <h4 class="text-sm font-medium text-gray-600 mb-4">Badges obtenus</h4>
+               <div class="flex flex-wrap gap-2">
+                    <% user.badges.forEach(badge=> { %>
+                         <div class="group relative">
+                              <div class="flex items-center space-x-2 px-3 py-1 bg-gray-100 rounded-full">
+                                   <% const badgeIcons={ 'top-rated' : 'fa-trophy text-yellow-500' , 'verified-professional' : 'fa-check-circle text-blue-500' , 'quick-responder' : 'fa-bolt text-orange-500' , 'experienced' : 'fa-star text-purple-500' , 'premium-provider' : 'fa-crown text-green-500' } %>
+                                        <i class="fas <%= badgeIcons[badge.type] %>"></i>
+                                        <span class="text-xs font-medium text-gray-700">
+                                             <%= badge.type.split('-').map(word=>
+                                                  word.charAt(0).toUpperCase() + word.slice(1)
+                                                  ).join(' ') %>
+                                        </span>
+                              </div>
+                              <!-- Badge Tooltip -->
+                              <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                                   Obtenu le <%= new Date(badge.earnedAt).toLocaleDateString() %>
+                              </div>
+                         </div>
+                         <% }) %>
+               </div>
+          </div>
+
+          <!-- Tips Section -->
+          <% if (user.ndressilikScore < 90) { %>
+               <div class="border-t pt-6">
+                    <h4 class="text-sm font-medium text-gray-600 mb-3">
+                         Comment améliorer votre score?
+                    </h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                         <% if (user.trustFactors.responseRate < 0.9) { %>
+                              <li class="flex items-start">
+                                   <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                   Répondez plus rapidement aux demandes de réservation
+                              </li>
+                              <% } %>
+                                   <% if (user.trustFactors.completionRate < 0.9) { %>
+                                        <li class="flex items-start">
+                                             <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                             Évitez d'annuler les réservations confirmées
+                                        </li>
+                                        <% } %>
+                                             <% if (user.trustFactors.onTimeRate < 0.9) { %>
+                                                  <li class="flex items-start">
+                                                       <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                                       Assurez-vous d'être ponctuel pour chaque service
+                                                  </li>
+                                                  <% } %>
+                                                       <% if (!user.isVerified) { %>
+                                                            <li class="flex items-start">
+                                                                 <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                                                 Complétez votre vérification d'identité
+                                                            </li>
+                                                            <% } %>
+                    </ul>
+               </div>
+               <% } %>
+     </div>
+</div>

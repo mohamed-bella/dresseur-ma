@@ -1,0 +1,223 @@
+<!-- Alpine.js Store -->
+
+
+<!-- views/partials/booking-card.ejs -->
+<div class="lg:sticky lg:top-24" x-data="bookingForm()">
+     <div class="bg-white rounded-2xl shadow-sm p-6 space-y-6">
+          <!-- Price and Rating Header -->
+          <div class="space-y-4">
+               <div class="flex items-baseline justify-between">
+                    <div>
+                         <span class="text-3xl font-bold text-gray-900">
+                              <%= service.priceRange %>
+                         </span>
+                         <span class="text-gray-500 text-sm">/ service</span>
+                    </div>
+                    <div class="flex items-center">
+                         <div class="flex items-center">
+                              <% for(let i=0; i < 5; i++) { %>
+                                   <svg class="w-5 h-5 <%= i < Math.floor((reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length) || 0) ? 'text-yellow-400' : 'text-gray-300' %>" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                   </svg>
+                                   <% } %>
+                         </div>
+                         <span class="ml-2 text-sm text-gray-600">
+                              <%= reviews.length %> avis
+                         </span>
+                    </div>
+               </div>
+
+               <!-- Quick Stats -->
+               <div class="grid grid-cols-2 gap-4 py-4 border-y border-gray-100">
+                    <div class="flex items-center gap-2">
+                         <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                         </svg>
+                         <span class="text-sm text-gray-600">Disponible aujourd'hui</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                         <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                         </svg>
+                         <span class="text-sm text-gray-600">Réponse rapide</span>
+                    </div>
+               </div>
+          </div>
+          <% if (!user) { %>
+               <!-- Not Logged In State -->
+               <div class="text-center py-6 space-y-6">
+                    <div class="space-y-2">
+                         <h3 class="text-lg font-semibold text-gray-900">Connectez-vous pour réserver</h3>
+                         <p class="text-sm text-gray-600">Vous devez être connecté pour effectuer une réservation</p>
+                    </div>
+
+                    <!-- Google Sign In Button -->
+                    <a href="/auth/google" class="w-full inline-flex items-center justify-center px-6 py-3 border border-gray-300 rounded-lg shadow-sm bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all">
+                         <img src="https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png" alt="Google" class="w-5 h-5 mr-2">
+                         Continuer avec Google
+                    </a>
+
+                    <div class="relative">
+                         <div class="absolute inset-0 flex items-center">
+                              <div class="w-full border-t border-gray-200"></div>
+                         </div>
+                         <div class="relative flex justify-center">
+                              <span class="px-2 bg-white text-sm text-gray-500">ou</span>
+                         </div>
+                    </div>
+
+                    <a href="/auth/google" class="w-full inline-flex items-center justify-center px-6 py-3 border border-transparent rounded-lg shadow-sm bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all">
+                         Se connecter avec un email
+                    </a>
+               </div>
+               <% } else { %>
+                    <!-- Booking Form -->
+                    <form id="bookingForm" class="space-y-6" @submit.prevent="submitBooking">
+                         <!-- Date Selection -->
+                         <div class="space-y-2">
+                              <label for="booking-date" class="block text-sm font-medium text-gray-700">Date</label>
+                              <div class="relative">
+                                   <input type="date" id="booking-date" x-model="formData.date" @change="checkAvailability" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" :min="new Date().toISOString().split('T')[0]" required>
+                              </div>
+                         </div>
+
+                         <!-- Time Selection -->
+                         <div class="space-y-2">
+                              <label for="booking-time" class="block text-sm font-medium text-gray-700">Heure</label>
+                              <div class="relative">
+                                   <select id="booking-time" x-model="formData.time" @change="checkAvailability" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none" required>
+                                        <option value="">Sélectionnez une heure</option>
+                                        <% for(let hour=8; hour <=18; hour++) { %>
+                                             <option value="<%= `${hour}:00` %>">
+                                                  <%= `${hour}:00` %>
+                                             </option>
+                                             <option value="<%= `${hour}:30` %>">
+                                                  <%= `${hour}:30` %>
+                                             </option>
+                                             <% } %>
+                                   </select>
+                                   <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                        </svg>
+                                   </div>
+                              </div>
+                         </div>
+
+                         <!-- Message -->
+                         <div class="space-y-2">
+                              <label for="booking-message" class="block text-sm font-medium text-gray-700">Message (optionnel)</label>
+                              <textarea id="booking-message" x-model="formData.message" rows="3" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none" placeholder="Décrivez vos besoins spécifiques..."></textarea>
+                         </div>
+
+                         <!-- Submit Button -->
+                         <button type="submit" class="w-full px-6 py-3 text-base font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors" :disabled="!isAvailable || loading" :class="{'opacity-50 cursor-not-allowed': !isAvailable || loading}">
+                              <span x-show="!loading">Réserver maintenant</span>
+                              <span x-show="loading" class="flex items-center justify-center">
+                                   <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                                   </svg>
+                                   Traitement...
+                              </span>
+                         </button>
+                    </form>
+
+                    <% } %>
+
+     </div>
+
+     <!-- Alpine.js Script -->
+     <script>
+          function bookingForm() {
+               return {
+                    formData: {
+                         date: '',
+                         time: '',
+                         message: '',
+                         serviceId: '<%= service._id %>'
+                    },
+                    loading: false,
+                    isAvailable: true,
+                    error: null,
+
+                    async checkAvailability() {
+                         if (!this.formData.date || !this.formData.time) return;
+
+                         try {
+                              const response = await fetch('/reservations/check-availability', {
+                                   method: 'POST',
+                                   headers: {
+                                        'Content-Type': 'application/json'
+                                   },
+                                   body: JSON.stringify({
+                                        serviceId: this.formData.serviceId,
+                                        date: this.formData.date,
+                                        time: this.formData.time
+                                   })
+                              });
+
+                              const data = await response.json();
+                              this.isAvailable = data.available;
+
+                              if (!this.isAvailable) {
+                                   Swal.fire({
+                                        icon: 'warning',
+                                        title: 'Créneau non disponible',
+                                        text: 'Veuillez choisir un autre horaire',
+                                        confirmButtonText: 'OK'
+                                   });
+                              }
+                         } catch (error) {
+                              console.error('Error checking availability:', error);
+                         }
+                    },
+
+                    async submitBooking() {
+                         if (this.loading || !this.isAvailable) return;
+
+                         this.loading = true;
+                         try {
+                              const response = await fetch('/reservations/create', {
+                                   method: 'POST',
+                                   headers: {
+                                        'Content-Type': 'application/json'
+                                   },
+                                   body: JSON.stringify(this.formData)
+                              });
+
+                              const data = await response.json();
+
+                              if (!response.ok) {
+                                   throw new Error(data.error || 'Error creating reservation');
+                              }
+
+                              // Show success message and close on confirmation
+                              Swal.fire({
+                                   icon: 'success',
+                                   title: 'Réservation confirmée!',
+                                   text: 'Vous recevrez bientôt une confirmation par email.',
+                                   confirmButtonText: 'Ok'
+                              }).then((result) => {
+                                   if (result.isConfirmed) {
+                                        // No action needed, just close
+                                   }
+                              });
+
+
+                         } catch (error) {
+                              console.error('Booking error:', error);
+                              Swal.fire({
+                                   icon: 'error',
+                                   title: 'Erreur',
+                                   text: error.message || 'Une erreur est survenue',
+                                   confirmButtonText: 'OK'
+                              });
+                         } finally {
+                              this.loading = false;
+                         }
+                    }
+               }
+          }
+     </script>
+</div>

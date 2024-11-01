@@ -1,0 +1,360 @@
+<!-- views/includes/profile/business-hours.ejs -->
+
+<!-- Custom CSS to handle disabled and checked state -->
+<style>
+     /* Handle the case when the input is disabled and checked */
+     input.day-toggle:disabled:checked+div {
+          background-color: #2563eb;
+          /* Tailwind's blue-600 */
+     }
+
+     /* Also move the toggle knob */
+     input.day-toggle:disabled:checked+div::after {
+          transform: translateX(100%);
+     }
+</style>
+
+<div class="bg-white rounded-2xl shadow-sm">
+     <!-- Header -->
+     <div class="p-6 border-b border-gray-100">
+          <div class="flex items-center justify-between">
+               <h3 class="text-lg font-semibold text-gray-800">Horaires de travail</h3>
+               <button type="button" id="editHoursBtn" class="text-sm px-3 py-1.5 rounded-lg text-blue-600 hover:bg-blue-50 transition-colors">
+                    <i class="fas fa-edit mr-1.5"></i>
+                    <span>Modifier</span>
+               </button>
+          </div>
+     </div>
+
+     <!-- Hours Form -->
+     <form id="businessHoursForm" class="p-6">
+          <div class="space-y-4">
+               <% const days=[ { id: 'monday' , label: 'Lundi' }, { id: 'tuesday' , label: 'Mardi' }, { id: 'wednesday' , label: 'Mercredi' }, { id: 'thursday' , label: 'Jeudi' }, { id: 'friday' , label: 'Vendredi' }, { id: 'saturday' , label: 'Samedi' }, { id: 'sunday' , label: 'Dimanche' } ]; %>
+
+                    <% days.forEach(day=> { %>
+                         <div class="group bg-white hover:bg-gray-50 p-3 rounded-lg transition-colors" data-day="<%= day.id %>">
+                              <div class="flex items-center justify-between">
+                                   <div class="flex items-center space-x-3">
+                                        <!-- Day Toggle -->
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                             <input type="checkbox" name="<%= day.id %>-enabled" class="day-toggle sr-only peer" <%=user.businessHours && user.businessHours[day.id] && (user.businessHours[day.id].isOpen===true || user.businessHours[day.id].isOpen==='true' ) ? 'checked' : '' %>
+                                             disabled>
+                                             <div class="w-11 h-6 bg-gray-200 rounded-full peer 
+                                    peer-focus:ring-2 peer-focus:ring-blue-300
+                                    peer-checked:bg-blue-600 
+                                    peer-disabled:opacity-50
+                                    after:content-[''] after:absolute after:top-0.5 
+                                    after:left-[2px] after:bg-white after:border-gray-300 
+                                    after:border after:rounded-full after:h-5 after:w-5 
+                                    after:transition-all peer-checked:after:translate-x-full">
+                                             </div>
+                                        </label>
+                                        <span class="text-sm font-medium text-gray-700">
+                                             <%= day.label %>
+                                        </span>
+                                   </div>
+
+                                   <!-- Time Selection -->
+                                   <div class="flex items-center space-x-2">
+                                        <select name="<%= day.id %>-open" class="time-select text-sm border border-gray-200 rounded-lg px-3 py-1.5 
+                                focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+                                disabled:bg-gray-50 disabled:text-gray-500" <%=(!user.businessHours || !user.businessHours[day.id] || !(user.businessHours[day.id].isOpen===true || user.businessHours[day.id].isOpen==='true' )) ? 'disabled' : '' %>>
+                                             <% for(let i=6; i <=23; i++) { %>
+                                                  <option value="<%= `${i.toString().padStart(2, '0')}:00` %>" <%=user.businessHours?.[day.id]?.open===`${i.toString().padStart(2, '0' )}:00` ? 'selected' : '' %>>
+                                                       <%= `${i.toString().padStart(2, '0' )}:00` %>
+                                                  </option>
+                                                  <option value="<%= `${i.toString().padStart(2, '0')}:30` %>" <%=user.businessHours?.[day.id]?.open===`${i.toString().padStart(2, '0' )}:30` ? 'selected' : '' %>>
+                                                       <%= `${i.toString().padStart(2, '0' )}:30` %>
+                                                  </option>
+                                                  <% } %>
+                                        </select>
+                                        <span class="text-gray-500">à</span>
+                                        <select name="<%= day.id %>-close" class="time-select text-sm border border-gray-200 rounded-lg px-3 py-1.5 
+                                focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+                                disabled:bg-gray-50 disabled:text-gray-500" <%=(!user.businessHours || !user.businessHours[day.id] || !(user.businessHours[day.id].isOpen===true || user.businessHours[day.id].isOpen==='true' )) ? 'disabled' : '' %>>
+                                             <% for(let i=6; i <=23; i++) { %>
+                                                  <option value="<%= `${i.toString().padStart(2, '0')}:00` %>" <%=user.businessHours?.[day.id]?.close===`${i.toString().padStart(2, '0' )}:00` ? 'selected' : '' %>>
+                                                       <%= `${i.toString().padStart(2, '0' )}:00` %>
+                                                  </option>
+                                                  <option value="<%= `${i.toString().padStart(2, '0')}:30` %>" <%=user.businessHours?.[day.id]?.close===`${i.toString().padStart(2, '0' )}:30` ? 'selected' : '' %>>
+                                                       <%= `${i.toString().padStart(2, '0' )}:30` %>
+                                                  </option>
+                                                  <% } %>
+                                        </select>
+                                   </div>
+                              </div>
+                         </div>
+                         <% }); %>
+          </div>
+
+          <!-- Quick Actions -->
+          <div id="quickActions" class="mt-6 space-y-3 hidden">
+               <!-- Presets -->
+               <div class="flex flex-wrap gap-2">
+                    <button type="button" class="preset-btn text-sm px-3 py-1.5 rounded bg-gray-100 hover:bg-gray-200 text-gray-600 transition-colors" data-open="08:00" data-close="17:00">
+                         8h-17h
+                    </button>
+                    <button type="button" class="preset-btn text-sm px-3 py-1.5 rounded bg-gray-100 hover:bg-gray-200 text-gray-600 transition-colors" data-open="09:00" data-close="18:00">
+                         9h-18h
+                    </button>
+                    <button type="button" class="preset-btn text-sm px-3 py-1.5 rounded bg-gray-100 hover:bg-gray-200 text-gray-600 transition-colors" data-open="10:00" data-close="19:00">
+                         10h-19h
+                    </button>
+               </div>
+
+               <!-- Copy to Weekdays -->
+               <button type="button" id="copyWeekdaysBtn" class="w-full text-sm px-4 py-2 rounded bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors">
+                    Copier vers jours ouvrables (Lun-Ven)
+               </button>
+
+               <!-- Save Button -->
+               <button type="submit" class="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 
+                        focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+                    Enregistrer les modifications
+               </button>
+          </div>
+     </form>
+</div>
+<div id="businessHoursPreview" class="hidden">
+     <%- JSON.stringify(user.businessHours || {}) %>
+</div>
+
+<!-- Business Hours Script -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+     $(document).ready(function () {
+          // DOM Elements
+          const $form = $('#businessHoursForm');
+          const $editBtn = $('#editHoursBtn');
+          const $quickActions = $('#quickActions');
+
+          // Parse initial data with custom reviver to handle isOpen
+          let businessHoursData;
+          try {
+               businessHoursData = JSON.parse($('#businessHoursPreview').text(), (key, value) => {
+                    if (key === 'isOpen') {
+                         return value === true || value === 'true';
+                    }
+                    return value;
+               });
+               console.log('Initial business hours:', businessHoursData);
+          } catch (error) {
+               console.error('Error parsing business hours:', error);
+               businessHoursData = {};
+          }
+
+          // State
+          let isEditing = false;
+
+          // Initialize form state
+          function initializeState() {
+               // Reset all controls to default state
+               $('.day-toggle').prop('disabled', true).prop('checked', false);
+               $('.time-select').prop('disabled', true);
+
+               // Apply saved data
+               Object.entries(businessHoursData).forEach(([day, hours]) => {
+                    if (!hours) return;
+
+                    const $dayContainer = $(`[data-day="${day}"]`);
+                    const $toggle = $dayContainer.find('.day-toggle');
+                    const $openSelect = $dayContainer.find(`[name="${day}-open"]`);
+                    const $closeSelect = $dayContainer.find(`[name="${day}-close"]`);
+
+                    // Coerce isOpen to boolean
+                    const isOpen = hours.isOpen === true || hours.isOpen === 'true';
+
+                    // Set toggle state
+                    $toggle.prop('checked', isOpen);
+
+                    // Set time values if available
+                    if (hours.open) $openSelect.val(hours.open);
+                    if (hours.close) $closeSelect.val(hours.close);
+
+                    // Set disabled state based on isOpen and edit mode
+                    $toggle.prop('disabled', !isEditing);
+                    const shouldDisableSelect = !isOpen || !isEditing;
+                    $openSelect.prop('disabled', shouldDisableSelect);
+                    $closeSelect.prop('disabled', shouldDisableSelect);
+               });
+
+               // Hide quick actions when not editing
+               $quickActions.toggleClass('hidden', !isEditing);
+          }
+
+          // Handle edit mode toggle
+          $editBtn.click(function () {
+               isEditing = !isEditing;
+
+               // Update button appearance
+               $(this).html(isEditing ?
+                    '<i class="fas fa-times mr-1.5"></i><span>Annuler</span>' :
+                    '<i class="fas fa-edit mr-1.5"></i><span>Modifier</span>'
+               ).toggleClass('text-red-600', isEditing);
+
+               if (isEditing) {
+                    // Enable all toggles
+                    $('.day-toggle').prop('disabled', false);
+
+                    // Enable time selects for active days
+                    $('.day-toggle:checked').each(function () {
+                         $(this).closest('[data-day]')
+                              .find('select')
+                              .prop('disabled', false);
+                    });
+
+                    // Show quick actions
+                    $quickActions.removeClass('hidden');
+               } else {
+                    // Reset to saved state
+                    $form[0].reset();
+                    initializeState();
+               }
+          });
+
+          // Handle day toggle changes
+          $('.day-toggle').change(function () {
+               if (!isEditing) return;
+
+               const $container = $(this).closest('[data-day]');
+               const isEnabled = $(this).prop('checked');
+               const $timeSelects = $container.find('select');
+
+               $timeSelects.prop('disabled', !isEnabled);
+
+               // Set default times if newly enabled
+               if (isEnabled) {
+                    $container.find(`[name="${$container.data('day')}-open"]`).val('09:00');
+                    $container.find(`[name="${$container.data('day')}-close"]`).val('18:00');
+               }
+          });
+
+          // Handle preset time buttons
+          $('.preset-btn').click(function () {
+               if (!isEditing) return;
+
+               const openTime = $(this).data('open');
+               const closeTime = $(this).data('close');
+
+               // Apply preset only to enabled days
+               $('.day-toggle:checked').each(function () {
+                    const $container = $(this).closest('[data-day]');
+                    $container.find(`[name="${$container.data('day')}-open"]`).val(openTime);
+                    $container.find(`[name="${$container.data('day')}-close"]`).val(closeTime);
+               });
+          });
+
+          // Handle copy to weekdays
+          $('#copyWeekdaysBtn').click(function () {
+               if (!isEditing) return;
+
+               const mondaySettings = {
+                    enabled: $('[name="monday-enabled"]').prop('checked'),
+                    open: $('[name="monday-open"]').val(),
+                    close: $('[name="monday-close"]').val()
+               };
+
+               // Apply to Tuesday through Friday
+               ['tuesday', 'wednesday', 'thursday', 'friday'].forEach(day => {
+                    const $dayToggle = $(`[name="${day}-enabled"]`);
+                    $dayToggle.prop('checked', mondaySettings.enabled);
+
+                    const $container = $dayToggle.closest('[data-day]');
+                    $container.find(`[name="${day}-open"]`).val(mondaySettings.open);
+                    $container.find(`[name="${day}-close"]`).val(mondaySettings.close);
+
+                    // Trigger change to update disabled states
+                    $dayToggle.trigger('change');
+               });
+          });
+
+          // Handle form submission
+          $form.submit(function (e) {
+               e.preventDefault();
+               if (!isEditing) return;
+
+               // Collect form data
+               const businessHours = {};
+               $('[data-day]').each(function () {
+                    const day = $(this).data('day');
+                    const isOpen = $(`[name="${day}-enabled"]`).prop('checked');
+
+                    businessHours[day] = {
+                         isOpen,
+                         open: isOpen ? $(`[name="${day}-open"]`).val() : null,
+                         close: isOpen ? $(`[name="${day}-close"]`).val() : null
+                    };
+               });
+
+               // Validate times
+               const invalidDays = Object.entries(businessHours)
+                    .filter(([_, hours]) => hours.isOpen)
+                    .filter(([_, hours]) => {
+                         const [openH, openM] = hours.open.split(':').map(Number);
+                         const [closeH, closeM] = hours.close.split(':').map(Number);
+                         return (closeH * 60 + closeM) <= (openH * 60 + openM);
+                    })
+                    .map(([day]) => day);
+
+               if (invalidDays.length > 0) {
+                    const dayNames = {
+                         monday: 'Lundi',
+                         tuesday: 'Mardi',
+                         wednesday: 'Mercredi',
+                         thursday: 'Jeudi',
+                         friday: 'Vendredi',
+                         saturday: 'Samedi',
+                         sunday: 'Dimanche'
+                    };
+
+                    Swal.fire({
+                         icon: 'error',
+                         title: 'Horaires invalides',
+                         text: `L'heure de fermeture doit être après l'heure d'ouverture pour: ${invalidDays.map(d => dayNames[d]).join(', ')}`
+                    });
+                    return;
+               }
+
+               // Show loading state
+               const $submitBtn = $(this).find('button[type="submit"]');
+               const originalText = $submitBtn.html();
+               $submitBtn.prop('disabled', true)
+                    .html('<div class="flex items-center justify-center"><svg class="animate-spin h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy "12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>Enregistrement...</div>');
+
+               // Submit data
+               $.ajax({
+                    url: '/dashboard/profile/update-hours',
+                    method: 'PUT',
+                    data: JSON.stringify({ businessHours }),
+                    contentType: 'application/json',
+                    success: function (response) {
+                         if (response.success) {
+                              Swal.fire({
+                                   icon: 'success',
+                                   title: 'Horaires mis à jour!',
+                                   text: 'Vos horaires ont été enregistrés avec succès.',
+                                   showConfirmButton: false,
+                                   timer: 1500
+                              }).then(() => window.location.reload());
+                         } else {
+                              throw new Error(response.message || 'Error updating hours');
+                         }
+                    },
+                    error: function (xhr) {
+                         console.error('Update error:', xhr);
+                         Swal.fire({
+                              icon: 'error',
+                              title: 'Erreur',
+                              text: xhr.responseJSON?.message || 'Erreur lors de la mise à jour des horaires'
+                         });
+                    },
+                    complete: function () {
+                         $submitBtn.prop('disabled', false).html(originalText);
+                    }
+               });
+          });
+
+          // Initialize the state on page load
+          initializeState();
+     });
+</script>

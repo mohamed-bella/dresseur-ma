@@ -89,6 +89,9 @@ const adminRoutes = require('./routes/adminRoutes');
 const articleRoutes = require('./routes/articleRoutes');
 const contactRoute = require('./routes/contactRoute');
 const serviceRoutes = require('./routes/serviceRoutes');
+const aiRoutes = require('./routes/aiRoutes');
+const profileRoutes = require('./routes/profileRoutes');
+const galeryRoutes = require('./routes/galeryRoutes');
 
 
 
@@ -98,6 +101,9 @@ app.use(adminRoutes);
 app.use(articleRoutes);
 app.use(contactRoute);
 app.use(serviceRoutes);
+app.use(aiRoutes);
+app.use('/dashboard', profileRoutes);
+app.use('/dashboard', galeryRoutes);
 
 // Error handling middleware (404)
 app.use((req, res) => {

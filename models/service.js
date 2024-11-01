@@ -1,20 +1,62 @@
 const mongoose = require('mongoose');
 
-// Define the Service schema
 const serviceSchema = new mongoose.Schema({
-     serviceName: { type: String, required: true },
-     description: { type: String, required: true },
-     priceRange: { type: String, required: true },
-     location: { type: String, required: true },
-     serviceOptions: [{ type: String, required: true }],
-     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-     createdAt: { type: Date, default: Date.now },
-     likes: { type: Number, default: 0 },
-     dislikes: { type: Number, default: 0 },
-     views: { type: Number, default: 0 }
+     serviceName: {
+          type: String,
+          required: true,
+          trim: true
+     },
+     description: {
+          type: String,
+          required: true,
+          trim: true
+     },
+     views: {
+          type: Number,
+          default: 0
+     },
+     priceRange: {
+          type: String,
+          required: true
+     },
+     location: {
+          type: String,
+          required: true,
+          lowercase: true
+     },
+     serviceOptions: {
+          type: String,
+          required: true,
+          // enum: ['dressage', 'toilettage', 'promonade', 'veterinaire', 'pension', 'transport']
+     },
+     createdBy: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User',
+          required: true
+     },
+     images: [{
+          type: String,
+          required: true
+     }],
+     isActive: {
+          type: Boolean,
+          default: true
+     },
+     createdAt: {
+          type: Date,
+          default: Date.now
+     }
+}, {
+     timestamps: true
 });
 
-// Create the Service model
-const Service = mongoose.model('Service', serviceSchema);
+// Virtual for status
+serviceSchema.virtual('status').get(function () {
+     return this.isActive ? 'active' : 'inactive';
+});
 
-module.exports = Service;
+// Ensure virtuals are included in JSON
+serviceSchema.set('toJSON', { virtuals: true });
+serviceSchema.set('toObject', { virtuals: true });
+
+module.exports = mongoose.model('Service', serviceSchema);

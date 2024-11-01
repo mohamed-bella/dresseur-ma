@@ -1,0 +1,40 @@
+<!-- views/profile.ejs -->
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+     <%- include('includes/head') %>
+          <title>NDRESSILIK - Profile</title>
+</head>
+
+<body class="bg-gray-50">
+     <%- include('includes/navbar') %>
+
+          <div class="max-w-7xl mx-auto p-6">
+               <!-- Profile Header Card -->
+               <%- include('includes/profile/header-card') %>
+
+                    <!-- Main Content Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+                         <!-- Left Sidebar -->
+                         <div class="space-y-6">
+                              <%- include('includes/profile/score-card') %>
+                                   <%- include('includes/profile/business-hours') %>
+                         </div>
+
+                         <!-- Main Content Area -->
+                         <div class="md:col-span-2 space-y-6">
+                              <%- include('includes/profile/basic-info') %>
+                                   <%- include('includes/profile/specializations') %>
+                                        <%- include('includes/profile/qualifications') %>
+                                             <%- include('includes/profile/settings') %>
+                         </div>
+                    </div>
+          </div>
+
+          <!-- Scripts -->
+          <%- include('includes/scripts') %>
+               <script src="/js/profile.js"></script>
+</body>
+
+</html>

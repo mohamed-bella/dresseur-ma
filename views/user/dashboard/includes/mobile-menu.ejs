@@ -1,0 +1,40 @@
+<!-- views/partials/dashboard/mobile-menu.ejs -->
+<div class="fixed inset-0 z-50 lg:hidden" x-show="mobileMenuOpen" @click.away="mobileMenuOpen = false">
+     <!-- Backdrop -->
+     <div class="fixed inset-0 bg-black bg-opacity-50"></div>
+
+     <!-- Mobile Menu -->
+     <div class="fixed inset-y-0 left-0 w-64 bg-blue-600 text-white">
+          <div class="h-full flex flex-col">
+               <!-- Logo -->
+               <div class="p-6 border-b border-blue-500 flex items-center justify-between">
+                    <h1 class="text-2xl font-bold">NDRESSILIK</h1>
+                    <button @click="mobileMenuOpen = false" class="text-white">
+                         <i class="fas fa-times text-xl"></i>
+                    </button>
+               </div>
+
+               <!-- Navigation -->
+               <nav class="flex-1 p-4 space-y-2">
+                    <a href="/dashboard" class="flex items-center px-4 py-3 rounded-lg bg-blue-700">
+                         <i class="fas fa-home w-6"></i>
+                         <span>Tableau de Bord</span>
+                    </a>
+                    <!-- Other menu items same as sidebar -->
+               </nav>
+
+               <!-- User Menu -->
+               <div class="p-4 border-t border-blue-500">
+                    <div class="flex items-center space-x-3 px-4 py-3">
+                         <img src="<%= user.avatar || '/images/default-avatar.png' %>" alt="Profile" class="w-10 h-10 rounded-full">
+                         <div>
+                              <p class="font-medium">
+                                   <%= user.name %>
+                              </p>
+                              <p class="text-sm text-blue-200">Prestataire</p>
+                         </div>
+                    </div>
+               </div>
+          </div>
+     </div>
+</div>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Galerie - Tableau de bord</title>
+
+     <!-- Tailwind CSS and FontAwesome -->
+     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+     <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
+     <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
+     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
+     <style>
+          .gallery-container {
+               display: grid;
+               grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+               gap: 1.5rem;
+          }
+
+          .gallery-image {
+               position: relative;
+               border-radius: 0.75rem;
+               overflow: hidden;
+               box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+               transition: transform 0.3s ease, box-shadow 0.3s ease;
+          }
+
+          .gallery-image:hover {
+               transform: translateY(-5px);
+               box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+          }
+
+          .overlay {
+               position: absolute;
+               inset: 0;
+               background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));
+               color: white;
+               display: flex;
+               justify-content: center;
+               align-items: flex-end;
+               opacity: 0;
+               transition: opacity 0.3s ease;
+               padding: 1rem;
+          }
+
+          .gallery-image:hover .overlay {
+               opacity: 1;
+          }
+     </style>
+</head>
+
+<body class="bg-gradient-to-br from-blue-100 via-indigo-100 to-pink-100 min-h-screen">
+     <div class="container mx-auto px-6 py-12">
+          <h1 class="text-4xl font-bold text-indigo-800 mb-6">Galerie de Photos</h1>
+          <p class="text-gray-700 text-lg mb-8">Ajoutez des photos pour enrichir votre profil. Maximum de 20 photos.</p>
+
+          <!-- Gallery Grid -->
+          <div class="gallery-container mb-12">
+               <% user.gallery.forEach((photo, index)=> { %>
+                    <div class="gallery-image relative group">
+                         <img src="<%= photo %>" alt="Gallery Image <%= index + 1 %>" class="w-full h-60 object-cover rounded-lg">
+                         <div class="overlay">
+                              <button data-photo="<%= photo %>" class="delete-photo-btn bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-200">
+                                   <i class="fas fa-trash"></i> Supprimer
+                              </button>
+                         </div>
+                    </div>
+                    <% }) %>
+          </div>
+
+          <!-- FilePond Upload Section -->
+          <% if (user.gallery.length < 20) { %>
+               <input type="file" id="filepond" name="filepond" multiple data-max-files="20" class="mb-4" />
+               <% } else { %>
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 mb-4 rounded" role="alert">
+                         <i class="fas fa-exclamation-triangle mr-2"></i> Vous avez atteint le nombre maximum de photos.
+                    </div>
+                    <% } %>
+     </div>
+
+     <!-- Scripts -->
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+     <script src="https://unpkg.com/filepond/dist/filepond.min.js"></script>
+     <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.js"></script>
+     <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.min.js"></script>
+     <script src="https://unpkg.com/filepond-plugin-image-validate-size/dist/filepond-plugin-image-validate-size.min.js"></script>
+     <script>
+          $(document).ready(function () {
+               const maxPhotos = 20;
+
+               // Initialize FilePond
+               FilePond.registerPlugin(
+                    FilePondPluginImagePreview,
+                    FilePondPluginFileValidateType,
+                    FilePondPluginImageValidateSize
+               );
+
+               FilePond.create(document.getElementById('filepond'), {
+                    allowMultiple: true,
+                    maxFiles: maxPhotos - <%= user.gallery.length %>,
+                    maxFileSize: '5MB',
+                    acceptedFileTypes: ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'],
+                    labelIdle: `Glissez et déposez vos photos ou <span class="filepond--label-action">cliquez ici</span>`,
+                    server: {
+                         url: '/dashboard/gallery/upload',
+                         process: {
+                              onload: (response) => {
+                                   return JSON.parse(response).message;
+                              }
+                         }
+                    },
+                    onprocessfiles: () => {
+                         Swal.fire({
+                              icon: 'success',
+                              title: 'Téléchargement réussi!',
+                              text: 'Vos photos ont été ajoutées avec succès.'
+                         }).then(() => {
+                              window.location.reload();
+                         });
+                    },
+                    onerror: (error) => {
+                         Swal.fire({
+                              icon: 'error',
+                              title: 'Erreur',
+                              text: 'Un problème est survenu lors du téléchargement.'
+                         });
+                    }
+               });
+
+               // Handle delete
+               $('.delete-photo-btn').on('click', function () {
+                    const photo = $(this).data('photo');
+
+                    Swal.fire({
+                         title: 'Êtes-vous sûr ?',
+                         text: "Cette action est irréversible !",
+                         icon: 'warning',
+                         showCancelButton: true,
+                         confirmButtonColor: '#3b82f6',
+                         cancelButtonColor: '#d33',
+                         confirmButtonText: 'Oui, supprimer',
+                         cancelButtonText: 'Annuler'
+                    }).then((result) => {
+                         if (result.isConfirmed) {
+                              $.ajax({
+                                   url: '/dashboard/gallery/delete',
+                                   type: 'DELETE',
+                                   data: JSON.stringify({ photo }),
+                                   contentType: 'application/json',
+                                   success: function (response) {
+                                        if (response.success) {
+                                             Swal.fire({
+                                                  icon: 'success',
+                                                  title: 'Supprimé!',
+                                                  text: 'La photo a été supprimée.'
+                                             }).then(() => {
+                                                  window.location.reload();
+                                             });
+                                        } else {
+                                             Swal.fire({
+                                                  icon: 'error',
+                                                  title: 'Erreur',
+                                                  text: response.message || 'Un problème est survenu lors de la suppression.'
+                                             });
+                                        }
+                                   },
+                                   error: function () {
+                                        Swal.fire({
+                                             icon: 'error',
+                                             title: 'Erreur',
+                                             text: 'Une erreur est survenue lors de la suppression.'
+                                        });
+                                   }
+                              });
+                         }
+                    });
+               });
+          });
+     </script>
+</body>
+
+</html>

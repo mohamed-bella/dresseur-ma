@@ -1,0 +1,195 @@
+<!-- Specializations Section -->
+<div class="bg-white rounded-2xl shadow-sm overflow-hidden" id="specializationsSection">
+     <!-- Header with animated gradient border -->
+     <div class="p-6 border-b border-gray-100 relative">
+          <div class="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
+          <div class="flex items-center justify-between">
+               <div class="flex items-center space-x-3">
+                    <h3 class="text-lg font-semibold text-gray-800">Spécialisations</h3>
+                    <span class="px-2 py-1 text-xs font-medium text-blue-600 bg-blue-50 rounded-full">
+                         <%= user.specializations?.length || 0 %> sélectionnées
+                    </span>
+               </div>
+               <button type="button" id="editSpecializationsBtn" class="group flex items-center px-4 py-2 text-sm font-medium text-blue-600 hover:text-white bg-blue-50 hover:bg-blue-600 rounded-lg transition-all duration-200">
+                    <i class="fas fa-edit mr-2 transform group-hover:rotate-12 transition-transform duration-200"></i>
+                    <span>Modifier</span>
+               </button>
+          </div>
+     </div>
+
+     <!-- View Mode -->
+     <div id="specializationsView" class="p-6">
+          <% if (user.specializations?.length> 0) { %>
+               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <% user.specializations.forEach(spec=> {
+                         const specInfo = specializations.find(s => s.value === spec);
+                         %>
+                         <div class="relative group">
+                              <div class="flex items-center p-4 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl transition-transform duration-200 hover:-translate-y-1">
+                                   <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-lg bg-blue-600 text-white">
+                                        <i class="fas <%= specInfo?.icon %> text-xl"></i>
+                                   </div>
+                                   <div class="ml-4">
+                                        <h4 class="text-sm font-medium text-gray-900">
+                                             <%= specInfo?.label || spec %>
+                                        </h4>
+                                        <p class="mt-1 text-xs text-gray-500">Service certifié</p>
+                                   </div>
+                                   <div class="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full border-2 border-white opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
+                              </div>
+                         </div>
+                         <% }); %>
+               </div>
+               <% } else { %>
+                    <div class="text-center py-8">
+                         <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-50 mb-4">
+                              <i class="fas fa-puzzle-piece text-2xl text-blue-500"></i>
+                         </div>
+                         <p class="text-gray-500">Aucune spécialisation sélectionnée</p>
+                         <p class="text-sm text-gray-400 mt-2">Cliquez sur modifier pour ajouter vos domaines d'expertise</p>
+                    </div>
+                    <% } %>
+     </div>
+
+     <!-- Edit Mode -->
+     <form id="specializationsForm" class="hidden">
+          <div class="p-6 space-y-6">
+               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <% specializations.forEach(spec=> { %>
+                         <label class="relative flex flex-col p-4 cursor-pointer rounded-xl border-2 transition-all duration-200 hover:shadow-md
+                        <%= user.specializations?.includes(spec.value) ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-blue-200' %>">
+                              <div class="flex items-center">
+                                   <input type="checkbox" name="specializations[]" value="<%= spec.value %>" class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500" <%=user.specializations?.includes(spec.value) ? 'checked' : '' %>>
+                                   <div class="ml-4 flex-1">
+                                        <span class="block text-sm font-medium text-gray-900">
+                                             <%= spec.label %>
+                                        </span>
+                                        <span class="block text-xs text-gray-500 mt-1">
+                                             <i class="fas <%= spec.icon %> mr-1"></i>
+                                             Service professionnel
+                                        </span>
+                                   </div>
+                              </div>
+                              <div class="mt-4 text-xs text-gray-500 leading-relaxed">
+                                   Description détaillée du service de <%= spec.label.toLowerCase() %>...
+                              </div>
+                         </label>
+                         <% }); %>
+               </div>
+
+               <!-- Action Buttons -->
+               <div class="flex gap-4 pt-6 border-t border-gray-100">
+                    <button type="button" id="cancelSpecializationsBtn" class="flex-1 px-4 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+                         <i class="fas fa-times mr-2"></i>
+                         Annuler
+                    </button>
+                    <button type="submit" class="flex-1 px-4 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+                         <i class="fas fa-check mr-2"></i>
+                         Enregistrer
+                    </button>
+               </div>
+          </div>
+     </form>
+</div>
+
+<script>
+     document.addEventListener('DOMContentLoaded', function () {
+          const $section = document.getElementById('specializationsSection');
+          const $viewMode = document.getElementById('specializationsView');
+          const $editMode = document.getElementById('specializationsForm');
+          const $editBtn = document.getElementById('editSpecializationsBtn');
+          const $cancelBtn = document.getElementById('cancelSpecializationsBtn');
+
+          function toggleEditMode() {
+               const isEditing = $editMode.classList.contains('hidden');
+
+               // Slide animation
+               if (isEditing) {
+                    $editMode.classList.remove('hidden');
+                    $editMode.classList.add('animate-slide-in');
+                    $viewMode.classList.add('hidden');
+               } else {
+                    $viewMode.classList.remove('hidden');
+                    $viewMode.classList.add('animate-slide-in');
+                    $editMode.classList.add('hidden');
+               }
+
+               // Button animation
+               $editBtn.innerHTML = isEditing ?
+                    '<i class="fas fa-times mr-2"></i><span>Annuler</span>' :
+                    '<i class="fas fa-edit mr-2"></i><span>Modifier</span>';
+          }
+
+          $editBtn.addEventListener('click', toggleEditMode);
+          $cancelBtn.addEventListener('click', () => {
+               $editMode.reset();
+               toggleEditMode();
+          });
+
+          $editMode.addEventListener('submit', async function (e) {
+               e.preventDefault();
+               const $submitBtn = this.querySelector('button[type="submit"]');
+               $submitBtn.disabled = true;
+
+               try {
+                    const formData = new FormData(this);
+                    const specializations = Array.from(formData.getAll('specializations[]'));
+
+                    if (specializations.length === 0) {
+                         alert('Veuillez sélectionner au moins une spécialisation');
+                         $submitBtn.disabled = false;
+                         return;
+                    }
+
+                    const response = await fetch('/dashboard/profile/update-specializations', {
+                         method: 'PUT',
+                         headers: { 'Content-Type': 'application/json' },
+                         body: JSON.stringify({ specializations })
+                    });
+
+                    const result = await response.json();
+                    if (response.ok) {
+                         window.location.reload();
+                    } else {
+                         throw new Error(result.message);
+                    }
+               } catch (error) {
+                    alert(error.message || 'Une erreur est survenue');
+                    $submitBtn.disabled = false;
+               }
+          });
+
+          // Add hover effects for specialization cards
+          const $cards = document.querySelectorAll('[name="specializations[]"]');
+          $cards.forEach(card => {
+               card.addEventListener('change', function () {
+                    const label = this.closest('label');
+                    if (this.checked) {
+                         label.classList.add('border-blue-500', 'bg-blue-50');
+                         label.classList.remove('border-gray-200');
+                    } else {
+                         label.classList.remove('border-blue-500', 'bg-blue-50');
+                         label.classList.add('border-gray-200');
+                    }
+               });
+          });
+     });
+</script>
+
+<style>
+     @keyframes slideIn {
+          from {
+               opacity: 0;
+               transform: translateY(-10px);
+          }
+
+          to {
+               opacity: 1;
+               transform: translateY(0);
+          }
+     }
+
+     .animate-slide-in {
+          animation: slideIn 0.3s ease-out forwards;
+     }
+</style>

@@ -1,276 +1,681 @@
 <%- include('include/head.ejs') %>
      <%- include('include/navbar.ejs') %>
 
-          <div class="service-details-container">
-               <div class="service-hero">
-                    <h1 class="service-title">
-                         <%= service.serviceName %>
-                    </h1>
-                    <div class="service-provider">
-                         <img src="<%= service.createdBy.image %>" alt="<%= service.createdBy.name %>" class="provider-image">
-                         <div class="provider-info">
-                              <h3>
-                                   <%= service.createdBy.name %>
-                              </h3>
-                              <p><i class="bi bi-envelope"></i>
-                                   <%= service.createdBy.email %>
-                              </p>
-                              <p><i class="bi bi-geo-alt"></i>
-                                   <%= service.location %>
-                              </p>
-                         </div>
+          <main class="bg-gray-50 min-h-screen pt-16">
+               <div class="relative bg-gradient-to-r from-white via-gray-50 to-white border-b border-gray-100 shadow-sm">
+                    <!-- Decorative Elements -->
+                    <div class="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,transparent,black)] pointer-events-none"></div>
+
+                    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                         <nav class="py-4" aria-label="Breadcrumb">
+                              <ol class="flex items-center flex-wrap">
+                                   <!-- Home -->
+                                   <li class="flex items-center group">
+                                        <a href="/" class="flex items-center text-sm font-medium transition duration-200 group">
+                                             <div class="flex items-center">
+                                                  <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-blue-50 group-hover:bg-blue-100 transition-colors duration-200">
+                                                       <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                                                       </svg>
+                                                  </span>
+                                                  <span class="ml-2 text-gray-600 group-hover:text-gray-900">Accueil</span>
+                                             </div>
+                                        </a>
+
+                                        <div class="flex items-center ml-3 mr-3">
+                                             <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                             </svg>
+                                        </div>
+                                   </li>
+
+                                   <!-- Service Category -->
+                                   <li class="flex items-center group">
+                                        <a href="/services/<%= service.serviceOptions %>" class="flex items-center text-sm font-medium transition duration-200 group">
+                                             <div class="flex items-center">
+                                                  <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-blue-50 group-hover:bg-blue-100 transition-colors duration-200">
+                                                       <% const icons={ 'dressage' : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/>' , 'toilettage' : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>' , 'promenade' : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>' , 'default' : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>' }; const iconPath=icons[service.serviceOptions] || icons.default; %>
+                                                            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                 <%- iconPath %>
+                                                            </svg>
+                                                  </span>
+                                                  <span class="ml-2 text-gray-600 group-hover:text-gray-900">
+                                                       <%= service.serviceOptions %>
+                                                  </span>
+                                             </div>
+                                        </a>
+
+                                        <div class="flex items-center ml-3 mr-3">
+                                             <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                             </svg>
+                                        </div>
+                                   </li>
+
+                                   <!-- Current Page -->
+                                   <li class="flex items-center">
+                                        <div class="flex items-center">
+                                             <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-blue-100">
+                                                  <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                                  </svg>
+                                             </span>
+                                             <span class="ml-2 text-sm font-medium text-gray-900" aria-current="page">
+                                                  <%= service.serviceName %>
+                                             </span>
+                                        </div>
+                                   </li>
+                              </ol>
+                         </nav>
                     </div>
                </div>
 
-               <div class="service-content">
-                    <div class="service-description">
-                         <h2>À propos de ce service</h2>
-                         <p>
-                              <%= service.description %>
-                         </p>
-                    </div>
+               <style>
+                    /* Decorative background grid */
+                    .bg-grid-slate-100 {
+                         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='rgb(226 232 240 / 0.8)'%3E%3Cpath d='M0 .5H31.5V32'/%3E%3C/svg%3E");
+                    }
 
-                    <div class="service-details">
-                         <div class="detail-card price-card">
-                              <h3>Prix</h3>
-                              <p class="price-amount">DH <%= service.priceRange %>
-                              </p>
+                    /* Smooth transitions */
+                    .transition {
+                         transition-property: all;
+                         transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+                         transition-duration: 150ms;
+                    }
+
+                    /* Hover animations */
+                    .group:hover .group-hover\:text-gray-900 {
+                         transition-delay: 50ms;
+                    }
+
+                    /* Focus styles for accessibility */
+                    a:focus-visible {
+                         outline: 2px solid #3B82F6;
+                         outline-offset: 2px;
+                         border-radius: 0.375rem;
+                    }
+
+                    /* Responsive adjustments */
+                    @media (max-width: 640px) {
+                         .flex-wrap li {
+                              margin-bottom: 0.5rem;
+                         }
+                    }
+
+                    /* Print styles */
+                    @media print {
+                         .bg-gradient-to-r {
+                              background: none !important;
+                         }
+
+                         .text-gray-600 {
+                              color: #000 !important;
+                         }
+                    }
+               </style>
+
+               <!-- Main Content -->
+               <div class="max-w-7xl mx-auto px-4 py-8">
+                    <!-- Top Navigation Bar -->
+                    <nav class="sticky top-0 bg-white/80 backdrop-blur-sm border-b border-gray-100 z-50">
+                         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                              <div class="flex justify-between h-16">
+                                   <div class="flex items-center">
+                                        <button onclick="history.back()" class="p-2 rounded-lg text-gray-600 hover:bg-gray-100">
+                                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                                             </svg>
+                                        </button>
+                                   </div>
+
+                                   <div class="flex items-center space-x-4">
+                                        <button class="p-2 rounded-lg text-gray-600 hover:bg-gray-100" onclick="shareService()">
+                                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                                             </svg>
+                                        </button>
+                                        <button class="p-2 rounded-lg text-gray-600 hover:bg-gray-100" onclick="toggleSaveService()">
+                                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                                             </svg>
+                                        </button>
+                                   </div>
+                              </div>
                          </div>
-                         <div class="detail-card options-card">
-                              <h3>Options de service</h3>
-                              <ul class="options-list">
-                                   <% service.serviceOptions.forEach(option=> { %>
-                                        <li><i class="bi bi-check-circle"></i>
-                                             <%= option %>
-                                        </li>
-                                        <% }) %>
-                              </ul>
+                    </nav>
+
+                    <!-- Main Content -->
+                    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
+                         <!-- Service Header -->
+                         <div class="space-y-4">
+                              <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900">
+                                   <%= service.serviceName %>
+                              </h1>
+
+                              <div class="flex flex-wrap items-center gap-4 text-sm text-gray-600">
+                                   <div class="flex items-center">
+                                        <svg class="w-5 h-5 mr-1.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                        </svg>
+                                        <%= service.location %>
+                                   </div>
+
+                                   <div class="flex items-center">
+                                        <svg class="w-5 h-5 mr-1.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                        </svg>
+                                        <%= service.views %> vues
+                                   </div>
+
+                                   <div class="flex items-center">
+                                        <svg class="w-5 h-5 mr-1.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        Mis à jour <%= new Date(service.updatedAt).toLocaleDateString('fr-FR', {day: 'numeric' , month: 'long' }) %>
+                                   </div>
+                              </div>
                          </div>
-                    </div>
 
-                    <div class="service-actions">
-                         <button class="action-btn like-btn" data-service-id="<%= service._id %>">
-                              <i class="bi bi-heart"></i> <span class="like-count">
-                                   <%= service.likes %>
-                              </span>
-                         </button>
+                         <!-- Image Gallery -->
+                         <div class="relative rounded-2xl overflow-hidden bg-gray-100" x-data="{ 
+                           activeImage: null,
+                           currentIndex: 0,
+                           images: <%= JSON.stringify(service.images) %>,
+                           previousImage() {
+                             this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
+                             this.activeImage = this.images[this.currentIndex];
+                           },
+                           nextImage() {
+                             this.currentIndex = (this.currentIndex + 1) % this.images.length;
+                             this.activeImage = this.images[this.currentIndex];
+                           }
+                         }">
+                              <!-- Mobile Single Image View -->
+                              <div class="block sm:hidden relative">
+                                   <img :src="images[currentIndex]" :alt="'<%= service.serviceName %> - Image ' + (currentIndex + 1)" class="w-full aspect-[4/3] object-cover">
 
-                         <button class="action-btn book-btn">Réserver maintenant</button>
-                    </div>
+                                   <!-- Mobile Navigation Arrows -->
+                                   <div class="absolute inset-y-0 left-0 flex items-center">
+                                        <button @click="previousImage()" class="p-2 m-2 bg-black/30 hover:bg-black/50 rounded-full backdrop-blur-sm transition-colors">
+                                             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                                             </svg>
+                                        </button>
+                                   </div>
+
+                                   <div class="absolute inset-y-0 right-0 flex items-center">
+                                        <button @click="nextImage()" class="p-2 m-2 bg-black/30 hover:bg-black/50 rounded-full backdrop-blur-sm transition-colors">
+                                             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                             </svg>
+                                        </button>
+                                   </div>
+
+
+                              </div>
+
+                              <!-- Desktop Grid View -->
+                              <div class="hidden sm:grid grid-cols-2 lg:grid-cols-4 gap-2 aspect-[16/9] sm:aspect-[2/1]">
+                                   <% if (service.images && service.images.length> 0) { %>
+                                        <!-- Main large image -->
+                                        <div class="relative col-span-1 sm:col-span-2 lg:row-span-2 group cursor-pointer" @click="activeImage = images[0]; currentIndex = 0">
+                                             <img src="<%= service.images[0] %>" alt="<%= service.serviceName %>" class="w-full h-full object-cover rounded-l-2xl">
+                                             <div class="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                  <div class="absolute inset-0 flex items-center justify-center">
+                                                       <div class="p-2 bg-black/50 rounded-lg backdrop-blur-sm text-white">
+                                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                                                            </svg>
+                                                       </div>
+                                                  </div>
+                                             </div>
+                                        </div>
+
+                                        <!-- Secondary images -->
+                                        <% service.images.slice(1, 5).forEach((image, index)=> { %>
+                                             <div class="relative group cursor-pointer hidden sm:block" @click="activeImage = '<%= image %>'; currentIndex = <%= index + 1 %>">
+                                                  <img src="<%= image %>" alt="<%= service.serviceName %>" class="w-full h-full object-cover <%= index === 1 ? 'rounded-tr-2xl' : '' %> <%= index === 3 ? 'rounded-br-2xl' : '' %>">
+                                                  <div class="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                       <div class="absolute inset-0 flex items-center justify-center">
+                                                            <div class="p-2 bg-black/50 rounded-lg backdrop-blur-sm text-white">
+                                                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                                                                 </svg>
+                                                            </div>
+                                                       </div>
+                                                  </div>
+                                             </div>
+                                             <% }) %>
+
+                                                  <!-- Show all photos button -->
+                                                  <% if (service.images.length> 5) { %>
+                                                       <button type="button" class="absolute bottom-4 right-4 px-4 py-2 bg-white/90 backdrop-blur-sm rounded-lg text-sm font-medium text-gray-700 hover:bg-white transition-colors shadow-lg group" @click="activeImage = images[0]; currentIndex = 0">
+                                                            <span class="flex items-center">
+                                                                 <svg class="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                                 </svg>
+                                                                 +<%= service.images.length - 5 %> photos
+                                                            </span>
+                                                       </button>
+                                                       <% } %>
+                                                            <% } %>
+                              </div>
+
+                              <!-- Fullscreen Image Modal -->
+                              <div x-show="activeImage" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 z-50 bg-black/90" @click.self="activeImage = null" @keydown.escape.window="activeImage = null" @keydown.arrow-left.window="previousImage()" @keydown.arrow-right.window="nextImage()">
+
+                                   <div class="absolute inset-0 flex items-center justify-center">
+                                        <!-- Previous Button -->
+                                        <button @click.stop="previousImage()" class="absolute left-4 p-2 text-white hover:text-gray-300 transition-colors rounded-full bg-black/20 hover:bg-black/40">
+                                             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                                             </svg>
+                                        </button>
+
+                                        <!-- Image Container -->
+                                        <div class="relative max-w-7xl mx-auto px-4">
+                                             <img :src="activeImage" :alt="'<%= service.serviceName %> - Image ' + (currentIndex + 1)" class="max-h-[90vh] max-w-full object-contain">
+                                        </div>
+
+                                        <!-- Next Button -->
+                                        <button @click.stop="nextImage()" class="absolute right-4 p-2 text-white hover:text-gray-300 transition-colors rounded-full bg-black/20 hover:bg-black/40">
+                                             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                             </svg>
+                                        </button>
+
+                                        <!-- Close Button -->
+                                        <button class="absolute top-4 right-4 p-2 text-white hover:text-gray-300 transition-colors rounded-full bg-black/20 hover:bg-black/40" @click="activeImage = null">
+                                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                             </svg>
+                                        </button>
+                                   </div>
+                              </div>
+                         </div>
+
+                         <style>
+                              /* Custom Swipe Animations */
+                              @keyframes swipeNext {
+                                   from {
+                                        transform: translateX(100%);
+                                        opacity: 0;
+                                   }
+
+                                   to {
+                                        transform: translateX(0);
+                                        opacity: 1;
+                                   }
+                              }
+
+                              @keyframes swipePrev {
+                                   from {
+                                        transform: translateX(-100%);
+                                        opacity: 0;
+                                   }
+
+                                   to {
+                                        transform: translateX(0);
+                                        opacity: 1;
+                                   }
+                              }
+
+                              .swipe-next {
+                                   animation: swipeNext 0.3s ease-out;
+                              }
+
+                              .swipe-prev {
+                                   animation: swipePrev 0.3s ease-out;
+                              }
+
+                              /* Touch handling improvements */
+                              @media (pointer: coarse) {
+                                   .modal-image {
+                                        touch-action: pan-y pinch-zoom;
+                                   }
+                              }
+
+                              /* Loading state */
+                              .image-loading {
+                                   position: relative;
+                              }
+
+                              .image-loading::after {
+                                   content: '';
+                                   position: absolute;
+                                   inset: 0;
+                                   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+                                   animation: shimmer 1.5s infinite;
+                              }
+
+                              @keyframes shimmer {
+                                   0% {
+                                        transform: translateX(-100%);
+                                   }
+
+                                   100% {
+                                        transform: translateX(100%);
+                                   }
+                              }
+                         </style>
+
+                         <!-- Provider Profile Card -->
+                         <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+                              <div class="p-6">
+                                   <div class="flex items-start space-x-4">
+                                        <!-- Provider Avatar -->
+                                        <a href="/@<%= service.createdBy.slug %>" class="relative flex-shrink-0">
+                                             <img src="<%= service.createdBy.profileImage %>" alt="<%= service.createdBy.displayName %>" class="w-16 h-16 rounded-xl object-cover ring-4 ring-gray-100">
+                                             <% if (service.createdBy.isVerified) { %>
+                                                  <div class="absolute -bottom-1 -right-1 bg-blue-500 text-white p-1 rounded-lg">
+                                                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                                       </svg>
+                                                  </div>
+                                                  <% } %>
+                                        </a>
+
+                                        <!-- Provider Info -->
+                                        <div class="flex-1 min-w-0">
+                                             <div class="flex items-center justify-between mb-2">
+                                                  <div>
+                                                       <h2 class="text-lg font-semibold text-gray-900 hover:text-blue-600 transition-colors">
+                                                            <%= service.createdBy.displayName %>
+                                                       </h2>
+                                                       <p class="text-sm text-gray-500">
+                                                            Membre depuis <%= new Date(service.createdBy.createdAt).toLocaleDateString('fr-FR', {month: 'long' , year: 'numeric' }) %>
+                                                       </p>
+                                                  </div>
+
+                                                  <a href="/@<%= service.createdBy.slug %>" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors">
+                                                       Voir le profil
+                                                  </a>
+                                             </div>
+
+                                             <!-- Provider Stats -->
+                                             <div class="grid grid-cols-3 gap-4 mt-4">
+                                                  <div class="bg-gray-50 rounded-lg px-4 py-2 text-center">
+                                                       <div class="text-lg font-semibold text-gray-900">
+                                                            <%= service.createdBy.metrics?.totalServices || 0 %>
+                                                       </div>
+                                                       <div class="text-xs text-gray-500">Services</div>
+                                                  </div>
+
+                                                  <div class="bg-gray-50 rounded-lg px-4 py-2 text-center">
+                                                       <div class="text-lg font-semibold text-gray-900">
+                                                            <%= service.createdBy.metrics?.averageRating?.toFixed(1) || '0.0' %>
+                                                                 <span class="text-yellow-400 text-sm">★</span>
+                                                       </div>
+                                                       <div class="text-xs text-gray-500">Note moyenne</div>
+                                                  </div>
+
+                                                  <div class="bg-gray-50 rounded-lg px-4 py-2 text-center">
+                                                       <div class="text-lg font-semibold text-gray-900">
+                                                            <%= service.createdBy.metrics?.responseRate || '0' %>%
+                                                       </div>
+                                                       <div class="text-xs text-gray-500">Taux de réponse</div>
+                                                  </div>
+                                             </div>
+                                        </div>
+                                   </div>
+
+                                   <!-- Contact Options -->
+                                   <div class="mt-6 pt-6 border-t grid grid-cols-2 gap-4">
+                                        <button type="button" class="flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors" onclick="showContactModal()">
+                                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                             </svg>
+                                             Message
+                                        </button>
+
+                                        <a href="tel:<%= service.createdBy.phoneNumber %>" class="flex items-center justify-center px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                             </svg>
+                                             Appeler
+                                        </a>
+                                   </div>
+                              </div>
+                         </div>
+
+                         <!-- Service Details -->
+                         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                              <!-- Left Column -->
+                              <div class="lg:col-span-2 space-y-8">
+                                   <!-- Description -->
+                                   <!-- Description Section (continued) -->
+                                   <div class="space-y-6">
+                                        <h2 class="text-xl font-semibold text-gray-900">À propos de ce service</h2>
+                                        <div class="prose prose-sm max-w-none text-gray-600 leading-relaxed">
+                                             <%= service.description %>
+                                        </div>
+
+                                        <!-- Service Features -->
+                                        <div class="grid grid-cols-2 gap-4 pt-6 border-t">
+                                             <div class="flex items-start space-x-3">
+                                                  <div class="flex-shrink-0 w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center">
+                                                       <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                       </svg>
+                                                  </div>
+                                                  <div>
+                                                       <h3 class="text-sm font-medium text-gray-900">Durée de service</h3>
+                                                       <p class="text-sm text-gray-500">1 heure en moyenne</p>
+                                                  </div>
+                                             </div>
+
+                                             <div class="flex items-start space-x-3">
+                                                  <div class="flex-shrink-0 w-10 h-10 bg-green-50 rounded-xl flex items-center justify-center">
+                                                       <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                       </svg>
+                                                  </div>
+                                                  <div>
+                                                       <h3 class="text-sm font-medium text-gray-900">Disponibilité</h3>
+                                                       <p class="text-sm text-gray-500">Disponible sous 24h</p>
+                                                  </div>
+                                             </div>
+
+                                             <div class="flex items-start space-x-3">
+                                                  <div class="flex-shrink-0 w-10 h-10 bg-purple-50 rounded-xl flex items-center justify-center">
+                                                       <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                                                       </svg>
+                                                  </div>
+                                                  <div>
+                                                       <h3 class="text-sm font-medium text-gray-900">Tarification</h3>
+                                                       <p class="text-sm text-gray-500">
+                                                            <%= service.priceRange %> DH
+                                                       </p>
+                                                  </div>
+                                             </div>
+
+                                             <div class="flex items-start space-x-3">
+                                                  <div class="flex-shrink-0 w-10 h-10 bg-yellow-50 rounded-xl flex items-center justify-center">
+                                                       <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                                                       </svg>
+                                                  </div>
+                                                  <div>
+                                                       <h3 class="text-sm font-medium text-gray-900">Expérience</h3>
+                                                       <p class="text-sm text-gray-500">
+                                                            <%= service.createdBy.experience?.years || 0 %> ans d'expérience
+                                                       </p>
+                                                  </div>
+                                             </div>
+                                        </div>
+                                   </div>
+
+                                   <!-- What's Included Section -->
+                                   <div class="bg-white rounded-2xl shadow-sm p-6 space-y-6">
+                                        <h2 class="text-xl font-semibold text-gray-900">Ce qui est inclus</h2>
+                                        <ul class="space-y-4">
+                                             <li class="flex items-start space-x-3">
+                                                  <svg class="w-5 h-5 text-green-500 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                                  </svg>
+                                                  <span class="text-gray-600">Consultation initiale personnalisée</span>
+                                             </li>
+                                             <li class="flex items-start space-x-3">
+                                                  <svg class="w-5 h-5 text-green-500 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                                  </svg>
+                                                  <span class="text-gray-600">Suivi post-service</span>
+                                             </li>
+                                             <li class="flex items-start space-x-3">
+                                                  <svg class="w-5 h-5 text-green-500 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                                  </svg>
+                                                  <span class="text-gray-600">Rapport détaillé des services effectués</span>
+                                             </li>
+                                        </ul>
+                                   </div>
+
+
+                              </div>
+
+
+                         </div>
+
+                         <!-- Reviews Section -->
+                         <%- include('include/reviews-section', { service: service, reviews: reviews }) %>
+                    </main>
+
+
+
+
+
+                    <style>
+                         /* Smooth scrolling behavior */
+                         html {
+                              scroll-behavior: smooth;
+                         }
+
+                         /* Custom scrollbar */
+                         ::-webkit-scrollbar {
+                              width: 8px;
+                              height: 8px;
+                         }
+
+                         ::-webkit-scrollbar-track {
+                              background: #f1f1f1;
+                              border-radius: 4px;
+                         }
+
+                         ::-webkit-scrollbar-thumb {
+                              background: #c5c5c5;
+                              border-radius: 4px;
+                         }
+
+                         ::-webkit-scrollbar-thumb:hover {
+                              background: #a8a8a8;
+                         }
+
+                         /* Animations */
+                         .animate-fade-in {
+                              animation: fadeIn 0.3s ease-out;
+                         }
+
+                         @keyframes fadeIn {
+                              from {
+                                   opacity: 0;
+                                   transform: translateY(10px);
+                              }
+
+                              to {
+                                   opacity: 1;
+                                   transform: translateY(0);
+                              }
+                         }
+
+                         /* Responsive image grid */
+                         @media (max-width: 640px) {
+                              .grid-cols-4 {
+                                   grid-template-columns: repeat(2, 1fr);
+                              }
+                         }
+
+                         /* Focus styles */
+                         .focus-visible:focus {
+                              outline: 2px solid #3b82f6;
+                              outline-offset: 2px;
+                         }
+                    </style>
+                    <!-- Reviews Section -->
+                    <%- include('include/reviews-section', { service: service, reviews: reviews }) %>
                </div>
-          </div>
+          </main>
 
-          <style>
-               body {
-                    font-family: 'Poppins', sans-serif;
-                    background-color: #f5f7fa;
-                    color: #333;
-               }
-
-               .service-details-container {
-                    max-width: 1000px;
-                    margin: 40px auto;
-                    background-color: #fff;
-                    border-radius: 12px;
-                    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-                    overflow: hidden;
-               }
-
-               .service-hero {
-                    background: linear-gradient(135deg, #3498db, #8e44ad);
-                    color: #fff;
-                    padding: 40px;
-                    position: relative;
-               }
-
-               .service-title {
-                    font-size: 2.5em;
-                    margin-bottom: 20px;
-               }
-
-               .service-provider {
-                    display: flex;
-                    align-items: center;
-               }
-
-               .provider-image {
-                    width: 80px;
-                    height: 80px;
-                    border-radius: 50%;
-                    object-fit: cover;
-                    border: 3px solid #fff;
-               }
-
-               .provider-info {
-                    margin-left: 20px;
-               }
-
-               .provider-info h3 {
-                    margin: 0;
-                    font-size: 1.2em;
-               }
-
-               .provider-info p {
-                    margin: 5px 0;
-                    font-size: 0.9em;
-               }
-
-               .service-content {
-                    padding: 40px;
-               }
-
-               .service-description h2 {
-                    color: #2c3e50;
-                    margin-bottom: 20px;
-               }
-
-               .service-details {
-                    display: flex;
-                    justify-content: space-between;
-                    margin-top: 40px;
-               }
-
-               .detail-card {
-                    background-color: #f8f9fa;
-                    border-radius: 8px;
-                    padding: 20px;
-                    width: 48%;
-                    transition: transform 0.3s ease;
-               }
-
-               .detail-card:hover {
-                    transform: translateY(-5px);
-               }
-
-               .detail-card h3 {
-                    color: #2c3e50;
-                    margin-bottom: 15px;
-               }
-
-               .price-amount {
-                    font-size: 1.5em;
-                    font-weight: bold;
-                    color: #27ae60;
-               }
-
-               .options-list {
-                    list-style-type: none;
-                    padding: 0;
-               }
-
-               .options-list li {
-                    margin-bottom: 10px;
-               }
-
-               .options-list i {
-                    color: #27ae60;
-                    margin-right: 10px;
-               }
-
-               .service-actions {
-                    display: flex;
-                    justify-content: space-between;
-                    margin-top: 40px;
-               }
-
-               .action-btn {
-                    padding: 10px 20px;
-                    border: none;
-                    border-radius: 25px;
-                    font-size: 1em;
-                    cursor: pointer;
-                    transition: all 0.3s ease;
-               }
-
-               .like-btn,
-               .dislike-btn {
-                    background-color: #f8f9fa;
-                    color: #333;
-               }
-
-               .like-btn:hover {
-                    background-color: #e74c3c;
-                    color: #fff;
-               }
-
-               .dislike-btn:hover {
-                    background-color: #3498db;
-                    color: #fff;
-               }
-
-               .book-btn {
-                    background-color: #27ae60;
-                    color: #fff;
-               }
-
-               .book-btn:hover {
-                    background-color: #2ecc71;
-               }
-
-               @media (max-width: 768px) {
-                    .service-details {
-                         flex-direction: column;
-                    }
-
-                    .detail-card {
-                         width: 100%;
-                         margin-bottom: 20px;
-                    }
-
-                    .service-actions {
-                         flex-wrap: wrap;
-                    }
-
-                    .action-btn {
-                         width: 100%;
-                         margin-bottom: 10px;
-                    }
-               }
-          </style>
-
+          <!-- Scripts -->
+          <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
           <script>
+               // Share functionality
+               function shareService() {
+                    if (navigator.share) {
+                         navigator.share({
+                              title: '<%= service.serviceName %>',
+                              text: '<%= service.description.substring(0, 100) %>...',
+                              url: window.location.href
+                         })
+                              .catch(console.error);
+                    }
+               }
+
+               // Save service functionality
+               function saveService() {
+                    // Implement save functionality
+               }
+
+               // View tracking
                document.addEventListener('DOMContentLoaded', function () {
-                    const likeBtn = document.querySelector('.like-btn');
-                    const dislikeBtn = document.querySelector('.dislike-btn');
+                    // Increment view count if not already viewed
+                    const serviceId = '<%= service._id %>';
+                    const viewedServices = JSON.parse(localStorage.getItem('viewedServices') || '[]');
 
-                    function updateCount(button, increment = true) {
-                         const countSpan = button.querySelector('span');
-                         let count = parseInt(countSpan.textContent);
-                         countSpan.textContent = increment ? count + 1 : count - 1;
+                    if (!viewedServices.includes(serviceId)) {
+                         fetch(`/api/services/${serviceId}/view`, {
+                              method: 'POST'
+                         }).then(() => {
+                              viewedServices.push(serviceId);
+                              localStorage.setItem('viewedServices', JSON.stringify(viewedServices));
+                         }).catch(console.error);
                     }
-
-                    function animateButton(button) {
-                         button.classList.add('animate__animated', 'animate__rubberBand');
-                         setTimeout(() => button.classList.remove('animate__animated', 'animate__rubberBand'), 1000);
-                    }
-
-                    likeBtn.addEventListener('click', function () {
-                         const serviceId = this.getAttribute('data-service-id');
-                         fetch(`/services/${serviceId}/like`, { method: 'POST' })
-                              .then(response => response.json())
-                              .then(data => {
-                                   if (data.success) {
-                                        updateCount(this);
-                                        animateButton(this);
-                                   }
-                              })
-                              .catch(err => console.error('Error liking service:', err));
-                    });
-
-                    dislikeBtn.addEventListener('click', function () {
-                         const serviceId = this.getAttribute('data-service-id');
-                         fetch(`/services/${serviceId}/dislike`, { method: 'POST' })
-                              .then(response => response.json())
-                              .then(data => {
-                                   if (data.success) {
-                                        updateCount(this);
-                                        animateButton(this);
-                                   }
-                              })
-                              .catch(err => console.error('Error disliking service:', err));
-                    });
                });
           </script>
 
-          <!-- Add Animate.css for animations -->
-          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+          <style>
+               /* Custom styles */
+               .prose img {
+                    border-radius: 0.75rem;
+               }
+
+               @media (max-width: 640px) {
+                    .grid-cols-4 {
+                         grid-template-columns: repeat(2, 1fr);
+                    }
+               }
+
+               /* Smooth scrolling */
+               html {
+                    scroll-behavior: smooth;
+               }
+
+               /* Better focus styles */
+               :focus-visible {
+                    outline: 2px solid theme('colors.blue.500');
+                    outline-offset: 2px;
+               }
+
+               @media (prefers-reduced-motion: reduce) {
+                    * {
+                         animation-duration: 0.01ms !important;
+                         animation-iteration-count: 1 !important;
+                         transition-duration: 0.01ms !important;
+                         scroll-behavior: auto !important;
+                    }
+               }
+          </style>
+          </body>
+
+          </html>

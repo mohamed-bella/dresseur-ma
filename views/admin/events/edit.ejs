@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Admin - Edit Event</title>
+</head>
+
+<body>
+     <h1>Edit Event</h1>
+
+     <form action="/admin/events/<%= event._id %>?_method=PUT" method="POST" enctype="multipart/form-data">
+          <div>
+               <label for="title">Title:</label>
+               <input type="text" id="title" name="title" required>
+          </div>
+          <div>
+               <label for="description">Description:</label>
+               <textarea id="description" name="description" required></textarea>
+          </div>
+          <div>
+               <label for="location">Location:</label>
+               <input type="text" id="location" name="location" required>
+          </div>
+          <div>
+               <label for="date">Date:</label>
+               <input type="date" id="date" name="date" required>
+          </div>
+          <div>
+               <label for="time">Time:</label>
+               <input type="text" id="time" name="time" required>
+          </div>
+          <div>
+               <label for="image">Image:</label>
+               <input type="file" id="image" name="image">
+          </div>
+          <div>
+               <label for="category">Category:</label>
+               <select id="category" name="category" required>
+                    <option value="training">Training</option>
+                    <option value="competition">Competition</option>
+                    <option value="socializing">Socializing</option>
+                    <option value="other">Other</option>
+               </select>
+          </div>
+          <div>
+               <label for="organizer">Organizer:</label>
+               <input type="text" id="organizer" name="organizer" required>
+          </div>
+          <div>
+               <label for="contactEmail">Contact Email:</label>
+               <input type="email" id="contactEmail" name="contactEmail" required>
+          </div>
+          <div>
+               <label for="contactPhone">Contact Phone:</label>
+               <input type="tel" id="contactPhone" name="contactPhone">
+          </div>
+          <div>
+               <label for="website">Website:</label>
+               <input type="url" id="website" name="website">
+          </div>
+          <div>
+               <label for="ticketPrice">Ticket Price:</label>
+               <input type="number" id="ticketPrice" name="ticketPrice" step="0.01">
+          </div>
+          <div>
+               <label for="ticketLink">Ticket Link:</label>
+               <input type="url" id="ticketLink" name="ticketLink">
+          </div>
+          <button type="submit">Update Event</button>
+     </form>
+</body>
+
+</html>

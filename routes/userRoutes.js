@@ -2,6 +2,10 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 const multer = require('multer');
+const { body, validationResult } = require('express-validator');
+const mongoose = require('mongoose');
+const { ObjectId } = mongoose.Types;
+
 const path = require('path');
 const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
 const { Upload } = require('@aws-sdk/lib-storage');
@@ -13,6 +17,11 @@ const sharp = require('sharp');
 // const upload = require('../config/multer'); // Multer config with Cloudinary
 const Announcement = require('../models/announcement'); // Your announcement model
 const Service = require('../models/service');
+const User = require('../models/user');
+const Event = require('../models/event');
+const Reservation = require('../models/reservation')
+const Review = require('../models/review');
+
 
 
 
@@ -25,39 +34,285 @@ const upload = multer({
      limits: { fileSize: 10 * 1024 * 1024 } // Limit file size to 10MB (adjust as needed)
 });
 
-router.get('/', async (req, res) => {
+
+
+// Validation middleware
+const validateService = [
+     body('serviceName')
+          .trim()
+          .isLength({ min: 3, max: 100 })
+          .withMessage('Le nom du service doit contenir entre 3 et 100 caractères'),
+
+     body('description')
+          .trim()
+          .isLength({ min: 100 })
+          .withMessage('La description doit contenir au moins 100 caractères'),
+
+     body('serviceType')
+          .isIn(['dressage', 'toilettage', 'promenade', 'veterinaire', 'pension', 'transport'])
+          .withMessage('Type de service invalide'),
+
+     body('location')
+          .trim()
+          .notEmpty()
+          .withMessage('La localisation est requise'),
+
+     body('basePrice')
+          .isNumeric()
+          .withMessage('Le prix doit être un nombre')
+          .custom((value) => value >= 0)
+          .withMessage('Le prix ne peut pas être négatif'),
+
+     body('features')
+          .optional()
+          .isArray()
+          .withMessage('Les caractéristiques doivent être un tableau'),
+
+     body('availability')
+          .optional()
+          .isObject()
+          .withMessage('La disponibilité doit être un objet valide')
+];
+
+
+
+// POST: Create New Service
+router.post('/dashboard/new-service', validateService, async (req, res) => {
      try {
-          // Fetch the latest 6 announcements
-          const announcements = await Announcement.find().limit(6);
+          // Handle file upload with error handling
+          upload(req, res, async function (err) {
+               if (err instanceof multer.MulterError) {
+                    return res.status(400).json({
+                         success: false,
+                         message: 'Erreur lors du téléchargement des images',
+                         errors: [{ msg: err.message }]
+                    });
+               }
 
-          // Fetch the latest 6 articles
-          const articles = await Article.find().limit(6);
+               // Validate input
+               const errors = validationResult(req);
+               if (!errors.isEmpty()) {
+                    return res.status(400).json({
+                         success: false,
+                         message: 'Erreur de validation',
+                         errors: errors.array()
+                    });
+               }
 
-          // Fetch unique locations from both Announcement and Service models
-          const announcementLocations = await Announcement.distinct('location');
-          const serviceLocations = await Service.distinct('location');
+               // Process and upload images
+               const imageUrls = [];
+               if (req.files && req.files.length > 0) {
+                    for (const file of req.files) {
+                         try {
+                              // Process image with sharp
+                              const processedImage = await sharp(file.buffer)
+                                   .resize(1200, 800, {
+                                        fit: 'cover',
+                                        withoutEnlargement: true
+                                   })
+                                   .webp({ quality: 80 })
+                                   .toBuffer();
 
-          // Combine and filter out duplicate locations
-          const uniqueLocations = [...new Set([...announcementLocations, ...serviceLocations])];
+                              // Generate unique filename
+                              const filename = `services/${Date.now()}-${slugify(req.body.serviceName)}-${imageUrls.length + 1}.webp`;
 
-          // Render the homepage view with announcements, articles, and unique locations
-          res.render('user/index', {
-               announcements,
-               articles, // Pass the articles to the view
-               locations: uniqueLocations // Pass the dynamic locations to the view
+                              // Upload to S3
+                              const upload = new Upload({
+                                   client: s3,
+                                   params: {
+                                        Bucket: process.env.AWS_S3_BUCKET_NAME,
+                                        Key: filename,
+                                        Body: processedImage,
+                                        ContentType: 'image/webp',
+                                        ACL: 'public-read'
+                                   }
+                              });
+
+                              const result = await upload.done();
+                              imageUrls.push({
+                                   url: result.Location,
+                                   key: filename
+                              });
+
+                         } catch (error) {
+                              console.error('Error processing image:', error);
+                              return res.status(500).json({
+                                   success: false,
+                                   message: 'Erreur lors du traitement des images'
+                              });
+                         }
+                    }
+               }
+
+               try {
+                    // Create service object
+                    const newService = new Service({
+                         serviceName: req.body.serviceName,
+                         description: req.body.description,
+                         serviceType: req.body.serviceType,
+                         location: req.body.location,
+                         basePrice: req.body.basePrice,
+                         features: req.body.features || [],
+                         images: imageUrls,
+                         availability: JSON.parse(req.body.availability || '{}'),
+                         provider: req.user._id,
+                         status: 'active',
+                         policies: req.body.policies || [],
+                         experienceLevel: req.body.experienceLevel,
+                         coordinates: req.body.coordinates ? {
+                              type: 'Point',
+                              coordinates: [
+                                   parseFloat(req.body.coordinates.lng),
+                                   parseFloat(req.body.coordinates.lat)
+                              ]
+                         } : undefined,
+                         weeklySchedule: req.body.weeklySchedule || {},
+                         bookingNotice: req.body.bookingNotice,
+                         serviceDuration: req.body.serviceDuration,
+                         maxCapacity: req.body.maxCapacity,
+                         slug: slugify(req.body.serviceName, { lower: true, strict: true })
+                    });
+
+                    await newService.save();
+
+                    // Return success response
+                    res.status(201).json({
+                         success: true,
+                         message: 'Service créé avec succès',
+                         serviceId: newService._id,
+                         redirect: `/service/${newService._id}/${newService.slug}`
+                    });
+
+               } catch (error) {
+                    console.error('Error creating service:', error);
+                    res.status(500).json({
+                         success: false,
+                         message: 'Erreur lors de la création du service'
+                    });
+               }
           });
      } catch (error) {
-          console.error('Error fetching announcements, articles, or locations:', error);
-          res.status(500).send('Server Error');
+          console.error('Error in service creation route:', error);
+          res.status(500).json({
+               success: false,
+               message: 'Erreur serveur'
+          });
      }
 });
 
+router.get('/', async (req, res) => {
+     // Define the metadata for the homepage
+     const pageTitle = 'Bienvenue sur NDRESSILIK - Trouvez les meilleurs services pour votre animal';
+     const description = 'Découvrez les derniers services et annonces pour animaux de compagnie sur NDRESSILIK. Recherchez par lieu et type de service.';
+     const keywords = 'services pour animaux, annonces, dressage, toilettage, adoption des animaux, NDRESSILIK';
+
+     try {
+
+          const events = await Event.find({
+               // date: { $gte: new Date() }
+          })
+               .sort({ createdat: -1 }) // Sort by date ascending
+               .limit(3); // Limit to 7 events (1 featured + 6 grid items)
+          // Fetch top providers with their metrics
+          const topProviders = await User.find({ status: 'active' })
+               .sort({ "metrics.averageRating": -1, "metrics.completedBookings": -1 })
+               .limit(7)
+               .select('displayName profileImage location city specializations metrics averageRating slug isVerified');
+
+          // Fetch services and reviews for each provider
+          const providersWithDetails = await Promise.all(
+               topProviders.map(async (provider) => {
+                    // Fetch provider's services
+                    const services = await Service.find({ createdBy: provider._id })
+                         .select('serviceName description priceRange images location serviceOptions')
+                         .limit(3); // Limit to 3 recent services
+
+                    // Fetch provider's reviews
+                    const reviews = await Review.find({
+                         serviceId: {
+                              $in: services.map(service => service._id)
+                         }
+                    })
+                         .populate('userId', 'displayName profileImage')
+                         .sort({ createdAt: -1 })
+                         .limit(5); // Limit to 5 recent reviews
+
+                    // Calculate metrics
+                    const avgRating = reviews.length > 0
+                         ? reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length
+                         : 0;
+
+                    // Return provider with additional details
+                    return {
+                         ...provider.toObject(),
+                         services,
+                         reviews,
+                         metrics: {
+                              ...provider.metrics,
+                              averageRating: avgRating.toFixed(1),
+                              totalReviews: reviews.length,
+                              totalServices: services.length
+                         }
+                    };
+               })
+          );
+
+          // Fetch latest articles
+          const articles = await Article.find()
+               .sort({ createdAt: -1 })
+               .limit(6)
+               .select('title summary featuredImage category tags createdAt slug');
+
+          // Fetch locations
+          const [announcementLocations, serviceLocations] = await Promise.all([
+               Announcement.distinct('location'),
+               Service.distinct('location')
+          ]);
+
+          // Combine and filter unique locations
+          const uniqueLocations = [...new Set([...announcementLocations, ...serviceLocations])]
+               .filter(Boolean) // Remove empty values
+               .sort(); // Sort alphabetically
+
+          // Fetch featured announcements
+          const announcements = await Announcement.find({ status: 'active' })
+               .sort({ createdAt: -1 })
+               .limit(6)
+               .select('title description images location price breed age gender');
+          res.render('user/index', {
+               pageTitle,
+               description,
+               events,
+               keywords,
+               topProviders: providersWithDetails, // Now includes services and reviews
+               articles,
+               // announcements,
+               locations: uniqueLocations,
+               user: req.user || null // Pass current user if exists
+          });
+
+     } catch (error) {
+          console.error('Error fetching homepage data:', error);
+          res.status(500).render('error', {
+               error: {
+                    status: 500,
+                    message: 'Une erreur est survenue lors du chargement de la page'
+               }
+          });
+     }
+});
 // GET ALL ARTICLES
 router.get('/articles', async (req, res) => {
+
+     // Metadata for the articles page
+     const pageTitle = 'Articles sur les animaux | NDRESSILIK';
+     const description = 'Lisez les derniers articles sur les soins, l’éducation, et l’adoption d’animaux sur NDRESSILIK.';
+     const keywords = 'articles sur les animaux, soins, éducation, adoption, NDRESSILIK';
+
      try {
           // Fetch all articles
           const articles = await Article.find();
-
+          console.log(articles)
           // Get unique categories from articles
           const categories = [...new Set(articles.map(article => article.category.trim()))];
 
@@ -66,7 +321,14 @@ router.get('/articles', async (req, res) => {
           const topics = [...new Set(allTags.filter(tag => tag && tag.trim().length > 0))]; // Filter out empty tags
 
           // Render the page with articles, categories, and tags
-          res.render('user/articles', { articles, categories, topics });
+          res.render('user/articles', {
+               pageTitle,
+               description,
+               keywords,
+               articles,
+               categories,
+               topics
+          });
      } catch (error) {
           console.error('Error fetching articles:', error);
           res.status(500).send('Server Error');
@@ -74,51 +336,149 @@ router.get('/articles', async (req, res) => {
 });
 
 
+// Helper functions for dashboard
+// utils/dashboardHelpers.js
+const getDashboardStats = async (userId) => {
+     try {
+          const stats = await Service.aggregate([
+               { $match: { createdBy: mongoose.Types.ObjectId(userId) } },
+               {
+                    $lookup: {
+                         from: 'reviews',
+                         localField: '_id',
+                         foreignField: 'serviceId',
+                         as: 'reviews'
+                    }
+               },
+               {
+                    $lookup: {
+                         from: 'reservations',
+                         localField: '_id',
+                         foreignField: 'serviceId',
+                         as: 'reservations'
+                    }
+               },
+               {
+                    $group: {
+                         _id: null,
+                         totalServices: { $sum: 1 },
+                         activeServices: {
+                              $sum: { $cond: [{ $eq: ['$isActive', true] }, 1, 0] }
+                         },
+                         totalReservations: { $sum: { $size: '$reservations' } },
+                         totalReviews: { $sum: { $size: '$reviews' } },
+                         totalRevenue: {
+                              $sum: {
+                                   $reduce: {
+                                        input: '$reservations',
+                                        initialValue: 0,
+                                        in: { $add: ['$$value', '$$this.totalAmount'] }
+                                   }
+                              }
+                         },
+                         averageRating: {
+                              $avg: {
+                                   $cond: [
+                                        { $gt: [{ $size: '$reviews' }, 0] },
+                                        { $avg: '$reviews.rating' },
+                                        0
+                                   ]
+                              }
+                         }
+                    }
+               }
+          ]);
 
-// GET: User Dashboard with Real Data
+          return stats[0] || {
+               totalServices: 0,
+               activeServices: 0,
+               totalReservations: 0,
+               totalReviews: 0,
+               totalRevenue: 0,
+               averageRating: 0
+          };
+     } catch (error) {
+          console.error('Error calculating dashboard stats:', error);
+          throw error;
+     }
+};
+
+
+
+// Updated dashboard route
 router.get('/dashboard', async (req, res) => {
+     try {
+          // Get services with basic stats
+          const services = await Service.aggregate([
+               {
+                    $match: {
+                         createdBy: new ObjectId(req.user._id)
+                    }
+               },
+               {
+                    $lookup: {
+                         from: 'reviews',
+                         localField: '_id',
+                         foreignField: 'serviceId',
+                         as: 'reviews'
+                    }
+               },
+               {
+                    $lookup: {
+                         from: 'reservations',
+                         localField: '_id',
+                         foreignField: 'serviceId',
+                         as: 'reservations'
+                    }
+               },
+               {
+                    $addFields: {
+                         averageRating: {
+                              $cond: [
+                                   { $gt: [{ $size: '$reviews' }, 0] },
+                                   { $avg: '$reviews.rating' },
+                                   0
+                              ]
+                         },
+                         totalReservations: { $size: '$reservations' },
+                         status: {
+                              $cond: [
+                                   { $eq: ['$isActive', true] },
+                                   'active',
+                                   'inactive'
+                              ]
+                         }
+                    }
+               }
+          ]);
 
-     if (req.isAuthenticated()) {
-          try {
-               // Fetch user's announcements
-               const announcements = await Announcement.find({ user: req.user._id });
-               // Ensure announcements is always an array, even if it's empty
-               const announcementsCount = announcements ? announcements.length : 0;
+          // Calculate dashboard stats
+          const stats = {
+               totalServices: services.length,
+               activeServices: services.filter(s => s.status === 'active').length,
+               totalReservations: services.reduce((acc, s) => acc + s.totalReservations, 0),
+               totalRevenue: services.reduce((acc, s) => {
+                    const reservationRevenue = s.reservations.reduce((sum, r) => sum + (r.totalAmount || 0), 0);
+                    return acc + reservationRevenue;
+               }, 0),
+               averageRating: services.length > 0
+                    ? (services.reduce((acc, s) => acc + s.averageRating, 0) / services.length).toFixed(1)
+                    : 0,
+               totalReviews: services.reduce((acc, s) => acc + s.reviews.length, 0)
+          };
 
-               // Handle cases where 'views' or 'responses' might be undefined
-               const totalViews = announcements.reduce((acc, curr) => acc + (curr.views || 0), 0);
-               const totalResponses = announcements.reduce((acc, curr) => acc + (curr.responses ? curr.responses.length : 0), 0);
+          res.render('user/dashboard/dashboard', {
+               user: req.user,
+               stats,
+               services,
+               moment: require('moment')
+          });
 
-               // Placeholder for user rating (can be dynamic later)
-               const userRating = req.user.rating || 4.8; // Adjust as necessary, or fetch from a rating source
-
-               // Example recent activity, can be fetched from a database or log source
-               const recentActivity = [
-                    { description: 'New message from Ahmed' },
-                    { description: 'Your announcement "Berger Allemand" got 5 new views' },
-                    { description: 'Password changed successfully' }
-               ];
-
-               // Render the dashboard with real data
-               res.render('user/dashboard/dashboard', {
-                    user: req.user,
-                    announcementsCount,
-                    totalViews,
-                    totalResponses,
-                    userRating,
-                    recentAnnouncements: announcements.slice(0, 5), // Show the latest 5 announcements
-                    recentActivity // Example recent activity, static for now
-               });
-          } catch (err) {
-               console.error('Error loading dashboard:', err);
-               res.status(500).send('Server Error');
-          }
-     } else {
-          res.redirect('/');
+     } catch (error) {
+          console.error('Dashboard Error:', error);
+          res.status(500).send('Error loading dashboard');
      }
 });
-
-
 // Configure AWS S3 Client for SDK v3
 const s3 = new S3Client({
      region: process.env.AWS_REGION,
@@ -342,6 +702,277 @@ router.get('/announcement/:id', async (req, res) => {
      }
 });
 
+function calculateNdressilikScore(user) {
+     let score = 0;
+
+     // Rating contribution (40%)
+     score += ((user.metrics?.averageRating || 0) / 5) * 40;
+
+     // Completion rate contribution (20%)
+     score += (user.trustFactors?.completionRate || 0) * 20;
+
+     // Response rate contribution (20%)
+     score += (user.trustFactors?.responseRate || 0) * 20;
+
+     // On-time rate contribution (20%)
+     score += (user.trustFactors?.onTimeRate || 0) * 20;
+
+     // Bonus points for badges (up to 10 extra points)
+     const badgeBonus = Math.min((user.badges?.length || 0) * 2, 10);
+     score += badgeBonus;
+
+     // Cap the score at 100
+     return Math.min(Math.round(score), 100);
+}
+
+// profile route
+const BADGE_CONFIG = {
+     'top-rated': {
+          icon: 'https://img.icons8.com/?size=100&id=Kn0jagVCdl2K&format=png&color=FAB005', // Gold medal with paw
+          label: 'Top Rated',
+          bgColor: 'bg-yellow-50',
+          textColor: 'text-yellow-800',
+          borderColor: 'border-yellow-200',
+          description: 'Prestataire hautement noté par nos clients'
+     },
+     'verified-professional': {
+          icon: 'https://img.icons8.com/?size=100&id=4vNqm6VhTbfY&format=png&color=FAB005', // Verified check badge
+          label: 'Professionnel Vérifié',
+          bgColor: 'bg-yellow-50',
+          textColor: 'text-yellow-800',
+          borderColor: 'border-yellow-200',
+          description: 'Identité et qualifications vérifiées par NDRESSILIK'
+     },
+     'quick-responder': {
+          icon: 'https://img.icons8.com/?size=100&id=f8aQQqBgxEti&format=png&color=FAB005', // Fast dog running
+          label: 'Réponse Rapide',
+          bgColor: 'bg-yellow-50',
+          textColor: 'text-yellow-800',
+          borderColor: 'border-yellow-200',
+          description: 'Répond à toutes les demandes en moins de 24h'
+     },
+     'experienced': {
+          icon: 'https://img.icons8.com/?size=100&id=HMO1TRQkstaj&format=png&color=FAB005', // Dog trainer
+          label: 'Expérimenté',
+          bgColor: 'bg-yellow-50',
+          textColor: 'text-yellow-800',
+          borderColor: 'border-yellow-200',
+          description: 'Plus de 50 services réalisés avec succès'
+     },
+     'premium-provider': {
+          icon: 'https://img.icons8.com/?size=100&id=9DaYvmG0EbR6&format=png&color=FAB005', // Crown with paw
+          label: 'Premium',
+          bgColor: 'bg-yellow-50',
+          textColor: 'text-yellow-800',
+          borderColor: 'border-yellow-200',
+          description: 'Excellence de service confirmée par NDRESSILIK'
+     }
+};
+router.get('/@:slug', async (req, res) => {
+     try {
+          const { slug } = req.params;
+
+          // Fetch user with all necessary fields
+          const user = await User.findOne({ slug })
+               .select('-password -email -phoneNumber -settings -verificationDocuments -googleId -__v');
+
+          if (!user) {
+               return res.status(404).render('user/404', {
+                    message: 'Profil non trouvé'
+               });
+          }
+
+          // Fetch related data
+          const [services, reviews, completedBookings] = await Promise.all([
+               Service.find({ createdBy: user._id }).sort('-createdAt'),
+               Review.find({ userId: user._id })
+                    .sort('-createdAt')
+                    .populate('userId', 'displayName profileImage'),
+               Reservation.countDocuments({
+                    provider: user._id,
+                    status: 'completed'
+               })
+          ]);
+
+          // Calculate metrics
+          const metrics = await calculateUserMetrics(user, services, reviews, completedBookings);
+
+          // Update trust factors
+          const trustFactors = await calculateTrustFactors(user._id);
+
+          // Calculate badges
+          const badges = await determineUserBadges(user, metrics, trustFactors);
+          const enhancedBadges = user.badges.map(badge => ({
+               ...badge.toObject(),
+               ...BADGE_CONFIG[badge.type],
+               earnedAt: new Date(badge.earnedAt).toLocaleDateString('fr-FR', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+               })
+          }));
+          // Update user metrics in database
+          await User.findByIdAndUpdate(user._id, {
+               $set: {
+                    metrics,
+                    trustFactors,
+                    badges,
+                    ndressilikScore: user.calculateNdressilikScore()
+               }
+          }, { new: true });
+
+          // Prepare view data
+          const viewData = {
+               user: {
+                    ...user.toObject(),
+                    metrics,
+                    trustFactors,
+                    badges: enhancedBadges,
+                    gallery: user.gallery || [],
+                    badgeConfig: BADGE_CONFIG // Pass full config for reference
+
+               },
+               services,
+               reviews,
+               stats: {
+                    completedServices: metrics.totalServices,
+                    totalReviews: metrics.totalReviews,
+                    averageRating: metrics.averageRating,
+                    ndressilikScore: user.calculateNdressilikScore()
+               }
+          };
+
+          res.render('user/profile', {
+               ...viewData,
+               pageTitle: `Profile de ${user.displayName}`,
+               description: `Découvrez le profil professionnel de ${user.displayName} sur NDRESSILIK. ${user.specializations.join(', ')}`,
+               author: "NDRESSILIK",
+               keywords: `${user.displayName}, ${user.specializations.join(', ')}, services, ndressilik`,
+          });
+
+     } catch (error) {
+          console.error('Error fetching public profile:', error);
+          res.status(500).render('500', {
+               message: 'Erreur interne du serveur'
+          });
+     }
+});
+
+// Helper Functions
+async function calculateUserMetrics(user, services, reviews, completedBookings) {
+     const averageRating = reviews.length > 0
+          ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length
+          : 0;
+
+     return {
+          totalServices: services.length,
+          totalReviews: reviews.length,
+          averageRating: Number(averageRating.toFixed(1)),
+          completedBookings
+     };
+}
+
+async function calculateTrustFactors(userId) {
+     const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+
+     // Get recent bookings
+     const recentBookings = await Reservation.find({
+          provider: userId,
+          createdAt: { $gte: thirtyDaysAgo }
+     });
+
+     // Calculate rates
+     const responseRate = await calculateResponseRate(userId, recentBookings);
+     const completionRate = await calculateCompletionRate(recentBookings);
+     const onTimeRate = await calculateOnTimeRate(recentBookings);
+
+     return {
+          responseRate,
+          completionRate,
+          onTimeRate
+     };
+}
+
+// Update the badge determination function
+async function determineUserBadges(user, metrics, trustFactors) {
+     const badges = [];
+     const now = new Date();
+
+     if (metrics.averageRating >= 4.5 && metrics.totalReviews >= 10) {
+          badges.push({
+               type: 'top-rated',
+               earnedAt: now
+          });
+     }
+
+     if (user.isVerified) {
+          badges.push({
+               type: 'verified-professional',
+               earnedAt: now
+          });
+     }
+
+     if (trustFactors.responseRate >= 0.9) {
+          badges.push({
+               type: 'quick-responder',
+               earnedAt: now
+          });
+     }
+
+     if (metrics.completedBookings >= 50 || (user.experience && user.experience.years >= 2)) {
+          badges.push({
+               type: 'experienced',
+               earnedAt: now
+          });
+     }
+
+     if (metrics.averageRating >= 4.8 &&
+          metrics.totalReviews >= 20 &&
+          trustFactors.completionRate >= 0.95) {
+          badges.push({
+               type: 'premium-provider',
+               earnedAt: now
+          });
+     }
+
+     // Sort badges by priority
+     return badges.sort((a, b) => getBadgePriority(a.type) - getBadgePriority(b.type));
+}
+
+async function calculateResponseRate(userId, recentBookings) {
+     if (!recentBookings.length) return 0;
+
+     const respondedCount = recentBookings.filter(booking =>
+          booking.providerRespondedAt &&
+          (booking.providerRespondedAt - booking.createdAt) <= 24 * 60 * 60 * 1000 // 24 hours
+     ).length;
+
+     return Number((respondedCount / recentBookings.length).toFixed(2));
+}
+
+async function calculateCompletionRate(recentBookings) {
+     if (!recentBookings.length) return 0;
+
+     const completedCount = recentBookings.filter(booking =>
+          booking.status === 'completed'
+     ).length;
+
+     return Number((completedCount / recentBookings.length).toFixed(2));
+}
+
+async function calculateOnTimeRate(recentBookings) {
+     const completedBookings = recentBookings.filter(booking =>
+          booking.status === 'completed'
+     );
+
+     if (!completedBookings.length) return 0;
+
+     const onTimeCount = completedBookings.filter(booking =>
+          !booking.wasLate // Assuming you have this field
+     ).length;
+
+     return Number((onTimeCount / completedBookings.length).toFixed(2));
+}
 
 
 
@@ -382,24 +1013,99 @@ router.get('/tous-les-annonces', async (req, res) => {
 });
 // Route for Privacy Policy Page
 router.get('/politique-de-confidentialite', (req, res) => {
-     res.render('user/privacyPolicy');
+     const pageTitle = 'Politique de confidentialite | NDRESSILIK';
+     const description = 'Politique de confidentialite pour les utilisateurs de NDRESSILIK.';
+     const author = 'NDRESSILIK';
+
+     res.render('user/privacyPolicy', {
+          pageTitle,
+          description,
+          author
+     });
 });
 // Route for Terms of Use Page
 router.get('/conditions-d-utilisation', (req, res) => {
-     res.render('user/terms');
+     const pageTitle = 'Conditions d’utilisation | NDRESSILIK';
+     const description = 'Conditions d’utilisation pour les utilisateurs de NDRESSILIK.';
+     const author = 'NDRESSILIK';
+
+     res.render('user/terms', {
+          pageTitle,
+          description,
+          author
+     });
 });
 
 // Route for FAQ Page
 router.get('/faq', (req, res) => {
-     res.render('user/faq');
+     // write variables pagetitle and description and author.
+     const pageTitle = 'FAQ | NDRESSILIK';
+     const description = 'FAQ pour les utilisateurs de NDRESSILIK.';
+     const author = 'NDRESSILIK';
+
+
+     res.render('user/faq', {
+          pageTitle,
+          description,
+          author
+     });
 });
 
 
 // Route for contact
 router.get('/contact', (req, res) => {
-     res.render('user/contact', { formData: {} });
+     const pageTitle = 'Contact | NDRESSILIK';
+     const description = 'Contactez nous pour toute information supplemmentaire sur NDRESSILIK.';
+     const author = 'NDRESSILIK';
+     const keywords = 'contact, NDRESSILIK';
+     res.render('user/contact', { formData: {}, pageTitle, description, author, keywords });
 });
 
 
+// route for consultation
+router.get('/consultation', (req, res) => {
+     res.render('user/consultation', {
+          formData: {},
+          pageTitle: 'Consultation | NDRESSILIK',
+          description: 'Lisez les derniers articles sur les soins, l\'éducation, et l\’adoption d\’animaux sur NDRESSILIK.',
+          keywords: 'consultation, soins, éducation, adoption, NDRESSILIK',
 
+     });
+});
+
+// Single event page
+router.get('/event/:id', async (req, res) => {
+     try {
+          const events = await Event.find();
+          const event = await Event.findById(req.params.id);
+
+          if (!event) {
+               return res.status(404).render('error', {
+                    message: 'Événement non trouvé'
+               });
+          }
+
+          // Get related events (same category, future dates)
+          const relatedEvents = await Event.find({
+               _id: { $ne: event._id },
+               category: event.category,
+               date: { $gte: new Date() }
+          })
+               .limit(3)
+               .sort({ date: 1 });
+
+          res.render('user/event', {
+               event,
+               events,
+               relatedEvents,
+               user: req.user // If using authentication
+          });
+
+     } catch (error) {
+          console.error('Error fetching event:', error);
+          res.status(500).render('error', {
+               message: 'Error loading event details'
+          });
+     }
+});
 module.exports = router;

@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const Article = require('../models/article');
-const { isAuthor } = require('../middlewares/auth');
 const multer = require('multer');
 const { S3Client } = require('@aws-sdk/client-s3');
 const { Upload } = require('@aws-sdk/lib-storage');
@@ -35,12 +34,12 @@ const s3 = new S3Client({
 
 
 // GET: Create new article
-router.get('/admin/articles/new', isAuthor, (req, res) => {
+router.get('/admin/articles/new', (req, res) => {
      res.render('admin/newArticle', { title: 'New Article' });
 });
 
 // POST: Submit new article
-router.post('/admin/articles', isAuthor, upload.single('featuredImage'), async (req, res) => {
+router.post('/admin/articles', upload.single('featuredImage'), async (req, res) => {
 
      const { title, category, summary, seoTitle, seoDescription, keywords, author } = req.body;
      let { tags } = req.body;
@@ -127,7 +126,7 @@ router.post('/admin/articles', isAuthor, upload.single('featuredImage'), async (
      }
 });
 // GET: Edit article
-router.get('/admin/articles/:slug/edit', isAuthor, async (req, res) => {
+router.get('/admin/articles/:slug/edit', async (req, res) => {
      try {
           const article = await Article.find({ slug: req.params.slug });
           res.render('admin/editArticle', { article: article[0] });
@@ -176,7 +175,7 @@ router.post('/admin/articles/:slug/edit', async (req, res) => {
 });
 
 // DELETE: Delete article
-router.post('/admin/articles/:id/delete', isAuthor, async (req, res) => {
+router.post('/admin/articles/:id/delete', async (req, res) => {
      try {
           await Article.findByIdAndDelete(req.params.id);
           req.flash('success', 'Article deleted successfully');

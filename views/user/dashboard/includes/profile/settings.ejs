@@ -1,0 +1,143 @@
+<!-- views/includes/profile/settings.ejs -->
+
+<div class="bg-white rounded-2xl shadow-sm">
+     <!-- Header -->
+     <div class="p-6 border-b border-gray-100">
+          <h3 class="text-lg font-semibold text-gray-800">Paramètres du compte</h3>
+     </div>
+
+     <!-- Settings Form -->
+     <form id="settingsForm" class="p-6 space-y-6">
+          <!-- Notification Settings -->
+          <div>
+               <h4 class="text-md font-semibold text-gray-700 mb-4">Notifications</h4>
+               <div class="space-y-4">
+                    <!-- Email Notifications -->
+                    <div class="flex items-center">
+                         <input type="checkbox" id="emailNotifications" name="emailNotifications" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" <%=user.settings?.emailNotifications ? 'checked' : '' %>>
+                         <label for="emailNotifications" class="ml-3 text-sm text-gray-700">
+                              Recevoir des notifications par email
+                         </label>
+                    </div>
+                    <!-- SMS Notifications -->
+                    <div class="flex items-center">
+                         <input type="checkbox" id="smsNotifications" name="smsNotifications" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" <%=user.settings?.smsNotifications ? 'checked' : '' %>>
+                         <label for="smsNotifications" class="ml-3 text-sm text-gray-700">
+                              Recevoir des notifications par SMS
+                         </label>
+                    </div>
+               </div>
+          </div>
+
+          <!-- Privacy Settings -->
+          <div>
+               <h4 class="text-md font-semibold text-gray-700 mb-4">Confidentialité</h4>
+               <div class="space-y-4">
+                    <!-- Display Phone Number -->
+                    <div class="flex items-center">
+                         <input type="checkbox" id="displayPhoneNumber" name="displayPhoneNumber" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" <%=user.settings?.displayPhoneNumber ? 'checked' : '' %>>
+                         <label for="displayPhoneNumber" class="ml-3 text-sm text-gray-700">
+                              Afficher mon numéro de téléphone sur mon profil
+                         </label>
+                    </div>
+                    <!-- Auto Accept Bookings -->
+                    <div class="flex items-center">
+                         <input type="checkbox" id="autoAcceptBookings" name="autoAcceptBookings" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" <%=user.settings?.autoAcceptBookings ? 'checked' : '' %>>
+                         <label for="autoAcceptBookings" class="ml-3 text-sm text-gray-700">
+                              Accepter automatiquement les réservations
+                         </label>
+                    </div>
+               </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex gap-3 pt-4 border-t">
+               <button type="button" id="cancelSettingsBtn" class="flex-1 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+                    Annuler
+               </button>
+               <button type="submit" class="flex-1 px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+                    Enregistrer
+               </button>
+          </div>
+     </form>
+</div>
+
+<!-- Include jQuery and SweetAlert in your main layout or here -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- Settings Script -->
+<script>
+     $(document).ready(function () {
+          const $form = $('#settingsForm');
+          const $cancelBtn = $('#cancelSettingsBtn');
+          const originalSettings = {
+               emailNotifications: $('#emailNotifications').prop('checked'),
+               smsNotifications: $('#smsNotifications').prop('checked'),
+               displayPhoneNumber: $('#displayPhoneNumber').prop('checked'),
+               autoAcceptBookings: $('#autoAcceptBookings').prop('checked')
+          };
+
+          // Handle Cancel Button
+          $cancelBtn.click(function () {
+               // Reset to original settings
+               $('#emailNotifications').prop('checked', originalSettings.emailNotifications);
+               $('#smsNotifications').prop('checked', originalSettings.smsNotifications);
+               $('#displayPhoneNumber').prop('checked', originalSettings.displayPhoneNumber);
+               $('#autoAcceptBookings').prop('checked', originalSettings.autoAcceptBookings);
+          });
+
+          // Handle Form Submission
+          $form.submit(function (e) {
+               e.preventDefault();
+
+               // Collect form data
+               const settings = {
+                    emailNotifications: $('#emailNotifications').prop('checked'),
+                    smsNotifications: $('#smsNotifications').prop('checked'),
+                    displayPhoneNumber: $('#displayPhoneNumber').prop('checked'),
+                    autoAcceptBookings: $('#autoAcceptBookings').prop('checked')
+               };
+
+               // Show loading state
+               const $submitBtn = $(this).find('button[type="submit"]');
+               const originalText = $submitBtn.html();
+               $submitBtn.prop('disabled', true)
+                    .html('<div class="flex items-center justify-center"><svg class="animate-spin h-5 w-5 mr-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy "12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>Enregistrement...</div>');
+
+               // Submit data via AJAX
+               $.ajax({
+                    url: '/dashboard/profile/update-settings',
+                    method: 'PUT',
+                    data: JSON.stringify({ settings }),
+                    contentType: 'application/json',
+                    success: function (response) {
+                         if (response.success) {
+                              Swal.fire({
+                                   icon: 'success',
+                                   title: 'Paramètres mis à jour!',
+                                   text: 'Vos paramètres ont été enregistrés avec succès.',
+                                   showConfirmButton: false,
+                                   timer: 1500
+                              }).then(() => {
+                                   $submitBtn.prop('disabled', false).html(originalText);
+                                   // Update original settings
+                                   Object.assign(originalSettings, settings);
+                              });
+                         } else {
+                              throw new Error(response.message || 'Erreur lors de la mise à jour');
+                         }
+                    },
+                    error: function (xhr) {
+                         console.error('Update error:', xhr);
+                         Swal.fire({
+                              icon: 'error',
+                              title: 'Erreur',
+                              text: xhr.responseJSON?.message || 'Erreur lors de la mise à jour des paramètres'
+                         });
+                         $submitBtn.prop('disabled', false).html(originalText);
+                    }
+               });
+          });
+     });
+</script>

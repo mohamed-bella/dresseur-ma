@@ -1,0 +1,58 @@
+<!-- views/partials/dashboard/sidebar.ejs -->
+<aside class="fixed top-0 left-0 z-40 h-screen w-64 bg-blue-600 text-white hidden lg:block">
+     <div class="h-full flex flex-col">
+          <!-- Logo -->
+          <div class="p-6 border-b border-blue-500">
+               <h1 class="text-2xl font-bold">NDRESSILIK</h1>
+          </div>
+
+          <!-- Navigation -->
+          <nav class="flex-1 p-4 space-y-2">
+               <a href="/dashboard" class="sidebar-item flex items-center px-4 py-3 rounded-lg active">
+                    <i class="fas fa-home w-6"></i>
+                    <span>Tableau de Bord</span>
+               </a>
+               <a href="services" class="sidebar-item flex items-center px-4 py-3 rounded-lg hover:bg-blue-700">
+                    <i class="fas fa-paw w-6"></i>
+                    <span>Mes Services</span>
+               </a>
+               <a href="profile" class="sidebar-item flex items-center px-4 py-3 rounded-lg hover:bg-blue-700">
+                    <i class="fas fa-paw w-6"></i>
+                    <span>Mon Profile</span>
+               </a>
+               <a href="gallery" class="sidebar-item flex items-center px-4 py-3 rounded-lg hover:bg-blue-700">
+                    <i class="fas fa-paw w-6"></i>
+                    <span>Gallery</span>
+               </a>
+               <!-- <a href="/reservations" class="sidebar-item flex items-center px-4 py-3 rounded-lg hover:bg-blue-700">
+                    <i class="fas fa-calendar-alt w-6"></i>
+                    <span>Réservations</span>
+               </a>
+               <a href="/messages" class="sidebar-item flex items-center px-4 py-3 rounded-lg hover:bg-blue-700">
+                    <i class="fas fa-comments w-6"></i>
+                    <span>Messages</span>
+               </a>
+               <a href="/reviews" class="sidebar-item flex items-center px-4 py-3 rounded-lg hover:bg-blue-700">
+                    <i class="fas fa-star w-6"></i>
+                    <span>Avis Clients</span>
+               </a>
+               <a href="/earnings" class="sidebar-item flex items-center px-4 py-3 rounded-lg hover:bg-blue-700">
+                    <i class="fas fa-wallet w-6"></i>
+                    <span>Revenus</span>
+               </a> -->
+          </nav>
+
+          <!-- User Menu -->
+          <div class="p-4 border-t border-blue-500">
+               <div class="flex items-center space-x-3 px-4 py-3">
+                    <img src="<%= user.avatar || '/images/default-avatar.png' %>" alt="Profile" class="w-10 h-10 rounded-full">
+                    <div class="flex-1">
+                         <p class="font-medium">
+                              <%= user.name %>
+                         </p>
+                         <p class="text-sm text-blue-200">Prestataire</p>
+                    </div>
+               </div>
+          </div>
+     </div>
+</aside>

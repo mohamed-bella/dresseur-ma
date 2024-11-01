@@ -1,125 +1,137 @@
-<section class="latest-articles py-5">
-     <div class="container">
+<section class="relative overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-50 py-20 lg:py-32">
+     <!-- Decorative background elements -->
+     <div class="absolute inset-0" aria-hidden="true">
+          <div class="absolute top-0 left-1/2 w-[1000px] h-[1000px] -translate-x-1/2 -translate-y-1/2 opacity-10">
+               <svg viewBox="0 0 100 100" class="w-full h-full text-blue-500">
+                    <defs>
+                         <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
+                              <path d="M 10 0 L 0 0 0 10" fill="none" stroke="currentColor" stroke-width="0.5" />
+                         </pattern>
+                    </defs>
+                    <rect width="100" height="100" fill="url(#grid)" />
+               </svg>
+          </div>
+     </div>
 
-          <div class="articles-container">
-               <div class="articles-content">
-                    <div class="articles-image">
-                         <img src="https://img.icons8.com/fluency/240/000000/blog.png" alt="Articles icon" />
+     <div class="relative container mx-auto px-4">
+          <div class="max-w-5xl mx-auto">
+               <div class="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-3xl overflow-hidden shadow-xl">
+                    <div class="relative p-8 lg:p-12">
+                         <!-- Main Content Grid -->
+                         <div class="grid md:grid-cols-2 gap-12 items-center">
+                              <!-- Left Content -->
+                              <div class="space-y-8 text-white">
+                                   <div class="space-y-4">
+                                        <h2 class="text-4xl lg:text-5xl font-bold tracking-tight">
+                                             Découvrez nos derniers articles
+                                        </h2>
+                                        <p class="text-blue-100 text-lg leading-relaxed">
+                                             Restez informé sur les meilleures pratiques d'éducation canine, les conseils de santé, et les histoires inspirantes d'adoptions réussies.
+                                        </p>
+                                   </div>
+
+                                   <!-- Article Categories -->
+                                   <div class="grid grid-cols-2 gap-4">
+                                        <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 hover:bg-white/20 transition-colors">
+                                             <div class="flex items-center space-x-3">
+                                                  <div class="flex-shrink-0 w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                                                       <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                                       </svg>
+                                                  </div>
+                                                  <span class="font-medium">Éducation</span>
+                                             </div>
+                                        </div>
+
+                                        <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 hover:bg-white/20 transition-colors">
+                                             <div class="flex items-center space-x-3">
+                                                  <div class="flex-shrink-0 w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                                                       <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                                       </svg>
+                                                  </div>
+                                                  <span class="font-medium">Bien-être</span>
+                                             </div>
+                                        </div>
+
+                                        <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 hover:bg-white/20 transition-colors">
+                                             <div class="flex items-center space-x-3">
+                                                  <div class="flex-shrink-0 w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                                                       <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                                       </svg>
+                                                  </div>
+                                                  <span class="font-medium">Conseils</span>
+                                             </div>
+                                        </div>
+
+                                        <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 hover:bg-white/20 transition-colors">
+                                             <div class="flex items-center space-x-3">
+                                                  <div class="flex-shrink-0 w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                                                       <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                                                       </svg>
+                                                  </div>
+                                                  <span class="font-medium">Témoignages</span>
+                                             </div>
+                                        </div>
+                                   </div>
+
+                                   <div class="pt-4">
+                                        <a href="/articles" class="group inline-flex items-center justify-center px-6 py-3 text-base font-medium text-blue-600 bg-white rounded-full hover:bg-blue-50 transition-all duration-300 transform hover:-translate-y-0.5 hover:shadow-lg">
+                                             Voir tous les articles
+                                             <svg class="w-5 h-5 ml-2 transition-transform duration-300 transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                             </svg>
+                                        </a>
+                                   </div>
+                              </div>
+
+                              <!-- Right Image Section -->
+                              <div class="relative flex items-center justify-center">
+                                   <div class="relative w-48 h-48 lg:w-64 lg:h-64">
+                                        <!-- Animated rings -->
+                                        <div class="absolute inset-0 animate-ping opacity-20">
+                                             <div class="absolute inset-0 border-4 border-white rounded-full"></div>
+                                        </div>
+                                        <div class="absolute inset-[-10px] border-4 border-white/30 rounded-full"></div>
+                                        <div class="absolute inset-[-20px] border-4 border-white/20 rounded-full"></div>
+
+                                        <!-- Main image -->
+                                        <img src="https://img.icons8.com/fluency/240/000000/blog.png" alt="Articles icon" class="relative w-full h-full object-contain transform hover:scale-105 transition-transform duration-300" />
+
+                                        <!-- Floating elements -->
+                                        <div class="absolute -top-4 -right-4 w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl animate-bounce-slow"></div>
+                                        <div class="absolute -bottom-4 -left-4 w-8 h-8 bg-white/20 backdrop-blur-sm rounded-lg animate-bounce-slower"></div>
+                                   </div>
+                              </div>
+                         </div>
                     </div>
-                    <h3>Découvrez nos derniers articles</h3>
-                    <p>Restez informé sur les meilleures pratiques d'éducation canine, les conseils de santé, et les histoires inspirantes d'adoptions réussies.</p>
-                    <a href="/articles" class="btn btn-primary">Voir tous les articles</a>
                </div>
           </div>
      </div>
 </section>
 
 <style>
-     .latest-articles {
-          background-color: #F5FAF9;
-          padding: 80px 0;
-     }
+     @keyframes bounce-slow {
 
-     .section-title {
-          color: #333;
-          font-weight: 700;
-          font-size: 2.5rem;
-          margin-bottom: 2rem;
-     }
-
-     .articles-container {
-          background-color: #4A90E2;
-          border-radius: 20px;
-          padding: 40px;
-          position: relative;
-          overflow: hidden;
-     }
-
-     .articles-container::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-          /* opacity: 0.1; */
-          mix-blend-mode: soft-light;
-     }
-
-     .articles-content {
-          position: relative;
-          z-index: 1;
-          color: #fff;
-          text-align: center;
-     }
-
-     .articles-image {
-          margin-bottom: 20px;
-     }
-
-     .articles-image img {
-          width: 120px;
-          height: 120px;
-          /* filter: brightness(0) invert(1); */
-     }
-
-     .articles-content h3 {
-          font-size: 2rem;
-          font-weight: 700;
-          margin-bottom: 1rem;
-     }
-
-     .articles-content p {
-          font-size: 1.1rem;
-          margin-bottom: 2rem;
-          max-width: 600px;
-          margin-left: auto;
-          margin-right: auto;
-     }
-
-     .btn-primary {
-          background-color: #fff;
-          color: #4A90E2;
-          border: none;
-          padding: 12px 30px;
-          font-size: 1.1rem;
-          font-weight: 600;
-          border-radius: 30px;
-          transition: background-color 0.3s ease, transform 0.3s ease;
-     }
-
-     .btn-primary:hover {
-          background-color: #F0F7F4;
-          color: #4A90E2;
-          transform: translateY(-3px);
-     }
-
-     @media (max-width: 768px) {
-          .section-title {
-               font-size: 2rem;
+          0%,
+          100% {
+               transform: translateY(-10%);
+               animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
           }
 
-          .articles-container {
-               padding: 30px;
+          50% {
+               transform: translateY(0);
+               animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
           }
+     }
 
-          .articles-content h3 {
-               font-size: 1.5rem;
-          }
+     .animate-bounce-slow {
+          animation: bounce-slow 3s infinite;
+     }
 
-          .articles-content p {
-               font-size: 1rem;
-          }
-
-          .btn-primary {
-               font-size: 1rem;
-               padding: 10px 20px;
-          }
-
-          .articles-image img {
-               width: 80px;
-               height: 80px;
-          }
+     .animate-bounce-slower {
+          animation: bounce-slow 4s infinite;
      }
 </style>

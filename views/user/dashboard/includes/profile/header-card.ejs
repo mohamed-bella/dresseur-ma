@@ -1,0 +1,268 @@
+<!-- Profile Header Card -->
+<div class="bg-white rounded-2xl shadow-sm overflow-hidden" x-data="headerCard">
+     <!-- Cover Image Section -->
+     <div class="relative h-56 md:h-72 group">
+          <!-- Animated Background Fallback -->
+          <div class="absolute inset-0 bg-gradient-to-br from-blue-600 via-indigo-500 to-purple-600 animate-gradient-x">
+               <div class="absolute inset-0 bg-[url('data:image/svg+xml,...')] opacity-10"></div>
+          </div>
+
+          <!-- Cover Image -->
+          <% if (user.coverImage) { %>
+               <img src="<%= user.coverImage %>" alt="Cover" class="w-full h-full object-cover transition-opacity duration-300" :class="{'opacity-75': isHoveringCover}">
+               <% } %>
+
+                    <!-- Cover Upload Button -->
+                    <button type="button" @click="$refs.coverInput.click()" class="absolute top-4 right-4 p-3 bg-black/20 hover:bg-black/40 text-white rounded-xl backdrop-blur-sm opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300" title="Changer la photo de couverture">
+                         <i class="fas fa-camera"></i>
+                         <span class="ml-2 text-sm font-medium">Modifier la couverture</span>
+                    </button>
+                    <input type="file" x-ref="coverInput" @change="handleImageUpload($event, 'cover')" accept="image/*" class="hidden">
+
+                    <!-- Profile Info Section -->
+                    <div class="absolute -bottom-16 left-0 right-0 px-6">
+                         <div class="flex flex-wrap items-end gap-6">
+                              <!-- Profile Image Container -->
+                              <div class="relative group/profile">
+                                   <div class="w-32 h-32 md:w-40 md:h-40 rounded-2xl shadow-lg border-4 border-white overflow-hidden bg-white transform group-hover/profile:scale-105 transition-transform duration-300">
+                                        <!-- Profile Image -->
+                                        <img src="<%= user.profileImage %>" alt="<%= user.displayName %>" class="w-full h-full object-cover transition-transform duration-500 group-hover/profile:scale-110">
+
+                                        <!-- Profile Upload Overlay -->
+                                        <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover/profile:opacity-100 transition-opacity duration-300">
+                                             <button type="button" @click="$refs.profileInput.click()" class="text-white text-sm font-medium">
+                                                  <i class="fas fa-camera text-lg mb-2"></i>
+                                                  <span class="block">Changer la photo</span>
+                                             </button>
+                                        </div>
+                                   </div>
+                                   <input type="file" x-ref="profileInput" @change="handleImageUpload($event, 'profile')" accept="image/*" class="hidden">
+
+                                   <!-- Verification Badge -->
+                                   <% if (user.isVerified) { %>
+                                        <div class="absolute -top-3 -right-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white p-2 rounded-full shadow-md transform rotate-12 hover:rotate-0 transition-all duration-300">
+                                             <i class="fas fa-check"></i>
+                                        </div>
+                                        <% } %>
+                              </div>
+
+                              <!-- User Info -->
+                              <div class="flex-1 mb-4">
+                                   <h1 class="text-2xl md:text-3xl font-bold text-gray-900">
+                                        <%= user.displayName %>
+                                   </h1>
+                                   <div class="flex flex-wrap items-center gap-3 mt-2 text-sm text-gray-600">
+                                        <% if (user.location?.city) { %>
+                                             <span class="flex items-center">
+                                                  <i class="fas fa-map-marker-alt text-red-500 mr-1.5"></i>
+                                                  <%= user.location.city.charAt(0).toUpperCase() + user.location.city.slice(1) %>
+                                             </span>
+                                             <% } %>
+                                                  <% if (user.metrics?.totalServices) { %>
+                                                       <span class="flex items-center">
+                                                            <i class="fas fa-briefcase text-blue-500 mr-1.5"></i>
+                                                            <%= user.metrics.totalServices %> services
+                                                       </span>
+                                                       <% } %>
+                                                            <% if (user.metrics?.averageRating) { %>
+                                                                 <span class="flex items-center">
+                                                                      <i class="fas fa-star text-yellow-500 mr-1.5"></i>
+                                                                      <%= user.metrics.averageRating %>/5
+                                                                 </span>
+                                                                 <% } %>
+                                   </div>
+                              </div>
+                         </div>
+                    </div>
+     </div>
+
+     <!-- Action Bar -->
+     <div class="px-6 pt-20 pb-6 flex flex-wrap items-center justify-between gap-4">
+          <!-- Profile Completion -->
+          <% if (completionPercentage < 100) { %>
+               <div class="flex-1 min-w-[200px] max-w-md bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl p-4">
+                    <div class="flex items-center justify-between mb-2">
+                         <span class="text-sm font-medium text-yellow-700">Complétez votre profil</span>
+                         <span class="text-xs font-bold text-yellow-600">
+                              <%= completionPercentage %>%
+                         </span>
+                    </div>
+                    <div class="relative h-2 bg-yellow-100 rounded-full overflow-hidden">
+                         <div class="absolute inset-y-0 left-0 bg-gradient-to-r from-yellow-500 to-orange-400 rounded-full transition-all duration-1000" style="width: <%= completionPercentage %>%">
+                         </div>
+                    </div>
+                    <button @click="showCompletionGuide" class="mt-2 text-xs text-yellow-600 hover:text-yellow-700 font-medium">
+                         Voir les étapes manquantes →
+                    </button>
+               </div>
+               <% } %>
+
+                    <!-- Action Buttons -->
+                    <div class="flex items-center gap-3">
+                         <button @click="shareProfile" class="flex items-center gap-2 px-4 py-2 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-xl transition-colors duration-200">
+                              <i class="fas fa-share-alt"></i>
+                              <span class="font-medium">Partager</span>
+                         </button>
+                         <a href="/messages" class="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-colors duration-200">
+                              <i class="fas fa-envelope"></i>
+                              <span class="font-medium">Contacter</span>
+                         </a>
+                    </div>
+     </div>
+</div>
+
+<!-- Alpine.js Component Logic -->
+<script>
+     document.addEventListener('alpine:init', () => {
+          Alpine.data('headerCard', () => ({
+               isHoveringCover: false,
+
+               async handleImageUpload(event, type) {
+                    const file = event.target.files[0];
+                    if (!file) return;
+
+                    // Validation
+                    if (!file.type.startsWith('image/')) {
+                         await this.showError('Type de fichier invalide', 'Veuillez sélectionner une image');
+                         return;
+                    }
+
+                    if (file.size > 5 * 1024 * 1024) {
+                         await this.showError('Fichier trop volumineux', 'La taille maximale est de 5MB');
+                         return;
+                    }
+
+                    // Show loading
+                    Swal.fire({
+                         title: 'Upload en cours...',
+                         html: `
+                    <div class="flex flex-col items-center">
+                        <div class="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                        <p class="mt-4 text-gray-600">Traitement de l'image...</p>
+                    </div>
+                `,
+                         allowOutsideClick: false,
+                         showConfirmButton: false
+                    });
+
+                    try {
+                         const formData = new FormData();
+                         formData.append('image', file);
+                         formData.append('type', type);
+
+                         const response = await fetch('/dashboard/profile/update-image', {
+                              method: 'POST',
+                              body: formData
+                         });
+
+                         if (!response.ok) throw new Error('Upload failed');
+
+                         await Swal.fire({
+                              icon: 'success',
+                              title: 'Image mise à jour!',
+                              text: 'Votre profil a été actualisé avec succès',
+                              showConfirmButton: false,
+                              timer: 1500
+                         });
+
+                         window.location.reload();
+                    } catch (error) {
+                         console.error('Upload error:', error);
+                         await this.showError('Erreur', 'Une erreur est survenue lors de l\'upload');
+                    }
+               },
+
+               async showCompletionGuide() {
+                    const missingFields = document.getElementById('completionGuide').dataset.missingFields.split(',');
+                    if (missingFields.length === 0) return;
+
+                    const fields = {
+                         displayName: 'Nom d\'affichage',
+                         bio: 'Bio professionnelle',
+                         city: 'Ville',
+                         phone: 'Numéro de téléphone',
+                         specializations: 'Spécialisations'
+                    };
+
+                    const items = missingFields.map(field => `
+                <div class="flex items-center gap-3 p-3 rounded-lg bg-gray-50">
+                    <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
+                        <i class="fas fa-check text-blue-600"></i>
+                    </div>
+                    <span class="text-gray-700">${fields[field]}</span>
+                </div>
+            `).join('');
+
+                    const result = await Swal.fire({
+                         title: 'Complétez votre profil',
+                         html: `
+                    <div class="space-y-3 mt-4">
+                        ${items}
+                    </div>
+                `,
+                         showCancelButton: true,
+                         confirmButtonText: 'Compléter maintenant',
+                         cancelButtonText: 'Plus tard',
+                         confirmButtonColor: '#2563eb'
+                    });
+
+                    if (result.isConfirmed) {
+                         document.querySelector('#basicInfoSection')?.scrollIntoView({
+                              behavior: 'smooth'
+                         });
+                    }
+               },
+
+               async shareProfile() {
+                    const url = `${window.location.origin}/profile/${document.getElementById('shareButton').dataset.slug}`;
+
+                    try {
+                         await navigator.clipboard.writeText(url);
+                         await Swal.fire({
+                              icon: 'success',
+                              title: 'Lien copié!',
+                              text: 'Le lien a été copié dans le presse-papier',
+                              showConfirmButton: false,
+                              timer: 1500
+                         });
+                    } catch (error) {
+                         await this.showError('Erreur', 'Impossible de copier le lien');
+                    }
+               },
+
+               async showError(title, text) {
+                    await Swal.fire({
+                         icon: 'error',
+                         title,
+                         text,
+                         confirmButtonColor: '#2563eb'
+                    });
+               }
+          }));
+     });
+</script>
+
+<style>
+     @keyframes gradient-x {
+          0% {
+               background-position: 0% 50%;
+          }
+
+          50% {
+               background-position: 100% 50%;
+          }
+
+          100% {
+               background-position: 0% 50%;
+          }
+     }
+
+     .animate-gradient-x {
+          background-size: 200% 200%;
+          animation: gradient-x 15s ease infinite;
+     }
+
+     .group:hover .group-hover\:scale-105 {
+          transform: scale(1.05);
+     }
+</style>

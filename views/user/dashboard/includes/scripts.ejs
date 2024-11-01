@@ -1,0 +1,21 @@
+<!-- views/partials/scripts.ejs -->
+<script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+<script>
+     document.addEventListener('alpine:init', () => {
+          Alpine.store('dashboard', {
+               mobileMenuOpen: false,
+               toggleMobileMenu() {
+                    this.mobileMenuOpen = !this.mobileMenuOpen;
+               }
+          });
+     });
+
+     // Chart.js initialization for any charts
+     if (document.getElementById('earningsChart')) {
+          const ctx = document.getElementById('earningsChart').getContext('2d');
+          new Chart(ctx, {
+               // Your chart configuration
+          });
+     }
+</script>

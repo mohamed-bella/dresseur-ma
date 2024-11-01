@@ -1,0 +1,55 @@
+<!-- views/partials/scripts.ejs -->
+<!-- Essential Libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.13.3/cdn.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- Custom Scripts -->
+<script>
+     // Global utility functions
+     const ndressilik = {
+          // Show loading spinner
+          showLoading: (message = 'Chargement...') => {
+               Swal.fire({
+                    title: message,
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    willOpen: () => Swal.showLoading()
+               });
+          },
+
+          // Show success message
+          showSuccess: (message, timer = 1500) => {
+               Swal.fire({
+                    icon: 'success',
+                    title: message,
+                    showConfirmButton: false,
+                    timer: timer
+               });
+          },
+
+          // Show error message
+          showError: (message) => {
+               Swal.fire({
+                    icon: 'error',
+                    title: 'Erreur',
+                    text: message
+               });
+          },
+
+          // File validation
+          validateImage: (file, maxSize = 5) => {
+               if (!file.type.startsWith('image/')) {
+                    ndressilik.showError('Veuillez sélectionner une image');
+                    return false;
+               }
+
+               if (file.size > maxSize * 1024 * 1024) {
+                    ndressilik.showError(`La taille maximale est de ${maxSize}MB`);
+                    return false;
+               }
+
+               return true;
+          }
+     };
+</script>

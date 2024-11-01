@@ -1,0 +1,389 @@
+<!-- Basic Info Section -->
+<div class="bg-white rounded-2xl shadow-sm overflow-hidden" id="basicInfoSection">
+     <!-- Header with animated gradient -->
+     <div class="p-6 border-b border-gray-100 relative">
+          <div class="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
+          <div class="flex items-center justify-between">
+               <div class="flex items-center space-x-3">
+                    <h3 class="text-lg font-semibold text-gray-800">Informations de base</h3>
+                    <div class="relative group">
+                         <span class="flex h-6 w-6 items-center justify-center rounded-full bg-blue-50 text-blue-600 cursor-help">
+                              <i class="fas fa-info-circle text-sm"></i>
+                         </span>
+                         <div class="absolute left-0 bottom-full mb-2 hidden group-hover:block w-72 p-3 bg-gray-800 text-white text-sm rounded-xl shadow-xl z-10">
+                              <div class="flex items-start space-x-3">
+                                   <i class="fas fa-lightbulb text-yellow-400 mt-1"></i>
+                                   <p>Ces informations seront visibles sur votre profil public et aideront les clients à mieux vous connaître.</p>
+                              </div>
+                         </div>
+                    </div>
+               </div>
+               <button type="button" id="editBasicInfoBtn" class="group flex items-center px-4 py-2 text-sm font-medium text-blue-600 hover:text-white bg-blue-50 hover:bg-blue-600 rounded-lg transition-all duration-200">
+                    <i class="fas fa-edit mr-2 transform group-hover:rotate-12 transition-transform duration-200"></i>
+                    <span>Modifier</span>
+               </button>
+          </div>
+     </div>
+
+     <!-- View Mode -->
+     <div id="basicInfoView" class="p-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+               <!-- Left Column -->
+               <div class="space-y-6">
+                    <!-- Display Name -->
+                    <div class="group">
+                         <label class="text-sm font-medium text-gray-500 mb-2 block">Nom d'affichage</label>
+                         <div class="flex items-center space-x-3">
+                              <i class="fas fa-user text-blue-500"></i>
+                              <p class="text-gray-900 font-medium group-hover:text-blue-600 transition-colors">
+                                   <%= user.displayName || '- Non renseigné -' %>
+                              </p>
+                         </div>
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="group">
+                         <label class="text-sm font-medium text-gray-500 mb-2 block">Téléphone</label>
+                         <div class="flex items-center space-x-3">
+                              <i class="fas fa-phone-alt text-green-500"></i>
+                              <p class="text-gray-900 font-medium group-hover:text-green-600 transition-colors">
+                                   <%= user.phoneNumber || '- Non renseigné -' %>
+                              </p>
+                         </div>
+                    </div>
+
+                    <!-- Location -->
+                    <div class="group">
+                         <label class="text-sm font-medium text-gray-500 mb-2 block">Ville</label>
+                         <div class="flex items-center space-x-3">
+                              <i class="fas fa-map-marker-alt text-red-500"></i>
+                              <p class="text-gray-900 font-medium group-hover:text-red-600 transition-colors">
+                                   <%= user.location?.city ? user.location.city.charAt(0).toUpperCase() + user.location.city.slice(1) : '- Non renseigné -' %>
+                              </p>
+                         </div>
+                    </div>
+               </div>
+
+               <!-- Right Column -->
+               <div class="space-y-6">
+                    <!-- Bio -->
+                    <div>
+                         <label class="text-sm font-medium text-gray-500 mb-2 block">Bio professionnelle</label>
+                         <div class="bg-gray-50 rounded-xl p-4">
+                              <p class="text-gray-700 whitespace-pre-line">
+                                   <%= user.bio || '- Non renseigné -' %>
+                              </p>
+                         </div>
+                    </div>
+
+                    <!-- Specializations -->
+                    <div>
+                         <label class="text-sm font-medium text-gray-500 mb-2 block">Spécialisations</label>
+                         <% if (user.specializations?.length> 0) { %>
+                              <div class="flex flex-wrap gap-2">
+                                   <% user.specializations.forEach(spec=> {
+                                        const specInfo = specializations.find(s => s.value === spec);
+                                        %>
+                                        <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700 border border-blue-100">
+                                             <i class="fas <%= specInfo?.icon %> mr-1.5"></i>
+                                             <%= specInfo?.label || spec %>
+                                        </span>
+                                        <% }); %>
+                              </div>
+                              <% } else { %>
+                                   <p class="text-gray-500 italic">Aucune spécialisation sélectionnée</p>
+                                   <% } %>
+                    </div>
+               </div>
+          </div>
+     </div>
+
+
+     <!-- Edit Mode -->
+     <form id="basicInfoForm" class="hidden">
+          <div class="p-6 space-y-8">
+               <!-- Personal Info Section -->
+               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Display Name -->
+                    <div class="space-y-2">
+                         <label for="displayName" class="block text-sm font-medium text-gray-700">
+                              Nom d'affichage <span class="text-red-500">*</span>
+                         </label>
+                         <div class="relative">
+                              <i class="fas fa-user absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                              <input type="text" id="displayName" name="displayName" value="<%= user.displayName %>" class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" required>
+                         </div>
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="space-y-2">
+                         <label for="phoneNumber" class="block text-sm font-medium text-gray-700">
+                              Téléphone <span class="text-red-500">*</span>
+                         </label>
+                         <div class="relative">
+                              <i class="fas fa-phone-alt absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                              <input type="tel" id="phoneNumber" name="phoneNumber" value="<%= user.phoneNumber %>" class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" pattern="^(?:\+212|0)[567]\d{8}$" title="Format: +212XXXXXXXXX ou 06XXXXXXXX" required>
+                         </div>
+                         <p class="text-sm text-gray-500">Format: +212 ou 06/07</p>
+                    </div>
+
+                    <!-- City -->
+                    <div class="space-y-2">
+                         <label for="city" class="block text-sm font-medium text-gray-700">
+                              Ville <span class="text-red-500">*</span>
+                         </label>
+                         <div class="relative">
+                              <i class="fas fa-map-marker-alt absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                              <select id="city" name="city" class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none bg-white" required>
+                                   <option value="">Sélectionnez une ville</option>
+                                   <% ['casablanca', 'rabat' , 'marrakech' , 'agadir' , 'tanger' , 'fes' ].forEach(city=> { %>
+                                        <option value="<%= city %>" <%=user.location?.city===city ? 'selected' : '' %>>
+                                             <%= city.charAt(0).toUpperCase() + city.slice(1) %>
+                                        </option>
+                                        <% }); %>
+                              </select>
+                              <i class="fas fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"></i>
+                         </div>
+                    </div>
+               </div>
+
+               <!-- Bio Section -->
+               <div class="space-y-2">
+                    <label for="bio" class="block text-sm font-medium text-gray-700">
+                         Bio professionnelle <span class="text-red-500">*</span>
+                    </label>
+                    <div class="relative">
+                         <textarea id="bio" name="bio" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none" maxlength="500" required><%= user.bio %></textarea>
+                         <div class="absolute right-2 bottom-2 px-2 py-1 text-xs font-medium text-gray-500 bg-white rounded-md border">
+                              <span id="bioLength">0</span>/500
+                         </div>
+                    </div>
+               </div>
+
+
+
+               <!-- Action Buttons -->
+               <div class="flex gap-4 pt-6 border-t">
+                    <button type="button" id="cancelBasicInfoBtn" class="flex-1 px-4 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+                         <i class="fas fa-times mr-2"></i>
+                         Annuler
+                    </button>
+                    <button type="submit" class="flex-1 px-4 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+                         <i class="fas fa-check mr-2"></i>
+                         Enregistrer
+                    </button>
+               </div>
+          </div>
+     </form>
+</div>
+
+<script>
+     document.addEventListener('DOMContentLoaded', function () {
+          const $section = document.getElementById('basicInfoSection');
+          const $viewMode = document.getElementById('basicInfoView');
+          const $editMode = document.getElementById('basicInfoForm');
+          const $editBtn = document.getElementById('editBasicInfoBtn');
+          const $cancelBtn = document.getElementById('cancelBasicInfoBtn');
+          const $bioTextarea = document.getElementById('bio');
+          const $bioLength = document.getElementById('bioLength');
+
+          // Bio character count
+          function updateBioLength() {
+               const length = $bioTextarea.value.length;
+               $bioLength.textContent = length;
+
+               // Visual feedback
+               if (length > 450) {
+                    $bioLength.classList.add('text-orange-500');
+               } else if (length > 480) {
+                    $bioLength.classList.add('text-red-500');
+               } else {
+                    $bioLength.classList.remove('text-orange-500', 'text-red-500');
+               }
+          }
+
+          $bioTextarea?.addEventListener('input', updateBioLength);
+          updateBioLength();
+
+          // Toggle edit mode with animation
+          function toggleEditMode() {
+               const isEditing = $editMode.classList.contains('hidden');
+
+               if (isEditing) {
+                    $editMode.classList.remove('hidden');
+                    $editMode.classList.add('animate-fade-slide-in');
+                    $viewMode.classList.add('hidden');
+               } else {
+                    $viewMode.classList.remove('hidden');
+                    $viewMode.classList.add('animate-fade-slide-in');
+                    $editMode.classList.add('hidden');
+               }
+
+               $editBtn.innerHTML = isEditing ?
+                    '<i class="fas fa-times mr-2"></i><span>Annuler</span>' :
+                    '<i class="fas fa-edit mr-2"></i><span>Modifier</span>';
+
+               if (isEditing) {
+                    $editBtn.classList.remove('bg-blue-50', 'text-blue-600', 'hover:bg-blue-600', 'hover:text-white');
+                    $editBtn.classList.remove('bg-blue-50', 'text-blue-600', 'hover:bg-blue-600', 'hover:text-white');
+                    $editBtn.classList.add('bg-red-50', 'text-red-600', 'hover:bg-red-600', 'hover:text-white');
+               } else {
+                    $editBtn.classList.remove('bg-red-50', 'text-red-600', 'hover:bg-red-600', 'hover:text-white');
+                    $editBtn.classList.add('bg-blue-50', 'text-blue-600', 'hover:bg-blue-600', 'hover:text-white');
+               }
+          }
+
+          $editBtn.addEventListener('click', toggleEditMode);
+          $cancelBtn.addEventListener('click', () => {
+               $editMode.reset();
+               toggleEditMode();
+          });
+
+          // Enhanced form validation and submission
+          $editMode.addEventListener('submit', async function (e) {
+               e.preventDefault();
+
+               const $submitBtn = this.querySelector('button[type="submit"]');
+               const $allInputs = this.querySelectorAll('input, select, textarea');
+
+               // Disable all form elements
+               $submitBtn.disabled = true;
+               $allInputs.forEach(input => input.disabled = true);
+
+               // Add loading state to submit button
+               $submitBtn.innerHTML = `
+            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Enregistrement...
+        `;
+
+               try {
+                    // Get form data
+                    const formData = new FormData(this);
+                    // const specializations = Array.from(formData.getAll('specializations[]'));
+
+                    // Basic validation
+                    // if (specializations.length === 0) {
+                    //      throw new Error('Veuillez sélectionner au moins une spécialisation');
+                    // }
+
+                    // Phone number validation
+                    const phoneNumber = formData.get('phoneNumber');
+                    // const phoneRegex = /^(?:\+212|0)[567]\d{8}$/;
+                    // if (!phoneRegex.test(phoneNumber)) {
+                    //      throw new Error('Format de numéro de téléphone invalide');
+                    // }
+
+                    // console.log(formData)
+
+                    // Build request data
+                    const data = {
+                         displayName: document.getElementById('displayName').value,
+                         bio: document.getElementById('bio').value,
+                         phoneNumber: document.getElementById('phoneNumber').value,
+                         location: {
+                              city: document.getElementById('city').value
+                         }
+                    };
+
+                    console.log(JSON.stringify(data))
+
+                    // Send request with loading state
+                    const response = await fetch('/dashboard/profile/update-basic-info', {
+                         method: 'PUT',
+                         headers: { 'Content-Type': 'application/json' },
+                         body: JSON.stringify(data)
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+                         // Show success message before reload
+                         Swal.fire({
+                              icon: 'success',
+                              title: 'Succès!',
+                              text: 'Vos informations ont été mises à jour avec succès',
+                              showConfirmButton: false,
+                              timer: 1500
+                         }).then(() => {
+                              window.location.reload();
+                         });
+                    } else {
+                         throw new Error(result.message);
+                    }
+               } catch (error) {
+                    // Show error message with SweetAlert2
+                    Swal.fire({
+                         icon: 'error',
+                         title: 'Erreur',
+                         text: error.message || 'Une erreur est survenue lors de la mise à jour',
+                         confirmButtonText: 'Réessayer',
+                         confirmButtonColor: '#3B82F6'
+                    });
+
+                    // Reset button and form state
+                    $submitBtn.innerHTML = '<i class="fas fa-check mr-2"></i>Enregistrer';
+                    $submitBtn.disabled = false;
+                    $allInputs.forEach(input => input.disabled = false);
+               }
+          });
+
+          // Add input validation and formatting
+          const $phoneInput = document.getElementById('phoneNumber');
+          $phoneInput?.addEventListener('input', function (e) {
+               let value = e.target.value.replace(/\D/g, '');
+
+               if (value.startsWith('212')) {
+                    value = '+' + value;
+               } else if (value.startsWith('0')) {
+                    value = value;
+               } else if (value.length > 0) {
+                    value = '0' + value;
+               }
+
+               e.target.value = value;
+          });
+
+          // Add animation styles
+          const style = document.createElement('style');
+          style.textContent = `
+        @keyframes fadeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-slide-in {
+            animation: fadeSlideIn 0.3s ease-out forwards;
+        }
+
+        /* Checkbox custom styles */
+        input[type="checkbox"] {
+            transition: all 0.2s ease-in-out;
+        }
+
+        input[type="checkbox"]:checked + div {
+            color: #1D4ED8;
+        }
+
+        /* Input focus effects */
+        input:focus, select:focus, textarea:focus {
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+        }
+
+        /* Hover effects for view mode items */
+        .group:hover i {
+            transform: scale(1.1);
+            transition: transform 0.2s ease-in-out;
+        }
+    `;
+          document.head.appendChild(style);
+     });
+</script>

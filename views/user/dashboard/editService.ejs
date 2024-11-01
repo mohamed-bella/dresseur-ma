@@ -1,0 +1,200 @@
+<!-- views/user/dashboard/editService.ejs -->
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Modifier le service | NDRESSILIK</title>
+
+     <!-- Essential Styles -->
+     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+     <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
+
+     <style>
+          .error-input {
+               border-color: #ef4444;
+          }
+
+          .image-preview {
+               transition: all 0.3s ease;
+          }
+
+          .image-preview:hover {
+               transform: translateY(-5px);
+          }
+
+          .remove-image {
+               opacity: 0;
+               transition: opacity 0.3s ease;
+          }
+
+          .image-preview:hover .remove-image {
+               opacity: 1;
+          }
+     </style>
+</head>
+
+<body class="bg-gray-50">
+     <div class="min-h-screen p-4 md:p-6">
+          <!-- Header -->
+          <div class="max-w-3xl mx-auto text-center mb-8" data-aos="fade-up">
+               <h1 class="text-2xl font-bold text-gray-900">Modifier le service</h1>
+               <p class="text-gray-600 mt-2">Mettez à jour les informations de votre service</p>
+          </div>
+
+          <!-- Form -->
+          <form id="editServiceForm" class="max-w-3xl mx-auto bg-white rounded-lg shadow-lg p-6" data-aos="fade-up" data-aos-delay="200" enctype="multipart/form-data">
+               <!-- Service Type -->
+               <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Type de service</label>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                         <% const services=[ { id: 'dressage' , name: 'Dressage' , icon: 'dog' }, { id: 'toilettage' , name: 'Toilettage' , icon: 'cut' }, { id: 'promenade' , name: 'Promenade' , icon: 'walking' }, { id: 'veterinaire' , name: 'Vétérinaire' , icon: 'stethoscope' }, { id: 'pension' , name: 'Pension' , icon: 'home' }, { id: 'transport' , name: 'Transport' , icon: 'car' } ]; %>
+
+                              <% services.forEach(type=> { %>
+                                   <label class="service-card cursor-pointer p-4 border rounded-lg hover:shadow-md transition-all <%= service.serviceOptions === type.id ? 'border-blue-500 bg-blue-50' : '' %>">
+                                        <input type="radio" name="serviceType" value="<%= type.id %>" class="sr-only" <%=service.serviceOptions===type.id ? 'checked' : '' %>>
+                                        <div class="flex flex-col items-center text-center gap-3">
+                                             <i class="fas fa-<%= type.icon %> text-2xl text-blue-500"></i>
+                                             <span class="font-medium">
+                                                  <%= type.name %>
+                                             </span>
+                                        </div>
+                                   </label>
+                                   <% }); %>
+                    </div>
+               </div>
+
+
+               <!-- Service Details -->
+               <div class="space-y-6">
+                    <div>
+                         <label class="block text-sm font-medium text-gray-700 mb-2">Nom du service</label>
+                         <input type="text" name="serviceName" value="<%= service.serviceName %>" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500" required>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                         <div>
+                              <label class="block text-sm font-medium text-gray-700 mb-2">Prix minimum (DH)</label>
+                              <input type="text" name="minPrice" value="<%= service.priceRange %>" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500" required>
+                         </div>
+                         <div>
+                              <label class="block text-sm font-medium text-gray-700 mb-2">Prix maximum (DH)</label>
+                              <input type="text" name="maxPrice" value="<%= service.priceRange %>" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500" required>
+                         </div>
+                    </div>
+
+                    <div>
+                         <label class="block text-sm font-medium text-gray-700 mb-2">Ville</label>
+                         <select name="location" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500" required>
+                              <% ['Casablanca', 'Rabat' , 'Marrakech' , 'Agadir' , 'Tanger' , 'Fès' ].forEach(city=> { %>
+                                   <option value="<%= city.toLowerCase() %>" <%=service.location===city.toLowerCase() ? 'selected' : '' %>>
+                                        <%= city %>
+                                   </option>
+                                   <% }) %>
+                         </select>
+                    </div>
+
+                    <div>
+                         <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                         <textarea name="description" rows="4" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500" required><%= service.description %></textarea>
+                    </div>
+               </div>
+
+               <!-- Image Gallery -->
+               <div class="mt-8">
+                    <label class="block text-sm font-medium text-gray-700 mb-4">Images du service</label>
+
+                    <!-- Existing Images -->
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-6">
+                         <% service.images.forEach((image, index)=> { %>
+                              <div class="image-preview relative rounded-lg overflow-hidden">
+                                   <img src="<%= image %>" alt="Service image <%= index + 1 %>" class="w-full h-32 object-cover">
+                                   <button type="button" class="remove-image absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full" onclick="removeImage('<%= image %>')">
+                                        <i class="fas fa-times"></i>
+                                   </button>
+                              </div>
+                              <% }) %>
+                    </div>
+
+                    <!-- New Images Upload -->
+                    <div class="mt-4">
+                         <input type="file" name="serviceImages" id="serviceImages" class="w-full p-3 border rounded-lg" multiple accept="image/*">
+                         <p class="text-sm text-gray-500 mt-2">Maximum 5 photos, 5MB par photo</p>
+                    </div>
+               </div>
+
+               <!-- Submit Button -->
+               <div class="mt-8 flex justify-end">
+                    <button type="submit" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+                         Mettre à jour le service
+                    </button>
+               </div>
+          </form>
+     </div>
+
+     <!-- Scripts -->
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+     <script>
+          $(document).ready(function () {
+               AOS.init({
+                    duration: 800,
+                    once: true
+               });
+
+               const removedImages = new Set();
+
+               window.removeImage = function (imageUrl) {
+                    removedImages.add(imageUrl);
+                    $(`.image-preview img[src="${imageUrl}"]`).closest('.image-preview').remove();
+               };
+
+               $('#editServiceForm').submit(function (e) {
+                    e.preventDefault();
+                    const formData = new FormData(this);
+
+                    // Add removed images to form data
+                    if (removedImages.size > 0) {
+                         formData.append('removeImages', JSON.stringify(Array.from(removedImages)));
+                    }
+                    for (var pair of formData.entries()) {
+                         console.log(pair[0] + ': ' + pair[1]);
+                    }
+                    $.ajax({
+                         url: '/dashboard/services/<%= service._id %>',
+                         method: 'POST',
+                         data: formData,
+                         processData: false,
+                         contentType: false,
+                         success: function (response) {
+                              if (response.success) {
+                                   alert('Service mis à jour avec succès!');
+                                   // window.location.href = '/dashboard';
+                              } else {
+                                   alert(response.message || 'Une erreur est survenue');
+                              }
+                         },
+                         error: function () {
+                              alert('Une erreur est survenue');
+                         }
+                    });
+               });
+
+               // Service type selection
+               $('.service-card').click(function () {
+                    // Uncheck all other radio buttons and remove styles
+                    $('input[name="serviceType"]').prop('checked', false);
+                    $('.service-card').removeClass('border-blue-500 bg-blue-50');
+
+                    // Check the clicked radio button and add styles
+                    $(this).find('input[name="serviceType"]').prop('checked', true);
+                    $(this).addClass('border-blue-500 bg-blue-50');
+               });
+
+          });
+     </script>
+</body>
+
+</html>

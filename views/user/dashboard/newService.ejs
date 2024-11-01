@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Nouveau Service</title>
+
+     <!-- Essential Styles -->
+     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+     <!-- Additional Styles -->
+     <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+     <style>
+          .step-active {
+               background-color: #3b82f6;
+               color: white;
+          }
+
+          .error-input {
+               border-color: #ef4444;
+          }
+
+          .checkmark {
+               opacity: 0;
+               transition: opacity 0.3s ease;
+          }
+
+          .checkmark.visible {
+               opacity: 1;
+          }
+
+          /* Additional Styles */
+          .service-card {
+               transition: all 0.3s ease;
+          }
+
+          .service-card:hover {
+               transform: translateY(-5px);
+               box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+                    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+          }
+
+          .form-input {
+               transition: border-color 0.3s ease;
+          }
+
+          .form-input:focus {
+               outline: none;
+               border-color: #3b82f6;
+          }
+
+          .loading-button {
+               position: relative;
+               overflow: hidden;
+          }
+
+          .loading-button::before {
+               content: "";
+               position: absolute;
+               top: 0;
+               left: 0;
+               width: 100%;
+               height: 100%;
+               background-color: rgba(255, 255, 255, 0.5);
+               transform: translateX(-100%);
+               transition: transform 0.3s ease;
+          }
+
+          .loading-button.loading::before {
+               transform: translateX(0);
+          }
+
+          .loading-button .spinner {
+               display: none;
+          }
+
+          .loading-button.loading .spinner {
+               display: block;
+          }
+     </style>
+</head>
+
+<body class="bg-gray-50">
+     <div class="min-h-screen p-4 md:p-6">
+          <!-- Progress Bar -->
+          <div class="fixed top-0 left-0 right-0 h-1 bg-blue-50">
+               <div id="progressBar" class="h-full bg-blue-500 transition-all" style="width: 0%"></div>
+          </div>
+
+          <!-- Header -->
+          <div class="max-w-3xl mx-auto text-center mb-8" data-aos="fade-up">
+               <h1 class="text-2xl font-bold text-gray-900">Créer un nouveau service</h1>
+               <p class="text-gray-600 mt-2">Partagez vos services avec la communauté</p>
+          </div>
+
+          <!-- Step Navigation -->
+          <div class="max-w-3xl mx-auto mb-8" data-aos="fade-up" data-aos-delay="200">
+               <div class="flex justify-between relative">
+                    <div class="absolute top-4 left-0 right-0 h-0.5 bg-gray-200"></div>
+                    <% ['Type de service', 'Détails' , 'Photos' ].forEach((step, index)=> { %>
+                         <div class="relative flex flex-col items-center">
+                              <div class="w-8 h-8 rounded-full flex items-center justify-center <%= index === 0 ? 'step-active' : 'bg-white border border-gray-300' %>" data-step="<%= index + 1 %>">
+                                   <%= index + 1 %>
+                              </div>
+                              <span class="mt-2 text-sm">
+                                   <%= step %>
+                              </span>
+                         </div>
+                         <% }) %>
+               </div>
+          </div>
+
+          <!-- Form -->
+          <form id="serviceForm" class="max-w-3xl mx-auto bg-white rounded-lg shadow p-6" enctype="multipart/form-data" data-aos="fade-up" data-aos-delay="400">
+               <!-- Step 1: Service Type -->
+               <div class="step" data-step="1">
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                         <% const services=[ { id: 'dressage' , name: 'Dressage' , icon: 'dog' }, { id: 'toilettage' , name: 'Toilettage' , icon: 'cut' }, { id: 'promenade' , name: 'Promenade' , icon: 'walking' }, { id: 'veterinaire' , name: 'Vétérinaire' , icon: 'stethoscope' }, { id: 'pension' , name: 'Pension' , icon: 'home' }, { id: 'transport' , name: 'Transport' , icon: 'car' } ]; %>
+
+                              <% services.forEach(service=> { %>
+                                   <label class="service-card cursor-pointer p-4 border rounded-lg hover:shadow-md transition-all flex flex-col items-center justify-center relative animate__animated animate__fadeIn">
+                                        <input type="radio" name="serviceType" value="<%= service.id %>" class="hidden" required>
+                                        <div class="flex flex-col items-center text-center gap-3">
+                                             <i class="fas fa-<%= service.icon %> text-2xl text-blue-500"></i>
+                                             <span class="font-medium">
+                                                  <%= service.name %>
+                                             </span>
+                                        </div>
+                                        <!-- Selection Indicator -->
+                                        <div class="checkmark absolute top-2 right-2">
+                                             <i class="fas fa-check-circle text-green-500 text-xl"></i>
+                                        </div>
+                                   </label>
+                                   <% }) %>
+                    </div>
+               </div>
+
+               <!-- Step 2: Service Details -->
+               <div class="step hidden" data-step="2">
+                    <div class="space-y-6">
+                         <div>
+                              <label class="block mb-2">Nom du service</label>
+                              <input type="text" name="serviceName" class="w-full p-2 border rounded-lg form-input" required>
+                         </div>
+                         <div class="grid grid-cols-2 gap-4">
+                              <div>
+                                   <label class="block mb-2">Prix minimum (DH)</label>
+                                   <input type="number" name="minPrice" class="w-full p-2 border rounded-lg form-input" required>
+                              </div>
+                              <div>
+                                   <label class="block mb-2">Prix maximum (DH)</label>
+                                   <input type="number" name="maxPrice" class="w-full p-2 border rounded-lg form-input" required>
+                              </div>
+                         </div>
+                         <div>
+                              <label class="block mb-2">Ville</label>
+                              <select name="location" class="w-full p-2 border rounded-lg form-input" required>
+                                   <option value="">Sélectionnez une ville</option>
+                                   <% ['Casablanca', 'Rabat' , 'Marrakech' , 'Agadir' , 'Tanger' , 'Fès' ].forEach(city=> { %>
+                                        <option value="<%= city.toLowerCase() %>">
+                                             <%= city %>
+                                        </option>
+                                        <% }) %>
+                              </select>
+                         </div>
+                         <div>
+                              <label class="block mb-2">Description</label>
+                              <textarea name="description" rows="4" class="w-full p-2 border rounded-lg form-input" required></textarea>
+                         </div>
+                    </div>
+               </div>
+
+               <!-- Step 3: Photos -->
+               <div class="step hidden" data-step="3">
+                    <label class="block mb-2">Photos du service</label>
+                    <input type="file" name="serviceImages" id="serviceImages" class="w-full p-2 border rounded-lg form-input" multiple accept="image/*" required>
+                    <p class="text-sm text-gray-500 mt-2">Maximum 5 photos, 5MB par photo</p>
+               </div>
+
+               <!-- Navigation Buttons -->
+               <div class="flex justify-between mt-6 pt-6 border-t">
+                    <button type="button" id="prevBtn" class="hidden px-4 py-2 border rounded-lg hover:bg-gray-50 animate__animated animate__fadeIn">Précédent</button>
+                    <button type="button" id="nextBtn" class="ml-auto px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 animate__animated animate__fadeIn loading-button">
+                         <span>Suivant</span>
+                         <div class="spinner border-4 border-white border-t-transparent rounded-full w-5 h-5 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-spin"></div>
+                    </button>
+                    <button type="submit" id="submitBtn" class="hidden ml-auto px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 animate__animated animate__fadeIn loading-button">
+                         <span>Créer le service</span>
+                         <div class="spinner border-4 border-white border-t-transparent rounded-full w-5 h-5 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-spin"></div>
+                    </button>
+               </div>
+          </form>
+     </div>
+
+     <!-- Scripts -->
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+     <script>
+          $(document).ready(function () {
+               AOS.init({
+                    duration: 800,
+                    easing: 'ease-in-out',
+                    once: true
+               });
+
+               let currentStep = 1;
+               const totalSteps = 3;
+
+               // Service Type Selection
+               $('input[name="serviceType"]').change(function () {
+                    $('.service-card').removeClass('border-blue-500 bg-blue-50');
+                    $('.service-card .checkmark').removeClass('visible');
+
+                    if ($(this).is(':checked')) {
+                         const selectedCard = $(this).closest('.service-card');
+                         selectedCard.addClass('border-blue-500 bg-blue-50');
+                         selectedCard.find('.checkmark').addClass('visible');
+                    }
+               });
+
+               // Step Navigation
+               function updateStep(direction) {
+                    const newStep = currentStep + direction;
+                    if (newStep < 1 || newStep > totalSteps) return;
+
+                    // Validate current step
+                    if (direction > 0 && !validateStep(currentStep)) return;
+
+                    // Update visibility
+                    $(`.step[data-step="${currentStep}"]`).hide();
+                    $(`.step[data-step="${newStep}"]`).show();
+
+                    // Update step indicators
+                    updateStepIndicators(newStep);
+
+                    // Update buttons
+                    $('#prevBtn').toggleClass('hidden', newStep === 1);
+                    $('#nextBtn').toggleClass('hidden', newStep === totalSteps);
+                    $('#submitBtn').toggleClass('hidden', newStep !== totalSteps);
+
+                    // Update progress
+                    const progress = ((newStep - 1) / (totalSteps - 1)) * 100;
+                    $('#progressBar').css('width', `${progress}%`);
+
+                    currentStep = newStep;
+               }
+
+               function validateStep(step) {
+                    const $currentStep = $(`.step[data-step="${step}"]`);
+                    let isValid = true;
+
+                    // Reset previous errors
+                    $('.error-input').removeClass('error-input');
+
+                    if (step === 1) {
+                         if (!$('input[name="serviceType"]:checked').length) {
+                              alert('Veuillez sélectionner un type de service');
+                              isValid = false;
+                         }
+                    } else if (step === 2) {
+                         $currentStep.find('[required]').each(function () {
+                              if (!$(this).val()) {
+                                   $(this).addClass('error-input');
+                                   isValid = false;
+                              }
+                         });
+
+                         const minPrice = parseInt($('input[name="minPrice"]').val());
+                         const maxPrice = parseInt($('input[name="maxPrice"]').val());
+                         if (!isNaN(minPrice) && !isNaN(maxPrice) && minPrice >= maxPrice) {
+                              $('input[name="maxPrice"]').addClass('error-input');
+                              alert('Le prix maximum doit être supérieur au prix minimum');
+                              isValid = false;
+                         }
+                    }
+
+                    return isValid;
+               }
+
+               function updateStepIndicators(activeStep) {
+                    $('[data-step]').each(function () {
+                         const step = parseInt($(this).data('step'));
+                         if (step < activeStep) {
+                              $(this).addClass('step-active');
+                              $(this).removeClass('bg-white border border-gray-300');
+                         } else if (step === activeStep) {
+                              $(this).addClass('step-active');
+                              $(this).removeClass('bg-white border border-gray-300');
+                         } else {
+                              $(this).removeClass('step-active');
+                              $(this).addClass('bg-white border border-gray-300');
+                         }
+                    });
+               }
+
+               // Navigation Event Listeners
+               $('#prevBtn').click(() => updateStep(-1));
+               $('#nextBtn').click(function () {
+                    $(this).addClass('loading-button loading');
+                    updateStep(1);
+                    $(this).removeClass('loading-button loading');
+               });
+
+               // Form Submission
+               $('#submitBtn').click(function () {
+                    $(this).addClass('loading-button loading');
+                    $('#serviceForm').submit();
+               });
+
+               $('#serviceForm').submit(function (e) {
+                    e.preventDefault();
+                    const formData = new FormData(this);
+                    const files = $('#serviceImages')[0].files;
+                    if (files.length > 5) {
+                         alert('Vous pouvez télécharger un maximum de 5 photos');
+                         $('#submitBtn').removeClass('loading-button loading');
+                         return;
+                    }
+
+                    $.ajax({
+                         url: '/services/add',
+                         method: 'POST',
+                         data: formData,
+                         processData: false,
+                         contentType: false,
+                         success: function (response) {
+                              if (response.success) {
+                                   alert('Service créé avec succès!');
+                                   window.location.href = '/dashboard';
+                              } else {
+                                   alert(response.message || 'Une erreur est survenue');
+                                   $('#submitBtn').removeClass('loading-button loading');
+                              }
+                         },
+
+                         error: function () {
+                              alert('Une erreur est survenue');
+                              $('#submitBtn').removeClass('loading-button loading');
+                         }
+                    });
+               });
+          });
+     </script>
+</body>
+
+</html>

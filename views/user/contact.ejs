@@ -1,72 +1,367 @@
 <%- include('include/head.ejs') %>
      <%- include('include/navbar.ejs') %>
 
+          <div class="min-h-screen bg-gradient-to-br from-gray-50 to-white py-16 px-4 sm:px-6 lg:px-8">
+               <div class="max-w-7xl mx-auto">
+                    <!-- Header Section -->
+                    <div class="text-center mb-16">
+                         <h1 class="text-4xl font-bold text-gray-900 mb-4">Contactez-nous</h1>
+                         <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                              Une question ? Un besoin spécifique ? Notre équipe est là pour vous aider.
+                         </p>
+                    </div>
 
-          <!-- Section de contact -->
-          <div class="container my-5">
-               <h1 class="text-center mb-4">Contactez-nous</h1>
+                    <div class="max-w-6xl mx-auto">
+                         <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                              <!-- Contact Information -->
+                              <div class="bg-white rounded-2xl shadow-lg p-8">
+                                   <div class="space-y-8">
+                                        <h3 class="text-xl font-semibold text-gray-900">Nos coordonnées</h3>
 
-               <div class="row">
-                    <!-- Informations de contact -->
-                    <div class="col-md-6 mb-4">
-                         <h3>Nos coordonnées</h3>
-                         <p><i class="bi bi-geo-alt-fill"></i> Bouskoura, Casablanca, Maroc</p>
-                         <!-- <p><i class="bi bi-telephone-fill"></i> </p> -->
-                         <p><i class="bi bi-envelope-fill"></i> ndressilik@gmail.com</p>
+                                        <div class="space-y-6">
+                                             <!-- Location -->
+                                             <div class="flex items-start space-x-4">
+                                                  <div class="flex-shrink-0">
+                                                       <div class="flex items-center justify-center h-12 w-12 rounded-lg bg-blue-50">
+                                                            <svg class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                            </svg>
+                                                       </div>
+                                                  </div>
+                                                  <div>
+                                                       <h4 class="text-base font-medium text-gray-900">Adresse</h4>
+                                                       <p class="mt-1 text-gray-600">Bouskoura, Casablanca, Maroc</p>
+                                                  </div>
+                                             </div>
 
-                         <h4>Suivez-nous</h4>
-                         <div class="social-links">
-                              <a href="https://web.facebook.com/groups/ndressilik" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
-                              <a href="https://www.instagram.com/ndressilik" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
-                              <a href="https://www.linkedin.com/in/ndressilik-ndressilik-770630329" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                                             <!-- Email -->
+                                             <div class="flex items-start space-x-4">
+                                                  <div class="flex-shrink-0">
+                                                       <div class="flex items-center justify-center h-12 w-12 rounded-lg bg-blue-50">
+                                                            <svg class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                                            </svg>
+                                                       </div>
+                                                  </div>
+                                                  <div>
+                                                       <h4 class="text-base font-medium text-gray-900">Email</h4>
+                                                       <p class="mt-1 text-gray-600">ndressilik@gmail.com</p>
+                                                  </div>
+                                             </div>
+                                        </div>
+
+                                        <!-- Social Links -->
+                                        <div class="space-y-4">
+                                             <h4 class="text-base font-medium text-gray-900">Suivez-nous</h4>
+                                             <div class="flex space-x-6">
+                                                  <a href="https://web.facebook.com/groups/ndressilik" class="text-gray-500 hover:text-blue-600 transition-colors">
+                                                       <span class="sr-only">Facebook</span>
+                                                       <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                                            <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" />
+                                                       </svg>
+                                                  </a>
+                                                  <a href="https://www.instagram.com/ndressilik" class="text-gray-500 hover:text-pink-600 transition-colors">
+                                                       <span class="sr-only">Instagram</span>
+                                                       <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                                            <path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd" />
+                                                       </svg>
+                                                  </a>
+                                                  <a href="https://www.linkedin.com/in/ndressilik-ndressilik-770630329" class="text-gray-500 hover:text-blue-600 transition-colors">
+                                                       <span class="sr-only">LinkedIn</span>
+                                                       <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                                            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                                                       </svg>
+                                                  </a>
+                                             </div>
+                                        </div>
+                                   </div>
+                              </div>
+
+                              <!-- Contact Form -->
+                              <div class="bg-white rounded-2xl shadow-lg p-8">
+                                   <form id="contactForm" class="space-y-6">
+                                        <!-- Alert Container -->
+                                        <div id="alertContainer" class="hidden"></div>
+
+                                        <!-- Name Input -->
+                                        <div>
+                                             <label for="name" class="block text-sm font-medium text-gray-700">Nom</label>
+                                             <div class="mt-1 relative">
+                                                  <input type="text" id="name" name="name" class="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                                                  <div class="error-message hidden text-sm text-red-600 mt-1"></div>
+                                             </div>
+                                        </div>
+
+                                        <!-- Email Input -->
+                                        <div>
+                                             <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                                             <div class="mt-1 relative">
+                                                  <input type="email" id="email" name="email" class="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                                                  <div class="error-message hidden text-sm text-red-600 mt-1"></div>
+                                             </div>
+                                        </div>
+
+                                        <!-- Message Input -->
+                                        <div>
+                                             <label for="message" class="block text-sm font-medium text-gray-700">Message</label>
+                                             <div class="mt-1 relative">
+                                                  <textarea id="message" name="message" rows="4" class="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required></textarea>
+                                                  <div class="error-message hidden text-sm text-red-600 mt-1"></div>
+                                             </div>
+                                        </div>
+
+                                        <!-- Submit Button -->
+                                        <div>
+                                             <button type="submit" id="submitButton" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                                  <span>Envoyer</span>
+                                                  <svg id="loadingSpinner" class="hidden animate-spin ml-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                       <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                       <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                                  </svg>
+                                             </button>
+                                        </div>
+                                   </form>
+                              </div>
                          </div>
                     </div>
-
-                    <!-- Formulaire de contact -->
-                    <div class="col-md-6 mb-4">
-
-                         <!-- Display success message -->
-                         <% if (typeof success !=='undefined' ) { %>
-                              <div class="alert alert-success">
-                                   <%= success %>
-                              </div>
-                              <% } %>
-
-                                   <!-- Display validation errors -->
-                                   <% if (typeof errors !=='undefined' && errors.length> 0) { %>
-                                        <div class="alert alert-danger">
-                                             <ul>
-                                                  <% errors.forEach(function(error) { %>
-                                                       <li>
-                                                            <%= error.msg %>
-                                                       </li>
-                                                       <% }) %>
-                                             </ul>
-                                        </div>
-                                        <% } %>
-
-                                             <div class="">
-                                                  <form action="/contact" method="POST">
-                                                       <div class="mb-3">
-                                                            <label for="name" class="form-label">Nom</label>
-                                                            <input type="text" class="form-control" id="name" name="name" value="<%= formData ? formData.name : '' %>" required>
-                                                       </div>
-                                                       <div class="mb-3">
-                                                            <label for="email" class="form-label">Email</label>
-                                                            <input type="email" class="form-control" id="email" name="email" value="<%= formData ? formData.email : '' %>" required>
-                                                       </div>
-                                                       <div class="mb-3">
-                                                            <label for="message" class="form-label">Message</label>
-                                                            <textarea class="form-control" id="message" name="message" rows="5" required><%= formData ? formData.message : '' %></textarea>
-                                                       </div>
-                                                       <button type="submit" class="btn btn-primary">Envoyer</button>
-                                                  </form>
-                                             </div>
-                    </div>
-
                </div>
           </div>
 
-          <!-- Bootstrap JS + Popper.js -->
-          <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-          <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+          <script>
+               document.addEventListener('DOMContentLoaded', function () {
+                    const form = document.getElementById('contactForm');
+                    const alertContainer = document.getElementById('alertContainer');
+                    const submitButton = document.getElementById('submitButton');
+                    const loadingSpinner = document.getElementById('loadingSpinner');
+
+                    // Show alert function
+                    function showAlert(message, type) {
+                         alertContainer.className = `rounded-lg p-4 mb-4 ${type === 'success'
+                              ? 'bg-green-100 text-green-700 border border-green-400'
+                              : 'bg-red-100 text-red-700 border border-red-400'
+                              }`;
+                         alertContainer.textContent = message;
+                         alertContainer.classList.remove('hidden');
+
+                         // Hide alert after 5 seconds
+                         setTimeout(() => {
+                              alertContainer.classList.add('hidden');
+                         }, 5000);
+                    }
+
+                    // Validate email function
+                    function isValidEmail(email) {
+                         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                         return re.test(String(email).toLowerCase());
+                    }
+
+                    // Validate form inputs
+                    function validateForm() {
+                         let isValid = true;
+                         const inputs = {
+                              name: {
+                                   value: document.getElementById('name').value,
+                                   error: 'Le nom doit contenir au moins 2 caractères'
+                              },
+                              email: {
+                                   value: document.getElementById('email').value,
+                                   error: 'Veuillez entrer une adresse email valide'
+                              },
+                              message: {
+                                   value: document.getElementById('message').value,
+                                   error: 'Le message doit contenir au moins 10 caractères'
+                              }
+                         };
+
+                         // Clear previous error messages
+                         document.querySelectorAll('.error-message').forEach(el => {
+                              el.classList.add('hidden');
+                              el.textContent = '';
+                         });
+
+                         // Validate name
+                         if (inputs.name.value.trim().length < 2) {
+                              showInputError('name', inputs.name.error);
+                              isValid = false;
+                         }
+
+                         // Validate email
+                         if (!isValidEmail(inputs.email.value)) {
+                              showInputError('email', inputs.email.error);
+                              isValid = false;
+                         }
+
+                         // Validate message
+                         if (inputs.message.value.trim().length < 10) {
+                              showInputError('message', inputs.message.error);
+                              isValid = false;
+                         }
+
+                         return isValid;
+                    }
+
+                    // Show input error
+                    function showInputError(inputId, message) {
+                         const input = document.getElementById(inputId);
+                         const errorDiv = input.parentElement.querySelector('.error-message');
+                         input.classList.add('border-red-500');
+                         errorDiv.textContent = message;
+                         errorDiv.classList.remove('hidden');
+
+                         // Add shake animation
+                         input.classList.add('animate-shake');
+                         setTimeout(() => {
+                              input.classList.remove('animate-shake');
+                         }, 500);
+                    }
+
+                    // Handle form submission
+                    form.addEventListener('submit', async function (e) {
+                         e.preventDefault();
+
+                         // Validate form
+                         if (!validateForm()) {
+                              showAlert('Veuillez corriger les erreurs dans le formulaire.', 'error');
+                              return;
+                         }
+
+                         // Prepare form data
+                         const formData = {
+                              name: document.getElementById('name').value,
+                              email: document.getElementById('email').value,
+                              message: document.getElementById('message').value
+                         };
+
+                         // Disable submit button and show spinner
+                         submitButton.disabled = true;
+                         loadingSpinner.classList.remove('hidden');
+
+                         try {
+                              const response = await fetch('/contact', {
+                                   method: 'POST',
+                                   headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-Requested-With': 'XMLHttpRequest'
+                                   },
+                                   body: JSON.stringify(formData)
+                              });
+
+                              const data = await response.json();
+
+                              if (response.ok) {
+                                   // Show success message
+                                   showAlert('Votre message a été envoyé avec succès!', 'success');
+
+                                   // Reset form
+                                   form.reset();
+
+                                   // Reset form styles
+                                   document.querySelectorAll('.border-red-500').forEach(el => {
+                                        el.classList.remove('border-red-500');
+                                   });
+                              } else {
+                                   // Show error message
+                                   showAlert(data.message || 'Une erreur est survenue. Veuillez réessayer.', 'error');
+                              }
+                         } catch (error) {
+                              console.error('Error:', error);
+                              showAlert('Une erreur est survenue. Veuillez réessayer.', 'error');
+                         } finally {
+                              // Re-enable submit button and hide spinner
+                              submitButton.disabled = false;
+                              loadingSpinner.classList.add('hidden');
+                         }
+                    });
+
+                    // Real-time validation on input
+                    const inputs = ['name', 'email', 'message'];
+                    inputs.forEach(inputId => {
+                         const input = document.getElementById(inputId);
+                         let debounceTimeout;
+
+                         input.addEventListener('input', function () {
+                              // Remove error styling on input
+                              this.classList.remove('border-red-500');
+                              const errorDiv = this.parentElement.querySelector('.error-message');
+                              errorDiv.classList.add('hidden');
+
+                              // Debounce validation
+                              clearTimeout(debounceTimeout);
+                              debounceTimeout = setTimeout(() => {
+                                   // Only validate if input is not empty
+                                   if (this.value.trim()) {
+                                        switch (inputId) {
+                                             case 'name':
+                                                  if (this.value.trim().length < 2) {
+                                                       showInputError(inputId, 'Le nom doit contenir au moins 2 caractères');
+                                                  }
+                                                  break;
+                                             case 'email':
+                                                  if (!isValidEmail(this.value)) {
+                                                       showInputError(inputId, 'Veuillez entrer une adresse email valide');
+                                                  }
+                                                  break;
+                                             case 'message':
+                                                  if (this.value.trim().length < 10) {
+                                                       showInputError(inputId, 'Le message doit contenir au moins 10 caractères');
+                                                  }
+                                                  break;
+                                        }
+                                   }
+                              }, 500);
+                         });
+                    });
+               });
+          </script>
+
+          <style>
+               /* Add these styles for animations */
+               @keyframes shake {
+
+                    0%,
+                    100% {
+                         transform: translateX(0);
+                    }
+
+                    25% {
+                         transform: translateX(-5px);
+                    }
+
+                    75% {
+                         transform: translateX(5px);
+                    }
+               }
+
+               .animate-shake {
+                    animation: shake 0.3s cubic-bezier(.36, .07, .19, .97) both;
+               }
+
+               /* Smooth transitions */
+               .transition-all {
+                    transition-property: all;
+                    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+                    transition-duration: 150ms;
+               }
+
+               /* Focus styles */
+               .focus-visible:focus {
+                    outline: 2px solid transparent;
+                    outline-offset: 2px;
+                    --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+                    --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+                    box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+                    border-color: #3B82F6;
+               }
+
+               /* Loading spinner animation */
+               @keyframes spin {
+                    to {
+                         transform: rotate(360deg);
+                    }
+               }
+
+               .animate-spin {
+                    animation: spin 1s linear infinite;
+               }
+          </style>

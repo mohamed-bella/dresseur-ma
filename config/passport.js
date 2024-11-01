@@ -44,7 +44,7 @@ passport.use(
                               slug: slug,
                               googleId: profile.id,
                               displayName: profile.displayName || 'Unknown User',
-                              image: profile.photos && profile.photos.length > 0 ? profile.photos[0].value : null,
+                              profileImage: profile.photos && profile.photos.length > 0 ? profile.photos[0].value : null,
                               email: email || `noemail_${profile.id}@unknown.com`, // Generate a placeholder email if none is provided
                          });
 

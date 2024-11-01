@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Consultation Sharing - NDRESSILIK</title>
+     <script src="https://cdn.tailwindcss.com"></script>
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-50">
+     <div class="max-w-7xl mx-auto px-4 py-8">
+          <!-- Header Section -->
+          <div class="mb-8">
+               <h1 class="text-3xl font-bold text-gray-900">Partager une consultation</h1>
+               <p class="text-gray-600 mt-2">Partagez votre expertise et aidez d'autres propriétaires d'animaux</p>
+          </div>
+
+          <!-- Main Content -->
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+               <!-- Consultation Form -->
+               <div class="lg:col-span-2">
+                    <form action="/consultations/create" method="POST" class="space-y-6" id="consultationForm">
+                         <!-- Basic Information -->
+                         <div class="bg-white rounded-lg shadow-sm p-6">
+                              <h2 class="text-xl font-semibold mb-4">Informations de base</h2>
+
+                              <div class="space-y-4">
+                                   <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                                             Titre de la consultation
+                                        </label>
+                                        <input type="text" name="title" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" placeholder="Ex: Conseils pour l'alimentation des chiots">
+                                   </div>
+
+                                   <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                                             Catégorie d'animal
+                                        </label>
+                                        <select name="animalCategory" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                                             <option value="">Sélectionnez une catégorie</option>
+                                             <option value="dog">Chien</option>
+                                             <option value="cat">Chat</option>
+                                             <option value="bird">Oiseau</option>
+                                             <option value="reptile">Reptile</option>
+                                             <option value="other">Autre</option>
+                                        </select>
+                                   </div>
+
+                                   <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                                             Tags (séparés par des virgules)
+                                        </label>
+                                        <input type="text" name="tags" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" placeholder="Ex: nutrition, chiot, alimentation">
+                                   </div>
+                              </div>
+                         </div>
+
+                         <!-- Consultation Details -->
+                         <div class="bg-white rounded-lg shadow-sm p-6">
+                              <h2 class="text-xl font-semibold mb-4">Détails de la consultation</h2>
+
+                              <div class="space-y-4">
+                                   <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                                             Description du problème
+                                        </label>
+                                        <textarea name="problem" rows="4" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" placeholder="Décrivez le problème ou la situation..."></textarea>
+                                   </div>
+
+                                   <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                                             Symptômes observés
+                                        </label>
+                                        <textarea name="symptoms" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" placeholder="Listez les symptômes observés..."></textarea>
+                                   </div>
+
+                                   <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                                             Solution proposée
+                                        </label>
+                                        <textarea name="solution" rows="4" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" placeholder="Décrivez votre solution ou vos recommandations..."></textarea>
+                                   </div>
+
+                                   <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                                             Recommandations supplémentaires
+                                        </label>
+                                        <textarea name="recommendations" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" placeholder="Ajoutez des conseils ou recommandations supplémentaires..."></textarea>
+                                   </div>
+                              </div>
+                         </div>
+
+                         <!-- Media Upload -->
+                         <div class="bg-white rounded-lg shadow-sm p-6">
+                              <h2 class="text-xl font-semibold mb-4">Médias</h2>
+
+                              <div class="space-y-4">
+                                   <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                                             Images (optional)
+                                        </label>
+                                        <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                                             <div class="space-y-1 text-center">
+                                                  <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                                       <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                                  </svg>
+                                                  <div class="flex text-sm text-gray-600">
+                                                       <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
+                                                            <span>Télécharger des fichiers</span>
+                                                            <input id="file-upload" name="images" type="file" class="sr-only" multiple accept="image/*">
+                                                       </label>
+                                                       <p class="pl-1">ou glisser-déposer</p>
+                                                  </div>
+                                                  <p class="text-xs text-gray-500">PNG, JPG jusqu'à 10MB</p>
+                                             </div>
+                                        </div>
+                                   </div>
+
+                                   <div id="image-preview" class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+                                        <!-- Image previews will be inserted here -->
+                                   </div>
+                              </div>
+                         </div>
+
+                         <!-- Visibility Settings -->
+                         <div class="bg-white rounded-lg shadow-sm p-6">
+                              <h2 class="text-xl font-semibold mb-4">Paramètres de visibilité</h2>
+
+                              <div class="space-y-4">
+                                   <div class="flex items-center space-x-3">
+                                        <input type="radio" id="public" name="visibility" value="public" checked class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300">
+                                        <label for="public" class="text-sm font-medium text-gray-700">
+                                             Public - Visible par tous
+                                        </label>
+                                   </div>
+
+                                   <div class="flex items-center space-x-3">
+                                        <input type="radio" id="private" name="visibility" value="private" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300">
+                                        <label for="private" class="text-sm font-medium text-gray-700">
+                                             Privé - Visible uniquement avec le lien
+                                        </label>
+                                   </div>
+                              </div>
+                         </div>
+
+                         <!-- Submit Button -->
+                         <div class="flex justify-end">
+                              <button type="submit" class="px-6 py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+                                   Partager la consultation
+                              </button>
+                         </div>
+                    </form>
+               </div>
+
+               <!-- Sidebar -->
+               <div class="lg:col-span-1">
+                    <!-- Preview Card -->
+                    <div class="bg-white rounded-lg shadow-sm p-6 sticky top-4">
+                         <h3 class="text-lg font-semibold mb-4">Aperçu</h3>
+                         <div id="preview-content" class="space-y-4">
+                              <div id="preview-title" class="text-xl font-medium">
+                                   Titre de la consultation
+                              </div>
+                              <div id="preview-category" class="text-sm text-gray-600">
+                                   Catégorie: -
+                              </div>
+                              <div id="preview-tags" class="flex flex-wrap gap-2">
+                                   <!-- Tags will be inserted here -->
+                              </div>
+                              <div class="border-t pt-4">
+                                   <div id="preview-problem" class="text-gray-700">
+                                        Description du problème apparaîtra ici...
+                                   </div>
+                              </div>
+                         </div>
+                    </div>
+
+                    <!-- Tips Card -->
+                    <div class="bg-white rounded-lg shadow-sm p-6 mt-6">
+                         <h3 class="text-lg font-semibold mb-4">Conseils pour une bonne consultation</h3>
+                         <ul class="space-y-3 text-sm text-gray-600">
+                              <li class="flex items-start">
+                                   <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                   <span>Soyez précis dans la description du problème</span>
+                              </li>
+                              <li class="flex items-start">
+                                   <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                   <span>Incluez tous les symptômes observés</span>
+                              </li>
+                              <li class="flex items-start">
+                                   <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                   <span>Ajoutez des photos si pertinent</span>
+                              </li>
+                              <li class="flex items-start">
+                                   <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                   <span>Détaillez la solution proposée</span>
+                              </li>
+                         </ul>
+                    </div>
+               </div>
+          </div>
+     </div>
+
+     <!-- JavaScript for form handling and preview -->
+     <script>
+          document.addEventListener('DOMContentLoaded', function () {
+               const form = document.getElementById('consultationForm');
+               const preview = {
+                    title: document.getElementById('preview-title'),
+                    category: document.getElementById('preview-category'),
+                    tags: document.getElementById('preview-tags'),
+                    problem: document.getElementById('preview-problem')
+               };
+
+               // Update preview on input changes
+               form.addEventListener('input', function (e) {
+                    switch (e.target.name) {
+                         case 'title':
+                              preview.title.textContent = e.target.value || 'Titre de la consultation';
+                              break;
+                         case 'animalCategory':
+                              preview.category.textContent = `Catégorie: ${e.target.options[e.target.selectedIndex].text}`;
+                              break;
+                         case 'tags':
+                              const tags = e.target.value.split(',').map(tag => tag.trim()).filter(tag => tag);
+                              preview.tags.innerHTML = tags.map(tag =>
+                                   `<span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">${tag}</span>`
+                              ).join('');
+                              break;
+                         case 'problem':
+                              preview.problem.textContent = e.target.value || 'Description du problème apparaîtra ici...';
+                              break;
+                    }
+               });
+
+               // Handle image upload and preview
+               const fileUpload = document.getElementById('file-upload');
+               const imagePreview = document.getElementById('image-preview');
+
+               fileUpload.addEventListener('change', function () {
+                    imagePreview.innerHTML = '';
+                    [...this.files].forEach(file => {
+                         if (file.type.startsWith('image/')) {
+                              const reader = new FileReader();
+                              reader.onload = function (e) {
+                                   const div = document.createElement('div');
+                                   div.className = 'relative';
+                                   div.innerHTML = `
+                                <img src="${e.target.result}" class="w-full h-32 object-cover rounded-lg">
+                                <button type="button" class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            `;
+                                   imagePreview.appendChild(div);
+
+                                   // Handle remove button
+                                   div.querySelector('button').addEventListener('click', function () {
+                                        div.remove();
+                                   });
+                              };
+                              reader.readAsDataURL(file);
+                         }
+                    }
+            });
+
+               // Form validation and submission
+               form.addEventListener('submit', async function (e) {
+                    e.preventDefault();
+
+                    // Show loading state
+                    const submitButton = form.querySelector('button[type="submit"]');
+                    const originalButtonText = submitButton.innerHTML;
+                    submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Publication en cours...';
+                    submitButton.disabled = true;
+
+                    try {
+                         const formData = new FormData(this);
+
+                         // Handle file uploads
+                         const imageFiles = [...imagePreview.children].map(div => {
+                              const imgSrc = div.querySelector('img').src;
+                              // Convert base64 to file if needed
+                              if (imgSrc.startsWith('data:')) {
+                                   return dataURLtoFile(imgSrc, 'image.jpg');
+                              }
+                              return null;
+                         }).filter(Boolean);
+
+                         imageFiles.forEach(file => {
+                              formData.append('images[]', file);
+                         });
+
+                         // Add tags as array
+                         const tags = formData.get('tags').split(',').map(tag => tag.trim()).filter(tag => tag);
+                         formData.delete('tags');
+                         tags.forEach(tag => formData.append('tags[]', tag));
+
+                         // Submit form data
+                         const response = await fetch('/consultations/create', {
+                              method: 'POST',
+                              body: formData
+                         });
+
+                         const result = await response.json();
+
+                         if (response.ok) {
+                              // Show success message
+                              showNotification('Consultation publiée avec succès!', 'success');
+
+                              // Redirect to the new consultation page
+                              setTimeout(() => {
+                                   window.location.href = `/consultations/${result.consultationId}`;
+                              }, 1500);
+                         } else {
+                              throw new Error(result.message || 'Erreur lors de la publication');
+                         }
+                    } catch (error) {
+                         showNotification(error.message, 'error');
+                         submitButton.innerHTML = originalButtonText;
+                         submitButton.disabled = false;
+                    }
+               });
+
+               // Character counter for text areas
+               document.querySelectorAll('textarea').forEach(textarea => {
+                    const maxLength = textarea.getAttribute('maxlength') || 1000;
+                    const counterDiv = document.createElement('div');
+                    counterDiv.className = 'text-sm text-gray-500 text-right mt-1';
+                    textarea.parentNode.appendChild(counterDiv);
+
+                    function updateCounter() {
+                         const remaining = maxLength - textarea.value.length;
+                         counterDiv.textContent = `${remaining} caractères restants`;
+                    }
+
+                    textarea.addEventListener('input', updateCounter);
+                    updateCounter();
+               });
+
+               // Drag and drop functionality for images
+               const dropZone = document.querySelector('.border-dashed');
+
+               ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                    dropZone.addEventListener(eventName, preventDefaults, false);
+               });
+
+               function preventDefaults(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+               }
+
+               ['dragenter', 'dragover'].forEach(eventName => {
+                    dropZone.addEventListener(eventName, highlight, false);
+               });
+
+               ['dragleave', 'drop'].forEach(eventName => {
+                    dropZone.addEventListener(eventName, unhighlight, false);
+               });
+
+               function highlight(e) {
+                    dropZone.classList.add('border-blue-500', 'bg-blue-50');
+               }
+
+               function unhighlight(e) {
+                    dropZone.classList.remove('border-blue-500', 'bg-blue-50');
+               }
+
+               dropZone.addEventListener('drop', handleDrop, false);
+
+               function handleDrop(e) {
+                    const dt = e.dataTransfer;
+                    const files = [...dt.files];
+
+                    files.forEach(file => {
+                         if (file.type.startsWith('image/')) {
+                              const reader = new FileReader();
+                              reader.onload = function (e) {
+                                   addImagePreview(e.target.result);
+                              };
+                              reader.readAsDataURL(file);
+                         }
+                    });
+               }
+
+               // Utility functions
+               function addImagePreview(src) {
+                    const div = document.createElement('div');
+                    div.className = 'relative group';
+                    div.innerHTML = `
+                    <img src="${src}" class="w-full h-32 object-cover rounded-lg">
+                    <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
+                        <button type="button" class="text-white hover:text-red-500 transition-colors">
+                            <i class="fas fa-trash-alt text-xl"></i>
+                        </button>
+                    </div>
+                `;
+                    imagePreview.appendChild(div);
+
+                    // Handle remove button
+                    div.querySelector('button').addEventListener('click', function () {
+                         div.remove();
+                    });
+               }
+
+               function dataURLtoFile(dataurl, filename) {
+                    let arr = dataurl.split(','),
+                         mime = arr[0].match(/:(.*?);/)[1],
+                         bstr = atob(arr[1]),
+                         n = bstr.length,
+                         u8arr = new Uint8Array(n);
+
+                    while (n--) {
+                         u8arr[n] = bstr.charCodeAt(n);
+                    }
+
+                    return new File([u8arr], filename, { type: mime });
+               }
+
+               function showNotification(message, type = 'info') {
+                    const notification = document.createElement('div');
+                    notification.className = `fixed bottom-4 right-4 px-6 py-3 rounded-lg text-white ${type === 'success' ? 'bg-green-500' : 'bg-red-500'
+                         } transition-opacity duration-300`;
+                    notification.textContent = message;
+
+                    document.body.appendChild(notification);
+
+                    // Remove notification after 3 seconds
+                    setTimeout(() => {
+                         notification.style.opacity = '0';
+                         setTimeout(() => notification.remove(), 300);
+                    }, 3000);
+               }
+
+               // Auto-save functionality
+               let autoSaveTimeout;
+               const AUTO_SAVE_DELAY = 2000; // 2 seconds
+
+               form.addEventListener('input', function () {
+                    clearTimeout(autoSaveTimeout);
+                    autoSaveTimeout = setTimeout(saveFormData, AUTO_SAVE_DELAY);
+               });
+
+               function saveFormData() {
+                    const formData = new FormData(form);
+                    const data = {};
+                    for (let [key, value] of formData.entries()) {
+                         data[key] = value;
+                    }
+                    localStorage.setItem('consultationDraft', JSON.stringify(data));
+               }
+
+               // Load saved draft on page load
+               function loadSavedDraft() {
+                    const saved = localStorage.getItem('consultationDraft');
+                    if (saved) {
+                         const data = JSON.parse(saved);
+                         Object.entries(data).forEach(([key, value]) => {
+                              const input = form.querySelector(`[name="${key}"]`);
+                              if (input) {
+                                   input.value = value;
+                                   input.dispatchEvent(new Event('input'));
+                              }
+                         });
+                    }
+               }
+
+               loadSavedDraft();
+          });
+     </script>
+</body>
+
+</html>

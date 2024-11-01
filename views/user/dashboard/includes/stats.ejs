@@ -1,0 +1,86 @@
+<!-- views/partials/dashboard/stats.ejs -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+     <!-- Total Services -->
+     <div class="bg-white rounded-xl shadow-sm p-6">
+          <div class="flex items-center justify-between">
+               <div>
+                    <p class="text-sm font-medium text-gray-600">Services Actifs</p>
+                    <h3 class="text-2xl font-bold text-gray-900 mt-1">
+                         <%= stats.totalServices %>
+                    </h3>
+               </div>
+               <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                    <i class="fas fa-paw text-blue-600 text-xl"></i>
+               </div>
+          </div>
+          <div class="mt-4 flex items-center text-sm">
+               <span class="text-green-500 flex items-center">
+                    <i class="fas fa-arrow-up mr-1"></i>
+                    12%
+               </span>
+               <span class="text-gray-600 ml-2">vs mois dernier</span>
+          </div>
+     </div>
+
+     <!-- Total Reservations -->
+     <div class="bg-white rounded-xl shadow-sm p-6">
+          <div class="flex items-center justify-between">
+               <div>
+                    <p class="text-sm font-medium text-gray-600">Réservations</p>
+                    <h3 class="text-2xl font-bold text-gray-900 mt-1">
+                         <%= stats.totalReservations %>
+                    </h3>
+               </div>
+               <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                    <i class="fas fa-calendar-check text-green-600 text-xl"></i>
+               </div>
+          </div>
+          <div class="mt-4 flex items-center text-sm">
+               <span class="text-green-500 flex items-center">
+                    <i class="fas fa-arrow-up mr-1"></i>
+                    8%
+               </span>
+               <span class="text-gray-600 ml-2">vs mois dernier</span>
+          </div>
+     </div>
+
+     <!-- Revenue -->
+     <div class="bg-white rounded-xl shadow-sm p-6">
+          <div class="flex items-center justify-between">
+               <div>
+                    <p class="text-sm font-medium text-gray-600">Revenu Total</p>
+                    <h3 class="text-2xl font-bold text-gray-900 mt-1">
+                         <%= stats.totalRevenue %> DH
+                    </h3>
+               </div>
+               <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                    <i class="fas fa-wallet text-purple-600 text-xl"></i>
+               </div>
+          </div>
+          <div class="mt-4 flex items-center text-sm">
+               <span class="text-green-500 flex items-center">
+                    <i class="fas fa-arrow-up mr-1"></i>
+                    15%
+               </span>
+               <span class="text-gray-600 ml-2">vs mois dernier</span>
+          </div>
+     </div>
+
+     <!-- Reviews -->
+     <div class="bg-white rounded-xl shadow-sm p-6">
+          <div class="flex items-center justify-between">
+               <div>
+                    <p class="text-sm font-medium text-gray-600">Note Moyenne</p>
+                    <h3 class="text-2xl font-bold text-gray-900 mt-1">
+                         <%= stats.averageRating %> ⭐
+                    </h3>
+               </div>
+               <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
+                    <i class="fas fa-star text-yellow-600 text-xl"></i>
+               </div>
+          </div>
+          <div class="mt-4 flex items-center text-sm">
+               <span class="text-gray-600">Basé sur <%= stats.totalReviews %> avis</span>
+          </div>
+     </div>
+</div>

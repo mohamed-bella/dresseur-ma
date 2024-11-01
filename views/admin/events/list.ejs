@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Admin - Events</title>
+</head>
+
+<body>
+     <h1>Events</h1>
+
+     <a href="/admin/events/create">Create New Event</a>
+
+     <table>
+          <thead>
+               <tr>
+                    <th>Title</th>
+                    <th>Date</th>
+                    <th>Location</th>
+                    <th>Actions</th>
+               </tr>
+          </thead>
+          <tbody>
+               <% events.forEach(event=> { %>
+                    <tr>
+                         <td>
+                              <%= event.title %>
+                         </td>
+                         <td>
+                              <%= event.date.toDateString() %>
+                         </td>
+                         <td>
+                              <%= event.location %>
+                         </td>
+                         <td>
+                              <a href="/admin/events/<%= event._id %>">View</a>
+                              <a href="/admin/events/<%= event._id %>/edit">Edit</a>
+                              <form action="/admin/events/<%= event._id %>?_method=DELETE" method="POST">
+                                   <button type="submit">Delete</button>
+                              </form>
+                         </td>
+                    </tr>
+                    <% }); %>
+          </tbody>
+     </table>
+</body>
+
+</html>
