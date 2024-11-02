@@ -1,105 +1,3 @@
-<script src="https://unpkg.com/next-themes"></script>
-
-<!-- Theme initialization script -->
-<script>
-     // Configure Tailwind for dark mode
-     tailwind.config = {
-          darkMode: 'class',
-          theme: {
-               extend: {
-                    // Add any theme extensions here
-               }
-          }
-     }
-
-     // Initialize ThemeProvider
-     const themeProvider = new NextThemes.ThemeProvider({
-          attribute: 'class',
-          defaultTheme: 'system',
-          disableTransitionOnChange: false,
-          themes: ['light', 'dark']
-     });
-
-     // Helper functions for theme management
-     const ThemeManager = {
-          // Get current theme
-          getCurrentTheme() {
-               return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
-          },
-
-          // Toggle theme
-          toggleTheme() {
-               const currentTheme = this.getCurrentTheme();
-               const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-               themeProvider.setTheme(newTheme);
-               this.updateThemeUI(newTheme);
-          },
-
-          // Set specific theme
-          setTheme(theme) {
-               themeProvider.setTheme(theme);
-               this.updateThemeUI(theme);
-          },
-
-          // Update UI elements based on theme
-          updateThemeUI(theme) {
-               const isDark = theme === 'dark';
-
-               // Update toggle button icons
-               document.querySelectorAll('[data-theme-toggle]').forEach(button => {
-                    const lightIcon = button.querySelector('[data-theme-icon="light"]');
-                    const darkIcon = button.querySelector('[data-theme-icon="dark"]');
-
-                    if (lightIcon) lightIcon.classList.toggle('hidden', isDark);
-                    if (darkIcon) darkIcon.classList.toggle('hidden', !isDark);
-               });
-
-               // Update meta theme color for mobile browsers
-               const metaThemeColor = document.querySelector('meta[name="theme-color"]');
-               if (metaThemeColor) {
-                    metaThemeColor.content = isDark ? '#1f2937' : '#ffffff';
-               }
-          }
-     };
-
-     // Initialize on page load
-     document.addEventListener('DOMContentLoaded', () => {
-          // Create theme toggle button if it doesn't exist
-          if (!document.querySelector('[data-theme-toggle]')) {
-               const toggleButton = document.createElement('button');
-               toggleButton.setAttribute('data-theme-toggle', '');
-               toggleButton.className = 'fixed top-4 right-4 z-50 p-2 rounded-lg bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-all duration-300';
-               toggleButton.innerHTML = `
-                    <svg data-theme-icon="light" class="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                    </svg>
-                    <svg data-theme-icon="dark" class="hidden w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
-                    </svg>
-                `;
-               document.body.appendChild(toggleButton);
-          }
-
-          // Add click handlers to toggle buttons
-          document.querySelectorAll('[data-theme-toggle]').forEach(button => {
-               button.addEventListener('click', () => ThemeManager.toggleTheme());
-          });
-
-          // Initial UI update
-          ThemeManager.updateThemeUI(ThemeManager.getCurrentTheme());
-     });
-
-     // Optional: Listen for system theme changes
-     if (window.matchMedia) {
-          window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
-               if (themeProvider.theme === 'system') {
-                    ThemeManager.updateThemeUI(e.matches ? 'dark' : 'light');
-               }
-          });
-     }
-</script>
-
-<!-- Add base styles for theme transitions -->
 <style>
      /* Smooth theme transitions */
      * {
@@ -210,12 +108,6 @@
                                                        Ajouter un Service
                                                   </a>
                                                   <% } %>
-
-                                                       <!-- Dark Mode Toggle -->
-                                                       <button id="theme-toggle" class="p-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200">
-                                                            <i class="fas fa-sun text-xl dark:hidden"></i>
-                                                            <i class="fas fa-moon text-xl hidden dark:block"></i>
-                                                       </button>
                     </div>
                </div>
 
@@ -226,12 +118,6 @@
                          <i class="fas fa-plus mr-1"></i>
                          <span>Ajouter</span>
                     </a>
-
-                    <!-- Dark Mode Toggle (Mobile) -->
-                    <button id="theme-toggle-mobile" class="p-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200">
-                         <i class="fas fa-sun text-lg dark:hidden"></i>
-                         <i class="fas fa-moon text-lg hidden dark:block"></i>
-                    </button>
 
                     <!-- Mobile Menu Button -->
                     <button type="button" class="mobile-menu-button inline-flex items-center justify-center p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors duration-200" aria-controls="mobile-menu" aria-expanded="false">
