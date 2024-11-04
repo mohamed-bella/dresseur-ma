@@ -58,72 +58,74 @@
                          </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
-                         <% services.forEach(service=> { %>
-                              <tr class="hover:bg-gray-50 transition-colors">
-                                   <!-- Service Info -->
-                                   <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                             <div class="h-12 w-12 flex-shrink-0">
-                                                  <img class="h-12 w-12 rounded-lg object-cover" src="<%= service.images[0] %>" alt="<%= service.serviceName %>">
-                                             </div>
-                                             <div class="ml-4">
-                                                  <div class="text-sm font-medium text-gray-900">
-                                                       <%= service.serviceName %>
+                         <% if (services && services.length> 0) { %>
+                              <% services.forEach(service=> { %>
+                                   <tr class="hover:bg-gray-50 transition-colors">
+                                        <!-- Service Info -->
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                             <div class="flex items-center">
+                                                  <div class="h-12 w-12 flex-shrink-0">
+                                                       <img class="h-12 w-12 rounded-lg object-cover" src="<%= service.images[0] %>" alt="<%= service.serviceName %>">
                                                   </div>
-                                                  <div class="text-sm text-gray-500">
-                                                       <%= service.reviews?.length || 0 %> avis
+                                                  <div class="ml-4">
+                                                       <div class="text-sm font-medium text-gray-900">
+                                                            <%= service.serviceName %>
+                                                       </div>
+                                                       <div class="text-sm text-gray-500">
+                                                            <%= service.reviews?.length || 0 %> avis
+                                                       </div>
                                                   </div>
                                              </div>
-                                        </div>
-                                   </td>
+                                        </td>
 
-                                   <!-- Type -->
-                                   <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                             <%= service.serviceOptions %>
-                                        </span>
-                                   </td>
-
-                                   <!-- Location -->
-                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        <%= service.location %>
-                                   </td>
-
-                                   <!-- Price -->
-                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                        <%= service.priceRange %> DH
-                                   </td>
-
-                                   <!-- Status Toggle -->
-                                   <td class="px-6 py-4 whitespace-nowrap">
-                                        <label class="relative inline-flex items-center cursor-pointer">
-                                             <input type="checkbox" class="sr-only peer" onchange="toggleServiceStatus('<%= service._id %>', '<%= service.status %>')" <%=service.status==='active' ? 'checked' : '' %>>
-                                             <div class="w-11 h-6 bg-gray-200 rounded-full peer 
-                                                peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 
-                                                peer-checked:after:translate-x-full peer-checked:bg-blue-600
-                                                after:content-[''] after:absolute after:top-[2px] after:left-[2px] 
-                                                after:bg-white after:border-gray-300 after:border after:rounded-full 
-                                                after:h-5 after:w-5 after:transition-all">
-                                             </div>
-                                             <span class="ml-3 text-sm font-medium text-gray-500">
-                                                  <%= service.status==='active' ? 'Actif' : 'Inactif' %>
+                                        <!-- Type -->
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                  <%= service.serviceOptions %>
                                              </span>
-                                        </label>
-                                   </td>
+                                        </td>
 
-                                   <!-- Actions -->
-                                   <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <div class="flex items-center gap-3">
-                                             <a href="/service/<%= service._id %>" class="text-blue-600 hover:text-blue-900">Voir</a>
-                                             <a href="/dashboard/services/<%= service._id %>/edit" class="text-gray-600 hover:text-gray-900">Modifier</a>
-                                             <form action="/dashboard/services/<%= service._id %>/delete" method="post">
-                                                  <button type="submit" class="text-red-600 hover:text-red-900">Remove</button>
+                                        <!-- Location -->
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                             <%= service.location %>
+                                        </td>
 
-                                             </form>
-                                        </div>
-                                   </td>
-                              </tr>
-                              <% }); %>
+                                        <!-- Price -->
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                             <%= service.priceRange %> DH
+                                        </td>
+
+                                        <!-- Status Toggle -->
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                             <label class="relative inline-flex items-center cursor-pointer">
+                                                  <input type="checkbox" class="sr-only peer" onchange="toggleServiceStatus('<%= service._id %>', '<%= service.status %>')" <%=service.status==='active' ? 'checked' : '' %>>
+                                                  <div class="w-11 h-6 bg-gray-200 rounded-full peer 
+                                                                         peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 
+                                                                         peer-checked:after:translate-x-full peer-checked:bg-blue-600
+                                                                         after:content-[''] after:absolute after:top-[2px] after:left-[2px] 
+                                                                         after:bg-white after:border-gray-300 after:border after:rounded-full 
+                                                                         after:h-5 after:w-5 after:transition-all">
+                                                  </div>
+                                                  <span class="ml-3 text-sm font-medium text-gray-500">
+                                                       <%= service.status==='active' ? 'Actif' : 'Inactif' %>
+                                                  </span>
+                                             </label>
+                                        </td>
+
+                                        <!-- Actions -->
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                             <div class="flex items-center gap-3">
+                                                  <a href="/service/<%= service._id %>" class="text-blue-600 hover:text-blue-900">Voir</a>
+                                                  <a href="/dashboard/services/<%= service._id %>/edit" class="text-gray-600 hover:text-gray-900">Modifier</a>
+                                                  <form action="/dashboard/services/<%= service._id %>/delete" method="post">
+                                                       <button type="submit" class="text-red-600 hover:text-red-900">Remove</button>
+
+                                                  </form>
+                                             </div>
+                                        </td>
+                                   </tr>
+                                   <% }); %>
+                                        <% } %>
                     </tbody>
                </table>
           </div>
