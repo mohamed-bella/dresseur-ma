@@ -37,8 +37,7 @@
                                    <div class="flex items-center space-x-3">
                                         <!-- Day Toggle -->
                                         <label class="relative inline-flex items-center cursor-pointer">
-                                             <input type="checkbox" name="<%= day.id %>-enabled" class="day-toggle sr-only peer" <%=user.businessHours && user.businessHours[day.id] && (user.businessHours[day.id].isOpen===true || user.businessHours[day.id].isOpen==='true' ) ? 'checked' : '' %>
-                                             disabled>
+                                             <input type="checkbox" name="<%= day.id %>-enabled" class="day-toggle sr-only peer" <%=user.businessHours && user.businessHours[day.id] && (user.businessHours[day.id].isOpen===true || user.businessHours[day.id].isOpen==='true' ) ? 'checked' : '' %>>
                                              <div class="w-11 h-6 bg-gray-200 rounded-full peer 
                                     peer-focus:ring-2 peer-focus:ring-blue-300
                                     peer-checked:bg-blue-600 
@@ -149,7 +148,7 @@
           // Initialize form state
           function initializeState() {
                // Reset all controls to default state
-               $('.day-toggle').prop('disabled', true).prop('checked', false);
+               $('.day-toggle').prop('checked', false);
                $('.time-select').prop('disabled', true);
 
                // Apply saved data
@@ -162,7 +161,7 @@
                     const $closeSelect = $dayContainer.find(`[name="${day}-close"]`);
 
                     // Coerce isOpen to boolean
-                    const isOpen = hours.isOpen === true || hours.isOpen === 'true';
+                    const isOpen = hours.isOpen === true || hours.isOpen === 'true' || (hours.open && hours.close);
 
                     // Set toggle state
                     $toggle.prop('checked', isOpen);

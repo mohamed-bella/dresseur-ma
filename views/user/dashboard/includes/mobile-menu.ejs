@@ -16,9 +16,25 @@
 
                <!-- Navigation -->
                <nav class="flex-1 p-4 space-y-2">
-                    <a href="/dashboard" class="flex items-center px-4 py-3 rounded-lg bg-blue-700">
-                         <i class="fas fa-home w-6"></i>
-                         <span>Tableau de Bord</span>
+                    <a href="/dashboard" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg <%= path === 'dashboard' ? 'bg-blue-50 text-blue-600' : '' %>">
+                         <i class="fas fa-gauge-high w-5"></i>
+                         <span>Dashboard</span>
+                    </a>
+                    <a href="/dashboard/profile" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg <%= path === 'profile' ? 'bg-blue-50 text-blue-600' : '' %>">
+                         <i class="fas fa-user w-5"></i>
+                         <span>Profile</span>
+                    </a>
+                    <!-- <a href="/services" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg <%= path === 'services' ? 'bg-blue-50 text-blue-600' : '' %>">
+                                        <i class="fas fa-briefcase w-5"></i>
+                                        <span>Services</span>
+                                   </a> -->
+                    <!-- <a href="/reservations" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg <%= path === 'reservations' ? 'bg-blue-50 text-blue-600' : '' %>">
+                                        <i class="fas fa-calendar w-5"></i>
+                                        <span>Reservations</span>
+                                   </a> -->
+                    <a href="/dashboard/galery" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg <%= path === 'gallery' ? 'bg-blue-50 text-blue-600' : '' %>">
+                         <i class="fas fa-images w-5"></i>
+                         <span>Gallery</span>
                     </a>
                     <!-- Other menu items same as sidebar -->
                </nav>

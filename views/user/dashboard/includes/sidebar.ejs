@@ -17,9 +17,7 @@
                     <h3 class="text-sm font-semibold text-gray-800">
                          <%= user.displayName %>
                     </h3>
-                    <p class="text-xs text-gray-500">
-                         <%= user.email %>
-                    </p>
+
                </div>
           </div>
      </div>
@@ -31,19 +29,19 @@
                     <i class="fas fa-gauge-high w-5"></i>
                     <span>Dashboard</span>
                </a>
-               <a href="/profile" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg <%= path === 'profile' ? 'bg-blue-50 text-blue-600' : '' %>">
+               <a href="/dashboard/profile" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg <%= path === 'profile' ? 'bg-blue-50 text-blue-600' : '' %>">
                     <i class="fas fa-user w-5"></i>
                     <span>Profile</span>
                </a>
-               <a href="/services" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg <%= path === 'services' ? 'bg-blue-50 text-blue-600' : '' %>">
+               <!-- <a href="/services" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg <%= path === 'services' ? 'bg-blue-50 text-blue-600' : '' %>">
                     <i class="fas fa-briefcase w-5"></i>
                     <span>Services</span>
-               </a>
-               <a href="/reservations" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg <%= path === 'reservations' ? 'bg-blue-50 text-blue-600' : '' %>">
+               </a> -->
+               <!-- <a href="/reservations" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg <%= path === 'reservations' ? 'bg-blue-50 text-blue-600' : '' %>">
                     <i class="fas fa-calendar w-5"></i>
                     <span>Reservations</span>
-               </a>
-               <a href="/gallery" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg <%= path === 'gallery' ? 'bg-blue-50 text-blue-600' : '' %>">
+               </a> -->
+               <a href="/dashboard/galery" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg <%= path === 'gallery' ? 'bg-blue-50 text-blue-600' : '' %>">
                     <i class="fas fa-images w-5"></i>
                     <span>Gallery</span>
                </a>

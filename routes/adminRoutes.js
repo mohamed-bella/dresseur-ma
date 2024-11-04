@@ -110,12 +110,14 @@ router.get('/admin/dashboard', async (req, res) => {
      }
 
      try {
+          const articles = await Article.find();
           // Only allow admins to view the full dashboard
           if (req.session.adminRole === 'admin') {
-               return res.render('admin/dashboard', { role: 'admin' });
+               return res.render('admin/dashboard', { role: 'admin', articles });
           } else if (req.session.adminRole === 'author') {
                // Fetch articles for the logged-in author
-               const articles = await Article.find(); // Assuming you store the user ID in the session
+               // Assuming you store the user ID in the session
+               console.log(articles)
                return res.render('admin/dashboard', { role: 'author', articles });
           } else {
                return res.redirect('/admin/login');

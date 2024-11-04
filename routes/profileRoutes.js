@@ -151,6 +151,7 @@ router.get('/profile', isAuthenticated, async (req, res) => {
           // console.log(viewData)
 
           // Render the profile page
+          console.log(req.user.businessHours)
           res.render('user/dashboard/profile', viewData);
 
      } catch (error) {

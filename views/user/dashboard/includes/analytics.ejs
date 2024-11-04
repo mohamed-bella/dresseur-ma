@@ -1,222 +1,211 @@
-<div class="grid grid-cols-1 gap-6 mb-6">
-     <!-- Overview Stats -->
-     <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
-          <div class="p-6 border-b border-gray-100">
-               <h2 class="text-lg font-semibold text-gray-900">Vue d'ensemble</h2>
-          </div>
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-6">
-               <!-- Total Revenue -->
-               <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4">
-                    <div class="flex items-center justify-between mb-2">
-                         <div class="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center">
-                              <i class="fas fa-money-bill text-white text-xl"></i>
-                         </div>
-                         <span class="text-xs font-medium text-blue-600 bg-blue-100 px-2 py-1 rounded-full">+12%</span>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900">
-                         <%= stats.totalRevenue.toLocaleString() %> DH
-                    </h3>
-                    <p class="text-sm text-gray-600">Revenu total</p>
-               </div>
-
-               <!-- Total Services -->
-               <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-4">
-                    <div class="flex items-center justify-between mb-2">
-                         <div class="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center">
-                              <i class="fas fa-briefcase text-white text-xl"></i>
-                         </div>
-                         <span class="text-xs font-medium text-purple-600 bg-purple-100 px-2 py-1 rounded-full">
-                              <%= stats.activeServices %>/<%= stats.totalServices %>
-                         </span>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900">
-                         <%= stats.totalServices %>
-                    </h3>
-                    <p class="text-sm text-gray-600">Services actifs</p>
-               </div>
-
-               <!-- Total Reviews -->
-               <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl p-4">
-                    <div class="flex items-center justify-between mb-2">
-                         <div class="w-12 h-12 bg-yellow-500 rounded-lg flex items-center justify-center">
-                              <i class="fas fa-star text-white text-xl"></i>
-                         </div>
-                         <span class="text-xs font-medium text-yellow-600 bg-yellow-100 px-2 py-1 rounded-full">
-                              <%= stats.averageRating %>/5
-                         </span>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900">
-                         <%= stats.totalReviews %>
-                    </h3>
-                    <p class="text-sm text-gray-600">Avis clients</p>
-               </div>
-
-               <!-- Total Reservations -->
-               <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-4">
-                    <div class="flex items-center justify-between mb-2">
-                         <div class="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center">
-                              <i class="fas fa-calendar-check text-white text-xl"></i>
-                         </div>
-                         <span class="text-xs font-medium text-green-600 bg-green-100 px-2 py-1 rounded-full">+5%</span>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900">
-                         <%= stats.totalReservations %>
-                    </h3>
-                    <p class="text-sm text-gray-600">Réservations totales</p>
-               </div>
-          </div>
+<% if (user.isVerified) { %>
+     <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative" role="alert">
+          <strong class="font-bold">✔️ Vérifié!</strong>
+          <span class="block sm:inline">Votre compte a été marqué comme vérifié par les administrateurs. Vous avez maintenant le badge de confiance et votre profil apparaît sur la page d'accueil.</span>
      </div>
-
-
-
-</div>
-
-<!-- Analytics Charts -->
-<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-     <!-- Visitor Analytics -->
-     <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
-          <div class="p-6 border-b border-gray-100">
-               <h2 class="text-lg font-semibold text-gray-900">
-                    Visiteurs du profil - Derniers 7 jours
-               </h2>
+     <% } else { %>
+          <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative" role="alert">
+               <strong class="font-bold">⚠️ Attention!</strong>
+               <span class="block sm:inline">Votre compte n'a pas encore été vérifié par les administrateurs et ne s'affiche pas sur la page d'accueil. Soyez patient, la vérification est en cours. ⏳</span>
           </div>
-          <div class="p-6">
-               <canvas id="visitorsChart" height="250"></canvas>
-          </div>
-     </div>
+          <% } %>
 
-</div>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<input type="hidden" value="<%= JSON.stringify(analytics.detailedVisits1) %>" id="visitorsData">
-<script>
-     // Visitor Analytics Chart Data
-     const visitorsData = JSON.parse(document.getElementById('visitorsData').value);
-     console.log(visitorsData); // Check if parsed correctly
 
-     // Check if the parsed data is an array and map over it
-     if (Array.isArray(visitorsData)) {
-          const visitorLabels = visitorsData.map(v => v.date);
-          const visitorCounts = visitorsData.map(v => v.count);
+               <div class="grid grid-cols-1 gap-6 mb-6">
+                    <!-- Overview Stats -->
+                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+                         <div class="p-6 border-b border-gray-100">
+                              <h2 class="text-lg font-semibold text-gray-900">Vue d'ensemble</h2>
+                         </div>
+                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-6">
 
-          console.log(visitorLabels); // Check the labels
-          console.log(visitorCounts); // Check the counts
 
-          // Create Visitor Chart
-          const ctxVisitors = document.getElementById('visitorsChart').getContext('2d');
-          new Chart(ctxVisitors, {
-               type: 'bar', // Column chart
-               data: {
-                    labels: visitorLabels,
-                    datasets: [{
-                         label: 'Nombre de Visites',
-                         data: visitorCounts,
-                         backgroundColor: 'rgba(54, 162, 235, 0.7)', // Softer color for bars
-                         borderColor: 'rgba(54, 162, 235, 1)',
-                         borderWidth: 1,
-                         borderRadius: 5, // Rounded corners for a softer look
-                         hoverBackgroundColor: 'rgba(54, 162, 235, 0.9)', // Slightly darker on hover
-                         hoverBorderColor: 'rgba(54, 162, 235, 1)'
-                    }]
-               },
-               options: {
-                    responsive: true,
-                    maintainAspectRatio: false, // Allows chart to adapt better to container size
-                    plugins: {
-                         legend: {
-                              display: false // Remove legend for a cleaner look (optional)
-                         },
-                         tooltip: {
-                              backgroundColor: 'rgba(0, 0, 0, 0.8)', // Darker background for tooltip
-                              titleColor: '#ffffff',
-                              bodyColor: '#ffffff',
-                              cornerRadius: 4
-                         }
-                    },
-                    scales: {
-                         x: {
-                              grid: {
-                                   display: false // Remove grid lines for a cleaner look
+                              <!-- Total Services -->
+                              <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-4">
+                                   <div class="flex items-center justify-between mb-2">
+                                        <div class="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center">
+                                             <i class="fas fa-briefcase text-white text-xl"></i>
+                                        </div>
+                                        <span class="text-xs font-medium text-purple-600 bg-purple-100 px-2 py-1 rounded-full">
+                                             <%= stats.activeServices %>/<%= stats.totalServices %>
+                                        </span>
+                                   </div>
+                                   <h3 class="text-2xl font-bold text-gray-900">
+                                        <%= stats.totalServices %>
+                                   </h3>
+                                   <p class="text-sm text-gray-600">Services actifs</p>
+                              </div>
+
+                              <!-- Total Reviews -->
+                              <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl p-4">
+                                   <div class="flex items-center justify-between mb-2">
+                                        <div class="w-12 h-12 bg-yellow-500 rounded-lg flex items-center justify-center">
+                                             <i class="fas fa-star text-white text-xl"></i>
+                                        </div>
+                                        <span class="text-xs font-medium text-yellow-600 bg-yellow-100 px-2 py-1 rounded-full">
+                                             <%= stats.averageRating %>/5
+                                        </span>
+                                   </div>
+                                   <h3 class="text-2xl font-bold text-gray-900">
+                                        <%= stats.totalReviews %>
+                                   </h3>
+                                   <p class="text-sm text-gray-600">Avis clients</p>
+                              </div>
+
+
+                         </div>
+                    </div>
+
+
+
+               </div>
+
+               <!-- Analytics Charts -->
+               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Visitor Analytics -->
+                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+                         <div class="p-6 border-b border-gray-100">
+                              <h2 class="text-lg font-semibold text-gray-900">
+                                   Visiteurs du profil - Derniers 7 jours
+                              </h2>
+                         </div>
+                         <div class="p-6">
+                              <canvas id="visitorsChart" height="250"></canvas>
+                         </div>
+                    </div>
+
+               </div>
+               <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+               <input type="hidden" value="<%= JSON.stringify(analytics.detailedVisits1) %>" id="visitorsData">
+               <script>
+                    // Visitor Analytics Chart Data
+                    const visitorsData = JSON.parse(document.getElementById('visitorsData').value);
+                    console.log(visitorsData); // Check if parsed correctly
+
+                    // Check if the parsed data is an array and map over it
+                    if (Array.isArray(visitorsData)) {
+                         const visitorLabels = visitorsData.map(v => v.date);
+                         const visitorCounts = visitorsData.map(v => v.count);
+
+                         console.log(visitorLabels); // Check the labels
+                         console.log(visitorCounts); // Check the counts
+
+                         // Create Visitor Chart
+                         const ctxVisitors = document.getElementById('visitorsChart').getContext('2d');
+                         new Chart(ctxVisitors, {
+                              type: 'bar', // Column chart
+                              data: {
+                                   labels: visitorLabels,
+                                   datasets: [{
+                                        label: 'Nombre de Visites',
+                                        data: visitorCounts,
+                                        backgroundColor: 'rgba(54, 162, 235, 0.7)', // Softer color for bars
+                                        borderColor: 'rgba(54, 162, 235, 1)',
+                                        borderWidth: 1,
+                                        borderRadius: 5, // Rounded corners for a softer look
+                                        hoverBackgroundColor: 'rgba(54, 162, 235, 0.9)', // Slightly darker on hover
+                                        hoverBorderColor: 'rgba(54, 162, 235, 1)'
+                                   }]
                               },
-                              title: {
-                                   display: true,
-                                   text: 'Date',
-                                   color: '#333',
-                                   font: {
-                                        family: 'Arial',
-                                        size: 14,
-                                        weight: 'bold'
+                              options: {
+                                   responsive: true,
+                                   maintainAspectRatio: false, // Allows chart to adapt better to container size
+                                   plugins: {
+                                        legend: {
+                                             display: false // Remove legend for a cleaner look (optional)
+                                        },
+                                        tooltip: {
+                                             backgroundColor: 'rgba(0, 0, 0, 0.8)', // Darker background for tooltip
+                                             titleColor: '#ffffff',
+                                             bodyColor: '#ffffff',
+                                             cornerRadius: 4
+                                        }
+                                   },
+                                   scales: {
+                                        x: {
+                                             grid: {
+                                                  display: false // Remove grid lines for a cleaner look
+                                             },
+                                             title: {
+                                                  display: true,
+                                                  text: 'Date',
+                                                  color: '#333',
+                                                  font: {
+                                                       family: 'Arial',
+                                                       size: 14,
+                                                       weight: 'bold'
+                                                  }
+                                             },
+                                             ticks: {
+                                                  color: '#666'
+                                             }
+                                        },
+                                        y: {
+                                             grid: {
+                                                  color: 'rgba(200, 200, 200, 0.3)' // Subtle grid lines
+                                             },
+                                             title: {
+                                                  display: true,
+                                                  text: 'Visites',
+                                                  color: '#333',
+                                                  font: {
+                                                       family: 'Arial',
+                                                       size: 14,
+                                                       weight: 'bold'
+                                                  }
+                                             },
+                                             ticks: {
+                                                  color: '#666'
+                                             }
+                                        }
+                                   }
+                              }
+                         });
+                    } else {
+                         console.error('Parsed data is not an array:', visitorsData);
+                    }
+
+
+               </script>
+
+
+
+               <!-- Initialize Charts -->
+
+               <script>
+                    // Performance Chart
+                    new Chart(document.getElementById('performanceChart'), {
+                         type: 'line',
+                         data: {
+                              labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                              datasets: [{
+                                   label: 'Revenus',
+                                   data: [1500, 2200, 1800, 2400, 2800, 2600, 3200],
+                                   borderColor: '#2563eb',
+                                   tension: 0.4
+                              }]
+                         },
+                         options: {
+                              responsive: true,
+                              plugins: {
+                                   legend: {
+                                        display: false
                                    }
                               },
-                              ticks: {
-                                   color: '#666'
-                              }
-                         },
-                         y: {
-                              grid: {
-                                   color: 'rgba(200, 200, 200, 0.3)' // Subtle grid lines
-                              },
-                              title: {
-                                   display: true,
-                                   text: 'Visites',
-                                   color: '#333',
-                                   font: {
-                                        family: 'Arial',
-                                        size: 14,
-                                        weight: 'bold'
+                              scales: {
+                                   y: {
+                                        beginAtZero: true,
+                                        grid: {
+                                             display: false
+                                        }
+                                   },
+                                   x: {
+                                        grid: {
+                                             display: false
+                                        }
                                    }
-                              },
-                              ticks: {
-                                   color: '#666'
                               }
                          }
-                    }
-               }
-          });
-     } else {
-          console.error('Parsed data is not an array:', visitorsData);
-     }
+                    });
 
-
-</script>
-
-
-
-<!-- Initialize Charts -->
-
-<script>
-     // Performance Chart
-     new Chart(document.getElementById('performanceChart'), {
-          type: 'line',
-          data: {
-               labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
-               datasets: [{
-                    label: 'Revenus',
-                    data: [1500, 2200, 1800, 2400, 2800, 2600, 3200],
-                    borderColor: '#2563eb',
-                    tension: 0.4
-               }]
-          },
-          options: {
-               responsive: true,
-               plugins: {
-                    legend: {
-                         display: false
-                    }
-               },
-               scales: {
-                    y: {
-                         beginAtZero: true,
-                         grid: {
-                              display: false
-                         }
-                    },
-                    x: {
-                         grid: {
-                              display: false
-                         }
-                    }
-               }
-          }
-     });
-
-</script>
+               </script>

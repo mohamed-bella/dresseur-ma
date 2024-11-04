@@ -29,6 +29,7 @@ const upload = multer({
 
 router.get('/galery', async (req, res) => {
      res.render('user/dashboard/galery', {
+          path: 'gallery',
           pageTitle: "Galerie de " + req.user.displayName,
           user: req.user
      });
