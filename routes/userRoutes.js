@@ -5,7 +5,8 @@ const multer = require('multer');
 const { body, validationResult } = require('express-validator');
 const mongoose = require('mongoose');
 const { ObjectId } = mongoose.Types;
-
+const captureVisit = require('../utils/visitTracker'); // Import the visit tracking utility
+const Visit = require('../models/visit')
 const path = require('path');
 const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
 const { Upload } = require('@aws-sdk/lib-storage');
@@ -467,18 +468,60 @@ router.get('/dashboard', async (req, res) => {
                totalReviews: services.reduce((acc, s) => acc + s.reviews.length, 0)
           };
 
+          const now = new Date();
+          const last7Days = new Date(now.setDate(now.getDate() - 7));
+
+          // Aggregate visit data, including guest visits, for the last 7 days
+          const detailedVisits = await Visit.aggregate([
+               {
+                    $match: {
+                         providerId: new ObjectId(req.user._id),
+                         createdAt: { $gte: last7Days }
+                    }
+               },
+               {
+                    $group: {
+                         _id: {
+                              date: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
+                              device: '$device',
+                              location: '$location',
+                              userId: '$userId'
+                         },
+                         count: { $sum: 1 }
+                    }
+               },
+               {
+                    $sort: { '_id.date': 1 }
+               }
+          ]);
+          const detailedVisits1 = formatDetailedVisits(detailedVisits)
+          console.log(detailedVisits1)
           res.render('user/dashboard/dashboard', {
                user: req.user,
                stats,
+               path: 'profile',
                services,
+               analytics: {
+                    detailedVisits1, // Format data for the frontend
+               },
                moment: require('moment')
           });
+
 
      } catch (error) {
           console.error('Dashboard Error:', error);
           res.status(500).send('Error loading dashboard');
      }
 });
+
+
+function formatDetailedVisits(visits) {
+     // Format visits data to return only date and count
+     return visits.map(visit => ({
+          date: visit._id.date, // Use only the date for the chart
+          count: visit.count    // Total count of visits for that date
+     }));
+}
 // Configure AWS S3 Client for SDK v3
 const s3 = new S3Client({
      region: process.env.AWS_REGION,
@@ -772,6 +815,7 @@ router.get('/@:slug', async (req, res) => {
      try {
           const { slug } = req.params;
 
+
           // Fetch user with all necessary fields
           const user = await User.findOne({ slug })
                .select('-password -email -phoneNumber -settings -verificationDocuments -googleId -__v');
@@ -781,6 +825,7 @@ router.get('/@:slug', async (req, res) => {
                     message: 'Profil non trouvé'
                });
           }
+          await captureVisit(req, user._id)
 
           // Fetch related data
           const [services, reviews, completedBookings] = await Promise.all([
@@ -1105,6 +1150,93 @@ router.get('/event/:id', async (req, res) => {
           console.error('Error fetching event:', error);
           res.status(500).render('error', {
                message: 'Error loading event details'
+          });
+     }
+});
+
+// GET ALL PROVIDERS PAGE 
+router.get('/providers', async (req, res) => {
+     try {
+          const filters = {};
+          const { location, specialization, rating, sort } = req.query;
+
+          // Apply filters
+          if (location) {
+               filters['location.city'] = new RegExp(location, 'i');
+          }
+
+          if (specialization) {
+               filters.specializations = specialization;
+          }
+
+          if (rating) {
+               filters['metrics.averageRating'] = { $gte: parseFloat(rating) };
+          }
+
+          // Base query
+          let query = User.find({
+               // role: 'provider',
+               // isVerified: true,
+               // status: 'active'
+          });
+
+          // Apply filters
+          query = query.find(filters);
+
+          // Apply sorting
+          switch (sort) {
+               case 'rating':
+                    query = query.sort({ 'metrics.averageRating': -1 });
+                    break;
+               case 'experience':
+                    query = query.sort({ 'experience.years': -1 });
+                    break;
+               case 'reviews':
+                    query = query.sort({ 'metrics.totalReviews': -1 });
+                    break;
+               default:
+                    query = query.sort({ 'metrics.ndressilikScore': -1 });
+          }
+
+          // Execute query with pagination
+          const page = parseInt(req.query.page) || 1;
+          const limit = 12;
+          const skip = (page - 1) * limit;
+
+          const [providers, total] = await Promise.all([
+               query.skip(skip).limit(limit),
+               User.countDocuments(filters)
+          ]);
+
+          // Get unique locations and specializations for filters
+          const [locations, specializations] = await Promise.all([
+               User.distinct('location.city', { role: 'provider' }),
+               User.distinct('specializations', { role: 'provider' })
+          ]);
+
+          console.log(providers)
+
+          res.render('user/providers', {
+               providers,
+               locations,
+               specializations,
+               currentPage: page,
+               totalPages: Math.ceil(total / limit),
+               totalProviders: total,
+               filters: {
+                    location,
+                    specialization,
+                    rating,
+                    sort
+               },
+               pageTitle: 'Trouvez les meilleurs prestataires de services pour animaux',
+               description: 'Découvrez des professionnels qualifiés pour prendre soin de vos animaux de compagnie',
+               keywords: 'services animaliers, dressage, toilettage, vétérinaire, pension'
+          });
+     } catch (error) {
+          console.error('Error fetching providers:', error);
+          res.status(500).render('error', {
+               message: 'Une erreur est survenue lors du chargement des prestataires'
           });
      }
 });

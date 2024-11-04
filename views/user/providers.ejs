@@ -1,0 +1,194 @@
+<%- include('include/head.ejs') %>
+     <%- include('include/navbar.ejs') %>
+
+          <div class="bg-gray-50 min-h-screen py-8">
+               <div class="container mx-auto px-4">
+                    <!-- Header -->
+                    <div class="max-w-4xl mx-auto text-center mb-12">
+                         <h1 class="text-3xl font-bold text-gray-900 mb-4">
+                              Nos Prestataires de Services
+                         </h1>
+                         <p class="text-lg text-gray-600">
+                              Des professionnels qualifiés à votre service pour prendre soin de vos animaux
+                         </p>
+                    </div>
+
+                    <!-- Filters Section -->
+                    <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+                         <form id="filterForm" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                              <!-- Location Filter -->
+                              <div>
+                                   <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        Ville
+                                   </label>
+                                   <select name="location" class="w-full border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                        <option value="">Toutes les villes</option>
+                                        <% locations.forEach(location=> { %>
+                                             <option value="<%= location %>" <%=filters.location===location ? 'selected' : '' %>>
+                                                  <%= location.charAt(0).toUpperCase() + location.slice(1) %>
+                                             </option>
+                                             <% }) %>
+                                   </select>
+                              </div>
+
+                              <!-- Specialization Filter -->
+                              <div>
+                                   <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        Spécialisation
+                                   </label>
+                                   <select name="specialization" class="w-full border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                        <option value="">Toutes les spécialisations</option>
+                                        <% specializations.forEach(spec=> { %>
+                                             <option value="<%= spec %>" <%=filters.specialization===spec ? 'selected' : '' %>>
+                                                  <%= spec.split('-').map(word=> word.charAt(0).toUpperCase() + word.slice(1)).join(' ') %>
+                                             </option>
+                                             <% }) %>
+                                   </select>
+                              </div>
+
+                              <!-- Rating Filter -->
+                              <div>
+                                   <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        Note minimum
+                                   </label>
+                                   <select name="rating" class="w-full border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                        <option value="">Toutes les notes</option>
+                                        <% [4.5, 4, 3.5, 3].forEach(rating=> { %>
+                                             <option value="<%= rating %>" <%=filters.rating===String(rating) ? 'selected' : '' %>>
+                                                  <%= rating %>+ étoiles
+                                             </option>
+                                             <% }) %>
+                                   </select>
+                              </div>
+
+                              <!-- Sort Filter -->
+                              <div>
+                                   <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        Trier par
+                                   </label>
+                                   <select name="sort" class="w-full border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                        <option value="score" <%=filters.sort==='score' ? 'selected' : '' %>>
+                                             Score NDRESSILIK
+                                        </option>
+                                        <option value="rating" <%=filters.sort==='rating' ? 'selected' : '' %>>
+                                             Note
+                                        </option>
+                                        <option value="reviews" <%=filters.sort==='reviews' ? 'selected' : '' %>>
+                                             Nombre d'avis
+                                        </option>
+                                        <option value="experience" <%=filters.sort==='experience' ? 'selected' : '' %>>
+                                             Expérience
+                                        </option>
+                                   </select>
+                              </div>
+                         </form>
+                    </div>
+
+                    <!-- Results Count -->
+                    <div class="mb-6 text-gray-600">
+                         <%= totalProviders %> prestataire<%= totalProviders> 1 ? 's' : '' %> trouvé<%= totalProviders> 1 ? 's' : '' %>
+                    </div>
+
+                    <!-- Providers Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                         <% providers.forEach(provider=> { %>
+                              <div class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+                                   <!-- Cover Image -->
+                                   <div class="relative h-48">
+                                        <img src="<%= provider.coverImage %>" alt="<%= provider.displayName %>" class="w-full h-full object-cover">
+
+                                        <!-- Profile Image Overlay -->
+                                        <div class="absolute -bottom-6 left-6">
+                                             <div class="relative">
+                                                  <img src="<%= provider.profileImage %>" alt="<%= provider.displayName %>" class="w-20 h-20 rounded-lg border-4 border-white">
+                                                  <% if (provider.isVerified) { %>
+                                                       <div class="absolute -top-2 -right-2 bg-blue-500 text-white p-1 rounded-full">
+                                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                            </svg>
+                                                       </div>
+                                                       <% } %>
+                                             </div>
+                                        </div>
+                                   </div>
+
+                                   <!-- Provider Info -->
+                                   <div class="p-6 pt-8">
+                                        <h3 class="text-xl font-bold text-gray-900 mb-2">
+                                             <%= provider.displayName %>
+                                        </h3>
+
+                                        <!-- Location -->
+                                        <p class="text-gray-600 mb-4">
+                                             <i class="fas fa-map-marker-alt text-gray-400 mr-2"></i>
+                                             <%= provider.location?.city %>
+                                        </p>
+
+                                        <!-- Specializations -->
+                                        <div class="flex flex-wrap gap-2 mb-4">
+                                             <% provider.specializations.slice(0, 3).forEach(spec=> { %>
+                                                  <span class="px-2 py-1 bg-blue-50 text-blue-700 rounded-full text-sm">
+                                                       <%= spec.split('-').map(word=> word.charAt(0).toUpperCase() + word.slice(1)).join(' ') %>
+                                                  </span>
+                                                  <% }) %>
+                                                       <% if (provider.specializations.length> 3) { %>
+                                                            <span class="px-2 py-1 bg-gray-50 text-gray-600 rounded-full text-sm">
+                                                                 +<%= provider.specializations.length - 3 %>
+                                                            </span>
+                                                            <% } %>
+                                        </div>
+
+                                        <!-- Stats -->
+                                        <div class="grid grid-cols-3 gap-4 py-4 border-t">
+                                             <div class="text-center">
+                                                  <div class="text-lg font-bold text-gray-900">
+                                                       <%= provider.metrics.averageRating?.toFixed(1) || '0.0' %>
+                                                  </div>
+                                                  <div class="text-sm text-gray-500">Note</div>
+                                             </div>
+                                             <div class="text-center">
+                                                  <div class="text-lg font-bold text-gray-900">
+                                                       <%= provider.metrics.totalServices || 0 %>
+                                                  </div>
+                                                  <div class="text-sm text-gray-500">Services</div>
+                                             </div>
+                                             <div class="text-center">
+                                                  <div class="text-lg font-bold text-gray-900">
+                                                       <%= provider.metrics.totalReviews || 0 %>
+                                                  </div>
+                                                  <div class="text-sm text-gray-500">Avis</div>
+                                             </div>
+                                        </div>
+
+                                        <!-- Action Button -->
+                                        <a href="/@<%= provider.slug %>" class="block w-full text-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors mt-4">
+                                             Voir le profil
+                                        </a>
+                                   </div>
+                              </div>
+                              <% }) %>
+                    </div>
+
+                    <!-- Pagination -->
+                    <% if (totalPages> 1) { %>
+                         <div class="flex justify-center mt-8 gap-2">
+                              <% for (let i=1; i <=totalPages; i++) { %>
+                                   <a href="?page=<%= i %>&<%= new URLSearchParams({...filters, page: undefined}).toString() %>" class="px-4 py-2 rounded-lg <%= currentPage === i ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-50' %>">
+                                        <%= i %>
+                                   </a>
+                                   <% } %>
+                         </div>
+                         <% } %>
+               </div>
+          </div>
+
+          <!-- Filter Form Script -->
+          <script>
+               document.querySelectorAll('#filterForm select').forEach(select => {
+                    select.addEventListener('change', () => {
+                         document.getElementById('filterForm').submit();
+                    });
+               });
+          </script>
+
+          <%- include('include/footer.ejs') %>

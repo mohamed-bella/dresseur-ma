@@ -6,7 +6,7 @@
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
      <title>Galerie - Tableau de bord</title>
 
-     <!-- Tailwind CSS and FontAwesome -->
+     <!-- Styles -->
      <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
      <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
@@ -14,72 +14,153 @@
      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
      <style>
+          :root {
+               --primary-color: #3B82F6;
+               /* Blue-500 */
+               --secondary-color: #4F46E5;
+               /* Indigo-600 */
+          }
+
+          body {
+               background: linear-gradient(135deg, #EFF6FF 0%, #E0E7FF 100%);
+          }
+
           .gallery-container {
                display: grid;
-               grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-               gap: 1.5rem;
+               grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+               gap: 2rem;
           }
 
           .gallery-image {
                position: relative;
-               border-radius: 0.75rem;
+               border-radius: 1rem;
                overflow: hidden;
-               box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-               transition: transform 0.3s ease, box-shadow 0.3s ease;
+               box-shadow: 0 10px 20px rgba(59, 130, 246, 0.1);
+               transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+               background: white;
+               padding: 0.5rem;
+          }
+
+          .gallery-image img {
+               border-radius: 0.75rem;
           }
 
           .gallery-image:hover {
-               transform: translateY(-5px);
-               box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+               transform: translateY(-8px);
+               box-shadow: 0 20px 30px rgba(59, 130, 246, 0.2);
           }
 
           .overlay {
                position: absolute;
-               inset: 0;
-               background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));
-               color: white;
+               inset: 0.5rem;
+               border-radius: 0.75rem;
+               background: linear-gradient(to top,
+                         rgba(59, 130, 246, 0.9),
+                         rgba(79, 70, 229, 0.7));
                display: flex;
                justify-content: center;
-               align-items: flex-end;
+               align-items: center;
                opacity: 0;
-               transition: opacity 0.3s ease;
-               padding: 1rem;
+               transition: all 0.3s ease;
           }
 
           .gallery-image:hover .overlay {
                opacity: 1;
           }
+
+          /* FilePond Customization */
+          .filepond--panel-root {
+               background-color: white;
+               border: 2px dashed var(--primary-color);
+          }
+
+          .filepond--drop-label {
+               color: var(--primary-color);
+          }
+
+          .filepond--item-panel {
+               background-color: var(--secondary-color);
+          }
+
+          /* Custom button styles */
+          .delete-btn {
+               background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+               transition: all 0.3s ease;
+               transform: translateY(0);
+          }
+
+          .delete-btn:hover {
+               transform: translateY(-2px);
+               box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+          }
+
+          /* Header styles */
+          .header-gradient {
+               background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+               -webkit-background-clip: text;
+               -webkit-text-fill-color: transparent;
+          }
      </style>
 </head>
 
-<body class="bg-gradient-to-br from-blue-100 via-indigo-100 to-pink-100 min-h-screen">
+<body class="min-h-screen font-sans">
      <div class="container mx-auto px-6 py-12">
-          <h1 class="text-4xl font-bold text-indigo-800 mb-6">Galerie de Photos</h1>
-          <p class="text-gray-700 text-lg mb-8">Ajoutez des photos pour enrichir votre profil. Maximum de 20 photos.</p>
+          <!-- Header Section -->
+          <div class="mb-12 text-center">
+               <h1 class="text-5xl font-bold header-gradient mb-4">Galerie de Photos</h1>
+               <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+                    Enrichissez votre profil avec vos plus belles photos. Maximum 40 photos.
+               </p>
+          </div>
+
+          <!-- Upload Section -->
+          <div class="max-w-4xl mx-auto mb-12">
+               <% if (user.gallery.length < 20) { %>
+                    <div class="bg-white p-6 rounded-2xl shadow-lg">
+                         <input type="file" id="filepond" name="filepond" multiple />
+                    </div>
+                    <% } else { %>
+                         <div class="bg-red-50 border-l-4 border-red-500 p-6 rounded-lg">
+                              <div class="flex items-center">
+                                   <div class="flex-shrink-0">
+                                        <i class="fas fa-exclamation-circle text-red-500 text-xl"></i>
+                                   </div>
+                                   <div class="ml-3">
+                                        <h3 class="text-red-800 font-medium">Limite atteinte</h3>
+                                        <p class="text-red-600 mt-1">Vous avez atteint le nombre maximum de photos autorisées.</p>
+                                   </div>
+                              </div>
+                         </div>
+                         <% } %>
+          </div>
 
           <!-- Gallery Grid -->
-          <div class="gallery-container mb-12">
+          <div class="gallery-container">
                <% user.gallery.forEach((photo, index)=> { %>
-                    <div class="gallery-image relative group">
-                         <img src="<%= photo %>" alt="Gallery Image <%= index + 1 %>" class="w-full h-60 object-cover rounded-lg">
+                    <div class="gallery-image">
+                         <img src="<%= photo %>" alt="Gallery Image <%= index + 1 %>" class="w-full h-64 object-cover">
                          <div class="overlay">
-                              <button data-photo="<%= photo %>" class="delete-photo-btn bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-200">
-                                   <i class="fas fa-trash"></i> Supprimer
+                              <button data-photo="<%= photo %>" class="delete-photo-btn delete-btn px-6 py-3 rounded-lg text-white font-medium flex items-center gap-2">
+                                   <i class="fas fa-trash-alt"></i>
+                                   Supprimer
                               </button>
                          </div>
                     </div>
                     <% }) %>
           </div>
 
-          <!-- FilePond Upload Section -->
-          <% if (user.gallery.length < 20) { %>
-               <input type="file" id="filepond" name="filepond" multiple data-max-files="20" class="mb-4" />
-               <% } else { %>
-                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 mb-4 rounded" role="alert">
-                         <i class="fas fa-exclamation-triangle mr-2"></i> Vous avez atteint le nombre maximum de photos.
+          <!-- Empty State -->
+          <% if (user.gallery.length===0) { %>
+               <div class="text-center py-16">
+                    <div class="mb-6">
+                         <i class="fas fa-images text-6xl text-gray-400"></i>
                     </div>
-                    <% } %>
+                    <h3 class="text-xl font-medium text-gray-700 mb-2">Aucune photo</h3>
+                    <p class="text-gray-500">Commencez à ajouter des photos à votre galerie</p>
+               </div>
+               <% } %>
      </div>
+
 
      <!-- Scripts -->
      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -100,7 +181,7 @@
 
                FilePond.create(document.getElementById('filepond'), {
                     allowMultiple: true,
-                    maxFiles: maxPhotos - <%= user.gallery.length %>,
+                    maxFiles: 40,
                     maxFileSize: '5MB',
                     acceptedFileTypes: ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'],
                     labelIdle: `Glissez et déposez vos photos ou <span class="filepond--label-action">cliquez ici</span>`,

@@ -94,18 +94,16 @@ const profileRoutes = require('./routes/profileRoutes');
 const galeryRoutes = require('./routes/galeryRoutes');
 
 
-app.get('/', (req, res) => {
-     res.send('site is still developing \:) ')
-})
-// app.use(userRoutes);
-// app.use(authRoutes);
-// app.use(adminRoutes);
-// app.use(articleRoutes);
-// app.use(contactRoute);
-// app.use(serviceRoutes);
-// app.use(aiRoutes);
-// app.use('/dashboard', profileRoutes);
-// app.use('/dashboard', galeryRoutes);
+
+app.use(userRoutes);
+app.use(authRoutes);
+app.use(adminRoutes);
+app.use(articleRoutes);
+app.use(contactRoute);
+app.use(serviceRoutes);
+app.use(aiRoutes);
+app.use('/dashboard', profileRoutes);
+app.use('/dashboard', galeryRoutes);
 
 // Error handling middleware (404)
 app.use((req, res) => {

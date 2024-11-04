@@ -3,6 +3,9 @@ const router = express.Router();
 const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
 const multer = require('multer');
 const path = require('path');
+const mongoose = require('mongoose')
+const { ObjectId } = mongoose.Types;
+
 const sharp = require('sharp');
 const Service = require('../models/service');
 const Review = require('../models/review');
@@ -117,24 +120,27 @@ router.post('/services/add', (req, res) => {
           }
 
           try {
-               const { serviceName, description, minPrice, maxPrice, location, serviceType } = req.body;
-               const serviceImages = [];
+               console.log(req.body.serviceImages)
+               const { serviceName, serviceImages, description, minPrice, maxPrice, location, serviceType } = req.body;
+
 
                // Process and upload images
-               if (req.files && req.files.length > 0) {
-                    for (const file of req.files) {
-                         const resizedImage = await processImage(file.buffer);
-                         const key = `services/${Date.now()}-${path.basename(file.originalname)}`;
-                         const imageUrl = await uploadToS3(resizedImage, key);
-                         serviceImages.push(imageUrl);
-                    }
-               }
+               // if (req.files && req.files.length > 0) {
+               //      for (const file of req.files) {
+               //           const resizedImage = await processImage(file.buffer);
+               //           const key = `services/${Date.now()}-${path.basename(file.originalname)}`;
+               //           const imageUrl = await uploadToS3(resizedImage, key);
+               //           serviceImages.push(imageUrl);
+               //      }
+               // }
+
+               // console.log(serviceImages)
 
                // Create new service
                const newService = new Service({
                     serviceName: serviceName.trim(),
                     description: description.trim(),
-                    priceRange: `${minPrice}-${maxPrice} DH`,
+                    priceRange: `${minPrice}`,
                     location: location.toLowerCase(),
                     serviceOptions: serviceType,
                     createdBy: req.user ? req.user._id : null,
@@ -178,7 +184,7 @@ router.post('/services/upload-temp', (req, res) => {
                     uploadedUrls.push({ key, url: imageUrl });
                }
 
-               res.json(uploadedUrls);
+               res.json({ uploadedUrls });
           } catch (error) {
                console.error(error);
                res.status(500).json({ error: 'Upload failed' });
@@ -560,6 +566,33 @@ router.get('/dashboard/services/:serviceId/edit', async (req, res) => {
      }
 });
 
+
+// DELETE route for removing a service and redirecting
+router.post('/dashboard/services/:serviceId/delete', async (req, res) => {
+     try {
+          const serviceId = req.params.serviceId;
+          console.log(serviceId)
+
+          // Check if the provided ID is valid
+          // if (!ObjectId.isValid(serviceId)) {
+          //      return res.status(400).send('Invalid service ID');
+          // }
+
+          // Find and delete the service
+          const deletedService = await Service.findByIdAndDelete(serviceId);
+
+          // If the service was not found, send an error response
+          if (!deletedService) {
+               return res.status(404).send('Service not found');
+          }
+
+          // Redirect to a different page after successful deletion (e.g., dashboard or services list)
+          res.redirect('/dashboard'); // Adjust the path as needed for your application
+     } catch (error) {
+          console.error('Error deleting service:', error);
+          res.status(500).send('An error occurred while deleting the service');
+     }
+});
 
 // Updated route with middleware
 router.post('/dashboard/services/:serviceId', upload, async (req, res) => {

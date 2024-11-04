@@ -1,148 +1,167 @@
-<!-- views/partials/dashboard/services.ejs -->
-<div class="bg-white rounded-xl shadow-sm">
+<!-- Services Management Dashboard -->
+<div class=" mx-auto px-4 sm:px-6 lg:px-8 py-8" style="margin: 10px auto !important;">
      <!-- Header Section -->
-     <div class="p-6 border-b">
-          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+     <div class="bg-white rounded-t-xl shadow-sm px-6 py-4 border-b">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+               <!-- Title and Subtitle -->
                <div>
-                    <h2 class="text-xl font-semibold text-gray-800 mb-1">Mes Services</h2>
-                    <p class="text-sm text-gray-600">Gérez vos services et suivez leurs performances</p>
+                    <h1 class="text-2xl font-bold text-gray-900">Mes Services</h1>
+                    <p class="mt-1 text-sm text-gray-500">Gérez vos services et suivez leurs performances</p>
                </div>
 
-               <!-- Actions -->
-               <div class="flex flex-col sm:flex-row gap-3">
+               <!-- Action Buttons -->
+               <div class="flex items-center gap-3">
+                    <!-- Search Bar -->
                     <div class="relative">
-                         <input type="text" id="serviceSearch" placeholder="Rechercher un service..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full">
-                         <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                         <input type="text" id="searchInput" placeholder="Rechercher..." class="w-full sm:w-64 pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                              <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                              </svg>
+                         </div>
                     </div>
-                    <a href="/dashboard/new-service" class="btn bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-all flex items-center justify-center gap-2 whitespace-nowrap">
-                         <i class="fas fa-plus"></i>
+
+                    <a href="/dashboard/new-service" class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                         <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                         </svg>
                          Nouveau Service
                     </a>
                </div>
           </div>
      </div>
 
-     <!-- Services Grid -->
-     <div class="p-6">
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="servicesGrid">
-               <% services.forEach(service=> { %>
-                    <div class="service-card bg-white border rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300" data-name="<%= service.serviceName %>" data-type="<%= service.serviceOptions %>" data-status="<%= service.status %>">
-
-                         <!-- Service Image with Status Badge -->
-                         <div class="relative">
-                              <img src="<%= service.images[0] %>" alt="<%= service.serviceName %>" class="w-full h-48 object-cover">
-                              <span class="absolute top-4 right-4 px-3 py-1 rounded-full text-sm font-medium
-                                   <%= service.status === 'active' 
-                                       ? 'bg-green-100 text-green-800' 
-                                       : 'bg-gray-100 text-gray-800' %>">
-                                   <%= service.status==='active' ? 'Actif' : 'Inactif' %>
-                              </span>
-                         </div>
-
-                         <!-- Service Info -->
-                         <div class="p-4 space-y-4">
-                              <!-- Service Type and Location -->
-                              <div class="flex items-center justify-between">
-                                   <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
-                                        <%= service.serviceOptions %>
-                                   </span>
-                                   <span class="text-gray-600 text-sm flex items-center">
-                                        <i class="fas fa-map-marker-alt mr-1"></i>
-                                        <%= service.location %>
-                                   </span>
-                              </div>
-
-                              <!-- Service Name -->
-                              <h3 class="text-lg font-semibold text-gray-800 line-clamp-2">
-                                   <%= service.serviceName %>
-                              </h3>
-
-                              <!-- Stats Row -->
-                              <div class="flex items-center justify-between">
-                                   <!-- Rating -->
-                                   <div class="flex items-center gap-2">
-                                        <div class="flex items-center text-yellow-400">
-                                             <i class="fas fa-star"></i>
-                                             <span class="ml-1 text-gray-700 font-medium">
-                                                  <%= service.rating || '0' %>
-                                             </span>
+     <!-- Table Section -->
+     <div class="bg-white shadow-sm rounded-b-xl overflow-hidden">
+          <div class="overflow-x-auto">
+               <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                         <tr>
+                              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                   Service
+                              </th>
+                              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                   Type
+                              </th>
+                              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                   Localisation
+                              </th>
+                              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                   Prix
+                              </th>
+                              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                   Statut
+                              </th>
+                              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                   Actions
+                              </th>
+                         </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                         <% services.forEach(service=> { %>
+                              <tr class="hover:bg-gray-50 transition-colors">
+                                   <!-- Service Info -->
+                                   <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                             <div class="h-12 w-12 flex-shrink-0">
+                                                  <img class="h-12 w-12 rounded-lg object-cover" src="<%= service.images[0] %>" alt="<%= service.serviceName %>">
+                                             </div>
+                                             <div class="ml-4">
+                                                  <div class="text-sm font-medium text-gray-900">
+                                                       <%= service.serviceName %>
+                                                  </div>
+                                                  <div class="text-sm text-gray-500">
+                                                       <%= service.reviews?.length || 0 %> avis
+                                                  </div>
+                                             </div>
                                         </div>
-                                        <span class="text-gray-500 text-sm">
-                                             (<%= service.reviews?.length || 0 %> avis)
-                                        </span>
-                                   </div>
-                                   <!-- Price -->
-                                   <div class="text-gray-900 font-semibold">
-                                        <%= service.priceRange %> DH
-                                   </div>
-                              </div>
+                                   </td>
 
-                              <!-- Quick Actions -->
-                              <div class="pt-4 border-t grid grid-cols-4 gap-2">
-                                   <button onclick="window.location.href='/services/<%= service._id %>/edit'" class="flex flex-col items-center p-2 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors" title="Modifier">
-                                        <i class="fas fa-edit mb-1"></i>
-                                        <span class="text-xs">Modifier</span>
-                                   </button>
-                                   <button onclick="window.location.href='/services/<%= service._id %>/stats'" class="flex flex-col items-center p-2 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors" title="Statistiques">
-                                        <i class="fas fa-chart-line mb-1"></i>
-                                        <span class="text-xs">Stats</span>
-                                   </button>
-                                   <button onclick="window.location.href='/services/<%= service._id %>/reservations'" class="flex flex-col items-center p-2 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors" title="Réservations">
-                                        <i class="fas fa-calendar-alt mb-1"></i>
-                                        <span class="text-xs">Réserv.</span>
-                                   </button>
-                                   <button onclick="toggleServiceStatus('<%= service._id %>', '<%= service.status %>')" class="flex flex-col items-center p-2 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors" title="Changer le statut">
-                                        <i class="fas <%= service.status === 'active' ? 'fa-toggle-on text-green-600' : 'fa-toggle-off text-gray-400' %> mb-1"></i>
-                                        <span class="text-xs">Statut</span>
-                                   </button>
-                              </div>
-                         </div>
-                    </div>
-                    <% }); %>
+                                   <!-- Type -->
+                                   <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                             <%= service.serviceOptions %>
+                                        </span>
+                                   </td>
+
+                                   <!-- Location -->
+                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <%= service.location %>
+                                   </td>
+
+                                   <!-- Price -->
+                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        <%= service.priceRange %> DH
+                                   </td>
+
+                                   <!-- Status Toggle -->
+                                   <td class="px-6 py-4 whitespace-nowrap">
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                             <input type="checkbox" class="sr-only peer" onchange="toggleServiceStatus('<%= service._id %>', '<%= service.status %>')" <%=service.status==='active' ? 'checked' : '' %>>
+                                             <div class="w-11 h-6 bg-gray-200 rounded-full peer 
+                                                peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 
+                                                peer-checked:after:translate-x-full peer-checked:bg-blue-600
+                                                after:content-[''] after:absolute after:top-[2px] after:left-[2px] 
+                                                after:bg-white after:border-gray-300 after:border after:rounded-full 
+                                                after:h-5 after:w-5 after:transition-all">
+                                             </div>
+                                             <span class="ml-3 text-sm font-medium text-gray-500">
+                                                  <%= service.status==='active' ? 'Actif' : 'Inactif' %>
+                                             </span>
+                                        </label>
+                                   </td>
+
+                                   <!-- Actions -->
+                                   <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                        <div class="flex items-center gap-3">
+                                             <a href="/service/<%= service._id %>" class="text-blue-600 hover:text-blue-900">Voir</a>
+                                             <a href="/dashboard/services/<%= service._id %>/edit" class="text-gray-600 hover:text-gray-900">Modifier</a>
+                                             <form action="/dashboard/services/<%= service._id %>/delete" method="post">
+                                                  <button type="submit" class="text-red-600 hover:text-red-900">Remove</button>
+
+                                             </form>
+                                        </div>
+                                   </td>
+                              </tr>
+                              <% }); %>
+                    </tbody>
+               </table>
           </div>
 
           <!-- Empty State -->
-          <div id="emptyState" class="hidden text-center py-12">
-               <div class="mx-auto max-w-sm">
-                    <i class="fas fa-search text-gray-400 text-4xl mb-4"></i>
-                    <h3 class="text-lg font-medium text-gray-900 mb-2">Aucun service trouvé</h3>
-                    <p class="text-gray-500 mb-6">Aucun service ne correspond à votre recherche.</p>
-                    <a href="/services/new" class="text-blue-600 hover:text-blue-700 font-medium">
-                         Créer un nouveau service <i class="fas fa-arrow-right ml-1"></i>
+          <% if (services.length===0) { %>
+               <div class="text-center py-12">
+                    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                    </svg>
+                    <h3 class="mt-4 text-lg font-medium text-gray-900">Aucun service</h3>
+                    <p class="mt-2 text-sm text-gray-500">Commencez par créer votre premier service.</p>
+                    <a href="/dashboard/new-service" class="mt-6 inline-flex items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700">
+                         Créer un service
                     </a>
                </div>
-          </div>
+               <% } %>
      </div>
 </div>
 
+<!-- Search and Toggle Functionality -->
 <script>
      // Search functionality
-     const searchInput = document.getElementById('serviceSearch');
-     const servicesGrid = document.getElementById('servicesGrid');
-     const emptyState = document.getElementById('emptyState');
-     const serviceCards = document.querySelectorAll('.service-card');
+     const searchInput = document.getElementById('searchInput');
+     searchInput.addEventListener('input', function (e) {
+          const searchText = e.target.value.toLowerCase();
+          const rows = document.querySelectorAll('tbody tr');
 
-     searchInput.addEventListener('input', (e) => {
-          const searchTerm = e.target.value.toLowerCase();
-          let hasVisibleCards = false;
-
-          serviceCards.forEach(card => {
-               const serviceName = card.dataset.name;
-               const serviceType = card.dataset.type;
-               const isVisible = serviceName.includes(searchTerm) || serviceType.includes(searchTerm);
-
-               card.classList.toggle('hidden', !isVisible);
-               if (isVisible) hasVisibleCards = true;
+          rows.forEach(row => {
+               const serviceName = row.querySelector('td:first-child').textContent.toLowerCase();
+               row.style.display = serviceName.includes(searchText) ? '' : 'none';
           });
-
-          servicesGrid.classList.toggle('hidden', !hasVisibleCards);
-          emptyState.classList.toggle('hidden', hasVisibleCards);
      });
 
-     // Toggle service status
+     // Status toggle functionality
      async function toggleServiceStatus(serviceId, currentStatus) {
           try {
-               const response = await fetch(`dashboard/services/${serviceId}/toggle-status`, {
+               const response = await fetch(`/dashboard/services/${serviceId}/toggle-status`, {
                     method: 'PUT',
                     headers: {
                          'Content-Type': 'application/json'
