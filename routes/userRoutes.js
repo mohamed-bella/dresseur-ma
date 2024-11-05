@@ -495,7 +495,7 @@ router.get('/dashboard', async (req, res) => {
                }
           ]);
           const detailedVisits1 = formatDetailedVisits(detailedVisits)
-          console.log(req.user.businessHours)
+
           res.render('user/dashboard/dashboard', {
                user: req.user,
                stats,
@@ -868,7 +868,8 @@ router.get('/@:slug', async (req, res) => {
 
           // Prepare view data
           const viewData = {
-               user: {
+               profile: {
+
                     ...user.toObject(),
                     metrics,
                     trustFactors,
