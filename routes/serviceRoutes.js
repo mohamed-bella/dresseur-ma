@@ -407,7 +407,7 @@ router.get('/service/:serviceId', async (req, res) => {
 
           // Find the service by ID and populate the createdBy field
           const service = await Service.findById(serviceId)
-               .populate('createdBy', 'email image displayName slug isVerified');  // Populate the service creator details
+               .populate('createdBy', 'email profileImage displayName slug isVerified createdAt');  // Populate the service creator details
 
           if (!service) {
                return res.status(404).send('Service non trouvé');
@@ -420,13 +420,12 @@ router.get('/service/:serviceId', async (req, res) => {
           // Increment views
           service.views += 1;
           await service.save();
-
           // Dynamic metadata for individual service
           const pageTitle = `${service.serviceName} - NDRESSILIK`;
-          const description = `${service.serviceName} disponible à ${service.location}. Découvrez les détails sur ce service proposé par ${service.createdBy.displayName || 'notre plateforme'}.`;
+          const description = `${service.serviceName} disponible à ${service.location}. Découvrez les détails sur ce service proposé par ${service.createdBy.name || 'notre plateforme'}.`;
           const keywords = `${service.serviceName}, services pour animaux, ${service.location}, ${service.createdBy.displayName || 'service'}`;
 
-          // console.log(reviews)
+
           // Render the service details page with the service and its reviews
           res.render('user/serviceDetails', {
                service,

@@ -77,7 +77,7 @@
                                         <img src="<%= service.createdBy.profileImage %>" alt="<%= service.createdBy.displayName %>" class="w-16 h-16 rounded-full object-cover">
                                         <div>
                                              <h3 class="font-bold text-gray-900 text-lg">
-                                                  <%= service.createdBy.displayName %>
+                                                  <%= service.createdBy.displayName %> (<%= %>)
                                              </h3>
                                              <p class="text-sm text-gray-600">Membre depuis <%= new Date(service.createdBy.createdAt).toLocaleDateString('fr-FR', { month: 'long' , year: 'numeric' }) %>
                                              </p>
