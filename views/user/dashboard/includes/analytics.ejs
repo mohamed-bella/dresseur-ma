@@ -1,79 +1,145 @@
 <% if (user.isVerified) { %>
-     <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative" role="alert">
-          <strong class="font-bold">✔️ Vérifié!</strong>
-          <span class="block sm:inline">Votre compte a été marqué comme vérifié par les administrateurs. Vous avez maintenant le badge de confiance et votre profil apparaît sur la page d'accueil.</span>
+     <!-- Verified Status Alert -->
+     <div class="bg-white border-l-4 border-blue-500 rounded-lg shadow-sm p-6 mb-6">
+          <div class="flex items-start space-x-4">
+               <!-- Success Icon -->
+               <div class="flex-shrink-0">
+                    <div class="bg-blue-100 rounded-full p-2">
+                         <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                         </svg>
+                    </div>
+               </div>
+
+               <!-- Content -->
+               <div class="flex-1">
+                    <div class="flex items-center justify-between">
+                         <h3 class="text-lg font-semibold text-gray-900">
+                              Compte Vérifié
+                              <span class="ml-2 inline-block px-2 py-1 text-xs font-medium text-blue-600 bg-blue-50 rounded-full">
+                                   <%= stats.totalServices %> services actifs
+                              </span>
+                         </h3>
+                         <div class="text-sm text-gray-500">
+                              Note moyenne: <%= stats.averageRating %>/5
+                         </div>
+                    </div>
+                    <p class="mt-1 text-gray-600">
+                         Votre profil est vérifié et visible sur la plateforme. Vous avez reçu <%= stats.totalReviews %> avis et <%= stats.totalReservations %> réservations.
+                    </p>
+               </div>
+          </div>
      </div>
      <% } else { %>
-          <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative" role="alert">
-               <strong class="font-bold">⚠️ Attention!</strong>
-               <span class="block sm:inline">Votre compte n'a pas encore été vérifié par les administrateurs et ne s'affiche pas sur la page d'accueil. Soyez patient, la vérification est en cours. ⏳</span>
-          </div>
-          <% } %>
-
-
-               <div class="grid grid-cols-1 gap-6 mb-6">
-                    <!-- Overview Stats -->
-                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
-                         <div class="p-6 border-b border-gray-100">
-                              <h2 class="text-lg font-semibold text-gray-900">Vue d'ensemble</h2>
-                         </div>
-                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-6">
-
-
-                              <!-- Total Services -->
-                              <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-4">
-                                   <div class="flex items-center justify-between mb-2">
-                                        <div class="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center">
-                                             <i class="fas fa-briefcase text-white text-xl"></i>
-                                        </div>
-                                        <span class="text-xs font-medium text-purple-600 bg-purple-100 px-2 py-1 rounded-full">
-                                             <%= stats.activeServices %>/<%= stats.totalServices %>
-                                        </span>
-                                   </div>
-                                   <h3 class="text-2xl font-bold text-gray-900">
-                                        <%= stats.totalServices %>
-                                   </h3>
-                                   <p class="text-sm text-gray-600">Services actifs</p>
-                              </div>
-
-                              <!-- Total Reviews -->
-                              <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl p-4">
-                                   <div class="flex items-center justify-between mb-2">
-                                        <div class="w-12 h-12 bg-yellow-500 rounded-lg flex items-center justify-center">
-                                             <i class="fas fa-star text-white text-xl"></i>
-                                        </div>
-                                        <span class="text-xs font-medium text-yellow-600 bg-yellow-100 px-2 py-1 rounded-full">
-                                             <%= stats.averageRating %>/5
-                                        </span>
-                                   </div>
-                                   <h3 class="text-2xl font-bold text-gray-900">
-                                        <%= stats.totalReviews %>
-                                   </h3>
-                                   <p class="text-sm text-gray-600">Avis clients</p>
-                              </div>
-
-
+          <!-- Pending Verification Alert -->
+          <div class="bg-white border-l-4 border-yellow-500 rounded-lg shadow-sm p-6 mb-6">
+               <div class="flex items-start space-x-4">
+                    <!-- Pending Icon -->
+                    <div class="flex-shrink-0">
+                         <div class="bg-yellow-100 rounded-full p-2">
+                              <svg class="w-6 h-6 text-yellow-500 animate-spin-slow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                              </svg>
                          </div>
                     </div>
 
+                    <!-- Content -->
+                    <div class="flex-1">
+                         <div class="flex items-center justify-between">
+                              <h3 class="text-lg font-semibold text-gray-900">
+                                   Vérification en cours
+                                   <span class="ml-2 inline-block px-2 py-1 text-xs font-medium text-yellow-600 bg-yellow-50 rounded-full">
+                                        En attente
+                                   </span>
+                              </h3>
+                              <% if (stats.totalServices> 0) { %>
+                                   <div class="text-sm text-gray-500">
+                                        <%= stats.totalServices %> services en attente
+                                   </div>
+                                   <% } %>
+                         </div>
 
+                         <!-- Progress -->
+                         <div class="mt-4">
+                              <div class="flex justify-between text-sm text-gray-600 mb-1">
+                                   <span>État de la vérification</span>
+                                   <span>50%</span>
+                              </div>
+                              <div class="w-full bg-gray-100 rounded-full h-2">
+                                   <div class="bg-yellow-500 rounded-full h-2 w-1/2 transition-all duration-500"></div>
+                              </div>
+                         </div>
 
+                         <!-- Checklist -->
+                         <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+                              <div class="flex items-center text-sm text-gray-600">
+                                   <svg class="w-4 h-4 mr-2 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                   </svg>
+                                   Profile complété
+                              </div>
+                              <div class="flex items-center text-sm text-gray-600">
+                                   <svg class="w-4 h-4 mr-2 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                                   </svg>
+                                   Vérification en cours
+                              </div>
+                         </div>
+
+                         <!-- Timeframe -->
+                         <div class="mt-4 text-sm text-gray-500 flex items-center">
+                              <svg class="w-4 h-4 mr-1.5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                   <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                              </svg>
+                              Temps estimé: 24-48 heures
+                         </div>
+                    </div>
                </div>
+          </div>
+          <% } %>
+
+               <style>
+                    @keyframes spin-slow {
+                         from {
+                              transform: rotate(0deg);
+                         }
+
+                         to {
+                              transform: rotate(360deg);
+                         }
+                    }
+
+                    .animate-spin-slow {
+                         animation: spin-slow 3s linear infinite;
+                    }
+               </style>
+
 
                <!-- Analytics Charts -->
                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <!-- Visitor Analytics -->
-                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
-                         <div class="p-6 border-b border-gray-100">
-                              <h2 class="text-lg font-semibold text-gray-900">
+                    <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+                         <div class="px-6 py-4 border-b border-gray-200">
+                              <h2 class="text-xl font-semibold text-gray-800">
                                    Visiteurs du profil - Derniers 7 jours
                               </h2>
                          </div>
                          <div class="p-6">
-                              <canvas id="visitorsChart" height="250"></canvas>
+                              <canvas id="visitorsChart" height="300"></canvas>
                          </div>
                     </div>
 
+                    <!-- Additional Chart (optional) -->
+                    <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+                         <div class="px-6 py-4 border-b border-gray-200">
+                              <h2 class="text-xl font-semibold text-gray-800">
+                                   Autre graphique
+                              </h2>
+                         </div>
+                         <div class="p-6">
+                              <!-- Add another chart here -->
+                         </div>
+                    </div>
                </div>
                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
                <input type="hidden" value="<%= JSON.stringify(analytics.detailedVisits1) %>" id="visitorsData">

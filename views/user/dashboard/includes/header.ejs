@@ -34,8 +34,8 @@
                </button>
 
                <!-- Profile Dropdown -->
-               <div class="relative" x-data="{ isOpen: false }">
-                    <button @click="isOpen = !isOpen" class="flex items-center space-x-3 focus:outline-none">
+               <div class="relative" id="profileDropdown">
+                    <button id="profileDropdownButton" class="flex items-center space-x-3 focus:outline-none">
                          <img src="<%= user.profileImage || 'https://via.placeholder.com/150' %>" alt="Profile" class="w-8 h-8 rounded-full object-cover">
                          <span class="hidden sm:block text-sm font-medium text-gray-700">
                               <%= user.displayName %>
@@ -44,7 +44,7 @@
                     </button>
 
                     <!-- Dropdown Menu -->
-                    <div x-show="isOpen" @click.away="isOpen = false" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="transform opacity-0 scale-95" x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="transform opacity-100 scale-100" x-transition:leave-end="transform opacity-0 scale-95" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50">
+                    <div id="profileDropdownMenu" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50 opacity-0 transform scale-95 transition-all duration-100 ease-out pointer-events-none">
                          <a href="/profile" class="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-100">
                               <i class="fas fa-user w-5"></i>
                               <span>Profile</span>
@@ -60,6 +60,44 @@
                          </a>
                     </div>
                </div>
+
+               <!-- Include Font Awesome if not already included -->
+               <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+
+               <!-- JavaScript -->
+               <script>
+                    // Get the elements
+                    const dropdownButton = document.getElementById('profileDropdownButton');
+                    const dropdownMenu = document.getElementById('profileDropdownMenu');
+
+                    // Functions to show and hide the dropdown
+                    function showDropdownMenu() {
+                         dropdownMenu.classList.remove('opacity-0', 'scale-95', 'pointer-events-none');
+                    }
+
+                    function hideDropdownMenu() {
+                         dropdownMenu.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
+                    }
+
+                    // Toggle dropdown menu on button click
+                    dropdownButton.addEventListener('click', function (event) {
+                         event.stopPropagation();
+                         if (dropdownMenu.classList.contains('opacity-0')) {
+                              showDropdownMenu();
+                         } else {
+                              hideDropdownMenu();
+                         }
+                    });
+
+                    // Close dropdown menu when clicking outside
+                    document.addEventListener('click', function (event) {
+                         const isClickInside = dropdownButton.contains(event.target) || dropdownMenu.contains(event.target);
+                         if (!isClickInside) {
+                              hideDropdownMenu();
+                         }
+                    });
+               </script>
+
           </div>
      </div>
 

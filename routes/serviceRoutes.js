@@ -121,7 +121,7 @@ router.post('/services/add', (req, res) => {
 
           try {
                console.log(req.body.serviceImages)
-               const { serviceName, serviceImages, description, minPrice, maxPrice, location, serviceType } = req.body;
+               const { serviceName, serviceImages, description, minPrice, location, serviceType } = req.body;
 
 
                // Process and upload images

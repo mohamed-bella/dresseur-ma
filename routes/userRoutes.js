@@ -495,7 +495,7 @@ router.get('/dashboard', async (req, res) => {
                }
           ]);
           const detailedVisits1 = formatDetailedVisits(detailedVisits)
-
+          console.log(req.user)
           res.render('user/dashboard/dashboard', {
                user: req.user,
                stats,
