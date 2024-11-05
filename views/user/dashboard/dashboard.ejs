@@ -15,6 +15,27 @@
                     <main class="p-6">
                          <!-- Dashboard Content -->
                          <div class="max-w-7xl mx-auto space-y-6">
+                              <!-- Quick Actions Div -->
+                              <div class="bg-white p-6 rounded-lg shadow-md mt-6">
+                                   <h2 class="text-xl font-semibold mb-4">Actions rapides</h2>
+                                   <div class="flex flex-wrap gap-4">
+                                        <!-- Nouveau Service Button -->
+                                        <a href="/dashboard/new-service" class="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                                             <i class="fas fa-plus mr-2"></i>
+                                             <span>Nouveau service</span>
+                                        </a>
+                                        <!-- Éditer Mon Profil Button -->
+                                        <a href="/dashboard/profile/" class="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
+                                             <i class="fas fa-user-edit mr-2"></i>
+                                             <span>Éditer mon profil</span>
+                                        </a>
+                                        <!-- Mes Services Button -->
+                                        <a href="#services" class="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+                                             <i class="fas fa-briefcase mr-2"></i>
+                                             <span>Mes services</span>
+                                        </a>
+                                   </div>
+                              </div>
                               <%- include('includes/analytics') %>
                                    <%- include('includes/services') %>
                          </div>
