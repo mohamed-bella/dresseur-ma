@@ -4,305 +4,313 @@
 <head>
      <meta charset="UTF-8">
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <title>New Article</title>
-     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-     <script src="https://cdn.tiny.cloud/1/wzg195slfx5e31zpp941e1qriff7qy8oxp318ngoas5hp7hu/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+     <title>Create Article | Admin Dashboard</title>
+
+     <!-- Fonts -->
+     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+     <!-- Core Libraries -->
+     <script src="https://cdn.tailwindcss.com"></script>
+     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+     <link rel="stylesheet" href="https://unpkg.com/filepond/dist/filepond.css">
+     <link rel="stylesheet" href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css">
+     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+     <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+     <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+     <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
+     <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
+     <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+     <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
+     <script src="https://unpkg.com/filepond-plugin-image-validate-size/dist/filepond-plugin-image-validate-size.js"></script>
+     <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
+
      <style>
-          :root {
-               --primary-color: #000;
-               --secondary-color: #fff;
-               --border-color: #ccc;
+          /* Custom Quill Styles */
+          .ql-container {
+               min-height: 400px;
+               font-size: 16px;
+               font-family: 'Inter', sans-serif;
           }
 
-          body {
-               font-family: 'Roboto', sans-serif;
-               background-color: var(--secondary-color);
-               color: var(--primary-color);
-               line-height: 1.6;
-               margin: 0;
-               padding: 20px;
+          /* FilePond Customization */
+          .filepond--panel-root {
+               border: 2px dashed #e2e8f0;
+               background-color: #f8fafc;
           }
 
-          .container {
-               max-width: 1200px;
-               margin: 0 auto;
+          .filepond--drop-label {
+               color: #64748b;
+               font-size: 1rem;
           }
 
-          h1 {
-               margin-bottom: 20px;
+          /* Select2 Customization */
+          .select2-container--default .select2-selection--multiple {
+               border-color: #e2e8f0;
+               border-radius: 0.5rem;
+               min-height: 3rem;
+               padding: 0.5rem;
           }
 
-          .form-group {
-               margin-bottom: 20px;
+          /* Custom Scrollbar */
+          ::-webkit-scrollbar {
+               width: 8px;
+               height: 8px;
           }
 
-          label {
-               display: block;
-               margin-bottom: 10px;
-               font-weight: bold;
+          ::-webkit-scrollbar-track {
+               background: #f1f1f1;
           }
 
-          input[type="text"],
-          select,
-          textarea {
-               width: 100%;
-               padding: 15px;
-               border: 1px solid var(--border-color);
-               background-color: var(--secondary-color);
-               color: var(--primary-color);
-               font-size: 18px;
+          ::-webkit-scrollbar-thumb {
+               background: #888;
+               border-radius: 4px;
           }
 
-          input[type="text"]:focus,
-          select:focus,
-          textarea:focus {
-               outline: none;
-               border-color: var(--primary-color);
-          }
-
-          button {
-               background-color: var(--primary-color);
-               color: var(--secondary-color);
-               border: none;
-               padding: 15px 30px;
-               font-size: 18px;
-               cursor: pointer;
-               transition: background-color 0.3s ease;
-          }
-
-          button:hover {
-               background-color: #333;
-          }
-
-          .tag-container {
-               display: flex;
-               flex-wrap: wrap;
-               gap: 10px;
-               margin-top: 10px;
-          }
-
-          .tag {
-               background-color: var(--secondary-color);
-               border: 1px solid var(--primary-color);
-               padding: 5px 10px;
-               display: flex;
-               align-items: center;
-          }
-
-          .tag-remove {
-               margin-left: 5px;
-               cursor: pointer;
-          }
-
-          .back-button {
-               margin-bottom: 20px;
-          }
-
-          #imagePreview {
-               max-width: 100%;
-               margin-top: 10px;
-          }
-
-          @media (max-width: 768px) {
-
-               input[type="text"],
-               select,
-               textarea {
-                    padding: 10px;
-                    font-size: 16px;
-               }
-
-               button {
-                    padding: 10px 20px;
-                    font-size: 16px;
-               }
+          ::-webkit-scrollbar-thumb:hover {
+               background: #555;
           }
      </style>
 </head>
 
-<body>
-     <div class="container">
-          <button class="back-button" onclick="history.back()">← Back</button>
-          <h1>New Article</h1>
-          <form id="articleForm" action="/admin/articles" method="POST" enctype="multipart/form-data">
-               <div class="form-group">
-                    <label for="title">Title</label>
-                    <input type="text" id="title" name="title" required>
+<body class="bg-gray-50">
+     <div class="min-h-screen p-6 lg:p-8">
+          <div class="max-w-6xl mx-auto">
+               <!-- Header -->
+               <div class="mb-8">
+                    <nav class="flex items-center space-x-4 mb-6">
+                         <a href="/admin/dashboard" class="text-gray-600 hover:text-gray-900 transition-colors">
+                              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                              </svg>
+                         </a>
+                         <span class="text-gray-400">/</span>
+                         <span class="text-gray-600">New Article</span>
+                    </nav>
+
+                    <h1 class="text-4xl font-bold text-gray-900">Create New Article</h1>
+                    <p class="mt-2 text-gray-600">Share your knowledge with the community</p>
                </div>
 
-               <div class="form-group">
-                    <label for="category">Catégorie</label>
-                    <select id="category" name="category" required>
-                         <option value="">-- Sélectionnez une catégorie --</option>
-                         <option value="dog-trainers">Dresseurs de chiens</option>
-                         <option value="veterinarians">Vétérinaires</option>
-                         <option value="pet-stores">Magasins pour animaux</option>
-                         <option value="dog-sitters">Gardiens de chiens</option>
-                         <option value="behavioral-psychology">Psychologie comportementale</option>
-                         <option value="educational-training">Formation éducative</option>
-                         <option value="puppy-training">Formation des chiots</option>
-                         <option value="obedience-training">Formation à l'obéissance</option>
-                    </select>
-               </div>
+               <!-- Main Form -->
+               <form id="articleForm" class="space-y-8">
+                    <!-- Title Section -->
+                    <div class="bg-white rounded-xl shadow-sm p-6 space-y-6">
+                         <div>
+                              <label class="block text-sm font-medium text-gray-700 mb-2">Title</label>
+                              <input type="text" name="title" class="block w-full text-2xl font-medium px-4 py-3 rounded-lg border border-gray-300 
+                                      focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all" placeholder="Enter a descriptive title...">
+                         </div>
 
+                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                              <div>
+                                   <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                                   <select name="category" class="category-select block w-full">
+                                        <option value="">Select a category</option>
+                                        <% categories.forEach(category=> { %>
+                                             <option value="<%= category.value %>">
+                                                  <%= category.label %>
+                                             </option>
+                                             <% }) %>
+                                   </select>
+                              </div>
 
-               <div class="form-group">
-                    <label for="summary">Summary</label>
-                    <textarea id="summary" name="summary" rows="3" required></textarea>
-               </div>
+                              <div>
+                                   <label class="block text-sm font-medium text-gray-700 mb-2">Tags</label>
+                                   <select name="tags" class="tags-select" multiple>
+                                        <% tags.forEach(tag=> { %>
+                                             <option value="<%= tag %>">
+                                                  <%= tag %>
+                                             </option>
+                                             <% }) %>
+                                   </select>
+                              </div>
+                         </div>
+                    </div>
 
-               <div class="form-group">
-                    <label for="tags">Tags</label>
-                    <input type="text" id="tags" name="tags">
-                    <div id="tagContainer" class="tag-container"></div>
-               </div>
+                    <!-- Content Section -->
+                    <div class="bg-white rounded-xl shadow-sm p-6">
+                         <label class="block text-sm font-medium text-gray-700 mb-2">Content</label>
+                         <div id="editor" class="prose max-w-none"></div>
+                    </div>
 
-               <div class="form-group">
-                    <label for="content">Content</label>
-                    <textarea id="content" name="content"></textarea>
-               </div>
+                    <!-- Featured Image -->
+                    <div class="bg-white rounded-xl shadow-sm p-6">
+                         <label class="block text-sm font-medium text-gray-700 mb-2">Featured Image</label>
+                         <input type="file" class="filepond" name="featuredImage" accept="image/png, image/jpeg, image/jpg, image/webp">
+                    </div>
 
-               <div class="form-group">
-                    <label for="featuredImage">Featured Image</label>
-                    <input type="file" id="featuredImage" name="featuredImage" accept="image/*">
-                    <img id="imagePreview" src="" alt="Featured Image Preview" style="display: none;">
-               </div>
+                    <!-- SEO Section -->
+                    <div class="bg-white rounded-xl shadow-sm p-6 space-y-6">
+                         <h3 class="text-lg font-medium text-gray-900">SEO Settings</h3>
 
-               <div class="form-group">
-                    <label for="seoTitle">SEO Title</label>
-                    <input type="text" id="seoTitle" name="seoTitle">
-               </div>
+                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                              <div>
+                                   <label class="block text-sm font-medium text-gray-700 mb-2">SEO Title</label>
+                                   <input type="text" name="seoTitle" class="block w-full px-4 py-3 rounded-lg border border-gray-300 
+                                          focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                              </div>
 
-               <div class="form-group">
-                    <label for="seoDescription">SEO Description</label>
-                    <textarea id="seoDescription" name="seoDescription" rows="3"></textarea>
-               </div>
+                              <div>
+                                   <label class="block text-sm font-medium text-gray-700 mb-2">Keywords</label>
+                                   <input type="text" name="keywords" class="block w-full px-4 py-3 rounded-lg border border-gray-300 
+                                          focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Separate keywords with commas">
+                              </div>
+                         </div>
 
-               <div class="form-group">
-                    <label for="keywords">Keywords (comma-separated)</label>
-                    <input type="text" id="keywords" name="keywords">
-               </div>
-               <div class="form-group">
-                    <label for="author">author</label>
-                    <input type="text" id="author" name="author">
-               </div>
-               <button type="submit">Publish Article</button>
-          </form>
+                         <div>
+                              <label class="block text-sm font-medium text-gray-700 mb-2">SEO Description</label>
+                              <textarea name="seoDescription" rows="3" class="block w-full px-4 py-3 rounded-lg border border-gray-300 
+                                         focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+                         </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="flex justify-end">
+                         <button type="submit" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium 
+                                   rounded-lg shadow-sm text-white bg-blue-600 hover:bg-blue-700 
+                                   focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 
+                                   transition-all">
+                              <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                   <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                   <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                   </path>
+                              </svg>
+                              <span>Publish Article</span>
+                         </button>
+                    </div>
+               </form>
+          </div>
      </div>
 
      <script>
-          tinymce.init({
-               selector: '#content',
-               plugins: 'autolink lists link image charmap print preview anchor',
-               toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
-               height: 500
-          });
-
-          const tagInput = document.getElementById('tags');
-          const tagContainer = document.getElementById('tagContainer');
-          const tagSet = new Set();
-
-          tagInput.addEventListener('keydown', function (e) {
-               if (e.key === 'Enter' || e.key === ',') {
-                    e.preventDefault();
-                    addTag();
-               }
-          });
-
-          function addTag() {
-               const tag = tagInput.value.trim();
-               if (tag && !tagSet.has(tag)) {
-                    tagSet.add(tag);
-                    renderTags();
-                    tagInput.value = '';
-               }
-          }
-
-          function removeTag(tag) {
-               tagSet.delete(tag);
-               renderTags();
-          }
-
-          function renderTags() {
-               tagContainer.innerHTML = '';
-               tagSet.forEach(tag => {
-                    const tagElement = document.createElement('span');
-                    tagElement.classList.add('tag');
-                    tagElement.textContent = tag;
-
-                    const removeButton = document.createElement('span');
-                    removeButton.classList.add('tag-remove');
-                    removeButton.textContent = '×';
-                    removeButton.onclick = () => removeTag(tag);
-
-                    tagElement.appendChild(removeButton);
-                    tagContainer.appendChild(tagElement);
+          $(document).ready(function () {
+               // Initialize Select2
+               $('.category-select').select2({
+                    theme: 'classic',
+                    placeholder: 'Select a category'
                });
-          }
 
-          // Featured image preview
-          document.getElementById('featuredImage').addEventListener('change', function (e) {
-               const file = e.target.files[0];
-               if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function (event) {
-                         const img = document.getElementById('imagePreview');
-                         img.src = event.target.result;
-                         img.style.display = 'block';
+               $('.tags-select').select2({
+                    theme: 'classic',
+                    placeholder: 'Select or create tags',
+                    tags: true,
+                    tokenSeparators: [',', ' ']
+               });
+
+               // Initialize Quill
+               const quill = new Quill('#editor', {
+                    theme: 'snow',
+                    modules: {
+                         toolbar: [
+                              [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                              ['bold', 'italic', 'underline', 'strike'],
+                              [{ 'color': [] }, { 'background': [] }],
+                              ['blockquote', 'code-block'],
+                              [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                              [{ 'align': [] }],
+                              ['link', 'image'],
+                              ['clean']
+                         ]
                     }
-                    reader.readAsDataURL(file);
-               }
-          });
+               });
 
-          // Form submission handling
-          document.getElementById('articleForm').addEventListener('submit', function (e) {
-               e.preventDefault();
+               // Initialize FilePond
+               FilePond.registerPlugin(
+                    FilePondPluginImagePreview,
+                    FilePondPluginFileValidateType,
+                    FilePondPluginImageValidateSize
+               );
 
-               // Get TinyMCE content
-               const content = tinymce.get('content').getContent();
+               const pond = FilePond.create(document.querySelector('.filepond'), {
+                    labelIdle: 'Drag & Drop your image or <span class="filepond--label-action">Browse</span>',
+                    imagePreviewHeight: 170,
+                    acceptedFileTypes: ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'],
+                    allowMultiple: false,
+                    maxFiles: 1,
+                    process: {
+                         url: '/services/upload-temp',
+                         method: 'POST',
+                         onload: (response) => {
 
-               // Create FormData object for submission
-               const formData = new FormData(this);
-
-               // Append TinyMCE content to formData
-               formData.append('content', content);
-
-               // Append tags as a comma-separated string
-               const tagsValue = Array.from(tagSet).join(',');
-               formData.append('tags', tagsValue);
-
-               // Disable submit button and show loading state
-               const submitButton = this.querySelector('button[type="submit"]');
-               submitButton.disabled = true;
-               submitButton.textContent = 'Publishing...';
-
-               // Send data to server
-               fetch('/admin/articles', {
-                    method: 'POST',
-                    body: formData
-               })
-                    .then(response => response.json())
-                    .then(data => {
-                         if (data.success) {
-                              // Redirect to the article's page using the returned articleId
-                              window.location.href = `/articles/${data.slug}`;
-                         } else {
-                              // Show error message
-                              alert('Error publishing article: ' + data.message);
+                              const data = JSON.parse(response);
+                              return data.uploadedUrls[0].url;
+                         },
+                         onerror: (response) => {
+                              console.error('Upload error:', response);
+                              return response.data;
                          }
-                    })
-                    .catch(error => {
-                         console.error('Error:', error);
-                         alert('An error occurred while publishing the article. Please try again.');
-                    })
-                    .finally(() => {
-                         // Re-enable submit button only if there's an error
-                         submitButton.disabled = false;
-                         submitButton.textContent = 'Publish Article';
+                    },
+                    onaddfile: (error, file) => {
+                         if (error) {
+                              console.error('FilePond error:', error);
+                              return;
+                         }
+                    }
+               });
+               // Form Submission
+               $('#articleForm').on('submit', function (e) {
+                    e.preventDefault();
+
+                    const $submitBtn = $(this).find('button[type="submit"]');
+                    const $spinner = $submitBtn.find('svg');
+                    const $btnText = $submitBtn.find('span');
+
+                    // Create FormData
+                    const formData = new FormData(this);
+                    formData.append('content', quill.root.innerHTML);
+
+                    const files = pond.getFiles();
+                    const fileUrls = files.map(file => file.serverId);
+                    if (fileUrls.length > 0) {
+                         formData.append('featuredImage', JSON.stringify(fileUrls));
+                    }
+                    // Show loading state
+                    $submitBtn.prop('disabled', true);
+                    $spinner.removeClass('hidden');
+                    $btnText.text('Publishing...');
+
+                    // Submit form
+                    $.ajax({
+                         url: '/admin/articles',
+                         type: 'POST',
+                         data: formData,
+                         processData: false,
+                         contentType: false,
+                         success: function (response) {
+                              if (response.success) {
+                                   Swal.fire({
+                                        icon: 'success',
+                                        title: 'Article Published!',
+                                        text: 'Your article has been published successfully.',
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                   }).then(() => {
+                                        window.location.href = `/articles/${response.slug}`;
+                                   });
+                              } else {
+                                   throw new Error(response.message);
+                              }
+                         },
+                         error: function (xhr, status, error) {
+                              Swal.fire({
+                                   icon: 'error',
+                                   title: 'Publication Failed',
+                                   text: 'There was an error publishing your article. Please try again.'
+                              });
+
+                              // Reset button state
+                              $submitBtn.prop('disabled', false);
+                              $spinner.addClass('hidden');
+                              $btnText.text('Publish Article');
+                         }
                     });
+               });
           });
      </script>
-
 </body>
 
 </html>

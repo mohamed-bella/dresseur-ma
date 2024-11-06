@@ -3,7 +3,7 @@
 
           <div class="bg-white">
                <!-- Stats and Quick Access Section -->
-               <div class="min-h-screen bg-gray-50">
+               <div class="min-h-screen bg-gray-100">
                     <!-- Mobile Header -->
 
 
@@ -25,10 +25,12 @@
                                              <% if (profile.isVerified) { %>
                                                   <div class="absolute -right-1 -bottom-1">
                                                        <div class="flex items-center justify-center w-6 h-6 rounded-full bg-white shadow-sm">
-                                                            <svg class="w-4 h-4 text-blue-500" viewBox="0 0 24 24" fill="currentColor">
+                                                            <!-- <svg class="w-4 h-4 text-blue-500" viewBox="0 0 24 24" fill="currentColor">
                                                                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
-                                                            </svg>
+                                                            </svg> -->
+                                                            <img src="https://img.icons8.com/?size=100&id=GSYoL5PjLpC8&format=png&color=FA5252" alt="" srcset="">
                                                        </div>
+
                                                   </div>
                                                   <% } %>
                                         </div>
@@ -315,45 +317,84 @@
                                                   <% }) %>
                                    </div>
                               </div>
-                              <!-- Business Hours Display -->
-                              <div class="bg-white rounded-xl shadow-md p-6">
-                                   <h2 class="text-2xl font-semibold text-gray-800 mb-4">Horaires de travail</h2>
-                                   <ul class="divide-y divide-gray-200">
-                                        <% const days=[ { id: 'monday' , label: 'Lundi' }, { id: 'tuesday' , label: 'Mardi' }, { id: 'wednesday' , label: 'Mercredi' }, { id: 'thursday' , label: 'Jeudi' }, { id: 'friday' , label: 'Vendredi' }, { id: 'saturday' , label: 'Samedi' }, { id: 'sunday' , label: 'Dimanche' } ]; %>
 
-                                             <% days.forEach(day=> { %>
-                                                  <% const hours=profile.businessHours ? profile.businessHours[day.id] : null; %>
-                                                       <% const isOpen=hours && (hours.isOpen===true || hours.isOpen==='true' || (hours.open && hours.close)); %>
-
-                                                            <% if (isOpen) { %>
-                                                                 <li class="py-3 flex justify-between items-center">
-                                                                      <span class="text-gray-700 font-medium">
-                                                                           <%= day.label %>
-                                                                      </span>
-                                                                      <span class="text-gray-600">
-                                                                           <%= hours.open ? hours.open.replace(':', 'h' ) : '' %> - <%= hours.close ? hours.close.replace(':', 'h' ) : '' %>
-                                                                      </span>
-                                                                 </li>
-                                                                 <% } %>
-                                                                      <% }); %>
-                                   </ul>
-
-                                   <!-- Message if closed all days -->
-                                   <% const isAlwaysClosed=days.every(day=> {
-                                        const hours = profile.businessHours ? profile.businessHours[day.id] : null;
-                                        const isOpen = hours && (hours.isOpen === true || hours.isOpen === 'true' || (hours.open && hours.close));
-                                        return !isOpen;
-                                        }); %>
-
-                                        <% if (isAlwaysClosed) { %>
-                                             <div class="text-gray-600 text-center py-6">
-                                                  Ce prestataire n'a pas encore renseigné ses horaires de travail.
-                                             </div>
-                                             <% } %>
-                              </div>
 
                          </div>
+                         <!-- Compact Business Hours Widget -->
+                         <div class="bg-white rounded-xl shadow-sm overflow-hidden mt-4">
+                              <% const days=[ { id: 'monday' , label: 'Lun' }, { id: 'tuesday' , label: 'Mar' }, { id: 'wednesday' , label: 'Mer' }, { id: 'thursday' , label: 'Jeu' }, { id: 'friday' , label: 'Ven' }, { id: 'saturday' , label: 'Sam' }, { id: 'sunday' , label: 'Dim' } ]; const today=new Date().getDay(); const todayId=days[today===0 ? 6 : today - 1].id; const todayHours=profile.businessHours?.[todayId]; const isOpenToday=todayHours && (todayHours.isOpen===true || todayHours.isOpen==='true' ); %>
 
+                                   <!-- Collapsed View -->
+                                   <div class="group" x-data="{ open: false }">
+                                        <!-- Summary Row -->
+                                        <div class="p-4 flex items-center justify-between cursor-pointer" @click="open = !open">
+                                             <div class="flex items-center space-x-3">
+                                                  <div class="flex items-center space-x-2">
+                                                       <span class="relative flex h-2.5 w-2.5">
+                                                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full <%= isOpenToday ? 'bg-green-400' : 'bg-gray-400' %> opacity-75"></span>
+                                                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 <%= isOpenToday ? 'bg-green-500' : 'bg-gray-500' %>"></span>
+                                                       </span>
+                                                       <span class="text-sm font-medium text-gray-900">
+                                                            <%= isOpenToday ? `Ouvert jusqu'à ${todayHours.close}` : 'Fermé aujourd\' hui' %>
+                                                       </span>
+                                                  </div>
+                                             </div>
+
+                                             <!-- Today's Hours Preview -->
+                                             <div class="flex items-center space-x-2">
+                                                  <% if (isOpenToday && todayHours.open && todayHours.close) { %>
+                                                       <span class="text-sm text-gray-600">
+                                                            <%= todayHours.open %> - <%= todayHours.close %>
+                                                       </span>
+                                                       <% } %>
+                                                            <svg class="w-5 h-5 text-gray-400 transform transition-transform" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                                            </svg>
+                                             </div>
+                                        </div>
+
+                                        <!-- Expanded Hours -->
+                                        <div x-show="open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform -translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 transform translate-y-0" x-transition:leave-end="opacity-0 transform -translate-y-2" class="border-t border-gray-100">
+                                             <div class="grid grid-cols-2 gap-x-4 gap-y-1 p-4">
+                                                  <% days.forEach(day=> {
+                                                       const hours = profile.businessHours?.[day.id];
+                                                       const isOpen = hours && (hours.isOpen === true || hours.isOpen === 'true');
+                                                       const isToday = day.id === todayId;
+                                                       %>
+                                                       <div class="flex items-center justify-between py-1 
+                      <%= isToday ? 'text-blue-600 font-medium' : 'text-gray-600' %>">
+                                                            <span class="text-sm">
+                                                                 <%= day.label %>
+                                                            </span>
+                                                            <% if (isOpen && hours.open && hours.close) { %>
+                                                                 <span class="text-sm">
+                                                                      <%= hours.open.replace(':', 'h' ) %> - <%= hours.close.replace(':', 'h' ) %>
+                                                                 </span>
+                                                                 <% } else { %>
+                                                                      <span class="text-sm text-gray-400">Fermé</span>
+                                                                      <% } %>
+                                                       </div>
+                                                       <% }); %>
+                                             </div>
+                                        </div>
+                                   </div>
+                         </div>
+
+
+                         <style>
+                              @keyframes ping {
+
+                                   75%,
+                                   100% {
+                                        transform: scale(2);
+                                        opacity: 0;
+                                   }
+                              }
+
+                              .animate-ping {
+                                   animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+                              }
+                         </style>
                          <!-- Tabs Section -->
                          <div class="mt-6 bg-white rounded-2xl shadow-sm overflow-hidden" x-data="{ activeTab: 'services' }">
                               <!-- Tab Navigation -->

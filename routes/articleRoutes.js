@@ -7,6 +7,7 @@ const { Upload } = require('@aws-sdk/lib-storage');
 const path = require('path');
 require('dotenv').config();
 const sharp = require('sharp');
+const cheerio = require('cheerio');
 const slugify = require('slugify');
 const Comment = require('../models/comment');
 const { body, validationResult } = require('express-validator');
@@ -35,12 +36,82 @@ const s3 = new S3Client({
 
 // GET: Create new article
 router.get('/admin/articles/new', (req, res) => {
-     res.render('admin/newArticle', { title: 'New Article' });
+     // Categories array with value/label pairs
+     const categories = [
+          { value: 'dog-training', label: 'Dressage de chiens' },
+          { value: 'dog-behavior', label: 'Comportement canin' },
+          { value: 'puppy-training', label: 'Éducation des chiots' },
+          { value: 'nutrition', label: 'Nutrition et alimentation' },
+          { value: 'health', label: 'Santé et bien-être' },
+          { value: 'grooming', label: 'Toilettage' },
+          { value: 'breeds', label: 'Races de chiens' },
+          { value: 'adoption', label: 'Adoption et sauvetage' },
+          { value: 'tips', label: 'Conseils pratiques' },
+          { value: 'accessories', label: 'Accessoires et équipement' },
+          { value: 'veterinary', label: 'Soins vétérinaires' },
+          { value: 'events', label: 'Événements canins' }
+     ];
+
+     // Tags array with common dog-related tags
+     const tags = [
+          'dressage',
+          'comportement',
+          'chiots',
+          'alimentation',
+          'santé',
+          'toilettage',
+          'races',
+          'adoption',
+          'conseils',
+          'équipement',
+          'vétérinaire',
+          'événements',
+          'obéissance',
+          'socialisation',
+          'jeux',
+          'exercice',
+          'propreté',
+          'agressivité',
+          'stress',
+          'anxiété',
+          'protection',
+          'éducation',
+          'dressage-positif',
+          'clicker-training',
+          'promenade',
+          'sport-canin',
+          'agility',
+          'premiers-soins',
+          'vaccination',
+          'parasites',
+          'nutrition',
+          'régime-alimentaire',
+          'accessoires',
+          'jouets',
+          'colliers',
+          'laisses',
+          'cages',
+          'transport',
+          'voyages',
+          'garde',
+          'pension',
+          'assurance',
+          'législation',
+          'reproduction',
+          'stérilisation'
+     ];
+
+     res.render('admin/newArticle',
+          {
+               title: 'New Article',
+               categories,
+               tags
+          });
 });
 
 // POST: Submit new article
 router.post('/admin/articles', upload.single('featuredImage'), async (req, res) => {
-
+     console.log(req.body)
      const { title, category, summary, seoTitle, seoDescription, keywords, author } = req.body;
      let { tags } = req.body;
 
@@ -225,6 +296,7 @@ router.get('/articles/:slug', async (req, res) => {
                comments,
                pageUrl,
                readTime,
+               cheerio,
                suggestedArticles, // Pass the suggested articles to the template
                success: req.flash('success'),
                error: req.flash('error')

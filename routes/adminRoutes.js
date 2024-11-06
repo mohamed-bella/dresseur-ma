@@ -9,7 +9,9 @@ const multer = require('multer');
 const path = require('path');
 const sharp = require('sharp');
 const Event = require('../models/event');
+const User = require('../models/user');
 const fs = require('fs');
+const { SearchUsersCommand } = require('@aws-sdk/client-rekognition');
 
 // S3 Client initialization
 const s3 = new S3Client({
@@ -60,6 +62,13 @@ const uploadToS3 = async (fileBuffer, key) => {
      await s3.send(new PutObjectCommand(params));
      return `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
 };
+
+const isAdmin = (req, res, next) => {
+     if (!req.session.isAuthenticated) {
+          return res.redirect('/admin/login');
+     }
+     next()
+}
 // Handle Admin Login
 router.get('/admin/login', (req, res) => {
      res.render('admin/login');
@@ -110,15 +119,18 @@ router.get('/admin/dashboard', async (req, res) => {
      }
 
      try {
+          const users = await User.find()
+               .select('displayName email profileImage isVerified badges ndressilikScore')
+               .sort('-createdAt');
           const articles = await Article.find();
           // Only allow admins to view the full dashboard
           if (req.session.adminRole === 'admin') {
-               return res.render('admin/dashboard', { role: 'admin', articles });
+               return res.render('admin/dashboard', { role: 'admin', articles, users });
           } else if (req.session.adminRole === 'author') {
                // Fetch articles for the logged-in author
                // Assuming you store the user ID in the session
                console.log(articles)
-               return res.render('admin/dashboard', { role: 'author', articles });
+               return res.render('admin/dashboard', { role: 'author', articles, SearchUsersCommand });
           } else {
                return res.redirect('/admin/login');
           }
@@ -247,6 +259,70 @@ router.delete('/admin/events/:id', async (req, res) => {
      } catch (err) {
           console.error(err);
           res.status(500).send('Server Error');
+     }
+});
+
+
+
+// Update user
+router.post('/admin/users/:userId/update', isAdmin, async (req, res) => {
+     try {
+          const { userId } = req.params;
+          const { badgeType, trustScore } = req.body;
+
+          const user = await User.findById(userId);
+          if (!user) {
+               return res.status(404).json({ error: 'User not found' });
+          }
+
+          // Add badge if it doesn't exist
+          if (badgeType && !user.badges.find(b => b.type === badgeType)) {
+               user.badges.push({
+                    type: badgeType,
+                    earnedAt: new Date()
+               });
+          }
+
+          // Update trust score if provided
+          if (trustScore) {
+               user.ndressilikScore = Math.min(Math.max(0, parseInt(trustScore)), 100);
+          }
+
+          await user.save();
+          res.json({ success: true });
+
+     } catch (error) {
+          console.error('Error updating user:', error);
+          res.status(500).json({ error: 'Server error' });
+     }
+});
+
+// Verify user
+router.post('/admin/users/:userId/verify', isAdmin, async (req, res) => {
+     try {
+          const { userId } = req.params;
+
+          const user = await User.findById(userId);
+          if (!user) {
+               return res.status(404).json({ error: 'User not found' });
+          }
+
+          user.isVerified = true;
+
+          // Add verified-professional badge if not present
+          if (!user.badges.find(b => b.type === 'verified-professional')) {
+               user.badges.push({
+                    type: 'verified-professional',
+                    earnedAt: new Date()
+               });
+          }
+
+          await user.save();
+          res.json({ success: true });
+
+     } catch (error) {
+          console.error('Error verifying user:', error);
+          res.status(500).json({ error: 'Server error' });
      }
 });
 

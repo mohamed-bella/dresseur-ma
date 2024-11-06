@@ -1,4 +1,4 @@
-// models/serviceProvider.js
+// models/user.js
 const mongoose = require('mongoose');
 const slugify = require('slugify');
 const Schema = mongoose.Schema;

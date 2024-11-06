@@ -409,6 +409,57 @@ const getDashboardStats = async (userId) => {
 // Updated dashboard route
 router.get('/dashboard', async (req, res) => {
      try {
+
+          const requiredFields = [
+               { field: 'location.city', weight: 15 },
+               { field: 'specializations', weight: 20, isArray: true },
+               { field: 'languages', weight: 10, isArray: true },
+               { field: 'experience.description', weight: 15, notDefault: 'Sans Experience.' },
+               { field: 'qualifications', weight: 15, isArray: true },
+               { field: 'gallery', weight: 15, isArray: true },
+               { field: 'bio', weight: 10 }
+          ];
+
+          // Calculate completion percentage
+          let completedWeight = 0;
+          requiredFields.forEach(field => {
+               if (field.isArray) {
+                    // Check if array exists and has items
+                    const value = field.field.split('.').reduce((obj, key) => obj?.[key], req.user);
+                    if (value && Array.isArray(value) && value.length > 0) {
+                         completedWeight += field.weight;
+                    }
+               } else if (field.notDefault) {
+                    // Check if field exists and is not default value
+                    const value = field.field.split('.').reduce((obj, key) => obj?.[key], req.user);
+                    if (value && value !== field.notDefault) {
+                         completedWeight += field.weight;
+                    }
+               } else {
+                    // Check if field exists and has value
+                    const value = field.field.split('.').reduce((obj, key) => obj?.[key], req.user);
+                    if (value && value !== '') {
+                         completedWeight += field.weight;
+                    }
+               }
+          });
+
+          // Add completion percentage to user object
+          const userWithCompletion = {
+               ...req.user.toObject(),
+               completionPercentage: Math.round(completedWeight),
+               requiredFields: requiredFields.map(field => {
+                    const value = field.field.split('.').reduce((obj, key) => obj?.[key], req.user);
+                    return {
+                         field: field.field,
+                         completed: field.isArray ?
+                              (value && Array.isArray(value) && value.length > 0) :
+                              (value && (!field.notDefault || value !== field.notDefault))
+                    };
+               })
+          };
+
+
           // Get services with basic stats
           const services = await Service.aggregate([
                {
@@ -495,7 +546,7 @@ router.get('/dashboard', async (req, res) => {
                }
           ]);
           const detailedVisits1 = formatDetailedVisits(detailedVisits)
-          console.log(req.user)
+
           res.render('user/dashboard/dashboard', {
                user: req.user,
                stats,
@@ -985,6 +1036,22 @@ async function determineUserBadges(user, metrics, trustFactors) {
      return badges.sort((a, b) => getBadgePriority(a.type) - getBadgePriority(b.type));
 }
 
+
+async function getBadgePriority(badgeType) {
+     const priorityMap = {
+          'platinum': 1,
+          'gold': 2,
+          'silver': 3,
+          'bronze': 4,
+          // Add other badge types with their priorities here
+     };
+
+     // Return the priority for the given badge type
+     // If the badge type is not found, assign a default low priority
+     return priorityMap[badgeType] || 999;
+}
+
+
 async function calculateResponseRate(userId, recentBookings) {
      if (!recentBookings.length) return 0;
 
@@ -1176,9 +1243,9 @@ router.get('/providers', async (req, res) => {
 
           // Base query
           let query = User.find({
-               // role: 'provider',
+               role: 'provider',
                // isVerified: true,
-               // status: 'active'
+               status: 'active'
           });
 
           // Apply filters

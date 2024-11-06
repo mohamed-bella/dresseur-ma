@@ -11,7 +11,7 @@
      <!-- Meta Tags -->
      <meta name="description" content="<%= article.summary %>">
      <meta name="author" content="<%= article.author %>">
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
      <!-- Tailwind CSS CDN -->
      <script src="https://cdn.tailwindcss.com"></script>
      <script>
@@ -19,10 +19,13 @@
                darkMode: 'class',
                theme: {
                     extend: {
+                         fontFamily: {
+                              sans: ['Noto Sans Arabic', 'sans-serif'],
+                         },
                          typography: {
                               DEFAULT: {
                                    css: {
-                                        maxWidth: '65ch',
+                                        fontFamily: 'Noto Sans Arabic, sans-serif',
                                    },
                               },
                          },
@@ -30,13 +33,32 @@
                },
           }
      </script>
-
+     <style>
+          body {
+               font-family: "Cairo", sans-serif;
+          }
+     </style>
      <!-- Custom Styles -->
-     <style type="text/tailwind">
+     <style type="text/tailwindcss">
           @layer utilities {
             .text-balance {
                 text-wrap: balance;
             }
+            .font-arabic {
+                font-family: 'Cairo', serif;
+            }
+            .font-latin {
+                font-family: 'Cairo', sans-serif;
+            }
+        }
+
+        /* Adjust text alignment based on direction */
+        .article-content[dir="rtl"] {
+            text-align: right;
+        }
+
+        .article-content[dir="ltr"] {
+            text-align: left;
         }
     </style>
 
@@ -44,10 +66,12 @@
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
      <!-- Google Fonts -->
-     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+     <!-- Include fonts for Arabic and Latin scripts -->
+     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
 
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200">
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200 ">
+     <!-- Include Navbar -->
      <%- include('include/navbar.ejs') %>
 
           <!-- Reading Progress Bar -->
@@ -66,10 +90,10 @@
                <!-- Font Size Controls -->
                <div class="h-6 w-px bg-gray-200 dark:bg-gray-700"></div>
                <button onclick="adjustFontSize(-1)" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700">
-                    <i class="fas fa-text-height text-gray-600 dark:text-gray-300"></i>-
+                    <i class="fas fa-minus text-gray-600 dark:text-gray-300"></i>
                </button>
                <button onclick="adjustFontSize(1)" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700">
-                    <i class="fas fa-text-height text-gray-600 dark:text-gray-300"></i>+
+                    <i class="fas fa-plus text-gray-600 dark:text-gray-300"></i>
                </button>
 
                <!-- Share Button -->
@@ -114,96 +138,150 @@
                                    <%= readTime %> min de lecture
                               </span>
                          </div>
+
+                         <!-- Social Media Sharing Options -->
+                         <div class="mt-6 flex justify-center gap-4">
+                              <% const currentUrl='' %>
+                                   <a href="https://www.facebook.com/sharer/sharer.php?u=<%= encodeURIComponent(currentUrl) %>" target="_blank" class="text-white hover:text-blue-200">
+                                        <i class="fab fa-facebook-f"></i>
+                                   </a>
+                                   <a href="https://twitter.com/intent/tweet?url=<%= encodeURIComponent(currentUrl) %>&text=<%= encodeURIComponent(article.title) %>" target="_blank" class="text-white hover:text-blue-200">
+                                        <i class="fab fa-twitter"></i>
+                                   </a>
+                                   <a href="mailto:?subject=<%= encodeURIComponent(article.title) %>&body=<%= encodeURIComponent(currentUrl) %>" class="text-white hover:text-blue-200">
+                                        <i class="fas fa-envelope"></i>
+                                   </a>
+                                   <a href="https://wa.me/?text=<%= encodeURIComponent(article.title + ' ' + currentUrl) %>" target="_blank" class="text-white hover:text-blue-200">
+                                        <i class="fab fa-whatsapp"></i>
+                                   </a>
+                         </div>
                     </div>
                </div>
           </header>
 
           <!-- Main Content -->
           <main class="container mx-auto px-4 py-12">
-               <div class="max-w-4xl mx-auto">
-                    <!-- Article Content -->
-                    <article class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl mb-12">
-                         <!-- Featured Image -->
-                         <% if (article.featuredImage) { %>
-                              <img src="<%= article.featuredImage %>" alt="<%= article.title %>" class="w-full h-[400px] object-cover rounded-t-2xl">
-                              <% } %>
+               <div class="flex flex-col lg:flex-row gap-8">
+                    <!-- Main Article Content -->
+                    <div class="w-full lg:w-2/3">
+                         <!-- Article Content -->
+                         <article class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl mb-12">
+                              <!-- Featured Image -->
+                              <% if (article.featuredImage) { %>
+                                   <img src="<%= article.featuredImage %>" alt="<%= article.title %>" class="w-full h-[400px] object-cover rounded-t-2xl">
+                                   <% } %>
 
-                                   <!-- Content -->
-                                   <div class="p-8 lg:p-12">
-                                        <div class="prose dark:prose-invert prose-lg max-w-none">
-                                             <div class="article-content">
+                                        <!-- Content -->
+                                        <div class="p-8 lg:p-12">
+                                             <!-- Reading Menu (Table of Contents) -->
+                                             <nav class="mb-8">
+                                                  <h2 class="text-xl font-semibold mb-4">Sommaire</h2>
+                                                  <ul class="list-disc ml-5 space-y-2">
+                                                       <!-- Assuming headings are h2 elements in the article content -->
+                                                       <% const $=cheerio.load(article.content); const headings=[]; $('h2').each(function(i, elem) { headings.push({ id: 'heading-' + i, text: $(this).text() }); $(this).attr('id', 'heading-' + i); }); article.content=$.html(); %>
+                                                            <% headings.forEach(heading=> { %>
+                                                                 <li>
+                                                                      <a href="#<%= heading.id %>" class="text-blue-600 hover:underline">
+                                                                           <%= heading.text %>
+                                                                      </a>
+                                                                 </li>
+                                                                 <% }) %>
+                                                  </ul>
+                                             </nav>
+
+                                             <div class="prose dark:prose-invert prose-lg max-w-none article-content">
                                                   <%- article.content %>
                                              </div>
-                                        </div>
 
-                                        <!-- Tags -->
-                                        <div class="mt-12 flex flex-wrap gap-2">
-                                             <% article.tags.filter(tag=> tag).forEach(tag => { %>
-                                                  <span class="px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full text-sm">
-                                                       #<%= tag %>
-                                                  </span>
-                                                  <% }) %>
-                                        </div>
-                                   </div>
-                    </article>
-
-                    <!-- Comments Section -->
-                    <section id="comments" class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 lg:p-12">
-                         <h2 class="text-2xl font-bold mb-8">Réponses (<%= comments.length %>)</h2>
-
-                         <!-- Comment Form -->
-                         <form action="/articles/<%= article.slug %>/comments" method="POST" class="mb-12">
-                              <div class="grid gap-6">
-                                   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <div>
-                                             <label class="block text-sm font-medium mb-2">Nom</label>
-                                             <input type="text" name="name" required class="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400">
-                                        </div>
-                                        <div>
-                                             <label class="block text-sm font-medium mb-2">Email</label>
-                                             <input type="email" name="email" required class="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400">
-                                        </div>
-                                   </div>
-                                   <div>
-                                        <label class="block text-sm font-medium mb-2">Votre réponse</label>
-                                        <textarea name="comment" rows="4" required class="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"></textarea>
-                                   </div>
-                                   <button type="submit" class="inline-flex justify-center items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-medium rounded-lg transition-colors">
-                                        <i class="fas fa-paper-plane mr-2"></i>
-                                        Publier la réponse
-                                   </button>
-                              </div>
-                         </form>
-
-                         <!-- Comments List -->
-                         <div class="space-y-8">
-                              <% comments.forEach(comment=> { %>
-                                   <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-6">
-                                        <div class="flex items-start gap-4">
-                                             <div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center flex-shrink-0">
-                                                  <%= comment.name.charAt(0).toUpperCase() %>
+                                             <!-- Tags -->
+                                             <div class="mt-12 flex flex-wrap gap-2">
+                                                  <% article.tags.filter(tag=> tag).forEach(tag => { %>
+                                                       <span class="px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full text-sm">
+                                                            #<%= tag %>
+                                                       </span>
+                                                       <% }) %>
                                              </div>
-                                             <div class="flex-1 min-w-0">
-                                                  <div class="flex items-center justify-between mb-2">
-                                                       <h4 class="font-semibold truncate">
-                                                            <%= comment.name %>
-                                                       </h4>
-                                                       <time class="text-sm text-gray-500 dark:text-gray-400">
-                                                            <%= new Date(comment.createdAt).toLocaleDateString() %>
-                                                       </time>
+                                        </div>
+                         </article>
+
+                         <!-- Comments Section -->
+                         <section id="comments" class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 lg:p-12">
+                              <h2 class="text-2xl font-bold mb-8">Réponses (<%= comments.length %>)</h2>
+
+                              <!-- Comment Form -->
+                              <form action="/articles/<%= article.slug %>/comments" method="POST" class="mb-12">
+                                   <div class="grid gap-6">
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                             <div>
+                                                  <label class="block text-sm font-medium mb-2">Nom</label>
+                                                  <input type="text" name="name" required class="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400">
+                                             </div>
+                                             <div>
+                                                  <label class="block text-sm font-medium mb-2">Email</label>
+                                                  <input type="email" name="email" required class="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400">
+                                             </div>
+                                        </div>
+                                        <div>
+                                             <label class="block text-sm font-medium mb-2">Votre réponse</label>
+                                             <textarea name="comment" rows="4" required class="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"></textarea>
+                                        </div>
+                                        <button type="submit" class="inline-flex justify-center items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-medium rounded-lg transition-colors">
+                                             <i class="fas fa-paper-plane mr-2"></i>
+                                             Publier la réponse
+                                        </button>
+                                   </div>
+                              </form>
+
+                              <!-- Comments List -->
+                              <div class="space-y-8">
+                                   <% comments.forEach(comment=> { %>
+                                        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-6">
+                                             <div class="flex items-start gap-4">
+                                                  <div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center flex-shrink-0">
+                                                       <%= comment.name.charAt(0).toUpperCase() %>
                                                   </div>
-                                                  <p class="text-gray-600 dark:text-gray-300">
-                                                       <%= comment.comment %>
-                                                  </p>
+                                                  <div class="flex-1 min-w-0">
+                                                       <div class="flex items-center justify-between mb-2">
+                                                            <h4 class="font-semibold truncate">
+                                                                 <%= comment.name %>
+                                                            </h4>
+                                                            <time class="text-sm text-gray-500 dark:text-gray-400">
+                                                                 <%= new Date(comment.createdAt).toLocaleDateString() %>
+                                                            </time>
+                                                       </div>
+                                                       <p class="text-gray-600 dark:text-gray-300">
+                                                            <%= comment.comment %>
+                                                       </p>
+                                                  </div>
                                              </div>
                                         </div>
-                                   </div>
-                                   <% }) %>
+                                        <% }) %>
+                              </div>
+                         </section>
+                    </div>
+
+                    <!-- Related Articles Sidebar -->
+                    <aside class="w-full lg:w-1/3">
+                         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6">
+                              <h2 class="text-xl font-semibold mb-4">Articles similaires</h2>
+                              <div class="space-y-6">
+                                   <!-- Dummy Related Articles -->
+                                   <% const relatedArticles=[ { title: 'Article 1' , slug: 'article-1' , thumbnail: '/path/to/image1.jpg' }, { title: 'Article 2' , slug: 'article-2' , thumbnail: '/path/to/image2.jpg' }, { title: 'Article 3' , slug: 'article-3' , thumbnail: '/path/to/image3.jpg' }, ]; %>
+                                        <% relatedArticles.forEach(related=> { %>
+                                             <a href="/articles/<%= related.slug %>" class="flex items-center gap-4 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded-lg transition">
+                                                  <img src="<%= related.thumbnail %>" alt="<%= related.title %>" class="w-16 h-16 object-cover rounded-lg">
+                                                  <span class="text-gray-800 dark:text-gray-200 font-medium">
+                                                       <%= related.title %>
+                                                  </span>
+                                             </a>
+                                             <% }) %>
+                              </div>
                          </div>
-                    </section>
+                    </aside>
                </div>
           </main>
 
+          <!-- JavaScript -->
           <script>
                // Dark mode toggle
                const themeToggle = document.getElementById('theme-toggle');
@@ -223,7 +301,7 @@
                // Reading progress bar
                const progressBar = document.querySelector('.progress-bar');
                window.addEventListener('scroll', () => {
-                    const winScroll = document.documentElement.scrollTop;
+                    const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
                     const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
                     const scrolled = (winScroll / height) * 100;
                     progressBar.style.width = scrolled + '%';
@@ -250,6 +328,21 @@
                               .then(() => alert('Lien copié dans le presse-papiers'));
                     }
                }
+
+               // Detect article language and change font and direction
+               document.addEventListener('DOMContentLoaded', () => {
+                    const articleContent = document.querySelector('.article-content');
+                    const text = articleContent.textContent || articleContent.innerText;
+                    const arabicPattern = /[\u0600-\u06FF]/;
+
+                    if (arabicPattern.test(text)) {
+                         articleContent.classList.add('font-arabic');
+                         articleContent.setAttribute('dir', 'rtl');
+                    } else {
+                         articleContent.classList.add('font-latin');
+                         articleContent.setAttribute('dir', 'ltr');
+                    }
+               });
           </script>
 </body>
 

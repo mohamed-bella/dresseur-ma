@@ -17,12 +17,12 @@ const articleSchema = new Schema({
      tags: [String],
      summary: {
           type: String,
-          required: true,
+          // required: true,
           trim: true,
      },
      author: {
           type: String,
-          required: true,
+          // required: true,
      },
      featuredImage: {
           type: String, // URL or path to the image

@@ -1,12 +1,44 @@
-<% if (user.isVerified) { %>
-     <!-- Verified Status Alert -->
-     <div class="bg-white border-l-4 border-blue-500 rounded-lg shadow-sm p-6 mb-6">
+<% const requiredFields=[ { field: 'location.city' , label: 'Location' , value: user.location?.city, icon: 'fa-location-dot' }, { field: 'specializations' , label: 'Spécialisations' , value: user.specializations?.length> 0,
+     icon: 'fa-briefcase'
+     },
+     {
+     field: 'languages',
+     label: 'Langues parlées',
+     value: user.languages?.length > 0,
+     icon: 'fa-language'
+     },
+     {
+     field: 'experience',
+     label: 'Expérience',
+     value: user.experience?.description && user.experience.description !== 'Sans Experience.',
+     icon: 'fa-star'
+     },
+     {
+     field: 'qualifications',
+     label: 'Qualifications',
+     value: user.qualifications?.length > 0,
+     icon: 'fa-certificate'
+     },
+     {
+     field: 'gallery',
+     label: 'Photos',
+     value: user.gallery?.length > 0,
+     icon: 'fa-images'
+     }
+     ];
+
+     // Calculate completion percentage
+     const completedFields = requiredFields.filter(field => field.value).length;
+     const completionPercentage = Math.round((completedFields / requiredFields.length) * 100);
+     %>
+
+     <div class="bg-white border-l-4 border-yellow-500 rounded-lg shadow-sm p-6 mb-6">
           <div class="flex items-start space-x-4">
-               <!-- Success Icon -->
+               <!-- Pending Icon -->
                <div class="flex-shrink-0">
-                    <div class="bg-blue-100 rounded-full p-2">
-                         <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <div class="bg-yellow-100 rounded-full p-2">
+                         <svg class="w-6 h-6 text-yellow-500 animate-spin-slow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                          </svg>
                     </div>
                </div>
@@ -15,263 +47,263 @@
                <div class="flex-1">
                     <div class="flex items-center justify-between">
                          <h3 class="text-lg font-semibold text-gray-900">
-                              Compte Vérifié
-                              <span class="ml-2 inline-block px-2 py-1 text-xs font-medium text-blue-600 bg-blue-50 rounded-full">
-                                   <%= stats.totalServices %> services actifs
+                              Vérification en cours
+                              <span class="ml-2 inline-block px-2 py-1 text-xs font-medium text-yellow-600 bg-yellow-50 rounded-full">
+                                   <%= completionPercentage %>% Complété
                               </span>
                          </h3>
-                         <div class="text-sm text-gray-500">
-                              Note moyenne: <%= stats.averageRating %>/5
+                    </div>
+
+                    <!-- Progress -->
+                    <div class="mt-4">
+                         <div class="flex justify-between text-sm text-gray-600 mb-1">
+                              <span>Progression du profil</span>
+                              <span>
+                                   <%= completedFields %> sur <%= requiredFields.length %> complétés
+                              </span>
+                         </div>
+                         <div class="w-full bg-gray-100 rounded-full h-2">
+                              <div class="bg-yellow-500 rounded-full h-2 transition-all duration-500" style="width: <%= completionPercentage %>%"></div>
                          </div>
                     </div>
-                    <p class="mt-1 text-gray-600">
-                         Votre profil est vérifié et visible sur la plateforme. Vous avez reçu <%= stats.totalReviews %> avis et <%= stats.totalReservations %> réservations.
-                    </p>
+
+                    <!-- Required Fields Checklist -->
+                    <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+                         <% requiredFields.forEach(field=> { %>
+                              <div class="flex items-center text-sm">
+                                   <% if (field.value) { %>
+                                        <span class="flex-shrink-0 w-5 h-5 mr-2 rounded-full bg-green-100 flex items-center justify-center">
+                                             <i class="fas fa-check text-xs text-green-500"></i>
+                                        </span>
+                                        <span class="text-gray-600">
+                                             <%= field.label %>
+                                        </span>
+                                        <% } else { %>
+                                             <span class="flex-shrink-0 w-5 h-5 mr-2 rounded-full bg-gray-100 flex items-center justify-center">
+                                                  <i class="fas <%= field.icon %> text-xs text-gray-400"></i>
+                                             </span>
+                                             <a href="/dashboard/profile" class="text-blue-600 hover:underline">
+                                                  Ajouter <%= field.label %>
+                                             </a>
+                                             <% } %>
+                              </div>
+                              <% }); %>
+                    </div>
+
+                    <% if (completionPercentage < 100) { %>
+                         <!-- Action Required Message -->
+                         <div class="mt-4 bg-blue-50 rounded-lg p-4">
+                              <div class="flex">
+                                   <div class="flex-shrink-0">
+                                        <i class="fas fa-info-circle text-blue-400"></i>
+                                   </div>
+                                   <div class="ml-3">
+                                        <h3 class="text-sm font-medium text-blue-800">Action requise</h3>
+                                        <p class="mt-2 text-sm text-blue-700">
+                                             Complétez votre profil pour accélérer le processus de vérification. Il vous reste <%= requiredFields.length - completedFields %> éléments à remplir.
+                                        </p>
+                                   </div>
+                              </div>
+                         </div>
+                         <% } else { %>
+                              <!-- All Complete Message -->
+                              <div class="mt-4 bg-green-50 rounded-lg p-4">
+                                   <div class="flex">
+                                        <div class="flex-shrink-0">
+                                             <i class="fas fa-check-circle text-green-400"></i>
+                                        </div>
+                                        <div class="ml-3">
+                                             <h3 class="text-sm font-medium text-green-800">Profil complet!</h3>
+                                             <p class="mt-2 text-sm text-green-700">
+                                                  Votre profil est complet. Notre équipe examine actuellement votre demande de vérification.
+                                             </p>
+                                        </div>
+                                   </div>
+                              </div>
+                              <% } %>
+
+                                   <!-- Timeframe -->
+                                   <div class="mt-4 text-sm text-gray-500 flex items-center">
+                                        <i class="fas fa-clock mr-2 text-gray-400"></i>
+                                        Temps estimé: 24-48 heures après complétion du profil
+                                   </div>
                </div>
           </div>
      </div>
-     <% } else { %>
-          <!-- Pending Verification Alert -->
-          <div class="bg-white border-l-4 border-yellow-500 rounded-lg shadow-sm p-6 mb-6">
-               <div class="flex items-start space-x-4">
-                    <!-- Pending Icon -->
-                    <div class="flex-shrink-0">
-                         <div class="bg-yellow-100 rounded-full p-2">
-                              <svg class="w-6 h-6 text-yellow-500 animate-spin-slow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                              </svg>
-                         </div>
-                    </div>
 
-                    <!-- Content -->
-                    <div class="flex-1">
-                         <div class="flex items-center justify-between">
-                              <h3 class="text-lg font-semibold text-gray-900">
-                                   Vérification en cours
-                                   <span class="ml-2 inline-block px-2 py-1 text-xs font-medium text-yellow-600 bg-yellow-50 rounded-full">
-                                        En attente
-                                   </span>
-                              </h3>
-                              <% if (stats.totalServices> 0) { %>
-                                   <div class="text-sm text-gray-500">
-                                        <%= stats.totalServices %> services en attente
-                                   </div>
-                                   <% } %>
-                         </div>
+     <style>
+          @keyframes spin-slow {
+               from {
+                    transform: rotate(0deg);
+               }
 
-                         <!-- Progress -->
-                         <div class="mt-4">
-                              <div class="flex justify-between text-sm text-gray-600 mb-1">
-                                   <span>État de la vérification</span>
-                                   <span>50%</span>
-                              </div>
-                              <div class="w-full bg-gray-100 rounded-full h-2">
-                                   <div class="bg-yellow-500 rounded-full h-2 w-1/2 transition-all duration-500"></div>
-                              </div>
-                         </div>
+               to {
+                    transform: rotate(360deg);
+               }
+          }
 
-                         <!-- Checklist -->
-                         <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
-                              <div class="flex items-center text-sm text-gray-600">
-                                   <svg class="w-4 h-4 mr-2 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                                   </svg>
-                                   Profile complété
-                              </div>
-                              <div class="flex items-center text-sm text-gray-600">
-                                   <svg class="w-4 h-4 mr-2 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
-                                   </svg>
-                                   Vérification en cours
-                              </div>
-                         </div>
+          .animate-spin-slow {
+               animation: spin-slow 3s linear infinite;
+          }
+     </style>
 
-                         <!-- Timeframe -->
-                         <div class="mt-4 text-sm text-gray-500 flex items-center">
-                              <svg class="w-4 h-4 mr-1.5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                                   <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
-                              </svg>
-                              Temps estimé: 24-48 heures
-                         </div>
-                    </div>
+     <!-- Analytics Charts -->
+     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Visitor Analytics -->
+          <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+               <div class="px-6 py-4 border-b border-gray-200">
+                    <h2 class="text-xl font-semibold text-gray-800">
+                         Visiteurs du profil - Derniers 7 jours
+                    </h2>
+               </div>
+               <div class="p-6">
+                    <canvas id="visitorsChart" height="300"></canvas>
                </div>
           </div>
-          <% } %>
 
-               <style>
-                    @keyframes spin-slow {
-                         from {
-                              transform: rotate(0deg);
-                         }
-
-                         to {
-                              transform: rotate(360deg);
-                         }
-                    }
-
-                    .animate-spin-slow {
-                         animation: spin-slow 3s linear infinite;
-                    }
-               </style>
-
-
-               <!-- Analytics Charts -->
-               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Visitor Analytics -->
-                    <div class="bg-white rounded-2xl shadow-md overflow-hidden">
-                         <div class="px-6 py-4 border-b border-gray-200">
-                              <h2 class="text-xl font-semibold text-gray-800">
-                                   Visiteurs du profil - Derniers 7 jours
-                              </h2>
-                         </div>
-                         <div class="p-6">
-                              <canvas id="visitorsChart" height="300"></canvas>
-                         </div>
-                    </div>
-
-                    <!-- Additional Chart (optional) -->
-                    <div class="bg-white rounded-2xl shadow-md overflow-hidden">
-                         <div class="px-6 py-4 border-b border-gray-200">
-                              <h2 class="text-xl font-semibold text-gray-800">
-                                   Autre graphique
-                              </h2>
-                         </div>
-                         <div class="p-6">
-                              <!-- Add another chart here -->
-                         </div>
-                    </div>
+          <!-- Additional Chart (optional) -->
+          <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+               <div class="px-6 py-4 border-b border-gray-200">
+                    <h2 class="text-xl font-semibold text-gray-800">
+                         Autre graphique
+                    </h2>
                </div>
-               <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-               <input type="hidden" value="<%= JSON.stringify(analytics.detailedVisits1) %>" id="visitorsData">
-               <script>
-                    // Visitor Analytics Chart Data
-                    const visitorsData = JSON.parse(document.getElementById('visitorsData').value);
-                    console.log(visitorsData); // Check if parsed correctly
+               <div class="p-6">
+                    <!-- Add another chart here -->
+               </div>
+          </div>
+     </div>
+     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+     <input type="hidden" value="<%= JSON.stringify(analytics.detailedVisits1) %>" id="visitorsData">
+     <script>
+          // Visitor Analytics Chart Data
+          const visitorsData = JSON.parse(document.getElementById('visitorsData').value);
+          console.log(visitorsData); // Check if parsed correctly
 
-                    // Check if the parsed data is an array and map over it
-                    if (Array.isArray(visitorsData)) {
-                         const visitorLabels = visitorsData.map(v => v.date);
-                         const visitorCounts = visitorsData.map(v => v.count);
+          // Check if the parsed data is an array and map over it
+          if (Array.isArray(visitorsData)) {
+               const visitorLabels = visitorsData.map(v => v.date);
+               const visitorCounts = visitorsData.map(v => v.count);
 
-                         console.log(visitorLabels); // Check the labels
-                         console.log(visitorCounts); // Check the counts
+               console.log(visitorLabels); // Check the labels
+               console.log(visitorCounts); // Check the counts
 
-                         // Create Visitor Chart
-                         const ctxVisitors = document.getElementById('visitorsChart').getContext('2d');
-                         new Chart(ctxVisitors, {
-                              type: 'bar', // Column chart
-                              data: {
-                                   labels: visitorLabels,
-                                   datasets: [{
-                                        label: 'Nombre de Visites',
-                                        data: visitorCounts,
-                                        backgroundColor: 'rgba(54, 162, 235, 0.7)', // Softer color for bars
-                                        borderColor: 'rgba(54, 162, 235, 1)',
-                                        borderWidth: 1,
-                                        borderRadius: 5, // Rounded corners for a softer look
-                                        hoverBackgroundColor: 'rgba(54, 162, 235, 0.9)', // Slightly darker on hover
-                                        hoverBorderColor: 'rgba(54, 162, 235, 1)'
-                                   }]
+               // Create Visitor Chart
+               const ctxVisitors = document.getElementById('visitorsChart').getContext('2d');
+               new Chart(ctxVisitors, {
+                    type: 'bar', // Column chart
+                    data: {
+                         labels: visitorLabels,
+                         datasets: [{
+                              label: 'Nombre de Visites',
+                              data: visitorCounts,
+                              backgroundColor: 'rgba(54, 162, 235, 0.7)', // Softer color for bars
+                              borderColor: 'rgba(54, 162, 235, 1)',
+                              borderWidth: 1,
+                              borderRadius: 5, // Rounded corners for a softer look
+                              hoverBackgroundColor: 'rgba(54, 162, 235, 0.9)', // Slightly darker on hover
+                              hoverBorderColor: 'rgba(54, 162, 235, 1)'
+                         }]
+                    },
+                    options: {
+                         responsive: true,
+                         maintainAspectRatio: false, // Allows chart to adapt better to container size
+                         plugins: {
+                              legend: {
+                                   display: false // Remove legend for a cleaner look (optional)
                               },
-                              options: {
-                                   responsive: true,
-                                   maintainAspectRatio: false, // Allows chart to adapt better to container size
-                                   plugins: {
-                                        legend: {
-                                             display: false // Remove legend for a cleaner look (optional)
-                                        },
-                                        tooltip: {
-                                             backgroundColor: 'rgba(0, 0, 0, 0.8)', // Darker background for tooltip
-                                             titleColor: '#ffffff',
-                                             bodyColor: '#ffffff',
-                                             cornerRadius: 4
-                                        }
-                                   },
-                                   scales: {
-                                        x: {
-                                             grid: {
-                                                  display: false // Remove grid lines for a cleaner look
-                                             },
-                                             title: {
-                                                  display: true,
-                                                  text: 'Date',
-                                                  color: '#333',
-                                                  font: {
-                                                       family: 'Arial',
-                                                       size: 14,
-                                                       weight: 'bold'
-                                                  }
-                                             },
-                                             ticks: {
-                                                  color: '#666'
-                                             }
-                                        },
-                                        y: {
-                                             grid: {
-                                                  color: 'rgba(200, 200, 200, 0.3)' // Subtle grid lines
-                                             },
-                                             title: {
-                                                  display: true,
-                                                  text: 'Visites',
-                                                  color: '#333',
-                                                  font: {
-                                                       family: 'Arial',
-                                                       size: 14,
-                                                       weight: 'bold'
-                                                  }
-                                             },
-                                             ticks: {
-                                                  color: '#666'
-                                             }
-                                        }
-                                   }
+                              tooltip: {
+                                   backgroundColor: 'rgba(0, 0, 0, 0.8)', // Darker background for tooltip
+                                   titleColor: '#ffffff',
+                                   bodyColor: '#ffffff',
+                                   cornerRadius: 4
                               }
-                         });
-                    } else {
-                         console.error('Parsed data is not an array:', visitorsData);
-                    }
-
-
-               </script>
-
-
-
-               <!-- Initialize Charts -->
-
-               <script>
-                    // Performance Chart
-                    new Chart(document.getElementById('performanceChart'), {
-                         type: 'line',
-                         data: {
-                              labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
-                              datasets: [{
-                                   label: 'Revenus',
-                                   data: [1500, 2200, 1800, 2400, 2800, 2600, 3200],
-                                   borderColor: '#2563eb',
-                                   tension: 0.4
-                              }]
                          },
-                         options: {
-                              responsive: true,
-                              plugins: {
-                                   legend: {
-                                        display: false
-                                   }
-                              },
-                              scales: {
-                                   y: {
-                                        beginAtZero: true,
-                                        grid: {
-                                             display: false
+                         scales: {
+                              x: {
+                                   grid: {
+                                        display: false // Remove grid lines for a cleaner look
+                                   },
+                                   title: {
+                                        display: true,
+                                        text: 'Date',
+                                        color: '#333',
+                                        font: {
+                                             family: 'Arial',
+                                             size: 14,
+                                             weight: 'bold'
                                         }
                                    },
-                                   x: {
-                                        grid: {
-                                             display: false
+                                   ticks: {
+                                        color: '#666'
+                                   }
+                              },
+                              y: {
+                                   grid: {
+                                        color: 'rgba(200, 200, 200, 0.3)' // Subtle grid lines
+                                   },
+                                   title: {
+                                        display: true,
+                                        text: 'Visites',
+                                        color: '#333',
+                                        font: {
+                                             family: 'Arial',
+                                             size: 14,
+                                             weight: 'bold'
                                         }
+                                   },
+                                   ticks: {
+                                        color: '#666'
                                    }
                               }
                          }
-                    });
+                    }
+               });
+          } else {
+               console.error('Parsed data is not an array:', visitorsData);
+          }
 
-               </script>
+
+     </script>
+
+
+
+     <!-- Initialize Charts -->
+
+     <script>
+          // Performance Chart
+          new Chart(document.getElementById('performanceChart'), {
+               type: 'line',
+               data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                    datasets: [{
+                         label: 'Revenus',
+                         data: [1500, 2200, 1800, 2400, 2800, 2600, 3200],
+                         borderColor: '#2563eb',
+                         tension: 0.4
+                    }]
+               },
+               options: {
+                    responsive: true,
+                    plugins: {
+                         legend: {
+                              display: false
+                         }
+                    },
+                    scales: {
+                         y: {
+                              beginAtZero: true,
+                              grid: {
+                                   display: false
+                              }
+                         },
+                         x: {
+                              grid: {
+                                   display: false
+                              }
+                         }
+                    }
+               }
+          });
+
+     </script>

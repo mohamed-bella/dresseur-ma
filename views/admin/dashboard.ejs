@@ -7,6 +7,41 @@
      <title>Author Dashboard | Ndressilik</title>
      <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+     <script src="https://cdn.tailwindcss.com"></script>
+     <style>
+          .btn-loading {
+               position: relative;
+               pointer-events: none;
+          }
+
+          .btn-loading::after {
+               content: '';
+               position: absolute;
+               width: 16px;
+               height: 16px;
+               top: 0;
+               left: 0;
+               right: 0;
+               bottom: 0;
+               margin: auto;
+               border: 4px solid transparent;
+               border-top-color: #ffffff;
+               border-radius: 50%;
+               animation: btn-loading-spinner 1s ease infinite;
+          }
+
+          @keyframes btn-loading-spinner {
+               from {
+                    transform: rotate(0turn);
+               }
+
+               to {
+                    transform: rotate(1turn);
+               }
+          }
+     </style>
      <style>
           :root {
                --primary-color: #000;
@@ -267,7 +302,171 @@
                          <a href="/admin/profile">Edit Profile</a>
                     </div>
                </div>
+               <div class="container mx-auto px-4 py-8">
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                         <h1 class="text-2xl font-bold mb-6">User Management</h1>
 
+                         <!-- Users Table -->
+                         <div class="overflow-x-auto">
+                              <table class="min-w-full divide-y divide-gray-200">
+                                   <thead class="bg-gray-50">
+                                        <tr>
+                                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
+                                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Badges</th>
+                                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                        </tr>
+                                   </thead>
+                                   <tbody class="bg-white divide-y divide-gray-200" id="usersTableBody">
+                                        <% users.forEach(user=> { %>
+                                             <tr data-user-id="<%= user._id %>">
+                                                  <td class="px-6 py-4 whitespace-nowrap">
+                                                       <div class="flex items-center">
+                                                            <div class="flex-shrink-0 h-10 w-10">
+                                                                 <img class="h-10 w-10 rounded-full" src="<%= user.profileImage %>" alt="">
+                                                            </div>
+                                                            <div class="ml-4">
+                                                                 <div class="text-sm font-medium text-gray-900">
+                                                                      <%= user.displayName %>
+                                                                 </div>
+                                                                 <div class="text-sm text-gray-500">
+                                                                      <%= user.email %>
+                                                                 </div>
+                                                            </div>
+                                                       </div>
+                                                  </td>
+                                                  <td class="px-6 py-4 whitespace-nowrap">
+                                                       <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                        <%= user.isVerified ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' %>">
+                                                            <%= user.isVerified ? 'Verified' : 'Pending' %>
+                                                       </span>
+                                                  </td>
+                                                  <td class="px-6 py-4 whitespace-nowrap">
+                                                       <div class="flex space-x-2">
+                                                            <% user.badges.forEach(badge=> { %>
+                                                                 <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800">
+                                                                      <%= badge.type %>
+                                                                 </span>
+                                                                 <% }) %>
+                                                       </div>
+                                                  </td>
+                                                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                                                       <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded transition-colors
+                                               edit-user-btn" data-user-id="<%= user._id %>">
+                                                            Edit
+                                                       </button>
+                                                       <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded transition-colors
+                                               verify-user-btn <%= user.isVerified ? 'opacity-50 cursor-not-allowed' : '' %>" data-user-id="<%= user._id %>" <%=user.isVerified ? 'disabled' : '' %>>
+                                                            Verify
+                                                       </button>
+                                                  </td>
+                                             </tr>
+                                             <% }) %>
+                                   </tbody>
+                              </table>
+                         </div>
+                    </div>
+               </div>
+
+               <script>
+                    $(document).ready(function () {
+                         // Edit User
+                         $('.edit-user-btn').click(function () {
+                              const userId = $(this).data('user-id');
+                              const $btn = $(this);
+
+                              // Show edit form using SweetAlert2
+                              Swal.fire({
+                                   title: 'Edit User',
+                                   html: `
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Add Badge</label>
+                                <select id="badge-type" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                                    <option value="top-rated">Top Rated</option>
+                                    <option value="verified-professional">Verified Professional</option>
+                                    <option value="quick-responder">Quick Responder</option>
+                                    <option value="experienced">Experienced</option>
+                                    <option value="premium-provider">Premium Provider</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Trust Score Adjustment</label>
+                                <input type="number" id="trust-score" min="0" max="100" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                            </div>
+                        </div>
+                    `,
+                                   showCancelButton: true,
+                                   confirmButtonText: 'Update',
+                                   showLoaderOnConfirm: true,
+                                   preConfirm: () => {
+                                        const badgeType = document.getElementById('badge-type').value;
+                                        const trustScore = document.getElementById('trust-score').value;
+
+                                        return $.ajax({
+                                             url: `/admin/users/${userId}/update`,
+                                             method: 'POST',
+                                             data: {
+                                                  badgeType,
+                                                  trustScore
+                                             },
+                                             beforeSend: function () {
+                                                  $btn.addClass('btn-loading');
+                                             }
+                                        }).always(function () {
+                                             $btn.removeClass('btn-loading');
+                                        });
+                                   }
+                              }).then((result) => {
+                                   if (result.isConfirmed) {
+                                        Swal.fire({
+                                             title: 'Success!',
+                                             text: 'User updated successfully',
+                                             icon: 'success'
+                                        }).then(() => {
+                                             window.location.reload();
+                                        });
+                                   }
+                              });
+                         });
+
+                         // Verify User
+                         $('.verify-user-btn').click(function () {
+                              const userId = $(this).data('user-id');
+                              const $btn = $(this);
+
+                              Swal.fire({
+                                   title: 'Verify User',
+                                   text: 'Are you sure you want to verify this user?',
+                                   icon: 'question',
+                                   showCancelButton: true,
+                                   confirmButtonText: 'Verify',
+                                   showLoaderOnConfirm: true,
+                                   preConfirm: () => {
+                                        return $.ajax({
+                                             url: `/admin/users/${userId}/verify`,
+                                             method: 'POST',
+                                             beforeSend: function () {
+                                                  $btn.addClass('btn-loading');
+                                             }
+                                        }).always(function () {
+                                             $btn.removeClass('btn-loading');
+                                        });
+                                   }
+                              }).then((result) => {
+                                   if (result.isConfirmed) {
+                                        Swal.fire({
+                                             title: 'Success!',
+                                             text: 'User verified successfully',
+                                             icon: 'success'
+                                        }).then(() => {
+                                             window.location.reload();
+                                        });
+                                   }
+                              });
+                         });
+                    });
+               </script>
                <!-- Mes Articles Section -->
                <div class="article-section">
                     <h3>Mes Articles</h3>
