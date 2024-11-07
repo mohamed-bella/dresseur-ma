@@ -7,19 +7,25 @@
           <title>NDRESSILIK - Profile</title>
 </head>
 
-<body class="bg-gray-50">
+<body class="bg-gray-300">
      <%- include('includes/navbar') %>
 
-          <div class="max-w-7xl mx-auto p-6">
+          <div class="max-w-7xl mx-auto p-2">
+               <div class="mb-6 mx-2 mt-6">
+                    <a href="/dashboard" class="inline-flex items-center px-6 py-3 bg-white text-black rounded-full hover:bg-blue-100 transition-colors duration-200">
+                         <i class="fas fa-arrow-left mr-2"></i>
+                         Retour au tableau de bord
+                    </a>
+               </div>
                <!-- Profile Header Card -->
                <%- include('includes/profile/header-card') %>
 
                     <!-- Main Content Grid -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+                    <div class="mt-6">
                          <!-- Left Sidebar -->
-                         <div class="space-y-6">
+                         <div class="">
                               <%- include('includes/profile/score-card') %>
-                                   <%- include('includes/profile/business-hours') %>
+
                          </div>
 
                          <!-- Main Content Area -->
@@ -27,7 +33,8 @@
                               <%- include('includes/profile/basic-info') %>
                                    <%- include('includes/profile/specializations') %>
                                         <%- include('includes/profile/qualifications') %>
-                                             <%- include('includes/profile/settings') %>
+                                             <%- include('includes/profile/business-hours') %>
+                                                  <%- include('includes/profile/settings') %>
                          </div>
                     </div>
           </div>

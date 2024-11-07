@@ -1,171 +1,119 @@
 <%- include('include/head.ejs') %>
      <%- include('include/navbar.ejs') %>
 
-          <main class="bg-gray-50 min-h-screen">
-               <!-- Breadcrumb Navigation -->
-               <nav class="bg-white border-b border-gray-200">
-                    <div class="container mx-auto px-4 py-3">
-                         <ol class="flex flex-wrap gap-2 text-sm text-gray-600">
-                              <li><a href="/" class="text-primary hover:underline">Accueil</a></li>
-                              <li>/</li>
-                              <li><a href="/services/<%= service.serviceOptions %>" class="text-primary hover:underline">
-                                        <%= service.serviceOptions %>
-                                   </a></li>
-                              <li>/</li>
-                              <li class="font-medium text-gray-900">
-                                   <%= service.serviceName %>
-                              </li>
-                         </ol>
-                    </div>
-               </nav>
+          <!-- PhotoSwipe CSS -->
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.2/photoswipe.min.css">
 
-               <!-- Main Content -->
-               <div class="container mx-auto px-4 py-8">
+          <main class="min-h-screen bg-gray-50 py-12">
+               <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <!-- Service Header -->
                     <div class="mb-8">
                          <h1 class="text-3xl font-bold text-gray-900 mb-2">
                               <%= service.serviceName %>
                          </h1>
-                         <div class="flex flex-wrap items-center gap-4 text-sm text-gray-600">
-                              <div class="flex items-center">
-                                   <i class="fas fa-map-marker-alt text-primary mr-1"></i>
-                                   <span>
-                                        <%= service.location %>
-                                   </span>
-                              </div>
-                              <div class="flex items-center">
-                                   <i class="fas fa-eye text-primary mr-1"></i>
-                                   <span>
-                                        <%= service.views %> vues
-                                   </span>
-                              </div>
-                              <div class="flex items-center">
-                                   <i class="fas fa-clock text-primary mr-1"></i>
-                                   <span>Mis à jour <%= new Date(service.updatedAt).toLocaleDateString('fr-FR', { day: 'numeric' , month: 'long' }) %></span>
-                              </div>
-                         </div>
+                         <p class="text-gray-600">
+                              <%= service.category %>
+                         </p>
                     </div>
 
-                    <!-- Main Grid -->
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                         <!-- Left Column -->
-                         <div class="lg:col-span-2 space-y-6">
-                              <!-- Image Gallery -->
-                              <div class="bg-white border border-gray-200 p-4 rounded-lg">
-                                   <img id="mainImage" src="<%= service.images[0] %>" alt="<%= service.serviceName %>" class="w-full h-auto object-cover rounded-lg mb-4">
-                                   <div class="flex gap-2 overflow-x-auto">
+                    <!-- Main Content Grid -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                         <!-- Left Column - Images -->
+                         <div class="space-y-6">
+                              <!-- Gallery -->
+                              <div class="pswp-gallery" id="gallery">
+                                   <!-- Main Image -->
+                                   <div class="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden bg-gray-100 mb-4">
+                                        <a href="<%= service.images[0] || '/images/placeholder.jpg' %>" data-pswp-width="1500" data-pswp-height="1000" target="_blank">
+                                             <img src="<%= service.images[0] || '/images/placeholder.jpg' %>" alt="<%= service.serviceName %>" class="object-cover w-full h-full hover:opacity-90 transition-opacity">
+                                        </a>
+                                   </div>
+
+                                   <!-- Thumbnail Grid -->
+                                   <div class="grid grid-cols-4 gap-4">
                                         <% service.images.forEach((image, index)=> { %>
-                                             <img src="<%= image %>" alt="Image <%= index + 1 %>" class="w-20 h-20 object-cover rounded cursor-pointer hover:opacity-80 transition-opacity" onclick="changeMainImage('<%= image %>')">
+                                             <a href="<%= image %>" data-pswp-width="1500" data-pswp-height="1000" class="aspect-square rounded-md overflow-hidden block" target="_blank">
+                                                  <img src="<%= image %>" alt="Image <%= index + 1 %>" class="object-cover w-full h-full hover:opacity-75 transition-opacity">
+                                             </a>
                                              <% }) %>
                                    </div>
                               </div>
+                         </div>
 
-                              <!-- Service Description -->
-                              <div class="bg-white border border-gray-200 p-6 rounded-lg">
-                                   <h2 class="text-2xl font-bold text-gray-900 mb-4">Description</h2>
-                                   <p class="text-gray-800 leading-relaxed whitespace-pre-line">
+                         <!-- Right Column - Info -->
+                         <div class="space-y-8">
+                              <!-- Description -->
+                              <div>
+                                   <h2 class="text-xl font-semibold text-gray-900 mb-4">Description</h2>
+                                   <p class="text-gray-600 leading-relaxed">
                                         <%= service.description %>
                                    </p>
                               </div>
-                         </div>
 
-                         <!-- Right Column -->
-                         <div class="space-y-6">
-                              <!-- Provider Card -->
-                              <div class="bg-white border border-gray-200 p-6 rounded-lg">
-                                   <div class="flex items-center gap-4 mb-6">
-                                        <img src="<%= service.createdBy.profileImage %>" alt="<%= service.createdBy.displayName %>" class="w-16 h-16 rounded-full object-cover">
+                              <!-- Provider Information -->
+                              <div class="bg-white rounded-lg shadow-sm p-6 space-y-4">
+                                   <h2 class="text-xl font-semibold text-gray-900">Contact Information</h2>
+
+                                   <div class="space-y-3">
                                         <div>
-                                             <h3 class="font-bold text-gray-900 text-lg">
-                                                  <%= service.createdBy.displayName %> (<%= %>)
-                                             </h3>
-                                             <p class="text-sm text-gray-600">Membre depuis <%= new Date(service.createdBy.createdAt).toLocaleDateString('fr-FR', { month: 'long' , year: 'numeric' }) %>
+                                             <p class="text-sm text-gray-500">Provider Name</p>
+                                             <p class="text-gray-900">
+                                                  <%= service.createdBy.displayName%>
+                                             </p>
+                                        </div>
+
+                                        <div>
+                                             <p class="text-sm text-gray-500">Email</p>
+                                             <p class="text-gray-900">
+                                                  <%= service.createdBy.email %>
+                                             </p>
+                                        </div>
+
+                                        <div>
+                                             <p class="text-sm text-gray-500">Location</p>
+                                             <p class="text-gray-900">
+                                                  <%= service.location || 'Location not specified' %>
+                                             </p>
+                                        </div>
+
+                                        <div>
+                                             <p class="text-sm text-gray-500">Phone Number</p>
+                                             <p class="text-gray-900">
+                                                  <%= service.createdBy.phone || '+1 (555) 000-0000' %>
                                              </p>
                                         </div>
                                    </div>
 
-                                   <!-- Price -->
-                                   <div class="border-t border-b border-gray-200 py-4 my-4">
-                                        <div class="text-3xl font-bold text-gray-900 mb-1">
-                                             <%= service.priceRange %> DH
-                                        </div>
-                                        <div class="text-sm text-gray-600">Prix par séance</div>
-                                   </div>
-
-                                   <!-- Action Buttons -->
-                                   <div class="space-y-3">
-                                        <button onclick="contactProvider()" class="w-full py-2 px-4 bg-primary text-white font-medium rounded hover:bg-primary-dark transition-colors">Contacter le prestataire</button>
-                                        <button onclick="bookService()" class="w-full py-2 px-4 bg-secondary text-white font-medium rounded hover:bg-secondary-dark transition-colors">Réserver maintenant</button>
-                                   </div>
-
-                                   <!-- Quick Stats -->
-                                   <div class="grid grid-cols-2 gap-4 mt-6">
-                                        <div class="text-center p-4 bg-gray-50 rounded">
-                                             <div class="font-bold text-gray-900 text-xl">
-                                                  <%= service.createdBy.metrics?.totalServices || 0 %>
-                                             </div>
-                                             <div class="text-gray-600">Services</div>
-                                        </div>
-                                        <div class="text-center p-4 bg-gray-50 rounded">
-                                             <div class="font-bold text-gray-900 text-xl">
-                                                  <%= service.createdBy.metrics?.averageRating?.toFixed(1) || '0.0' %> ★
-                                             </div>
-                                             <div class="text-gray-600">Note</div>
-                                        </div>
-                                   </div>
+                                   <!-- Contact Button -->
+                                   <a href="mailto:<%= service.createdBy.email %>" class="mt-6 w-full inline-flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+                                        Contact Provider
+                                   </a>
                               </div>
 
-                              <!-- Share and Save Buttons -->
-                              <div class="flex gap-4">
-                                   <button class="flex-1 py-2 px-4 bg-white border border-gray-200 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-100 transition-colors" onclick="shareService()">
-                                        <i class="fas fa-share text-primary"></i>
-                                        <span class="text-gray-800 font-medium">Partager</span>
-                                   </button>
-                                   <button class="flex-1 py-2 px-4 bg-white border border-gray-200 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-100 transition-colors" onclick="toggleSaveService()">
-                                        <i class="fas fa-bookmark text-primary"></i>
-                                        <span class="text-gray-800 font-medium">Enregistrer</span>
-                                   </button>
-                              </div>
+                              <!-- Share Button -->
+                              <button onclick="shareService()" class="w-full inline-flex justify-center items-center px-6 py-3 border border-gray-300 rounded-md shadow-sm text-base font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+                                   Share Service
+                              </button>
                          </div>
                     </div>
                </div>
-
-               <!-- Image Modal -->
-               <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-75 hidden z-50 flex items-center justify-center" onclick="hideModal()">
-                    <img id="modalImage" class="max-h-full max-w-full">
-                    <button onclick="hideModal()" class="absolute top-4 right-4 text-white text-3xl">&times;</button>
-               </div>
-
-               <!-- Reviews Section -->
-               <%- include('include/reviews-section', { service: service, reviews: reviews }) %>
           </main>
 
+          <!-- PhotoSwipe JS -->
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/umd/photoswipe.umd.min.js"></script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/umd/photoswipe-lightbox.umd.min.js"></script>
+
           <!-- Scripts -->
-          <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
           <script>
-               function changeMainImage(src) {
-                    document.getElementById('mainImage').src = src;
-               }
+               // Initialize PhotoSwipe
+               const lightbox = new PhotoSwipeLightbox({
+                    gallery: '#gallery',
+                    children: 'a',
+                    pswpModule: PhotoSwipe
+               });
+               lightbox.init();
 
-               function showImage(src) {
-                    document.getElementById('modalImage').src = src;
-                    document.getElementById('imageModal').classList.remove('hidden');
-                    document.body.style.overflow = 'hidden';
-               }
-
-               function hideModal() {
-                    document.getElementById('imageModal').classList.add('hidden');
-                    document.body.style.overflow = '';
-               }
-
-               function contactProvider() {
-                    // Contact provider logic
-               }
-
-               function bookService() {
-                    // Booking logic
-               }
-
+               // Share functionality
                function shareService() {
                     if (navigator.share) {
                          navigator.share({
@@ -174,13 +122,8 @@
                               url: window.location.href
                          }).catch(console.error);
                     } else {
-                         // Fallback for browsers that do not support navigator.share
-                         alert('Le partage n\'est pas supporté par votre navigateur.');
+                         alert('Sharing is not supported in your browser.');
                     }
-               }
-
-               function toggleSaveService() {
-                    // Implement save functionality
                }
 
                // View tracking
@@ -198,92 +141,3 @@
                     }
                });
           </script>
-
-          <!-- Styles -->
-          <style>
-               :root {
-                    --primary: #1DA1F2;
-                    /* Twitter Blue */
-                    --primary-dark: #1A91DA;
-                    --secondary: #14171A;
-                    /* Twitter Dark Gray */
-                    --secondary-dark: #101418;
-               }
-
-               body {
-                    background-color: #F5F8FA;
-                    /* Twitter Light Gray */
-                    color: var(--secondary);
-                    font-family: 'Helvetica Neue', Arial, sans-serif;
-               }
-
-               .text-primary {
-                    color: var(--primary);
-               }
-
-               .bg-primary {
-                    background-color: var(--primary);
-               }
-
-               .hover\:bg-primary-dark:hover {
-                    background-color: var(--primary-dark);
-               }
-
-               .bg-secondary {
-                    background-color: var(--secondary);
-               }
-
-               .hover\:bg-secondary-dark:hover {
-                    background-color: var(--secondary-dark);
-               }
-
-               .text-secondary {
-                    color: var(--secondary);
-               }
-
-               /* Button styles */
-               button {
-                    transition: background-color 0.2s;
-               }
-
-               /* Image Modal */
-               #imageModal img {
-                    border-radius: 0.5rem;
-               }
-
-               /* Responsive adjustments */
-               @media (max-width: 1024px) {
-                    .container {
-                         padding-left: 1rem;
-                         padding-right: 1rem;
-                    }
-               }
-
-               /* Custom scrollbar */
-               ::-webkit-scrollbar {
-                    width: 8px;
-               }
-
-               ::-webkit-scrollbar-thumb {
-                    background-color: rgba(0, 0, 0, 0.2);
-                    border-radius: 4px;
-               }
-
-               ::-webkit-scrollbar-thumb:hover {
-                    background-color: rgba(0, 0, 0, 0.3);
-               }
-
-               /* Focus styles for accessibility */
-               :focus-visible {
-                    outline: 2px solid var(--primary);
-                    outline-offset: 2px;
-               }
-
-               /* Reduce motion for users who prefer it */
-               @media (prefers-reduced-motion: reduce) {
-                    * {
-                         transition: none !important;
-                         animation: none !important;
-                    }
-               }
-          </style>

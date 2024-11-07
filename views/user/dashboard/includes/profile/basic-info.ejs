@@ -62,6 +62,30 @@
                               </p>
                          </div>
                     </div>
+                    <!-- Languages Display Section -->
+                    <div class="mt-6 bg-white rounded-xl shadow-sm p-6">
+                         <h3 class="text-lg font-medium text-gray-900 mb-4">Langues Parlées</h3>
+                         <div class="flex flex-wrap gap-2">
+                              <% const languageOptions=['french', 'arabic' , 'english' , 'spanish' ]; %>
+                                   <% languageOptions.forEach(lang=> { %>
+                                        <% if (user.languages && user.languages.includes(lang)) { %>
+                                             <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
+                                                            <%= {
+                                                                'french': 'bg-blue-100 text-blue-800',
+                                                                'arabic': 'bg-green-100 text-green-800',
+                                                                'english': 'bg-purple-100 text-purple-800',
+                                                                'spanish': 'bg-orange-100 text-orange-800'
+                                                            }[lang] %>">
+                                                  <i class="fas fa-globe mr-1.5"></i>
+                                                  <%= lang.charAt(0).toUpperCase() + lang.slice(1) %>
+                                             </span>
+                                             <% } %>
+                                                  <% }) %>
+                                                       <% if (!user.languages || user.languages.length===0) { %>
+                                                            <span class="text-gray-500 italic">Aucune langue spécifiée</span>
+                                                            <% } %>
+                         </div>
+                    </div>
                </div>
 
 
@@ -74,6 +98,39 @@
                               <p class="text-gray-700 whitespace-pre-line">
                                    <%= user.bio || '- Non renseigné -' %>
                               </p>
+                         </div>
+                    </div>
+
+
+                    <!-- Experience Display Section -->
+                    <div class="mt-6 bg-white rounded-xl shadow-sm p-6">
+                         <h3 class="text-lg font-medium text-gray-900 mb-4">Expérience</h3>
+                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                              <!-- Years of Experience -->
+                              <div class="flex items-center space-x-3">
+                                   <div class="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-clock text-blue-600"></i>
+                                   </div>
+                                   <div>
+                                        <p class="text-sm text-gray-500">Années d'expérience</p>
+                                        <p class="text-lg font-semibold text-gray-900">
+                                             <%= user.experience?.years || 0 %> ans
+                                        </p>
+                                   </div>
+                              </div>
+
+                              <!-- Experience Description -->
+                              <div class="flex items-start space-x-3">
+                                   <div class="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-file-alt text-blue-600"></i>
+                                   </div>
+                                   <div>
+                                        <p class="text-sm text-gray-500">Description</p>
+                                        <p class="text-gray-700 mt-1">
+                                             <%= user.experience?.description || 'Aucune description disponible' %>
+                                        </p>
+                                   </div>
+                              </div>
                          </div>
                     </div>
 
@@ -160,22 +217,22 @@
                          </div>
                     </div>
                </div>
+               <hr>
                <!-- New Languages Field -->
                <div class="mt-6">
                     <label for="languages" class="block text-sm font-medium text-gray-700">Langues Parlées</label>
                     <div class="mt-2 grid grid-cols-2 md:grid-cols-4 gap-4">
-                         <% const languageOptions=['french', 'arabic' , 'english' , 'spanish' ]; %>
-                              <% languageOptions.forEach(lang=> { %>
-                                   <div class="flex items-center">
-                                        <input id="lang-<%= lang %>" name="languages" type="checkbox" value="<%= lang %>" <%=user.languages && user.languages.includes(lang) ? 'checked' : '' %> class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                                        <label for="lang-<%= lang %>" class="ml-2 block text-sm text-gray-700 capitalize">
-                                             <%= lang %>
-                                        </label>
-                                   </div>
-                                   <% }) %>
+                         <% languageOptions.forEach(lang=> { %>
+                              <div class="flex items-center">
+                                   <input id="lang-<%= lang %>" name="languages" type="checkbox" value="<%= lang %>" <%=user.languages && user.languages.includes(lang) ? 'checked' : '' %> class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                   <label for="lang-<%= lang %>" class="ml-2 block text-sm text-gray-700 capitalize">
+                                        <%= lang %>
+                                   </label>
+                              </div>
+                              <% }) %>
                     </div>
                </div>
-
+               <hr>
                <!-- New Experience Field -->
                <div class="mt-6">
                     <label class="block text-sm font-medium text-gray-700">Expérience</label>
@@ -183,12 +240,12 @@
                          <!-- Years of Experience -->
                          <div>
                               <label for="experience-years" class="block text-sm font-medium text-gray-700">Années d'expérience</label>
-                              <input type="number" name="experienceYears" id="experience-years" min="0" value="<%= user.experience?.years || 0 %>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                              <input type="number" name="experienceYears" id="experience-years" min="0" value="<%= user.experience?.years || 0 %>" class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
                          </div>
                          <!-- Experience Description -->
                          <div>
                               <label for="experience-description" class="block text-sm font-medium text-gray-700">Description de l'expérience</label>
-                              <textarea name="experienceDescription" id="experience-description" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"><%= user.experience?.description || '' %></textarea>
+                              <textarea name="experienceDescription" id="experience-description" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"><%= user.experience?.description || '' %></textarea>
                          </div>
                     </div>
                </div>
