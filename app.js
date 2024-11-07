@@ -18,6 +18,7 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser()); // Ensure cookieParser is before session middleware
+require('punycode');
 
 // View Engine
 app.set('view engine', 'ejs');
