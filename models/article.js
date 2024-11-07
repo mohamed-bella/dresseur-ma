@@ -23,6 +23,7 @@ const articleSchema = new Schema({
      author: {
           type: String,
           // required: true,
+          default: 'Ndressilik'
      },
      featuredImage: {
           type: String, // URL or path to the image

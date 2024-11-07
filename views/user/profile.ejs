@@ -42,64 +42,157 @@
                                              <%= profile.displayName %>
                                         </h1>
 
-                                        <div class="mt-2 inline-flex items-center rounded-full px-2.5 py-0.5 text-xs sm:text-sm font-medium bg-gradient-to-r from-blue-500/10 to-blue-600/10 text-blue-600">
-                                             <%= profile.role==='provider' ? 'Prestataire de service' : 'Client' %>
-                                        </div>
+
                                    </div>
 
-                                   <% if (profile.badges && profile.badges.length> 0) { %>
-                                        <!-- Primary Badge -->
-                                        <div class="mt-6">
-                                             <div class="inline-flex flex-col items-center">
-                                                  <div class="relative">
-                                                       <!-- Badge Icon with Glow Effect -->
-                                                       <div class="p-3 rounded-xl bg-gradient-to-r from-amber-500/10 to-amber-600/10">
-                                                            <img src="<%= profile.badges[0].icon %>" alt="<%= profile.badges[0].label %>" class="w-10 h-10 sm:w-12 sm:h-12">
-                                                       </div>
-                                                       <!-- Active Status Indicator -->
-                                                       <div class="absolute -bottom-1 -right-1 h-4 w-4 rounded-full border-2 border-white bg-green-500"></div>
-                                                  </div>
-
-                                                  <span class="mt-2 inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-1 text-xs font-medium text-amber-700 ring-1 ring-inset ring-amber-600/20">
-                                                       <%= profile.badges[0].label %>
-                                                  </span>
-                                             </div>
+                              <style>
+                                   .badges-section {
+                                        position: relative;
+                                        padding: 1rem;
+                                        background: #ffffff;
+                                        border-radius: 0.75rem;
+                                        border: 1px solid #e2e8f0;
+                                   }
+                              
+                                   .badges-container {
+                                        display: flex;
+                                        flex-wrap: wrap;
+                                        gap: 0.75rem;
+                                   }
+                              
+                                   .badge-card {
+                                        position: relative;
+                                        display: flex;
+                                        align-items: center;
+                                        background: #f8fafc;
+                                        border-radius: 0.75rem;
+                                        padding: 0.75rem;
+                                        transition: all 0.2s ease;
+                                        border: 1px solid #e5e7eb;
+                                        width: calc(50% - 0.375rem);
+                                        /* 2 badges per row with gap */
+                                        min-width: 240px;
+                                        max-width: 100%;
+                                   }
+                              
+                                   .badge-card:hover {
+                                        background: #fff;
+                                        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+                                        transform: translateY(-1px);
+                                   }
+                              
+                                   .badge-icon {
+                                        flex-shrink: 0;
+                                        width: 56px;
+                                        height: 56px;
+                                        margin-right: 0.75rem;
+                                        position: relative;
+                                   }
+                              
+                                   .badge-icon img {
+                                        width: 100%;
+                                        height: 100%;
+                                        object-fit: cover;
+                                        border-radius: 0.5rem;
+                                   }
+                              
+                                   .badge-content {
+                                        flex: 1;
+                                        min-width: 0;
+                                        /* Allows text truncation to work */
+                                   }
+                              
+                                   .badge-title {
+                                        font-weight: 600;
+                                        color: #1f2937;
+                                        font-size: 0.875rem;
+                                        white-space: nowrap;
+                                        overflow: hidden;
+                                        text-overflow: ellipsis;
+                                   }
+                              
+                                   .badge-date {
+                                        font-size: 0.75rem;
+                                        color: #6b7280;
+                                        display: flex;
+                                        align-items: center;
+                                        margin-top: 0.25rem;
+                                   }
+                              
+                                   .section-header {
+                                        display: flex;
+                                        align-items: center;
+                                        margin-bottom: 0.75rem;
+                                   }
+                              
+                                   .section-title {
+                                        font-size: 1.125rem;
+                                        font-weight: 600;
+                                        color: #1f2937;
+                                        margin-right: 0.5rem;
+                                   }
+                              
+                                   .badge-count {
+                                        background: #f3f4f6;
+                                        padding: 0.125rem 0.5rem;
+                                        border-radius: 9999px;
+                                        font-size: 0.75rem;
+                                        color: #4b5563;
+                                        font-weight: 500;
+                                   }
+                              
+                                   @media (max-width: 640px) {
+                                        .badge-card {
+                                             width: 100%;
+                                        }
+                                   }
+                              </style>
+                              
+                              <% if (profile.badges && profile.badges.length> 0) { %>
+                                   <div class="badges-section">
+                                        <div class="section-header">
+                                             <h2 class="section-title">Badges</h2>
+                                             <span class="badge-count">
+                                                  <%= profile.badges.length %>
+                                             </span>
                                         </div>
-
-                                        <!-- Badge Grid -->
-                                        <div class="mt-6 flex flex-wrap justify-center gap-2">
-                                             <% profile.badges.slice(1).forEach(badge=> { %>
-                                                  <div class="group relative">
-                                                       <!-- Badge Button -->
-                                                       <button class="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium
-                                                 bg-gray-50 text-gray-700 hover:bg-gray-100 
-                                                 transition duration-150 ease-in-out">
-                                                            <img src="<%= badge.icon %>" alt="" class="w-4 h-4 transition-transform group-hover:scale-110">
-                                                            <%= badge.label %>
-                                                       </button>
-
-                                                       <!-- Tooltip -->
-                                                       <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 
-                                                 rounded-lg bg-gray-900 text-xs 
-                                                 invisible opacity-0 group-hover:visible group-hover:opacity-100 
-                                                 transition-all duration-200 z-10">
-                                                            <!-- Content -->
-                                                            <div class="text-white space-y-1">
-                                                                 <p class="font-medium">
-                                                                      <%= badge.description %>
-                                                                 </p>
-                                                                 <p class="text-gray-400">Obtenu le <%= badge.earnedAt %>
-                                                                 </p>
+                              
+                                        <div class="badges-container">
+                                             <% profile.badges.forEach(badge=> { %>
+                                                  <div class="badge-card">
+                                                       <div class="badge-icon">
+                                                            <img src="<%= badge.image %>" alt="<%= badge.type %> Badge">
+                                                       </div>
+                                                       <div class="badge-content">
+                                                            <h3 class="badge-title" title="<%= badge.label %>">
+                                                                 <%= badge.label %>
+                                                            </h3>
+                                                            <div class="badge-date">
+                                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                                 </svg>
+                                                                 <%= new Date(badge.earnedAt).toLocaleDateString('fr-FR', { day: 'numeric' , month: 'short' , year: 'numeric' }) %>
                                                             </div>
-
-                                                            <!-- Arrow -->
-                                                            <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 
-                                                     border-4 border-transparent border-t-gray-900"></div>
                                                        </div>
                                                   </div>
                                                   <% }) %>
                                         </div>
-                                        <% } %>
+                                   </div>
+                                   <% } %>
+                              
+                                        <!-- Optional: Compact Empty State -->
+                                        <% if (!profile.badges || profile.badges.length===0) { %>
+                                             <div class="badges-section">
+                                                  <div class="section-header">
+                                                       <h2 class="section-title">Badges</h2>
+                                                  </div>
+                                                  <div class="text-center py-4">
+                                                       <p class="text-sm text-gray-500">Aucun badge pour le moment</p>
+                                                  </div>
+                                             </div>
+                                             <% } %>
+
+
                               </div>
 
                               <style>

@@ -258,34 +258,72 @@ router.delete('/admin/events/:id', async (req, res) => {
 });
 
 
+// Get User Data
+router.get('/admin/users/:userId', isAdmin, async (req, res) => {
+     try {
+          const { userId } = req.params;
+          const user = await User.findById(userId).select('-password'); // Exclude password if any
+          if (!user) {
+               return res.status(404).json({ error: 'User not found' });
+          }
+          res.json(user);
+     } catch (error) {
+          console.error('Error fetching user:', error);
+          res.status(500).json({ error: 'Server error' });
+     }
+});
+// Delete User
+router.delete('/admin/users/:userId/delete', isAdmin, async (req, res) => {
+     try {
+          const { userId } = req.params;
 
-// Update user
+          await User.findByIdAndDelete(userId);
+          res.json({ success: true });
+     } catch (error) {
+          console.error('Error deleting user:', error);
+          res.status(500).json({ error: 'Server error' });
+     }
+});
 router.post('/admin/users/:userId/update', isAdmin, async (req, res) => {
      try {
           const { userId } = req.params;
-          const { badgeType, trustScore } = req.body;
+          const { badgeTypes, trustScore, status } = req.body;
 
           const user = await User.findById(userId);
           if (!user) {
                return res.status(404).json({ error: 'User not found' });
           }
 
-          // Add badge if it doesn't exist
-          if (badgeType && !user.badges.find(b => b.type === badgeType)) {
-               user.badges.push({
-                    type: badgeType,
-                    earnedAt: new Date()
+          // Handle Multiple Badges
+          if (badgeTypes && Array.isArray(badgeTypes)) {
+               // Remove Badges Not in New Selection
+               user.badges = user.badges.filter(badge =>
+                    badgeTypes.includes(badge.type)
+               );
+
+               // Add New Badges That Don't Exist
+               badgeTypes.forEach(badgeType => {
+                    if (!user.badges.find(b => b.type === badgeType)) {
+                         user.badges.push({
+                              type: badgeType,
+                              earnedAt: new Date()
+                         });
+                    }
                });
           }
 
-          // Update trust score if provided
-          if (trustScore) {
+          // Update Trust Score
+          if (trustScore !== undefined) {
                user.ndressilikScore = Math.min(Math.max(0, parseInt(trustScore)), 100);
+          }
+
+          // Update User Status
+          if (status && ['pending', 'active', 'suspended'].includes(status)) {
+               user.status = status;
           }
 
           await user.save();
           res.json({ success: true });
-
      } catch (error) {
           console.error('Error updating user:', error);
           res.status(500).json({ error: 'Server error' });

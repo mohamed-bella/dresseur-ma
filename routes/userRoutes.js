@@ -821,51 +821,57 @@ function calculateNdressilikScore(user) {
 
 // profile route
 const BADGE_CONFIG = {
-     'top-rated': {
-          icon: 'https://img.icons8.com/?size=100&id=Kn0jagVCdl2K&format=png&color=FAB005', // Gold medal with paw
-          label: 'Top Rated',
-          bgColor: 'bg-yellow-50',
-          textColor: 'text-yellow-800',
-          borderColor: 'border-yellow-200',
-          description: 'Prestataire hautement noté par nos clients'
+     "lead-expert": {
+          description: "Consistently high-rated professional",
+          image: "https://ndressilik.s3.eu-north-1.amazonaws.com/badges/lead-badge.png"
      },
-     'verified-professional': {
-          icon: 'https://img.icons8.com/?size=100&id=4vNqm6VhTbfY&format=png&color=FAB005', // Verified check badge
-          label: 'Professionnel Vérifié',
-          bgColor: 'bg-yellow-50',
-          textColor: 'text-yellow-800',
-          borderColor: 'border-yellow-200',
-          description: 'Identité et qualifications vérifiées par NDRESSILIK'
+     "prominent": {
+          description: "Verified expertise and credentials",
+          image: "https://ndressilik.s3.eu-north-1.amazonaws.com/badges/prominent-badge.png"
      },
-     'quick-responder': {
-          icon: 'https://img.icons8.com/?size=100&id=f8aQQqBgxEti&format=png&color=FAB005', // Fast dog running
-          label: 'Réponse Rapide',
-          bgColor: 'bg-yellow-50',
-          textColor: 'text-yellow-800',
-          borderColor: 'border-yellow-200',
-          description: 'Répond à toutes les demandes en moins de 24h'
+     "specialist": {
+          description: "Fast and reliable responses",
+          image: "https://ndressilik.s3.eu-north-1.amazonaws.com/badges/specialist-badge.png"
      },
-     'experienced': {
-          icon: 'https://img.icons8.com/?size=100&id=HMO1TRQkstaj&format=png&color=FAB005', // Dog trainer
-          label: 'Expérimenté',
-          bgColor: 'bg-yellow-50',
-          textColor: 'text-yellow-800',
-          borderColor: 'border-yellow-200',
-          description: 'Plus de 50 services réalisés avec succès'
+     "chosen": {
+          description: "Proven track record of success",
+          image: "https://ndressilik.s3.eu-north-1.amazonaws.com/badges/chosen-badge.png"
      },
-     'premium-provider': {
-          icon: 'https://img.icons8.com/?size=100&id=9DaYvmG0EbR6&format=png&color=FAB005', // Crown with paw
-          label: 'Premium',
-          bgColor: 'bg-yellow-50',
-          textColor: 'text-yellow-800',
-          borderColor: 'border-yellow-200',
-          description: 'Excellence de service confirmée par NDRESSILIK'
+     "basic": {
+          description: "Premium service provider",
+          image: "https://ndressilik.s3.eu-north-1.amazonaws.com/badges/basic-badge.png"
      }
 };
+const badgeData = {
+     "lead-expert": {
+          description: "Consistently high-rated professional",
+          image: "https://ndressilik.s3.eu-north-1.amazonaws.com/badges/lead-badge.png"
+     },
+     "prominent": {
+          description: "Verified expertise and credentials",
+          image: "https://ndressilik.s3.eu-north-1.amazonaws.com/badges/prominent-badge.png"
+     },
+     "specialist": {
+          description: "Fast and reliable responses",
+          image: "https://ndressilik.s3.eu-north-1.amazonaws.com/badges/specialist-badge.png"
+     },
+     "chosen": {
+          description: "Proven track record of success",
+          image: "https://ndressilik.s3.eu-north-1.amazonaws.com/badges/chosen-badge.png"
+     },
+     "basic": {
+          description: "Premium service provider",
+          image: "https://ndressilik.s3.eu-north-1.amazonaws.com/badges/basic-badge.png"
+     },
+     "verified-professional": {
+          description: "Compte Verifier",
+          image: "https://ndressilik.s3.eu-north-1.amazonaws.com/badges/basic-badge.png"
+     }
+};
+// GET Public Profile
 router.get('/@:slug', async (req, res) => {
      try {
           const { slug } = req.params;
-
 
           // Fetch user with all necessary fields
           const user = await User.findOne({ slug })
@@ -876,7 +882,9 @@ router.get('/@:slug', async (req, res) => {
                     message: 'Profil non trouvé'
                });
           }
-          await captureVisit(req, user._id)
+
+          // Capture user visit for analytics
+          await captureVisit(req, user._id);
 
           // Fetch related data
           const [services, reviews, completedBookings] = await Promise.all([
@@ -896,38 +904,47 @@ router.get('/@:slug', async (req, res) => {
           // Update trust factors
           const trustFactors = await calculateTrustFactors(user._id);
 
-          // Calculate badges
-          const badges = await determineUserBadges(user, metrics, trustFactors);
-          const enhancedBadges = user.badges.map(badge => ({
-               ...badge.toObject(),
-               ...BADGE_CONFIG[badge.type],
-               earnedAt: new Date(badge.earnedAt).toLocaleDateString('fr-FR', {
-                    day: 'numeric',
-                    month: 'long',
-                    year: 'numeric'
-               })
-          }));
-          // Update user metrics in database
-          await User.findByIdAndUpdate(user._id, {
-               $set: {
-                    metrics,
-                    trustFactors,
-                    badges,
-                    ndressilikScore: user.calculateNdressilikScore()
-               }
-          }, { new: true });
+          // Determine new badges to add
+          const newBadges = await determineUserBadges(user, metrics, trustFactors);
+
+          // Extract existing badge types to prevent duplicates
+          const existingBadgeTypes = user.badges.map(b => b.type);
+
+          // Filter out badges that the user already has
+          const badgesToAdd = newBadges.filter(badge => !existingBadgeTypes.includes(badge.type));
+
+          // If there are new badges to add, update the user document
+          if (badgesToAdd.length > 0) {
+               user.badges.push(...badgesToAdd);
+
+               // Update user metrics and trust factors
+               user.metrics = metrics;
+               user.trustFactors = trustFactors;
+               user.ndressilikScore = user.calculateNdressilikScore();
+
+               await user.save();
+          }
+
+          // Map user's badges to include image URLs and descriptions
+          const userBadges = user.badges.map(badge => {
+               const badgeInfo = badgeData[badge.type];
+               return {
+                    type: badge.type,
+                    label: badgeInfo ? badgeInfo.description : 'Badge Inconnu',
+                    image: badgeInfo ? badgeInfo.image : 'https://ndressilik.s3.eu-north-1.amazonaws.com/badges/default-badge.png', // Fallback image
+                    earnedAt: badge.earnedAt
+               };
+          });
 
           // Prepare view data
           const viewData = {
                profile: {
-
                     ...user.toObject(),
                     metrics,
                     trustFactors,
-                    badges: enhancedBadges,
+                    badges: userBadges,
                     gallery: user.gallery || [],
-                    badgeConfig: BADGE_CONFIG // Pass full config for reference
-
+                    badgeConfig: badgeData // Pass full config for reference
                },
                services,
                reviews,
@@ -991,50 +1008,65 @@ async function calculateTrustFactors(userId) {
 }
 
 // Update the badge determination function
+/**
+ * Determine User Badges based on metrics and trust factors
+ * @param {Object} user - User document
+ * @param {Object} metrics - User metrics
+ * @param {Object} trustFactors - User trust factors
+ * @returns {Array} newBadges - Badges to be added
+ */
 async function determineUserBadges(user, metrics, trustFactors) {
-     const badges = [];
+     const newBadges = [];
      const now = new Date();
 
+     // Badge: Lead Expert
      if (metrics.averageRating >= 4.5 && metrics.totalReviews >= 10) {
-          badges.push({
-               type: 'top-rated',
+          newBadges.push({
+               type: 'lead-expert',
                earnedAt: now
           });
      }
 
+     // Badge: Prominent
      if (user.isVerified) {
-          badges.push({
-               type: 'verified-professional',
+          newBadges.push({
+               type: 'prominent',
                earnedAt: now
           });
      }
 
+     // Badge: Specialist
      if (trustFactors.responseRate >= 0.9) {
-          badges.push({
-               type: 'quick-responder',
+          newBadges.push({
+               type: 'specialist',
                earnedAt: now
           });
      }
 
+     // Badge: Chosen
      if (metrics.completedBookings >= 50 || (user.experience && user.experience.years >= 2)) {
-          badges.push({
-               type: 'experienced',
+          newBadges.push({
+               type: 'chosen',
                earnedAt: now
           });
      }
 
-     if (metrics.averageRating >= 4.8 &&
+     // Badge: Basic
+     if (
+          metrics.averageRating >= 4.8 &&
           metrics.totalReviews >= 20 &&
-          trustFactors.completionRate >= 0.95) {
-          badges.push({
-               type: 'premium-provider',
+          trustFactors.completionRate >= 0.95
+     ) {
+          newBadges.push({
+               type: 'basic',
                earnedAt: now
           });
      }
 
      // Sort badges by priority
-     return badges.sort((a, b) => getBadgePriority(a.type) - getBadgePriority(b.type));
+     return newBadges.sort((a, b) => getBadgePriority(a.type) - getBadgePriority(b.type));
 }
+
 
 
 async function getBadgePriority(badgeType) {

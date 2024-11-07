@@ -112,13 +112,13 @@ const serviceProviderSchema = new Schema({
      badges: [{
           type: {
                type: String,
-               enum: [
-                    'top-rated',
-                    'verified-professional',
-                    'quick-responder',
-                    'experienced',
-                    'premium-provider'
-               ]
+               // enum: [
+               //      'Basic',
+               //      'chosen',
+               //      'specialist',
+               //      'prominent',
+               //      'lead-expert'
+               // ]
           },
           earnedAt: {
                type: Date,
