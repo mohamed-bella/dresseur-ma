@@ -116,6 +116,10 @@ app.use(aiRoutes);
 app.use('/dashboard', profileRoutes);
 app.use('/dashboard', galeryRoutes);
 
+const searchRouter = require('./routes/search');
+app.use(searchRouter);
+
+
 // Error handling middleware (404)
 app.use((req, res) => {
      res.status(404).render('user/404', { message: 'Page Not Found' });

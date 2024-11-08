@@ -1,3 +1,4 @@
+// service model 
 const mongoose = require('mongoose');
 
 const serviceSchema = new mongoose.Schema({
@@ -33,6 +34,9 @@ const serviceSchema = new mongoose.Schema({
           type: mongoose.Schema.Types.ObjectId,
           ref: 'User',
           required: true
+     },
+     slug: {
+          type: String
      },
      images: [{
           type: String,

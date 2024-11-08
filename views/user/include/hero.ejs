@@ -41,6 +41,42 @@
                <p class="mt-6 max-w-2xl text-lg leading-8 text-gray-600 animate-in slide-in-from-bottom delay-300 duration-700">
                     Des professionnels qualifiés à votre service pour prendre soin de votre animal de compagnie
                </p>
+               <!-- Search Form -->
+               <div class="w-full max-w-3xl mt-10 animate-in slide-in-from-bottom delay-500 duration-700">
+                    <form action="/search" method="GET" class="relative">
+                         <div class="flex flex-col sm:flex-row gap-4">
+                              <!-- Search Input -->
+                              <div class="relative flex-1">
+                                   <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                        <i class="fas fa-search text-gray-400 text-lg"></i>
+                                   </div>
+                                   <input type="text" name="q" id="q" placeholder="Quel service recherchez-vous ?" class="w-full h-14 sm:h-16 pl-12 pr-4 text-lg rounded-2xl border-2 border-gray-100 bg-white/80 backdrop-blur-sm
+                                                     focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10
+                                                     transition-all duration-300 outline-none" autocomplete="off">
+
+                                   <!-- Quick Suggestions (Optional) -->
+                                   <div class=" left-0 right-0 mt-2">
+                                        <div class="flex flex-wrap gap-2 justify-center sm:justify-start">
+                                             <% ['Dressage', 'Toilettage' , 'Promenade' ].forEach(suggestion=> { %>
+                                                  <button type="button" onclick="document.querySelector('input[id=\'q\']').value='<%= suggestion %>'" class="text-sm px-3 py-1.5 rounded-full bg-gray-50 text-gray-600 hover:bg-gray-100 transition-colors">
+                                                       <%= suggestion %>
+                                                  </button>
+                                                  <% }); %>
+                                        </div>
+                                   </div>
+                              </div>
+
+                              <!-- Search Button -->
+                              <button type="submit" class="h-14 sm:h-16 px-8 sm:px-12 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl
+                                                  text-lg font-medium transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5
+                                                  flex items-center justify-center gap-2">
+                                   <span>Rechercher</span>
+                                   <i class="fas fa-arrow-right"></i>
+                              </button>
+                         </div>
+                    </form>
+               </div>
+               <hr>
                <% const services=[ { id: 'dressage' , name: 'Dressage' , icon: 'dog' , bgColor: 'bg-blue-500' , textColor: 'text-white' , image: 'https://ndressilik.s3.eu-north-1.amazonaws.com/users/672166487944169b94e40563/gallery/1730309993918_d.png' , rating: 4.9, providers: 150 }, { id: 'toilettage' , name: 'Toilettage' , icon: 'cut' , bgColor: 'bg-purple-500' , textColor: 'text-white' , image: 'https://ndressilik.s3.eu-north-1.amazonaws.com/users/672166487944169b94e40563/gallery/1730309991467_toilettage.png' , rating: 4.8, providers: 120 }, { id: 'promenade' , name: 'Promenade' , icon: 'walking' , bgColor: 'bg-green-500' , textColor: 'text-white' , image: 'https://ndressilik.s3.eu-north-1.amazonaws.com/users/672166487944169b94e40563/gallery/1730309993933_p.png' , rating: 4.7, providers: 200 }, { id: 'veterinaire' , name: 'Vétérinaire' , icon: 'stethoscope' , bgColor: 'bg-red-500' , textColor: 'text-white' , image: 'https://ndressilik.s3.eu-north-1.amazonaws.com/users/672166487944169b94e40563/gallery/1730309991441_v.png' , rating: 4.9, providers: 80 }, { id: 'pension' , name: 'Pension' , icon: 'home' , bgColor: 'bg-yellow-500' , textColor: 'text-white' , image: 'https://ndressilik.s3.eu-north-1.amazonaws.com/users/672166487944169b94e40563/gallery/1730309989188_pension.png' , rating: 4.6, providers: 90 }, { id: 'transport' , name: 'Transport' , icon: 'car' , bgColor: 'bg-indigo-500' , textColor: 'text-white' , image: 'https://ndressilik.s3.eu-north-1.amazonaws.com/users/672166487944169b94e40563/gallery/1730309989456_t.png' , rating: 4.7, providers: 70 } ]; %>
                     <div class="mx-auto w-full max-w-7xl px-0 sm:px-6 lg:px-8 py-4 sm:py-8">
                          <!-- Service Cards Grid -->

@@ -323,16 +323,21 @@ router.get('/services/:serviceOption?/:location?', async (req, res) => {
                icon: serviceConfig.icons[service.serviceOptions?.[0]?.toLowerCase()] || '🐾'
           }));
 
+
+          const uniqueLocations = await Service.distinct("location", { serviceOptions: serviceOption === 'tous' ? { $exists: true } : serviceOption.toLowerCase(), isActive: true });
+
+          // console.log(uniqueLocations)
           // Prepare view data
           const viewData = {
 
 
           };
-          console.log(services)
           res.render('user/services', {
                pageTitle: '',
                description: '',
                keywords: '',
+               currentLocation: location || null,
+               locations: uniqueLocations,
 
                // Services data
                services: processedServices,
