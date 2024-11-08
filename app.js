@@ -61,6 +61,16 @@ app.use((req, res, next) => {
      res.locals.user = req.user || null; // Make user globally available in views
      next();
 });
+app.use((req, res, next) => {
+     const originalSend = res.send;
+     res.send = function (body) {
+          const contentLength = Buffer.byteLength(body);
+          console.log(`Response size: ${contentLength} bytes`);
+          res.set('Content-Length', contentLength);
+          originalSend.call(this, body);
+     };
+     next();
+});
 
 // HTML Minification middleware
 app.use(minifyHTML({

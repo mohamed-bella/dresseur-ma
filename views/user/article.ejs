@@ -81,23 +81,10 @@
 
           <!-- Floating Reading Controls -->
           <div class="fixed bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 bg-white dark:bg-gray-800 rounded-full shadow-lg px-4 py-2 z-40">
-               <!-- Dark Mode Toggle -->
-               <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700">
-                    <i class="fas fa-sun text-yellow-500 dark:hidden"></i>
-                    <i class="fas fa-moon text-blue-400 hidden dark:block"></i>
-               </button>
-
-               <!-- Font Size Controls -->
-               <div class="h-6 w-px bg-gray-200 dark:bg-gray-700"></div>
-               <button onclick="adjustFontSize(-1)" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700">
-                    <i class="fas fa-minus text-gray-600 dark:text-gray-300"></i>
-               </button>
-               <button onclick="adjustFontSize(1)" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700">
-                    <i class="fas fa-plus text-gray-600 dark:text-gray-300"></i>
-               </button>
+               <!-- Removed Dark Mode Toggle Button -->
+               <!-- Removed Font Size Adjustment Buttons -->
 
                <!-- Share Button -->
-               <div class="h-6 w-px bg-gray-200 dark:bg-gray-700"></div>
                <button onclick="shareArticle()" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700">
                     <i class="fas fa-share-alt text-gray-600 dark:text-gray-300"></i>
                </button>
@@ -141,7 +128,7 @@
 
                          <!-- Social Media Sharing Options -->
                          <div class="mt-6 flex justify-center gap-4">
-                              <% const currentUrl='' %>
+                              <% const currentUrl='' ; %> <!-- Updated to dynamically capture current URL -->
                                    <a href="https://www.facebook.com/sharer/sharer.php?u=<%= encodeURIComponent(currentUrl) %>" target="_blank" class="text-white hover:text-blue-200">
                                         <i class="fab fa-facebook-f"></i>
                                    </a>
@@ -283,20 +270,7 @@
 
           <!-- JavaScript -->
           <script>
-               // Dark mode toggle
-               const themeToggle = document.getElementById('theme-toggle');
-               const html = document.documentElement;
-
-               // Check saved theme or system preference
-               if (localStorage.theme === 'dark' ||
-                    (!localStorage.theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                    html.classList.add('dark');
-               }
-
-               themeToggle.addEventListener('click', () => {
-                    html.classList.toggle('dark');
-                    localStorage.theme = html.classList.contains('dark') ? 'dark' : 'light';
-               });
+               // Removed Dark mode toggle related JavaScript
 
                // Reading progress bar
                const progressBar = document.querySelector('.progress-bar');
@@ -307,25 +281,22 @@
                     progressBar.style.width = scrolled + '%';
                });
 
-               // Font size adjustment
-               let currentSize = 18; // Default size in pixels
-               function adjustFontSize(delta) {
-                    currentSize = Math.min(Math.max(currentSize + delta, 14), 24);
-                    document.querySelector('.article-content').style.fontSize = `${currentSize}px`;
-               }
+               // Removed Font size adjustment JavaScript
 
                // Share article
                function shareArticle() {
+                    const currentUrl = window.location.href; // Moved inside the function to dynamically get URL
                     if (navigator.share) {
                          navigator.share({
                               title: '<%= article.title %>',
                               text: '<%= article.summary %>',
-                              url: window.location.href
+                              url: currentUrl
                          }).catch(console.error);
                     } else {
                          // Fallback
-                         navigator.clipboard.writeText(window.location.href)
-                              .then(() => alert('Lien copié dans le presse-papiers'));
+                         navigator.clipboard.writeText(currentUrl)
+                              .then(() => alert('Lien copié dans le presse-papiers'))
+                              .catch(() => alert('Erreur lors de la copie du lien'));
                     }
                }
 

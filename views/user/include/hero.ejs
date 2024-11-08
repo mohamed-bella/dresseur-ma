@@ -42,83 +42,115 @@
                     Des professionnels qualifiés à votre service pour prendre soin de votre animal de compagnie
                </p>
                <% const services=[ { id: 'dressage' , name: 'Dressage' , icon: 'dog' , bgColor: 'bg-blue-500' , textColor: 'text-white' , image: 'https://ndressilik.s3.eu-north-1.amazonaws.com/users/672166487944169b94e40563/gallery/1730309993918_d.png' , rating: 4.9, providers: 150 }, { id: 'toilettage' , name: 'Toilettage' , icon: 'cut' , bgColor: 'bg-purple-500' , textColor: 'text-white' , image: 'https://ndressilik.s3.eu-north-1.amazonaws.com/users/672166487944169b94e40563/gallery/1730309991467_toilettage.png' , rating: 4.8, providers: 120 }, { id: 'promenade' , name: 'Promenade' , icon: 'walking' , bgColor: 'bg-green-500' , textColor: 'text-white' , image: 'https://ndressilik.s3.eu-north-1.amazonaws.com/users/672166487944169b94e40563/gallery/1730309993933_p.png' , rating: 4.7, providers: 200 }, { id: 'veterinaire' , name: 'Vétérinaire' , icon: 'stethoscope' , bgColor: 'bg-red-500' , textColor: 'text-white' , image: 'https://ndressilik.s3.eu-north-1.amazonaws.com/users/672166487944169b94e40563/gallery/1730309991441_v.png' , rating: 4.9, providers: 80 }, { id: 'pension' , name: 'Pension' , icon: 'home' , bgColor: 'bg-yellow-500' , textColor: 'text-white' , image: 'https://ndressilik.s3.eu-north-1.amazonaws.com/users/672166487944169b94e40563/gallery/1730309989188_pension.png' , rating: 4.6, providers: 90 }, { id: 'transport' , name: 'Transport' , icon: 'car' , bgColor: 'bg-indigo-500' , textColor: 'text-white' , image: 'https://ndressilik.s3.eu-north-1.amazonaws.com/users/672166487944169b94e40563/gallery/1730309989456_t.png' , rating: 4.7, providers: 70 } ]; %>
-
                     <div class="mx-auto w-full max-w-7xl px-0 sm:px-6 lg:px-8 py-4 sm:py-8">
-                         <!-- Card Grid -->
-                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 px-2 sm:px-0">
+                         <!-- Service Cards Grid -->
+                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 px-2 sm:px-0">
                               <% services.forEach(service=> { %>
-                                   <a href="/services/<%= service.id %>" class="group relative isolate overflow-hidden bg-white rounded-xl sm:rounded-2xl transition hover:-translate-y-1 hover:shadow-md">
-                                        <!-- Desktop View (Hidden on Mobile) -->
+                                   <a href="/services/<%= service.id %>" class="group relative isolate bg-white rounded-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+
+                                        <!-- Desktop View -->
                                         <div class="hidden sm:block">
-                                             <!-- Image Container -->
-                                             <div class="aspect-[4/3] overflow-hidden">
-                                                  <img src="<%= service.image %>" alt="<%= service.name %>" class="h-full w-full object-cover transition duration-300 group-hover:scale-105" loading="lazy">
+                                             <!-- Image Container with Gradient Overlay -->
+                                             <div class="aspect-[4/3] overflow-hidden rounded-t-2xl relative">
+                                                  <img src="<%= service.image %>" alt="<%= service.name %>" class="h-full w-full object-cover transition duration-500 group-hover:scale-105" loading="lazy">
+                                                  <!-- Gradient Overlay -->
+                                                  <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+
+                                                  <!-- Rating Badge -->
+                                                  <div class="absolute top-3 right-3">
+                                                       <div class="flex items-center px-2.5 py-1.5 rounded-full text-sm font-semibold bg-white/95 shadow-sm backdrop-blur-sm">
+                                                            <svg class="w-4 h-4 text-amber-400 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                                 <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                                            </svg>
+                                                            <%= service.rating %>
+                                                       </div>
+                                                  </div>
                                              </div>
 
                                              <!-- Content -->
-                                             <div class="p-4">
-                                                  <!-- Title and Icon -->
-                                                  <div class="flex items-center justify-between mb-2">
-                                                       <h3 class="font-medium text-gray-900">
+                                             <div class="p-5">
+                                                  <div class="flex items-center justify-between mb-3">
+                                                       <!-- Title -->
+                                                       <h3 class="text-lg font-semibold text-gray-900 group-hover:text-<%= service.bgColor.split('-')[1] %>-600 transition-colors">
                                                             Les services de <%= service.name %>
                                                        </h3>
-                                                       <div class="flex h-8 w-8 items-center justify-center rounded-full bg-gray-50/80 backdrop-blur-sm">
-                                                            <i class="fas fa-<%= service.icon %> text-<%= service.bgColor.split('-')[1] %>-500"></i>
+                                                       <!-- Icon -->
+                                                       <div class="flex h-10 w-10 items-center justify-center rounded-xl 
+                                      bg-gradient-to-br from-<%= service.bgColor.split('-')[1] %>-50 to-white
+                                      group-hover:from-<%= service.bgColor.split('-')[1] %>-100 group-hover:to-<%= service.bgColor.split('-')[1] %>-50
+                                      transition-all duration-300">
+                                                            <i class="fas fa-<%= service.icon %> text-<%= service.bgColor.split('-')[1] %>-500 text-lg
+                                          group-hover:scale-110 transition-transform"></i>
                                                        </div>
                                                   </div>
 
-                                                  <!-- Stats -->
-                                                  <div class="flex items-center justify-between text-sm">
-                                                       <div class="flex items-center gap-1">
-                                                            <i class="fas fa-star text-amber-400"></i>
-                                                            <span class="font-medium text-gray-900">
-                                                                 <%= service.rating %>
-                                                            </span>
-                                                       </div>
-                                                       <span class="text-gray-500">
+                                                  <!-- Stats and Info -->
+                                                  <div class="flex items-center justify-between">
+                                                       <span class="inline-flex items-center text-sm font-medium text-gray-600">
+                                                            <i class="fas fa-users text-<%= service.bgColor.split('-')[1] %>-400 mr-2"></i>
                                                             <%= service.providers %>+ prestataires
+                                                       </span>
+                                                       <span class="inline-flex items-center text-sm font-medium text-green-600">
+                                                            <i class="fas fa-check-circle mr-1"></i>
+                                                            Disponible
                                                        </span>
                                                   </div>
                                              </div>
                                         </div>
 
-                                        <!-- Mobile View (Hidden on Desktop) -->
-                                        <div class="sm:hidden flex items-center gap-3 p-3">
-                                             <!-- Icon -->
-                                             <div class="flex-none">
-                                                  <div class="flex h-10 w-10 items-center justify-center rounded-full <%= service.bgColor %>/10">
-                                                       <i class="fas fa-<%= service.icon %> text-<%= service.bgColor.split('-')[1] %>-600"></i>
-                                                  </div>
-                                             </div>
-
-                                             <!-- Content -->
-                                             <div class="flex-1 min-w-0">
-                                                  <h3 class="text-sm font-medium text-gray-900 truncate">
-                                                       les services de <%= service.name %>
-                                                  </h3>
-                                                  <div class="flex items-center gap-2 mt-0.5">
-                                                       <div class="flex items-center text-xs">
-                                                            <i class="fas fa-star text-amber-400 mr-1"></i>
-                                                            <span class="font-medium">
+                                        <!-- Mobile View -->
+                                        <div class="sm:hidden">
+                                             <div class="flex items-center gap-4 p-4">
+                                                  <!-- Icon with Background -->
+                                                  <div class="relative">
+                                                       <div class="absolute inset-0 rounded-xl bg-gradient-to-br 
+                                      from-<%= service.bgColor.split('-')[1] %>-400/10 
+                                      to-<%= service.bgColor.split('-')[1] %>-600/10 
+                                      animate-pulse"></div>
+                                                       <div class="relative flex h-14 w-14 items-center justify-center rounded-xl
+                                      bg-gradient-to-br from-<%= service.bgColor.split('-')[1] %>-50 to-white
+                                      ring-1 ring-inset ring-<%= service.bgColor.split('-')[1] %>-400/20">
+                                                            <i class="fas fa-<%= service.icon %> text-xl text-<%= service.bgColor.split('-')[1] %>-600"></i>
+                                                       </div>
+                                                       <!-- Rating Badge -->
+                                                       <div class="absolute -bottom-1 -right-1">
+                                                            <div class="flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium
+                                          bg-white shadow-sm border border-gray-100">
+                                                                 <i class="fas fa-star text-amber-400 mr-1"></i>
                                                                  <%= service.rating %>
+                                                            </div>
+                                                       </div>
+                                                  </div>
+
+                                                  <!-- Content -->
+                                                  <div class="flex-1 min-w-0">
+                                                       <h3 class="text-base font-semibold text-gray-900 mb-1">
+                                                            les services de <%= service.name %>
+                                                       </h3>
+                                                       <div class="flex items-center gap-3">
+                                                            <span class="text-sm text-gray-600 font-medium">
+                                                                 <%= service.providers %>+ prestataires
+                                                            </span>
+                                                            <span class="inline-flex items-center rounded-full bg-green-50 px-2 py-0.5 text-xs font-medium text-green-700">
+                                                                 24/7
                                                             </span>
                                                        </div>
-                                                       <span class="text-xs text-gray-500">
-                                                            <%= service.providers %>+ prestataires
-                                                       </span>
                                                   </div>
-                                             </div>
 
-                                             <!-- Arrow -->
-                                             <div class="flex-none text-gray-400">
-                                                  <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                                                  </svg>
+                                                  <!-- Arrow with Custom Background -->
+                                                  <div class="flex h-9 w-9 items-center justify-center rounded-full
+                                  bg-gray-50 group-hover:bg-<%= service.bgColor.split('-')[1] %>-50
+                                  transition-colors duration-200">
+                                                       <svg class="h-5 w-5 text-gray-400 group-hover:text-<%= service.bgColor.split('-')[1] %>-600
+                                      transform group-hover:translate-x-0.5 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                                       </svg>
+                                                  </div>
                                              </div>
                                         </div>
 
-                                        <!-- Focus Ring -->
-                                        <div class="absolute inset-0 rounded-xl sm:rounded-2xl ring-1 ring-inset ring-gray-900/[0.08]"></div>
+                                        <!-- Common Focus Ring -->
+                                        <div class="absolute inset-0 rounded-2xl ring-1 ring-inset ring-gray-900/10 group-hover:ring-<%= service.bgColor.split('-')[1] %>-200 transition-colors"></div>
                                    </a>
                                    <% }); %>
                          </div>
