@@ -262,7 +262,10 @@ router.get('/', async (req, res) => {
           const articles = await Article.find()
                .sort({ createdAt: -1 })
                .limit(6)
-               .select('title summary featuredImage category tags createdAt slug');
+               .select('title summary featuredImage category tags createdAt slug author');
+
+
+          console.log(articles)
 
           // Fetch locations
           const [announcementLocations, serviceLocations] = await Promise.all([

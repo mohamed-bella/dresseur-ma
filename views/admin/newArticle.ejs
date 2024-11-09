@@ -120,7 +120,7 @@
 
                               <div>
                                    <label class="block text-sm font-medium text-gray-700 mb-2">Tags</label>
-                                   <select name="tags[]" class="tags-select" multiple>
+                                   <select name="tags" class="tags-select" multiple>
                                         <% tags.forEach(tag=> { %>
                                              <option value="<%= tag %>">
                                                   <%= tag %>
@@ -137,6 +137,11 @@
                          <div id="editor" class="prose max-w-none"></div>
                     </div>
 
+                    <!-- Featured Image -->
+                    <div class="form-group mt-3">
+                         <label for="imageUpload" class="form-label">Upload Featured Image</label>
+                         <input type="file" class="file" name="featuredImage" id="imageUpload" />
+                    </div>
 
 
                     <!-- SEO Section -->
@@ -221,6 +226,33 @@
                     FilePondPluginImageValidateSize
                );
 
+               const pond = FilePond.create(document.querySelector('.filepond'), {
+                    labelIdle: 'Drag & Drop your image or <span class="filepond--label-action">Browse</span>',
+                    imagePreviewHeight: 170,
+                    acceptedFileTypes: ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'],
+                    allowMultiple: false,
+                    maxFiles: 1,
+                    process: {
+                         url: '/services/upload-temp',
+                         method: 'POST',
+                         onload: (response) => {
+
+                              const data = JSON.parse(response);
+                              return data.uploadedUrls[0].url;
+                         },
+                         onerror: (response) => {
+                              console.error('Upload error:', response);
+                              return response.data;
+                         }
+                    },
+                    onaddfile: (error, file) => {
+                         if (error) {
+                              console.error('FilePond error:', error);
+                              return;
+                         }
+                    }
+               });
+               // Form Submission
                $('#articleForm').on('submit', function (e) {
                     e.preventDefault();
 
@@ -232,13 +264,15 @@
                     const formData = new FormData(this);
                     formData.append('content', quill.root.innerHTML);
 
-
+                    const files = pond.getFiles();
+                    const fileUrls = files.map(file => file.serverId);
+                    if (fileUrls.length > 0) {
+                         formData.append('featuredImage', JSON.stringify(fileUrls));
+                    }
                     // Show loading state
                     $submitBtn.prop('disabled', true);
                     $spinner.removeClass('hidden');
                     $btnText.text('Publishing...');
-
-                    console.log(formData)
 
                     // Submit form
                     $.ajax({

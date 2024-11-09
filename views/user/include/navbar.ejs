@@ -1,5 +1,5 @@
 <!-- Navbar Component -->
-<nav x-data="{ mobileMenuOpen: false, searchModalOpen: false }" class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-sm border-b border-gray-100">
+<nav x-data="{ mobileMenuOpen: false, searchModalOpen: false }" class="fixed top-0 left-0 right-0 z-50 bg-white backdrop-blur-sm border-b border-gray-100">
      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="flex h-16 md:h-20 items-center justify-between gap-4">
                <!-- Logo -->
@@ -40,7 +40,7 @@
                <!-- Right Section -->
                <div class="flex items-center gap-3">
                     <!-- Mobile Search Button -->
-                    <button @click="searchModalOpen = true" class="lg:hidden w-10 h-10 flex items-center justify-center text-gray-700 hover:bg-gray-50 rounded-full">
+                    <button @click="searchModalOpen = true" class="lg:hidden bg-gray-50 w-10 h-10 flex items-center justify-center text-gray-700 hover:bg-gray-50 rounded-full">
                          <i class="fas fa-search text-lg"></i>
                     </button>
 
@@ -169,22 +169,6 @@
           <div class="overflow-y-auto h-[calc(100vh-4rem)] md:h-[calc(100vh-5rem)]" style="background-color: #f5f5f5;">
                <!-- Recent Searches (Example) -->
                <div class="max-w-7xl mx-auto px-4 py-4">
-                    <div class="mb-6">
-                         <h3 class="text-sm font-medium text-gray-500 mb-3">Recherches récentes</h3>
-                         <div class="space-y-2">
-                              <a href="#" class="flex items-center w-full p-3 text-left text-gray-700 hover:bg-gray-50 rounded-xl group">
-                                   <i class="fas fa-history text-gray-400 w-5 mr-3"></i>
-                                   <span class="flex-1">Dressage chien</span>
-                                   <i class="fas fa-times text-gray-300 group-hover:text-gray-400"></i>
-                              </a>
-                              <a href="#" class="flex items-center w-full p-3 text-left text-gray-700 hover:bg-gray-50 rounded-xl group">
-                                   <i class="fas fa-history text-gray-400 w-5 mr-3"></i>
-                                   <span class="flex-1">Toilettage Rabat</span>
-                                   <i class="fas fa-times text-gray-300 group-hover:text-gray-400"></i>
-                              </a>
-                         </div>
-                    </div>
-
                     <!-- Popular Searches -->
                     <div>
                          <h3 class="text-sm font-medium text-gray-500 mb-3">Recherches populaires</h3>

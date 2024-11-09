@@ -110,7 +110,7 @@ router.get('/admin/articles/new', (req, res) => {
 });
 
 // POST: Submit new article
-router.post('/admin/articles', async (req, res) => {
+router.post('/admin/articles', upload.single('featuredImage'), async (req, res) => {
      console.log(req.body)
      const { title, category, summary, seoTitle, seoDescription, keywords, author } = req.body;
      let { tags } = req.body;
@@ -133,9 +133,32 @@ router.post('/admin/articles', async (req, res) => {
      const slug = slugify(`${title}-${currentDate}-${randomNum}`, { lower: true, strict: true });
 
      try {
+          // Initialize imageUrl as null (for when no image is uploaded)
+          let imageUrl = null;
 
+          // Handle image upload to S3 if a file was uploaded
+          if (req.file) {
+               const buffer = await sharp(req.file.buffer)
+                    .webp({ quality: 80 })
+                    .toBuffer();
 
+               const key = `uploads/${Date.now()}-${Math.round(Math.random() * 1E9)}.webp`;
 
+               const uploadParams = {
+                    Bucket: process.env.AWS_S3_BUCKET_NAME, // Your S3 bucket name
+                    Key: key,
+                    Body: buffer,
+                    ContentType: 'image/webp'
+               };
+
+               const parallelUploads3 = new Upload({
+                    client: s3,
+                    params: uploadParams
+               });
+
+               const data = await parallelUploads3.done();
+               imageUrl = data.Location; // Save the uploaded image URL
+          }
 
           // Create new article
           const newArticle = new Article({
@@ -145,7 +168,7 @@ router.post('/admin/articles', async (req, res) => {
                category,
                tags: tags.split(',').map(tag => tag.trim()),
                summary,
-               // featuredImage: imageUrl, // Store the S3 URL or null if no image was uploaded
+               featuredImage: imageUrl, // Store the S3 URL or null if no image was uploaded
                author,
                seo: {
                     title: seoTitle,
