@@ -202,22 +202,55 @@
                     tokenSeparators: [',', ' ']
                });
 
-               // Initialize Quill
+               // Initialize Quill with Arabic fonts and maximum toolbar options
+               const Font = Quill.import('formats/font');
+               Font.whitelist = ['sans-serif', 'serif', 'monospace', 'cairo', 'amiri', 'lateef', 'arabic'];
+               Quill.register(Font, true);
+
                const quill = new Quill('#editor', {
                     theme: 'snow',
                     modules: {
                          toolbar: [
+                              // Font family selection with Arabic fonts
+                              [{ 'font': ['sans-serif', 'serif', 'monospace', 'cairo', 'amiri', 'lateef', 'arabic'] }],
+
+                              // Header levels
                               [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+                              // Text styling: bold, italic, underline, strikethrough
                               ['bold', 'italic', 'underline', 'strike'],
+
+                              // Subscript/superscript
+                              [{ 'script': 'sub' }, { 'script': 'super' }],
+
+                              // Text color and background color
                               [{ 'color': [] }, { 'background': [] }],
+
+                              // Block elements
                               ['blockquote', 'code-block'],
+
+                              // Lists: ordered, bullet, and indent controls
                               [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                              [{ 'align': [] }],
-                              ['link', 'image'],
+                              [{ 'indent': '-1' }, { 'indent': '+1' }],
+
+                              // Text alignment options and RTL direction
+                              [{ 'align': [] }, { 'direction': 'rtl' }],
+
+                              // Line height and spacing (if supported by custom styling)
+                              [{ 'lineheight': [] }, { 'letter-spacing': [] }],
+
+                              // Links, images, and video embeds
+                              ['link', 'image', 'video'],
+
+                              // Emoji (requires emoji plugin if you want emojis)
+                              ['emoji'],
+
+                              // Remove formatting
                               ['clean']
                          ]
                     }
                });
+
 
                // Initialize FilePond
                FilePond.registerPlugin(
