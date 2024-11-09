@@ -35,7 +35,7 @@
                          <!-- Content -->
                          <div class="mt-4">
                               <h3 class="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2">
-                                   <a href="/article/<%= article.slug %>">
+                                   <a href="/articles/<%= article.slug %>">
                                         <%= article.title %>
                                    </a>
                               </h3>
@@ -58,7 +58,7 @@
           <div class="lg:hidden space-y-6">
                <% articles.forEach((article, index)=> { %>
                     <article class="group">
-                         <a href="/article/<%= article.slug %>" class="flex gap-4">
+                         <a href="/articles/<%= article.slug %>" class="flex gap-4">
                               <!-- Image -->
 
                               <div class="relative flex-shrink-0 w-32 sm:w-44">

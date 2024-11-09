@@ -1,16 +1,16 @@
 <%- include('include/head.ejs') %>
 
-     <body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200 ">
+     <body class="bg-gray-50 text-gray-900 transition-colors duration-200 ">
           <!-- Include Navbar -->
           <%- include('include/navbar.ejs') %>
 
                <!-- Reading Progress Bar -->
                <div class="fixed top-0 left-0 right-0 h-1 z-50">
-                    <div class="progress-bar bg-blue-500 dark:bg-blue-400 h-full w-0 transition-all duration-150"></div>
+                    <div class="progress-bar bg-blue-500 h-full w-0 transition-all duration-150"></div>
                </div>
 
                <!-- Floating Reading Controls -->
-               <div class="fixed bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 bg-white dark:bg-gray-800 rounded-full shadow-lg px-4 py-2 z-40">
+               <div class="fixed bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 bg-white  rounded-full shadow-lg px-4 py-2 z-40">
                     <!-- Removed Dark Mode Toggle Button -->
                     <!-- Removed Font Size Adjustment Buttons -->
 
@@ -21,7 +21,7 @@
                </div>
 
                <!-- Article Header -->
-               <header class="relative py-20 bg-gradient-to-br from-blue-600 to-indigo-700 dark:from-blue-900 dark:to-indigo-950">
+               <header class="relative py-20 bg-gradient-to-br from-blue-600 to-indigo-700 ">
                     <div class="absolute inset-0 bg-black/20"></div>
                     <div class="container mx-auto px-4 relative">
                          <div class="max-w-3xl mx-auto text-center text-white">
@@ -106,14 +106,14 @@
                                                        </ul>
                                                   </nav>
 
-                                                  <div class="prose dark:prose-invert prose-lg max-w-none article-content">
+                                                  <div class="prose  prose-lg max-w-none article-content">
                                                        <%- article.content %>
                                                   </div>
 
                                                   <!-- Tags -->
                                                   <div class="mt-12 flex flex-wrap gap-2">
                                                        <% article.tags.filter(tag=> tag).forEach(tag => { %>
-                                                            <span class="px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full text-sm">
+                                                            <span class="px-3 py-1 bg-gray-100  rounded-full text-sm">
                                                                  #<%= tag %>
                                                             </span>
                                                             <% }) %>
@@ -122,7 +122,7 @@
                               </article>
 
                               <!-- Comments Section -->
-                              <section id="comments" class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 lg:p-12">
+                              <section id="comments" class="bg-white rounded-2xl shadow-xl p-8 lg:p-12">
                                    <h2 class="text-2xl font-bold mb-8">Réponses (<%= comments.length %>)</h2>
 
                                    <!-- Comment Form -->
@@ -131,18 +131,18 @@
                                              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                                   <div>
                                                        <label class="block text-sm font-medium mb-2">Nom</label>
-                                                       <input type="text" name="name" required class="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400">
+                                                       <input type="text" name="name" required class="w-full px-4 py-2 rounded-lg border border-gray-200 bg-white  focus:ring-2 focus:ring-blue-500 ">
                                                   </div>
                                                   <div>
                                                        <label class="block text-sm font-medium mb-2">Email</label>
-                                                       <input type="email" name="email" required class="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400">
+                                                       <input type="email" name="email" required class="w-full px-4 py-2 rounded-lg border border-gray-200 bg-white  focus:ring-2 focus:ring-blue-500 ">
                                                   </div>
                                              </div>
                                              <div>
                                                   <label class="block text-sm font-medium mb-2">Votre réponse</label>
-                                                  <textarea name="comment" rows="4" required class="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"></textarea>
+                                                  <textarea name="comment" rows="4" required class="w-full px-4 py-2 rounded-lg border border-gray-200  bg-white focus:ring-2 focus:ring-blue-500 "></textarea>
                                              </div>
-                                             <button type="submit" class="inline-flex justify-center items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-medium rounded-lg transition-colors">
+                                             <button type="submit" class="inline-flex justify-center items-center px-6 py-3 bg-blue-600 hover:bg-blue-700  text-white font-medium rounded-lg transition-colors">
                                                   <i class="fas fa-paper-plane mr-2"></i>
                                                   Publier la réponse
                                              </button>
@@ -152,9 +152,9 @@
                                    <!-- Comments List -->
                                    <div class="space-y-8">
                                         <% comments.forEach(comment=> { %>
-                                             <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-6">
+                                             <div class="bg-gray-50 rounded-xl p-6">
                                                   <div class="flex items-start gap-4">
-                                                       <div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center flex-shrink-0">
+                                                       <div class="w-10 h-10 rounded-full bg-blue-100  flex items-center justify-center flex-shrink-0">
                                                             <%= comment.name.charAt(0).toUpperCase() %>
                                                        </div>
                                                        <div class="flex-1 min-w-0">
@@ -162,11 +162,11 @@
                                                                  <h4 class="font-semibold truncate">
                                                                       <%= comment.name %>
                                                                  </h4>
-                                                                 <time class="text-sm text-gray-500 dark:text-gray-400">
+                                                                 <time class="text-sm text-gray-500">
                                                                       <%= new Date(comment.createdAt).toLocaleDateString() %>
                                                                  </time>
                                                             </div>
-                                                            <p class="text-gray-600 dark:text-gray-300">
+                                                            <p class="text-gray-600 ">
                                                                  <%= comment.comment %>
                                                             </p>
                                                        </div>
@@ -179,7 +179,7 @@
 
                          <!-- Related Articles Sidebar -->
                          <aside class="w-full lg:w-1/3">
-                              <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6">
+                              <div class="bg-white rounded-2xl shadow-xl p-6">
                                    <h2 class="text-xl font-semibold mb-4">Articles similaires</h2>
                                    <div class="space-y-6">
                                         <!-- Dummy Related Articles -->
