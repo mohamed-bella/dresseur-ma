@@ -83,12 +83,89 @@
                          <div class="max-w-7xl mx-auto px-4">
                               <!-- Section Header -->
                               <div class="flex flex-col items-center text-center mb-16">
-                                   <h2 class="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
-                                        Découvrez Nos Services
-                                   </h2>
-                                   <p class="mt-4 text-gray-600 max-w-2xl">
-                                        Des services professionnels pour prendre soin de votre compagnon à quatre pattes
-                                   </p>
+                                   <div class="relative py-8 left">
+                                        <h2 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 font-heading tracking-tight">
+                                             Découvrez Nos Services
+                                             <!-- Custom animated underline -->
+                                             <div class="relative mt-2">
+                                                  <div class="absolute inset-x-0 h-1 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 rounded-full"></div>
+                                                  <div class="absolute inset-x-0 h-1 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 rounded-full animate-shimmer"></div>
+                                             </div>
+                                        </h2>
+                                   </div>
+
+                                   <style>
+                                        /* Import modern font - Outfit is similar to many modern tech websites */
+                                        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap');
+
+                                        /* Custom font class */
+                                        .font-heading {
+                                             font-family: 'Outfit', sans-serif;
+                                             letter-spacing: -0.02em;
+                                        }
+
+                                        /* Shimmer animation for underline */
+                                        @keyframes shimmer {
+                                             0% {
+                                                  transform: translateX(-100%);
+                                                  opacity: 0;
+                                             }
+
+                                             10% {
+                                                  opacity: 0.5;
+                                             }
+
+                                             50% {
+                                                  opacity: 1;
+                                             }
+
+                                             90% {
+                                                  opacity: 0.5;
+                                             }
+
+                                             100% {
+                                                  transform: translateX(100%);
+                                                  opacity: 0;
+                                             }
+                                        }
+
+                                        .animate-shimmer {
+                                             animation: shimmer 3s ease-in-out infinite;
+                                        }
+
+                                        /* Responsive text adjustments */
+                                        @media (max-width: 640px) {
+                                             .text-4xl {
+                                                  font-size: 2.5rem;
+                                                  line-height: 1.1;
+                                             }
+                                        }
+
+                                        @media (min-width: 641px) and (max-width: 1024px) {
+                                             .md\:text-5xl {
+                                                  font-size: 3rem;
+                                                  line-height: 1.1;
+                                             }
+                                        }
+
+                                        @media (min-width: 1025px) {
+                                             .lg\:text-6xl {
+                                                  font-size: 3.75rem;
+                                                  line-height: 1.1;
+                                             }
+                                        }
+
+                                        /* Optional: Add text shadow for better contrast */
+                                        .font-heading {
+                                             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+                                        }
+
+                                        /* Optional: Enhance hover effect */
+                                        .font-heading:hover+.relative .absolute {
+                                             animation-duration: 2s;
+                                        }
+                                   </style>
+
                               </div>
 
                               <!-- Desktop Grid with Creative Layout -->
