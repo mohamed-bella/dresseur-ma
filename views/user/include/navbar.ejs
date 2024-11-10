@@ -1,354 +1,180 @@
-<!-- Navbar Component -->
-<nav x-data="{ mobileMenuOpen: false, searchModalOpen: false }" class="fixed top-0 left-0 right-0 z-50 bg-white backdrop-blur-sm border-b border-gray-100">
-     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="flex h-16 md:h-20 items-center justify-between gap-4">
-               <!-- Logo -->
-               <a href="/" class="flex items-center gap-3 shrink-0 group">
-                    <div class="h-9 w-9 rounded-xl bg-black flex items-center justify-center transition-transform group-hover:scale-105 duration-300">
-                         <span class="text-lg text-white font-bold">N</span>
+<nav x-data="{ mobileMenuOpen: false, searchOpen: false }" class="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200">
+     <!-- Main Navbar Content -->
+     <div class="max-w-7xl mx-auto px-4">
+          <div class="flex h-14 items-center justify-between">
+               <!-- Left: Logo Section -->
+               <a href="/" class="flex items-center gap-2 flex-shrink-0">
+                    <div class="w-8 h-8 bg-[#58CC02] rounded-lg flex items-center justify-center">
+                         <span class="text-white font-bold">N</span>
                     </div>
-                    <span class="text-lg font-bold hidden sm:block">NDRESSILIK</span>
+                    <span class="font-bold hidden sm:block">NDRESSILIK</span>
                </a>
 
-               <!-- Desktop Search and Navigation -->
-               <div class="hidden lg:flex items-center flex-1 gap-4">
-                    <!-- Main Nav Links -->
-                    <div class="flex items-center">
-                         <a href="/" class="flex items-center gap-2 px-4 h-16 text-[15px] text-gray-700 hover:bg-gray-50 transition-all duration-200 relative group">
-                              <i class="fas fa-home text-lg"></i>
-                              <span class="font-medium">Accueil</span>
-                              <div class="absolute bottom-0 left-0 w-full h-1 bg-black scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center"></div>
-                         </a>
-                         <a href="/services" class="flex items-center gap-2 px-4 h-16 text-[15px] text-gray-700 hover:bg-gray-50 transition-all duration-200 relative group">
-                              <i class="fas fa-concierge-bell text-lg"></i>
-                              <span class="font-medium">Services</span>
-                              <div class="absolute bottom-0 left-0 w-full h-1 bg-black scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center"></div>
-                         </a>
-                    </div>
+               <!-- Center: Navigation -->
+               <div class="hidden md:flex items-center gap-1">
+                    <% const navItems=[ { label: 'Accueil' , icon: 'home' , href: '/' }, { label: 'Services' , icon: 'concierge-bell' , href: '/services' }, { label: 'Annonces' , icon: 'bullhorn' , href: '/announcements' }, ] %>
 
-                    <!-- Search Bar -->
-                    <form action="/search" method="GET" class="flex-1 max-w-2xl">
-                         <div class="relative group">
-                              <input type="text" name="q" placeholder="Rechercher un service..." class="w-full h-12 pl-12 pr-4 rounded-full text-[15px] bg-gray-100 border-2 border-gray-400 focus:bg-white focus:border-gray-200 outline-none transition-all duration-300">
-                              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                   <i class="fas fa-search text-gray-400 group-focus-within:text-gray-600"></i>
-                              </div>
-                         </div>
-                    </form>
+                         <% navItems.forEach(item=> { %>
+                              <a href="<%= item.href %>" class="flex items-center gap-2 px-4 h-14 text-sm font-semibold text-gray-700 hover:bg-gray-50 
+                                   relative group transition-colors">
+                                   <i class="fas fa-<%= item.icon %> text-lg 
+                                        group-hover:text-[#58CC02] transition-colors"></i>
+                                   <span class="group-hover:text-[#58CC02]">
+                                        <%= item.label %>
+                                   </span>
+                                   <div class="absolute bottom-0 left-0 right-0 h-0.5 bg-[#58CC02] scale-x-0 
+                                        group-hover:scale-x-100 transition-transform origin-left"></div>
+                              </a>
+                              <% }) %>
                </div>
 
-               <!-- Right Section -->
-               <div class="flex items-center gap-3">
-                    <!-- Mobile Search Button -->
-                    <button @click="searchModalOpen = true" class="lg:hidden bg-gray-50 w-10 h-10 flex items-center justify-center text-gray-700 hover:bg-gray-50 rounded-full">
+               <!-- Right: Actions -->
+               <div class="flex items-center gap-2">
+                    <!-- Search Button -->
+                    <button @click="searchOpen = true" class="p-2 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
                          <i class="fas fa-search text-lg"></i>
                     </button>
 
                     <!-- Add Service Button -->
                     <% if (user) { %>
-                         <div class="inline-flex relative">
-                              <!-- Main Button -->
-                              <a href="/dashboard/new-service" class="group relative inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#58CC02] hover:bg-[#4CAF02] 
-                            rounded-xl text-white font-bold text-[15px] select-none
-                            transform active:translate-y-[2px] transition-all duration-200
-                            shadow-[0_4px_0_0_#3B8101] active:shadow-[0_0_0_0_#3B8101]
-                            outline-none focus:ring-4 focus:ring-[#58CC02]/50">
-                                   <!-- Plus Icon with Animation -->
-                                   <span class="relative flex items-center justify-center w-5 h-5 transform group-hover:rotate-90 transition-transform duration-200">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor">
-                                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                        </svg>
-                                   </span>
-                                   <!-- Button Text -->
-                                   <span class="relative">Service</span>
+                         <a href="/dashboard/new-service" class="flex items-center gap-2 px-4 py-2 bg-[#58CC02] hover:bg-[#46a702] text-white 
+                                   font-bold text-sm rounded-xl transition-colors shadow-sm">
+                              <i class="fas fa-plus"></i>
+                              <span>Service</span>
+                         </a>
 
-                                   <!-- Hover Effect Overlay -->
-                                   <div class="absolute inset-0 h-full w-full rounded-xl bg-white/[0.05] opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
-                              </a>
-                         </div>
+                         <!-- User Menu -->
+                         <div class="relative" x-data="{ open: false }">
+                              <button @click="open = !open" class="flex items-center gap-2 p-1 hover:bg-gray-50 rounded-lg transition-colors">
+                                   <img src="<%= user.profileImage || `/default-avatar.png` %>" class="w-8 h-8 rounded-lg object-cover" alt="<%= user.displayName %>">
+                                   <i class="fas fa-chevron-down text-sm text-gray-500"></i>
+                              </button>
 
-                         <style>
-                              /* Disable text selection on button */
-                              .select-none {
-                                   -webkit-user-select: none;
-                                   -moz-user-select: none;
-                                   -ms-user-select: none;
-                                   user-select: none;
-                              }
-
-                              /* Optional: Add ripple effect on click */
-                              @keyframes ripple {
-                                   0% {
-                                        transform: scale(0);
-                                        opacity: 1;
-                                   }
-
-                                   100% {
-                                        transform: scale(4);
-                                        opacity: 0;
-                                   }
-                              }
-
-                              .ripple {
-                                   position: absolute;
-                                   border-radius: 50%;
-                                   background-color: rgba(255, 255, 255, 0.4);
-                                   animation: ripple 0.6s linear;
-                                   pointer-events: none;
-                              }
-                         </style>
-
-                         <script>
-                              // Add ripple effect
-                              document.querySelector('a').addEventListener('click', function (e) {
-                                   const button = this;
-                                   const ripple = document.createElement('span');
-                                   const rect = button.getBoundingClientRect();
-                                   const size = Math.max(rect.width, rect.height);
-                                   const x = e.clientX - rect.left - size / 2;
-                                   const y = e.clientY - rect.top - size / 2;
-
-                                   ripple.style.width = ripple.style.height = `${size}px`;
-                                   ripple.style.left = `${x}px`;
-                                   ripple.style.top = `${y}px`;
-                                   ripple.classList.add('ripple');
-
-                                   button.appendChild(ripple);
-
-                                   ripple.addEventListener('animationend', () => {
-                                        ripple.remove();
-                                   });
-                              });
-
-                              // Add haptic feedback on mobile
-                              document.querySelector('a').addEventListener('click', () => {
-                                   if ('vibrate' in navigator) {
-                                        navigator.vibrate(5);
-                                   }
-                              });
-                         </script>
-                         <% } %>
-
-                              <!-- User Menu -->
-                              <% if (user) { %>
-                                   <div class="relative" x-data="{ open: false }">
-                                        <button @click="open = !open" class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-full transition-all duration-200">
-                                             <div class="relative w-10 h-10 rounded-full overflow-hidden bg-gray-100">
-                                                  <img src="<%= user.image || `https://api.dicebear.com/7.x/adventurer/svg?seed=${user.displayName}` %>" alt="<%= user.displayName %>" class="w-full h-full object-cover">
-                                             </div>
-                                             <svg class="w-5 h-5 text-gray-500 transition-transform duration-200" :class="{ 'rotate-180': open }" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                                             </svg>
-                                        </button>
-
-                                        <!-- Dropdown -->
-                                        <div x-show="open" @click.away="open = false" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95" class="absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-
-                                             <div class="p-4 border-b border-gray-100">
-                                                  <p class="text-[15px] font-medium text-gray-900">
-                                                       <%= user.displayName %>
-                                                  </p>
-                                                  <p class="text-sm text-gray-500 truncate">
-                                                       <%= user.email %>
-                                                  </p>
-                                             </div>
-
-                                             <div class="p-2">
-                                                  <a href="/dashboard" class="flex items-center gap-3 w-full p-3 text-[15px] text-gray-700 hover:bg-gray-50 rounded-xl transition-colors">
-                                                       <i class="fas fa-tachometer-alt w-5"></i>
-                                                       <span>Tableau de bord</span>
-                                                  </a>
-                                                  <a href="/dashboard/profile" class="flex items-center gap-3 w-full p-3 text-[15px] text-gray-700 hover:bg-gray-50 rounded-xl transition-colors">
-                                                       <i class="fas fa-user w-5"></i>
-                                                       <span>Profile</span>
-                                                  </a>
-                                             </div>
-
-                                             <div class="p-2 border-t border-gray-100">
-                                                  <a href="/logout" class="flex items-center gap-3 w-full p-3 text-[15px] text-red-600 hover:bg-red-50 rounded-xl transition-colors">
-                                                       <i class="fas fa-sign-out-alt w-5"></i>
-                                                       <span>Déconnexion</span>
-                                                  </a>
-                                             </div>
+                              <!-- Dropdown -->
+                              <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-60 bg-white rounded-2xl shadow-lg border border-gray-200
+                                          divide-y divide-gray-100">
+                                   <!-- User Info -->
+                                   <div class="p-3">
+                                        <div class="font-semibold">
+                                             <%= user.displayName %>
+                                        </div>
+                                        <div class="text-sm text-gray-500">
+                                             <%= user.email %>
                                         </div>
                                    </div>
-                                   <% } else { %>
-                                        <div class="inline-flex relative">
-                                             <!-- Main Button -->
-                                             <a href="/auth/google" class="group relative inline-flex items-center justify-center gap-2 px-6 py-2 bg-[#58CC02] hover:bg-[#4CAF02] 
-                                           rounded-xl text-white font-bold text-[15px] select-none
-                                           transform active:translate-y-[2px] transition-all duration-200
-                                           shadow-[0_4px_0_0_#3B8101] active:shadow-[0_0_0_0_#3B8101]
-                                           outline-none focus:ring-4 focus:ring-[#58CC02]/50">
-                                                  <!-- Plus Icon with Animation -->
-                                                  <span class="relative flex items-center justify-center w-5 h-5 transform group-hover:rotate-90 transition-transform duration-200">
-                                                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                                       </svg>
-                                                  </span>
-                                                  <!-- Button Text -->
-                                                  <span class="relative">Service</span>
 
-                                                  <!-- Hover Effect Overlay -->
-                                                  <div class="absolute inset-0 h-full w-full rounded-xl bg-white/[0.05] opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
-                                             </a>
-                                        </div>
+                                   <!-- Menu Items -->
+                                   <div class="p-2 space-y-1">
+                                        <a href="/dashboard" class="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 
+                                                                  hover:bg-gray-50 rounded-lg transition-colors">
+                                             <i class="fas fa-chart-line w-5"></i>
+                                             <span>Tableau de bord</span>
+                                        </a>
+                                        <a href="/profile" class="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 
+                                                                 hover:bg-gray-50 rounded-lg transition-colors">
+                                             <i class="fas fa-user w-5"></i>
+                                             <span>Profile</span>
+                                        </a>
+                                   </div>
 
-                                        <style>
-                                             /* Disable text selection on button */
-                                             .select-none {
-                                                  -webkit-user-select: none;
-                                                  -moz-user-select: none;
-                                                  -ms-user-select: none;
-                                                  user-select: none;
-                                             }
+                                   <!-- Logout -->
+                                   <div class="p-2">
+                                        <a href="/logout" class="flex items-center gap-3 px-3 py-2 text-sm text-red-600 
+                                                               hover:bg-red-50 rounded-lg transition-colors">
+                                             <i class="fas fa-sign-out-alt w-5"></i>
+                                             <span>Déconnexion</span>
+                                        </a>
+                                   </div>
+                              </div>
+                         </div>
+                         <% } else { %>
+                              <!-- Login Button -->
+                              <a href="/auth/google" class="flex items-center gap-2 px-4 py-2 bg-[#58CC02] hover:bg-[#46a702] text-white 
+                                   font-bold text-sm rounded-xl transition-colors shadow-sm">
+                                   <i class="fab fa-google"></i>
+                                   <span>Connexion</span>
+                              </a>
+                              <% } %>
 
-                                             /* Optional: Add ripple effect on click */
-                                             @keyframes ripple {
-                                                  0% {
-                                                       transform: scale(0);
-                                                       opacity: 1;
-                                                  }
+                                   <!-- Mobile Menu Button -->
+                                   <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden p-2 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
+                                        <i class="fas fa-bars text-lg"></i>
+                                   </button>
+               </div>
+          </div>
+     </div>
 
-                                                  100% {
-                                                       transform: scale(4);
-                                                       opacity: 0;
-                                                  }
-                                             }
+     <!-- Search Modal -->
+     <div x-show="searchOpen" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 z-50 bg-white">
+          <!-- Search Header -->
+          <div class="border-b border-gray-200">
+               <div class="max-w-7xl mx-auto px-4">
+                    <div class="flex h-14 items-center gap-4">
+                         <i class="fas fa-search text-gray-400"></i>
+                         <input type="text" placeholder="Rechercher..." class="flex-1 h-full bg-transparent text-gray-900 placeholder-gray-500 focus:outline-none" @keydown.escape="searchOpen = false" autofocus>
+                         <button @click="searchOpen = false" class="p-2 text-gray-500 hover:text-gray-700">
+                              <i class="fas fa-times text-lg"></i>
+                         </button>
+                    </div>
+               </div>
+          </div>
 
-                                             .ripple {
-                                                  position: absolute;
-                                                  border-radius: 50%;
-                                                  background-color: rgba(255, 255, 255, 0.4);
-                                                  animation: ripple 0.6s linear;
-                                                  pointer-events: none;
-                                             }
-                                        </style>
-
-                                        <script>
-                                             // Add ripple effect
-                                             document.querySelector('a').addEventListener('click', function (e) {
-                                                  const button = this;
-                                                  const ripple = document.createElement('span');
-                                                  const rect = button.getBoundingClientRect();
-                                                  const size = Math.max(rect.width, rect.height);
-                                                  const x = e.clientX - rect.left - size / 2;
-                                                  const y = e.clientY - rect.top - size / 2;
-
-                                                  ripple.style.width = ripple.style.height = `${size}px`;
-                                                  ripple.style.left = `${x}px`;
-                                                  ripple.style.top = `${y}px`;
-                                                  ripple.classList.add('ripple');
-
-                                                  button.appendChild(ripple);
-
-                                                  ripple.addEventListener('animationend', () => {
-                                                       ripple.remove();
-                                                  });
-                                             });
-
-                                             // Add haptic feedback on mobile
-                                             document.querySelector('a').addEventListener('click', () => {
-                                                  if ('vibrate' in navigator) {
-                                                       navigator.vibrate(5);
-                                                  }
-                                             });
-                                        </script>
-                                        <% } %>
-
-                                             <!-- Mobile Menu Button -->
-                                             <button @click="mobileMenuOpen = !mobileMenuOpen" class="lg:hidden p-2 text-gray-700 hover:bg-gray-50 rounded-full">
-                                                  <i class="fas fa-bars text-xl"></i>
-                                             </button>
+          <!-- Search Content -->
+          <div class="max-w-7xl mx-auto px-4 py-6">
+               <!-- Popular Searches -->
+               <div class="space-y-4">
+                    <h3 class="text-sm font-medium text-gray-500">Recherches populaires</h3>
+                    <div class="flex flex-wrap gap-2">
+                         <% ['Dressage', 'Toilettage' , 'Promenade' , 'Vétérinaire' ].forEach(term=> { %>
+                              <a href="/search?q=<%= term %>" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm 
+                                        rounded-full transition-colors">
+                                   <%= term %>
+                              </a>
+                              <% }) %>
+                    </div>
                </div>
           </div>
      </div>
 
      <!-- Mobile Menu -->
-     <div x-show="mobileMenuOpen" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" @click.away="mobileMenuOpen = false" class="lg:hidden border-t border-gray-100">
-          <nav class="max-w-7xl mx-auto px-4 py-2">
-               <div class="grid gap-2">
-                    <a href="/" class="flex items-center gap-3 p-3 text-[15px] text-gray-700 hover:bg-gray-50 rounded-xl transition-colors">
-                         <i class="fas fa-home w-5 text-gray-400"></i>
-                         <span class="font-medium">Accueil</span>
-                    </a>
-                    <a href="/services" class="flex items-center gap-3 p-3 text-[15px] text-gray-700 hover:bg-gray-50 rounded-xl transition-colors">
-                         <i class="fas fa-concierge-bell w-5 text-gray-400"></i>
-                         <span class="font-medium">Services</span>
-                    </a>
-
-                    <% if (user) { %>
-                         <div class="border-t border-gray-100 mt-2 pt-2">
-                              <a href="/dashboard" class="flex items-center gap-3 p-3 text-[15px] text-gray-700 hover:bg-gray-50 rounded-xl transition-colors">
-                                   <i class="fas fa-tachometer-alt w-5 text-gray-400"></i>
-                                   <span>Tableau de bord</span>
-                              </a>
-                              <a href="/profile" class="flex items-center gap-3 p-3 text-[15px] text-gray-700 hover:bg-gray-50 rounded-xl transition-colors">
-                                   <i class="fas fa-user w-5 text-gray-400"></i>
-                                   <span>Profile</span>
-                              </a>
-                              <a href="/logout" class="flex items-center gap-3 p-3 text-[15px] text-red-600 hover:bg-red-50 rounded-xl transition-colors">
-                                   <i class="fas fa-sign-out-alt w-5"></i>
-                                   <span>Déconnexion</span>
-                              </a>
-                         </div>
-                         <% } %>
+     <div x-show="mobileMenuOpen" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" @click.away="mobileMenuOpen = false" class="md:hidden border-t border-gray-200">
+          <nav class="max-w-7xl mx-auto px-4 py-3">
+               <div class="space-y-1">
+                    <% navItems.forEach(item=> { %>
+                         <a href="<%= item.href %>" class="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
+                              <i class="fas fa-<%= item.icon %> text-gray-400 w-5"></i>
+                              <span>
+                                   <%= item.label %>
+                              </span>
+                         </a>
+                         <% }) %>
                </div>
           </nav>
      </div>
-
-     <!-- Replace the existing Search Modal with this new version -->
-
-     <!-- Fullscreen Search Modal -->
-     <div x-show="searchModalOpen" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 z-[100] bg-white lg:hidden">
-
-          <!-- Search Header -->
-          <div class="border-b border-gray-100">
-               <div class="max-w-7xl mx-auto px-4 h-16 md:h-20 flex items-center gap-4">
-                    <form action="/search" method="GET" class="flex-1">
-                         <div class="relative flex items-center">
-                              <div class="absolute left-0 pl-1 flex items-center pointer-events-none">
-                                   <i class="fas fa-search text-gray-400 text-lg"></i>
-                              </div>
-                              <input type="text" name="q" placeholder="Rechercher un service..." class="w-full h-12 pl-10 pr-4 text-base bg-transparent focus:outline-none" @keydown.escape="searchModalOpen = false" autofocus>
-                         </div>
-                    </form>
-                    <button type="button" @click="searchModalOpen = false" class="flex items-center justify-center w-10 h-10 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100">
-                         <i class="fas fa-times text-xl"></i>
-                    </button>
-               </div>
-          </div>
-
-          <!-- Search Content -->
-          <div class="overflow-y-auto h-[calc(100vh-4rem)] md:h-[calc(100vh-5rem)]" style="background-color: #f5f5f5;">
-               <!-- Recent Searches (Example) -->
-               <div class="max-w-7xl mx-auto px-4 py-4">
-                    <!-- Popular Searches -->
-                    <div>
-                         <h3 class="text-sm font-medium text-gray-500 mb-3">Recherches populaires</h3>
-                         <div class="flex flex-wrap gap-2">
-                              <% const popularSearches=['Dressage', 'Toilettage' , 'Promenade' , 'Vétérinaire' , 'Pension' ]; %>
-                                   <% popularSearches.forEach(search=> { %>
-                                        <a href="/search?q=<%= encodeURIComponent(search) %>" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 transition-colors">
-                                             <%= search %>
-                                        </a>
-                                        <% }); %>
-                         </div>
-                    </div>
-               </div>
-          </div>
-     </div>
 </nav>
 
-<!-- Body padding to account for fixed navbar -->
 <style>
+     /* Body spacing for fixed navbar */
      body {
-          padding-top: 64px;
+          padding-top: 3.5rem;
      }
 
-     @media (min-width: 768px) {
-          body {
-               padding-top: 80px;
+     /* Smooth transitions */
+     .transition-transform {
+          transition-property: transform;
+          transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+          transition-duration: 200ms;
+     }
+
+     /* Better mobile tap targets */
+     @media (max-width: 768px) {
+          .nav-link {
+               min-height: 44px;
           }
+     }
+
+     /* Remove touch highlight on mobile */
+     * {
+          -webkit-tap-highlight-color: transparent;
      }
 </style>
