@@ -89,7 +89,7 @@
                                              <!-- Custom animated underline -->
                                              <div class="relative mt-2">
                                                   <div class="absolute inset-x-0 h-1 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 rounded-full"></div>
-                                                  <div class="absolute inset-x-0 h-1 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 rounded-full animate-shimmer"></div>
+                                                  <div class="absolute inset-x-0 h-1 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 rounded-full"></div>
                                              </div>
                                         </h2>
                                    </div>
@@ -129,9 +129,7 @@
                                              }
                                         }
 
-                                        .animate-shimmer {
-                                             animation: shimmer 3s ease-in-out infinite;
-                                        }
+
 
                                         /* Responsive text adjustments */
                                         @media (max-width: 640px) {
@@ -168,575 +166,197 @@
 
                               </div>
 
-                              <!-- Desktop Grid with Creative Layout -->
-                              <div class="hidden sm:grid grid-cols-6 grid-rows-2 gap-6 mb-8">
-                                   <% services.forEach((service, index)=> { %>
-                                        <a href="/services/<%= service.id %>" class="group relative <%= index === 0 ? 'col-span-3 row-span-2' : 'col-span-3' %> 
-                                         transform transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl" data-aos="fade-up" data-aos-delay="<%= index * 100 %>">
-                                             <div class="h-full bg-white rounded-3xl overflow-hidden border border-gray-100">
-                                                  <div class="flex <%= index === 0 ? 'flex-col' : 'h-full' %>">
-                                                       <!-- Image Section -->
-                                                       <div class="<%= index === 0 ? 'w-full aspect-[16/9]' : 'w-2/5 aspect-square' %> relative overflow-hidden">
-                                                            <img src="<%= service.image %>" alt="<%= service.name %>" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
-                                                            <!-- Gradient Overlay -->
-                                                            <div class="absolute inset-0 bg-gradient-to-tr 
-                                                           from-<%= service.bgColor.split('-')[1] %>-600/20 
-                                                           to-transparent opacity-0 group-hover:opacity-100 
-                                                           transition-opacity duration-500"></div>
 
-                                                            <!-- Rating Badge -->
-                                                            <div class="absolute top-4 right-4 px-3 py-1.5 rounded-full 
-                                                           bg-white/95 backdrop-blur-sm flex items-center gap-2 
-                                                           transform transition-transform duration-500 
-                                                           group-hover:scale-110">
-                                                                 <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                                                                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                                                 </svg>
-                                                                 <span class="font-semibold text-sm">
-                                                                      <%= service.rating %>
-                                                                 </span>
-                                                            </div>
-                                                       </div>
 
-                                                       <!-- Content Section -->
-                                                       <div class="<%= index === 0 ? 'w-full' : 'w-3/5' %> p-6 flex flex-col justify-between">
-                                                            <div>
-                                                                 <div class="flex items-center justify-between mb-4">
-                                                                      <h3 class="text-lg font-bold text-gray-900">
-                                                                           Service de <%= service.name %>
-                                                                      </h3>
-                                                                      <div class="flex h-12 w-12 items-center justify-center rounded-2xl
-                                                                   bg-gradient-to-br from-<%= service.bgColor.split('-')[1] %>-50 
-                                                                   to-<%= service.bgColor.split('-')[1] %>-100/50 
-                                                                   group-hover:from-<%= service.bgColor.split('-')[1] %>-100 
-                                                                   group-hover:to-<%= service.bgColor.split('-')[1] %>-200/50 
-                                                                   transition-all duration-500">
-                                                                           <i class="fas fa-<%= service.icon %> text-<%= service.bgColor.split('-')[1] %>-500 
-                                                                     text-xl group-hover:scale-125 transition-transform duration-500"></i>
-                                                                      </div>
-                                                                 </div>
+                              <!-- MOBILE -->
 
-                                                            </div>
-
-                                                            <div class="flex items-center justify-between">
-                                                                 <span class="inline-flex items-center text-sm font-medium text-green-600">
-                                                                      <i class="fas fa-check-circle mr-2"></i>
-                                                                      Disponible 24/7
-                                                                 </span>
-                                                                 <div class="flex items-center gap-2 text-<%= service.bgColor.split('-')[1] %>-500 
-                                                               group-hover:translate-x-2 transition-transform duration-500">
-                                                                      <span class="text-sm font-medium">Découvrir</span>
-                                                                      <i class="fas fa-arrow-right"></i>
-                                                                 </div>
-                                                            </div>
-                                                       </div>
-                                                  </div>
+                              <!-- Popular Services Slider -->
+                              <section class="relative overflow-hidden py-8">
+                                   <div class="container mx-auto px-4">
+                                        <!-- Section Header -->
+                                        <div class="flex items-center justify-between mb-6">
+                                             <h2 class="text-xl font-semibold text-gray-900">Services Populaires</h2>
+                                             <div class="hidden md:flex items-center gap-2">
+                                                  <button id="prevBtn" class="p-2 rounded-full text-gray-600 hover:bg-gray-100 transition-all">
+                                                       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                                                       </svg>
+                                                  </button>
+                                                  <button id="nextBtn" class="p-2 rounded-full text-gray-600 hover:bg-gray-100 transition-all">
+                                                       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                                       </svg>
+                                                  </button>
                                              </div>
-                                        </a>
-                                        <% }); %>
-                              </div>
-
-                              <!-- Mobile Story-like Slider -->
-                              <div class="sm:hidden py-4">
-                                   <!-- Slider Track -->
-                                   <div class="relative overflow-hidden px-4">
-                                        <div id="sliderTrack" class="flex gap-3 transition-all duration-700 ease-out">
-                                             <% services.forEach((service, index)=> { %>
-                                                  <div class="flex-none w-[120px] transform transition-all duration-700">
-                                                       <a href="/services/<%= service.id %>" class="block">
-                                                            <div class="relative h-[160px] rounded-xl p-3 
-                            bg-gradient-to-br from-<%= service.bgColor.split('-')[1] %>-50 
-                            to-<%= service.bgColor.split('-')[1] %>-100 
-                            border border-gray-100 
-                            transform transition-all duration-500
-                            hover:shadow-lg hover:-translate-y-0.5">
-
-                                                                 <!-- Icon -->
-                                                                 <div class="w-8 h-8 rounded-full bg-white/90 backdrop-blur 
-                                flex items-center justify-center 
-                                transform transition-transform duration-500 
-                                hover:scale-110">
-                                                                      <i class="fas fa-<%= service.icon %> text-<%= service.bgColor.split('-')[1] %>-500 text-sm"></i>
-                                                                 </div>
-
-                                                                 <!-- Title -->
-                                                                 <h4 class="text-sm font-medium text-gray-900 mt-auto line-clamp-2">
-                                                                      <%= service.name %>
-                                                                 </h4>
-
-                                                                 <!-- Available Badge -->
-                                                                 <div class="absolute bottom-3 right-3 
-                                px-2 py-0.5 rounded-full 
-                                bg-white/90 backdrop-blur-sm 
-                                text-[10px] font-medium text-green-600
-                                transform transition-all duration-300">
-                                                                      <i class="fas fa-check mr-1"></i>
-                                                                      Disponible
-                                                                 </div>
-                                                            </div>
-                                                       </a>
-                                                  </div>
-                                                  <% }); %>
-
-                                                       <!-- Clone first few items for infinite scroll effect -->
-                                                       <% services.slice(0, 3).forEach((service, index)=> { %>
-                                                            <div class="flex-none w-[120px] transform transition-all duration-700 clone">
-                                                                 <!-- Same card content as above -->
-                                                                 <a href="/services/<%= service.id %>" class="block">
-                                                                      <div class="relative h-[160px] rounded-xl p-3 
-                            bg-gradient-to-br from-<%= service.bgColor.split('-')[1] %>-50 
-                            to-<%= service.bgColor.split('-')[1] %>-100 
-                            border border-gray-100">
-                                                                           <div class="w-8 h-8 rounded-full bg-white/90 backdrop-blur flex items-center justify-center">
-                                                                                <i class="fas fa-<%= service.icon %> text-<%= service.bgColor.split('-')[1] %>-500 text-sm"></i>
-                                                                           </div>
-                                                                           <h4 class="text-sm font-medium text-gray-900 mt-auto line-clamp-2">
-                                                                                <%= service.name %>
-                                                                           </h4>
-                                                                           <div class="absolute bottom-3 right-3 px-2 py-0.5 rounded-full bg-white/90 backdrop-blur-sm text-[10px] font-medium text-green-600">
-                                                                                <i class="fas fa-check mr-1"></i>
-                                                                                Disponible
-                                                                           </div>
-                                                                      </div>
-                                                                 </a>
-                                                            </div>
-                                                            <% }); %>
                                         </div>
 
-                                        <!-- Progress Bar -->
-                                        <div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gray-100 rounded-full overflow-hidden">
-                                             <div id="progressBar" class="h-full bg-gradient-to-r from-blue-500 to-indigo-500 w-0 transition-all duration-300"></div>
+                                        <!-- Slider Container -->
+                                        <div class="relative">
+                                             <div id="servicesTrack" class="flex transition-transform duration-500 ease-out gap-4">
+                                                  <% const bgColors=[ 'bg-blue-50' , 'bg-green-50' , 'bg-purple-50' , 'bg-pink-50' , 'bg-yellow-50' , 'bg-indigo-50' ]; const iconColors=[ 'text-blue-500' , 'text-green-500' , 'text-purple-500' , 'text-pink-500' , 'text-yellow-600' , 'text-indigo-500' ]; services.forEach((service, index)=> {
+                                                       const bgColor = bgColors[index % bgColors.length];
+                                                       const iconColor = iconColors[index % iconColors.length];
+                                                       %>
+                                                       <div class="flex-none w-[160px] md:w-[300px]">
+                                                            <a href="/services/<%= service.id %>" class="block">
+                                                                 <div class="<%= bgColor %> rounded-2xl p-4 md:p-6 border border-gray-100 hover:shadow-lg transition-all group">
+                                                                      <div class="flex flex-col md:flex-row items-center gap-3 md:gap-4">
+                                                                           <div class="w-12 h-12 md:w-16 md:h-16 rounded-xl bg-white/50 backdrop-blur-sm flex items-center justify-center group-hover:scale-110 transition-transform">
+                                                                                <i class="fas fa-<%= service.icon %> text-xl md:text-2xl <%= iconColor %>"></i>
+                                                                           </div>
+                                                                           <h3 class="font-medium text-center md:text-left text-gray-900 group-hover:text-gray-700 transition-colors md:text-lg">
+                                                                                <%= service.name %>
+                                                                           </h3>
+                                                                      </div>
+                                                                 </div>
+                                                            </a>
+                                                       </div>
+                                                       <% }); %>
+                                             </div>
+
+                                             <!-- Progress Dots -->
+                                             <div class="flex justify-center mt-6 gap-2 md:hidden" id="progressDots"></div>
                                         </div>
                                    </div>
-                              </div>
+                              </section>
 
                               <script>
                                    document.addEventListener('DOMContentLoaded', function () {
-                                        const track = document.getElementById('sliderTrack');
-                                        const progressBar = document.getElementById('progressBar');
-                                        const slides = Array.from(track.children).filter(slide => !slide.classList.contains('clone'));
-                                        const slideWidth = 123; // width + gap
+                                        const track = document.getElementById('servicesTrack');
+                                        const slides = track.children;
+                                        const nextBtn = document.getElementById('nextBtn');
+                                        const prevBtn = document.getElementById('prevBtn');
+                                        const dotsContainer = document.getElementById('progressDots');
+
                                         let currentIndex = 0;
-                                        let isTransitioning = false;
-                                        let autoplayInterval;
-                                        let progressInterval;
+                                        let slideWidth;
+                                        let slidesToShow;
+                                        let maxIndex;
+                                        let autoSlideInterval;
 
-                                        // Initialize positions
-                                        updateSliderPosition(true);
+                                        function updateDimensions() {
+                                             const isMobile = window.innerWidth < 768;
+                                             slideWidth = slides[0].offsetWidth + 16; // Including gap
+                                             slidesToShow = isMobile ? 2 : 4; // Show more cards on desktop
+                                             maxIndex = Math.max(0, slides.length - slidesToShow);
 
-                                        function updateSliderPosition(immediate = false) {
-                                             const offset = -currentIndex * slideWidth;
-                                             if (immediate) {
-                                                  track.style.transition = 'none';
-                                                  track.style.transform = `translateX(${offset}px)`;
-                                                  // Force reflow
-                                                  track.offsetHeight;
-                                                  track.style.transition = '';
-                                             } else {
-                                                  track.style.transform = `translateX(${offset}px)`;
+                                             // Update dots for mobile
+                                             if (isMobile) {
+                                                  updateDots();
                                              }
                                         }
 
-                                        // Smooth auto-sliding animation
-                                        function startAutoplay() {
-                                             let progress = 0;
-                                             const slideDuration = 5000; // 5 seconds per slide
-
-                                             // Clear existing intervals
-                                             clearInterval(autoplayInterval);
-                                             clearInterval(progressInterval);
-
-                                             // Update progress bar
-                                             progressInterval = setInterval(() => {
-                                                  progress += (100 / slideDuration) * 10; // Update every 10ms
-                                                  if (progress <= 100) {
-                                                       progressBar.style.width = `${progress}%`;
-                                                  }
-                                             }, 10);
-
-                                             // Slide transition
-                                             autoplayInterval = setInterval(() => {
-                                                  progress = 0;
-                                                  progressBar.style.width = '0%';
-
-                                                  currentIndex++;
-                                                  isTransitioning = true;
-
-                                                  // Smooth slide transition
-                                                  updateSliderPosition();
-
-                                                  // Reset position when reaching the end
-                                                  if (currentIndex >= slides.length) {
-                                                       setTimeout(() => {
-                                                            currentIndex = 0;
-                                                            updateSliderPosition(true);
-                                                            isTransitioning = false;
-                                                       }, 700); // Match duration-700 from CSS
-                                                  } else {
-                                                       setTimeout(() => {
-                                                            isTransitioning = false;
-                                                       }, 700);
-                                                  }
-                                             }, slideDuration);
+                                        function updateDots() {
+                                             dotsContainer.innerHTML = '';
+                                             for (let i = 0; i <= maxIndex; i++) {
+                                                  const dot = document.createElement('button');
+                                                  dot.classList.add('h-2', 'rounded-full', 'bg-gray-200', 'transition-all');
+                                                  dot.style.width = i === 0 ? '2rem' : '0.5rem';
+                                                  dot.addEventListener('click', () => goToSlide(i));
+                                                  dotsContainer.appendChild(dot);
+                                             }
                                         }
 
-                                        // Touch handling with smooth transitions
-                                        let touchStartX = 0;
-                                        let touchEndX = 0;
-                                        let initialOffset = 0;
+                                        function updateSlidePosition() {
+                                             track.style.transform = `translateX(${-currentIndex * slideWidth}px)`;
 
-                                        track.addEventListener('touchstart', e => {
-                                             if (isTransitioning) return;
-                                             touchStartX = e.touches[0].clientX;
-                                             initialOffset = -currentIndex * slideWidth;
-
-                                             clearInterval(autoplayInterval);
-                                             clearInterval(progressInterval);
-
-                                             track.style.transition = 'none';
-                                        }, { passive: true });
-
-                                        track.addEventListener('touchmove', e => {
-                                             if (isTransitioning) return;
-                                             touchEndX = e.touches[0].clientX;
-                                             const diff = touchEndX - touchStartX;
-                                             track.style.transform = `translateX(${initialOffset + diff}px)`;
-                                        }, { passive: true });
-
-                                        track.addEventListener('touchend', () => {
-                                             if (isTransitioning) return;
-                                             const diff = touchEndX - touchStartX;
-
-                                             track.style.transition = '';
-
-                                             if (Math.abs(diff) > 50) { // Minimum swipe distance
-                                                  if (diff > 0 && currentIndex > 0) {
-                                                       currentIndex--;
-                                                  } else if (diff < 0 && currentIndex < slides.length - 1) {
-                                                       currentIndex++;
+                                             // Update dots on mobile
+                                             if (window.innerWidth < 768) {
+                                                  const dots = dotsContainer.children;
+                                                  for (let i = 0; i < dots.length; i++) {
+                                                       dots[i].style.width = i === currentIndex ? '2rem' : '0.5rem';
+                                                       dots[i].classList.toggle('bg-blue-500', i === currentIndex);
                                                   }
                                              }
+                                        }
 
-                                             updateSliderPosition();
-                                             startAutoplay();
+                                        function goToSlide(index) {
+                                             currentIndex = Math.min(Math.max(index, 0), maxIndex);
+                                             updateSlidePosition();
+                                        }
+
+                                        function nextSlide() {
+                                             currentIndex = (currentIndex + 1) % (maxIndex + 1);
+                                             updateSlidePosition();
+                                        }
+
+                                        function prevSlide() {
+                                             currentIndex = currentIndex === 0 ? maxIndex : currentIndex - 1;
+                                             updateSlidePosition();
+                                        }
+
+                                        // Event Listeners
+                                        nextBtn?.addEventListener('click', () => {
+                                             nextSlide();
+                                             resetAutoSlide();
                                         });
 
-                                        // Initialize autoplay
-                                        startAutoplay();
+                                        prevBtn?.addEventListener('click', () => {
+                                             prevSlide();
+                                             resetAutoSlide();
+                                        });
+
+                                        // Auto slide functionality
+                                        function startAutoSlide() {
+                                             autoSlideInterval = setInterval(nextSlide, 3000);
+                                        }
+
+                                        function resetAutoSlide() {
+                                             clearInterval(autoSlideInterval);
+                                             startAutoSlide();
+                                        }
+
+                                        // Touch events for mobile
+                                        let touchStartX = 0;
+                                        let touchEndX = 0;
+
+                                        track.addEventListener('touchstart', e => {
+                                             touchStartX = e.changedTouches[0].screenX;
+                                             clearInterval(autoSlideInterval);
+                                        }, { passive: true });
+
+                                        track.addEventListener('touchend', e => {
+                                             touchEndX = e.changedTouches[0].screenX;
+                                             handleSwipe();
+                                             startAutoSlide();
+                                        }, { passive: true });
+
+                                        function handleSwipe() {
+                                             const swipeThreshold = 50;
+                                             const diff = touchStartX - touchEndX;
+
+                                             if (Math.abs(diff) > swipeThreshold) {
+                                                  if (diff > 0) {
+                                                       nextSlide();
+                                                  } else {
+                                                       prevSlide();
+                                                  }
+                                             }
+                                        }
+
+                                        // Initialize
+                                        updateDimensions();
+                                        updateSlidePosition();
+                                        startAutoSlide();
+
+                                        // Handle window resize
+                                        window.addEventListener('resize', () => {
+                                             updateDimensions();
+                                             updateSlidePosition();
+                                        });
+
+                                        // Pause auto slide on hover (desktop only)
+                                        if (window.innerWidth >= 768) {
+                                             track.addEventListener('mouseenter', () => clearInterval(autoSlideInterval));
+                                             track.addEventListener('mouseleave', startAutoSlide);
+                                        }
                                    });
                               </script>
 
-                              <style>
-                                   /* Smooth transitions */
-                                   .transition-all {
-                                        transition-property: all;
-                                        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-                                   }
-
-                                   /* Progress bar animation */
-                                   @keyframes progress {
-                                        from {
-                                             width: 0%;
-                                        }
-
-                                        to {
-                                             width: 100%;
-                                        }
-                                   }
-
-                                   /* Card hover effects */
-                                   .hover\:shadow-lg:hover {
-                                        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
-                                             0 4px 6px -2px rgba(0, 0, 0, 0.05);
-                                   }
-
-                                   /* Optimize touch handling */
-                                   #sliderTrack {
-                                        -webkit-overflow-scrolling: touch;
-                                        touch-action: pan-x;
-                                        will-change: transform;
-                                   }
-
-                                   /* Reduce motion if preferred */
-                                   @media (prefers-reduced-motion: reduce) {
-                                        .transition-all {
-                                             transition: none;
-                                        }
-
-                                        .hover\:shadow-lg:hover {
-                                             box-shadow: none;
-                                        }
-                                   }
-                              </style>
                          </div>
                     </section>
 
-                    <style>
-                         @keyframes shimmer {
-                              0% {
-                                   background-position: 200% 0;
-                              }
 
-                              100% {
-                                   background-position: -200% 0;
-                              }
-                         }
-
-                         .animate-shimmer {
-                              animation: shimmer 8s linear infinite;
-                         }
-
-                         /* Card entrance animations */
-                         @keyframes cardEntrance {
-                              from {
-                                   opacity: 0;
-                                   transform: scale(0.9);
-                              }
-
-                              to {
-                                   opacity: 1;
-                                   transform: scale(1);
-                              }
-                         }
-
-                         [data-aos="card-entrance"] {
-                              transform-origin: center;
-                              animation: cardEntrance 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-                         }
-
-                         /* Smooth scrolling */
-                         .smooth-scroll {
-                              scroll-behavior: smooth;
-                         }
-
-                         @media (prefers-reduced-motion: reduce) {
-                              .smooth-scroll {
-                                   scroll-behavior: auto;
-                              }
-
-                              .animate-shimmer {
-                                   animation: none;
-                              }
-                         }
-                    </style>
-
-                    <script>
-                         document.addEventListener('DOMContentLoaded', function () {
-                              const track = document.getElementById('sliderTrack');
-                              const progressBar = document.getElementById('progressBar');
-                              const nextBtn = document.getElementById('nextBtn');
-                              const prevBtn = document.getElementById('prevBtn');
-                              let currentIndex = 0;
-                              const slideWidth = 296; // 280px card + 16px gap
-                              let startX = 0;
-                              let isDragging = false;
-                              let currentTranslate = 0;
-                              let previousTranslate = 0;
-
-                              function updateSlider(animate = true) {
-                                   const maxTranslate = -(track.children.length - 1) * slideWidth;
-                                   currentTranslate = Math.max(Math.min(currentTranslate, 0), maxTranslate);
-
-                                   if (animate) {
-                                        track.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
-                                   } else {
-                                        track.style.transition = 'none';
-                                   }
-
-                                   track.style.transform = `translateX(${currentTranslate}px)`;
-
-                                   // Update progress bar
-                                   const progress = (Math.abs(currentTranslate) / Math.abs(maxTranslate)) * 100;
-                                   progressBar.style.width = `${progress}%`;
-
-                                   // Update buttons
-                                   prevBtn.disabled = currentTranslate >= 0;
-                                   nextBtn.disabled = currentTranslate <= maxTranslate;
-
-                                   if (animate) {
-                                        setTimeout(() => {
-                                             track.style.transition = 'none';
-                                        }, 500);
-                                   }
-                              }
-
-                              // Touch events
-                              track.addEventListener('touchstart', (e) => {
-                                   isDragging = true;
-                                   startX = e.touches[0].clientX;
-                                   previousTranslate = currentTranslate;
-                                   track.style.transition = 'none';
-                              });
-
-                              // Continue from previous touchmove event
-                              track.addEventListener('touchmove', (e) => {
-                                   if (!isDragging) return;
-                                   const currentX = e.touches[0].clientX;
-                                   const diff = currentX - startX;
-                                   currentTranslate = previousTranslate + diff;
-                                   updateSlider(false);
-                              });
-
-                              track.addEventListener('touchend', () => {
-                                   isDragging = false;
-                                   const moveBy = 20; // Minimum movement to trigger slide
-
-                                   // Calculate the closest slide position
-                                   const slideMove = Math.round(currentTranslate / slideWidth) * slideWidth;
-                                   currentTranslate = slideMove;
-
-                                   updateSlider(true);
-                              });
-
-                              // Button controls
-                              nextBtn?.addEventListener('click', () => {
-                                   currentTranslate -= slideWidth;
-                                   updateSlider(true);
-                                   animateSlideButton(nextBtn);
-                              });
-
-                              prevBtn?.addEventListener('click', () => {
-                                   currentTranslate += slideWidth;
-                                   updateSlider(true);
-                                   animateSlideButton(prevBtn);
-                              });
-
-                              // Button press animation
-                              function animateSlideButton(button) {
-                                   button.classList.add('scale-95', 'bg-gray-50');
-                                   setTimeout(() => {
-                                        button.classList.remove('scale-95', 'bg-gray-50');
-                                   }, 200);
-                              }
-
-                              // Card entrance animations
-                              function animateCards() {
-                                   const cards = track.children;
-                                   Array.from(cards).forEach((card, index) => {
-                                        card.style.opacity = '0';
-                                        card.style.transform = 'translateY(20px)';
-
-                                        setTimeout(() => {
-                                             card.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
-                                             card.style.opacity = '1';
-                                             card.style.transform = 'translateY(0)';
-                                        }, index * 100);
-                                   });
-                              }
-
-                              // Initialize
-                              updateSlider(false);
-                              animateCards();
-
-                              // Add smooth momentum scrolling
-                              let velocity = 0;
-                              let rafId = null;
-
-                              function momentumScroll() {
-                                   if (Math.abs(velocity) > 0.1) {
-                                        currentTranslate += velocity;
-                                        velocity *= 0.95; // Decay factor
-                                        updateSlider(false);
-                                        rafId = requestAnimationFrame(momentumScroll);
-                                   } else {
-                                        cancelAnimationFrame(rafId);
-                                        // Snap to nearest slide
-                                        const slideMove = Math.round(currentTranslate / slideWidth) * slideWidth;
-                                        currentTranslate = slideMove;
-                                        updateSlider(true);
-                                   }
-                              }
-
-                              // Add MouseWheel support for desktop testing
-                              track.addEventListener('wheel', (e) => {
-                                   e.preventDefault();
-                                   const delta = e.deltaX;
-                                   velocity = delta * 0.1;
-
-                                   if (rafId === null) {
-                                        rafId = requestAnimationFrame(momentumScroll);
-                                   }
-                              }, { passive: false });
-
-                              // Handle window resize
-                              let resizeTimeout;
-                              window.addEventListener('resize', () => {
-                                   clearTimeout(resizeTimeout);
-                                   resizeTimeout = setTimeout(() => {
-                                        // Recalculate dimensions and update slider
-                                        updateSlider(false);
-                                   }, 250);
-                              });
-
-                              // Add keyboard navigation
-                              document.addEventListener('keydown', (e) => {
-                                   if (e.key === 'ArrowLeft') {
-                                        prevBtn.click();
-                                   } else if (e.key === 'ArrowRight') {
-                                        nextBtn.click();
-                                   }
-                              });
-
-                              // Add swipe detection
-                              let xDown = null;
-                              let yDown = null;
-
-                              function getTouches(evt) {
-                                   return evt.touches || evt.originalEvent.touches;
-                              }
-
-                              track.addEventListener('touchstart', (evt) => {
-                                   const firstTouch = getTouches(evt)[0];
-                                   xDown = firstTouch.clientX;
-                                   yDown = firstTouch.clientY;
-                              });
-
-                              track.addEventListener('touchmove', (evt) => {
-                                   if (!xDown || !yDown) return;
-
-                                   const xUp = evt.touches[0].clientX;
-                                   const yUp = evt.touches[0].clientY;
-                                   const xDiff = xDown - xUp;
-                                   const yDiff = yDown - yUp;
-
-                                   if (Math.abs(xDiff) > Math.abs(yDiff)) {
-                                        if (xDiff > 0) {
-                                             nextBtn.click();
-                                        } else {
-                                             prevBtn.click();
-                                        }
-                                   }
-
-                                   xDown = null;
-                                   yDown = null;
-                              });
-
-                              // Intersection Observer for lazy loading
-                              const options = {
-                                   root: null,
-                                   rootMargin: '50px',
-                                   threshold: 0.1
-                              };
-
-                              const observer = new IntersectionObserver((entries) => {
-                                   entries.forEach(entry => {
-                                        if (entry.isIntersecting) {
-                                             const img = entry.target.querySelector('img');
-                                             if (img && img.dataset.src) {
-                                                  img.src = img.dataset.src;
-                                                  img.removeAttribute('data-src');
-                                             }
-                                             observer.unobserve(entry.target);
-                                        }
-                                   });
-                              }, options);
-
-                              // Observe all slide cards
-                              track.querySelectorAll('.flex-none').forEach(card => {
-                                   observer.observe(card);
-                              });
-                         });
-                    </script>
 
 
 

@@ -1,126 +1,215 @@
 <%- include('include/head.ejs', { user }) %>
      <%- include('include/navbar.ejs', { user }) %>
 
-          <!-- Category Tabs - Horizontal Scrollable -->
-          <div style="background-color: #efefef;" class="w-full overflow-x-auto scrollbar-hide sticky top-16 bg-white/95 backdrop-blur-sm z-40 border-b border-gray-200">
+          <!-- Category Tabs - Enhanced Mobile Navigation -->
+          <div class="w-full sticky top-16 z-40 bg-white/95 backdrop-blur-md border-b border-gray-200">
+               <!-- Container -->
                <div class="container mx-auto px-4">
-                    <div class="flex space-x-6 py-4 no-scrollbar">
-                         <!-- All Services -->
-                         <a href="/services/tous" class="flex-shrink-0 text-sm font-medium px-4 py-2.5 rounded-full transition-all duration-200 whitespace-nowrap
-                         <%= serviceOption === 'tous' ? 'bg-gray-900 text-white' : 'text-gray-500 hover:bg-gray-50' %>">
-                              <div class="flex items-center space-x-2">
-                                   <span class="text-base">🔍</span>
-                                   <span>Tous les services</span>
-                              </div>
-                         </a>
+                    <!-- Main Navigation Track -->
+                    <div class="relative">
+                         <!-- Overflow Container -->
+                         <div class="overflow-x-auto scrollbar-hide overscroll-x-contain -mx-4 px-4">
+                              <div class="flex gap-3 py-4 no-scrollbar snap-x snap-mandatory">
+                                   <!-- All Services -->
+                                   <a href="/services/tous" class="flex-none snap-start first:pl-4 last:pr-4 min-w-fit text-sm font-medium px-4 py-2.5 rounded-full
+                            <%= serviceOption === 'tous' ? 'bg-gray-900 text-white shadow-lg scale-105' : 'text-gray-500 hover:bg-gray-50' %>
+                            active:scale-95 transform transition-all duration-200">
+                                        <div class="flex items-center gap-2">
+                                             <span class="text-base transform transition-transform duration-200">🔍</span>
+                                             <span>Tous</span>
+                                        </div>
+                                        <% if (serviceOption==='tous' ) { %>
+                                             <div class="absolute inset-x-0 -bottom-4 h-0.5 bg-gray-900"></div>
+                                             <% } %>
+                                   </a>
 
-                         <!-- Dressage -->
-                         <a href="/services/dressage" class="flex-shrink-0 text-sm font-medium px-4 py-2.5 rounded-full transition-all duration-200 whitespace-nowrap
-                         <%= serviceOption === 'dressage' ? 'bg-blue-50 text-blue-600' : 'text-gray-500 hover:bg-gray-50' %>">
-                              <div class="flex items-center space-x-2">
-                                   <span class="text-base">🐕</span>
-                                   <span>Dressage</span>
-                              </div>
-                         </a>
+                                   <!-- Service Options with Dynamic Colors -->
+                                   <% const servicesTab=[ { id: 'dressage' , icon: '🐕' , label: 'Dressage' , colors: { bg: 'blue' , active: 'scale-105' }}, { id: 'toilettage' , icon: '✂️' , label: 'Toilettage' , colors: { bg: 'purple' , active: 'scale-105' }}, { id: 'promenade' , icon: '🦮' , label: 'Promenade' , colors: { bg: 'green' , active: 'scale-105' }}, { id: 'veterinaire' , icon: '⚕️' , label: 'Vétérinaire' , colors: { bg: 'red' , active: 'scale-105' }}, { id: 'pension' , icon: '🏠' , label: 'Pension' , colors: { bg: 'orange' , active: 'scale-105' }}, { id: 'transport' , icon: '🚗' , label: 'Transport' , colors: { bg: 'indigo' , active: 'scale-105' }} ]; %>
 
-                         <!-- Toilettage -->
-                         <a href="/services/toilettage" class="flex-shrink-0 text-sm font-medium px-4 py-2.5 rounded-full transition-all duration-200 whitespace-nowrap
-                         <%= serviceOption === 'toilettage' ? 'bg-purple-50 text-purple-600' : 'text-gray-500 hover:bg-gray-50' %>">
-                              <div class="flex items-center space-x-2">
-                                   <span class="text-base">✂️</span>
-                                   <span>Toilettage</span>
+                                        <% servicesTab.forEach(service=> { %>
+                                             <a href="/services/<%= service.id %>" class="flex-none snap-start min-w-fit text-sm font-medium px-4 py-2.5 rounded-full
+                                <%= serviceOption === service.id ? 
+                                    `bg-${service.colors.bg}-50 text-${service.colors.bg}-600 shadow-sm ${service.colors.active}` : 
+                                    'text-gray-500 hover:bg-gray-50' %>
+                                active:scale-95 transform transition-all duration-200 relative group">
+                                                  <div class="flex items-center gap-2">
+                                                       <span class="text-base transform group-hover:scale-110 transition-transform duration-200">
+                                                            <%= service.icon %>
+                                                       </span>
+                                                       <span>
+                                                            <%= service.label %>
+                                                       </span>
+                                                  </div>
+                                                  <% if (serviceOption===service.id) { %>
+                                                       <div class="absolute inset-x-0 -bottom-4 h-0.5 bg-<%= service.colors.bg %>-600"></div>
+                                                       <% } %>
+                                             </a>
+                                             <% }); %>
                               </div>
-                         </a>
+                         </div>
 
-                         <!-- Promenade -->
-                         <a href="/services/promenade" class="flex-shrink-0 text-sm font-medium px-4 py-2.5 rounded-full transition-all duration-200 whitespace-nowrap
-                         <%= serviceOption === 'promenade' ? 'bg-green-50 text-green-600' : 'text-gray-500 hover:bg-gray-50' %>">
-                              <div class="flex items-center space-x-2">
-                                   <span class="text-base">🦮</span>
-                                   <span>Promenade</span>
-                              </div>
-                         </a>
-
-                         <!-- Vétérinaire -->
-                         <a href="/services/veterinaire" class="flex-shrink-0 text-sm font-medium px-4 py-2.5 rounded-full transition-all duration-200 whitespace-nowrap
-                         <%= serviceOption === 'veterinaire' ? 'bg-red-50 text-red-600' : 'text-gray-500 hover:bg-gray-50' %>">
-                              <div class="flex items-center space-x-2">
-                                   <span class="text-base">⚕️</span>
-                                   <span>Vétérinaire</span>
-                              </div>
-                         </a>
-
-                         <!-- Pension -->
-                         <a href="/services/pension" class="flex-shrink-0 text-sm font-medium px-4 py-2.5 rounded-full transition-all duration-200 whitespace-nowrap
-                         <%= serviceOption === 'pension' ? 'bg-orange-50 text-orange-600' : 'text-gray-500 hover:bg-gray-50' %>">
-                              <div class="flex items-center space-x-2">
-                                   <span class="text-base">🏠</span>
-                                   <span>Pension</span>
-                              </div>
-                         </a>
-
-                         <!-- Transport -->
-                         <a href="/services/transport" class="flex-shrink-0 text-sm font-medium px-4 py-2.5 rounded-full transition-all duration-200 whitespace-nowrap
-                         <%= serviceOption === 'transport' ? 'bg-indigo-50 text-indigo-600' : 'text-gray-500 hover:bg-gray-50' %>">
-                              <div class="flex items-center space-x-2">
-                                   <span class="text-base">🚗</span>
-                                   <span>Transport</span>
-                              </div>
-                         </a>
+                         <!-- Scroll Indicators -->
+                         <div class="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-white to-transparent pointer-events-none opacity-75"></div>
+                         <div class="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-white to-transparent pointer-events-none opacity-75"></div>
                     </div>
                </div>
-
-               <!-- Add subtle fade effect on scroll edges -->
-               <div class="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-white to-transparent pointer-events-none"></div>
-               <div class="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white to-transparent pointer-events-none"></div>
           </div>
 
-
-
-          <!-- Add these styles to your CSS -->
           <style>
-               /* Hide scrollbar but keep functionality */
+               /* Enhance touch scrolling */
                .scrollbar-hide {
                     scrollbar-width: none;
-                    /* Firefox */
                     -ms-overflow-style: none;
-                    /* IE and Edge */
+                    -webkit-overflow-scrolling: touch;
                }
 
                .scrollbar-hide::-webkit-scrollbar {
                     display: none;
-                    /* Chrome, Safari, Opera */
                }
 
-               /* Smooth scroll behavior */
-               .container {
-                    scroll-behavior: smooth;
-               }
-
-               /* Better touch scrolling on mobile */
-               .no-scrollbar {
-                    -webkit-overflow-scrolling: touch;
+               /* Smooth snap scrolling */
+               .snap-x {
                     scroll-snap-type: x mandatory;
-                    scroll-padding: 1rem;
+                    scroll-padding-left: 1rem;
                }
 
-               /* Optional: Add active tab indicator animation */
-               .border-b-2 {
-                    transition: border-color 0.2s ease-in-out;
+               .snap-start {
+                    scroll-snap-align: start;
                }
 
-               /* Optional: Add hover effect for desktop */
-               @media (min-width: 1024px) {
-                    .hover\:text-gray-700:hover {
-                         transform: translateY(-1px);
+               /* Active state animations */
+               .scale-105 {
+                    transform: scale(1.05);
+               }
+
+               .active\:scale-95:active {
+                    transform: scale(0.95);
+               }
+
+               /* Enhanced touch feedback */
+               @media (hover: none) {
+                    .active\:scale-95:active {
+                         transform: scale(0.95);
+                         opacity: 0.9;
                     }
                }
 
-               /* Optional: Add active tab scale effect */
-               .border-gray-900 {
-                    transform: translateY(-1px);
+               /* Smooth transitions */
+               .transition-all {
+                    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+               }
+
+               /* Prevent overscroll bounce */
+               .overscroll-x-contain {
+                    overscroll-behavior-x: contain;
+               }
+
+               /* Active tab indicator animation */
+               .h-0.5 {
+                    transition: transform 0.2s ease;
+               }
+
+               /* Hover animations for icons */
+               .group:hover .group-hover\:scale-110 {
+                    transform: scale(1.1);
+               }
+
+               /* Better focus states */
+               a:focus-visible {
+                    outline: 2px solid #3B82F6;
+                    outline-offset: 2px;
+               }
+
+               /* Loading skeleton animation */
+               @keyframes shimmer {
+                    0% {
+                         transform: translateX(-100%)
+                    }
+
+                    100% {
+                         transform: translateX(100%)
+                    }
+               }
+
+               .animate-shimmer::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: linear-gradient(90deg,
+                              transparent,
+                              rgba(255, 255, 255, 0.3),
+                              transparent);
+                    animation: shimmer 1.5s infinite;
                }
           </style>
+
+          <script>
+               document.addEventListener('DOMContentLoaded', function () {
+                    const scrollContainer = document.querySelector('.overflow-x-auto');
+                    const activeTab = document.querySelector('[class*="scale-105"]');
+
+                    // Scroll active tab into view on load
+                    if (activeTab) {
+                         setTimeout(() => {
+                              activeTab.scrollIntoView({
+                                   behavior: 'smooth',
+                                   block: 'nearest',
+                                   inline: 'center'
+                              });
+                         }, 100);
+                    }
+
+                    // Add momentum scrolling for iOS
+                    let startX;
+                    let scrollLeft;
+                    let isDown = false;
+                    let velocity = 0;
+                    let rafId;
+
+                    scrollContainer.addEventListener('touchstart', (e) => {
+                         isDown = true;
+                         startX = e.touches[0].pageX - scrollContainer.offsetLeft;
+                         scrollLeft = scrollContainer.scrollLeft;
+                         cancelAnimationFrame(rafId);
+                    }, { passive: true });
+
+                    scrollContainer.addEventListener('touchend', () => {
+                         isDown = false;
+                         // Apply momentum scrolling
+                         function momentumScroll() {
+                              if (Math.abs(velocity) > 0.1) {
+                                   scrollContainer.scrollLeft += velocity;
+                                   velocity *= 0.95;
+                                   rafId = requestAnimationFrame(momentumScroll);
+                              }
+                         }
+                         momentumScroll();
+                    }, { passive: true });
+
+                    scrollContainer.addEventListener('touchmove', (e) => {
+                         if (!isDown) return;
+                         e.preventDefault();
+                         const x = e.touches[0].pageX - scrollContainer.offsetLeft;
+                         const walk = (x - startX) * 2;
+                         const prevScroll = scrollContainer.scrollLeft;
+                         scrollContainer.scrollLeft = scrollLeft - walk;
+                         velocity = scrollContainer.scrollLeft - prevScroll;
+                    });
+
+                    // Add haptic feedback for supported devices
+                    const buttons = document.querySelectorAll('a');
+                    buttons.forEach(button => {
+                         button.addEventListener('click', () => {
+                              if ('vibrate' in navigator) {
+                                   navigator.vibrate(5);
+                              }
+                         });
+                    });
+               });
+          </script>
 
 
           <!-- Services List Container -->
@@ -217,7 +306,7 @@
 
                                              <!-- Service Badge -->
                                              <% const serviceIcons={ 'dressage' : { emoji: '🐕' , color: 'blue' }, 'toilettage' : { emoji: '✂️' , color: 'purple' }, 'promenade' : { emoji: '🦮' , color: 'green' }, 'veterinaire' : { emoji: '⚕️' , color: 'red' }, 'pension' : { emoji: '🏠' , color: 'orange' }, 'transport' : { emoji: '🚗' , color: 'indigo' } }; %>
-                                                  <% const serviceType=service.serviceOptions.toLowerCase(); %>
+                                                  <% const serviceType=service.serviceOptions; %>
                                                        <% const iconData=serviceIcons[serviceType] || { emoji: '🐾' , color: 'gray' }; %>
 
                                                             <div class="absolute top-3 left-3 z-10">
@@ -671,9 +760,7 @@
 
                     /* Touch-friendly sizing for mobile */
                     @media (max-width: 640px) {
-                         .group {
-                              min-height: 120px;
-                         }
+
 
                          .group:active {
                               transform: scale(0.98);

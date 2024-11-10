@@ -46,10 +46,87 @@
 
                     <!-- Add Service Button -->
                     <% if (user) { %>
-                         <a href="/dashboard/new-service" class="flex items-center gap-2 h-10 px-5 text-[15px] font-medium text-white bg-black rounded-full hover:bg-gray-800 transition-all duration-200 hover:-translate-y-0.5">
-                              <i class="fas fa-plus text-sm"></i>
-                              <span class="hidden sm:inline">Ajouter</span>
-                         </a>
+                         <div class="inline-flex relative">
+                              <!-- Main Button -->
+                              <a href="/dashboard/new-service" class="group relative inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#58CC02] hover:bg-[#4CAF02] 
+                            rounded-xl text-white font-bold text-[15px] select-none
+                            transform active:translate-y-[2px] transition-all duration-200
+                            shadow-[0_4px_0_0_#3B8101] active:shadow-[0_0_0_0_#3B8101]
+                            outline-none focus:ring-4 focus:ring-[#58CC02]/50">
+                                   <!-- Plus Icon with Animation -->
+                                   <span class="relative flex items-center justify-center w-5 h-5 transform group-hover:rotate-90 transition-transform duration-200">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor">
+                                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                        </svg>
+                                   </span>
+                                   <!-- Button Text -->
+                                   <span class="relative">Service</span>
+
+                                   <!-- Hover Effect Overlay -->
+                                   <div class="absolute inset-0 h-full w-full rounded-xl bg-white/[0.05] opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
+                              </a>
+                         </div>
+
+                         <style>
+                              /* Disable text selection on button */
+                              .select-none {
+                                   -webkit-user-select: none;
+                                   -moz-user-select: none;
+                                   -ms-user-select: none;
+                                   user-select: none;
+                              }
+
+                              /* Optional: Add ripple effect on click */
+                              @keyframes ripple {
+                                   0% {
+                                        transform: scale(0);
+                                        opacity: 1;
+                                   }
+
+                                   100% {
+                                        transform: scale(4);
+                                        opacity: 0;
+                                   }
+                              }
+
+                              .ripple {
+                                   position: absolute;
+                                   border-radius: 50%;
+                                   background-color: rgba(255, 255, 255, 0.4);
+                                   animation: ripple 0.6s linear;
+                                   pointer-events: none;
+                              }
+                         </style>
+
+                         <script>
+                              // Add ripple effect
+                              document.querySelector('a').addEventListener('click', function (e) {
+                                   const button = this;
+                                   const ripple = document.createElement('span');
+                                   const rect = button.getBoundingClientRect();
+                                   const size = Math.max(rect.width, rect.height);
+                                   const x = e.clientX - rect.left - size / 2;
+                                   const y = e.clientY - rect.top - size / 2;
+
+                                   ripple.style.width = ripple.style.height = `${size}px`;
+                                   ripple.style.left = `${x}px`;
+                                   ripple.style.top = `${y}px`;
+                                   ripple.classList.add('ripple');
+
+                                   button.appendChild(ripple);
+
+                                   ripple.addEventListener('animationend', () => {
+                                        ripple.remove();
+                                   });
+                              });
+
+                              // Add haptic feedback on mobile
+                              document.querySelector('a').addEventListener('click', () => {
+                                   if ('vibrate' in navigator) {
+                                        navigator.vibrate(5);
+                                   }
+                              });
+                         </script>
                          <% } %>
 
                               <!-- User Menu -->
@@ -81,7 +158,7 @@
                                                        <i class="fas fa-tachometer-alt w-5"></i>
                                                        <span>Tableau de bord</span>
                                                   </a>
-                                                  <a href="/profile" class="flex items-center gap-3 w-full p-3 text-[15px] text-gray-700 hover:bg-gray-50 rounded-xl transition-colors">
+                                                  <a href="/dashboard/profile" class="flex items-center gap-3 w-full p-3 text-[15px] text-gray-700 hover:bg-gray-50 rounded-xl transition-colors">
                                                        <i class="fas fa-user w-5"></i>
                                                        <span>Profile</span>
                                                   </a>
@@ -96,10 +173,87 @@
                                         </div>
                                    </div>
                                    <% } else { %>
-                                        <a href="/auth/google" class="flex items-center gap-2 h-10 px-3 text-[15px] font-medium text-white bg-yellow-600 rounded-full hover:bg-yellow-800 transition-all duration-200 hover:-translate-y-0.5">
-                                             <i class="fab fa-plus"></i>
-                                             <span>Service</span>
-                                        </a>
+                                        <div class="inline-flex relative">
+                                             <!-- Main Button -->
+                                             <a href="/auth/google" class="group relative inline-flex items-center justify-center gap-2 px-6 py-2 bg-[#58CC02] hover:bg-[#4CAF02] 
+                                           rounded-xl text-white font-bold text-[15px] select-none
+                                           transform active:translate-y-[2px] transition-all duration-200
+                                           shadow-[0_4px_0_0_#3B8101] active:shadow-[0_0_0_0_#3B8101]
+                                           outline-none focus:ring-4 focus:ring-[#58CC02]/50">
+                                                  <!-- Plus Icon with Animation -->
+                                                  <span class="relative flex items-center justify-center w-5 h-5 transform group-hover:rotate-90 transition-transform duration-200">
+                                                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                                       </svg>
+                                                  </span>
+                                                  <!-- Button Text -->
+                                                  <span class="relative">Service</span>
+
+                                                  <!-- Hover Effect Overlay -->
+                                                  <div class="absolute inset-0 h-full w-full rounded-xl bg-white/[0.05] opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
+                                             </a>
+                                        </div>
+
+                                        <style>
+                                             /* Disable text selection on button */
+                                             .select-none {
+                                                  -webkit-user-select: none;
+                                                  -moz-user-select: none;
+                                                  -ms-user-select: none;
+                                                  user-select: none;
+                                             }
+
+                                             /* Optional: Add ripple effect on click */
+                                             @keyframes ripple {
+                                                  0% {
+                                                       transform: scale(0);
+                                                       opacity: 1;
+                                                  }
+
+                                                  100% {
+                                                       transform: scale(4);
+                                                       opacity: 0;
+                                                  }
+                                             }
+
+                                             .ripple {
+                                                  position: absolute;
+                                                  border-radius: 50%;
+                                                  background-color: rgba(255, 255, 255, 0.4);
+                                                  animation: ripple 0.6s linear;
+                                                  pointer-events: none;
+                                             }
+                                        </style>
+
+                                        <script>
+                                             // Add ripple effect
+                                             document.querySelector('a').addEventListener('click', function (e) {
+                                                  const button = this;
+                                                  const ripple = document.createElement('span');
+                                                  const rect = button.getBoundingClientRect();
+                                                  const size = Math.max(rect.width, rect.height);
+                                                  const x = e.clientX - rect.left - size / 2;
+                                                  const y = e.clientY - rect.top - size / 2;
+
+                                                  ripple.style.width = ripple.style.height = `${size}px`;
+                                                  ripple.style.left = `${x}px`;
+                                                  ripple.style.top = `${y}px`;
+                                                  ripple.classList.add('ripple');
+
+                                                  button.appendChild(ripple);
+
+                                                  ripple.addEventListener('animationend', () => {
+                                                       ripple.remove();
+                                                  });
+                                             });
+
+                                             // Add haptic feedback on mobile
+                                             document.querySelector('a').addEventListener('click', () => {
+                                                  if ('vibrate' in navigator) {
+                                                       navigator.vibrate(5);
+                                                  }
+                                             });
+                                        </script>
                                         <% } %>
 
                                              <!-- Mobile Menu Button -->
