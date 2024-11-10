@@ -1,106 +1,222 @@
-<!-- Articles Grid Section -->
-<section class="py-12 bg-white sm:py-16">
-     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <!-- Section Header -->
-          <div class="mb-8 sm:mb-12">
-               <div class="relative py-8">
-                    <h2 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 font-heading tracking-tight">
-                         Top Articles
-                         <!-- Custom animated underline -->
-                         <div class="relative mt-2">
-                              <div class="absolute inset-x-0 h-1 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 rounded-full"></div>
-                              <div class="absolute inset-x-0 h-1 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 rounded-full"></div>
+<section class="py-16 bg-[#fff]">
+     <div class="container mx-auto px-4">
+          <!-- Articles Section -->
+          <div class="mb-20">
+               <!-- Section Header -->
+               <div class="flex items-center justify-between mb-12">
+                    <div class="flex items-center gap-4">
+                         <div class="w-12 h-12 bg-[#58CC02]/10 rounded-2xl flex items-center justify-center">
+                              <span class="text-2xl">📚</span>
                          </div>
-                    </h2>
+                         <div>
+                              <h2 class="text-2xl sm:text-3xl font-extrabold text-[#4b4b4b]">Articles Populaires</h2>
+                              <p class="text-[#777] mt-1">Des conseils d'experts pour votre compagnon</p>
+                         </div>
+                    </div>
+
+                    <a href="/articles" class="hidden sm:flex items-center gap-2 text-[#58CC02] font-bold hover:underline">
+                         Voir tout
+                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                         </svg>
+                    </a>
                </div>
-               <div class="mt-2 h-1 w-12 bg-blue-600"></div>
-          </div>
 
-          <!-- Desktop Layout (3 columns) -->
-          <div class="hidden lg:grid lg:grid-cols-3 lg:gap-8">
-               <% articles.forEach((article, index)=> { %>
-                    <article class="group relative">
-                         <!-- Article Image -->
-                         <div class="aspect-[16/9] w-full overflow-hidden rounded-2xl bg-gray-100">
-                              <img src="<%= article.featuredImage %>" alt="<%= article.title %>" class="h-full w-full object-cover transition duration-300 group-hover:scale-105">
-                         </div>
+               <!-- Articles Grid -->
+               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <% articles.forEach((article, index)=> { %>
+                         <article class="group bg-white rounded-3xl border-2 border-[#E5E5E5] hover:border-[#58CC02] transition-all duration-300 overflow-hidden">
+                              <!-- Image Container -->
+                              <div class="relative aspect-video overflow-hidden">
+                                   <img src="<%= article.featuredImage %>" alt="<%= article.title %>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                   <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
 
-                         <!-- Category Badge -->
-                         <div class="absolute top-4 left-4">
-                              <span class="inline-flex items-center rounded-full bg-blue-600/90 backdrop-blur-sm px-3 py-1 text-sm font-medium text-white">
-                                   DOGS
-                              </span>
-                         </div>
-
-                         <!-- Reading Time -->
-                         <div class="absolute top-4 right-4">
-                              <span class="inline-flex items-center rounded-full bg-black/60 backdrop-blur-sm px-2.5 py-1 text-xs text-white">
-                                   <%= article.readingTime || '2-4' %> minutes
-                              </span>
-                         </div>
-
-                         <!-- Content -->
-                         <div class="mt-4">
-                              <h3 class="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2">
-                                   <a href="/articles/<%= article.slug %>">
-                                        <%= article.title %>
-                                   </a>
-                              </h3>
-                              <p class="mt-2 text-sm text-gray-600 line-clamp-2">
-                                   <%= article.excerpt %>
-                              </p>
-                              <div class="mt-3 flex items-center gap-3 text-sm text-gray-500">
-                                   <span>By <%= article.author %></span>
-                                   <span>•</span>
-                                   <time>
-                                        <%= article.publishDate %>
-                                   </time>
-                              </div>
-                         </div>
-                    </article>
-                    <% }) %>
-          </div>
-
-          <!-- Mobile Layout (List View) -->
-          <div class="lg:hidden space-y-6">
-               <% articles.forEach((article, index)=> { %>
-                    <article class="group">
-                         <a href="/articles/<%= article.slug %>" class="flex gap-4">
-                              <!-- Image -->
-
-                              <div class="relative flex-shrink-0 w-32 sm:w-44">
-                                   <div class="aspect-[4/3] overflow-hidden rounded-xl bg-gray-100">
-                                        <img src="<%= article.featuredImage %>" alt="<%= article.title %>" class="h-full w-full object-cover">
-                                   </div>
                                    <!-- Category Badge -->
-                                   <div class="absolute top-2 left-2">
-                                        <span class="inline-flex items-center rounded-full bg-blue-600/90 backdrop-blur-sm px-2 py-0.5 text-xs font-medium text-white">
-                                             DOGS
+                                   <div class="absolute top-4 left-4">
+                                        <span class="inline-flex items-center px-3 py-1.5 rounded-xl font-bold text-sm bg-[#58CC02] text-white">
+                                             <%= article.category || 'DOGS' %>
+                                        </span>
+                                   </div>
+
+                                   <!-- XP Badge -->
+                                   <div class="absolute top-4 right-4">
+                                        <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#FFC800] text-white font-bold text-sm">
+                                             <span class="text-lg">⭐️</span>
+                                             <%= Math.floor(Math.random() * 20 + 10) %> XP
+                                        </div>
+                                   </div>
+                              </div>
+
+                              <!-- Content -->
+                              <div class="p-6">
+                                   <h3 class="text-xl font-bold text-[#4b4b4b] group-hover:text-[#58CC02] transition-colors line-clamp-2 mb-3">
+                                        <a href="/articles/<%= article.slug %>">
+                                             <%= article.title %>
+                                        </a>
+                                   </h3>
+
+                                   <!-- Author & Stats -->
+                                   <div class="flex items-center justify-between mb-4">
+                                        <div class="flex items-center gap-2">
+                                             <div class="w-8 h-8 rounded-xl bg-[#58CC02]/10 flex items-center justify-center">
+                                                  <span class="text-[#58CC02]">👤</span>
+                                             </div>
+                                             <span class="text-sm font-medium text-[#777]">
+                                                  <%= article.author %>
+                                             </span>
+                                        </div>
+
+                                        <div class="flex items-center gap-2 text-sm text-[#777]">
+                                             <i class="far fa-clock"></i>
+                                             <%= article.readingTime || '2-4' %> min
+                                        </div>
+                                   </div>
+
+                                   <!-- Progress Bar -->
+                                   <div class="h-2 bg-[#E5E5E5] rounded-full overflow-hidden">
+                                        <div class="h-full bg-[#58CC02] w-0 group-hover:w-full transition-all duration-1000"></div>
+                                   </div>
+                              </div>
+                         </article>
+                         <% }) %>
+               </div>
+          </div>
+
+          <!-- Events Section -->
+          <div>
+               <!-- Section Header -->
+               <div class="flex items-center justify-between mb-12">
+                    <div class="flex items-center gap-4">
+                         <div class="w-12 h-12 bg-[#FFC800]/10 rounded-2xl flex items-center justify-center">
+                              <span class="text-2xl">🎉</span>
+                         </div>
+                         <div>
+                              <h2 class="text-2xl sm:text-3xl font-extrabold text-[#4b4b4b]">Événements à venir</h2>
+                              <p class="text-[#777] mt-1">Rejoignez la communauté canine</p>
+                         </div>
+                    </div>
+
+                    <a href="/events" class="hidden sm:flex items-center gap-2 text-[#FFC800] font-bold hover:underline">
+                         Voir tout
+                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                         </svg>
+                    </a>
+               </div>
+
+               <!-- Events Grid -->
+               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <% events.forEach((event, index)=> { %>
+                         <article class="group relative bg-white rounded-3xl border-2 border-[#E5E5E5] hover:border-[#FFC800] transition-all duration-300 overflow-hidden">
+                              <!-- Image Container -->
+                              <div class="relative aspect-[4/3] overflow-hidden">
+                                   <img src="<%= event.image %>" alt="<%= event.title %>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                   <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+
+                                   <!-- Date Badge -->
+                                   <div class="absolute top-4 right-4">
+                                        <div class="flex flex-col items-center bg-white rounded-2xl p-3 shadow-lg">
+                                             <span class="text-xl font-bold text-[#4b4b4b] leading-none">
+                                                  <%= new Date(event.date).getDate() %>
+                                             </span>
+                                             <span class="text-sm font-medium text-[#777] capitalize">
+                                                  <%= new Date(event.date).toLocaleDateString('fr-FR', {month: 'short' }) %>
+                                             </span>
+                                        </div>
+                                   </div>
+
+                                   <!-- Category Badge -->
+                                   <div class="absolute top-4 left-4">
+                                        <span class="inline-flex items-center px-3 py-1.5 rounded-xl font-bold text-sm bg-[#FFC800] text-white">
+                                             <%= event.category || 'ÉVÉNEMENT' %>
                                         </span>
                                    </div>
                               </div>
 
                               <!-- Content -->
-                              <div class="flex-1 min-w-0">
-                                   <h3 class="font-medium text-gray-900 sm:text-lg line-clamp-2 mb-2">
-                                        <%= article.title %>
+                              <div class="p-6">
+                                   <h3 class="text-xl font-bold text-[#4b4b4b] group-hover:text-[#FFC800] transition-colors line-clamp-2 mb-4">
+                                        <a href="/events/<%= event.slug %>">
+                                             <%= event.title %>
+                                        </a>
                                    </h3>
-                                   <div class="flex items-center gap-2 text-xs text-gray-500">
-                                        <span>By <%= article.author %></span>
-                                        <span>•</span>
-                                        <span>
-                                             <%= article.readingTime || '2-4' %> min read
-                                        </span>
+
+                                   <!-- Event Details -->
+                                   <div class="space-y-3 mb-6">
+                                        <div class="flex items-center gap-3">
+                                             <div class="w-8 h-8 rounded-xl bg-[#FFC800]/10 flex items-center justify-center">
+                                                  <i class="far fa-clock text-[#FFC800]"></i>
+                                             </div>
+                                             <span class="text-sm text-[#777]">
+                                                  <%= event.time %>
+                                             </span>
+                                        </div>
+
+                                        <div class="flex items-center gap-3">
+                                             <div class="w-8 h-8 rounded-xl bg-[#FFC800]/10 flex items-center justify-center">
+                                                  <i class="fas fa-map-marker-alt text-[#FFC800]"></i>
+                                             </div>
+                                             <span class="text-sm text-[#777] truncate">
+                                                  <%= event.location %>
+                                             </span>
+                                        </div>
+                                   </div>
+
+                                   <!-- Participants -->
+                                   <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-2">
+                                             <div class="flex -space-x-2">
+                                                  <% Array(3).fill().forEach(()=> { %>
+                                                       <div class="w-8 h-8 rounded-xl bg-[#E5E5E5] border-2 border-white relative">
+                                                            <span class="absolute inset-0 flex items-center justify-center text-[#777] text-xs">👤</span>
+                                                       </div>
+                                                       <% }) %>
+                                             </div>
+                                             <span class="text-sm font-medium text-[#777]">
+                                                  +<%= event.participants || 12 %> participants
+                                             </span>
+                                        </div>
+
+                                        <!-- Join Button -->
+                                        <button class="px-4 py-2 bg-[#FFC800]/10 text-[#FFC800] font-bold rounded-xl hover:bg-[#FFC800]/20 transition-colors">
+                                             Rejoindre
+                                        </button>
                                    </div>
                               </div>
-                         </a>
-                    </article>
-                    <% }) %>
+                         </article>
+                         <% }) %>
+               </div>
+
+               <!-- Mobile View All Buttons -->
+               <div class="flex flex-col gap-4 mt-8 sm:hidden">
+                    <a href="/articles" class="w-full py-3 text-center bg-[#58CC02] text-white font-bold rounded-xl">
+                         Voir tous les articles
+                    </a>
+                    <a href="/events" class="w-full py-3 text-center bg-[#FFC800] text-white font-bold rounded-xl">
+                         Voir tous les événements
+                    </a>
+               </div>
           </div>
      </div>
 </section>
 
 <style>
+     /* Mobile optimizations */
+     @media (max-width: 640px) {
+          .grid {
+               gap: 1rem;
+          }
+
+          .text-3xl {
+               font-size: 1.5rem;
+          }
+
+          .p-6 {
+               padding: 1rem;
+          }
+     }
+
+     /* Line clamp */
      .line-clamp-2 {
           display: -webkit-box;
           -webkit-line-clamp: 2;
@@ -108,162 +224,10 @@
           overflow: hidden;
      }
 
-     @media (max-width: 640px) {
-          .aspect-\[4\/3\] {
-               aspect-ratio: 4/3;
+     /* Hover states */
+     @media (hover: hover) {
+          .group:hover .progress-bar {
+               width: 100%;
           }
      }
 </style>
-<!-- Events Grid Section -->
-<section class="py-12 bg-white sm:py-16">
-     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <!-- Section Header -->
-          <div class="mb-8 sm:mb-12">
-               <div class="relative py-8">
-                    <h2 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 font-heading tracking-tight">
-                         Les evenements canine
-                         <!-- Custom animated underline -->
-                         <div class="relative mt-2">
-                              <div class="absolute inset-x-0 h-1 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 rounded-full"></div>
-                              <div class="absolute inset-x-0 h-1 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 rounded-full"></div>
-                         </div>
-                    </h2>
-               </div>
-               <div class="mt-2 h-1 w-12 bg-blue-600"></div>
-          </div>
-
-          <!-- Desktop Layout (3 columns) -->
-          <div class="hidden lg:grid lg:grid-cols-3 lg:gap-8">
-               <% events.forEach((event, index)=> { %>
-                    <article class="group">
-                         <!-- Event Image -->
-                         <div class="relative aspect-[16/9] w-full overflow-hidden rounded-2xl bg-gray-100">
-                              <img src="<%= event.image %>" alt="<%= event.title %>" class="h-full w-full object-cover transition duration-300 group-hover:scale-105">
-
-                              <!-- Date Badge -->
-                              <div class="absolute top-4 right-4">
-                                   <div class="flex flex-col items-center justify-center w-16 h-16 bg-white/95 backdrop-blur-sm rounded-xl shadow-sm">
-                                        <span class="text-xl font-bold text-gray-900">
-                                             <%= new Date(event.date).getDate() %>
-                                        </span>
-                                        <span class="text-sm font-medium text-gray-600 capitalize">
-                                             <%= new Date(event.date).toLocaleDateString('fr-FR', { month: 'short' }) %>
-                                        </span>
-                                   </div>
-                              </div>
-
-                              <!-- Category Badge -->
-                              <div class="absolute top-4 left-4">
-                                   <span class="inline-flex items-center rounded-full bg-blue-600/90 backdrop-blur-sm px-3 py-1 text-sm font-medium text-white">
-                                        <%= event.category || 'EVENT' %>
-                                   </span>
-                              </div>
-                         </div>
-
-                         <!-- Content -->
-                         <div class="mt-4">
-                              <h3 class="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2">
-                                   <a href="/events/<%= event.slug %>">
-                                        <%= event.title %>
-                                   </a>
-                              </h3>
-
-                              <!-- Event Details -->
-                              <div class="mt-3 flex flex-wrap gap-4">
-                                   <div class="flex items-center gap-2 text-sm text-gray-600">
-                                        <i class="far fa-clock text-gray-400"></i>
-                                        <span>
-                                             <%= event.time %>
-                                        </span>
-                                   </div>
-                                   <div class="flex items-center gap-2 text-sm text-gray-600">
-                                        <i class="fas fa-map-marker-alt text-gray-400"></i>
-                                        <span>
-                                             <%= event.location %>
-                                        </span>
-                                   </div>
-                              </div>
-
-                              <!-- Participants Preview -->
-                              <div class="mt-4 flex items-center gap-3">
-                                   <div class="flex -space-x-2">
-                                        <% Array(3).fill().forEach(()=> { %>
-                                             <div class="w-8 h-8 rounded-full bg-gray-100 border-2 border-white flex items-center justify-center">
-                                                  <i class="fas fa-user text-gray-400 text-xs"></i>
-                                             </div>
-                                             <% }) %>
-                                   </div>
-                                   <span class="text-sm text-gray-500">
-                                        +<%= event.participants || 12 %> participants
-                                   </span>
-                              </div>
-                         </div>
-                    </article>
-                    <% }) %>
-          </div>
-
-          <!-- Mobile Layout (List View) -->
-          <div class="lg:hidden space-y-6">
-               <% events.forEach((event, index)=> { %>
-                    <article class="group">
-                         <a href="/events/<%= event.slug %>" class="flex gap-4">
-                              <!-- Image Container -->
-                              <div class="relative flex-shrink-0 w-32 sm:w-44">
-                                   <div class="aspect-[4/3] overflow-hidden rounded-xl bg-gray-100">
-                                        <img src="<%= event.image %>" alt="<%= event.title %>" class="h-full w-full object-cover">
-                                   </div>
-                                   <!-- Date Badge -->
-                                   <div class="absolute -top-2 -right-2">
-                                        <div class="flex flex-col items-center justify-center w-12 h-12 bg-white rounded-lg shadow-md">
-                                             <span class="text-base font-bold text-gray-900 leading-none mt-1">
-                                                  <%= new Date(event.date).getDate() %>
-                                             </span>
-                                             <span class="text-xs font-medium text-gray-600 capitalize leading-none mb-1">
-                                                  <%= new Date(event.date).toLocaleDateString('fr-FR', { month: 'short' }) %>
-                                             </span>
-                                        </div>
-                                   </div>
-                              </div>
-
-                              <!-- Content -->
-                              <div class="flex-1 min-w-0 py-1">
-                                   <h3 class="font-medium text-gray-900 sm:text-lg line-clamp-2 mb-2">
-                                        <%= event.title %>
-                                   </h3>
-
-                                   <!-- Event Details -->
-                                   <div class="flex flex-col gap-1.5">
-                                        <div class="flex items-center gap-2 text-xs text-gray-600">
-                                             <i class="far fa-clock text-gray-400"></i>
-                                             <span>
-                                                  <%= event.time %>
-                                             </span>
-                                        </div>
-                                        <div class="flex items-center gap-2 text-xs text-gray-600">
-                                             <i class="fas fa-map-marker-alt text-gray-400"></i>
-                                             <span class="truncate">
-                                                  <%= event.location %>
-                                             </span>
-                                        </div>
-                                   </div>
-
-                                   <!-- Participants (Optional) -->
-                                   <div class="mt-2 flex items-center gap-1.5">
-                                        <div class="flex -space-x-1.5">
-                                             <% [1,2].forEach(()=> { %>
-                                                  <div class="w-5 h-5 rounded-full bg-gray-100 border border-white flex items-center justify-center">
-                                                       <i class="fas fa-user text-gray-400 text-[10px]"></i>
-                                                  </div>
-                                                  <% }) %>
-                                        </div>
-                                        <span class="text-xs text-gray-500">
-                                             +<%= event.participants || 12 %>
-                                        </span>
-                                   </div>
-                              </div>
-                         </a>
-                    </article>
-                    <% }) %>
-          </div>
-     </div>
-</section>
