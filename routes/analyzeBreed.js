@@ -32,7 +32,19 @@ router.post('/analyze-breed', upload.single('image'), async (req, res) => {
           }
 
           const results = await response.json();
-          res.json(results);
+          // Check if the model is still loading
+          if (results.error && results.error.includes("currently loading")) {
+               if (retries > 0) {
+                    setTimeout(() => analyzeDogBreed(file, retries - 1), 20000); // Retry after 20 seconds
+               } else {
+                    res.status(500).json({ error: error.message || 'Failed to analyze breed' });
+                    // Swal.fire('خطأ', 'النموذج لم يتم تحميله بعد، يرجى المحاولة لاحقاً', 'error');
+               }
+          } else {
+
+               res.json(results);
+          }
+
 
      } catch (error) {
           console.error('Error analyzing breed:', error);
