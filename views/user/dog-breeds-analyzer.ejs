@@ -131,7 +131,7 @@
                               }
                          }
 
-                         async function analyzeDogBreed(file) {
+                         async function analyzeDogBreed(file, retryCount = 0) {
                               const formData = new FormData();
                               formData.append('image', file);
 
@@ -149,7 +149,17 @@
                                         method: 'POST',
                                         body: formData
                                    });
+
                                    const results = await response.json();
+
+                                   // Check if the model is still loading and retry if necessary
+                                   if (results.error && results.error.includes("currently loading") && retryCount < 5) {
+                                        // Wait for a short period before retrying
+                                        await new Promise(resolve => setTimeout(resolve, 5000)); // Wait 5 seconds
+                                        return analyzeDogBreed(file, retryCount + 1); // Retry with an incremented retryCount
+                                   }
+
+                                   // Close the loading modal and display results if model is ready
                                    Swal.close();
                                    displayResults(results);
                               } catch (error) {
