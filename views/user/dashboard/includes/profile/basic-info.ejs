@@ -61,11 +61,12 @@
                               <i class="fas fa-map-marker-alt absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
                               <select id="city" name="city" class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none bg-white" required>
                                    <option value="">Sélectionnez une ville</option>
-                                   <% ['casablanca', 'rabat' , 'marrakech' , 'agadir' , 'tanger' , 'fes' ].forEach(city=> { %>
-                                        <option value="<%= city %>" <%=user.location?.city===city ? 'selected' : '' %>>
-                                             <%= city.charAt(0).toUpperCase() + city.slice(1) %>
+                                   <% const cities=[ { arabic: 'الدار البيضاء' , french: 'Casablanca' }, { arabic: 'الرباط' , french: 'Rabat' }, { arabic: 'مراكش' , french: 'Marrakech' }, { arabic: 'أكادير' , french: 'Agadir' }, { arabic: 'طنجة' , french: 'Tanger' }, { arabic: 'فاس' , french: 'Fès' }, { arabic: 'مكناس' , french: 'Meknès' }, { arabic: 'وجدة' , french: 'Oujda' }, { arabic: 'القنيطرة' , french: 'Kénitra' }, { arabic: 'تطوان' , french: 'Tétouan' }, { arabic: 'آسفي' , french: 'Safi' }, { arabic: 'الجديدة' , french: 'El Jadida' }, { arabic: 'الناظور' , french: 'Nador' }, { arabic: 'برشيد' , french: 'Berrechid' }, { arabic: 'الخميسات' , french: 'Khemisset' }, { arabic: 'خريبكة' , french: 'Khouribga' }, { arabic: 'سطات' , french: 'Settat' }, { arabic: 'العرائش' , french: 'Larache' }, { arabic: 'بني ملال' , french: 'Beni Mellal' }, { arabic: 'كلميم' , french: 'Guelmim' }, { arabic: 'تازة' , french: 'Taza' }, { arabic: 'سيدي قاسم' , french: 'Sidi Kacem' }, { arabic: 'تزنيت' , french: 'Tiznit' }, { arabic: 'الصويرة' , french: 'Essaouira' }, { arabic: 'خنيفرة' , french: 'Khenifra' }, { arabic: 'طانطان' , french: 'Tan-Tan' }, { arabic: 'جرسيف' , french: 'Guercif' }, { arabic: 'شفشاون' , french: 'Chefchaouen' }, { arabic: 'المحمدية' , french: 'Mohammedia' }, { arabic: 'تاونات' , french: 'Taounate' }, { arabic: 'سيدي سليمان' , french: 'Sidi Slimane' }, { arabic: 'طرفاية' , french: 'Tarfaya' }, { arabic: 'ميدلت' , french: 'Midelt' }, { arabic: 'الرشيدية' , french: 'Errachidia' }, { arabic: 'أزرو' , french: 'Azrou' }, { arabic: 'بن جرير' , french: 'Ben Guerir' }, { arabic: 'شيشاوة' , french: 'Chichaoua' }, { arabic: 'ورزازات' , french: 'Ouarzazate' }, { arabic: 'زايو' , french: 'Zaio' } ]; cities.forEach(city=> { %>
+                                        <option value="<%= city.french %>" <%=user.location?.city===city.french ? 'selected' : '' %>>
+                                             <%= city.arabic %> - <%= city.french %>
                                         </option>
                                         <% }); %>
+
                               </select>
                               <i class="fas fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"></i>
                          </div>

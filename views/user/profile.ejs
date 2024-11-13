@@ -65,7 +65,7 @@
                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                                                                       </svg>
-                                                                      <%= profile.location %>
+                                                                      <%= profile.location.city %>
                                                                  </span>
                                                                  <% } %>
                                                                       <span class="flex items-center">
@@ -98,7 +98,7 @@
                                    </div>
 
                                    <!-- Badges Section - Directly under profile info -->
-                                   <div class="flex justify-center flex-wrap gap-3 -mt-4 px-4">
+                                   <div class="flex justify-center flex-wrap gap-3 -mt-2 px-4">
                                         <% profile.badges.forEach((badge, index)=> { %>
                                              <div class="show-badge-modal cursor-pointer group">
                                                   <div class="relative w-16 h-16 transform transition-all duration-200 group-hover:-translate-y-1">
@@ -107,94 +107,111 @@
                                                   </div>
                                              </div>
                                              <% }) %>
+
                                    </div>
-                                   <script>
-                                        $(document).ready(function () {
-                                             // Badge click handler
-                                             $('.show-badge-modal').click(function () {
-                                                  const badgeData = {
-                                                       image: $(this).data('badge-image'),
-                                                       type: $(this).data('badge-type'),
-                                                       label: $(this).data('badge-label'),
-                                                       date: new Date($(this).data('badge-date')).toLocaleDateString('fr-FR', {
-                                                            day: 'numeric',
-                                                            month: 'long',
-                                                            year: 'numeric'
-                                                       })
-                                                  };
-
-                                                  // Show SweetAlert2 modal
-                                                  Swal.fire({
-                                                       html: `
-                                              <div class="text-center">
-                                                  <div class="mb-4">
-                                                      <img src="${badgeData.image}" 
-                                                           alt="${badgeData.type}" 
-                                                           class="w-24 h-24 mx-auto object-contain">
-                                                  </div>
-                                                  <h3 class="text-lg font-semibold text-gray-900 mb-2">
-                                                      ${badgeData.label}
-                                                  </h3>
-                                                  <p class="text-sm text-gray-500 flex items-center justify-center">
-                                                      <svg xmlns="http://www.w3.org/2000/svg" 
-                                                           class="h-4 w-4 mr-1" 
-                                                           fill="none" 
-                                                           viewBox="0 0 24 24" 
-                                                           stroke="currentColor">
-                                                          <path stroke-linecap="round" 
-                                                                stroke-linejoin="round" 
-                                                                stroke-width="2" 
-                                                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                                      </svg>
-                                                      ${badgeData.date}
+                                   <%= profile.phoneNumber %>
+                                        <div class="">
+                                             <p class="text-gray-600 whitespace-pre-line">
+                                                  <% if (profile.bio.length> 0) { %>
+                                                       <%= profile.phoneNumber %>
+                                                            <% } %>
+                                             </p>
+                                        </div>
+                                        <% if (profile.phoneNumber) { %>
+                                             <div class="">
+                                                  <p class="text-gray-600 whitespace-pre-line">
+                                                       <%= profile.phoneNumber %>
                                                   </p>
-                                              </div>
-                                          `,
-                                                       showConfirmButton: false,
-                                                       showCloseButton: true,
-                                                       customClass: {
-                                                            popup: 'badge-modal-popup rounded-lg',
-                                                            closeButton: 'badge-modal-close focus:outline-none',
-                                                       },
-                                                       width: 'auto',
-                                                       padding: '1.5rem'
-                                                  });
-                                             });
-                                        });
-                                   </script>
+                                             </div>
+                                             <% } %>
+                                                  <script>
+                                                       $(document).ready(function () {
+                                                            // Badge click handler
+                                                            $('.show-badge-modal').click(function () {
+                                                                 const badgeData = {
+                                                                      image: $(this).find('img').data('badge-image') || 'default-image.png', // Default in case image URL is missing
+                                                                      type: $(this).find('img').data('badge-type') || 'Type not specified',
+                                                                      label: $(this).find('img').data('badge-label') || 'Label not available',
+                                                                      date: new Date($(this).find('img').data('badge-date')).toLocaleDateString('fr-FR', {
+                                                                           day: 'numeric',
+                                                                           month: 'long',
+                                                                           year: 'numeric'
+                                                                      })
+                                                                 };
 
-                                   <!-- Additional styles for SweetAlert2 customization -->
-                                   <style>
-                                        .badge-modal-popup {
-                                             max-width: 320px !important;
-                                        }
+                                                                 // Show SweetAlert2 modal
+                                                                 Swal.fire({
+                                                                      html: `
+                <div class="text-center">
+                    <div class="mb-4">
+                        <img src="${badgeData.image}" 
+                             alt="${badgeData.type}" 
+                             class="w-24 h-24 mx-auto object-contain">
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">
+                        ${badgeData.label}
+                    </h3>
+                    <p class="text-sm text-gray-500 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" 
+                             class="h-4 w-4 mr-1" 
+                             fill="none" 
+                             viewBox="0 0 24 24" 
+                             stroke="currentColor">
+                            <path stroke-linecap="round" 
+                                  stroke-linejoin="round" 
+                                  stroke-width="2" 
+                                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        ${badgeData.date}
+                    </p>
+                </div>
+            `,
+                                                                      showConfirmButton: false,
+                                                                      showCloseButton: true,
+                                                                      customClass: {
+                                                                           popup: 'badge-modal-popup rounded-lg',
+                                                                           closeButton: 'badge-modal-close focus:outline-none',
+                                                                      },
+                                                                      width: 'auto',
+                                                                      padding: '1.5rem'
+                                                                 });
+                                                            });
+                                                       });
 
-                                        .badge-modal-close {
-                                             position: absolute !important;
-                                             top: 0.75rem !important;
-                                             right: 0.75rem !important;
-                                             width: 2rem !important;
-                                             height: 2rem !important;
-                                             border-radius: 9999px !important;
-                                             background: #f3f4f6 !important;
-                                             color: #4b5563 !important;
-                                        }
+                                                  </script>
 
-                                        .badge-modal-close:hover {
-                                             background: #e5e7eb !important;
-                                        }
+                                                  <!-- Additional styles for SweetAlert2 customization -->
+                                                  <style>
+                                                       .badge-modal-popup {
+                                                            max-width: 320px !important;
+                                                       }
 
-                                        @media (max-width: 640px) {
-                                             .badges-flex {
-                                                  justify-content: flex-start;
-                                             }
+                                                       .badge-modal-close {
+                                                            position: absolute !important;
+                                                            top: 0.75rem !important;
+                                                            right: 0.75rem !important;
+                                                            width: 2rem !important;
+                                                            height: 2rem !important;
+                                                            border-radius: 9999px !important;
+                                                            background: #f3f4f6 !important;
+                                                            color: #4b5563 !important;
+                                                       }
 
-                                             .badge-item {
-                                                  width: 60px;
-                                                  height: 60px;
-                                             }
-                                        }
-                                   </style>
+                                                       .badge-modal-close:hover {
+                                                            background: #e5e7eb !important;
+                                                       }
+
+                                                       @media (max-width: 640px) {
+                                                            .badges-flex {
+                                                                 justify-content: flex-start;
+                                                            }
+
+                                                            .badge-item {
+                                                                 width: 60px;
+                                                                 height: 60px;
+                                                            }
+                                                       }
+                                                  </style>
 
                               </div>
 
