@@ -297,7 +297,7 @@ router.get('/', async (req, res) => {
                .limit(limit)
                .select('serviceName location priceRange images views');
 
-          console.log(services)
+          // console.log(services)
           res.render('user/index', {
                pageTitle,
                description,
@@ -333,7 +333,7 @@ router.get('/articles', async (req, res) => {
      try {
           // Fetch all articles
           const articles = await Article.find();
-          console.log(articles)
+          // console.log(articles)
           // Get unique categories from articles
           const categories = [...new Set(articles.map(article => article.category.trim()))];
 
@@ -1334,7 +1334,7 @@ router.get('/providers', async (req, res) => {
                User.distinct('specializations', { role: 'provider' })
           ]);
 
-          console.log(providers)
+          // console.log(providers)
 
           res.render('user/providers', {
                providers,
