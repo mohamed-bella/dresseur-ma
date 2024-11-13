@@ -203,9 +203,9 @@ router.post('/dashboard/new-service', validateService, async (req, res) => {
 
 router.get('/', async (req, res) => {
      // Define the metadata for the homepage
-     const pageTitle = 'Bienvenue sur NDRESSILIK - Trouvez les meilleurs services pour votre animal';
+     const pageTitle = 'Bienvenue sur NDRESSILIK - Trouvez les meilleurs services pour votre chiend';
      const description = 'Découvrez les derniers services et annonces pour animaux de compagnie sur NDRESSILIK. Recherchez par lieu et type de service.';
-     const keywords = 'services pour animaux, annonces, dressage, toilettage, adoption des animaux, NDRESSILIK';
+     const keywords = 'services pour animaux,services pour chien, annonces, dressage, toilettage, adoption des animaux, NDRESSILIK';
 
      try {
 
@@ -265,7 +265,7 @@ router.get('/', async (req, res) => {
                .select('title summary featuredImage category tags createdAt slug author');
 
 
-          console.log(articles)
+          // console.log(articles)
 
           // Fetch locations
           const [announcementLocations, serviceLocations] = await Promise.all([
@@ -283,13 +283,30 @@ router.get('/', async (req, res) => {
                .sort({ createdAt: -1 })
                .limit(6)
                .select('title description images location price breed age gender');
+
+          // service tabs in the home page 
+          const { category, page = 1 } = req.query;
+          const limit = 4;
+          const skip = (page - 1) * limit;
+
+          let query = {};
+
+          const services = await Service.find(query)
+               .sort({ createdAt: -1 })
+               .skip(skip)
+               .limit(limit)
+               .select('serviceName location priceRange images views');
+
+          console.log(services)
           res.render('user/index', {
                pageTitle,
                description,
                events,
                keywords,
+
                topProviders: providersWithDetails, // Now includes services and reviews
                articles,
+               services,
                // announcements,
                locations: uniqueLocations,
                user: req.user || null // Pass current user if exists
@@ -1340,6 +1357,36 @@ router.get('/providers', async (req, res) => {
           console.error('Error fetching providers:', error);
           res.status(500).render('error', {
                message: 'Une erreur est survenue lors du chargement des prestataires'
+          });
+     }
+});
+
+router.get('/api/services', async (req, res) => {
+     try {
+          const { category, page = 1 } = req.query;
+          const limit = 4;
+          const skip = (page - 1) * limit;
+
+          let query = {};
+          if (category !== 'all') {
+               query.serviceOptions = category;
+          }
+
+          const services = await Service.find(query)
+               .sort({ createdAt: -1 })
+               .skip(skip)
+               .limit(limit)
+               .select('serviceName location priceRange images views');
+
+          res.json({
+               success: true,
+               services
+          });
+     } catch (error) {
+          console.error('Error fetching services:', error);
+          res.status(500).json({
+               success: false,
+               message: 'Error fetching services'
           });
      }
 });

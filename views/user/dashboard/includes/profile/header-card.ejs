@@ -11,7 +11,7 @@
                               <img src="<%= user.profileImage %>" alt="<%= user.displayName %>" class="w-full h-full object-cover transition-transform duration-500 group-hover/profile:scale-110">
 
                               <!-- Profile Upload Overlay -->
-                              <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover/profile:opacity-100 transition-opacity duration-300">
+                              <div class="absolute inset-0 bg-black/50 flex items-center justify-center  group-hover/profile:opacity-100 transition-opacity duration-300">
                                    <button type="button" @click="$refs.profileInput.click()" class="text-white text-sm font-medium">
                                         <i class="fas fa-camera text-lg mb-2"></i>
                                         <span class="block">Changer la photo</span>

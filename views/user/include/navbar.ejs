@@ -4,15 +4,15 @@
           <div class="flex h-14 items-center justify-between">
                <!-- Left: Logo Section -->
                <a href="/" class="flex items-center gap-2 flex-shrink-0">
-                    <div class="w-8 h-8 bg-[#58CC02] rounded-lg flex items-center justify-center">
-                         <span class="text-white font-bold">N</span>
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center">
+                         <img src="https://ndressilik.s3.eu-north-1.amazonaws.com/users/67338636f84bd237e37a39a6/gallery/1731497935188_ndressilikLogoTopNavbar.png" alt="" srcset="">
                     </div>
                     <span class="font-bold hidden sm:block">NDRESSILIK</span>
                </a>
 
                <!-- Center: Navigation -->
                <div class="hidden md:flex items-center gap-1">
-                    <% const navItems=[ { label: 'Accueil' , icon: 'home' , href: '/' }, { label: 'Services' , icon: 'concierge-bell' , href: '/services' }, { label: 'Annonces' , icon: 'bullhorn' , href: '/announcements' }, ] %>
+                    <% const navItems=[ { label: 'Accueil' , icon: 'home' , href: '/' }, { label: 'Services' , icon: 'concierge-bell' , href: '/services' }, ] %>
 
                          <% navItems.forEach(item=> { %>
                               <a href="<%= item.href %>" class="flex items-center gap-2 px-4 h-14 text-sm font-semibold text-gray-700 hover:bg-gray-50 
@@ -37,7 +37,7 @@
 
                     <!-- Add Service Button -->
                     <% if (user) { %>
-                         <a href="/dashboard/new-service" class="flex items-center gap-2 px-4 py-2 bg-[#58CC02] hover:bg-[#46a702] text-white 
+                         <a href="/dashboard/new-service" class="flex items-center gap-2 px-4 py-2 bg-[#ffc300] hover:bg-[#46a702] text-white 
                                    font-bold text-sm rounded-xl transition-colors shadow-sm">
                               <i class="fas fa-plus"></i>
                               <span>Service</span>
@@ -89,10 +89,10 @@
                          </div>
                          <% } else { %>
                               <!-- Login Button -->
-                              <a href="/auth/google" class="flex items-center gap-2 px-4 py-2 bg-[#58CC02] hover:bg-[#46a702] text-white 
+                              <a href="/auth/google" class="flex items-center gap-2 px-4 py-2 bg-[#ffc300] hover:bg-[#ffc300] text-white 
                                    font-bold text-sm rounded-xl transition-colors shadow-sm">
-                                   <i class="fab fa-google"></i>
-                                   <span>Connexion</span>
+                                   <i class="fab fa-plus"></i>
+                                   <span>Service</span>
                               </a>
                               <% } %>
 

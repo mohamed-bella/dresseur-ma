@@ -73,15 +73,15 @@ app.use((req, res, next) => {
 });
 
 // HTML Minification middleware
-app.use(minifyHTML({
-     override: true,
-     htmlMinifier: {
-          removeComments: true,
-          collapseWhitespace: true,
-          minifyJS: true,
-          minifyCSS: true,
-     },
-}));
+// app.use(minifyHTML({
+//      override: true,
+//      htmlMinifier: {
+//           removeComments: true,
+//           collapseWhitespace: true,
+//           minifyJS: true,
+//           minifyCSS: true,
+//      },
+// }));
 
 // CONNECT TO DATABASE
 mongoose.connect(process.env.DATABASE_URI, {

@@ -121,7 +121,7 @@ router.post('/services/add', (req, res) => {
 
           try {
                console.log(req.body.serviceImages)
-               const { serviceName, serviceImages, description, minPrice, location, serviceType } = req.body;
+               const { serviceName, serviceImages, description, minPrice, serviceNumber, location, serviceType } = req.body;
 
 
                // Process and upload images
@@ -143,6 +143,7 @@ router.post('/services/add', (req, res) => {
                     priceRange: `${minPrice}`,
                     location: location.toLowerCase(),
                     serviceOptions: serviceType,
+                    serviceNumber: serviceNumber,
                     createdBy: req.user ? req.user._id : null,
                     images: serviceImages
                });
@@ -309,14 +310,13 @@ router.get('/services/:serviceOption?/:location?', async (req, res) => {
                serviceName: service.serviceName || service.serviceOptions?.[0] || 'Service',
                serviceOptions: service.serviceOptions,
                images: service.images || [],
-               rating: service.rating || 4.9,
-               reviewsCount: service.reviewsCount || '12',
+               views: service.views || '12',
                priceRange: service.priceRange ? `${service.priceRange} DH` : 'N/A',
                location: service.location || 'Non spécifié',
                availability: service.availability || 'sur rendez-vous',
                createdBy: {
-                    displayName: service.createdBy?.displayName || 'Service Provider',
-                    profileImage: service.createdBy?.profileImage || '/default-avatar.png',
+                    displayName: service.createdBy?.displayName || 'Expert',
+                    profileImage: service.createdBy?.profileImage || 'https://img.icons8.com/?size=100&id=7819&format=png&color=000000',
                     isVerified: service.createdBy?.isVerified || false
                },
                serviceType: service.serviceOptions?.[0]?.toLowerCase() || 'general',
@@ -332,10 +332,24 @@ router.get('/services/:serviceOption?/:location?', async (req, res) => {
 
 
           };
+
+          // Metadata for SEO
+          const pageTitle = location
+               ? ` à ${location} | Services pour animaux au Maroc | NDRESSILIK`
+               : `${serviceConfig.titles[serviceOption]} | Services pour animaux au Maroc | NDRESSILIK`;
+
+          const description = location
+               ? `Trouvez des services de ${serviceConfig.titles[serviceOption]} pour animaux de compagnie à ${location}. Explorez les offres de dressage, toilettage, garde, et plus encore sur NDRESSILIK.`
+               : `Découvrez les meilleurs services de ${serviceConfig.titles[serviceOption]} pour animaux au Maroc sur NDRESSILIK. Nos partenaires de confiance proposent dressage, toilettage, et autres services pour le bien-être de vos animaux.`;
+
+          const keywords = location
+               ? `${serviceOption}, services animaliers, ${location}, dressage, garde animaux, NDRESSILIK, Maroc`
+               : `${serviceOption}, services animaliers, Maroc, dressage, garde animaux, NDRESSILIK`;
+
           res.render('user/services', {
-               pageTitle: '',
-               description: '',
-               keywords: '',
+               pageTitle,
+               description,
+               keywords,
                currentLocation: location || null,
                locations: uniqueLocations,
 
@@ -408,33 +422,34 @@ router.get('/services/:serviceOption?/:location?', async (req, res) => {
 // GET: Service Details
 router.get('/service/:serviceId', async (req, res) => {
      try {
-          const serviceId = req.params.serviceId;
+          const { serviceId } = req.params;
 
-          // Find the service by ID and populate the createdBy field
+          // Find the service by ID and populate the creator details
           const service = await Service.findById(serviceId)
-               .populate('createdBy', 'email profileImage displayName slug isVerified createdAt');  // Populate the service creator details
+               .populate('createdBy', 'displayName profileImage slug');  // Populate only the display name of the service creator
 
           if (!service) {
                return res.status(404).send('Service non trouvé');
           }
 
-          // Fetch reviews separately by serviceId and populate the userId for each review
+          // Fetch reviews by serviceId and populate the user details for each review
           const reviews = await Review.find({ serviceId })
-               .populate('userId', 'displayName image');  // Populate the user details for each review
+               .populate('userId', 'displayName image');  // Populate display name and image of each reviewer
 
-          // Increment views
+          // Increment view count for the service
           service.views += 1;
           await service.save();
-          // Dynamic metadata for individual service
-          const pageTitle = `${service.serviceName} - NDRESSILIK`;
-          const description = `${service.serviceName} disponible à ${service.location}. Découvrez les détails sur ce service proposé par ${service.createdBy.name || 'notre plateforme'}.`;
-          const keywords = `${service.serviceName}, services pour animaux, ${service.location}, ${service.createdBy.displayName || 'service'}`;
 
+          console.log(service)
+          // Dynamic metadata for SEO
+          const pageTitle = `${service.serviceName} - NDRESSILIK`;
+          const description = `${service.serviceName} disponible à ${service.location}. Découvrez les détails de ce service proposé par ${service.createdBy.displayName || 'notre plateforme'}.`;
+          const keywords = `${service.serviceName}, services pour animaux, ${service.location}, ${service.createdBy.displayName || 'service'}`;
 
           // Render the service details page with the service and its reviews
           res.render('user/serviceDetails', {
                service,
-               reviews,  // Pass the reviews to the frontend template
+               reviews,  // Pass reviews to the frontend template
                pageTitle,
                description,
                keywords
@@ -444,6 +459,7 @@ router.get('/service/:serviceId', async (req, res) => {
           res.status(500).json({ success: false, message: 'Erreur serveur.' });
      }
 });
+
 
 
 // Submit a review

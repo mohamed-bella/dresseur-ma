@@ -1,510 +1,126 @@
-<section class="relative isolate overflow-hidden bg-white">
+<!-- Section Héro -->
+<div class="min-h-screen bg-white px-4 py-16">
+     <!-- Contenu Héro -->
+     <div class="max-w-7xl mx-auto">
+          <div class="max-w-4xl mx-auto text-center mb-16">
+               <h1 class="text-4xl md:text-6xl font-bold leading-tight mb-6">
+                    Service pour chiens,
+                    <br>
+                    <span class="text-blue-600">Facilitez le soin de votre compagnon.</span>
+               </h1>
+               <p class="text-xl text-gray-600 mb-8">
+                    Profitez d'offres exclusives sur tous les services pour votre chien
+               </p>
 
-
-     <!-- Content container -->
-     <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div class="flex flex-col items-center text-center">
-
-               <!-- Hero Section -->
-               <section class="relative pt-20 pb-16 overflow-hidden">
-
-                    <div class="container mx-auto px-4">
-                         <div class="max-w-5xl mx-auto text-center relative">
-                              <!-- Main Heading with Duolingo-style -->
-                              <div class="inline-flex items-center gap-2 px-4 py-2 bg-[#58CC02]/10 rounded-full mb-8 animate-bounce-slight">
-                                   <div class="w-8 h-8 bg-[#58CC02] rounded-full flex items-center justify-center">
-                                        <span class="text-white text-lg">🐾</span>
-                                   </div>
-                                   <span class="text-[#58CC02] font-bold">#1 des Services Animaliers</span>
-                              </div>
-
-                              <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold text-[#4b4b4b] leading-tight mb-6">
-                                   Trouvez les meilleurs
-                                   <span class="relative whitespace-nowrap text-[#58CC02] block md:inline">
-                                        services animaliers
-                                        <svg aria-hidden="true" viewBox="0 0 418 42" class="absolute left-0 top-[90%] h-[0.58em] w-full fill-[#58CC02]/20" preserveAspectRatio="none">
-                                             <path d="M203.371.916c-26.013-2.078-76.686 1.963-124.73 9.946L67.3 12.749C35.421 18.062 18.2 21.766 6.004 25.934 1.244 27.561.828 27.778.874 28.61c.07 1.214.828 1.121 9.595-1.176 9.072-2.377 17.15-3.92 39.246-7.496C123.565 7.986 157.869 4.492 195.942 5.046c7.461.108 19.25 1.696 19.17 2.582-.107 1.183-7.874 4.31-25.75 10.366-21.992 7.45-35.43 12.534-36.701 13.884-2.173 2.308-.202 4.407 4.442 4.734 2.654.187 3.263.157 15.593-.78 35.401-2.686 57.944-3.488 88.365-3.143 46.327.526 75.721 2.23 130.788 7.584 19.787 1.924 20.814 1.98 24.557 1.332l.066-.011c1.201-.203 1.53-1.825.399-2.335-2.911-1.31-4.893-1.604-22.048-3.261-57.509-5.556-87.871-7.36-132.059-7.842-23.239-.254-33.617-.116-50.627.674-11.629.54-42.371 2.494-46.696 2.967-2.359.259 8.133-3.625 26.504-9.81 23.239-7.825 27.934-10.149 28.304-14.005.417-4.348-3.529-6-16.878-7.066Z" />
-                                        </svg>
-                                   </span>
-                              </h1>
-
-                              <p class="text-lg md:text-xl text-[#777] max-w-2xl mx-auto mb-12">
-                                   Des professionnels qualifiés à votre service pour prendre soin de votre animal de compagnie
-                              </p>
-
-                              <!-- Gamified Search Form -->
-                              <div class="max-w-3xl mx-auto">
-                                   <form action="/search" method="GET" class="relative">
-                                        <div class="flex flex-col sm:flex-row gap-4">
-                                             <!-- Search Input with Duolingo style -->
-                                             <div class="relative flex-1">
-                                                  <div class="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
-                                                       <svg class="w-6 h-6 text-[#58CC02]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                                       </svg>
-                                                  </div>
-                                                  <input type="text" name="q" id="q" placeholder="Quel service recherchez-vous ?" class="w-full h-16 pl-16 pr-4 text-lg rounded-2xl border-3 border-[#E5E5E5] bg-white
-                                 focus:border-[#58CC02] focus:ring-4 focus:ring-[#58CC02]/10
-                                 transition-all duration-300 outline-none" autocomplete="off">
-
-
-                                             </div>
-
-                                             <!-- Search Button with Duolingo style -->
-                                             <button type="submit" class="h-16 px-8 bg-[#58CC02] hover:bg-[#46a102] text-white rounded-2xl
-                               text-lg font-bold transition-all duration-300 hover:shadow-lg 
-                               hover:-translate-y-0.5 flex items-center justify-center gap-3">
-                                                  <span>Rechercher</span>
-                                                  <div class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
-                                                       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                                                       </svg>
-                                                  </div>
-                                             </button>
-                                        </div>
-                                   </form>
-
-                                   <!-- Trust Indicators -->
-                                   <div class="flex items-center justify-center gap-8 mt-12">
-                                        <div class="flex items-center gap-2">
-                                             <div class="w-10 h-10 bg-[#58CC02]/10 rounded-xl flex items-center justify-center">
-                                                  <span class="text-xl">🏆</span>
-                                             </div>
-                                             <div class="text-left">
-                                                  <div class="text-sm font-bold text-[#4b4b4b]">10+</div>
-                                                  <div class="text-xs text-[#777]">Experts</div>
-                                             </div>
-                                        </div>
-
-                                        <div class="flex items-center gap-2">
-                                             <div class="w-10 h-10 bg-[#FFC800]/10 rounded-xl flex items-center justify-center">
-                                                  <span class="text-xl">⭐️</span>
-                                             </div>
-                                             <div class="text-left">
-                                                  <div class="text-sm font-bold text-[#4b4b4b]">4.9/5</div>
-                                                  <div class="text-xs text-[#777]">Note moyenne</div>
-                                             </div>
-                                        </div>
-
-                                        <div class="flex items-center gap-2">
-                                             <div class="w-10 h-10 bg-[#FF4B4B]/10 rounded-xl flex items-center justify-center">
-                                                  <span class="text-xl">💫</span>
-                                             </div>
-                                             <div class="text-left">
-                                                  <div class="text-sm font-bold text-[#4b4b4b]">24/7</div>
-                                                  <div class="text-xs text-[#777]">Support</div>
-                                             </div>
-                                        </div>
-                                   </div>
-                              </div>
-                         </div>
+               <!-- Barre de Recherche -->
+               <form action="/search" method="GET" class="flex items-center justify-center space-x-4">
+                    <div class="relative flex items-center w-full md:w-[400px]">
+                         <input type="search" name="q" placeholder="Rechercher des services..." class="w-full pl-12 pr-4 py-3 rounded-full border border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none" autocomplete="off">
+                         <i class="fas fa-search absolute left-4 text-gray-400"></i>
+                         <button type="submit" class="absolute right-3 p-1 hover:bg-gray-100 rounded-full transition-colors">
+                              <i class="fas fa-arrow-right text-blue-500"></i>
+                         </button>
                     </div>
-               </section>
+               </form>
+          </div>
 
-               <style>
-                    /* Custom animations */
-                    @keyframes bounce-slight {
+          <!-- Slider des Services -->
+          <div class="relative ">
+               <!-- Conteneur du Slider -->
+               <div class="overflow-x-auto hide-scrollbar -mx-4">
+                    <div class="flex space-x-4 md:space-x-6 p-4 transition-transform duration-300">
+                         <% const serviceCards=[ { icon: '🐕' , title: 'Dressage' , description: 'Éducation professionnelle pour chiens' , bgColor: 'bg-emerald-50' , hoverColor: 'group-hover:bg-emerald-100' , iconBg: 'bg-emerald-100' }, { icon: '✂️' , title: 'Toilettage' , description: 'Services complets de toilettage' , bgColor: 'bg-sky-50' , hoverColor: 'group-hover:bg-sky-100' , iconBg: 'bg-sky-100' }, { icon: '🏠' , title: 'Pension' , description: 'Hébergement de luxe' , bgColor: 'bg-purple-50' , hoverColor: 'group-hover:bg-purple-100' , iconBg: 'bg-purple-100' }, { icon: '🦮' , title: 'Promenade' , description: 'Promenade professionnelle pour chiens' , bgColor: 'bg-amber-50' , hoverColor: 'group-hover:bg-amber-100' , iconBg: 'bg-amber-100' }, { icon: '🐾' , title: 'Vétérinaire' , description: 'Soins vétérinaires spécialisés' , bgColor: 'bg-pink-50' , hoverColor: 'group-hover:bg-pink-100' , iconBg: 'bg-pink-100' }, { icon: '🚚' , title: 'Transport' , description: 'Service de transport sécurisé pour chiens' , bgColor: 'bg-teal-50' , hoverColor: 'group-hover:bg-teal-100' , iconBg: 'bg-teal-100' } ] %>
 
-                         0%,
-                         100% {
-                              transform: translateY(0);
-                         }
-
-                         50% {
-                              transform: translateY(-4px);
-                         }
-                    }
-
-                    .animate-bounce-slight {
-                         animation: bounce-slight 2s infinite;
-                    }
-
-                    /* Mobile optimizations */
-                    @media (max-width: 640px) {
-                         .trust-indicators {
-                              flex-direction: column;
-                              gap: 1rem;
-                         }
-
-                         .text-7xl {
-                              font-size: 3rem;
-                              line-height: 1.2;
-                         }
-                    }
-
-                    /* Input styles */
-                    input::placeholder {
-                         color: #AAAAAA;
-                    }
-
-                    input:focus::placeholder {
-                         color: #CCCCCC;
-                    }
-
-                    /* Reduced motion */
-                    @media (prefers-reduced-motion: reduce) {
-
-                         .animate-bounce-slight,
-                         .transition-all {
-                              animation: none;
-                              transition: none;
-                         }
-                    }
-               </style>
-               <% const services=[ { id: 'dressage' , name: 'Dressage' , icon: 'dog' , bgColor: 'bg-blue-500' , textColor: 'text-white' , image: 'https://ndressilik.s3.eu-north-1.amazonaws.com/users/672166487944169b94e40563/gallery/1730309993918_d.png' , rating: 4.9, providers: 150 }, { id: 'toilettage' , name: 'Toilettage' , icon: 'cut' , bgColor: 'bg-purple-500' , textColor: 'text-white' , image: 'https://ndressilik.s3.eu-north-1.amazonaws.com/users/672166487944169b94e40563/gallery/1730309991467_toilettage.png' , rating: 4.8, providers: 120 }, { id: 'promenade' , name: 'Promenade' , icon: 'walking' , bgColor: 'bg-green-500' , textColor: 'text-white' , image: 'https://ndressilik.s3.eu-north-1.amazonaws.com/users/672166487944169b94e40563/gallery/1730309993933_p.png' , rating: 4.7, providers: 200 }, { id: 'veterinaire' , name: 'Vétérinaire' , icon: 'stethoscope' , bgColor: 'bg-red-500' , textColor: 'text-white' , image: 'https://ndressilik.s3.eu-north-1.amazonaws.com/users/672166487944169b94e40563/gallery/1730309991441_v.png' , rating: 4.9, providers: 80 }, { id: 'pension' , name: 'Pension' , icon: 'home' , bgColor: 'bg-yellow-500' , textColor: 'text-white' , image: 'https://ndressilik.s3.eu-north-1.amazonaws.com/users/672166487944169b94e40563/gallery/1730309989188_pension.png' , rating: 4.6, providers: 90 }, { id: 'transport' , name: 'Transport' , icon: 'car' , bgColor: 'bg-indigo-500' , textColor: 'text-white' , image: 'https://ndressilik.s3.eu-north-1.amazonaws.com/users/672166487944169b94e40563/gallery/1730309989456_t.png' , rating: 4.7, providers: 70 } ]; %>
-                    <!-- Services Section  -->
-                    <section class="w-full py-10 bg-gradient-to-b from-gray-50/50 to-white/50">
-                         <div class="max-w-7xl mx-auto px-4">
-                              <!-- Section Header -->
-                              <div class="flex flex-col items-center text-center mb-16">
-                                   <div class="relative left">
-                                        <h2 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 font-heading tracking-tight">
-                                             Découvrez Nos Services
-
-                                        </h2>
-                                   </div>
-
-                                   <style>
-                                        /* Import modern font - Outfit is similar to many modern tech websites */
-                                        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap');
-
-                                        /* Custom font class */
-                                        .font-heading {
-                                             font-family: 'Outfit', sans-serif;
-                                             letter-spacing: -0.02em;
-                                        }
-
-                                        /* Shimmer animation for underline */
-                                        @keyframes shimmer {
-                                             0% {
-                                                  transform: translateX(-100%);
-                                                  opacity: 0;
-                                             }
-
-                                             10% {
-                                                  opacity: 0.5;
-                                             }
-
-                                             50% {
-                                                  opacity: 1;
-                                             }
-
-                                             90% {
-                                                  opacity: 0.5;
-                                             }
-
-                                             100% {
-                                                  transform: translateX(100%);
-                                                  opacity: 0;
-                                             }
-                                        }
-
-
-
-                                        /* Responsive text adjustments */
-                                        @media (max-width: 640px) {
-                                             .text-4xl {
-                                                  font-size: 2.5rem;
-                                                  line-height: 1.1;
-                                             }
-                                        }
-
-                                        @media (min-width: 641px) and (max-width: 1024px) {
-                                             .md\:text-5xl {
-                                                  font-size: 3rem;
-                                                  line-height: 1.1;
-                                             }
-                                        }
-
-                                        @media (min-width: 1025px) {
-                                             .lg\:text-6xl {
-                                                  font-size: 3.75rem;
-                                                  line-height: 1.1;
-                                             }
-                                        }
-
-                                        /* Optional: Add text shadow for better contrast */
-                                        .font-heading {
-                                             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-                                        }
-
-                                        /* Optional: Enhance hover effect */
-                                        .font-heading:hover+.relative .absolute {
-                                             animation-duration: 2s;
-                                        }
-                                   </style>
-
-                              </div>
-
-
-
-                              <!-- MOBILE -->
-
-                              <!-- Popular Services Slider -->
-                              <section class="relative overflow-hidden py-8">
-                                   <div class="container mx-auto px-4">
-                                        <!-- Section Header -->
-                                        <div class="flex items-center justify-between mb-8">
-                                             <h2 class="text-2xl font-bold text-gray-900">Services Populaires</h2>
-                                             <div class="hidden md:flex items-center gap-3">
-                                                  <button id="prevBtn" class="group p-3 rounded-xl text-gray-600 hover:bg-gray-100 transition-all">
-                                                       <svg class="w-6 h-6 group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
-                                                       </svg>
-                                                  </button>
-                                                  <button id="nextBtn" class="group p-3 rounded-xl text-gray-600 hover:bg-gray-100 transition-all">
-                                                       <svg class="w-6 h-6 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
-                                                       </svg>
-                                                  </button>
-                                             </div>
-                                        </div>
-
-                                        <!-- Slider Container -->
-                                        <div class="relative">
-                                             <div id="servicesTrack" class="flex transition-transform duration-500 ease-out gap-4 md:gap-6">
-                                                  <% const cards=[ { bgColor: 'bg-[#58CC02]' , shadowColor: 'shadow-[#3B8101]' , iconColor: 'text-white' }, { bgColor: 'bg-[#FF4B4B]' , shadowColor: 'shadow-[#CC3333]' , iconColor: 'text-white' }, { bgColor: 'bg-[#2B70C9]' , shadowColor: 'shadow-[#1E4D8C]' , iconColor: 'text-white' }, { bgColor: 'bg-[#CE82FF]' , shadowColor: 'shadow-[#9B4DDB]' , iconColor: 'text-white' }, { bgColor: 'bg-[#FFC800]' , shadowColor: 'shadow-[#CC9900]' , iconColor: 'text-white' }, { bgColor: 'bg-[#FF9600]' , shadowColor: 'shadow-[#CC6600]' , iconColor: 'text-white' } ]; services.forEach((service, index)=> {
-                                                       const style = cards[index % cards.length];
-                                                       %>
-                                                       <div class="flex-none w-[180px] md:w-[320px]">
-                                                            <a href="/services/<%= service.id %>" class="group block select-none">
-                                                                 <div class="relative transform transition-all duration-200 active:translate-y-[2px]">
-                                                                      <!-- Main Card -->
-                                                                      <div class="<%= style.bgColor %> rounded-2xl p-6 md:p-8
-                                                                     shadow-[0_4px_0_0] <%= style.shadowColor %>
-                                                                     active:shadow-[0_0_0_0] active:translate-y-[4px]
-                                                                     transition-all duration-200">
-                                                                           <div class="flex flex-col items-center gap-4 md:gap-6">
-                                                                                <!-- Icon -->
-                                                                                <div class="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-white/20 backdrop-blur-sm 
-                                                                             flex items-center justify-center transform transition-transform duration-300 
-                                                                             group-hover:scale-110 group-hover:rotate-3">
-                                                                                     <i class="fas fa-<%= service.icon %> text-2xl md:text-3xl <%= style.iconColor %>"></i>
-                                                                                </div>
-
-                                                                                <!-- Title -->
-                                                                                <h3 class="text-lg md:text-xl font-bold text-white text-center">
-                                                                                     <%= service.name %>
-                                                                                </h3>
-                                                                           </div>
-
-                                                                           <!-- Hover/Active Effects -->
-                                                                           <div class="absolute inset-0 rounded-2xl bg-black opacity-0 
-                                                                         group-hover:opacity-5 group-active:opacity-10 transition-opacity"></div>
-                                                                      </div>
-
-                                                                      <!-- Card Shine Effect -->
-                                                                      <div class="absolute inset-0 rounded-2xl bg-gradient-to-tr from-white/0 via-white/10 to-white/0 
-                                                                     opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                                                 </div>
-                                                            </a>
-                                                       </div>
-                                                       <% }); %>
+                              <% serviceCards.forEach(card=> { %>
+                                   <a href="/services/<%= card.title.toLowerCase() %>" class="flex-none w-[280px] md:w-[320px] group">
+                                        <div class="<%= card.bgColor %> <%= card.hoverColor %> rounded-3xl p-6 md:p-8 shadow-sm hover:shadow-xl transition-all duration-300 h-full">
+                                             <!-- Icône avec fond -->
+                                             <div class="<%= card.iconBg %> w-14 h-14 rounded-2xl flex items-center justify-center mb-4">
+                                                  <span class="text-3xl">
+                                                       <%= card.icon %>
+                                                  </span>
                                              </div>
 
-                                             <!-- Progress Dots -->
-                                             <div class="flex justify-center mt-8 gap-2 md:hidden" id="progressDots"></div>
+                                             <!-- Contenu -->
+                                             <h3 class="text-xl md:text-2xl font-bold mb-2 group-hover:text-blue-600 transition-colors">
+                                                  <%= card.title %>
+                                             </h3>
+
+                                             <p class="text-sm text-gray-600 mb-6">
+                                                  <%= card.description %>
+                                             </p>
+
+                                             <!-- Flèche -->
+                                             <div class="flex items-center text-blue-600 text-sm font-medium group-hover:translate-x-2 transition-transform">
+                                                  <span>Explorer</span>
+                                                  <i class="fas fa-arrow-right ml-2"></i>
+                                             </div>
                                         </div>
-                                   </div>
-                              </section>
-
-                              <style>
-                                   /* Disable text selection */
-                                   .select-none {
-                                        user-select: none;
-                                        -webkit-user-select: none;
-                                   }
-
-                                   /* Active state animation */
-                                   .active\:translate-y-\[4px\]:active {
-                                        transform: translateY(4px);
-                                   }
-
-                                   /* Smooth animations */
-                                   .transition-all {
-                                        transition-property: all;
-                                        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-                                   }
-
-                                   /* Progress dots animation */
-                                   @keyframes dot-scale {
-
-                                        0%,
-                                        100% {
-                                             transform: scale(1);
-                                        }
-
-                                        50% {
-                                             transform: scale(1.2);
-                                        }
-                                   }
-
-                                   .progress-dot.active {
-                                        animation: dot-scale 2s infinite;
-                                   }
-
-                                   /* Optional: Add loading skeleton animation */
-                              </style>
-
-                              <script>
-
-                                   track.addEventListener('touchstart', (e) => {
-                                        if ('vibrate' in navigator) {
-                                             navigator.vibrate(5);
-                                        }
-                                   });
-
-                                   // Add sound feedback (optional)
-                                   const tapSound = new Audio('path/to/tap-sound.mp3');
-                                   track.addEventListener('click', () => {
-                                        tapSound.currentTime = 0;
-                                        tapSound.play().catch(() => { });
-                                   });
-                              </script>
-
-                              <script>
-                                   document.addEventListener('DOMContentLoaded', function () {
-                                        const track = document.getElementById('servicesTrack');
-                                        const slides = track.children;
-                                        const nextBtn = document.getElementById('nextBtn');
-                                        const prevBtn = document.getElementById('prevBtn');
-                                        const dotsContainer = document.getElementById('progressDots');
-
-                                        let currentIndex = 0;
-                                        let slideWidth;
-                                        let slidesToShow;
-                                        let maxIndex;
-                                        let autoSlideInterval;
-
-                                        function updateDimensions() {
-                                             const isMobile = window.innerWidth < 768;
-                                             slideWidth = slides[0].offsetWidth + 16; // Including gap
-                                             slidesToShow = isMobile ? 2 : 4; // Show more cards on desktop
-                                             maxIndex = Math.max(0, slides.length - slidesToShow);
-
-                                             // Update dots for mobile
-                                             if (isMobile) {
-                                                  updateDots();
-                                             }
-                                        }
-
-                                        function updateDots() {
-                                             dotsContainer.innerHTML = '';
-                                             for (let i = 0; i <= maxIndex; i++) {
-                                                  const dot = document.createElement('button');
-                                                  dot.classList.add('h-2', 'rounded-full', 'bg-gray-200', 'transition-all');
-                                                  dot.style.width = i === 0 ? '2rem' : '0.5rem';
-                                                  dot.addEventListener('click', () => goToSlide(i));
-                                                  dotsContainer.appendChild(dot);
-                                             }
-                                        }
-
-                                        function updateSlidePosition() {
-                                             track.style.transform = `translateX(${-currentIndex * slideWidth}px)`;
-
-                                             // Update dots on mobile
-                                             if (window.innerWidth < 768) {
-                                                  const dots = dotsContainer.children;
-                                                  for (let i = 0; i < dots.length; i++) {
-                                                       dots[i].style.width = i === currentIndex ? '2rem' : '0.5rem';
-                                                       dots[i].classList.toggle('bg-blue-500', i === currentIndex);
-                                                  }
-                                             }
-                                        }
-
-                                        function goToSlide(index) {
-                                             currentIndex = Math.min(Math.max(index, 0), maxIndex);
-                                             updateSlidePosition();
-                                        }
-
-                                        function nextSlide() {
-                                             currentIndex = (currentIndex + 1) % (maxIndex + 1);
-                                             updateSlidePosition();
-                                        }
-
-                                        function prevSlide() {
-                                             currentIndex = currentIndex === 0 ? maxIndex : currentIndex - 1;
-                                             updateSlidePosition();
-                                        }
-
-                                        // Event Listeners
-                                        nextBtn?.addEventListener('click', () => {
-                                             nextSlide();
-                                             resetAutoSlide();
-                                        });
-
-                                        prevBtn?.addEventListener('click', () => {
-                                             prevSlide();
-                                             resetAutoSlide();
-                                        });
-
-                                        // Auto slide functionality
-                                        function startAutoSlide() {
-                                             autoSlideInterval = setInterval(nextSlide, 3000);
-                                        }
-
-                                        function resetAutoSlide() {
-                                             clearInterval(autoSlideInterval);
-                                             startAutoSlide();
-                                        }
-
-                                        // Touch events for mobile
-                                        let touchStartX = 0;
-                                        let touchEndX = 0;
-
-                                        track.addEventListener('touchstart', e => {
-                                             touchStartX = e.changedTouches[0].screenX;
-                                             clearInterval(autoSlideInterval);
-                                        }, { passive: true });
-
-                                        track.addEventListener('touchend', e => {
-                                             touchEndX = e.changedTouches[0].screenX;
-                                             handleSwipe();
-                                             startAutoSlide();
-                                        }, { passive: true });
-
-                                        function handleSwipe() {
-                                             const swipeThreshold = 50;
-                                             const diff = touchStartX - touchEndX;
-
-                                             if (Math.abs(diff) > swipeThreshold) {
-                                                  if (diff > 0) {
-                                                       nextSlide();
-                                                  } else {
-                                                       prevSlide();
-                                                  }
-                                             }
-                                        }
-
-                                        // Initialize
-                                        updateDimensions();
-                                        // updateSlidePosition();
-                                        // startAutoSlide();
-
-                                        // Handle window resize
-                                        window.addEventListener('resize', () => {
-                                             updateDimensions();
-                                             updateSlidePosition();
-                                        });
-
-                                        // Pause auto slide on hover (desktop only)
-                                        if (window.innerWidth >= 768) {
-                                             track.addEventListener('mouseenter', () => clearInterval(autoSlideInterval));
-                                             track.addEventListener('mouseleave', startAutoSlide);
-                                        }
-                                   });
-                              </script>
-
-                         </div>
-                    </section>
-
+                                   </a>
+                                   <% }) %>
+                    </div>
+               </div>
+               <!-- Décoration Patte -->
+               <div class="absolute -bottom-12 left-1/2 transform -translate-x-1/2 text-gray-200 opacity-20">
+                    <svg class="w-24 h-24" viewBox="0 0 512 512">
+                         <path fill="currentColor" d="M256 224c-79.5 0-144 64.5-144 144s64.5 144 144 144 144-64.5 144-144-64.5-144-144-144zm0 240c-52.9 0-96-43.1-96-96s43.1-96 96-96 96 43.1 96 96-43.1 96-96 96zm0-128c-17.7 0-32 14.3-32 32s14.3 32 32 32 32-14.3 32-32-14.3-32-32-32z" />
+                    </svg>
+               </div>
           </div>
      </div>
-</section>
+</div>
 
 <style>
-     /* Grid pattern background */
-     .bg-grid-pattern {
-          background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M54.627 0l.83.828-1.415 1.415L51.8 0h2.827zM5.373 0l-.83.828L5.96 2.243 8.2 0H5.374zM48.97 0l3.657 3.657-1.414 1.414L46.143 0h2.828zM11.03 0L7.372 3.657 8.787 5.07 13.857 0H11.03zm32.284 0L49.8 6.485 48.384 7.9l-7.9-7.9h2.83zM16.686 0L10.2 6.485 11.616 7.9l7.9-7.9h-2.83zM22.344 0L13.858 8.485 15.272 9.9l7.9-7.9h-.828zm5.656 0L19.515 8.485 20.93 9.9l7.9-7.9h-0.828zm5.656 0L25.172 8.485 26.586 9.9l7.9-7.9h-0.828zm5.656 0L30.828 8.485 32.242 9.9l7.9-7.9h-0.828zm5.656 0L36.485 8.485 37.9 9.9l7.9-7.9h-0.828zm5.656 0L42.142 8.485 43.556 9.9l7.9-7.9h-0.828zm5.656 0L47.8 8.485 49.214 9.9l7.9-7.9h-0.828zm5.656 0L53.456 8.485 54.87 9.9l7.9-7.9h-0.828zM1.414 0L0 1.414l.828.83L2.244 0h-.83zm5.656 0L5.656 1.414l.828.83L8.9 0H7.07zm5.656 0L11.313 1.414l.828.83L14.557 0h-.83zm5.656 0L16.97 1.414l.828.83L20.213 0h-.83zm5.656 0L22.626 1.414l.828.83L25.87 0h-.83zm5.656 0L28.283 1.414l.828.83L31.526 0h-.83zm5.656 0L33.94 1.414l.828.83L37.182 0h-.83zm.828 0h-.83A5.082 5.082 0 0 1 49.8 13.858L60 3.656V0h-5.656zM0 5.656V0h5.656L0 5.656zm0 5.656V5.656L5.656 0h5.656L0 11.313zm0 5.656V11.313L11.313 0h5.656L0 16.97zm0 5.656V16.97L16.97 0h5.656L0 22.626zm0 5.656V22.626L22.626 0h5.656L0 28.283zm0 5.656V28.283L28.283 0h5.656L0 33.94zm0 5.656V33.94L33.94 0h5.656L0 39.596zm0 5.656V39.596L39.596 0h5.656L0 45.253zm0 5.656V45.253L45.253 0h5.656L0 50.91zm0 5.656V50.91L50.91 0h5.656L0 56.566zm0 5.656V56.566L56.566 0H60L0 60z' fill='%23f0f9ff' fill-opacity='1' fill-rule='evenodd'/%3E%3C/svg%3E");
+     /* Cacher la barre de défilement mais conserver la fonctionnalité */
+     .hide-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+     }
+
+     .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+     }
+
+     /* Activer le défilement fluide */
+     .overflow-x-auto {
+          -webkit-overflow-scrolling: touch;
+          scroll-behavior: smooth;
+     }
+
+     /* Effets de survol des cartes */
+     .group:hover {
+          transform: translateY(-4px);
      }
 </style>
+
+<script>
+     // Facultatif : ajouter la fonctionnalité de glissement au toucher
+     document.addEventListener('DOMContentLoaded', function () {
+          const slider = document.querySelector('.overflow-x-auto');
+          let isDown = false;
+          let startX;
+          let scrollLeft;
+
+          slider.addEventListener('mousedown', (e) => {
+               isDown = true;
+               startX = e.pageX - slider.offsetLeft;
+               scrollLeft = slider.scrollLeft;
+          });
+
+          slider.addEventListener('mouseleave', () => {
+               isDown = false;
+          });
+
+          slider.addEventListener('mouseup', () => {
+               isDown = false;
+          });
+
+          slider.addEventListener('mousemove', (e) => {
+               if (!isDown) return;
+               e.preventDefault();
+               const x = e.pageX - slider.offsetLeft;
+               const walk = (x - startX) * 2;
+               slider.scrollLeft = scrollLeft - walk;
+          });
+     });
+</script>

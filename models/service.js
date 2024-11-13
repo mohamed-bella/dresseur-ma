@@ -38,6 +38,9 @@ const serviceSchema = new mongoose.Schema({
      slug: {
           type: String
      },
+     serviceNumber: {
+          type: String,
+     },
      images: [{
           type: String,
           required: true

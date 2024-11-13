@@ -29,14 +29,14 @@
                                         </a>
                                    </div>
 
-                                   <!-- Thumbnail Grid -->
                                    <div class="grid grid-cols-4 gap-4">
-                                        <% service.images.forEach((image, index)=> { %>
+                                        <% service.images.slice(0, -1).forEach((image, index)=> { %>
                                              <a href="<%= image %>" data-pswp-width="1500" data-pswp-height="1000" class="aspect-square rounded-md overflow-hidden block" target="_blank">
                                                   <img src="<%= image %>" alt="Image <%= index + 1 %>" class="object-cover w-full h-full hover:opacity-75 transition-opacity">
                                              </a>
                                              <% }) %>
                                    </div>
+
                               </div>
                          </div>
 
@@ -79,13 +79,13 @@
                                         <div>
                                              <p class="text-sm text-gray-500">Phone Number</p>
                                              <p class="text-gray-900">
-                                                  <%= service.createdBy.phone || '+1 (555) 000-0000' %>
+                                                  <%= service.serviceNumber || '+1 (555) 000-0000' %>
                                              </p>
                                         </div>
                                    </div>
 
                                    <!-- Contact Button -->
-                                   <a href="mailto:<%= service.createdBy.email %>" class="mt-6 w-full inline-flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+                                   <a href="tel:<%= service.serviceNumber %>" class="mt-6 w-full inline-flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
                                         Contact Provider
                                    </a>
                               </div>
@@ -141,3 +141,5 @@
                     }
                });
           </script>
+
+          <%- include('include/footer.ejs') %>
