@@ -103,6 +103,19 @@ const serviceRoutes = require('./routes/serviceRoutes');
 const aiRoutes = require('./routes/aiRoutes');
 const profileRoutes = require('./routes/profileRoutes');
 const galeryRoutes = require('./routes/galeryRoutes');
+const analyzeBreedRouter = require('./routes/analyzeBreed');
+
+
+app.get('/dog-breeds-analyzer', (req, res) => {
+     res.render('user/dog-breeds-analyzer', {
+          pageTitle: 'تحليل سلالات الكلاب - اكتشف سلالة الكلب من الصورة',
+          description: 'استخدم أداة تحليل سلالات الكلاب الخاصة بنا لمعرفة سلالة الكلب من خلال صورة. اكتشف المزيد حول السلالات المختلفة وخصائصها.',
+          keywords: 'تحليل سلالات الكلاب, اكتشف سلالة الكلب, معرفة سلالة الكلب من الصورة, سلالات الكلاب, الكلاب في المغرب',
+          currentUrl: `${req.protocol}://${req.get('host')}${req.originalUrl}`
+     });
+});
+
+app.use('/', analyzeBreedRouter);
 
 
 

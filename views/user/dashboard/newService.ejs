@@ -75,168 +75,166 @@
 
 <body class="font-sans antialiased">
      <!-- Define variables first -->
-     <% const steps=['Type de Service', 'Détails' , 'Photos' ]; const services=[ { id: 'dressage' , name: 'Dressage' , icon: '🐕' }, { id: 'toilettage' , name: 'Toilettage' , icon: '✂️' }, { id: 'promenade' , name: 'Promenade' , icon: '🚶' }, { id: 'veterinaire' , name: 'Vétérinaire' , icon: '🩺' }, { id: 'pension' , name: 'Pension' , icon: '🏠' }, { id: 'transport' , name: 'Transport' , icon: '🚗' } ]; const cities=['Casablanca', 'Rabat' , 'Marrakech' , 'Agadir' , 'Tanger' , 'Fès' ]; %>
+     <% const steps=['Type de Service', 'Détails' , 'Photos' ]; const services=[ { id: 'dressage' , name: 'Dressage' , icon: '🐕' }, { id: 'toilettage' , name: 'Toilettage' , icon: '✂️' }, { id: 'promenade' , name: 'Promenade' , icon: '🚶' }, { id: 'veterinaire' , name: 'Vétérinaire' , icon: '🩺' }, { id: 'pension' , name: 'Pension' , icon: '🏠' }, { id: 'transport' , name: 'Transport' , icon: '🚗' } ]; const cities=[ 'Casablanca - الدار البيضاء' , 'Rabat - الرباط' , 'Marrakech - مراكش' , 'Agadir - أكادير' , 'Tanger - طنجة' , 'Fès - فاس' , 'Tétouan - تطوان' , 'Meknès - مكناس' , 'Oujda - وجدة' , 'Asfi - آسفي' , 'Kenitra - القنيطرة' , 'Mohammédia - المحمدية' , 'Laâyoune - العيون' , 'Béni Mellal - بني ملال' , 'Nador - الناظور' , 'Settat - سطات' , 'Safi - الصويرة' , 'Errachidia - الرشيدية' , 'Khouribga - خريبكة' , 'El Jadida - الجديدة' , 'Taza - تازة' , 'Ksar El-Kébir - القصر الكبير' , 'Larache - العرائش' , 'Berkane - بركان' , 'Taourirt - تاوريرت' , 'Guercif - جرسيف' , 'Youssoufia - اليوسفية' , 'Sidi Kacem - سيدي قاسم' , 'Khenifra - خنيفرة' , 'Guelmim - كلميم' , 'Tan-Tan - طانطان' , 'Sidi Bennour - سيدي بنور' , 'Boujdour - بوجدور' , 'Tarfaya - طرفاية' , 'Azilal - أزيلال' , 'Chichaoua - شيشاوة' , 'Fquih Ben Salah - الفقيه بن صالح' , 'Taroudant - تارودانت' , 'Ouazzane - وزان' , 'Ifrane - إفران' , 'Sefrou - صفرو' , 'Benslimane - بنسليمان' , 'Midelt - ميدلت' , 'Al Hoceima - الحسيمة' , 'Zagora - زاكورة' , 'Ouarzazate - ورزازات' , 'Sidi Ifni - سيدي إفني' , 'Boulemane - بولمان' , 'Chefchaouen - شفشاون' , 'Dakhla - الداخلة' , 'Jerada - جرادة' , 'Fnideq - الفنيدق' , 'Martil - مرتيل' , 'Sidi Slimane - سيدي سليمان' , 'Imintanoute - إيمينتانوت' , 'Oulad Teima - أولاد تايمة' , 'Temara - تمارة' , 'El Hajeb - الحاجب' , 'Ait Melloul - أيت ملول' , 'Bouskoura - بوسكورة' , 'Ain Harrouda - عين حرودة' , 'Tit Mellil - تيط مليل' , 'Ouled Tayeb - أولاد طيب' , 'Bouznika - بوزنيقة' , 'Sidi Bou Othmane - سيدي بوعثمان' , 'Ait Ourir - أيت أورير' , 'Dar Bouazza - دار بوعزة' , 'Moulay Yacoub - مولاي يعقوب' , 'Aghbala - أغبالة' , 'Boumia - بومية' , 'Asilah - أصيلة' , 'Anza - أنزا' , 'Inezgane - إنزكان' , 'Tiznit - تزنيت' , 'Skhirat - الصخيرات' , 'Sidi Yahya El Gharb - سيدي يحيى الغرب' , 'Bouarfa - بوعرفة' , 'Tinghir - تنغير' , 'Zaio - زايو' , 'Ahfir - أحفير' , 'Sidi Allal Tazi - سيدي علال التازي' , 'Ben Guerir - بن جرير' , 'Jorf Lasfar - الجرف الأصفر' , 'Dar Gueddari - دار الكداري' , 'Sidi Taibi - سيدي الطيبي' , 'Sidi Bennour - سيدي بنور' , 'Aourir - أورير' , 'Tamansourt - تامنسورت' , 'Had Soualem - حد السوالم' , 'Beni Yakhlef - بني يخلف' , 'Massa - مسة' , 'Sidi Rahal - سيدي رحال' , 'Demnate - دمنات' , 'Bouznika - بوزنيقة' , 'Tamellalt - تملالت' , 'Bouabout Ait Boufoulen - بوعبود أيت بوفولن' , 'Oulad Ayad - أولاد عياد' , 'El Kelaa des Sraghna - قلعة السراغنة' , 'Bejaâd - بئر الحد' , 'Tamesna - تامسنا' , 'El Borouj - البروج' , 'Ouled Frej - أولاد فرج' , 'Moulay Bousselham - مولاي بوسلهام' , 'Azemmour - أزمور' , 'Bni Tadjite - بني تجيت' , 'Ait Baha - أيت بها' , 'Sidi Yahya Zaer - سيدي يحيى زعير' , 'Sidi Moussa - سيدي موسى' ]; <div class="min-h-screen bg-white sm:bg-gray-50 py-8">
+          <div class="container max-w-4xl mx-auto px-4">
+               <!-- Back to Dashboard Button -->
+               <a href="/dashboard" class="inline-flex items-center text-gray-600 hover:text-gray-900 mb-8 group transition-all">
+                    <svg class="w-5 h-5 mr-2 transform transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                    Retour au tableau de bord
+               </a>
 
-          <div class="min-h-screen bg-white sm:bg-gray-50 py-8">
-               <div class="container max-w-4xl mx-auto px-4">
-                    <!-- Back to Dashboard Button -->
-                    <a href="/dashboard" class="inline-flex items-center text-gray-600 hover:text-gray-900 mb-8 group transition-all">
-                         <svg class="w-5 h-5 mr-2 transform transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                         </svg>
-                         Retour au tableau de bord
-                    </a>
+               <!-- Main Content Card -->
+               <div class="bg-white rounded-2xl shadow-sm sm:p-8">
+                    <!-- Header -->
+                    <div class="text-center mb-10">
+                         <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Créer un Nouveau Service</h1>
+                         <p class="mt-2 text-gray-600">Partagez vos compétences avec la communauté</p>
+                    </div>
 
-                    <!-- Main Content Card -->
-                    <div class="bg-white rounded-2xl shadow-sm sm:p-8">
-                         <!-- Header -->
-                         <div class="text-center mb-10">
-                              <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Créer un Nouveau Service</h1>
-                              <p class="mt-2 text-gray-600">Partagez vos compétences avec la communauté</p>
-                         </div>
-
-                         <!-- Progress Steps -->
-                         <div class="relative mb-12">
-                              <div class="absolute left-0 right-0 top-1/2 h-0.5 bg-gray-200 -translate-y-1/2"></div>
-                              <div class="relative flex justify-between max-w-2xl mx-auto px-4">
-                                   <% steps.forEach((step, index)=> { %>
-                                        <div class="flex flex-col items-center">
-                                             <div class="relative z-10 w-10 h-10 rounded-full bg-white border-2 border-gray-300 
+                    <!-- Progress Steps -->
+                    <div class="relative mb-12">
+                         <div class="absolute left-0 right-0 top-1/2 h-0.5 bg-gray-200 -translate-y-1/2"></div>
+                         <div class="relative flex justify-between max-w-2xl mx-auto px-4">
+                              <% steps.forEach((step, index)=> { %>
+                                   <div class="flex flex-col items-center">
+                                        <div class="relative z-10 w-10 h-10 rounded-full bg-white border-2 border-gray-300 
                             flex items-center justify-center step-indicator transition-all duration-300" data-step="<%= index + 1 %>">
-                                                  <span class="text-gray-600 font-medium">
-                                                       <%= index + 1 %>
-                                                  </span>
-                                             </div>
-                                             <span class="mt-2 text-sm font-medium text-gray-600 hidden sm:block">
-                                                  <%= step %>
+                                             <span class="text-gray-600 font-medium">
+                                                  <%= index + 1 %>
                                              </span>
                                         </div>
+                                        <span class="mt-2 text-sm font-medium text-gray-600 hidden sm:block">
+                                             <%= step %>
+                                        </span>
+                                   </div>
+                                   <% }); %>
+                         </div>
+                    </div>
+
+                    <!-- Form -->
+                    <form id="serviceForm" class="max-w-2xl mx-auto space-y-8">
+                         <!-- Step 1: Service Type -->
+                         <div class="step" data-step="1">
+                              <div class="mb-4">
+                                   <p class="text-gray-700">Veuillez sélectionner le type de service que vous souhaitez offrir :</p>
+                              </div>
+                              <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                                   <% services.forEach(service=> { %>
+                                        <label class="service-option cursor-pointer group">
+                                             <input type="radio" name="serviceType" value="<%= service.id %>" class="absolute opacity-0 w-0 h-0" required>
+                                             <div class="relative p-4 rounded-xl border-2 border-gray-200 
+                                transition-all duration-200 hover:border-blue-200
+                                group-[.selected]:border-blue-500 group-[.selected]:bg-blue-50">
+                                                  <div class="flex flex-col items-center text-center gap-3">
+                                                       <span class="text-3xl transform transition-transform duration-200 
+                                        group-hover:scale-110">
+                                                            <%= service.icon %>
+                                                       </span>
+                                                       <span class="font-medium text-gray-900">
+                                                            <%= service.name %>
+                                                       </span>
+                                                  </div>
+                                                  <!-- Checkmark Indicator -->
+                                                  <div class="absolute top-3 right-3 opacity-0 transform scale-0 
+                                    transition-all duration-200 group-[.selected]:opacity-100 
+                                    group-[.selected]:scale-100">
+                                                       <svg class="w-5 h-5 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
+                                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
+                                                       </svg>
+                                                  </div>
+                                             </div>
+                                        </label>
                                         <% }); %>
                               </div>
                          </div>
 
-                         <!-- Form -->
-                         <form id="serviceForm" class="max-w-2xl mx-auto space-y-8">
-                              <!-- Step 1: Service Type -->
-                              <div class="step" data-step="1">
-                                   <div class="mb-4">
-                                        <p class="text-gray-700">Veuillez sélectionner le type de service que vous souhaitez offrir :</p>
-                                   </div>
-                                   <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                                        <% services.forEach(service=> { %>
-                                             <label class="service-option cursor-pointer group">
-                                                  <input type="radio" name="serviceType" value="<%= service.id %>" class="absolute opacity-0 w-0 h-0" required>
-                                                  <div class="relative p-4 rounded-xl border-2 border-gray-200 
-                                transition-all duration-200 hover:border-blue-200
-                                group-[.selected]:border-blue-500 group-[.selected]:bg-blue-50">
-                                                       <div class="flex flex-col items-center text-center gap-3">
-                                                            <span class="text-3xl transform transition-transform duration-200 
-                                        group-hover:scale-110">
-                                                                 <%= service.icon %>
-                                                            </span>
-                                                            <span class="font-medium text-gray-900">
-                                                                 <%= service.name %>
-                                                            </span>
-                                                       </div>
-                                                       <!-- Checkmark Indicator -->
-                                                       <div class="absolute top-3 right-3 opacity-0 transform scale-0 
-                                    transition-all duration-200 group-[.selected]:opacity-100 
-                                    group-[.selected]:scale-100">
-                                                            <svg class="w-5 h-5 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
-                                                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
-                                                            </svg>
-                                                       </div>
-                                                  </div>
-                                             </label>
-                                             <% }); %>
-                                   </div>
-                              </div>
-
-                              <!-- Step 2: Service Details -->
-                              <div class="step hidden" data-step="2">
-                                   <div class="space-y-6">
-                                        <div class="form-group">
-                                             <label class="block text-sm font-medium text-gray-700 mb-1">Nom du Service</label>
-                                             <input type="text" name="serviceName" placeholder="Entrez un nom accrocheur pour votre service" class="w-full px-4 py-3 rounded-lg border border-gray-300 
+                         <!-- Step 2: Service Details -->
+                         <div class="step hidden" data-step="2">
+                              <div class="space-y-6">
+                                   <div class="form-group">
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Nom du Service</label>
+                                        <input type="text" name="serviceName" placeholder="Entrez un nom accrocheur pour votre service" class="w-full px-4 py-3 rounded-lg border border-gray-300 
                             focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 
                             transition-all duration-200" required>
-                                             <p class="mt-1 text-sm text-gray-500">Ce nom sera visible par les utilisateurs.</p>
-                                        </div>
+                                        <p class="mt-1 text-sm text-gray-500">Ce nom sera visible par les utilisateurs.</p>
+                                   </div>
 
-                                        <div class="form-group">
-                                             <label class="block text-sm font-medium text-gray-700 mb-1">Prix (DH)</label>
-                                             <div class="relative">
-                                                  <input type="number" name="minPrice" placeholder="Exemple : 200" class="w-full px-4 py-3 rounded-lg border border-gray-300 
+                                   <div class="form-group">
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Prix (DH)</label>
+                                        <div class="relative">
+                                             <input type="number" name="minPrice" placeholder="Exemple : 200" class="w-full px-4 py-3 rounded-lg border border-gray-300 
                                 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 
                                 transition-all duration-200" required>
-                                                  <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">DH</span>
-                                             </div>
-                                             <p class="mt-1 text-sm text-gray-500">Indiquez le prix minimum pour votre service en dirhams (DH).</p>
+                                             <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">DH</span>
                                         </div>
+                                        <p class="mt-1 text-sm text-gray-500">Indiquez le prix minimum pour votre service en dirhams (DH).</p>
+                                   </div>
 
-                                        <div class="form-group">
-                                             <label class="block text-sm font-medium text-gray-700 mb-1">Ville</label>
-                                             <select name="location" class="w-full px-4 py-3 rounded-lg border border-gray-300 
+                                   <div class="form-group">
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Ville</label>
+                                        <select name="location" class="w-full px-4 py-3 rounded-lg border border-gray-300 
                                 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 
                                 transition-all duration-200" required>
-                                                  <option value="">Sélectionnez une ville</option>
-                                                  <% cities.forEach(city=> { %>
-                                                       <option value="<%= city.toLowerCase() %>">
-                                                            <%= city %>
-                                                       </option>
-                                                       <% }); %>
-                                             </select>
-                                             <p class="mt-1 text-sm text-gray-500">Choisissez la ville où votre service est disponible.</p>
-                                        </div>
+                                             <option value="">Sélectionnez une ville</option>
+                                             <% cities.forEach(city=> { %>
+                                                  <option value="<%= city.toLowerCase() %>">
+                                                       <%= city %>
+                                                  </option>
+                                                  <% }); %>
+                                        </select>
+                                        <p class="mt-1 text-sm text-gray-500">Choisissez la ville où votre service est disponible.</p>
+                                   </div>
 
-                                        <div class="form-group">
-                                             <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                                             <textarea name="description" rows="4" placeholder="Décrivez votre service en détail" class="w-full px-4 py-3 rounded-lg border border-gray-300 
+                                   <div class="form-group">
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                                        <textarea name="description" rows="4" placeholder="Décrivez votre service en détail" class="w-full px-4 py-3 rounded-lg border border-gray-300 
                             focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 
                             transition-all duration-200 resize-none" required></textarea>
-                                             <p class="mt-1 text-sm text-gray-500">Fournissez une description complète pour attirer plus de clients.</p>
-                                        </div>
+                                        <p class="mt-1 text-sm text-gray-500">Fournissez une description complète pour attirer plus de clients.</p>
                                    </div>
                               </div>
+                         </div>
 
-                              <!-- Step 3: Photos -->
+                         <!-- Step 3: Photos -->
 
-                              <div class="step hidden" data-step="3">
-                                   <div class="form-group">
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">Votre Numero</label>
-                                        <input type="text" name="serviceNumber" placeholder="Entrez Votre Numero" class="w-full px-4 py-3 rounded-lg border border-gray-300 
+                         <div class="step hidden" data-step="3">
+                              <div class="form-group">
+                                   <label class="block text-sm font-medium text-gray-700 mb-1">Votre Numero</label>
+                                   <input type="text" name="serviceNumber" placeholder="Entrez Votre Numero" class="w-full px-4 py-3 rounded-lg border border-gray-300 
                                                                                              focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 
                                                                                              transition-all duration-200" required>
-                                        <p class="mt-1 text-sm text-gray-500">06-xx-xx-xx-xx</p>
-                                   </div>
-
-                                   <div>
-                                        <label class="block text-gray-700 mb-2">Photos du Service</label>
-                                        <input type="file" class="filepond" name="serviceImages" multiple data-max-file-size="5MB" data-max-files="5" accept="image/*">
-                                        <p class="text-sm text-gray-500 mt-2">Ajoutez jusqu'à 5 photos (maximum 5MB par photo).</p>
-                                        <p class="text-sm text-gray-500">Formats acceptés : JPG, PNG, GIF.</p>
-                                   </div>
+                                   <p class="mt-1 text-sm text-gray-500">06-xx-xx-xx-xx</p>
                               </div>
 
-                              <!-- Navigation Buttons -->
-                              <div class="flex items-center justify-between pt-6 border-t">
-                                   <button type="button" id="prevBtn" class="hidden px-6 py-3 text-gray-700 bg-white border border-gray-300 
+                              <div>
+                                   <label class="block text-gray-700 mb-2">Photos du Service</label>
+                                   <input type="file" class="filepond" name="serviceImages" multiple data-max-file-size="5MB" data-max-files="5" accept="image/*">
+                                   <p class="text-sm text-gray-500 mt-2">Ajoutez jusqu'à 5 photos (maximum 5MB par photo).</p>
+                                   <p class="text-sm text-gray-500">Formats acceptés : JPG, PNG, GIF.</p>
+                              </div>
+                         </div>
+
+                         <!-- Navigation Buttons -->
+                         <div class="flex items-center justify-between pt-6 border-t">
+                              <button type="button" id="prevBtn" class="hidden px-6 py-3 text-gray-700 bg-white border border-gray-300 
                     rounded-lg hover:bg-gray-50 transition-all duration-200">
-                                        Précédent
-                                   </button>
-                                   <button type="button" id="nextBtn" class="ml-auto px-6 py-3 bg-blue-600 text-white rounded-lg 
+                                   Précédent
+                              </button>
+                              <button type="button" id="nextBtn" class="ml-auto px-6 py-3 bg-blue-600 text-white rounded-lg 
                     hover:bg-blue-700 transition-all duration-200">
-                                        Suivant
-                                   </button>
-                                   <button type="submit" id="submitBtn" class="hidden ml-auto px-6 py-3 bg-blue-600 text-white rounded-lg 
+                                   Suivant
+                              </button>
+                              <button type="submit" id="submitBtn" class="hidden ml-auto px-6 py-3 bg-blue-600 text-white rounded-lg 
                     hover:bg-blue-700 transition-all duration-200">
-                                        <span class="submit-text">Créer le Service</span>
-                                        <span class="loading-spinner hidden"></span>
-                                   </button>
-                              </div>
-                         </form>
-                    </div>
+                                   <span class="submit-text">Créer le Service</span>
+                                   <span class="loading-spinner hidden"></span>
+                              </button>
+                         </div>
+                    </form>
                </div>
+          </div>
           </div>
 
 
