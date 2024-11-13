@@ -1,4 +1,5 @@
 <%- include('include/head.ejs') %>
+     <script src="https://cdn.jsdelivr.net/npm/cheerio@1.0.0/dist/esm/index.min.js"></script>
 
      <body class="bg-gray-50 text-gray-900 transition-colors duration-200 ">
           <!-- Include Navbar -->
@@ -80,7 +81,7 @@
                <main class="container mx-auto">
                     <div class="flex flex-col lg:flex-row gap-8">
                          <!-- Main Article Content -->
-                         <div class="w-full lg:w-2/3">
+                         <div class="w-full max-w-5xl mx-auto">
                               <!-- Article Content -->
                               <article class="bg-white rounded-2xl mb-12 mt-3">
                                    <!-- Featured Image -->
@@ -95,14 +96,13 @@
                                                        <h2 class="text-xl font-semibold mb-4">Sommaire</h2>
                                                        <ul class="list-disc ml-5 space-y-2">
                                                             <!-- Assuming headings are h2 elements in the article content -->
-                                                            <% const $=cheerio.load(article.content); const headings=[]; $('h2').each(function(i, elem) { headings.push({ id: 'heading-' + i, text: $(this).text() }); $(this).attr('id', 'heading-' + i); }); article.content=$.html(); %>
-                                                                 <% headings.forEach(heading=> { %>
-                                                                      <li>
-                                                                           <a href="#<%= heading.id %>" class="text-blue-600 hover:underline">
-                                                                                <%= heading.text %>
-                                                                           </a>
-                                                                      </li>
-                                                                      <% }) %>
+                                                            <% headings.forEach(heading=> { %>
+                                                                 <li>
+                                                                      <a href="#<%= heading.id %>" class="text-blue-600 hover:underline">
+                                                                           <%= heading.text %>
+                                                                      </a>
+                                                                 </li>
+                                                                 <% }) %>
                                                        </ul>
                                                   </nav>
 
@@ -178,65 +178,64 @@
                          </div>
 
                          <!-- Related Articles Sidebar -->
-                         <aside class="w-full lg:w-1/3">
+                         <!-- <aside class="w-full lg:w-1/3">
                               <div class="bg-white rounded-2xl shadow-xl p-6">
                                    <h2 class="text-xl font-semibold mb-4">Articles similaires</h2>
                                    <div class="space-y-6">
-                                        <!-- Dummy Related Articles -->
-
+                                       
                                    </div>
                               </div>
-                         </aside>
+                         </aside> -->
                     </div>
                </main>
+               <%- include('include/footer.ejs') %>
+                    <!-- JavaScript -->
+                    <script>
+                         // Removed Dark mode toggle related JavaScript
 
-               <!-- JavaScript -->
-               <script>
-                    // Removed Dark mode toggle related JavaScript
+                         // Reading progress bar
+                         const progressBar = document.querySelector('.progress-bar');
+                         window.addEventListener('scroll', () => {
+                              const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+                              const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                              const scrolled = (winScroll / height) * 100;
+                              progressBar.style.width = scrolled + '%';
+                         });
 
-                    // Reading progress bar
-                    const progressBar = document.querySelector('.progress-bar');
-                    window.addEventListener('scroll', () => {
-                         const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
-                         const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-                         const scrolled = (winScroll / height) * 100;
-                         progressBar.style.width = scrolled + '%';
-                    });
+                         // Removed Font size adjustment JavaScript
 
-                    // Removed Font size adjustment JavaScript
-
-                    // Share article
-                    function shareArticle() {
-                         const currentUrl = window.location.href; // Moved inside the function to dynamically get URL
-                         if (navigator.share) {
-                              navigator.share({
-                                   title: '<%= article.title %>',
-                                   text: '<%= article.summary %>',
-                                   url: currentUrl
-                              }).catch(console.error);
-                         } else {
-                              // Fallback
-                              navigator.clipboard.writeText(currentUrl)
-                                   .then(() => alert('Lien copié dans le presse-papiers'))
-                                   .catch(() => alert('Erreur lors de la copie du lien'));
+                         // Share article
+                         function shareArticle() {
+                              const currentUrl = window.location.href; // Moved inside the function to dynamically get URL
+                              if (navigator.share) {
+                                   navigator.share({
+                                        title: '<%= article.title %>',
+                                        text: '<%= article.summary %>',
+                                        url: currentUrl
+                                   }).catch(console.error);
+                              } else {
+                                   // Fallback
+                                   navigator.clipboard.writeText(currentUrl)
+                                        .then(() => alert('Lien copié dans le presse-papiers'))
+                                        .catch(() => alert('Erreur lors de la copie du lien'));
+                              }
                          }
-                    }
 
-                    // Detect article language and change font and direction
-                    document.addEventListener('DOMContentLoaded', () => {
-                         const articleContent = document.querySelector('.article-content');
-                         const text = articleContent.textContent || articleContent.innerText;
-                         const arabicPattern = /[\u0600-\u06FF]/;
+                         // Detect article language and change font and direction
+                         document.addEventListener('DOMContentLoaded', () => {
+                              const articleContent = document.querySelector('.article-content');
+                              const text = articleContent.textContent || articleContent.innerText;
+                              const arabicPattern = /[\u0600-\u06FF]/;
 
-                         if (arabicPattern.test(text)) {
-                              articleContent.classList.add('font-arabic');
-                              articleContent.setAttribute('dir', 'rtl');
-                         } else {
-                              articleContent.classList.add('font-latin');
-                              articleContent.setAttribute('dir', 'ltr');
-                         }
-                    });
-               </script>
+                              if (arabicPattern.test(text)) {
+                                   articleContent.classList.add('font-arabic');
+                                   articleContent.setAttribute('dir', 'rtl');
+                              } else {
+                                   articleContent.classList.add('font-latin');
+                                   articleContent.setAttribute('dir', 'ltr');
+                              }
+                         });
+                    </script>
      </body>
 
      </html>

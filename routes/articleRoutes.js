@@ -258,46 +258,54 @@ router.post('/admin/articles/:id/delete', async (req, res) => {
 });
 
 // GET THE ARTICLE BY SLUG AND DISPLAY IT IN THE ARTICLE PAGE
+
 router.get('/articles/:slug', async (req, res) => {
-
-     const calculateReadingTime = (content) => {
-          const wordsPerMinute = 200; // Average reading speed
-          const text = content.replace(/<[^>]*>/g, ''); // Remove HTML tags if any
-          const wordCount = text.trim().split(/\s+/).length; // Count the words
-          const readingTime = Math.ceil(wordCount / wordsPerMinute); // Calculate the reading time
-          return readingTime;
-     };
-
-
-
      const slug = req.params.slug;
 
      try {
-          // Find the article by slug
           const article = await Article.findOne({ slug });
-          const pageUrl = `https://www.ndressilik.com/articles/${article.slug}`;
-
           if (!article) {
                return res.status(404).send('Article not found');
           }
 
-          // Find comments related to this article
+          // Load article content with Cheerio
+          const $ = cheerio.load(article.content);
+          const headings = [];
+
+          // Extract headings and assign unique IDs
+          $('h2').each(function (i, elem) {
+               const headingText = $(this).text();
+               const headingId = 'heading-' + i;
+               headings.push({ id: headingId, text: headingText });
+               $(this).attr('id', headingId); // Add unique ID to each heading
+          });
+
+          // Update article content with IDs
+          article.content = $.html();
+          const calculateReadingTime = (content) => {
+               const wordsPerMinute = 200; // Average reading speed
+               const text = content.replace(/<[^>]*>/g, ''); // Remove HTML tags
+               const wordCount = text.trim().split(/\s+/).length; // Count words
+               return Math.ceil(wordCount / wordsPerMinute); // Calculate reading time in minutes
+          };
+
+          // Dynamic SEO metadata
+          const pageTitle = `${article.title} | NDRESSILIK`;
+          const description = article.summary || `${article.title} - Découvrez notre article complet sur ${article.category}.`;
+          const keywords = `${article.tags.join(', ')}, ${article.category}, articles NDRESSILIK`;
+
           const comments = await Comment.find({ article: article._id });
 
-          // Fetch suggested articles from the same category, limit to 5
-          const suggestedArticles = await Article.find({
-               category: article.category,
-               _id: { $ne: article._id } // Exclude the current article
-          }).limit(5);
-          const readTime = calculateReadingTime(article.content);
-          console.log(readTime)
+          // Pass data to the template
           res.render('user/article', {
-               article,
+               pageTitle,
                comments,
-               pageUrl,
-               readTime,
-               cheerio,
-               suggestedArticles, // Pass the suggested articles to the template
+               description,
+               keywords,
+               article,
+               headings,
+               pageUrl: `https://www.ndressilik.com/articles/${slug}`,
+               readTime: calculateReadingTime(article.content),
                success: req.flash('success'),
                error: req.flash('error')
           });
@@ -306,6 +314,7 @@ router.get('/articles/:slug', async (req, res) => {
           res.status(500).send('Server Error');
      }
 });
+
 
 
 // POST comment on an article

@@ -310,7 +310,7 @@ router.get('/services/:serviceOption?/:location?', async (req, res) => {
                serviceName: service.serviceName || service.serviceOptions?.[0] || 'Service',
                serviceOptions: service.serviceOptions,
                images: service.images || [],
-               views: service.views || '12',
+               views: service.views || '0',
                priceRange: service.priceRange ? `${service.priceRange} DH` : 'N/A',
                location: service.location || 'Non spécifié',
                availability: service.availability || 'sur rendez-vous',

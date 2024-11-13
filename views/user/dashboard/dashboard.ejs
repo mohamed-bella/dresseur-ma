@@ -7,7 +7,7 @@
           <title>NDRESSILIK - Tableau de Bord</title>
 </head>
 
-<body class="bg-gray-100">
+<body class="bg-gray-200">
      <div class="">
           <%- include('includes/header') %>
 
@@ -15,82 +15,69 @@
                     <!-- Dashboard Content -->
                     <div class="max-w-5xl mx-auto space-y-6">
                          <!-- Quick Actions Section -->
-                         <div class="bg-white rounded-2xl p-6 mt-6 border border-gray-100">
-                              <!-- Header with gradient underline -->
-                              <div class="relative mb-6">
-                                   <h2 class="text-xl font-bold text-gray-900">Actions rapides</h2>
-                                   <!-- <div class="absolute bottom-0 left-0 w-1/4 h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"></div> -->
+                         <!-- Quick Actions Section -->
+                         <div class="bg-white rounded-xl shadow-sm p-4 sm:p-6">
+                              <!-- Section Header -->
+                              <div class="mb-6">
+                                   <h2 class="text-lg sm:text-xl font-semibold text-gray-900">Actions rapides</h2>
                               </div>
 
                               <!-- Actions Grid -->
-                              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                   <!-- Nouveau Service Card -->
-                                   <a href="/dashboard/new-service" class="group relative overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-50 p-4 rounded-xl transition-all duration-300 hover:shadow-md hover:-translate-y-1">
-                                        <div class="flex items-center space-x-4">
-                                             <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-blue-500 text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
-                                                  <i class="fas fa-plus text-lg"></i>
-                                             </div>
-                                             <div>
-                                                  <h3 class="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">Nouveau service</h3>
-                                                  <p class="text-sm text-gray-500">Ajouter un nouveau service</p>
-                                             </div>
+                              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                   <!-- New Service Card -->
+                                   <a href="/dashboard/new-service" class="flex items-center p-4 bg-blue-50 rounded-xl transition hover:-translate-y-1 hover:shadow-md">
+                                        <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg bg-blue-600 text-white">
+                                             <i class="fas fa-plus"></i>
                                         </div>
-                                        <!-- Animated Arrow -->
-                                        <div class="absolute right-4 top-1/2 -translate-y-1/2 group-hover:opacity-100 transform group-hover:translate-x-0 translate-x-4 transition-all duration-300">
-                                             <i class="fas fa-arrow-right text-blue-500"></i>
+                                        <div class="ml-4 flex-1">
+                                             <p class="font-medium text-gray-900">Nouveau service</p>
+                                             <p class="text-sm text-gray-500">Ajouter un service</p>
                                         </div>
+                                        <i class="fas fa-chevron-right text-blue-600 ml-2"></i>
                                    </a>
 
-                                   <!-- Éditer Mon Profil Card -->
-                                   <a href="/dashboard/profile/" class="group relative overflow-hidden bg-gradient-to-br from-green-50 to-teal-50 p-4 rounded-xl transition-all duration-300 hover:shadow-md hover:-translate-y-1">
-                                        <div class="flex items-center space-x-4">
-                                             <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-green-500 text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
-                                                  <i class="fas fa-user-edit text-lg"></i>
-                                             </div>
-                                             <div>
-                                                  <h3 class="font-semibold text-gray-900 group-hover:text-green-600 transition-colors">Éditer profil</h3>
-                                                  <p class="text-sm text-gray-500">Modifier vos informations</p>
-                                             </div>
+                                   <!-- Edit Profile Card -->
+                                   <a href="/dashboard/profile" class="flex items-center p-4 bg-green-50 rounded-xl transition hover:-translate-y-1 hover:shadow-md">
+                                        <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg bg-green-600 text-white">
+                                             <i class="fas fa-user-edit"></i>
                                         </div>
-                                        <div class="absolute right-4 top-1/2 -translate-y-1/2 group-hover:opacity-100 transform group-hover:translate-x-0 translate-x-4 transition-all duration-300">
-                                             <i class="fas fa-arrow-right text-green-500"></i>
+                                        <div class="ml-4 flex-1">
+                                             <p class="font-medium text-gray-900">Éditer profil</p>
+                                             <p class="text-sm text-gray-500">Modifier infos</p>
                                         </div>
+                                        <i class="fas fa-chevron-right text-green-600 ml-2"></i>
                                    </a>
 
-                                   <!-- Mes Services Card -->
-                                   <a href="#services" class="group relative overflow-hidden bg-gradient-to-br from-purple-50 to-pink-50 p-4 rounded-xl transition-all duration-300 hover:shadow-md hover:-translate-y-1">
-                                        <div class="flex items-center space-x-4">
-                                             <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-purple-500 text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
-                                                  <i class="fas fa-briefcase text-lg"></i>
-                                             </div>
-                                             <div>
-                                                  <h3 class="font-semibold text-gray-900 group-hover:text-purple-600 transition-colors">Mes services</h3>
-                                                  <p class="text-sm text-gray-500">Gérer vos services</p>
-                                             </div>
+                                   <!-- My Services Card -->
+                                   <a href="#services" class="flex items-center p-4 bg-purple-50 rounded-xl transition hover:-translate-y-1 hover:shadow-md">
+                                        <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg bg-purple-600 text-white">
+                                             <i class="fas fa-briefcase"></i>
                                         </div>
-                                        <div class="absolute right-4 top-1/2 -translate-y-1/2 group-hover:opacity-100 transform group-hover:translate-x-0 translate-x-4 transition-all duration-300">
-                                             <i class="fas fa-arrow-right text-purple-500"></i>
+                                        <div class="ml-4 flex-1">
+                                             <p class="font-medium text-gray-900">Mes services</p>
+                                             <p class="text-sm text-gray-500">Gérer services</p>
                                         </div>
+                                        <i class="fas fa-chevron-right text-purple-600 ml-2"></i>
                                    </a>
                               </div>
 
-                              <!-- Quick Stats Preview -->
+                              <!-- Quick Stats -->
                               <div class="grid grid-cols-3 gap-4 mt-6 pt-6 border-t border-gray-100">
                                    <div class="text-center">
-                                        <div class="text-2xl font-bold text-blue-600">
+                                        <p class="text-xl font-semibold text-blue-600">
                                              <%= stats.totalServices %>
-                                        </div>
-                                        <div class="text-xs text-gray-500">Services actifs</div>
+                                        </p>
+                                        <p class="text-xs text-gray-500">Services</p>
                                    </div>
                                    <div class="text-center">
-                                        <div class="text-2xl font-bold text-green-600">
+                                        <p class="text-xl font-semibold text-green-600">
                                              <%= stats.totalReviews %>
-                                        </div>
-                                        <div class="text-xs text-gray-500">Avis clients</div>
+                                        </p>
+                                        <p class="text-xs text-gray-500">Avis</p>
                                    </div>
                                    <div class="text-center">
-                                        <div class="text-2xl font-bold text-purple-600">0</div>
-                                        <div class="text-xs text-gray-500">Vues totales</div>
+                                        <p class="text-xl font-semibold text-purple-600">0</p>
+                                        <p class="text-xs text-gray-500">Vues</p>
                                    </div>
                               </div>
                          </div>
