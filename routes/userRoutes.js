@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const nodemailer = require('nodemailer');
+
 const passport = require('passport');
 const multer = require('multer');
 const { body, validationResult } = require('express-validator');
@@ -22,6 +24,7 @@ const User = require('../models/user');
 const Event = require('../models/event');
 const Reservation = require('../models/reservation')
 const Review = require('../models/review');
+const { sendNewServiceEmail } = require('../utils/emails'); // Import the email service
 
 
 
@@ -202,6 +205,7 @@ router.post('/dashboard/new-service', validateService, async (req, res) => {
 });
 
 router.get('/', async (req, res) => {
+
      // Define the metadata for the homepage
      const pageTitle = 'Bienvenue sur NDRESSILIK - Trouvez les meilleurs services pour votre chiend';
      const description = 'Découvrez les derniers services et annonces pour animaux de compagnie sur NDRESSILIK. Recherchez par lieu et type de service.';
