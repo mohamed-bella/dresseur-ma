@@ -1,73 +1,154 @@
-<!-- Section Héro -->
-<div class="min-h-screen bg-white px-4 py-16">
-     <!-- Contenu Héro -->
-     <div class="max-w-7xl mx-auto">
-          <div class="max-w-4xl mx-auto text-center mb-16">
-               <h1 class="text-4xl md:text-6xl font-bold leading-tight mb-6">
-                    Service pour chiens,
-                    <br>
-                    <span class="text-blue-600">Facilitez le soin de votre compagnon.</span>
-               </h1>
-               <p class="text-xl text-gray-600 mb-8">
-                    Profitez d'offres exclusives sur tous les services pour votre chien
-               </p>
+<!-- Hero Section -->
+<div class="relative min-h-screen bg-gradient-to-b from-blue-50 to-white overflow-hidden">
+     <!-- Background Pattern -->
+     <div class="absolute inset-0 opacity-30">
+          <div class="absolute inset-0" style="background-image: radial-gradient(circle at 25px 25px, #60A5FA 1%, transparent 0%), radial-gradient(circle at 75px 75px, #93C5FD 1%, transparent 0%); background-size: 100px 100px;"></div>
+     </div>
 
-               <!-- Barre de Recherche -->
-               <form action="/search" method="GET" class="flex items-center justify-center space-x-4">
-                    <div class="relative flex items-center w-full md:w-[400px]">
-                         <input type="search" name="q" placeholder="Rechercher des services..." class="w-full pl-12 pr-4 py-3 rounded-full border border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none" autocomplete="off">
-                         <i class="fas fa-search absolute left-4 text-gray-400"></i>
-                         <button type="submit" class="absolute right-3 p-1 hover:bg-gray-100 rounded-full transition-colors">
-                              <i class="fas fa-arrow-right text-blue-500"></i>
-                         </button>
-                    </div>
-               </form>
+     <!-- Floating Paw Prints Animation -->
+     <div class="absolute inset-0 overflow-hidden pointer-events-none">
+          <div class="paw-prints opacity-5">
+               <svg class="w-8 h-8 text-blue-500 absolute animate-float-1" style="top: 15%; left: 10%;" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-4-8a2 2 0 100-4 2 2 0 000 4zm4-3a2 2 0 100-4 2 2 0 000 4zm4 3a2 2 0 100-4 2 2 0 000 4zm-4 3a2 2 0 100-4 2 2 0 000 4z" />
+               </svg>
+               <!-- Add more paw prints with different animations -->
           </div>
+     </div>
 
-          <!-- Slider des Services -->
-          <div class="relative ">
-               <!-- Conteneur du Slider -->
-               <div class="overflow-x-auto hide-scrollbar -mx-4">
-                    <div class="flex space-x-4 md:space-x-6 p-4 transition-transform duration-300">
-                         <% const serviceCards=[ { icon: '🐕' , title: 'Dressage' , description: 'Éducation professionnelle pour chiens' , bgColor: 'bg-emerald-50' , hoverColor: 'group-hover:bg-emerald-100' , iconBg: 'bg-emerald-100' }, { icon: '✂️' , title: 'Toilettage' , description: 'Services complets de toilettage' , bgColor: 'bg-sky-50' , hoverColor: 'group-hover:bg-sky-100' , iconBg: 'bg-sky-100' }, { icon: '🏠' , title: 'Pension' , description: 'Hébergement de luxe' , bgColor: 'bg-purple-50' , hoverColor: 'group-hover:bg-purple-100' , iconBg: 'bg-purple-100' }, { icon: '🦮' , title: 'Promenade' , description: 'Promenade professionnelle pour chiens' , bgColor: 'bg-amber-50' , hoverColor: 'group-hover:bg-amber-100' , iconBg: 'bg-amber-100' }, { icon: '🐾' , title: 'Vétérinaire' , description: 'Soins vétérinaires spécialisés' , bgColor: 'bg-pink-50' , hoverColor: 'group-hover:bg-pink-100' , iconBg: 'bg-pink-100' }, { icon: '🚚' , title: 'Transport' , description: 'Service de transport sécurisé pour chiens' , bgColor: 'bg-teal-50' , hoverColor: 'group-hover:bg-teal-100' , iconBg: 'bg-teal-100' } ] %>
+     <!-- Main Content -->
+     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div class="pt-20 pb-16 text-center">
+               <!-- Title Section -->
+               <div class="max-w-4xl mx-auto mb-12">
+                    <h1 class="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent animate-fade-in">
+                         Service pour chiens
+                         <span class="block mt-2 text-4xl md:text-6xl">Facilitez le soin de votre compagnon</span>
+                    </h1>
+                    <p class="text-xl text-gray-600 mb-8 animate-fade-in-up">
+                         Profitez d'offres exclusives sur tous les services pour votre chien
+                    </p>
 
-                              <% serviceCards.forEach(card=> { %>
-                                   <a href="/services/<%= card.title.toLowerCase() %>" class="flex-none w-[280px] md:w-[320px] group">
-                                        <div class="<%= card.bgColor %> <%= card.hoverColor %> rounded-3xl p-6 md:p-8 shadow-sm hover:shadow-xl transition-all duration-300 h-full">
-                                             <!-- Icône avec fond -->
-                                             <div class="<%= card.iconBg %> w-14 h-14 rounded-2xl flex items-center justify-center mb-4">
-                                                  <span class="text-3xl">
-                                                       <%= card.icon %>
-                                                  </span>
-                                             </div>
-
-                                             <!-- Contenu -->
-                                             <h3 class="text-xl md:text-2xl font-bold mb-2 group-hover:text-blue-600 transition-colors">
-                                                  <%= card.title %>
-                                             </h3>
-
-                                             <p class="text-sm text-gray-600 mb-6">
-                                                  <%= card.description %>
-                                             </p>
-
-                                             <!-- Flèche -->
-                                             <div class="flex items-center text-blue-600 text-sm font-medium group-hover:translate-x-2 transition-transform">
-                                                  <span>Explorer</span>
-                                                  <i class="fas fa-arrow-right ml-2"></i>
-                                             </div>
-                                        </div>
-                                   </a>
-                                   <% }) %>
+                    <!-- Search Bar -->
+                    <div class="max-w-2xl mx-auto relative animate-fade-in-up">
+                         <div class="relative flex items-center">
+                              <input type="search" placeholder="Rechercher des services..." class="w-full pl-14 pr-16 py-4 rounded-full border-2 border-blue-100 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 outline-none text-lg transition-all duration-300 shadow-lg hover:shadow-xl" autocomplete="off">
+                              <div class="absolute left-5 top-1/2 -translate-y-1/2">
+                                   <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                   </svg>
+                              </div>
+                              <button class="absolute right-3 top-1/2 -translate-y-1/2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-2 rounded-full hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300">
+                                   Rechercher
+                              </button>
+                         </div>
                     </div>
-               </div>
-               <!-- Décoration Patte -->
-               <div class="absolute -bottom-12 left-1/2 transform -translate-x-1/2 text-gray-200 opacity-20">
-                    <svg class="w-24 h-24" viewBox="0 0 512 512">
-                         <path fill="currentColor" d="M256 224c-79.5 0-144 64.5-144 144s64.5 144 144 144 144-64.5 144-144-64.5-144-144-144zm0 240c-52.9 0-96-43.1-96-96s43.1-96 96-96 96 43.1 96 96-43.1 96-96 96zm0-128c-17.7 0-32 14.3-32 32s14.3 32 32 32 32-14.3 32-32-14.3-32-32-32z" />
-                    </svg>
+
+
                </div>
           </div>
      </div>
+</div>
+
+<style>
+     @keyframes float-1 {
+
+          0%,
+          100% {
+               transform: translate(0, 0) rotate(0deg);
+          }
+
+          25% {
+               transform: translate(10px, -10px) rotate(5deg);
+          }
+
+          50% {
+               transform: translate(20px, 0) rotate(0deg);
+          }
+
+          75% {
+               transform: translate(10px, 10px) rotate(-5deg);
+          }
+     }
+
+     .animate-float-1 {
+          animation: float-1 8s infinite ease-in-out;
+     }
+
+     .animate-fade-in {
+          animation: fadeIn 1s ease-out;
+     }
+
+     .animate-fade-in-up {
+          animation: fadeInUp 1s ease-out;
+     }
+
+     @keyframes fadeIn {
+          from {
+               opacity: 0;
+          }
+
+          to {
+               opacity: 1;
+          }
+     }
+
+     @keyframes fadeInUp {
+          from {
+               opacity: 0;
+               transform: translateY(20px);
+          }
+
+          to {
+               opacity: 1;
+               transform: translateY(0);
+          }
+     }
+</style>
+
+<!-- Slider des Services -->
+<div class="relative overflow-hidden">
+     <!-- Conteneur du Slider -->
+     <div class="overflow-x-auto hide-scrollbar -mx-4">
+          <div class="flex space-x-4 md:space-x-6 p-4 transition-transform duration-300">
+               <% const serviceCards=[ { icon: '🐕' , title: 'Dressage' , description: 'Éducation professionnelle pour chiens' , bgColor: 'bg-emerald-50' , hoverColor: 'group-hover:bg-emerald-100' , iconBg: 'bg-emerald-100' }, { icon: '✂️' , title: 'Toilettage' , description: 'Services complets de toilettage' , bgColor: 'bg-sky-50' , hoverColor: 'group-hover:bg-sky-100' , iconBg: 'bg-sky-100' }, { icon: '🏠' , title: 'Pension' , description: 'Hébergement de luxe' , bgColor: 'bg-purple-50' , hoverColor: 'group-hover:bg-purple-100' , iconBg: 'bg-purple-100' }, { icon: '🦮' , title: 'Promenade' , description: 'Promenade professionnelle pour chiens' , bgColor: 'bg-amber-50' , hoverColor: 'group-hover:bg-amber-100' , iconBg: 'bg-amber-100' }, { icon: '🐾' , title: 'Vétérinaire' , description: 'Soins vétérinaires spécialisés' , bgColor: 'bg-pink-50' , hoverColor: 'group-hover:bg-pink-100' , iconBg: 'bg-pink-100' }, { icon: '🚚' , title: 'Transport' , description: 'Service de transport sécurisé pour chiens' , bgColor: 'bg-teal-50' , hoverColor: 'group-hover:bg-teal-100' , iconBg: 'bg-teal-100' } ] %>
+
+                    <% serviceCards.forEach(card=> { %>
+                         <a href="/services/<%= card.title.toLowerCase() %>" class="flex-none w-[280px] md:w-[320px] group">
+                              <div class="<%= card.bgColor %> <%= card.hoverColor %> rounded-3xl p-6 md:p-8 shadow-sm hover:shadow-xl transition-all duration-300 h-full">
+                                   <!-- Icône avec fond -->
+                                   <div class="<%= card.iconBg %> w-14 h-14 rounded-2xl flex items-center justify-center mb-4">
+                                        <span class="text-3xl">
+                                             <%= card.icon %>
+                                        </span>
+                                   </div>
+
+                                   <!-- Contenu -->
+                                   <h3 class="text-xl md:text-2xl font-bold mb-2 group-hover:text-blue-600 transition-colors">
+                                        <%= card.title %>
+                                   </h3>
+
+                                   <p class="text-sm text-gray-600 mb-6">
+                                        <%= card.description %>
+                                   </p>
+
+                                   <!-- Flèche -->
+                                   <div class="flex items-center text-blue-600 text-sm font-medium group-hover:translate-x-2 transition-transform">
+                                        <span>Explorer</span>
+                                        <i class="fas fa-arrow-right ml-2"></i>
+                                   </div>
+                              </div>
+                         </a>
+                         <% }) %>
+          </div>
+     </div>
+     <!-- Décoration Patte -->
+     <div class="absolute -bottom-12 left-1/2 transform -translate-x-1/2 text-gray-200 opacity-20">
+          <svg class="w-24 h-24" viewBox="0 0 512 512">
+               <path fill="currentColor" d="M256 224c-79.5 0-144 64.5-144 144s64.5 144 144 144 144-64.5 144-144-64.5-144-144-144zm0 240c-52.9 0-96-43.1-96-96s43.1-96 96-96 96 43.1 96 96-43.1 96-96 96zm0-128c-17.7 0-32 14.3-32 32s14.3 32 32 32 32-14.3 32-32-14.3-32-32-32z" />
+          </svg>
+     </div>
+</div>
+</div>
 </div>
 
 <style>
