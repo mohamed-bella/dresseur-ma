@@ -1,64 +1,88 @@
 <style>
      body {
-          background-color: #fffda2 !important;
+          background-color: #f0f0ef !important;
      }
 </style>
 <%- include('include/head.ejs', { user }) %>
      <%- include('include/navbar.ejs', { user }) %>
 
-          <!-- Category Tabs - Enhanced Mobile Navigation -->
-          <div class="w-full top-16 z-40 bg-white/95 backdrop-blur-md border-b border-gray-200">
-               <!-- Container -->
-               <div class="container mx-auto px-4">
-                    <!-- Main Navigation Track -->
-                    <div class="relative">
-                         <!-- Overflow Container -->
-                         <div class="overflow-x-auto scrollbar-hide overscroll-x-contain -mx-4 px-4">
-                              <div class="flex gap-3 py-4 no-scrollbar snap-x snap-mandatory">
-                                   <!-- All Services -->
-                                   <a href="/services/tous" class="flex-none snap-start first:pl-4 last:pr-4 min-w-fit text-sm font-medium px-4 py-2.5 rounded-full
-                            <%= serviceOption === 'tous' ? 'bg-gray-900 text-white shadow-lg scale-105' : 'text-gray-500 hover:bg-gray-50' %>
-                            active:scale-95 transform transition-all duration-200">
-                                        <div class="flex items-center gap-2">
-                                             <span class="text-base transform transition-transform duration-200">🔍</span>
-                                             <span>Tous</span>
-                                        </div>
-                                        <% if (serviceOption==='tous' ) { %>
-                                             <div class="absolute inset-x-0 -bottom-4 h-0.5 bg-gray-900"></div>
-                                             <% } %>
-                                   </a>
+          <!-- Category Navigation -->
+          <nav class="sticky top-16 z-40 bg-white/95 backdrop-blur-md border-b border-gray-200">
+               <div class="max-w-7xl mx-auto px-4">
+                    <!-- Desktop Navigation -->
+                    <div class="hidden md:flex justify-between items-center py-3">
+                         <div class="flex gap-4">
+                              <% const servicesTab=[ { id: 'tous' , icon: '🔍' , label: 'Tous' , bgColor: 'gray' }, { id: 'dressage' , icon: '🐕' , label: 'Dressage' , bgColor: 'blue' }, { id: 'toilettage' , icon: '✂️' , label: 'Toilettage' , bgColor: 'purple' }, { id: 'promenade' , icon: '🦮' , label: 'Promenade' , bgColor: 'green' }, { id: 'veterinaire' , icon: '⚕️' , label: 'Vétérinaire' , bgColor: 'red' }, { id: 'pension' , icon: '🏠' , label: 'Pension' , bgColor: 'orange' }, { id: 'transport' , icon: '🚗' , label: 'Transport' , bgColor: 'indigo' } ] %>
 
-                                   <!-- Service Options with Dynamic Colors -->
-                                   <% const servicesTab=[ { id: 'dressage' , icon: '🐕' , label: 'Dressage' , colors: { bg: 'blue' , active: 'scale-105' }}, { id: 'toilettage' , icon: '✂️' , label: 'Toilettage' , colors: { bg: 'purple' , active: 'scale-105' }}, { id: 'promenade' , icon: '🦮' , label: 'Promenade' , colors: { bg: 'green' , active: 'scale-105' }}, { id: 'veterinaire' , icon: '⚕️' , label: 'Vétérinaire' , colors: { bg: 'red' , active: 'scale-105' }}, { id: 'pension' , icon: '🏠' , label: 'Pension' , colors: { bg: 'orange' , active: 'scale-105' }}, { id: 'transport' , icon: '🚗' , label: 'Transport' , colors: { bg: 'indigo' , active: 'scale-105' }} ]; %>
+                                   <% servicesTab.forEach(service=> { %>
+                                        <a href="/services/<%= service.id %>" class="group relative px-6 py-2.5 rounded-xl transition-all duration-200
+                                 <%= serviceOption === service.id ? 
+                                     `bg-${service.bgColor}-50 text-${service.bgColor}-600 shadow-sm scale-105` : 
+                                     'text-gray-600 hover:bg-gray-50' %>">
+                                             <div class="flex items-center gap-2">
+                                                  <span class="text-xl group-hover:scale-110 transition-transform duration-200">
+                                                       <%= service.icon %>
+                                                  </span>
+                                                  <span class="font-medium">
+                                                       <%= service.label %>
+                                                  </span>
+                                             </div>
+                                             <% if (serviceOption===service.id) { %>
+                                                  <div class="absolute inset-x-0 -bottom-3 h-0.5 bg-<%= service.bgColor %>-600"></div>
+                                                  <% } %>
+                                        </a>
+                                        <% }) %>
+                         </div>
+                    </div>
 
-                                        <% servicesTab.forEach(service=> { %>
-                                             <a href="/services/<%= service.id %>" class="flex-none snap-start min-w-fit text-sm font-medium px-4 py-2.5 rounded-full
-                                <%= serviceOption === service.id ? 
-                                    `bg-${service.colors.bg}-50 text-${service.colors.bg}-600 shadow-sm ${service.colors.active}` : 
-                                    'text-gray-500 hover:bg-gray-50' %>
-                                active:scale-95 transform transition-all duration-200 relative group">
-                                                  <div class="flex items-center gap-2">
-                                                       <span class="text-base transform group-hover:scale-110 transition-transform duration-200">
-                                                            <%= service.icon %>
-                                                       </span>
-                                                       <span>
-                                                            <%= service.label %>
-                                                       </span>
-                                                  </div>
-                                                  <% if (serviceOption===service.id) { %>
-                                                       <div class="absolute inset-x-0 -bottom-4 h-0.5 bg-<%= service.colors.bg %>-600"></div>
-                                                       <% } %>
-                                             </a>
-                                             <% }); %>
+                    <!-- Mobile Navigation -->
+                    <div class="md:hidden relative">
+                         <div class="overflow-x-auto scrollbar-hide py-3">
+                              <div class="flex gap-3 snap-x snap-mandatory">
+                                   <% servicesTab.forEach(service=> { %>
+                                        <a href="/services/<%= service.id %>" class="flex-none first:pl-4 last:pr-4 snap-start
+                                     <%= serviceOption === service.id ? 
+                                         `bg-${service.bgColor}-50 text-${service.bgColor}-600 shadow-md` : 
+                                         'bg-white text-gray-600' %>
+                                     p-3 rounded-xl active:scale-95 transform transition-all">
+                                             <div class="flex flex-col items-center gap-1 min-w-[4rem]">
+                                                  <span class="text-2xl">
+                                                       <%= service.icon %>
+                                                  </span>
+                                                  <span class="text-xs font-medium whitespace-nowrap">
+                                                       <%= service.label %>
+                                                  </span>
+                                             </div>
+                                        </a>
+                                        <% }) %>
                               </div>
                          </div>
 
-                         <!-- Scroll Indicators -->
-                         <div class="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-white to-transparent pointer-events-none opacity-75"></div>
-                         <div class="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-white to-transparent pointer-events-none opacity-75"></div>
+                         <!-- Scroll Shadows -->
+                         <div class="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-white"></div>
+                         <div class="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-white"></div>
                     </div>
                </div>
-          </div>
+          </nav>
+
+          <style>
+               .scrollbar-hide {
+                    -ms-overflow-style: none;
+                    scrollbar-width: none;
+               }
+
+               .scrollbar-hide::-webkit-scrollbar {
+                    display: none;
+               }
+
+               .snap-x {
+                    scroll-snap-type: x mandatory;
+               }
+
+               .snap-start {
+                    scroll-snap-align: start;
+               }
+          </style>
 
           <style>
                /* Enhance touch scrolling */
@@ -282,295 +306,153 @@
 
                <!-- Services Grid -->
                <% if (services && services.length> 0) { %>
-                    <!-- Service Cards Grid -->
-                    <div class="grid gap-4 sm:gap-6">
+                    <div class="grid grid-cols-1 gap-4">
                          <% services.forEach(service=> { %>
                               <a href="/service/<%= service._id %>" class="block group">
-                                   <!-- Desktop Design (Hidden on Mobile) -->
-                                   <div class="hidden sm:flex bg-white/60 backdrop-blur-sm border border-gray-100 rounded-2xl overflow-hidden hover:shadow-lg hover:shadow-blue-500/5 transition-all duration-300 hover:-translate-y-0.5">
-                                        <!-- Image Section -->
-                                        <div class="relative w-48 md:w-56 xl:w-64 flex-shrink-0">
-                                             <div class="absolute inset-0 overflow-hidden">
-                                                  <% if (service.images && service.images.length> 0) { %>
-                                                       <img src="<%= service.images[0] %>" alt="<%= service.serviceOptions?.[0] %>" class="h-full w-full object-cover transform transition duration-700 group-hover:scale-110" loading="lazy">
+                                   <!-- Mobile Design -->
+                                   <div class="sm:hidden bg-white rounded-xl shadow-sm overflow-hidden">
+                                        <div class="flex">
+                                             <!-- Image Left -->
+                                             <div class="w-32 h-32 relative flex-shrink-0">
+                                                  <% if (service.images?.[0]) { %>
+                                                       <img src="<%= service.images[0] %>" alt="" class="w-full h-full object-cover">
                                                        <% } else { %>
-                                                            <div class="h-full bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center">
-                                                                 <div class="rounded-full bg-white/80 p-3">
-                                                                      <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                           <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                                                      </svg>
-                                                                 </div>
+                                                            <div class="w-full h-full bg-gray-100 flex items-center justify-center">
+                                                                 <i class="fas fa-image text-gray-400 text-2xl"></i>
                                                             </div>
                                                             <% } %>
-                                                                 <!-- Gradient Overlay -->
-                                                                 <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                                                 <!-- Service Type Badge -->
+                                                                 <div class="absolute top-2 left-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full text-xs font-medium">
+                                                                      <%= serviceIcons[service.serviceOptions]?.emoji || '🐾' %>
+                                                                 </div>
                                              </div>
 
-                                             <!-- Service Badge -->
-                                             <% const serviceIcons={ 'dressage' : { emoji: '🐕' , color: 'blue' }, 'toilettage' : { emoji: '✂️' , color: 'purple' }, 'promenade' : { emoji: '🦮' , color: 'green' }, 'veterinaire' : { emoji: '⚕️' , color: 'red' }, 'pension' : { emoji: '🏠' , color: 'orange' }, 'transport' : { emoji: '🚗' , color: 'indigo' } }; %>
-                                                  <% const serviceType=service.serviceOptions; %>
-                                                       <% const iconData=serviceIcons[serviceType] || { emoji: '🐾' , color: 'gray' }; %>
-
-                                                            <div class="absolute top-3 left-3 z-10">
-                                                                 <div class="flex items-center gap-2 bg-white/95 backdrop-blur px-3 py-1.5 rounded-full shadow-sm border border-white/20">
-                                                                      <span class="text-base">
-                                                                           <%= iconData.emoji %>
-                                                                      </span>
-                                                                      <span class="text-xs font-medium text-gray-700">
-                                                                           <%= service.serviceOptions %>
-                                                                      </span>
-                                                                 </div>
-                                                            </div>
-                                        </div>
-
-                                        <!-- Content Section -->
-                                        <div class="flex-1 p-5 flex flex-col">
-                                             <div class="flex items-start justify-between gap-4 mb-3">
-                                                  <!-- Title and Rating -->
-                                                  <div>
-                                                       <h3 class="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+                                             <!-- Content Right -->
+                                             <div class="flex-1 p-3">
+                                                  <div class="flex justify-between items-start">
+                                                       <h3 class="font-semibold text-gray-900 mb-1 line-clamp-1">
                                                             <%= service.serviceName || service.serviceOptions %>
                                                        </h3>
-
-                                                       <!--  Views -->
-                                                       <div class="flex items-center gap-3 mt-2">
-                                                            <div class="flex items-center">
-                                                                 <span class="text-sm text-gray-500 ml-2">
-                                                                      (<%= service.views %> Vu)
-                                                                 </span>
-                                                            </div>
-                                                       </div>
+                                                       <span class="text-sm font-bold text-gray-900">
+                                                            <%= service.priceRange || 'Sur devis' %>
+                                                       </span>
                                                   </div>
 
-                                                  <!-- Price Tag -->
-                                                  <div class="flex flex-col items-end">
-                                                       <div class="text-lg font-bold text-gray-900">
-                                                            <%= service.priceRange ? `${service.priceRange}` : 'Sur devis' %>
-                                                       </div>
-                                                       <div class="text-xs text-gray-500">par séance</div>
-                                                  </div>
-                                             </div>
-
-                                             <!-- Info Pills -->
-                                             <div class="flex flex-wrap gap-2 mb-4">
-                                                  <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gray-50 text-gray-700 text-sm">
-                                                       <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                                       </svg>
-                                                       <%= service.location || 'Non spécifié' %>
-                                                  </div>
-                                             </div>
-
-                                             <!-- Provider Section -->
-                                             <div class="mt-auto pt-4 flex items-center justify-between border-t border-gray-100">
-                                                  <div class="flex items-center gap-3">
-                                                       <div class="relative">
-                                                            <img src="<%= service.createdBy?.profileImage || 'https://img.icons8.com/?size=100&id=7819&format=png&color=000000' %>" class="w-10 h-10 rounded-full object-cover ring-2 ring-white" alt="<%= service.createdBy?.displayName %>">
-                                                            <% if (service.createdBy?.isVerified) { %>
-                                                                 <div class="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5">
-                                                                      <svg class="w-4 h-4 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
-                                                                           <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
-                                                                      </svg>
-                                                                 </div>
-                                                                 <% } %>
-                                                       </div>
-                                                       <div>
-                                                            <div class="text-sm font-medium text-gray-900">
-                                                                 <%= service.createdBy?.displayName || 'Service Provider' %>
-                                                            </div>
-                                                            <div class="text-xs text-gray-500">Prestataire professionnel</div>
-                                                       </div>
+                                                  <!-- Location & Views -->
+                                                  <div class="flex items-center gap-2 text-xs text-gray-500 mb-2">
+                                                       <i class="fas fa-map-marker-alt"></i>
+                                                       <span>
+                                                            <%= service.location || 'Non spécifié' %>
+                                                       </span>
+                                                       <span>•</span>
+                                                       <span>
+                                                            <%= service.views %> vues
+                                                       </span>
                                                   </div>
 
-                                                  <div class="flex items-center gap-2 text-blue-600 font-medium">
-                                                       <span class="text-sm">Voir détails</span>
-                                                       <svg class="w-5 h-5 transform transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                                                       </svg>
+                                                  <!-- Provider -->
+                                                  <div class="flex items-center gap-2">
+                                                       <img src="<%= service.createdBy?.profileImage || '/default-avatar.png' %>" class="w-6 h-6 rounded-full object-cover" alt="">
+                                                       <span class="text-xs font-medium text-gray-700 truncate">
+                                                            <%= service.createdBy?.displayName || 'Service Provider' %>
+                                                                 <% if (service.createdBy?.isVerified) { %>
+                                                                      <i class="fas fa-check-circle text-blue-500 ml-1"></i>
+                                                                      <% } %>
+                                                       </span>
                                                   </div>
                                              </div>
                                         </div>
                                    </div>
 
-                                   <!-- Mobile Design -->
-                                   <div class="sm:hidden bg-white/60 backdrop-blur-sm border border-gray-100 rounded-xl overflow-hidden active:scale-[0.99] transition-all">
-                                        <div class="relative aspect-video">
-                                             <% if (service.images && service.images.length> 0) { %>
-                                                  <img src="<%= service.images[0] %>" alt="<%= service.serviceOptions?.[0] %>" class="w-full h-full object-cover" loading="lazy">
-                                                  <% } else { %>
-                                                       <div class="w-full h-full bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center">
-                                                            <div class="rounded-full bg-white/80 p-3">
-                                                                 <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                      <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                                                 </svg>
+                                   <!-- Desktop Design -->
+                                   <div class="hidden sm:block bg-white rounded-xl shadow-sm hover:shadow-md transition-all overflow-hidden">
+                                        <div class="flex">
+                                             <!-- Image Section -->
+                                             <div class="w-48 relative">
+                                                  <% if (service.images?.[0]) { %>
+                                                       <img src="<%= service.images[0] %>" class="w-full h-full object-cover" loading="lazy" alt="">
+                                                       <% } else { %>
+                                                            <div class="w-full h-full bg-gray-100 flex items-center justify-center">
+                                                                 <i class="fas fa-image text-gray-400 text-3xl"></i>
                                                             </div>
-                                                       </div>
-                                                       <% } %>
+                                                            <% } %>
 
-                                                            <!-- Service Badge -->
-                                                            <div class="absolute top-3 left-3">
-                                                                 <div class="flex items-center gap-2 bg-white/95 backdrop-blur px-2.5 py-1 rounded-full shadow-sm">
-                                                                      <span>
-                                                                           <%= iconData.emoji %>
-                                                                      </span>
-                                                                      <span class="text-xs font-medium text-gray-700">
-                                                                           <%= service.serviceOptions %>
-                                                                      </span>
+                                                                 <!-- Service Badge -->
+                                                                 <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full">
+                                                                      <div class="flex items-center gap-2">
+                                                                           <span class="text-base">
+                                                                                <%= serviceIcons[service.serviceOptions]?.emoji || '🐾' %>
+                                                                           </span>
+                                                                           <span class="text-sm font-medium text-gray-700">
+                                                                                <%= service.serviceOptions %>
+                                                                           </span>
+                                                                      </div>
                                                                  </div>
-                                                            </div>
-
-                                                            <!-- Price Badge -->
-                                                            <div class="absolute top-3 right-3">
-                                                                 <div class="bg-white/95 backdrop-blur px-2.5 py-1 rounded-full shadow-sm text-sm font-semibold text-gray-900">
-                                                                      <%= service.priceRange ? `${service.priceRange}` : 'Sur devis' %>
-                                                                 </div>
-                                                            </div>
-                                        </div>
-
-                                        <div class="p-4">
-                                             <div class="flex items-start justify-between gap-3 mb-3">
-                                                  <h3 class="text-base font-semibold text-gray-900">
-                                                       <%= service.serviceName || service.serviceOptions %>
-                                                  </h3>
-
                                              </div>
 
-                                             <div class="flex items-center gap-2 text-xs">
-                                                  <div class="flex items-center gap-1 text-gray-600">
-                                                       <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                                       </svg>
-                                                       <%= service.location || 'Non spécifié' %>
-                                                  </div>
-                                                  <span class="text-gray-300">•</span>
-                                                  <span class="text-gray-600">
-                                                       <%= service.views %> Vu
-                                                  </span>
-                                             </div>
-
-                                             <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
-                                                  <div class="flex items-center gap-2">
-                                                       <div class="relative flex-shrink-0">
-                                                            <img src="<%= service.createdBy?.profileImage || 'https://img.icons8.com/?size=100&id=7819&format=png&color=000000' %>" class="w-8 h-8 rounded-full object-cover ring-2 ring-white" alt="<%= service.createdBy?.displayName %>">
-                                                            <% if (service.createdBy?.isVerified) { %>
-                                                                 <div class="absolute -bottom-0.5 -right-0.5 bg-white rounded-full p-0.5">
-                                                                      <svg class="w-3 h-3 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
-                                                                           <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
-                                                                      </svg>
-                                                                 </div>
-                                                                 <% } %>
+                                             <!-- Content Section -->
+                                             <div class="flex-1 p-6">
+                                                  <div class="flex justify-between items-start mb-4">
+                                                       <div>
+                                                            <h3 class="text-xl font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+                                                                 <%= service.serviceName || service.serviceOptions %>
+                                                            </h3>
+                                                            <p class="text-sm text-gray-500 mt-1">
+                                                                 <i class="fas fa-map-marker-alt mr-1"></i>
+                                                                 <%= service.location || 'Non spécifié' %>
+                                                                      <span class="mx-2">•</span>
+                                                                      <%= service.views %> vues
+                                                            </p>
                                                        </div>
-                                                       <div class="min-w-0">
-                                                            <div class="text-sm font-medium text-gray-900 truncate">
-                                                                 <%= service.createdBy?.displayName || 'Service Provider' %>
+                                                       <div class="text-right">
+                                                            <div class="text-xl font-bold text-gray-900">
+                                                                 <%= service.priceRange || 'Sur devis' %>
                                                             </div>
-                                                            <div class="text-xs text-gray-500">Pro</div>
+                                                            <div class="text-xs text-gray-500">par séance</div>
                                                        </div>
                                                   </div>
 
-                                                  <!-- Mobile Action Button -->
-                                                  <div class="flex items-center text-blue-600">
-                                                       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                                                       </svg>
+                                                  <!-- Provider Section -->
+                                                  <div class="flex items-center justify-between mt-4 pt-4 border-t">
+                                                       <div class="flex items-center gap-3">
+                                                            <img src="<%= service.createdBy?.profileImage || '/default-avatar.png' %>" class="w-10 h-10 rounded-full object-cover" alt="">
+                                                            <div>
+                                                                 <div class="font-medium">
+                                                                      <%= service.createdBy?.displayName || 'Service Provider' %>
+                                                                           <% if (service.createdBy?.isVerified) { %>
+                                                                                <i class="fas fa-check-circle text-blue-500 ml-1"></i>
+                                                                                <% } %>
+                                                                 </div>
+                                                                 <div class="text-sm text-gray-500">Pro</div>
+                                                            </div>
+                                                       </div>
+                                                       <div class="text-blue-600 group-hover:translate-x-1 transition-transform">
+                                                            <i class="fas fa-arrow-right"></i>
+                                                       </div>
                                                   </div>
                                              </div>
                                         </div>
                                    </div>
                               </a>
-                              <% }); %>
+                              <% }) %>
                     </div>
-
-
-                    <% }else { %>
+                    <% } else { %>
                          <!-- Empty State -->
-                         <div class="text-center py-16 bg-white rounded-2xl border border-gray-200">
-                              <div class="max-w-md mx-auto">
-                                   <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-50 mb-4">
-                                        <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-                                   </div>
+                         <div class="text-center py-12 bg-white rounded-xl shadow-sm">
+                              <div class="max-w-md mx-auto px-4">
+                                   <i class="fas fa-search text-gray-400 text-3xl mb-4"></i>
                                    <h3 class="text-lg font-semibold text-gray-900 mb-2">
                                         Aucun service disponible
                                    </h3>
                                    <p class="text-gray-500 mb-6">
                                         Aucun service n'est actuellement disponible dans cette catégorie.
                                    </p>
-                                   <a href="/services" class="inline-flex items-center justify-center px-4 py-2 border border-transparent 
-                                                             text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 
-                                                             transition-colors">
+                                   <a href="/services" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
                                         Voir tous les services
                                    </a>
                               </div>
                          </div>
                          <% } %>
-
-                              <style>
-                                   /* Custom Scrollbar */
-                                   .custom-scrollbar {
-                                        scrollbar-width: thin;
-                                        scrollbar-color: #E5E7EB transparent;
-                                   }
-
-                                   .custom-scrollbar::-webkit-scrollbar {
-                                        width: 6px;
-                                        height: 6px;
-                                   }
-
-                                   .custom-scrollbar::-webkit-scrollbar-track {
-                                        background: transparent;
-                                   }
-
-                                   .custom-scrollbar::-webkit-scrollbar-thumb {
-                                        background-color: #E5E7EB;
-                                        border-radius: 3px;
-                                   }
-
-                                   /* Smooth Transitions */
-                                   .transition-all {
-                                        transition-property: all;
-                                        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-                                        transition-duration: 300ms;
-                                   }
-
-                                   /* Card Hover Animation */
-                                   @keyframes softPulse {
-                                        0% {
-                                             transform: scale(1);
-                                        }
-
-                                        50% {
-                                             transform: scale(1.02);
-                                        }
-
-                                        100% {
-                                             transform: scale(1);
-                                        }
-                                   }
-
-                                   .hover-pulse:hover {
-                                        animation: softPulse 2s infinite;
-                                   }
-
-                                   /* Image Loading Animation */
-                                   .image-loading {
-                                        background: linear-gradient(90deg, #f3f4f6 0%, #e5e7eb 50%, #f3f4f6 100%);
-                                        background-size: 200% 100%;
-                                        animation: shimmer 1.5s infinite;
-                                   }
-
-                                   @keyframes shimmer {
-                                        0% {
-                                             background-position: -200% 0;
-                                        }
-
-                                        100% {
-                                             background-position: 200% 0;
-                                        }
-                                   }
-                              </style>
-
                               <script>
                                    // Lazy Loading Images
                                    document.addEventListener('DOMContentLoaded', () => {

@@ -1,223 +1,304 @@
-<!-- Hero Section -->
-<div class="relative min-h-screen bg-[#f8f5f0] text-gray-800 overflow-hidden">
-     <!-- Background Pattern -->
-
-
-     <!-- Main Content -->
-     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <div class="pt-20 pb-16 text-center">
-               <!-- Professional Title Section -->
-               <div class="max-w-4xl mx-auto mb-12">
-                    <h1 class="font-serif text-6xl md:text-8xl font-bold mb-8 text-gray-800 animate-fade-in">
-                         Vous êtes un
-                         <span class="block mt-4 text-5xl md:text-7xl">
-                              Dresseur, Vétérinaire, Toiletteur ?
-                         </span>
-                    </h1>
-                    <p class="font-serif text-2xl text-gray-600 mb-12 animate-fade-in-up leading-relaxed">
-                         Rejoignez notre communauté de professionnels et développez votre activité en ligne.
-                         <span class="block mt-2">Gagnez en visibilité et trouvez de nouveaux clients.</span>
-                    </p>
-
-                    <!-- Search Bar -->
-                    <form class="max-w-2xl mx-auto relative mb-12 animate-fade-in-up" action="/search" method="get">
-                         <div class="relative flex items-center">
-                              <input name="q" type="search" placeholder="Rechercher des services..." class="w-full pl-14 pr-16 py-6 rounded-xl border-2 border-gray-300 bg-white text-gray-800 placeholder-gray-500 focus:border-gray-400 focus:ring-4 focus:ring-gray-200 outline-none text-lg transition-all duration-300 shadow-sm hover:shadow-md font-serif" autocomplete="off">
-                              <div class="absolute left-5 top-1/2 -translate-y-1/2">
-                                   <i class="fas fa-search text-2xl text-gray-400"></i>
-                              </div>
-                              <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2 bg-gray-800 text-white px-3 py-3 rounded-xl font-serif hover:bg-gray-700 transform hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2">
-                                   <span>Rechercher</span>
-                                   <i class="fas fa-arrow-right"></i>
-                              </button>
-                         </div>
-                    </form>
-
-                    <!-- Add Service Button -->
-                    <button onclick="document.getElementById('loginModal').classList.remove('hidden')" class="bg-gray-800 text-white px-8 py-4 rounded-xl font-serif text-lg hover:bg-gray-700 transform hover:-translate-y-0.5 transition-all duration-300 shadow-lg flex items-center gap-3 mx-auto">
-                         <i class="fas fa-plus-circle text-2xl"></i>
-                         <span>Ajouter un nouveau service</span>
-                    </button>
-               </div>
-          </div>
+<!-- Hero Section with Unique Design -->
+<div class="relative min-h-screen bg-gradient-to-b from-[#ffd60a]/5 to-white overflow-hidden">
+     <!-- Decorative Elements -->
+     <div class="absolute inset-0 pointer-events-none overflow-hidden">
+          <!-- Yellow Gradient Blob -->
+          <div class="absolute top-0 -right-1/4 w-1/2 h-1/2 bg-[#ffd60a]/10 rounded-full blur-3xl animate-blob"></div>
+          <!-- Blue Gradient Blob -->
+          <div class="absolute -bottom-1/4 -left-1/4 w-1/2 h-1/2 bg-[#003566]/10 rounded-full blur-3xl animate-blob animation-delay-2000"></div>
+          <!-- Small Decorative Elements -->
+          <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width=\'20\' height=\'20\' viewBox=\'0 0 20 20\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M5 5 L15 15 M15 5 L5 15\' stroke=\'%23ffd60a\' stroke-width=\'0.5\' opacity=\'0.1\'/%3E%3C/svg%3E'); background-size: 30px 30px;"></div>
      </div>
 
-     <!-- Login Modal -->
-     <div id="loginModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div class="bg-[#f8f5f0] text-gray-800 p-8 rounded-xl max-w-md w-full mx-4 shadow-2xl">
-               <div class="text-center">
-                    <h2 class="font-serif text-3xl font-bold mb-6">Connexion requise</h2>
-                    <p class="text-gray-600 mb-8 font-serif">Connectez-vous pour ajouter un nouveau service</p>
-
-                    <button onclick="window.location.href='/auth/google'" class="w-full bg-white border-2 border-gray-800 text-gray-800 px-6 py-4 rounded-xl font-serif hover:bg-gray-100 transition-all duration-300 flex items-center justify-center gap-3 mb-6 shadow-md">
-                         <i class="fab fa-google text-2xl"></i>
-                         <span>Continuer avec Google</span>
-                    </button>
-
-                    <button onclick="document.getElementById('loginModal').classList.add('hidden')" class="font-serif text-gray-600 hover:text-gray-800 transition-colors duration-300">
-                         Annuler
-                    </button>
+     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative pt-20 pb-16">
+          <!-- Main Content -->
+          <div class="text-center max-w-4xl mx-auto">
+               <!-- Title Section -->
+               <div class="mb-16 space-y-4">
+                    <h1 class="text-5xl md:text-7xl font-bold text-[#001d3d]">
+                         <span class="inline-block animate-fade-in-up">Trouvez le</span>
+                         <span class="block mt-2 text-[#ffd60a] animate-fade-in-up animation-delay-200">Service Parfait</span>
+                         <span class="block mt-2 text-3xl md:text-4xl font-medium text-[#003566] animate-fade-in-up animation-delay-400">pour votre compagnon à quatre pattes</span>
+                    </h1>
+                    <p class="text-xl text-[#003566]/80 max-w-2xl mx-auto animate-fade-in-up animation-delay-600">
+                         Une plateforme unique réunissant tous les professionnels du monde canin
+                    </p>
                </div>
+
+               <!-- Enhanced Search Bar -->
+               <div class="relative max-w-2xl mx-auto mb-16 animate-fade-in-up animation-delay-800">
+                    <div class="absolute inset-0 bg-gradient-to-r from-[#ffd60a]/30 to-[#003566]/30 rounded-2xl blur-xl transform -rotate-1"></div>
+                    <div class="relative">
+                         <input type="search" placeholder="Rechercher un service..." class="w-full pl-14 pr-4 py-6 rounded-xl bg-white/80 backdrop-blur-sm border-2 
+                               border-transparent text-lg placeholder:text-gray-400 outline-none transition-all
+                               focus:border-[#ffd60a] focus:bg-white shadow-xl">
+                         <span class="absolute left-4 top-1/2 -translate-y-1/2 text-[#003566]/50">
+                              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                              </svg>
+                         </span>
+                    </div>
+               </div>
+
+               <!-- CTA Section -->
+               <div class="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up animation-delay-1000">
+                    <% if(user) { %>
+                         <a href="/dashboard/new-service" class="group relative px-8 py-4 bg-[#003566] text-white rounded-xl overflow-hidden
+                              hover:bg-[#002851] transition-colors">
+                              <div class="absolute inset-0 bg-[#ffd60a]/20 rounded-xl w-0 group-hover:w-full transition-all duration-300"></div>
+                              <span class="relative flex items-center gap-2">
+                                   <i class="fas fa-plus-circle"></i>
+                                   <span>Proposer un service</span>
+                              </span>
+                         </a>
+                         <% } else { %>
+                              <a href="/auth/google" class="group relative px-8 py-4 bg-[#003566] text-white rounded-xl overflow-hidden
+                              hover:bg-[#002851] transition-colors">
+                                   <div class="absolute inset-0 bg-[#ffd60a]/20 rounded-xl w-0 group-hover:w-full transition-all duration-300"></div>
+                                   <span class="relative flex items-center gap-2">
+                                        <i class="fab fa-plus"></i>
+                                        <span>Proposer un service</span>
+                                   </span>
+                              </a>
+                              <% } %>
+
+                                   <a href="/services" class="group px-8 py-4 border-2 border-[#003566] text-[#003566] rounded-xl
+                          hover:bg-[#003566] hover:text-white transition-all">
+                                        <span class="flex items-center gap-2">
+                                             <i class="fas fa-search"></i>
+                                             <span>Explorer les services</span>
+                                        </span>
+                                   </a>
+               </div>
+
+
           </div>
      </div>
 </div>
 
 <style>
-     @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap');
-
-     .font-serif {
-          font-family: 'Playfair Display', serif;
-     }
-
-     .animate-fade-in {
-          animation: fadeIn 0.8s ease-out forwards;
-     }
-
-     .animate-fade-in-up {
-          animation: fadeInUp 0.8s ease-out forwards;
-     }
-
-     @keyframes fadeIn {
-          from {
-               opacity: 0;
-          }
-
-          to {
-               opacity: 1;
-          }
-     }
-
-     @keyframes fadeInUp {
-          from {
-               opacity: 0;
-               transform: translateY(20px);
-          }
-
-          to {
-               opacity: 1;
-               transform: translateY(0);
-          }
-     }
-</style>
-
-<!-- Add to your existing scripts -->
-<script>
-     // Close modal when clicking outside
-     document.getElementById('loginModal').addEventListener('click', function (e) {
-          if (e.target === this) {
-               this.classList.add('hidden');
-          }
-     });
-</script>
-<style>
-     @keyframes float-1 {
+     @keyframes blob {
 
           0%,
           100% {
-               transform: translate(0, 0) rotate(0deg);
+               transform: translate(0, 0) scale(1);
           }
 
           25% {
-               transform: translate(10px, -10px) rotate(5deg);
+               transform: translate(20px, -50px) scale(1.1);
           }
 
           50% {
-               transform: translate(20px, 0) rotate(0deg);
+               transform: translate(-20px, 20px) scale(0.9);
           }
 
           75% {
-               transform: translate(10px, 10px) rotate(-5deg);
+               transform: translate(50px, 50px) scale(1.05);
           }
      }
 
-     .animate-float-1 {
-          animation: float-1 8s infinite ease-in-out;
+     .animate-blob {
+          animation: blob 20s infinite;
      }
 
-     .animate-fade-in {
-          animation: fadeIn 1s ease-out;
+     .animation-delay-2000 {
+          animation-delay: 2s;
      }
 
-     .animate-fade-in-up {
-          animation: fadeInUp 1s ease-out;
-     }
-
-     @keyframes fadeIn {
-          from {
-               opacity: 0;
-          }
-
-          to {
-               opacity: 1;
-          }
-     }
-
-     @keyframes fadeInUp {
-          from {
+     @keyframes fade-in-up {
+          0% {
                opacity: 0;
                transform: translateY(20px);
           }
 
-          to {
+          100% {
                opacity: 1;
                transform: translateY(0);
           }
      }
+
+     .animate-fade-in-up {
+          animation: fade-in-up 0.6s ease-out forwards;
+     }
+
+     .animation-delay-200 {
+          animation-delay: 0.2s;
+     }
+
+     .animation-delay-400 {
+          animation-delay: 0.4s;
+     }
+
+     .animation-delay-600 {
+          animation-delay: 0.6s;
+     }
+
+     .animation-delay-800 {
+          animation-delay: 0.8s;
+     }
+
+     .animation-delay-1000 {
+          animation-delay: 1s;
+     }
+
+     .animation-delay-1200 {
+          animation-delay: 1.2s;
+     }
 </style>
-
-<!-- Slider des Services -->
-<div class="py-16 bg-gray-50 overflow-hidden px-2">
-     <!-- Section Header -->
-     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12 text-center">
-          <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Nos Services Animaliers</h2>
-          <p class="text-xl text-gray-600 max-w-2xl mx-auto">Découvrez notre gamme complète de services professionnels pour prendre soin de votre compagnon à quatre pattes</p>
+<!-- Services Section -->
+<section class="relative py-24 bg-gradient-to-b from-white to-[#ffd60a]/5 overflow-hidden">
+     <!-- Decorative Background Elements -->
+     <div class="absolute inset-0 pointer-events-none">
+          <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#003566]/10 to-transparent"></div>
+          <div class="absolute bottom-0 right-0 w-1/3 h-1/3 bg-[#003566]/5 rounded-full blur-3xl"></div>
      </div>
-     <!-- Conteneur du Slider -->
-     <div class="overflow-x-auto hide-scrollbar -mx-4">
-          <div class="flex space-x-4 md:space-x-6 p-4 transition-transform duration-300">
-               <% const serviceCards=[ { icon: '🐕' , title: 'Dressage' , description: 'Éducation professionnelle pour chiens' , bgColor: 'bg-emerald-50' , hoverColor: 'group-hover:bg-emerald-100' , iconBg: 'bg-emerald-100' }, { icon: '✂️' , title: 'Toilettage' , description: 'Services complets de toilettage' , bgColor: 'bg-sky-50' , hoverColor: 'group-hover:bg-sky-100' , iconBg: 'bg-sky-100' }, { icon: '🏠' , title: 'Pension' , description: 'Hébergement de luxe' , bgColor: 'bg-purple-50' , hoverColor: 'group-hover:bg-purple-100' , iconBg: 'bg-purple-100' }, { icon: '🦮' , title: 'Promenade' , description: 'Promenade professionnelle pour chiens' , bgColor: 'bg-amber-50' , hoverColor: 'group-hover:bg-amber-100' , iconBg: 'bg-amber-100' }, { icon: '🐾' , title: 'Vétérinaire' , description: 'Soins vétérinaires spécialisés' , bgColor: 'bg-pink-50' , hoverColor: 'group-hover:bg-pink-100' , iconBg: 'bg-pink-100' }, { icon: '🚚' , title: 'Transport' , description: 'Service de transport sécurisé pour chiens' , bgColor: 'bg-teal-50' , hoverColor: 'group-hover:bg-teal-100' , iconBg: 'bg-teal-100' } ] %>
 
-                    <% serviceCards.forEach(card=> { %>
-                         <a href="/services/<%= card.title.toLowerCase() %>" class="flex-none w-[280px] md:w-[320px] group">
-                              <div class="<%= card.bgColor %> <%= card.hoverColor %> rounded-3xl p-6 md:p-8 shadow-sm hover:shadow-xl transition-all duration-300 h-full">
-                                   <!-- Icône avec fond -->
-                                   <div class="<%= card.iconBg %> w-14 h-14 rounded-2xl flex items-center justify-center mb-4">
-                                        <span class="text-3xl">
-                                             <%= card.icon %>
-                                        </span>
-                                   </div>
+     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <!-- Section Header -->
+          <div class="text-center max-w-3xl mx-auto mb-20">
+               <h2 class="text-4xl md:text-5xl font-bold text-[#001d3d] mb-6">
+                    Services Exceptionnels
+                    <span class="block mt-2 text-[#003566]">Pour Votre Chien</span>
+               </h2>
+               <p class="text-xl text-[#003566]/70">
+                    Des professionnels passionnés à votre service pour le bien-être de votre compagnon
+               </p>
+          </div>
 
-                                   <!-- Contenu -->
-                                   <h3 class="text-xl md:text-2xl font-bold mb-2 group-hover:text-blue-600 transition-colors">
-                                        <%= card.title %>
-                                   </h3>
+          <!-- Navigation Controls -->
+          <div class="flex justify-end gap-4 mb-8">
+               <button onclick="scrollServices('left')" class="p-3 rounded-xl border-2 border-[#003566] text-[#003566] hover:bg-[#003566] 
+                           hover:text-white transition-colors">
+                    <i class="fas fa-chevron-left"></i>
+               </button>
+               <button onclick="scrollServices('right')" class="p-3 rounded-xl border-2 border-[#003566] text-[#003566] hover:bg-[#003566] 
+                           hover:text-white transition-colors">
+                    <i class="fas fa-chevron-right"></i>
+               </button>
+          </div>
 
-                                   <p class="text-sm text-gray-600 mb-6">
-                                        <%= card.description %>
-                                   </p>
+          <!-- Services Cards Container -->
+          <div class="relative">
+               <div class="overflow-x-auto hide-scrollbar -mx-4" id="servicesContainer">
+                    <div class="flex gap-6 p-4">
+                         <% const services=[ { id: 'dressage' , icon: '🐕' , title: 'Dressage Canin' , description: 'Éducation personnalisée et comportementalisme pour votre chien' , features: ['Cours individuels', 'Correction comportementale' , 'Conseils pratiques' ], color: 'from-[#ffd60a]/20 to-[#ffc300]/20' }, { id: 'toilettage' , icon: '✂️' , title: 'Toilettage Premium' , description: 'Soins esthétiques professionnels et bien-être' , features: ['Bain et brushing', 'Coupe sur mesure' , 'Soins spécifiques' ], color: 'from-[#003566]/20 to-[#001d3d]/20' }, { id: 'pension' , icon: '🏠' , title: 'Pension de Luxe' , description: 'Hébergement confortable et surveillance 24/7' , features: ['Espaces privés', 'Activités quotidiennes' , 'Suivi personnalisé' ], color: 'from-[#ffd60a]/20 to-[#ffc300]/20' }, { id: 'veterinaire' , icon: '⚕️' , title: 'Soins Vétérinaires' , description: 'Consultations et suivis médicaux experts' , features: ['Examens complets', 'Vaccinations' , 'Urgences' ], color: 'from-[#003566]/20 to-[#001d3d]/20' }, { id: 'promenade' , icon: '🚶‍♂️' , title: 'Promenade et Exercice' , description: 'Balades actives et stimulation physique pour votre chien' , features: ['Sorties quotidiennes', 'Exercice en extérieur' , 'Renforcement musculaire' ], color: 'from-[#4caf50]/20 to-[#2e7d32]/20' }, { id: 'transport' , icon: '🚐' , title: 'Transport Sécurisé' , description: 'Service de transport sécurisé pour vos déplacements avec votre animal' , features: ['Véhicules adaptés', 'Sécurité optimale' , 'Trajets confortables' ], color: 'from-[#673ab7]/20 to-[#4527a0]/20' } ] %>
 
-                                   <!-- Flèche -->
-                                   <div class="flex items-center text-blue-600 text-sm font-medium group-hover:translate-x-2 transition-transform">
-                                        <span>Explorer</span>
-                                        <i class="fas fa-arrow-right ml-2"></i>
-                                   </div>
-                              </div>
-                         </a>
-                         <% }) %>
+                              <% services.forEach(service=> { %>
+                                   <a href="/services/<%= service.id %>" class="flex-none w-[300px] group">
+                                        <!-- Card Container -->
+                                        <div class="relative h-full bg-gradient-to-br <%= service.color %> backdrop-blur-sm 
+                                        p-1 rounded-2xl transition-all duration-300 hover:scale-[1.02]">
+                                             <div class="absolute inset-0 bg-white/40 rounded-2xl backdrop-blur-sm"></div>
+
+                                             <!-- Card Content -->
+                                             <div class="relative bg-white/80 backdrop-blur-sm p-8 rounded-2xl h-full
+                                            border border-white/50 hover:border-[#003566]/20 transition-colors">
+                                                  <!-- Icon & Title -->
+                                                  <div class="flex items-start justify-between mb-6">
+                                                       <div>
+                                                            <span class="text-4xl mb-4 block">
+                                                                 <%= service.icon %>
+                                                            </span>
+                                                            <h3 class="text-2xl font-bold text-[#001d3d] group-hover:text-[#003566] 
+                                                       transition-colors">
+                                                                 <%= service.title %>
+                                                            </h3>
+                                                       </div>
+                                                       <div class="w-10 h-10 rounded-full bg-[#ffd60a]/10 flex items-center 
+                                                    justify-center group-hover:bg-[#003566]/10 transition-colors">
+                                                            <i class="fas fa-arrow-right text-[#003566] opacity-0 group-hover:opacity-100 
+                                                      transition-opacity"></i>
+                                                       </div>
+                                                  </div>
+
+                                                  <!-- Description -->
+                                                  <p class="text-[#003566]/70 mb-6 text-lg">
+                                                       <%= service.description %>
+                                                  </p>
+
+                                                  <!-- Features -->
+                                                  <div class="space-y-3">
+                                                       <% service.features.forEach(feature=> { %>
+                                                            <div class="flex items-center gap-3">
+                                                                 <div class="w-6 h-6 rounded-full bg-[#ffd60a]/20 flex items-center 
+                                                            justify-center">
+                                                                      <i class="fas fa-check text-xs text-[#003566]"></i>
+                                                                 </div>
+                                                                 <span class="text-[#003566]/80">
+                                                                      <%= feature %>
+                                                                 </span>
+                                                            </div>
+                                                            <% }) %>
+                                                  </div>
+                                             </div>
+                                        </div>
+                                   </a>
+                                   <% }) %>
+                    </div>
+               </div>
+          </div>
+
+          <!-- View All Link -->
+          <div class="text-center mt-12">
+               <a href="/services" class="inline-flex items-center gap-2 text-[#003566] hover:text-[#001d3d] 
+                      font-semibold text-lg group">
+                    <span>Voir tous nos services</span>
+                    <i class="fas fa-arrow-right transform group-hover:translate-x-1 transition-transform"></i>
+               </a>
           </div>
      </div>
-     <!-- Décoration Patte -->
-     <div class="absolute -bottom-12 left-1/2 transform -translate-x-1/2 text-gray-200 opacity-20">
-          <svg class="w-24 h-24" viewBox="0 0 512 512">
-               <path fill="currentColor" d="M256 224c-79.5 0-144 64.5-144 144s64.5 144 144 144 144-64.5 144-144-64.5-144-144-144zm0 240c-52.9 0-96-43.1-96-96s43.1-96 96-96 96 43.1 96 96-43.1 96-96 96zm0-128c-17.7 0-32 14.3-32 32s14.3 32 32 32 32-14.3 32-32-14.3-32-32-32z" />
-          </svg>
-     </div>
-</div>
-</div>
-</div>
+</section>
+
+<script>
+     function scrollServices(direction) {
+          const container = document.getElementById('servicesContainer');
+          const scrollAmount = 420; // Adjusted for wider cards
+
+          if (direction === 'left') {
+               container.scrollBy({
+                    left: -scrollAmount,
+                    behavior: 'smooth'
+               });
+          } else {
+               container.scrollBy({
+                    left: scrollAmount,
+                    behavior: 'smooth'
+               });
+          }
+     }
+
+     // Optional: Add scroll snap
+     document.addEventListener('DOMContentLoaded', function () {
+          const container = document.getElementById('servicesContainer');
+          let isDown = false;
+          let startX;
+          let scrollLeft;
+
+          container.addEventListener('mousedown', (e) => {
+               isDown = true;
+               startX = e.pageX - container.offsetLeft;
+               scrollLeft = container.scrollLeft;
+          });
+
+          container.addEventListener('mouseleave', () => {
+               isDown = false;
+          });
+
+          container.addEventListener('mouseup', () => {
+               isDown = false;
+          });
+
+          container.addEventListener('mousemove', (e) => {
+               if (!isDown) return;
+               e.preventDefault();
+               const x = e.pageX - container.offsetLeft;
+               const walk = (x - startX) * 2;
+               container.scrollLeft = scrollLeft - walk;
+          });
+     });
+</script>
 
 <style>
-     /* Cacher la barre de défilement mais conserver la fonctionnalité */
      .hide-scrollbar {
           -ms-overflow-style: none;
           scrollbar-width: none;
@@ -227,46 +308,19 @@
           display: none;
      }
 
-     /* Activer le défilement fluide */
-     .overflow-x-auto {
-          -webkit-overflow-scrolling: touch;
-          scroll-behavior: smooth;
+     @keyframes float {
+
+          0%,
+          100% {
+               transform: translateY(0);
+          }
+
+          50% {
+               transform: translateY(-10px);
+          }
      }
 
-     /* Effets de survol des cartes */
-     .group:hover {
-          transform: translateY(-4px);
+     .hover-float:hover {
+          animation: float 2s ease-in-out infinite;
      }
 </style>
-
-<script>
-     // Facultatif : ajouter la fonctionnalité de glissement au toucher
-     document.addEventListener('DOMContentLoaded', function () {
-          const slider = document.querySelector('.overflow-x-auto');
-          let isDown = false;
-          let startX;
-          let scrollLeft;
-
-          slider.addEventListener('mousedown', (e) => {
-               isDown = true;
-               startX = e.pageX - slider.offsetLeft;
-               scrollLeft = slider.scrollLeft;
-          });
-
-          slider.addEventListener('mouseleave', () => {
-               isDown = false;
-          });
-
-          slider.addEventListener('mouseup', () => {
-               isDown = false;
-          });
-
-          slider.addEventListener('mousemove', (e) => {
-               if (!isDown) return;
-               e.preventDefault();
-               const x = e.pageX - slider.offsetLeft;
-               const walk = (x - startX) * 2;
-               slider.scrollLeft = scrollLeft - walk;
-          });
-     });
-</script>
