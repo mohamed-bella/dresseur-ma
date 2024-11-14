@@ -17,10 +17,10 @@
                               <!-- Service Type Badge -->
                               <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
                                    <span class="text-2xl">
-                                        <%= service.category==='dressage' ? '🐕' : service.category==='toilettage' ? '✂️' : service.category==='pension' ? '🏠' : '⚕️' %>
+                                        <%= service.serviceOptions==='dressage' ? '🐕' : service.serviceOptions==='toilettage' ? '✂️' : service.serviceOptions==='pension' ? '🏠' : '' %>
                                    </span>
                                    <span class="text-sm font-medium">
-                                        <%= service.category %>
+                                        <%= service.serviceOptions %>
                                    </span>
                               </div>
 
@@ -63,12 +63,12 @@
                                         <div class="flex items-center gap-4 mb-6">
                                              <img src="<%= service.createdBy.profileImage || '/default-avatar.png' %>" alt="<%= service.createdBy.displayName %>" class="w-16 h-16 rounded-full object-cover ring-4 ring-[#ffd60a]/20">
                                              <div>
-                                                  <h3 class="text-lg font-bold text-gray-900">
+                                                  <a href="/@<%= service.createdBy.slug %>" class="text-lg font-bold text-gray-900">
                                                        <%= service.createdBy.displayName %>
                                                             <% if(service.createdBy.isVerified) { %>
                                                                  <i class="fas fa-check-circle text-[#003566] ml-1"></i>
                                                                  <% } %>
-                                                  </h3>
+                                                  </a>
                                                   <p class="text-gray-500">Prestataire Professionnel</p>
                                              </div>
                                         </div>
@@ -85,33 +85,175 @@
                                                   </span>
                                                   <i class="fas fa-arrow-right opacity-0 group-hover:opacity-100 transition-opacity"></i>
                                              </a>
+                                             <% if ( service.createdBy.email) { %>
+                                                  <a href="mailto:<%= service.createdBy.email %>" class="flex items-center gap-3 p-4 rounded-xl bg-gray-100 text-gray-900 hover:bg-gray-200 
+                                                                                        transition-colors group">
+                                                       <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
+                                                            <i class="fas fa-envelope"></i>
+                                                       </div>
+                                                       <span class="flex-1 truncate">
+                                                            <%= service.createdBy.email %>
+                                                       </span>
+                                                       <i class="fas fa-arrow-right opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                                                  </a>
+                                                  <% } %>
 
-                                             <a href="mailto:<%= service.createdBy.email %>" class="flex items-center gap-3 p-4 rounded-xl bg-gray-100 text-gray-900 hover:bg-gray-200 
-                                      transition-colors group">
-                                                  <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
-                                                       <i class="fas fa-envelope"></i>
-                                                  </div>
-                                                  <span class="flex-1 truncate">
-                                                       <%= service.createdBy.email %>
-                                                  </span>
-                                                  <i class="fas fa-arrow-right opacity-0 group-hover:opacity-100 transition-opacity"></i>
-                                             </a>
                                         </div>
 
                                         <!-- Share Button -->
-                                        <button onclick="shareService()" class="mt-4 w-full flex items-center justify-center gap-2 p-4 rounded-xl border-2 
+                                        <button onclick="openShareModal()" class="mt-4 w-full flex items-center justify-center gap-2 p-4 rounded-xl border-2 
                                        border-gray-200 text-gray-700 hover:bg-gray-50 transition-colors">
                                              <i class="fas fa-share-alt"></i>
                                              <span>Partager ce service</span>
                                         </button>
+                                        <!-- Share Modal -->
+                                        <div id="shareModal" class="fixed inset-0 z-50 bg-[#001d3d]/98 opacity-0 pointer-events-none transition-opacity duration-300">
+                                             <div class="min-h-screen px-4 text-center">
+                                                  <!-- Background overlay -->
+                                                  <div class="fixed inset-0" aria-hidden="true"></div>
+
+                                                  <!-- Modal container -->
+                                                  <div class="inline-block w-full max-w-md p-6 my-8 text-left align-middle transition-all transform bg-white 
+                                                            rounded-2xl shadow-xl relative">
+                                                       <div class="absolute top-4 right-4">
+                                                            <button onclick="closeShareModal()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors">
+                                                                 <i class="fas fa-times text-gray-500"></i>
+                                                            </button>
+                                                       </div>
+
+                                                       <!-- Modal content -->
+                                                       <div class="mt-4">
+                                                            <div class="flex items-center gap-3 mb-6">
+                                                                 <div class="w-10 h-10 rounded-full bg-[#001d3d]/10 flex items-center justify-center">
+                                                                      <i class="fas fa-share-alt text-[#001d3d]"></i>
+                                                                 </div>
+                                                                 <div>
+                                                                      <h3 class="text-lg font-bold text-gray-900">Partager ce service</h3>
+                                                                      <p class="text-sm text-gray-500">Choisissez comment partager</p>
+                                                                 </div>
+                                                            </div>
+
+                                                            <!-- Share options -->
+                                                            <div class="grid grid-cols-2 gap-4 mb-6">
+                                                                 <button onclick="shareViaWhatsApp()" class="flex items-center gap-3 p-4 rounded-xl hover:bg-green-50 transition-colors group">
+                                                                      <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+                                                                           <i class="fab fa-whatsapp text-green-500"></i>
+                                                                      </div>
+                                                                      <span class="text-sm font-medium text-gray-700 group-hover:text-green-600">WhatsApp</span>
+                                                                 </button>
+
+                                                                 <button onclick="shareViaFacebook()" class="flex items-center gap-3 p-4 rounded-xl hover:bg-blue-50 transition-colors group">
+                                                                      <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                                                                           <i class="fab fa-facebook text-blue-500"></i>
+                                                                      </div>
+                                                                      <span class="text-sm font-medium text-gray-700 group-hover:text-blue-600">Facebook</span>
+                                                                 </button>
+                                                            </div>
+
+                                                            <!-- Copy link section -->
+                                                            <div class="relative">
+                                                                 <input type="text" id="shareLink" value="<%= `https://ndressilik.com/service/${service._id}` %>" class="w-full px-4 py-3 pr-24 rounded-xl border border-gray-200 text-sm focus:outline-none 
+                                                                       focus:border-[#003566] focus:ring-2 focus:ring-[#003566]/20" readonly>
+                                                                 <button onclick="copyShareLink()" class="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-1.5 bg-[#001d3d] text-white 
+                                                                       rounded-lg text-sm hover:bg-[#003566] transition-colors">
+                                                                      Copier
+                                                                 </button>
+                                                            </div>
+                                                       </div>
+                                                  </div>
+                                             </div>
+                                        </div>
+
+                                        <script>
+                                             function shareService() {
+                                                  // Check if native share is available
+                                                  if (navigator.share) {
+                                                       navigator.share({
+                                                            title: '<%= service.serviceName %>',
+                                                            text: '<%= service.description %>',
+                                                            url: window.location.href
+                                                       })
+                                                            .then(() => console.log('Shared successfully'))
+                                                            .catch((error) => {
+                                                                 console.log('Error sharing:', error);
+                                                                 openShareModal();
+                                                            });
+                                                  } else {
+                                                       openShareModal();
+                                                  }
+                                             }
+
+                                             function openShareModal() {
+                                                  const modal = document.getElementById('shareModal');
+                                                  modal.classList.add('opacity-100', 'pointer-events-auto');
+                                                  document.body.style.overflow = 'hidden';
+                                             }
+
+                                             function closeShareModal() {
+                                                  const modal = document.getElementById('shareModal');
+                                                  modal.classList.remove('opacity-100', 'pointer-events-auto');
+                                                  document.body.style.overflow = '';
+                                             }
+
+                                             function shareViaWhatsApp() {
+                                                  const text = `Découvrez ${service.serviceName} sur NDRESSILIK:\n${window.location.href}`;
+                                                  const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text)}`;
+                                                  window.open(whatsappUrl, '_blank');
+                                             }
+
+                                             function shareViaFacebook() {
+                                                  const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`;
+                                                  window.open(facebookUrl, '_blank');
+                                             }
+
+                                             function copyShareLink() {
+                                                  const shareLink = document.getElementById('shareLink');
+                                                  shareLink.select();
+                                                  shareLink.setSelectionRange(0, 99999); // For mobile devices
+
+                                                  navigator.clipboard.writeText(shareLink.value)
+                                                       .then(() => {
+                                                            // Show success toast
+                                                            const toast = document.createElement('div');
+                                                            toast.className = `fixed bottom-4 right-4 bg-[#001d3d] text-white px-6 py-3 rounded-xl 
+                                                                     shadow-lg flex items-center gap-2 transform translate-y-full opacity-0 
+                                                                     transition-all duration-300`;
+                                                            toast.innerHTML = `
+                                                        <i class="fas fa-check-circle"></i>
+                                                        <span>Lien copié!</span>
+                                                    `;
+
+                                                            document.body.appendChild(toast);
+
+                                                            // Animate toast
+                                                            setTimeout(() => {
+                                                                 toast.classList.remove('translate-y-full', 'opacity-0');
+                                                            }, 100);
+
+                                                            // Remove toast
+                                                            setTimeout(() => {
+                                                                 toast.classList.add('translate-y-full', 'opacity-0');
+                                                                 setTimeout(() => toast.remove(), 300);
+                                                            }, 3000);
+                                                       })
+                                                       .catch(err => {
+                                                            console.error('Failed to copy text: ', err);
+                                                       });
+                                             }
+
+                                             // Close modal on escape key
+                                             document.addEventListener('keydown', (e) => {
+                                                  if (e.key === 'Escape') {
+                                                       closeShareModal();
+                                                  }
+                                             });
+                                        </script>
                                    </div>
                               </div>
                          </div>
                     </div>
                </div>
 
-               <!-- Diagonal Divider -->
-               <div class="absolute bottom-0 left-0 right-0 h-16 bg-gray-50 transform -skew-y-3 translate-y-8"></div>
           </div>
 
 
