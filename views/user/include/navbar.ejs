@@ -1,60 +1,50 @@
-<nav x-data="{ mobileMenuOpen: false, searchOpen: false }" class="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200">
-     <!-- Main Navbar Content -->
+<nav x-data="{ sidebarOpen: false, searchOpen: false }" class="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200">
      <div class="max-w-7xl mx-auto px-4">
-          <div class="flex h-14 items-center justify-between">
-               <!-- Left: Logo Section -->
-               <a href="/" class="flex items-center gap-2 flex-shrink-0">
-                    <div class="w-8 h-8 rounded-lg flex items-center justify-center">
-                         <img src="https://ndressilik.s3.eu-north-1.amazonaws.com/users/67338636f84bd237e37a39a6/gallery/1731497935188_ndressilikLogoTopNavbar.png" alt="" srcset="">
-                    </div>
-                    <span class="font-bold hidden sm:block">NDRESSILIK</span>
+          <div class="flex h-16 items-center justify-between">
+               <!-- Logo -->
+               <a href="/" class="flex items-center gap-2">
+                    <img src="https://ndressilik.s3.eu-north-1.amazonaws.com/users/67338636f84bd237e37a39a6/gallery/1731497935188_ndressilikLogoTopNavbar.png" alt="Logo" class="w-10 h-10 object-contain">
+                    <span class="font-bold text-xl hidden sm:block">NDRESSILIK</span>
                </a>
 
-               <!-- Center: Navigation -->
-               <div class="hidden md:flex items-center gap-1">
-                    <% const navItems=[ { label: 'Accueil' , icon: 'home' , href: '/' }, { label: 'Services' , icon: 'concierge-bell' , href: '/services' }, { label: 'Identifier la race du chien' , icon: 'dog' , href: '/dog-breeds-analyzer' }, ] %>
+               <!-- Desktop Navigation -->
+               <div class="hidden lg:flex items-center gap-6">
+                    <% const navItems=[ { label: 'Accueil' , icon: 'home' , href: '/' }, { label: 'Services' , icon: 'concierge-bell' , href: '/services' }, { label: 'Identifier la race' , icon: 'dog' , href: '/dog-breeds-analyzer' } ] %>
 
                          <% navItems.forEach(item=> { %>
-                              <a href="<%= item.href %>" class="flex items-center gap-2 px-4 h-14 text-sm font-semibold text-gray-700 hover:bg-gray-50 
-                                   relative group transition-colors">
-                                   <i class="fas fa-<%= item.icon %> text-lg 
-                                        group-hover:text-[#58CC02] transition-colors"></i>
-                                   <span class="group-hover:text-[#58CC02]">
+                              <a href="<%= item.href %>" class="flex items-center gap-2 h-16 text-gray-700 hover:text-[#58CC02] relative group">
+                                   <i class="fas fa-<%= item.icon %> text-xl"></i>
+                                   <span class="font-medium">
                                         <%= item.label %>
                                    </span>
-                                   <div class="absolute bottom-0 left-0 right-0 h-0.5 bg-[#58CC02] scale-x-0 
-                                        group-hover:scale-x-100 transition-transform origin-left"></div>
+                                   <div class="absolute bottom-0 left-0 right-0 h-0.5 bg-[#58CC02] scale-x-0 group-hover:scale-x-100 transition-transform"></div>
                               </a>
                               <% }) %>
                </div>
 
-               <!-- Right: Actions -->
-               <div class="flex items-center gap-2">
-                    <!-- Search Button -->
-                    <button @click="searchOpen = true" class="p-2 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
-                         <i class="fas fa-search text-lg"></i>
+               <!-- Right Actions -->
+               <div class="flex items-center gap-4">
+                    <button @click="searchOpen = true" class="p-2 hover:bg-gray-100 rounded-full">
+                         <i class="fas fa-search text-xl"></i>
                     </button>
 
-                    <!-- Add Service Button -->
                     <% if (user) { %>
-                         <a href="/dashboard/new-service" class="flex items-center gap-2 px-4 py-2 bg-[#ffc300] hover:bg-[#46a702] text-white 
-                                   font-bold text-sm rounded-xl transition-colors shadow-sm">
+                         <a href="/dashboard/new-service" class="hidden md:flex items-center gap-2 px-6 py-2.5 bg-[#ffc300] text-white font-bold rounded-xl hover:bg-[#46a702] transition-colors">
                               <i class="fas fa-plus"></i>
                               <span>Service</span>
                          </a>
 
                          <!-- User Menu -->
                          <div class="relative" x-data="{ open: false }">
-                              <button @click="open = !open" class="flex items-center gap-2 p-1 hover:bg-gray-50 rounded-lg transition-colors">
-                                   <img src="<%= user.profileImage || `/default-avatar.png` %>" class="w-8 h-8 rounded-lg object-cover" alt="<%= user.displayName %>">
-                                   <i class="fas fa-chevron-down text-sm text-gray-500"></i>
+                              <button @click="open = !open" class="flex items-center gap-2 p-1 hover:bg-gray-50 rounded-xl">
+                                   <img src="<%= user.profileImage || '/default-avatar.png' %>" class="w-10 h-10 rounded-xl object-cover" alt="">
+                                   <i class="fas fa-chevron-down text-gray-500"></i>
                               </button>
 
                               <!-- Dropdown -->
-                              <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-60 bg-white rounded-2xl shadow-lg border border-gray-200
-                                          divide-y divide-gray-100">
+                              <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border divide-y">
                                    <!-- User Info -->
-                                   <div class="p-3">
+                                   <div class="p-4">
                                         <div class="font-semibold">
                                              <%= user.displayName %>
                                         </div>
@@ -64,14 +54,12 @@
                                    </div>
 
                                    <!-- Menu Items -->
-                                   <div class="p-2 space-y-1">
-                                        <a href="/dashboard" class="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 
-                                                                  hover:bg-gray-50 rounded-lg transition-colors">
+                                   <div class="p-2">
+                                        <a href="/dashboard" class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg">
                                              <i class="fas fa-chart-line w-5"></i>
                                              <span>Tableau de bord</span>
                                         </a>
-                                        <a href="/profile" class="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 
-                                                                 hover:bg-gray-50 rounded-lg transition-colors">
+                                        <a href="/profile" class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg">
                                              <i class="fas fa-user w-5"></i>
                                              <span>Profile</span>
                                         </a>
@@ -79,8 +67,7 @@
 
                                    <!-- Logout -->
                                    <div class="p-2">
-                                        <a href="/logout" class="flex items-center gap-3 px-3 py-2 text-sm text-red-600 
-                                                               hover:bg-red-50 rounded-lg transition-colors">
+                                        <a href="/logout" class="flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg">
                                              <i class="fas fa-sign-out-alt w-5"></i>
                                              <span>Déconnexion</span>
                                         </a>
@@ -88,100 +75,93 @@
                               </div>
                          </div>
                          <% } else { %>
-                              <!-- Login Button -->
-                              <a href="/auth/google" class="flex items-center gap-2 px-4 py-2 bg-[#ffc300] hover:bg-[#ffc300] text-white 
-                                   font-bold text-sm rounded-xl transition-colors shadow-sm">
-                                   <i class="fab fa-plus"></i>
+                              <a href="/auth/google" class="hidden md:flex items-center gap-2 px-6 py-2.5 bg-[#ffc300] text-white font-bold rounded-xl hover:bg-[#46a702] transition-colors">
+                                   <i class="fas fa-plus"></i>
                                    <span>Service</span>
                               </a>
                               <% } %>
 
                                    <!-- Mobile Menu Button -->
-                                   <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden p-2 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
-                                        <i class="fas fa-bars text-lg"></i>
+                                   <button @click="sidebarOpen = true" class="lg:hidden p-2 hover:bg-gray-100 rounded-lg">
+                                        <i class="fas fa-bars text-2xl"></i>
                                    </button>
                </div>
           </div>
      </div>
 
-     <!-- Search Modal -->
-     <div x-show="searchOpen" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 z-50 bg-white">
-          <!-- Search Header -->
-          <div class="border-b border-gray-200">
-               <div class="max-w-7xl mx-auto px-4">
-                    <div class="flex h-14 items-center gap-4">
-                         <i class="fas fa-search text-gray-400"></i>
-                         <input type="text" placeholder="Rechercher..." class="flex-1 h-full bg-transparent text-gray-900 placeholder-gray-500 focus:outline-none" @keydown.escape="searchOpen = false" autofocus>
-                         <button @click="searchOpen = false" class="p-2 text-gray-500 hover:text-gray-700">
-                              <i class="fas fa-times text-lg"></i>
-                         </button>
-                    </div>
-               </div>
-          </div>
+     <!-- Mobile Sidebar -->
+     <div x-show="sidebarOpen" class="fixed inset-0 z-50 lg:hidden" x-transition:enter="transition-opacity ease-linear duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition-opacity ease-linear duration-300" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
 
-          <!-- Search Content -->
-          <div class="max-w-7xl mx-auto px-4 py-6">
-               <!-- Popular Searches -->
-               <div class="space-y-4">
-                    <h3 class="text-sm font-medium text-gray-500">Recherches populaires</h3>
-                    <div class="flex flex-wrap gap-2">
-                         <% ['Dressage', 'Toilettage' , 'Promenade' , 'Vétérinaire' ].forEach(term=> { %>
-                              <a href="/search?q=<%= term %>" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm 
-                                        rounded-full transition-colors">
-                                   <%= term %>
-                              </a>
-                              <% }) %>
-                    </div>
-               </div>
-          </div>
-     </div>
+          <!-- Overlay -->
+          <div class="fixed inset-0 bg-gray-600 bg-opacity-75" @click="sidebarOpen = false"></div>
 
-     <!-- Mobile Menu -->
-     <div x-show="mobileMenuOpen" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" @click.away="mobileMenuOpen = false" class="md:hidden border-t border-gray-200">
-          <nav class="max-w-7xl mx-auto px-4 py-3">
-               <div class="space-y-1">
+          <!-- Sidebar Panel -->
+          <div class="relative flex flex-col w-[85%] max-w-sm bg-white h-full transform transition-transform ease-in-out duration-300" x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0" x-transition:leave-start="translate-x-0" x-transition:leave-end="-translate-x-full">
+
+               <!-- Sidebar Header -->
+               <div class="flex items-center justify-between p-4 border-b">
+                    <img src="https://ndressilik.s3.eu-north-1.amazonaws.com/users/67338636f84bd237e37a39a6/gallery/1731497935188_ndressilikLogoTopNavbar.png" alt="Logo" class="w-10 h-10">
+                    <button @click="sidebarOpen = false" class="p-2 hover:bg-gray-100 rounded-full">
+                         <i class="fas fa-times text-2xl"></i>
+                    </button>
+               </div>
+
+               <!-- Navigation Links -->
+               <div class="flex-1 px-2 py-4 overflow-y-auto">
                     <% navItems.forEach(item=> { %>
-                         <a href="<%= item.href %>" class="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
-                              <i class="fas fa-<%= item.icon %> text-gray-400 w-5"></i>
-                              <span>
+                         <a href="<%= item.href %>" class="flex items-center gap-4 px-4 py-4 text-gray-700 hover:bg-gray-50 rounded-xl mb-2">
+                              <i class="fas fa-<%= item.icon %> text-2xl w-8"></i>
+                              <span class="text-lg font-medium">
                                    <%= item.label %>
                               </span>
                          </a>
                          <% }) %>
                </div>
-          </nav>
+
+               <!-- Bottom Actions -->
+               <div class="p-4 border-t">
+                    <% if (user) { %>
+                         <a href="/dashboard/new-service" class="flex items-center justify-center gap-2 w-full py-3 bg-[#ffc300] text-white font-bold rounded-xl mb-4">
+                              <i class="fas fa-plus"></i>
+                              <span>Ajouter un service</span>
+                         </a>
+                         <% } else { %>
+                              <a href="/auth/google" class="flex items-center justify-center gap-2 w-full py-3 bg-[#ffc300] text-white font-bold rounded-xl">
+                                   <i class="fas fa-sign-in-alt"></i>
+                                   <span>Se connecter</span>
+                              </a>
+                              <% } %>
+               </div>
+          </div>
+     </div>
+
+     <!-- Search Modal -->
+     <div x-show="searchOpen" class="fixed inset-0 z-50 bg-white">
+          <div class="border-b">
+               <div class="max-w-7xl mx-auto px-4">
+                    <div class="flex h-16 items-center gap-4">
+                         <i class="fas fa-search text-xl text-gray-400"></i>
+                         <input type="text" placeholder="Rechercher..." class="flex-1 h-full bg-transparent text-xl placeholder:text-gray-400 focus:outline-none" @keydown.escape="searchOpen = false" autofocus>
+                         <button @click="searchOpen = false" class="p-2 hover:bg-gray-100 rounded-full">
+                              <i class="fas fa-times text-xl"></i>
+                         </button>
+                    </div>
+               </div>
+          </div>
      </div>
 </nav>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-SF2CSHKXJQ"></script>
-<script>
-     window.dataLayer = window.dataLayer || [];
-     function gtag() { dataLayer.push(arguments); }
-     gtag('js', new Date());
 
-     gtag('config', 'G-SF2CSHKXJQ');
-</script>
 <style>
-     /* Body spacing for fixed navbar */
      body {
-          padding-top: 3.5rem;
+          padding-top: 4rem;
      }
 
-     /* Smooth transitions */
-     .transition-transform {
-          transition-property: transform;
-          transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-          transition-duration: 200ms;
-     }
-
-     /* Better mobile tap targets */
      @media (max-width: 768px) {
           .nav-link {
-               min-height: 44px;
+               min-height: 3.5rem;
           }
      }
 
-     /* Remove touch highlight on mobile */
      * {
           -webkit-tap-highlight-color: transparent;
      }
