@@ -413,6 +413,149 @@ router.get('/:serviceOption?/:location?', async (req, res) => {
      }
 });
 
+router.get('/services/:serviceOption?/:location?', async (req, res) => {
+     try {
+          const { serviceOption = 'tous', location } = req.params;
+          const page = parseInt(req.query.page) || 1;
+          const limit = parseInt(req.query.limit) || 12;
+          const sort = req.query.sort || 'recent';
+
+          // Build query
+          const query = { isActive: true };
+          if (serviceOption !== 'tous') {
+               query.serviceOptions = serviceOption.toLowerCase();
+          }
+          if (location) {
+               query.location = new RegExp(location, 'i');
+          }
+
+          // Get sort configuration
+          const sortConfig = {
+               'recent': { createdAt: -1 },
+               'price-asc': { priceRange: 1 },
+               'price-desc': { priceRange: -1 },
+               'rating': { rating: -1 }
+          }[sort] || { createdAt: -1 };
+
+          // Execute queries
+          const [services, total] = await Promise.all([
+               Service.find(query)
+                    .populate('createdBy', 'displayName profileImage isVerified')
+                    .sort(sortConfig)
+                    .skip((page - 1) * limit)
+                    .limit(limit)
+                    .lean(),
+               Service.countDocuments(query)
+          ]);
+
+          // Process services
+          const processedServices = services.map(service => ({
+               _id: service._id,
+               serviceName: service.serviceName || service.serviceOptions?.[0] || 'Service',
+               serviceOptions: service.serviceOptions,
+               images: service.images || [],
+               views: service.views || '0',
+               priceRange: service.priceRange ? `${service.priceRange} DH` : 'N/A',
+               location: service.location || 'Non spécifié',
+               availability: service.availability || 'sur rendez-vous',
+               createdBy: {
+                    displayName: service.createdBy?.displayName || 'Expert',
+                    profileImage: service.createdBy?.profileImage || 'https://img.icons8.com/?size=100&id=7819&format=png&color=000000',
+                    isVerified: service.createdBy?.isVerified || false
+               },
+               serviceType: service.serviceOptions?.[0]?.toLowerCase() || 'general',
+               icon: serviceConfig.icons[service.serviceOptions?.[0]?.toLowerCase()] || '🐾'
+          }));
+
+
+          const uniqueLocations = await Service.distinct("location", { serviceOptions: serviceOption === 'tous' ? { $exists: true } : serviceOption.toLowerCase(), isActive: true });
+
+          // console.log(uniqueLocations)
+          // Prepare view data
+          const viewData = {
+
+
+          };
+
+          // Metadata for SEO
+          const pageTitle = location
+               ? ` à ${location} | Services pour animaux au Maroc | NDRESSILIK`
+               : `${serviceConfig.titles[serviceOption]} | Services pour animaux au Maroc | NDRESSILIK`;
+
+          const description = location
+               ? `Trouvez des services de ${serviceConfig.titles[serviceOption]} pour animaux de compagnie à ${location}. Explorez les offres de dressage, toilettage, garde, et plus encore sur NDRESSILIK.`
+               : `Découvrez les meilleurs services de ${serviceConfig.titles[serviceOption]} pour animaux au Maroc sur NDRESSILIK. Nos partenaires de confiance proposent dressage, toilettage, et autres services pour le bien-être de vos animaux.`;
+
+          const keywords = location
+               ? `${serviceOption}, services animaliers, ${location}, dressage, garde animaux, NDRESSILIK, Maroc`
+               : `${serviceOption}, services animaliers, Maroc, dressage, garde animaux, NDRESSILIK`;
+
+          res.render('user/services', {
+               pageTitle,
+               description,
+               keywords,
+               currentLocation: location || null,
+               locations: uniqueLocations,
+
+               // Services data
+               services: processedServices,
+               serviceIcons: serviceConfig.icons,
+
+               // Page metadata
+               meta: {
+                    title: location ?
+                         `${serviceConfig.titles[serviceOption]} à ${location} | NDRESSILIK` :
+                         `${serviceConfig.titles[serviceOption]} | NDRESSILIK`,
+                    description: serviceConfig.descriptions[serviceOption],
+                    keywords: `${serviceOption}, services animaliers, ${location || 'Maroc'}, NDRESSILIK`
+               },
+
+               // Current selections
+               current: {
+                    serviceOption,
+                    location,
+                    sort
+               },
+
+               // Options
+               options: {
+                    sorts: serviceConfig.sortOptions,
+                    serviceTypes: Object.entries(serviceConfig.titles).map(([key, value]) => ({
+                         value: key,
+                         label: value,
+                         icon: serviceConfig.icons[key] || '🐾'
+                    }))
+               },
+
+               // Pagination
+               pagination: {
+                    current: page,
+                    total: Math.ceil(total / limit),
+                    hasNext: page * limit < total,
+                    hasPrev: page > 1
+               },
+
+               // Additional info
+               stats: {
+                    total,
+                    filteredBy: location ? `à ${location}` : null
+               },
+               serviceOption
+
+          });
+
+     } catch (error) {
+          console.error('Error fetching services:', error);
+          res.render('user/services', {
+               services: [],
+               meta: {
+                    title: 'Services | NDRESSILIK',
+                    description: 'Découvrez nos services pour animaux'
+               },
+               error: 'Une erreur est survenue lors du chargement des services'
+          });
+     }
+});
 /**
  * ============================
  * SERVICE DETAILS
