@@ -1,4 +1,4 @@
-<!-- Place this at the top of your layout for global scroll handling -->
+<!-- Place this at the top of your layout -->
 <div x-data="{
     isScrolled: false,
     isMobileMenuOpen: false,
@@ -15,56 +15,52 @@
         { text: 'Toilettage Casablanca', count: '500+ recherches' },
         { text: 'Pension Marrakech', count: '300+ recherches' }
     ]
-}" @scroll.window="isScrolled = (window.pageYOffset > 20)" class="">
+}" @scroll.window="isScrolled = (window.pageYOffset > 20)" class="relative">
 
      <!-- Modern Navbar -->
-     <nav class="fixed top-0 inset-x-0 z-50 transition-all duration-300" :class="{ 'backdrop-blur-lg bg-white/80': isScrolled, 'bg-white': !isScrolled }">
-
-          <!-- Desktop Navigation -->
+     <nav class="fixed top-0 inset-x-0 z-50 transition-all duration-300" :class="{ 'backdrop-blur-lg bg-white/90 shadow-sm': isScrolled, 'bg-white': !isScrolled }">
           <div class="mx-auto max-w-[2000px]">
                <div class="px-4 md:px-6 lg:px-8">
                     <div class="flex h-16 items-center justify-between gap-4">
                          <!-- Left Section -->
                          <div class="flex items-center gap-4 lg:gap-8">
-                              <!-- Mobile Menu Button -->
-                              <button @click="isMobileMenuOpen = true" class="lg:hidden -ml-2 p-2 rounded-full hover:bg-gray-100 transition-colors">
+                              <button @click="isMobileMenuOpen = true" class="lg:hidden -ml-2 p-2 rounded-full hover:bg-gray-100 active:bg-gray-200 
+                                transition-colors">
                                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16" />
                                    </svg>
                               </button>
 
-                              <!-- Logo -->
                               <a href="/" class="flex items-center gap-2 shrink-0">
                                    <img src="https://ndressilik.s3.eu-north-1.amazonaws.com/users/67338636f84bd237e37a39a6/gallery/1731497935188_ndressilikLogoTopNavbar.png" alt="Logo" class="h-8 w-auto">
                                    <span class="font-semibold text-lg hidden sm:block">NDRESSILIK</span>
                               </a>
 
-                              <!-- Desktop Menu -->
                               <div class="hidden lg:flex items-center gap-8">
                                    <a href="/services" class="text-sm font-medium text-gray-700 hover:text-gray-900
-                                      transition relative group py-2">
+                               transition relative group py-2">
                                         Services
                                         <span class="absolute inset-x-0 bottom-0 h-0.5 bg-gray-900 scale-x-0 
-                                           group-hover:scale-x-100 transition-transform"></span>
+                                       group-hover:scale-x-100 transition-transform"></span>
                                    </a>
-                                   <a href="/dog-breeds-analyzer" class="flex items-center gap-2 text-sm font-medium text-gray-700 
-                                      hover:text-gray-900 transition relative group py-2">
-                                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                   <a href="/dog-breeds-analyzer" class="flex items-center gap-2 text-sm font-medium 
+                               text-gray-700 hover:text-gray-900 transition relative group py-2">
+                                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23-.693L5 14.5m14.8.8l1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0112 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" />
                                         </svg>
                                         Race Identifier
                                         <span class="absolute inset-x-0 bottom-0 h-0.5 bg-gray-900 scale-x-0 
-                                           group-hover:scale-x-100 transition-transform"></span>
+                                       group-hover:scale-x-100 transition-transform"></span>
                                    </a>
                               </div>
                          </div>
 
-                         <!-- Search Bar -->
+                         <!-- Desktop Search Bar -->
                          <div class="flex-1 max-w-2xl hidden lg:block relative">
                               <div class="relative">
                                    <input type="search" placeholder="Rechercher un service..." class="w-full h-11 pl-11 pr-4 rounded-full bg-gray-100 border border-transparent
-                                       placeholder:text-gray-500 text-sm focus:border-gray-300 
-                                       focus:bg-white transition-colors" @focus="searchFocused = true" @blur="setTimeout(() => searchFocused = false, 150)" x-model="currentSearch">
+                                   placeholder:text-gray-500 text-sm focus:border-gray-300 focus:bg-white 
+                                   transition-colors" @focus="searchFocused = true" @blur="setTimeout(() => searchFocused = false, 150)" x-model="currentSearch">
                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <svg class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -74,13 +70,13 @@
 
                               <!-- Search Dropdown -->
                               <div x-show="searchFocused" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-1" x-transition:enter-end="opacity-100 translate-y-0" class="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl
-                                    shadow-xl border border-gray-200 overflow-hidden" @click.away="searchFocused = false">
+                             shadow-xl border border-gray-200 overflow-hidden" @click.away="searchFocused = false">
                                    <div class="p-4 border-b border-gray-100">
                                         <h3 class="text-sm font-medium text-gray-900">Tendances</h3>
                                         <div class="mt-2 space-y-2">
                                              <template x-for="item in trending" :key="item.text">
                                                   <a :href="'/search?q=' + encodeURIComponent(item.text)" class="flex items-center justify-between p-2 rounded-lg
-                                                  hover:bg-gray-50 transition-colors">
+                                           hover:bg-gray-50 transition-colors">
                                                        <div class="flex items-center gap-3">
                                                             <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
@@ -96,30 +92,57 @@
                          </div>
 
                          <!-- Right Section -->
-                         <div class="flex items-center gap-2">
-                              <!-- Mobile Search Button -->
-                              <button @click="isSearchOpen = true" class="lg:hidden p-2 rounded-full hover:bg-gray-100 transition-colors">
-                                   <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                   </svg>
-                              </button>
+                         <div class="flex items-center gap-3">
+                              <!-- Mobile Actions -->
+                              <div class="flex items-center gap-2 lg:hidden">
+                                   <!-- Search Button -->
+                                   <button @click="isSearchOpen = true" class="p-2 rounded-full hover:bg-gray-100 active:bg-gray-200 
+                                    transition-colors">
+                                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                        </svg>
+                                   </button>
 
-                              <!-- Add Service Button -->
+                                   <!-- Add Service Button -->
+                                   <% if (user) { %>
+                                        <a href="/dashboard/new-service" class="inline-flex items-center justify-center h-10 px-4 py-2 
+                                   bg-gray-900 hover:bg-gray-800 active:bg-gray-950 text-white rounded-full 
+                                   transition-all shadow-sm hover:shadow-md">
+                                             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                             </svg>
+                                             <span class="ml-2 text-sm font-medium">Ajouter</span>
+                                        </a>
+                                        <% } else { %>
+                                             <a href="/auth/google" class="inline-flex items-center justify-center h-10 px-4 py-2 
+                                   bg-gray-900 hover:bg-gray-800 active:bg-gray-950 text-white rounded-full 
+                                   transition-all shadow-sm hover:shadow-md">
+                                                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                                  </svg>
+                                                  <span class="ml-2 text-sm font-medium">Ajouter</span>
+                                             </a>
+                                             <% } %>
+                              </div>
+
+                              <!-- Desktop Add Service Button -->
                               <% if (user) { %>
-                                   <a href="/dashboard/new-service" class="hidden md:flex items-center gap-2 px-4 h-10 bg-gray-900 
-                                      hover:bg-gray-800 text-white rounded-full transition-colors">
+                                   <a href="/dashboard/new-service" class="hidden lg:flex items-center gap-2 px-5 h-10 bg-gray-900 
+                               hover:bg-gray-800 active:bg-gray-950 text-white rounded-full 
+                               transition-all shadow-sm hover:shadow-md">
                                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                                         </svg>
-                                        <span class="text-sm font-medium">Ajouter</span>
+                                        <span class="text-sm font-medium">Ajouter un service</span>
                                    </a>
                                    <% } else { %>
-                                        <a href="/auth/google" class="hidden md:flex items-center gap-2 px-4 h-10 bg-gray-900 
-                                      hover:bg-gray-800 text-white rounded-full transition-colors">
+                                        <a href="/auth/google" class="hidden lg:flex items-center gap-2 px-5 h-10 bg-gray-900 
+                               hover:bg-gray-800 active:bg-gray-950 text-white rounded-full 
+                               transition-all shadow-sm hover:shadow-md">
                                              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                                              </svg>
-                                             <span class="text-sm font-medium">Ajouter</span>
+                                             <span class="text-sm font-medium">Ajouter un service</span>
                                         </a>
                                         <% } %>
 
@@ -127,14 +150,13 @@
                                              <% if (user) { %>
                                                   <div class="relative" x-data="{ open: false }">
                                                        <button @click="open = !open" class="flex items-center gap-2 p-1 rounded-full hover:bg-gray-100 
-                                           transition-colors focus:outline-none">
-                                                            <img src="<%= user.profileImage || '/default-avatar.png' %>" alt="Profile" class="w-8 h-8 rounded-full object-cover">
+                                        active:bg-gray-200 transition-colors focus:outline-none">
+                                                            <img src="<%= user.profileImage || '/default-avatar.png' %>" alt="Profile" class="w-8 h-8 rounded-full object-cover ring-2 ring-white">
                                                        </button>
 
-                                                       <!-- Dropdown -->
+                                                       <!-- User Dropdown -->
                                                        <div x-show="open" @click.away="open = false" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" class="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg 
-                                            border border-gray-200 py-1">
-                                                            <!-- User Info -->
+                                     border border-gray-200 py-1">
                                                             <div class="px-4 py-3 border-b border-gray-100">
                                                                  <p class="text-sm font-medium text-gray-900">
                                                                       <%= user.displayName %>
@@ -143,25 +165,23 @@
                                                                       <%= user.email %>
                                                                  </p>
                                                             </div>
-
-                                                            <!-- Menu Items -->
                                                             <div class="py-1">
-                                                                 <a href="/dashboard" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 
-                                                  hover:bg-gray-50">
+                                                                 <a href="/dashboard" class="flex items-center gap-2 px-4 py-2 text-sm 
+                                           text-gray-700 hover:bg-gray-50">
                                                                       <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                                                                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a11 0 011 1v4a1 1 0 001 1m-6 0h6" />
                                                                       </svg>
                                                                       Dashboard
                                                                  </a>
-                                                                 <a href="/profile" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 
-                                                  hover:bg-gray-50">
+                                                                 <a href="/profile" class="flex items-center gap-2 px-4 py-2 text-sm 
+                                           text-gray-700 hover:bg-gray-50">
                                                                       <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                                                       </svg>
                                                                       Profile
                                                                  </a>
-                                                                 <a href="/logout" class="flex items-center gap-2 px-4 py-2 text-sm text-red-600 
-                                                  hover:bg-red-50">
+                                                                 <a href="/logout" class="flex items-center gap-2 px-4 py-2 text-sm 
+                                           text-red-600 hover:bg-red-50">
                                                                       <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                                                                       </svg>
@@ -180,23 +200,21 @@
      <!-- Mobile Search Dialog -->
      <div x-show="isSearchOpen" class="fixed inset-0 z-50 bg-white" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
           <div class="flex flex-col h-full">
-               <!-- Search Header -->
                <div class="flex items-center gap-4 p-4 border-b border-gray-100">
-                    <button @click="isSearchOpen = false" class="p-2 -ml-2 rounded-full hover:bg-gray-100">
+                    <button @click="isSearchOpen = false" class="p-2 -ml-2 rounded-full hover:bg-gray-100 active:bg-gray-200">
                          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12" />
                          </svg>
                     </button>
                     <div class="flex-1 relative">
                          <input type="search" placeholder="Rechercher un service..." class="w-full pl-10 pr-4 py-2 bg-gray-100 rounded-full text-base
-                                  focus:outline-none focus:bg-gray-50" x-model="currentSearch" autofocus>
+                           focus:outline-none focus:bg-gray-50" x-model="currentSearch" autofocus>
                          <svg class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                          </svg>
                     </div>
                </div>
 
-               <!-- Search Content -->
                <div class="flex-1 overflow-y-auto">
                     <!-- Recent Searches -->
                     <div class="p-4 border-b border-gray-100">
@@ -247,7 +265,7 @@
                <!-- Header -->
                <div class="flex items-center justify-between p-4 border-b border-gray-100">
                     <img src="https://ndressilik.s3.eu-north-1.amazonaws.com/users/67338636f84bd237e37a39a6/gallery/1731497935188_ndressilikLogoTopNavbar.png" alt="Logo" class="h-8 w-auto">
-                    <button @click="isMobileMenuOpen = false" class="p-2 rounded-full hover:bg-gray-100">
+                    <button @click="isMobileMenuOpen = false" class="p-2 rounded-full hover:bg-gray-100 active:bg-gray-200">
                          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12" />
                          </svg>
@@ -257,11 +275,11 @@
                <!-- Menu Items -->
                <div class="py-4">
                     <a href="/services" class="flex items-center gap-3 px-4 py-3 text-base font-medium text-gray-900 
-                          hover:bg-gray-50">
+                   hover:bg-gray-50 active:bg-gray-100">
                          Services
                     </a>
                     <a href="/dog-breeds-analyzer" class="flex items-center gap-3 px-4 py-3 text-base font-medium text-gray-900 
-                          hover:bg-gray-50">
+                   hover:bg-gray-50 active:bg-gray-100">
                          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23-.693L5 14.5m14.8.8l1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0112 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" />
                          </svg>
@@ -274,7 +292,7 @@
                     <div class="border-t border-gray-100 py-4">
                          <div class="px-4 mb-4">
                               <div class="flex items-center gap-3">
-                                   <img src="<%= user.profileImage || '/https://ndressilik.s3.eu-north-1.amazonaws.com/users/67338636f84bd237e37a39a6/gallery/1731497935188_ndressilikLogoTopNavbar.png' %>" alt="Profile" class="w-10 h-10 rounded-full">
+                                   <img src="<%= user.profileImage || '/default-avatar.png' %>" alt="Profile" class="w-10 h-10 rounded-full object-cover ring-2 ring-white">
                                    <div>
                                         <p class="font-medium text-gray-900">
                                              <%= user.displayName %>
@@ -285,22 +303,26 @@
                                    </div>
                               </div>
                          </div>
-                         <a href="/dashboard" class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50">
+                         <a href="/dashboard" class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 
+                       active:bg-gray-100">
                               Dashboard
                          </a>
-                         <a href="/profile" class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50">
+                         <a href="/profile" class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 
+                       active:bg-gray-100">
                               Profile
                          </a>
-                         <a href="/logout" class="flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50">
+                         <a href="/logout" class="flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 
+                       active:bg-red-100">
                               Déconnexion
                          </a>
                     </div>
                     <% } else { %>
                          <div class="border-t border-gray-100 p-4">
                               <a href="/auth/google" class="flex items-center justify-center gap-2 w-full py-3 bg-gray-900 
-                              text-white rounded-full hover:bg-gray-800">
-                                   <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm6.066 13.012h-4.034v4.034h-2.064v-4.034H7.934v-2.064h4.034V6.914h2.064v4.034h4.034v2.064z" />
+                       text-white rounded-full hover:bg-gray-800 active:bg-gray-950 shadow-sm 
+                       hover:shadow-md transition-all">
+                                   <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                                    </svg>
                                    <span class="font-medium">Ajouter un service</span>
                               </a>
@@ -311,7 +333,6 @@
 </div>
 
 <style>
-     /* Custom scroll behavior */
      .hide-scrollbar {
           -ms-overflow-style: none;
           scrollbar-width: none;
@@ -321,23 +342,34 @@
           display: none;
      }
 
-     /* Smooth transitions */
      .transition-transform {
           transition-property: transform;
           transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
           transition-duration: 300ms;
      }
 
-     /* Better touch targets for mobile */
      @media (max-width: 640px) {
           .touch-target {
                min-height: 44px;
           }
      }
 
-     /* Focus styles */
      .focus-visible:focus {
           outline: 2px solid #000000;
           outline-offset: 2px;
+     }
+
+     .hover-lift {
+          transition: transform 0.2s ease;
+     }
+
+     .hover-lift:hover {
+          transform: translateY(-1px);
+     }
+
+     @media (hover: none) {
+          .tap-highlight {
+               -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+          }
      }
 </style>
