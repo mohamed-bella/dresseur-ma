@@ -10,7 +10,7 @@
           <nav class="sticky top-16 z-40 bg-white/95 backdrop-blur-md border-b border-gray-200">
                <div class="max-w-7xl mx-auto px-4">
                     <!-- Desktop Navigation -->
-                    <div class="hidden md:flex justify-between items-center py-3">
+                    <div class="hidden md:flex justify-between items-center py-2">
                          <div class="flex gap-4">
                               <% const servicesTab=[ { id: 'tous' , icon: '🔍' , label: 'Tous' , bgColor: 'gray' }, { id: 'dressage' , icon: '🐕' , label: 'Dressage' , bgColor: 'blue' }, { id: 'toilettage' , icon: '✂️' , label: 'Toilettage' , bgColor: 'purple' }, { id: 'promenade' , icon: '🦮' , label: 'Promenade' , bgColor: 'green' }, { id: 'veterinaire' , icon: '⚕️' , label: 'Vétérinaire' , bgColor: 'red' }, { id: 'pension' , icon: '🏠' , label: 'Pension' , bgColor: 'orange' }, { id: 'transport' , icon: '🚗' , label: 'Transport' , bgColor: 'indigo' } ] %>
 
@@ -244,16 +244,16 @@
           <!-- Services List Container -->
           <div class="container mx-auto px-4 py-6">
                <!-- Page Header -->
-               <div class="text-center mb-8">
+               <div class="text-center mt-3 mb-8">
                     <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
                          Services disponibles
                          <% if (serviceOption) { %>
                               - <%= serviceOption.charAt(0).toUpperCase() + serviceOption.slice(1) %>
                                    <% } %>
                     </h1>
-                    <p class="text-gray-600 max-w-2xl mx-auto">
+                    <!-- <p class="text-gray-600 max-w-2xl mx-auto">
                          Découvrez les meilleurs prestataires de services animaliers près de chez vous
-                    </p>
+                    </p> -->
                </div>
 
                <!-- Location Filter Section -->
@@ -449,6 +449,9 @@
                                    </p>
                                    <a href="/services" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
                                         Voir tous les services
+                                   </a>
+                                   <a href="/dashboard/new-service" class="inline-flex items-center px-4 py-2 bg-yellow-500 text-white text-yellow-800 rounded-lg hover:bg-yellow-600 mt-2">
+                                        Ajouter Votre Service
                                    </a>
                               </div>
                          </div>

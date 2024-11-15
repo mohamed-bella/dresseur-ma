@@ -204,128 +204,128 @@ router.post('/dashboard/new-service', validateService, async (req, res) => {
      }
 });
 
-router.get('/', async (req, res) => {
+// router.get('/', async (req, res) => {
 
-     // Define the metadata for the homepage
-     const pageTitle = 'Bienvenue sur NDRESSILIK - Trouvez les meilleurs services pour votre chiend';
-     const description = 'Découvrez les derniers services et annonces pour animaux de compagnie sur NDRESSILIK. Recherchez par lieu et type de service.';
-     const keywords = 'services pour animaux,services pour chien, annonces, dressage, toilettage, adoption des animaux, NDRESSILIK';
+//      // Define the metadata for the homepage
+//      const pageTitle = 'Bienvenue sur NDRESSILIK - Trouvez les meilleurs services pour votre chiend';
+//      const description = 'Découvrez les derniers services et annonces pour animaux de compagnie sur NDRESSILIK. Recherchez par lieu et type de service.';
+//      const keywords = 'services pour animaux,services pour chien, annonces, dressage, toilettage, adoption des animaux, NDRESSILIK';
 
-     try {
+//      try {
 
-          const events = await Event.find({
-               // date: { $gte: new Date() }
-          })
-               .sort({ createdat: -1 }) // Sort by date ascending
-               .limit(3); // Limit to 7 events (1 featured + 6 grid items)
-          // Fetch top providers with their metrics
-          const topProviders = await User.find({ status: 'active' })
-               .sort({ "metrics.averageRating": -1, "metrics.completedBookings": -1 })
-               .limit(7)
-               .select('displayName profileImage location city specializations metrics averageRating slug isVerified');
+//           const events = await Event.find({
+//                // date: { $gte: new Date() }
+//           })
+//                .sort({ createdat: -1 }) // Sort by date ascending
+//                .limit(3); // Limit to 7 events (1 featured + 6 grid items)
+//           // Fetch top providers with their metrics
+//           const topProviders = await User.find({ status: 'active' })
+//                .sort({ "metrics.averageRating": -1, "metrics.completedBookings": -1 })
+//                .limit(7)
+//                .select('displayName profileImage location city specializations metrics averageRating slug isVerified');
 
-          // Fetch services and reviews for each provider
-          const providersWithDetails = await Promise.all(
-               topProviders.map(async (provider) => {
-                    // Fetch provider's services
-                    const services = await Service.find({ createdBy: provider._id })
-                         .select('serviceName description priceRange images location serviceOptions')
-                         .limit(3); // Limit to 3 recent services
+//           // Fetch services and reviews for each provider
+//           const providersWithDetails = await Promise.all(
+//                topProviders.map(async (provider) => {
+//                     // Fetch provider's services
+//                     const services = await Service.find({ createdBy: provider._id })
+//                          .select('serviceName description priceRange images location serviceOptions')
+//                          .limit(3); // Limit to 3 recent services
 
-                    // Fetch provider's reviews
-                    const reviews = await Review.find({
-                         serviceId: {
-                              $in: services.map(service => service._id)
-                         }
-                    })
-                         .populate('userId', 'displayName profileImage')
-                         .sort({ createdAt: -1 })
-                         .limit(5); // Limit to 5 recent reviews
+//                     // Fetch provider's reviews
+//                     const reviews = await Review.find({
+//                          serviceId: {
+//                               $in: services.map(service => service._id)
+//                          }
+//                     })
+//                          .populate('userId', 'displayName profileImage')
+//                          .sort({ createdAt: -1 })
+//                          .limit(5); // Limit to 5 recent reviews
 
-                    // Calculate metrics
-                    const avgRating = reviews.length > 0
-                         ? reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length
-                         : 0;
+//                     // Calculate metrics
+//                     const avgRating = reviews.length > 0
+//                          ? reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length
+//                          : 0;
 
-                    // Return provider with additional details
-                    return {
-                         ...provider.toObject(),
-                         services,
-                         reviews,
-                         metrics: {
-                              ...provider.metrics,
-                              averageRating: avgRating.toFixed(1),
-                              totalReviews: reviews.length,
-                              totalServices: services.length
-                         }
-                    };
-               })
-          );
+//                     // Return provider with additional details
+//                     return {
+//                          ...provider.toObject(),
+//                          services,
+//                          reviews,
+//                          metrics: {
+//                               ...provider.metrics,
+//                               averageRating: avgRating.toFixed(1),
+//                               totalReviews: reviews.length,
+//                               totalServices: services.length
+//                          }
+//                     };
+//                })
+//           );
 
-          // Fetch latest articles
-          const articles = await Article.find()
-               .sort({ createdAt: -1 })
-               .limit(6)
-               .select('title summary featuredImage category tags createdAt slug author');
+//           // Fetch latest articles
+//           const articles = await Article.find()
+//                .sort({ createdAt: -1 })
+//                .limit(6)
+//                .select('title summary featuredImage category tags createdAt slug author');
 
 
-          // console.log(articles)
+//           // console.log(articles)
 
-          // Fetch locations
-          const [announcementLocations, serviceLocations] = await Promise.all([
-               Announcement.distinct('location'),
-               Service.distinct('location')
-          ]);
+//           // Fetch locations
+//           const [announcementLocations, serviceLocations] = await Promise.all([
+//                Announcement.distinct('location'),
+//                Service.distinct('location')
+//           ]);
 
-          // Combine and filter unique locations
-          const uniqueLocations = [...new Set([...announcementLocations, ...serviceLocations])]
-               .filter(Boolean) // Remove empty values
-               .sort(); // Sort alphabetically
+//           // Combine and filter unique locations
+//           const uniqueLocations = [...new Set([...announcementLocations, ...serviceLocations])]
+//                .filter(Boolean) // Remove empty values
+//                .sort(); // Sort alphabetically
 
-          // Fetch featured announcements
-          const announcements = await Announcement.find({ status: 'active' })
-               .sort({ createdAt: -1 })
-               .limit(6)
-               .select('title description images location price breed age gender');
+//           // Fetch featured announcements
+//           const announcements = await Announcement.find({ status: 'active' })
+//                .sort({ createdAt: -1 })
+//                .limit(6)
+//                .select('title description images location price breed age gender');
 
-          // service tabs in the home page 
-          const { category, page = 1 } = req.query;
-          const limit = 4;
-          const skip = (page - 1) * limit;
+//           // service tabs in the home page 
+//           const { category, page = 1 } = req.query;
+//           const limit = 4;
+//           const skip = (page - 1) * limit;
 
-          let query = {};
+//           let query = {};
 
-          const services = await Service.find(query)
-               .sort({ createdAt: -1 })
-               .skip(skip)
-               .limit(limit)
-               .select('serviceName location priceRange images views');
+//           const services = await Service.find(query)
+//                .sort({ createdAt: -1 })
+//                .skip(skip)
+//                .limit(limit)
+//                .select('serviceName location priceRange images views');
 
-          // console.log(services)
-          res.render('user/index', {
-               pageTitle,
-               description,
-               events,
-               keywords,
+//           // console.log(services)
+//           res.render('user/index', {
+//                pageTitle,
+//                description,
+//                events,
+//                keywords,
 
-               topProviders: providersWithDetails, // Now includes services and reviews
-               articles,
-               services,
-               // announcements,
-               locations: uniqueLocations,
-               user: req.user || null // Pass current user if exists
-          });
+//                topProviders: providersWithDetails, // Now includes services and reviews
+//                articles,
+//                services,
+//                // announcements,
+//                locations: uniqueLocations,
+//                user: req.user || null // Pass current user if exists
+//           });
 
-     } catch (error) {
-          console.error('Error fetching homepage data:', error);
-          res.status(500).render('error', {
-               error: {
-                    status: 500,
-                    message: 'Une erreur est survenue lors du chargement de la page'
-               }
-          });
-     }
-});
+//      } catch (error) {
+//           console.error('Error fetching homepage data:', error);
+//           res.status(500).render('error', {
+//                error: {
+//                     status: 500,
+//                     message: 'Une erreur est survenue lors du chargement de la page'
+//                }
+//           });
+//      }
+// });
 // GET ALL ARTICLES
 router.get('/articles', async (req, res) => {
 

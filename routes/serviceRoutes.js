@@ -269,7 +269,7 @@ const serviceConfig = {
      ]
 };
 
-router.get('/services/:serviceOption?/:location?', async (req, res) => {
+router.get('/:serviceOption?/:location?', async (req, res) => {
      try {
           const { serviceOption = 'tous', location } = req.params;
           const page = parseInt(req.query.page) || 1;
