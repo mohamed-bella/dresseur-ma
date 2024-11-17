@@ -1,241 +1,283 @@
 <%- include('include/head.ejs') %>
-     <script src="https://cdn.jsdelivr.net/npm/cheerio@1.0.0/dist/esm/index.min.js"></script>
 
-     <body class="bg-gray-50 text-gray-900 transition-colors duration-200 ">
-          <!-- Include Navbar -->
+     <body class="bg-[#F0F2F5]">
           <%- include('include/navbar.ejs') %>
+               <% const currentUrl=`${process.env.BASE_URL || 'https://ndressilik.com' }/articles/${article.slug}`; %>
 
-               <!-- Reading Progress Bar -->
-               <div class="fixed top-0 left-0 right-0 h-1 z-50">
-                    <div class="progress-bar bg-blue-500 h-full w-0 transition-all duration-150"></div>
-               </div>
+                    <!-- Reading Progress Bar -->
+                    <div class="fixed top-0 left-0 right-0 h-1 z-50">
+                         <div class="progress-bar bg-blue-500 h-full w-0 transition-all duration-150"></div>
+                    </div>
 
-               <!-- Floating Reading Controls -->
-               <div class="fixed bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 bg-white  rounded-full shadow-lg px-4 py-2 z-40">
-                    <!-- Removed Dark Mode Toggle Button -->
-                    <!-- Removed Font Size Adjustment Buttons -->
-
-                    <!-- Share Button -->
-                    <!-- <button onclick="shareArticle()" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700">
-                         <i class="fas fa-share-alt text-gray-600 dark:text-gray-300"></i>
-                    </button> -->
-               </div>
-
-               <!-- Article Header -->
-               <header class="relative py-20 bg-gradient-to-br from-blue-600 to-indigo-700 ">
-                    <div class="absolute inset-0 bg-black/20"></div>
-                    <div class="container mx-auto px-4 relative">
-                         <div class="max-w-3xl mx-auto text-center text-white">
+                    <!-- Compact Header -->
+                    <header class="pt-16 lg:pt-20 bg-white border-b">
+                         <div class="max-w-2xl mx-auto px-4 py-8">
                               <!-- Category & Date -->
-                              <div class="flex items-center justify-center gap-4 mb-6">
-                                   <span class="px-3 py-1 bg-white/20 rounded-full text-sm backdrop-blur-sm">
+                              <div class="flex items-center gap-3 mb-4">
+                                   <span class="px-2.5 py-1 bg-blue-100 text-blue-700 rounded-md text-sm font-medium">
                                         <%= article.category %>
                                    </span>
-                                   <span class="text-white/80">
+                                   <span class="text-sm text-gray-500">
                                         <%= new Date(article.publicationDate).toLocaleDateString('fr-FR', { year: 'numeric' , month: 'long' , day: 'numeric' }) %>
                                    </span>
                               </div>
 
                               <!-- Title -->
-                              <h1 class="text-4xl md:text-5xl font-bold mb-6 text-balance">
+                              <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
                                    <%= article.title %>
                               </h1>
 
                               <!-- Author & Read Time -->
-                              <div class="flex items-center justify-center gap-4">
+                              <div class="flex items-center gap-4">
                                    <div class="flex items-center gap-2">
-                                        <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
-                                             <i class="fas fa-user"></i>
+                                        <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
+                                             <i class="fas fa-user text-gray-600 text-sm"></i>
                                         </div>
-                                        <span>
+                                        <span class="text-sm text-gray-600">
                                              <%= article.author %>
                                         </span>
                                    </div>
-                                   <span>•</span>
-                                   <span>
+                                   <span class="text-gray-300">•</span>
+                                   <span class="text-sm text-gray-600">
                                         <%= readTime %> min de lecture
                                    </span>
                               </div>
-
-                              <!-- Social Media Sharing Options -->
-                              <div class="mt-6 flex justify-center gap-4">
-                                   <% const currentUrl='' ; %> <!-- Updated to dynamically capture current URL -->
-                                        <a href="https://www.facebook.com/sharer/sharer.php?u=<%= encodeURIComponent(currentUrl) %>" target="_blank" class="text-white hover:text-blue-200">
-                                             <i class="fab fa-facebook-f"></i>
-                                        </a>
-                                        <a href="https://twitter.com/intent/tweet?url=<%= encodeURIComponent(currentUrl) %>&text=<%= encodeURIComponent(article.title) %>" target="_blank" class="text-white hover:text-blue-200">
-                                             <i class="fab fa-twitter"></i>
-                                        </a>
-                                        <a href="mailto:?subject=<%= encodeURIComponent(article.title) %>&body=<%= encodeURIComponent(currentUrl) %>" class="text-white hover:text-blue-200">
-                                             <i class="fas fa-envelope"></i>
-                                        </a>
-                                        <a href="https://wa.me/?text=<%= encodeURIComponent(article.title + ' ' + currentUrl) %>" target="_blank" class="text-white hover:text-blue-200">
-                                             <i class="fab fa-whatsapp"></i>
-                                        </a>
-                              </div>
                          </div>
-                    </div>
-               </header>
+                    </header>
 
-               <!-- Main Content -->
-               <main class="container mx-auto">
-                    <div class="flex flex-col lg:flex-row gap-8">
-                         <!-- Main Article Content -->
-                         <div class="w-full max-w-5xl mx-auto">
-                              <!-- Article Content -->
-                              <article class="bg-white rounded-2xl mb-12 mt-3">
-                                   <!-- Featured Image -->
-                                   <% if (article.featuredImage) { %>
-                                        <img src="<%= article.featuredImage %>" alt="<%= article.title %>" class="w-full h-[400px] object-cover rounded-t-2xl">
-                                        <% } %>
+                    <!-- Main Content -->
+                    <main class="max-w-2xl mx-auto px-4 py-8">
+                         <!-- Table of Contents -->
+                         <div class="bg-white rounded-lg p-4 mb-6">
+                              <h2 class="font-medium text-gray-900 mb-3">Sommaire</h2>
+                              <ul class="space-y-2">
+                                   <% headings.forEach(heading=> { %>
+                                        <li class="text-sm">
+                                             <a href="#<%= heading.id %>" class="text-gray-600 hover:text-blue-600 transition-colors flex items-center gap-2">
+                                                  <i class="fas fa-chevron-right text-xs text-gray-400"></i>
+                                                  <%= heading.text %>
+                                             </a>
+                                        </li>
+                                        <% }) %>
+                              </ul>
+                         </div>
 
-                                             <!-- Content -->
-                                             <div class="p-2 lg:p-12">
-                                                  <!-- Reading Menu (Table of Contents) -->
-                                                  <nav class="mb-8">
-                                                       <h2 class="text-xl font-semibold mb-4">Sommaire</h2>
-                                                       <ul class="list-disc ml-5 space-y-2">
-                                                            <!-- Assuming headings are h2 elements in the article content -->
-                                                            <% headings.forEach(heading=> { %>
-                                                                 <li>
-                                                                      <a href="#<%= heading.id %>" class="text-blue-600 hover:underline">
-                                                                           <%= heading.text %>
-                                                                      </a>
-                                                                 </li>
-                                                                 <% }) %>
-                                                       </ul>
-                                                  </nav>
+                         <!-- Featured Image -->
+                         <% if (article.featuredImage) { %>
+                              <div class="relative rounded-lg overflow-hidden mb-8">
+                                   <img src="<%= article.featuredImage %>" alt="<%= article.title %>" class="w-full aspect-[16/9] object-cover">
+                              </div>
+                              <% } %>
 
-                                                  <div class="prose  prose-lg max-w-none article-content">
-                                                       <%- article.content %>
-                                                  </div>
-
-                                                  <!-- Tags -->
-                                                  <div class="mt-12 flex flex-wrap gap-2">
-                                                       <% article.tags.filter(tag=> tag).forEach(tag => { %>
-                                                            <span class="px-3 py-1 bg-gray-100  rounded-full text-sm">
-                                                                 #<%= tag %>
-                                                            </span>
-                                                            <% }) %>
-                                                  </div>
-                                             </div>
-                              </article>
-
-                              <!-- Comments Section -->
-                              <section id="comments" class="bg-white rounded-2xl shadow-xl p-8 lg:p-12">
-                                   <h2 class="text-2xl font-bold mb-8">Réponses (<%= comments.length %>)</h2>
-
-                                   <!-- Comment Form -->
-                                   <form action="/articles/<%= article.slug %>/comments" method="POST" class="mb-12">
-                                        <div class="grid gap-6">
-                                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                                  <div>
-                                                       <label class="block text-sm font-medium mb-2">Nom</label>
-                                                       <input type="text" name="name" required class="w-full px-4 py-2 rounded-lg border border-gray-200 bg-white  focus:ring-2 focus:ring-blue-500 ">
-                                                  </div>
-                                                  <div>
-                                                       <label class="block text-sm font-medium mb-2">Email</label>
-                                                       <input type="email" name="email" required class="w-full px-4 py-2 rounded-lg border border-gray-200 bg-white  focus:ring-2 focus:ring-blue-500 ">
-                                                  </div>
-                                             </div>
-                                             <div>
-                                                  <label class="block text-sm font-medium mb-2">Votre réponse</label>
-                                                  <textarea name="comment" rows="4" required class="w-full px-4 py-2 rounded-lg border border-gray-200  bg-white focus:ring-2 focus:ring-blue-500 "></textarea>
-                                             </div>
-                                             <button type="submit" class="inline-flex justify-center items-center px-6 py-3 bg-blue-600 hover:bg-blue-700  text-white font-medium rounded-lg transition-colors">
-                                                  <i class="fas fa-paper-plane mr-2"></i>
-                                                  Publier la réponse
-                                             </button>
+                                   <!-- Article Content -->
+                                   <article class="bg-white rounded-lg p-6 mb-8">
+                                        <div class="prose prose-gray prose-lg max-w-none">
+                                             <%- article.content %>
                                         </div>
-                                   </form>
 
-                                   <!-- Comments List -->
-                                   <div class="space-y-8">
-                                        <% comments.forEach(comment=> { %>
-                                             <div class="bg-gray-50 rounded-xl p-6">
-                                                  <div class="flex items-start gap-4">
-                                                       <div class="w-10 h-10 rounded-full bg-blue-100  flex items-center justify-center flex-shrink-0">
-                                                            <%= comment.name.charAt(0).toUpperCase() %>
+                                        <!-- Tags -->
+                                        <div class="mt-8 flex flex-wrap gap-2 pt-6 border-t">
+                                             <% article.tags.filter(tag=> tag).forEach(tag => { %>
+                                                  <span class="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm">
+                                                       #<%= tag %>
+                                                  </span>
+                                                  <% }) %>
+                                        </div>
+                                   </article>
+
+                                   <!-- Share Section -->
+                                   <div class="bg-white rounded-lg p-6 mb-8">
+                                        <h3 class="font-medium text-gray-900 mb-4">Partager l'article</h3>
+                                        <div class="flex gap-3">
+                                             <a href="https://www.facebook.com/sharer/sharer.php?u=<%= encodeURIComponent(currentUrl) %>" target="_blank" class="flex-1 flex items-center justify-center gap-2 p-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">
+                                                  <i class="fab fa-facebook text-[#1877F2]"></i>
+                                                  <span class="text-sm">Facebook</span>
+                                             </a>
+                                             <a href="https://twitter.com/intent/tweet?url=<%= encodeURIComponent(currentUrl) %>&text=<%= encodeURIComponent(article.title) %>" target="_blank" class="flex-1 flex items-center justify-center gap-2 p-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">
+                                                  <i class="fab fa-twitter text-[#1DA1F2]"></i>
+                                                  <span class="text-sm">Twitter</span>
+                                             </a>
+                                             <a href="https://wa.me/?text=<%= encodeURIComponent(article.title + ' ' + currentUrl) %>" target="_blank" class="flex-1 flex items-center justify-center gap-2 p-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">
+                                                  <i class="fab fa-whatsapp text-[#25D366]"></i>
+                                                  <span class="text-sm">WhatsApp</span>
+                                             </a>
+                                        </div>
+                                   </div>
+
+                                   <!-- Comments Section -->
+                                   <section class="bg-white rounded-lg p-6">
+                                        <h3 class="font-medium text-gray-900 mb-6">
+                                             Réponses (<%= comments.length %>)
+                                        </h3>
+
+                                        <!-- Comment Form -->
+                                        <form action="/articles/<%= article.slug %>/comments" method="POST" class="mb-8">
+                                             <div class="space-y-4">
+                                                  <div class="grid grid-cols-2 gap-4">
+                                                       <div>
+                                                            <label class="block text-sm text-gray-600 mb-1.5">Nom</label>
+                                                            <input type="text" name="name" required class="w-full px-3 h-10 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
                                                        </div>
-                                                       <div class="flex-1 min-w-0">
-                                                            <div class="flex items-center justify-between mb-2">
-                                                                 <h4 class="font-semibold truncate">
-                                                                      <%= comment.name %>
-                                                                 </h4>
-                                                                 <time class="text-sm text-gray-500">
-                                                                      <%= new Date(comment.createdAt).toLocaleDateString() %>
-                                                                 </time>
-                                                            </div>
-                                                            <p class="text-gray-600 ">
-                                                                 <%= comment.comment %>
-                                                            </p>
+                                                       <div>
+                                                            <label class="block text-sm text-gray-600 mb-1.5">Email</label>
+                                                            <input type="email" name="email" required class="w-full px-3 h-10 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
                                                        </div>
                                                   </div>
+                                                  <div>
+                                                       <label class="block text-sm text-gray-600 mb-1.5">Votre réponse</label>
+                                                       <textarea name="comment" rows="4" required class="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"></textarea>
+                                                  </div>
+                                                  <button type="submit" class="w-full sm:w-auto px-6 h-10 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg transition-colors">
+                                                       Publier la réponse
+                                                  </button>
                                              </div>
-                                             <% }) %>
-                                   </div>
-                              </section>
-                         </div>
+                                        </form>
 
-                         <!-- Related Articles Sidebar -->
-                         <!-- <aside class="w-full lg:w-1/3">
-                              <div class="bg-white rounded-2xl shadow-xl p-6">
-                                   <h2 class="text-xl font-semibold mb-4">Articles similaires</h2>
-                                   <div class="space-y-6">
-                                       
-                                   </div>
-                              </div>
-                         </aside> -->
+                                        <!-- Comments List -->
+                                        <div class="space-y-4">
+                                             <% comments.forEach(comment=> { %>
+                                                  <div class="p-4 bg-gray-50 rounded-lg">
+                                                       <div class="flex gap-3">
+                                                            <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 text-sm font-medium text-blue-600">
+                                                                 <%= comment.name.charAt(0).toUpperCase() %>
+                                                            </div>
+                                                            <div class="flex-1 min-w-0">
+                                                                 <div class="flex items-center justify-between mb-1">
+                                                                      <span class="font-medium text-gray-900">
+                                                                           <%= comment.name %>
+                                                                      </span>
+                                                                      <time class="text-sm text-gray-500">
+                                                                           <%= new Date(comment.createdAt).toLocaleDateString() %>
+                                                                      </time>
+                                                                 </div>
+                                                                 <p class="text-gray-600 text-sm">
+                                                                      <%= comment.comment %>
+                                                                 </p>
+                                                            </div>
+                                                       </div>
+                                                  </div>
+                                                  <% }) %>
+                                        </div>
+                                   </section>
+                    </main>
+
+                    <!-- Floating Reading Progress -->
+                    <div class="fixed bottom-6 right-6 flex gap-2">
+                         <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="p-3 bg-white shadow-lg rounded-full hover:shadow-xl transition-all duration-200
+                       opacity-0 invisible transform translate-y-4
+                       scrolled:opacity-100 scrolled:visible scrolled:translate-y-0">
+                              <i class="fas fa-arrow-up text-gray-600"></i>
+                         </button>
                     </div>
-               </main>
-               <%- include('include/footer.ejs') %>
-                    <!-- JavaScript -->
-                    <script>
-                         // Removed Dark mode toggle related JavaScript
-
-                         // Reading progress bar
-                         const progressBar = document.querySelector('.progress-bar');
-                         window.addEventListener('scroll', () => {
-                              const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
-                              const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-                              const scrolled = (winScroll / height) * 100;
-                              progressBar.style.width = scrolled + '%';
-                         });
-
-                         // Removed Font size adjustment JavaScript
-
-                         // Share article
-                         function shareArticle() {
-                              const currentUrl = window.location.href; // Moved inside the function to dynamically get URL
-                              if (navigator.share) {
-                                   navigator.share({
-                                        title: '<%= article.title %>',
-                                        text: '<%= article.summary %>',
-                                        url: currentUrl
-                                   }).catch(console.error);
-                              } else {
-                                   // Fallback
-                                   navigator.clipboard.writeText(currentUrl)
-                                        .then(() => alert('Lien copié dans le presse-papiers'))
-                                        .catch(() => alert('Erreur lors de la copie du lien'));
-                              }
-                         }
-
-                         // Detect article language and change font and direction
-                         document.addEventListener('DOMContentLoaded', () => {
-                              const articleContent = document.querySelector('.article-content');
-                              const text = articleContent.textContent || articleContent.innerText;
-                              const arabicPattern = /[\u0600-\u06FF]/;
-
-                              if (arabicPattern.test(text)) {
-                                   articleContent.classList.add('font-arabic');
-                                   articleContent.setAttribute('dir', 'rtl');
-                              } else {
-                                   articleContent.classList.add('font-latin');
-                                   articleContent.setAttribute('dir', 'ltr');
-                              }
-                         });
-                    </script>
      </body>
 
-     </html>
+     <script>
+          // Reading progress
+          const progressBar = document.querySelector('.progress-bar');
+          window.addEventListener('scroll', () => {
+               const winScroll = document.documentElement.scrollTop;
+               const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+               const scrolled = (winScroll / height) * 100;
+               progressBar.style.width = `${scrolled}%`;
+
+               // Toggle scroll-to-top button
+               const scrollButton = document.querySelector('button[onclick="window.scrollTo"]');
+               if (scrollButton) {
+                    scrollButton.classList.toggle('scrolled', winScroll > 500);
+               }
+          });
+
+          // Smooth scroll for table of contents
+          document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+               anchor.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const element = document.querySelector(anchor.getAttribute('href'));
+                    if (element) {
+                         element.scrollIntoView({
+                              behavior: 'smooth',
+                              block: 'start'
+                         });
+                    }
+               });
+          });
+
+          // Auto-detect article language
+          document.addEventListener('DOMContentLoaded', () => {
+               const articleContent = document.querySelector('.prose');
+               if (articleContent) {
+                    const text = articleContent.textContent || articleContent.innerText;
+                    const arabicPattern = /[\u0600-\u06FF]/;
+
+                    if (arabicPattern.test(text)) {
+                         articleContent.classList.add('font-arabic');
+                         articleContent.dir = 'rtl';
+                    }
+               }
+          });
+     </script>
+
+     <style>
+          /* Prose Customization */
+          .prose {
+               font-size: 1.125rem;
+               line-height: 1.75;
+          }
+
+          .prose h2 {
+               font-size: 1.5rem;
+               margin-top: 2.5rem;
+               margin-bottom: 1rem;
+               font-weight: 600;
+               color: #1f2937;
+          }
+
+          .prose p {
+               margin-top: 1.25rem;
+               margin-bottom: 1.25rem;
+          }
+
+          .prose img {
+               border-radius: 0.5rem;
+          }
+
+          .prose a {
+               color: #2563eb;
+               text-decoration: underline;
+               text-decoration-thickness: 1px;
+               text-underline-offset: 2px;
+          }
+
+          .prose ul {
+               margin-top: 1.25rem;
+               margin-bottom: 1.25rem;
+               list-style-type: disc;
+               padding-left: 1.625rem;
+          }
+
+          /* RTL Support */
+          [dir="rtl"] .prose {
+               font-family: 'Tajawal', sans-serif;
+          }
+
+          /* Smooth Transitions */
+          .transition-all {
+               transition-property: all;
+               transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+               transition-duration: 150ms;
+          }
+
+          /* Scroll Button States */
+          .scrolled\:opacity-100.scrolled {
+               opacity: 1;
+          }
+
+          .scrolled\:visible.scrolled {
+               visibility: visible;
+          }
+
+          .scrolled\:translate-y-0.scrolled {
+               transform: translateY(0);
+          }
+     </style>
+
+     <%- include('include/footer.ejs') %>

@@ -1244,7 +1244,7 @@ router.get('/consultation', (req, res) => {
 });
 
 // Single event page
-router.get('/event/:id', async (req, res) => {
+router.get('/event/', async (req, res) => {
      try {
           const events = await Event.find();
           const event = await Event.findById(req.params.id);
