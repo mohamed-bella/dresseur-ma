@@ -899,7 +899,7 @@ router.get('/@:slug', async (req, res) => {
 
           // Fetch user with all necessary fields
           const user = await User.findOne({ slug })
-               .select('-password -email -phoneNumber -settings -verificationDocuments -googleId -__v');
+               .select('-password -email  -settings -verificationDocuments -googleId -__v');
 
           if (!user) {
                return res.status(404).render('user/404', {

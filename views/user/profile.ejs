@@ -57,6 +57,182 @@
                                                   Lien copié!
                                              </div>
                                         </button>
+                                        <!-- Call Button  -->
+                                        <% if (profile.phoneNumber) { %>
+                                             <button onclick="openCallModal()" class="w-full mt-4 group relative flex items-center justify-center gap-3 px-6 py-3
+                                                      bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl
+                                                      hover:shadow-lg hover:shadow-green-500/25 hover:-translate-y-0.5
+                                                      active:translate-y-0 transition-all duration-300">
+                                                  <div class="absolute inset-0 bg-gradient-to-r from-green-600 to-green-700 
+                                                       opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-300">
+                                                  </div>
+                                                  <i class="fas fa-phone-alt relative animate-pulse"></i>
+                                                  <span class="relative font-medium">
+                                                       <%= profile.phoneNumber %>
+                                                  </span>
+                                             </button>
+                                             <% } %>
+
+                                                  <!-- Enhanced Call Modal -->
+                                                  <div id="callModal" class="fixed inset-0 z-50 hidden animate-fadeIn" onclick="handleModalClick(event)">
+                                                       <!-- Backdrop -->
+                                                       <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+
+                                                       <!-- Modal Content -->
+                                                       <div class="fixed inset-0 flex items-center justify-center p-4">
+                                                            <div class="relative bg-white w-full max-w-md rounded-2xl shadow-2xl p-6
+                                                       transform transition-all duration-300 scale-95 opacity-0" id="modalContent">
+                                                                 <!-- Modal Header -->
+                                                                 <div class="text-center mb-6">
+                                                                      <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-green-100 
+                                                               flex items-center justify-center">
+                                                                           <i class="fas fa-phone-alt text-2xl text-green-600"></i>
+                                                                      </div>
+                                                                      <h2 class="text-xl font-bold text-gray-900 mb-2 font-arabic">
+                                                                           هل تريد الاتصال بهذا الرقم؟
+                                                                      </h2>
+                                                                      <p class="text-lg text-gray-600 font-medium dir-ltr">
+                                                                           <%= profile.phoneNumber %>
+                                                                      </p>
+                                                                 </div>
+
+                                                                 <!-- Action Buttons -->
+                                                                 <div class="grid grid-cols-2 gap-4">
+                                                                      <button onclick="closeCallModal()" class="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 
+                                                                  rounded-xl font-medium transition-colors duration-200 font-arabic">
+                                                                           إلغاء
+                                                                      </button>
+                                                                      <button onclick="confirmCall()" class="px-6 py-3 bg-green-600 hover:bg-green-700 text-white 
+                                                                  rounded-xl font-medium transition-colors duration-200 
+                                                                  hover:shadow-lg hover:shadow-green-500/25 font-arabic">
+                                                                           اتصال
+                                                                      </button>
+                                                                 </div>
+
+                                                                 <!-- Close Button -->
+                                                                 <button onclick="closeCallModal()" class="absolute -top-4 -right-4 w-8 h-8 bg-white rounded-full 
+                                                              shadow-lg flex items-center justify-center hover:bg-gray-50 
+                                                              transition-colors duration-200">
+                                                                      <i class="fas fa-times text-gray-500"></i>
+                                                                 </button>
+                                                            </div>
+                                                       </div>
+                                                  </div>
+
+                                                  <script>
+                                                       // Enhanced modal functionality
+                                                       function openCallModal() {
+                                                            const modal = document.getElementById('callModal');
+                                                            const modalContent = document.getElementById('modalContent');
+
+                                                            // Show modal
+                                                            modal.classList.remove('hidden');
+
+                                                            // Animate content
+                                                            setTimeout(() => {
+                                                                 modalContent.classList.remove('scale-95', 'opacity-0');
+                                                                 modalContent.classList.add('scale-100', 'opacity-100');
+                                                            }, 50);
+
+                                                            // Lock scroll
+                                                            document.body.style.overflow = 'hidden';
+                                                       }
+
+                                                       function closeCallModal() {
+                                                            const modal = document.getElementById('callModal');
+                                                            const modalContent = document.getElementById('modalContent');
+
+                                                            // Animate out
+                                                            modalContent.classList.remove('scale-100', 'opacity-100');
+                                                            modalContent.classList.add('scale-95', 'opacity-0');
+
+                                                            // Hide modal after animation
+                                                            setTimeout(() => {
+                                                                 modal.classList.add('hidden');
+                                                                 document.body.style.overflow = '';
+                                                            }, 200);
+                                                       }
+
+                                                       function handleModalClick(event) {
+                                                            if (event.target.id === 'callModal') {
+                                                                 closeCallModal();
+                                                            }
+                                                       }
+
+                                                       function confirmCall() {
+                                                            const phoneNumber = '<%= profile.phoneNumber %>';
+                                                            window.location.href = `tel:${phoneNumber}`;
+                                                            closeCallModal();
+                                                       }
+
+                                                       // Close on escape key
+                                                       document.addEventListener('keydown', (e) => {
+                                                            if (e.key === 'Escape' && !document.getElementById('callModal').classList.contains('hidden')) {
+                                                                 closeCallModal();
+                                                            }
+                                                       });
+                                                  </script>
+
+                                                  <style>
+                                                       /* Animation keyframes */
+                                                       @keyframes fadeIn {
+                                                            from {
+                                                                 opacity: 0;
+                                                            }
+
+                                                            to {
+                                                                 opacity: 1;
+                                                            }
+                                                       }
+
+                                                       .animate-fadeIn {
+                                                            animation: fadeIn 0.3s ease-out;
+                                                       }
+
+                                                       /* RTL support */
+                                                       .dir-ltr {
+                                                            direction: ltr;
+                                                       }
+
+                                                       /* Prevent text selection during modal interactions */
+                                                       .modal-open {
+                                                            user-select: none;
+                                                       }
+
+                                                       /* Modal animations */
+                                                       .modal-enter {
+                                                            animation: modalEnter 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                                                       }
+
+                                                       @keyframes modalEnter {
+                                                            from {
+                                                                 opacity: 0;
+                                                                 transform: scale(0.95) translateY(10px);
+                                                            }
+
+                                                            to {
+                                                                 opacity: 1;
+                                                                 transform: scale(1) translateY(0);
+                                                            }
+                                                       }
+
+                                                       /* Pulse animation for phone icon */
+                                                       .animate-pulse {
+                                                            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+                                                       }
+
+                                                       @keyframes pulse {
+
+                                                            0%,
+                                                            100% {
+                                                                 opacity: 1;
+                                                            }
+
+                                                            50% {
+                                                                 opacity: .7;
+                                                            }
+                                                       }
+                                                  </style>
                                    </div>
 
                                    <!-- Karma-like Stats -->
