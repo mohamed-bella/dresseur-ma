@@ -244,12 +244,12 @@
                                                   </div>
                                                   <div class="text-xs text-gray-500">Score de confiance</div>
                                              </div>
-                                             <div class="px-4 py-3 text-center">
+                                             <!-- <div class="px-4 py-3 text-center">
                                                   <div class="text-xl font-bold text-blue-500">
                                                        <%= profile.metrics?.totalReviews || 0 %>
                                                   </div>
                                                   <div class="text-xs text-gray-500">Avis reçus</div>
-                                             </div>
+                                             </div> -->
                                         </div>
                                    </div>
 
@@ -288,7 +288,8 @@
                          <div class="bg-white rounded-lg border shadow-sm">
                               <!-- Tab Navigation -->
                               <div class="flex items-center border-b">
-                                   <% const tabs=[ { id: 'services' , label: 'Services' , icon: 'fa-briefcase' , count: services.length }, { id: 'reviews' , label: 'Avis' , icon: 'fa-star' , count: reviews.length }, ] %>
+                                   <!-- { id: 'reviews' , label: 'Avis' , icon: 'fa-star' , count: reviews.length }, -->
+                                   <% const tabs=[ { id: 'services' , label: 'Services' , icon: 'fa-briefcase' , count: services.length }, ] %>
 
                                         <% tabs.forEach(tab=> { %>
                                              <button @click="activeTab = '<%= tab.id %>'" class="flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium
