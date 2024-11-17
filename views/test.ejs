@@ -1,0 +1,58 @@
+<script>
+     document.addEventListener('DOMContentLoaded', function () {
+          const link = 'https://ndressilik.com'; // Replace with your target URL
+          const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+          if (/Instagram/.test(userAgent)) {
+               const message = document.createElement('div');
+               message.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            text-align: center;
+        `;
+
+               message.innerHTML = `
+            <p style="margin-bottom: 16px; font-size: 18px;">We recommend opening this link in your default browser for the best experience.</p>
+            <button id="openInBrowser" style="
+                padding: 10px 20px;
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 16px;
+            ">
+                Open in Browser
+            </button>
+        `;
+
+               document.body.appendChild(message);
+
+               const openInBrowserBtn = document.getElementById('openInBrowser');
+               openInBrowserBtn.addEventListener('click', function () {
+                    const androidIntent = `intent://${link.replace('https://', '')}#Intent;scheme=https;package=com.android.chrome;end;`;
+                    const safariLink = `x-web-search://?${link}`;
+
+                    if (/android/i.test(userAgent)) {
+                         window.location.href = androidIntent;
+                    } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                         window.location.href = safariLink;
+                    } else {
+                         window.location.href = link; // For desktop and fallback
+                    }
+               });
+          } else {
+               window.location.href = link; // If not in Instagram browser, open the link directly
+          }
+     });
+
+</script>
