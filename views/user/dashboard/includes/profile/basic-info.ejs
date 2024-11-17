@@ -64,7 +64,7 @@
                          </div>
 
                          <!-- City Select -->
-                         <div class="space-y-3">
+                         <div class="space-y-3" id="location.city">
                               <label for="city" class="block text-base font-semibold text-gray-700 font-arabic">
                                    المدينة <span class="text-blue-500">*</span>
                               </label>
@@ -107,8 +107,8 @@
                     </div>
 
                     <!-- Languages Section -->
-                    <div class="space-y-4">
-                         <label class="block text-base font-semibold text-gray-700 font-arabic">اللغات المتحدث بها</label>
+                    <div class="space-y-4" id="languages">
+                         <label class=" block text-base font-semibold text-gray-700 font-arabic">اللغات المتحدث بها</label>
                          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                               <% const languageMap={ 'french' : 'الفرنسية' , 'arabic' : 'العربية' , 'english' : 'الإنجليزية' , 'spanish' : 'الإسبانية' } %>
                                    <% languageOptions.forEach(lang=> { %>
@@ -377,5 +377,204 @@
           }
           `;
                     document.head.appendChild(style);
+               });
+          </script>
+
+
+
+
+
+
+
+
+
+
+          <!-- ####################### GALLERY ############################# -->
+          <!-- Gallery Section -->
+          <div class="bg-white rounded-2xl shadow-lg overflow-hidden mt-8" dir="rtl">
+               <!-- Header -->
+               <div class="p-6 border-b border-gray-100">
+                    <div class="flex items-center justify-between">
+                         <div class="flex items-center gap-3">
+                              <h2 class="text-xl font-bold text-gray-900 font-arabic">معرض الصور</h2>
+                              <% if (user.gallery?.length) { %>
+                                   <span class="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-sm font-arabic">
+                                        <%= user.gallery.length %> صورة
+                                   </span>
+                                   <% } %>
+                         </div>
+                    </div>
+               </div>
+
+               <!-- Gallery Preview/Upload Card -->
+               <div class="p-6">
+                    <a href="/dashboard/galery" class="block group relative overflow-hidden rounded-2xl transition-all duration-300
+                  hover:shadow-xl">
+                         <!-- Background Pattern -->
+                         <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5
+                        transition-all duration-500 group-hover:scale-110"></div>
+
+                         <!-- Content Container -->
+                         <div class="relative p-8">
+                              <div class="flex flex-col items-center gap-6 text-center">
+                                   <!-- Icon Container -->
+                                   <div class="w-20 h-20 flex items-center justify-center rounded-full
+                                bg-gradient-to-r from-blue-500 to-blue-600 text-white
+                                transform transition-all duration-500 
+                                group-hover:scale-110 group-hover:rotate-12">
+                                        <i class="fas fa-images text-3xl"></i>
+                                   </div>
+
+                                   <!-- Text Content -->
+                                   <div class="space-y-2">
+                                        <h3 class="text-xl font-bold text-gray-900 font-arabic">
+                                             <% if (user.gallery?.length) { %>
+                                                  إدارة معرض الصور
+                                                  <% } else { %>
+                                                       أضف صورك الأولى
+                                                       <% } %>
+                                        </h3>
+                                        <p class="text-gray-500 max-w-md mx-auto font-arabic">
+                                             <% if (user.gallery?.length) { %>
+                                                  يمكنك تحرير وإضافة المزيد من الصور لمعرضك
+                                                  <% } else { %>
+                                                       قم بإنشاء معرض صور احترافي لعرض خدماتك وأعمالك
+                                                       <% } %>
+                                        </p>
+                                   </div>
+
+                                   <!-- Gallery Preview or Upload Button -->
+                                   <% if (user.gallery?.length) { %>
+                                        <!-- Mini Gallery Preview -->
+                                        <div class="flex items-center gap-4">
+                                             <% user.gallery.slice(0, 3).forEach(image=> { %>
+                                                  <div class="w-16 h-16 rounded-xl overflow-hidden">
+                                                       <img src="<%= image %>" alt="Gallery preview" class="w-full h-full object-cover">
+                                                  </div>
+                                                  <% }) %>
+                                                       <% if (user.gallery.length> 3) { %>
+                                                            <div class="w-16 h-16 rounded-xl bg-gray-900/10 flex items-center 
+                                            justify-center text-gray-600 font-medium font-arabic">
+                                                                 +<%= user.gallery.length - 3 %>
+                                                            </div>
+                                                            <% } %>
+                                        </div>
+                                        <% } %>
+
+                                             <!-- Action Button -->
+                                             <button class="inline-flex items-center gap-2 px-6 py-3 
+                                 bg-gradient-to-r from-blue-500 to-blue-600
+                                 text-white rounded-xl font-arabic
+                                 transition-all duration-300 group-hover:shadow-lg 
+                                 group-hover:shadow-blue-500/25 group-hover:-translate-y-0.5">
+                                                  <i class="fas <%= user.gallery?.length ? 'fa-pen-to-square' : 'fa-plus' %>"></i>
+                                                  <span>
+                                                       <%= user.gallery?.length ? 'تحرير المعرض' : 'إنشاء معرض' %>
+                                                  </span>
+                                             </button>
+                              </div>
+                         </div>
+
+                         <!-- Hover Effect Overlay -->
+                         <div class="absolute inset-0 bg-gradient-to-r from-blue-600/0 to-blue-600/0
+                        transition-all duration-300 group-hover:from-blue-600/5 
+                        group-hover:to-blue-600/5"></div>
+                    </a>
+               </div>
+
+               <!-- Optional Quick Stats -->
+               <div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 bg-gray-50/50 border-t border-gray-100">
+                    <div class="text-center p-4 rounded-xl bg-white">
+                         <div class="text-2xl font-bold text-blue-600 font-arabic">
+                              <%= user.gallery?.length || 0 %>
+                         </div>
+                         <div class="text-sm text-gray-500 mt-1 font-arabic">إجمالي الصور</div>
+                    </div>
+
+               </div>
+          </div>
+
+          <style>
+               /* Enhanced Hover Animations */
+               @keyframes floatUp {
+
+                    0%,
+                    100% {
+                         transform: translateY(0);
+                    }
+
+                    50% {
+                         transform: translateY(-5px);
+                    }
+               }
+
+               .hover-float {
+                    animation: floatUp 3s ease-in-out infinite;
+               }
+
+               @keyframes shimmer {
+                    0% {
+                         transform: translateX(-100%);
+                    }
+
+                    100% {
+                         transform: translateX(200%);
+                    }
+               }
+
+               .hover-shimmer::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    right: -100%;
+                    width: 50%;
+                    height: 100%;
+                    background: linear-gradient(90deg,
+                              transparent,
+                              rgba(255, 255, 255, 0.2),
+                              transparent);
+                    transform: skewX(-25deg);
+                    animation: shimmer 2s infinite;
+               }
+
+               /* Custom Scrollbar for Image Preview */
+               .custom-scrollbar::-webkit-scrollbar {
+                    width: 4px;
+                    height: 4px;
+               }
+
+               .custom-scrollbar::-webkit-scrollbar-track {
+                    background: #f1f5f9;
+               }
+
+               .custom-scrollbar::-webkit-scrollbar-thumb {
+                    background: #cbd5e1;
+                    border-radius: 2px;
+               }
+          </style>
+
+          <script>
+               // Optional: Add some interactive elements
+               document.addEventListener('DOMContentLoaded', () => {
+                    // Add loading state when clicking the gallery link
+                    const galleryLink = document.querySelector('a[href="/dashboard/galery"]');
+                    galleryLink?.addEventListener('click', (e) => {
+                         const button = e.currentTarget.querySelector('button');
+                         const originalText = button.innerHTML;
+
+                         // Show loading state
+                         button.innerHTML = `
+            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span class="font-arabic">جارٍ التحميل...</span>
+        `;
+
+                         // Restore original text after navigation
+                         setTimeout(() => {
+                              button.innerHTML = originalText;
+                         }, 500);
+                    });
                });
           </script>

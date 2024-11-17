@@ -1,65 +1,129 @@
 <!-- Services Management Dashboard -->
-<div class="mx-auto py-8 px-4 sm:px-6" style="margin: 10px auto !important;" id="services">
+<div class="mx-auto py-8 " style="margin: 10px auto !important;" id="services" dir="rtl">
      <!-- Header Section -->
      <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
           <div class="px-6 py-8 border-b border-gray-100">
-               <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+               <div class="flex flex-col gap-6">
                     <!-- Title and Stats -->
-                    <div class="flex-1">
-                         <h1 class="text-2xl font-bold text-gray-900">
-                              Tableau de bord des services
-                              <span class="ml-2 text-sm font-medium px-3 py-1 bg-blue-50 text-blue-600 rounded-full">
-                                   <%= services.length %> services
+                    <div class="text-center sm:text-right">
+                         <h1 class="text-2xl font-bold text-gray-900 font-arabic flex items-center justify-center sm:justify-start gap-3 flex-wrap">
+                              لوحة التحكم بالخدمات
+                              <span class="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-sm">
+                                   <%= services.length %> خدمة
                               </span>
                          </h1>
-                         <p class="mt-2 text-gray-500">Gérez et suivez vos services en temps réel</p>
+                         <p class="mt-2 text-gray-500 font-arabic">إدارة ومتابعة خدماتك في الوقت الفعلي</p>
                     </div>
 
                     <!-- Action Buttons -->
-                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                    <div class="flex flex-col sm:flex-row gap-4">
                          <!-- Enhanced Search Bar -->
-                         <div class="relative group">
-                              <input type="text" id="searchInput" placeholder="Rechercher un service..." class="w-full sm:w-64 pl-11 pr-4 h-11 border border-gray-200 rounded-xl
-                                      bg-gray-50 focus:bg-white focus:border-blue-500 focus:ring-4 
-                                      focus:ring-blue-500/10 transition-all duration-300">
-                              <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400
+                         <div class="relative flex-1">
+                              <input type="text" id="searchInput" placeholder="ابحث عن خدمة..." class="w-full h-12 pr-12 pl-4 bg-gray-50 border-2 border-gray-200 rounded-xl
+                                      text-right font-arabic
+                                      focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10
+                                      transition-all duration-300">
+                              <i class="fas fa-search absolute right-4 top-1/2 -translate-y-1/2 text-gray-400
                                  group-focus-within:text-blue-500 transition-colors"></i>
                          </div>
 
                          <!-- New Service Button -->
-                         <a href="/dashboard/new-service" class="group inline-flex items-center px-5 h-11 bg-gradient-to-r from-blue-500 to-blue-600
-                              text-white rounded-xl font-medium transition-all duration-300
-                              hover:shadow-lg hover:shadow-blue-500/25 hover:-translate-y-0.5 active:translate-y-0">
-                              <i class="fas fa-plus mr-2 transition-transform duration-300 group-hover:rotate-180"></i>
-                              Nouveau Service
+                         <a href="/dashboard/new-service" class="group flex items-center justify-center gap-2 px-6 h-12 
+                              bg-gradient-to-l from-blue-500 to-blue-600
+                              text-white rounded-xl font-arabic
+                              transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/25 
+                              hover:-translate-y-0.5 active:translate-y-0">
+                              <i class="fas fa-plus transition-transform duration-300 group-hover:rotate-180"></i>
+                              <span>إضافة خدمة جديدة</span>
                          </a>
                     </div>
                </div>
           </div>
 
-          <!-- Table Section -->
-          <div class="overflow-x-auto">
+          <!-- Mobile Card View (for small screens) -->
+          <div class="sm:hidden">
+               <% if (services && services.length> 0) { %>
+                    <div class="p-4 grid gap-4">
+                         <% services.forEach(service=> { %>
+                              <div class="bg-gray-50/50 rounded-xl p-4 space-y-4 transition-all duration-300
+                                  hover:shadow-md hover:-translate-y-1">
+                                   <!-- Service Header -->
+                                   <div class="flex items-center gap-4">
+                                        <img src="<%= service.images[0] %>" alt="<%= service.serviceName %>" class="h-16 w-16 rounded-xl object-cover shadow-sm">
+                                        <div class="flex-1">
+                                             <h3 class="font-bold text-gray-900 font-arabic">
+                                                  <%= service.serviceName %>
+                                             </h3>
+                                             <div class="flex items-center gap-2 text-sm text-gray-500 mt-1">
+                                                  <i class="fas fa-star text-yellow-400"></i>
+                                                  <span class="font-arabic">
+                                                       <%= service.reviews?.length || 0 %> تقييم
+                                                  </span>
+                                             </div>
+                                        </div>
+                                        <!-- Status Toggle -->
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                             <input type="checkbox" class="sr-only peer" onchange="toggleServiceStatus('<%= service._id %>', '<%= service.status %>')" <%=service.status==='active' ? 'checked' : '' %>>
+                                             <div class="w-11 h-6 bg-gray-200 rounded-full peer 
+                                                peer-focus:ring-4 peer-focus:ring-blue-300 
+                                                peer-checked:after:translate-x-full peer-checked:bg-blue-600
+                                                after:content-[''] after:absolute after:top-[2px] after:left-[2px] 
+                                                after:bg-white after:border-gray-300 after:border after:rounded-full 
+                                                after:h-5 after:w-5 after:transition-all duration-300">
+                                             </div>
+                                        </label>
+                                   </div>
+
+                                   <!-- Service Details -->
+                                   <div class="flex flex-wrap gap-3 text-sm font-arabic">
+                                        <span class="px-3 py-1.5 rounded-full bg-blue-50 text-blue-600">
+                                             <%= service.serviceOptions %>
+                                        </span>
+                                        <span class="px-3 py-1.5 rounded-full bg-gray-100 text-gray-600 flex items-center gap-2">
+                                             <i class="fas fa-location-dot"></i>
+                                             <%= service.location %>
+                                        </span>
+                                        <span class="px-3 py-1.5 rounded-full bg-gray-100 text-gray-600">
+                                             <%= service.priceRange %> درهم
+                                        </span>
+                                   </div>
+
+                                   <!-- Action Buttons -->
+                                   <div class="flex items-center justify-between pt-3 border-t border-gray-100">
+                                        <a href="/service/<%= service._id %>" class="flex items-center gap-2 px-4 py-2 text-blue-600 rounded-lg
+                                          hover:bg-blue-50 transition-all duration-300 font-arabic">
+                                             <i class="fas fa-eye"></i>
+                                             <span>عرض</span>
+                                        </a>
+                                        <a href="/dashboard/services/<%= service._id %>/edit" class="flex items-center gap-2 px-4 py-2 text-emerald-600 rounded-lg
+                                          hover:bg-emerald-50 transition-all duration-300 font-arabic">
+                                             <i class="fas fa-edit"></i>
+                                             <span>تعديل</span>
+                                        </a>
+                                        <button onclick="deleteService('<%= service._id %>')" class="flex items-center gap-2 px-4 py-2 text-red-600 rounded-lg
+                                               hover:bg-red-50 transition-all duration-300 font-arabic">
+                                             <i class="fas fa-trash"></i>
+                                             <span>حذف</span>
+                                        </button>
+                                   </div>
+                              </div>
+                              <% }); %>
+                    </div>
+                    <% } %>
+          </div>
+
+          <!-- Desktop Table View -->
+          <div class="hidden sm:block overflow-x-auto">
+               <!-- Your existing table code with Arabic text -->
                <table class="w-full">
                     <thead>
                          <tr class="bg-gray-50/50">
-                              <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                                   Service
-                              </th>
-                              <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                                   Type
-                              </th>
-                              <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                                   Localisation
-                              </th>
-                              <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                                   Prix
-                              </th>
-                              <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                                   Statut
-                              </th>
-                              <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                                   Actions
-                              </th>
+                              <th class="px-6 py-4 text-right text-xs font-semibold text-gray-500 font-arabic">الخدمة</th>
+                              <th class="px-6 py-4 text-right text-xs font-semibold text-gray-500 font-arabic">النوع</th>
+                              <th class="px-6 py-4 text-right text-xs font-semibold text-gray-500 font-arabic">الموقع</th>
+                              <th class="px-6 py-4 text-right text-xs font-semibold text-gray-500 font-arabic">السعر</th>
+                              <th class="px-6 py-4 text-right text-xs font-semibold text-gray-500 font-arabic">الحالة</th>
+                              <th class="px-6 py-4 text-right text-xs font-semibold text-gray-500 font-arabic">الإجراءات</th>
                          </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
@@ -85,7 +149,7 @@
                                         <!-- Type -->
                                         <td class="px-6 py-4">
                                              <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
-                                               bg-gradient-to-r from-blue-500/10 to-blue-600/10 text-blue-600">
+                                                                   bg-gradient-to-r from-blue-500/10 to-blue-600/10 text-blue-600">
                                                   <%= service.serviceOptions %>
                                              </span>
                                         </td>
@@ -110,15 +174,12 @@
                                              <label class="relative inline-flex items-center cursor-pointer">
                                                   <input type="checkbox" class="sr-only peer" onchange="toggleServiceStatus('<%= service._id %>', '<%= service.status %>')" <%=service.status==='active' ? 'checked' : '' %>>
                                                   <div class="w-11 h-6 bg-gray-200 rounded-full peer 
-                                                    peer-focus:ring-4 peer-focus:ring-blue-300 
-                                                    peer-checked:after:translate-x-full peer-checked:bg-blue-600
-                                                    after:content-[''] after:absolute after:top-[2px] after:left-[2px] 
-                                                    after:bg-white after:border-gray-300 after:border after:rounded-full 
-                                                    after:h-5 after:w-5 after:transition-all duration-300">
+                                                                                             peer-focus:ring-4 peer-focus:ring-blue-300 
+                                                                                             peer-checked:after:translate-x-full peer-checked:bg-blue-600
+                                                                                             after:content-[''] after:absolute after:top-[2px] after:left-[2px] 
+                                                                                             after:bg-white after:border-gray-300 after:border after:rounded-full 
+                                                                                             after:h-5 after:w-5 after:transition-all duration-300">
                                                   </div>
-                                                  <span class="ml-3 text-sm text-gray-500">
-                                                       <%= service.status==='active' ? 'Actif' : 'Inactif' %>
-                                                  </span>
                                              </label>
                                         </td>
 
@@ -126,31 +187,31 @@
                                         <td class="px-6 py-4">
                                              <div class="flex items-center gap-2">
                                                   <a href="/service/<%= service._id %>" class="p-2 rounded-lg hover:bg-blue-100/80 text-blue-600 
-                                                  transition-all duration-300 group/btn relative">
+                                                                      transition-all duration-300 group/btn relative">
                                                        <i class="fas fa-eye text-lg"></i>
                                                        <span class="absolute -top-12 left-1/2 -translate-x-1/2 px-3 py-1.5 
-                                                        bg-gray-900 text-white text-sm rounded-lg opacity-0 
-                                                        group-hover/btn:opacity-100 transition-opacity whitespace-nowrap">
+                                                                            bg-gray-900 text-white text-sm rounded-lg opacity-0 
+                                                                            group-hover/btn:opacity-100 transition-opacity whitespace-nowrap">
                                                             Voir le service
                                                        </span>
                                                   </a>
 
                                                   <a href="/dashboard/services/<%= service._id %>/edit" class="p-2 rounded-lg hover:bg-emerald-100/80 text-emerald-600 
-                                                  transition-all duration-300 group/btn relative">
+                                                                      transition-all duration-300 group/btn relative">
                                                        <i class="fas fa-edit text-lg"></i>
                                                        <span class="absolute -top-12 left-1/2 -translate-x-1/2 px-3 py-1.5 
-                                                        bg-gray-900 text-white text-sm rounded-lg opacity-0 
-                                                        group-hover/btn:opacity-100 transition-opacity whitespace-nowrap">
+                                                                            bg-gray-900 text-white text-sm rounded-lg opacity-0 
+                                                                            group-hover/btn:opacity-100 transition-opacity whitespace-nowrap">
                                                             Modifier
                                                        </span>
                                                   </a>
 
                                                   <button onclick="deleteService('<%= service._id %>')" class="p-2 rounded-lg hover:bg-red-100/80 text-red-600 
-                                                       transition-all duration-300 group/btn relative">
+                                                                           transition-all duration-300 group/btn relative">
                                                        <i class="fas fa-trash text-lg"></i>
                                                        <span class="absolute -top-12 left-1/2 -translate-x-1/2 px-3 py-1.5 
-                                                        bg-gray-900 text-white text-sm rounded-lg opacity-0 
-                                                        group-hover/btn:opacity-100 transition-opacity whitespace-nowrap">
+                                                                            bg-gray-900 text-white text-sm rounded-lg opacity-0 
+                                                                            group-hover/btn:opacity-100 transition-opacity whitespace-nowrap">
                                                             Supprimer
                                                        </span>
                                                   </button>
@@ -161,29 +222,102 @@
                                         <% } %>
                     </tbody>
                </table>
-
-               <!-- Empty State -->
-               <% if (services.length===0) { %>
-                    <div class="text-center py-16">
-                         <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                              <i class="fas fa-cube text-2xl text-blue-500"></i>
-                         </div>
-                         <h3 class="text-lg font-medium text-gray-900">Aucun service trouvé</h3>
-                         <p class="mt-2 text-gray-500 max-w-sm mx-auto">
-                              Commencez par créer votre premier service pour gérer vos offres.
-                         </p>
-                         <a href="/dashboard/new-service" class="mt-6 inline-flex items-center px-5 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600
-                              text-white rounded-xl font-medium transition-all duration-300
-                              hover:shadow-lg hover:shadow-blue-500/25 hover:-translate-y-0.5">
-                              <i class="fas fa-plus mr-2"></i>
-                              Créer un service
-                         </a>
-                    </div>
-                    <% } %>
           </div>
+
+          <!-- Empty State -->
+          <% if (services.length===0) { %>
+               <div class="text-center py-16">
+                    <div class="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                         <i class="fas fa-cube text-3xl text-blue-500"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2 font-arabic">لا توجد خدمات</h3>
+                    <p class="text-gray-500 max-w-sm mx-auto mb-8 font-arabic">
+                         ابدأ بإضافة خدمتك الأولى لإدارة عروضك
+                    </p>
+                    <a href="/dashboard/new-service" class="inline-flex items-center gap-2 px-6 py-3 
+                          bg-gradient-to-l from-blue-500 to-blue-600
+                          text-white rounded-xl font-arabic
+                          transition-all duration-300 hover:shadow-lg 
+                          hover:shadow-blue-500/25 hover:-translate-y-0.5">
+                         <i class="fas fa-plus"></i>
+                         <span>إضافة خدمة</span>
+                    </a>
+               </div>
+               <% } %>
      </div>
 </div>
 
+<style>
+     .font-arabic {
+          font-family: 'Tajawal', sans-serif;
+     }
+
+     /* Enhanced Mobile Animations */
+     @media (max-width: 640px) {
+          .service-card {
+               transform: translateZ(0);
+               transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+
+          .service-card:active {
+               transform: scale(0.98);
+          }
+     }
+
+     /* Toast Animations */
+     @keyframes slideInRight {
+          from {
+               transform: translateX(100%);
+               opacity: 0;
+          }
+
+          to {
+               transform: translateX(0);
+               opacity: 1;
+          }
+     }
+
+     .toast-enter {
+          animation: slideInRight 0.5s ease-out forwards;
+     }
+
+     /* Custom Scrollbar */
+     .custom-scrollbar::-webkit-scrollbar {
+          width: 6px;
+          height: 6px;
+     }
+
+     .custom-scrollbar::-webkit-scrollbar-track {
+          background: #f1f5f9;
+     }
+
+     .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: #cbd5e1;
+          border-radius: 3px;
+     }
+
+     /* Status Toggle Animation */
+     .toggle-switch {
+          transition: background-color 0.3s ease;
+     }
+
+     .toggle-switch::after {
+          transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+     }
+</style>
+
+<script>
+
+     // Update success message
+     function showSuccessToast(message) {
+          const toast = document.createElement('div');
+          toast.className = 'fixed bottom-4 left-4 bg-green-500 text-white px-6 py-3 rounded-xl shadow-lg font-arabic toast-enter';
+          toast.textContent = message;
+          document.body.appendChild(toast);
+          setTimeout(() => toast.remove(), 3000);
+     }
+
+</script>
 <script>
      // Enhanced search functionality with debounce
      function debounce(func, wait) {
@@ -263,14 +397,29 @@
 
      // Delete service with confirmation
      function deleteService(serviceId) {
-          if (confirm('Êtes-vous sûr de vouloir supprimer ce service ?')) {
-               const form = document.createElement('form');
-               form.method = 'POST';
-               form.action = `/dashboard/services/${serviceId}/delete`;
-               document.body.appendChild(form);
-               form.submit();
-          }
+          Swal.fire({
+               title: 'هل أنت متأكد؟',
+               text: 'لن تتمكن من استعادة هذه الخدمة!',
+               icon: 'warning',
+               showCancelButton: true,
+               confirmButtonColor: '#ef4444',
+               cancelButtonColor: '#6b7280',
+               confirmButtonText: 'نعم، احذف',
+               cancelButtonText: 'إلغاء',
+               customClass: {
+                    popup: 'font-arabic'
+               }
+          }).then((result) => {
+               if (result.isConfirmed) {
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = `/dashboard/services/${serviceId}/delete`;
+                    document.body.appendChild(form);
+                    form.submit();
+               }
+          });
      }
+
 </script>
 
 <style>

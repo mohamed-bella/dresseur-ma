@@ -566,9 +566,19 @@ router.post('/profile/qualifications', isAuthenticated, upload.single('certifica
 router.delete('/profile/qualifications/:qualificationId', isAuthenticated, async (req, res) => {
      try {
           const { qualificationId } = req.params;
+          console.log(qualificationId);
 
-          // Find user and qualification
+          // Find user
           const user = await User.findById(req.user._id);
+
+          if (!user) {
+               return res.status(404).json({
+                    success: false,
+                    message: 'Utilisateur non trouvé'
+               });
+          }
+
+          // Find the qualification
           const qualification = user.qualifications.id(qualificationId);
 
           if (!qualification) {
@@ -583,8 +593,10 @@ router.delete('/profile/qualifications/:qualificationId', isAuthenticated, async
                await deleteFromS3(qualification.certificate);
           }
 
-          // Remove qualification
-          qualification.remove();
+          // Remove the qualification using pull()
+          user.qualifications.pull(qualificationId);
+
+          // Save the updated user document
           await user.save();
 
           res.json({
@@ -599,6 +611,7 @@ router.delete('/profile/qualifications/:qualificationId', isAuthenticated, async
           });
      }
 });
+
 
 // Route: Update Settings
 router.put('/profile/update-settings', isAuthenticated, async (req, res) => {

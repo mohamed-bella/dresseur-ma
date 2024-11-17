@@ -16,7 +16,7 @@
      <!-- List of Qualifications -->
      <div class="p-6" id="qualificationsList">
           <% if (user.qualifications && user.qualifications.length> 0) { %>
-               <div class="grid gap-4">
+               <div class="grid gap-4" id="qualifications">
                     <% user.qualifications.forEach(qualification=> { %>
                          <div class="group relative p-4 bg-gradient-to-l from-gray-50 to-gray-100/50 rounded-xl
                                 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
@@ -114,28 +114,32 @@
                     </div>
                </div>
 
-               <!-- Action Buttons -->
+               <!-- Submit Button in Add Qualification Form -->
                <div class="flex gap-4 pt-6 border-t">
                     <button type="button" id="cancelAddQualificationBtn" class="flex-1 h-12 bg-gray-50 text-gray-700 rounded-xl font-arabic
-                               hover:bg-gray-100 focus:ring-4 focus:ring-gray-200
-                               transition-all duration-300 group">
+                         hover:bg-gray-100 focus:ring-4 focus:ring-gray-200
+                         transition-all duration-300 group">
                          <i class="fas fa-times ml-2 group-hover:rotate-90 transition-transform"></i>
                          إلغاء
                     </button>
-                    <button type="submit" class="flex-1 h-12 bg-blue-600 text-white rounded-xl font-arabic
-                               hover:bg-blue-700 focus:ring-4 focus:ring-blue-500/30
-                               transition-all duration-300 group">
-                         <i class="fas fa-check ml-2 group-hover:scale-110 transition-transform"></i>
-                         حفظ
+                    <button type="submit" id="submitQualificationBtn" class="flex-1 h-12 bg-blue-600 text-white rounded-xl font-arabic
+                         hover:bg-blue-700 focus:ring-4 focus:ring-blue-500/30
+                         transition-all duration-300 flex items-center justify-center">
+                         <span id="submitText" class="group-hover:scale-110 transition-transform">حفظ</span>
+                         <span id="spinner" class="hidden ml-2">
+                              <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                   <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                   <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                              </svg>
+                         </span>
                     </button>
                </div>
+
           </div>
      </form>
 </div>
 
 <style>
-     @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700&display=swap');
-
      .font-arabic {
           font-family: 'Tajawal', sans-serif;
      }
@@ -193,12 +197,17 @@
           $addQualificationBtn.addEventListener('click', toggleAddQualificationForm);
           $cancelAddQualificationBtn.addEventListener('click', toggleAddQualificationForm);
 
-          // Handle Add Qualification Form Submission
+          const $submitBtn = document.getElementById('submitQualificationBtn');
+          const $submitText = document.getElementById('submitText');
+          const $spinner = document.getElementById('spinner');
+
           $addQualificationForm.addEventListener('submit', async function (e) {
                e.preventDefault();
 
-               const $submitBtn = this.querySelector('button[type="submit"]');
+               // Show spinner and disable button
                $submitBtn.disabled = true;
+               $spinner.classList.remove('hidden');
+               $submitText.classList.add('hidden');
 
                try {
                     // Get form data
@@ -213,20 +222,23 @@
                     const result = await response.json();
 
                     if (response.ok) {
+                         // Reload page on success
                          window.location.reload();
                     } else {
                          throw new Error(result.message);
                     }
                } catch (error) {
+                    // Show error message and reset button state
                     Swal.fire({
                          icon: 'error',
-                         title: 'Erreur',
-                         text: error.message || 'Une erreur est survenue lors de l\'ajout'
+                         title: 'خطأ',
+                         text: error.message || 'حدث خطأ أثناء الإضافة'
                     });
                     $submitBtn.disabled = false;
+                    $spinner.classList.add('hidden');
+                    $submitText.classList.remove('hidden');
                }
           });
-
           // Handle Delete Qualification
           document.querySelectorAll('.deleteQualificationBtn').forEach(button => {
                button.addEventListener('click', async function () {
