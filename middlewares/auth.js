@@ -249,7 +249,7 @@ router.get('/auth/google/cb',
     }),
     async (req, res) => {
         await sendWelcomeEmail(req.user.email);
-        res.redirect('/dashboard');
+        res.redirect('/dashboard/new-service');
 
     }
 );
