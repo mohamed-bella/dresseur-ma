@@ -27,7 +27,17 @@ async function sendNewServiceEmail(to, serviceName) {
           console.error('Error sending email:', error);
      }
 }
+// Function to send an email to a single recipient
+async function sendEmail(to, subject, htmlContent) {
+     const mailOptions = {
+          from: 'ghizlaneakouan@yahoo.com',
+          to,
+          subject,
+          html: htmlContent,
+     };
 
+     return transporter.sendMail(mailOptions);
+}
 async function sendBroadcastEmail(to, subject, message) {
      const mailOptions = {
           from: 'ghizlaneakouan@yahoo.com',
@@ -45,4 +55,4 @@ async function sendBroadcastEmail(to, subject, message) {
 }
 
 
-module.exports = { sendNewServiceEmail, sendBroadcastEmail };
+module.exports = { sendNewServiceEmail, sendBroadcastEmail, sendEmail };

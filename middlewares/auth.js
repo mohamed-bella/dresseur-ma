@@ -7,8 +7,8 @@ const nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
     service: 'yahoo',
     auth: {
-        user: 'ghizlaneakouan@yahoo.com',      // Your Yahoo email
-        pass: 'vijwurvhmmujirco'   // Yahoo app-specific password
+        user: process.env.YAHOO_EMAIL,  // Yahoo app-specific password
+        pass: process.env.YAHOO_APP_PASSWORD,      // Your Yahoo email
     },
     logger: true,  // Logs to console
     debug: true    // Enable debugging
@@ -17,7 +17,7 @@ const transporter = nodemailer.createTransport({
 // Function to send a welcome email
 const sendWelcomeEmail = async (toEmail) => {
     const mailOptions = {
-        from: 'ghizlaneakouan@yahoo.com',
+        from: process.env.YAHOO_EMAIL,
         to: toEmail,
         subject: 'Welcome to Our Service!',
         html: `
@@ -208,7 +208,7 @@ const sendWelcomeEmail = async (toEmail) => {
 
             <p>Ready to begin? Click the button below to access your dashboard:</p>
 
-            <a href="[Your Dashboard URL]" class="cta-button">Go to Dashboard</a>
+            <a href="https://ndressilik.com/dashboard" class="cta-button">Go to Dashboard</a>
         </div>
 
         <div class="footer">

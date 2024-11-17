@@ -362,30 +362,34 @@ router.post('/admin/users/:userId/verify', isAdmin, async (req, res) => {
 
 
 // Import the email service
-const { sendBroadcastEmail } = require('../utils/emails');
+const { sendBroadcastEmail, sendEmail } = require('../utils/emails');
 
 // Route to render broadcast form in the admin dashboard
-router.get('/admin/broadcast', isAdmin, (req, res) => {
-     res.render('admin/broadcast'); // Render a form for broadcast (e.g., with subject and message fields)
+router.get('/dashboard/admin/broadcast', isAdmin, async (req, res) => {
+     try {
+          const users = await User.find().select('email');
+          res.render('admin/broadcast', { users });
+     } catch (error) {
+          console.error('Error fetching users:', error);
+          res.status(500).send('Error fetching users.');
+     }
 });
 
-// Route to handle the broadcast email submission
-router.post('/admin/broadcast', isAdmin, async (req, res) => {
-     const { subject, message } = req.body;
+// Route to handle sending an email to a single user
+router.post('/admin/send-email', isAdmin, async (req, res) => {
+     const { email, subject, message } = req.body;
+
+     // Input validation
+     if (!email || !subject || !message) {
+          return res.status(400).json({ success: false, message: 'Missing required fields.' });
+     }
 
      try {
-          // Get all user emails from the database
-          const users = await User.find().select('email');
-          const emails = users.map(user => user.email); // Extract emails
-
-          // Send broadcast email to all users
-          await sendBroadcastEmail(emails, subject, message);
-
-          // Return success response
-          res.json({ success: true, message: 'Broadcast email sent successfully to all users.' });
+          await sendEmail(email, subject, message);
+          res.json({ success: true });
      } catch (error) {
-          console.error('Error sending broadcast email:', error);
-          res.status(500).json({ success: false, message: 'Error sending broadcast email.' });
+          console.error(`Error sending email to ${email}:`, error);
+          res.status(500).json({ success: false, message: `Error sending email to ${email}` });
      }
 });
 
