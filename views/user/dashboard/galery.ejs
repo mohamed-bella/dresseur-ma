@@ -104,167 +104,167 @@
 </head>
 
 <body class="min-h-screen font-sans">
-     <%- include('includes/sidebar') %>
-          <div class="lg:ml-64">
-               <%- include('includes/header') %>
-                    <div class="container mx-auto px-6 py-12">
-                         <!-- Header Section -->
-                         <div class="mb-12 text-center">
-                              <h1 class="text-5xl font-bold header-gradient mb-4">Galerie de Photos</h1>
-                              <p class="text-gray-600 text-lg max-w-2xl mx-auto">
-                                   Enrichissez votre profil avec vos plus belles photos. Maximum 40 photos.
-                              </p>
-                         </div>
 
-                         <!-- Upload Section -->
-                         <div class="max-w-4xl mx-auto mb-12">
-                              <% if (user.gallery.length < 20) { %>
-                                   <div class="bg-white p-6 rounded-2xl shadow-lg">
-                                        <input type="file" id="filepond" name="filepond" multiple />
-                                   </div>
-                                   <% } else { %>
-                                        <div class="bg-red-50 border-l-4 border-red-500 p-6 rounded-lg">
-                                             <div class="flex items-center">
-                                                  <div class="flex-shrink-0">
-                                                       <i class="fas fa-exclamation-circle text-red-500 text-xl"></i>
-                                                  </div>
-                                                  <div class="ml-3">
-                                                       <h3 class="text-red-800 font-medium">Limite atteinte</h3>
-                                                       <p class="text-red-600 mt-1">Vous avez atteint le nombre maximum de photos autorisées.</p>
-                                                  </div>
-                                             </div>
-                                        </div>
-                                        <% } %>
-                         </div>
-
-                         <!-- Gallery Grid -->
-                         <div class="gallery-container">
-                              <% user.gallery.forEach((photo, index)=> { %>
-                                   <div class="gallery-image">
-                                        <img src="<%= photo %>" alt="Gallery Image <%= index + 1 %>" class="w-full h-64 object-cover">
-                                        <div class="overlay">
-                                             <button data-photo="<%= photo %>" class="delete-photo-btn delete-btn px-6 py-3 rounded-lg text-white font-medium flex items-center gap-2">
-                                                  <i class="fas fa-trash-alt"></i>
-                                                  Supprimer
-                                             </button>
-                                        </div>
-                                   </div>
-                                   <% }) %>
-                         </div>
-
-                         <!-- Empty State -->
-                         <% if (user.gallery.length===0) { %>
-                              <div class="text-center py-16">
-                                   <div class="mb-6">
-                                        <i class="fas fa-images text-6xl text-gray-400"></i>
-                                   </div>
-                                   <h3 class="text-xl font-medium text-gray-700 mb-2">Aucune photo</h3>
-                                   <p class="text-gray-500">Commencez à ajouter des photos à votre galerie</p>
-                              </div>
-                              <% } %>
+     <div class="lg:ml-64">
+          <%- include('includes/header') %>
+               <div class="container mx-auto px-6 py-12">
+                    <!-- Header Section -->
+                    <div class="mb-12 text-center">
+                         <h1 class="text-5xl font-bold header-gradient mb-4">Galerie de Photos</h1>
+                         <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+                              Enrichissez votre profil avec vos plus belles photos. Maximum 40 photos.
+                         </p>
                     </div>
 
+                    <!-- Upload Section -->
+                    <div class="max-w-4xl mx-auto mb-12">
+                         <% if (user.gallery.length < 20) { %>
+                              <div class="bg-white p-6 rounded-2xl shadow-lg">
+                                   <input type="file" id="filepond" name="filepond" multiple />
+                              </div>
+                              <% } else { %>
+                                   <div class="bg-red-50 border-l-4 border-red-500 p-6 rounded-lg">
+                                        <div class="flex items-center">
+                                             <div class="flex-shrink-0">
+                                                  <i class="fas fa-exclamation-circle text-red-500 text-xl"></i>
+                                             </div>
+                                             <div class="ml-3">
+                                                  <h3 class="text-red-800 font-medium">Limite atteinte</h3>
+                                                  <p class="text-red-600 mt-1">Vous avez atteint le nombre maximum de photos autorisées.</p>
+                                             </div>
+                                        </div>
+                                   </div>
+                                   <% } %>
+                    </div>
 
-                    <!-- Scripts -->
-                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                    <script src="https://unpkg.com/filepond/dist/filepond.min.js"></script>
-                    <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.js"></script>
-                    <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.min.js"></script>
-                    <script src="https://unpkg.com/filepond-plugin-image-validate-size/dist/filepond-plugin-image-validate-size.min.js"></script>
-                    <script>
-                         $(document).ready(function () {
-                              const maxPhotos = 20;
+                    <!-- Gallery Grid -->
+                    <div class="gallery-container">
+                         <% user.gallery.forEach((photo, index)=> { %>
+                              <div class="gallery-image">
+                                   <img src="<%= photo %>" alt="Gallery Image <%= index + 1 %>" class="w-full h-64 object-cover">
+                                   <div class="overlay">
+                                        <button data-photo="<%= photo %>" class="delete-photo-btn delete-btn px-6 py-3 rounded-lg text-white font-medium flex items-center gap-2">
+                                             <i class="fas fa-trash-alt"></i>
+                                             Supprimer
+                                        </button>
+                                   </div>
+                              </div>
+                              <% }) %>
+                    </div>
 
-                              // Initialize FilePond
-                              FilePond.registerPlugin(
-                                   FilePondPluginImagePreview,
-                                   FilePondPluginFileValidateType,
-                                   FilePondPluginImageValidateSize
-                              );
+                    <!-- Empty State -->
+                    <% if (user.gallery.length===0) { %>
+                         <div class="text-center py-16">
+                              <div class="mb-6">
+                                   <i class="fas fa-images text-6xl text-gray-400"></i>
+                              </div>
+                              <h3 class="text-xl font-medium text-gray-700 mb-2">Aucune photo</h3>
+                              <p class="text-gray-500">Commencez à ajouter des photos à votre galerie</p>
+                         </div>
+                         <% } %>
+               </div>
 
-                              FilePond.create(document.getElementById('filepond'), {
-                                   allowMultiple: true,
-                                   maxFiles: 40,
-                                   maxFileSize: '5MB',
-                                   acceptedFileTypes: ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'],
-                                   labelIdle: `Glissez et déposez vos photos ou <span class="filepond--label-action">cliquez ici</span>`,
-                                   server: {
-                                        url: '/dashboard/gallery/upload',
-                                        process: {
-                                             onload: (response) => {
-                                                  return JSON.parse(response).message;
-                                             }
+
+               <!-- Scripts -->
+               <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+               <script src="https://unpkg.com/filepond/dist/filepond.min.js"></script>
+               <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.js"></script>
+               <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.min.js"></script>
+               <script src="https://unpkg.com/filepond-plugin-image-validate-size/dist/filepond-plugin-image-validate-size.min.js"></script>
+               <script>
+                    $(document).ready(function () {
+                         const maxPhotos = 20;
+
+                         // Initialize FilePond
+                         FilePond.registerPlugin(
+                              FilePondPluginImagePreview,
+                              FilePondPluginFileValidateType,
+                              FilePondPluginImageValidateSize
+                         );
+
+                         FilePond.create(document.getElementById('filepond'), {
+                              allowMultiple: true,
+                              maxFiles: 40,
+                              maxFileSize: '5MB',
+                              acceptedFileTypes: ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'],
+                              labelIdle: `Glissez et déposez vos photos ou <span class="filepond--label-action">cliquez ici</span>`,
+                              server: {
+                                   url: '/dashboard/gallery/upload',
+                                   process: {
+                                        onload: (response) => {
+                                             return JSON.parse(response).message;
                                         }
-                                   },
-                                   onprocessfiles: () => {
-                                        Swal.fire({
-                                             icon: 'success',
-                                             title: 'Téléchargement réussi!',
-                                             text: 'Vos photos ont été ajoutées avec succès.'
-                                        }).then(() => {
-                                             window.location.reload();
-                                        });
-                                   },
-                                   onerror: (error) => {
-                                        Swal.fire({
-                                             icon: 'error',
-                                             title: 'Erreur',
-                                             text: 'Un problème est survenu lors du téléchargement.'
-                                        });
                                    }
-                              });
-
-                              // Handle delete
-                              $('.delete-photo-btn').on('click', function () {
-                                   const photo = $(this).data('photo');
-
+                              },
+                              onprocessfiles: () => {
                                    Swal.fire({
-                                        title: 'Êtes-vous sûr ?',
-                                        text: "Cette action est irréversible !",
-                                        icon: 'warning',
-                                        showCancelButton: true,
-                                        confirmButtonColor: '#3b82f6',
-                                        cancelButtonColor: '#d33',
-                                        confirmButtonText: 'Oui, supprimer',
-                                        cancelButtonText: 'Annuler'
-                                   }).then((result) => {
-                                        if (result.isConfirmed) {
-                                             $.ajax({
-                                                  url: '/dashboard/gallery/delete',
-                                                  type: 'DELETE',
-                                                  data: JSON.stringify({ photo }),
-                                                  contentType: 'application/json',
-                                                  success: function (response) {
-                                                       if (response.success) {
-                                                            Swal.fire({
-                                                                 icon: 'success',
-                                                                 title: 'Supprimé!',
-                                                                 text: 'La photo a été supprimée.'
-                                                            }).then(() => {
-                                                                 window.location.reload();
-                                                            });
-                                                       } else {
-                                                            Swal.fire({
-                                                                 icon: 'error',
-                                                                 title: 'Erreur',
-                                                                 text: response.message || 'Un problème est survenu lors de la suppression.'
-                                                            });
-                                                       }
-                                                  },
-                                                  error: function () {
+                                        icon: 'success',
+                                        title: 'Téléchargement réussi!',
+                                        text: 'Vos photos ont été ajoutées avec succès.'
+                                   }).then(() => {
+                                        window.location.reload();
+                                   });
+                              },
+                              onerror: (error) => {
+                                   Swal.fire({
+                                        icon: 'error',
+                                        title: 'Erreur',
+                                        text: 'Un problème est survenu lors du téléchargement.'
+                                   });
+                              }
+                         });
+
+                         // Handle delete
+                         $('.delete-photo-btn').on('click', function () {
+                              const photo = $(this).data('photo');
+
+                              Swal.fire({
+                                   title: 'Êtes-vous sûr ?',
+                                   text: "Cette action est irréversible !",
+                                   icon: 'warning',
+                                   showCancelButton: true,
+                                   confirmButtonColor: '#3b82f6',
+                                   cancelButtonColor: '#d33',
+                                   confirmButtonText: 'Oui, supprimer',
+                                   cancelButtonText: 'Annuler'
+                              }).then((result) => {
+                                   if (result.isConfirmed) {
+                                        $.ajax({
+                                             url: '/dashboard/gallery/delete',
+                                             type: 'DELETE',
+                                             data: JSON.stringify({ photo }),
+                                             contentType: 'application/json',
+                                             success: function (response) {
+                                                  if (response.success) {
+                                                       Swal.fire({
+                                                            icon: 'success',
+                                                            title: 'Supprimé!',
+                                                            text: 'La photo a été supprimée.'
+                                                       }).then(() => {
+                                                            window.location.reload();
+                                                       });
+                                                  } else {
                                                        Swal.fire({
                                                             icon: 'error',
                                                             title: 'Erreur',
-                                                            text: 'Une erreur est survenue lors de la suppression.'
+                                                            text: response.message || 'Un problème est survenu lors de la suppression.'
                                                        });
                                                   }
-                                             });
-                                        }
-                                   });
+                                             },
+                                             error: function () {
+                                                  Swal.fire({
+                                                       icon: 'error',
+                                                       title: 'Erreur',
+                                                       text: 'Une erreur est survenue lors de la suppression.'
+                                                  });
+                                             }
+                                        });
+                                   }
                               });
                          });
-                    </script>
-          </div>
+                    });
+               </script>
+     </div>
 </body>
 
 </html>
