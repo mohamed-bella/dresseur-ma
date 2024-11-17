@@ -1,309 +1,388 @@
-<% const requiredFields=[ { field: 'location.city' , label: 'Location' , value: user.location?.city, icon: 'fa-location-dot' }, { field: 'specializations' , label: 'Spécialisations' , value: user.specializations?.length> 0,
-     icon: 'fa-briefcase'
-     },
-     {
-     field: 'languages',
-     label: 'Langues parlées',
-     value: user.languages?.length > 0,
-     icon: 'fa-language'
-     },
-     {
-     field: 'experience',
-     label: 'Expérience',
-     value: user.experience?.description && user.experience.description !== 'Sans Experience.',
-     icon: 'fa-star'
-     },
-     {
-     field: 'qualifications',
-     label: 'Qualifications',
-     value: user.qualifications?.length > 0,
-     icon: 'fa-certificate'
-     },
-     {
-     field: 'gallery',
-     label: 'Photos',
-     value: user.gallery?.length > 0,
-     icon: 'fa-images'
-     }
-     ];
+<div class="bg-white rounded-2xl shadow-lg p-4 sm:p-6 mb-6">
+     <% const requiredFields=[ { field: 'location.city' , label: 'الموقع' , arabicHint: 'أضف موقعك الحالي' , value: user.location?.city, icon: 'fa-location-dot' , color: 'blue' }, { field: 'specializations' , label: 'التخصصات' , arabicHint: 'أضف مجالات تخصصك' , value: user.specializations?.length> 0,
+          icon: 'fa-briefcase',
+          color: 'purple'
+          },
+          {
+          field: 'languages',
+          label: 'اللغات',
+          arabicHint: 'أضف اللغات التي تتحدثها',
+          value: user.languages?.length > 0,
+          icon: 'fa-language',
+          color: 'green'
+          },
+          {
+          field: 'experience',
+          label: 'الخبرة',
+          arabicHint: 'أضف خبراتك السابقة',
+          value: user.experience?.description && user.experience.description !== 'Sans Experience.',
+          icon: 'fa-star',
+          color: 'yellow'
+          },
+          {
+          field: 'qualifications',
+          label: 'المؤهلات',
+          arabicHint: 'أضف شهاداتك ومؤهلاتك',
+          value: user.qualifications?.length > 0,
+          icon: 'fa-certificate',
+          color: 'red'
+          },
+          {
+          field: 'gallery',
+          label: 'الصور',
+          arabicHint: 'أضف صور لأعمالك',
+          value: user.gallery?.length > 0,
+          icon: 'fa-images',
+          color: 'pink'
+          }
+          ];
 
-     // Calculate completion percentage
-     const completedFields = requiredFields.filter(field => field.value).length;
-     const completionPercentage = Math.round((completedFields / requiredFields.length) * 100);
-     %>
+          const completedFields = requiredFields.filter(field => field.value).length;
+          const completionPercentage = Math.round((completedFields / requiredFields.length) * 100);
+          %>
 
-     <div class="bg-white border-l-4 border-yellow-500 rounded-lg shadow-sm p-6 mb-6">
-          <div class="flex items-start space-x-4">
-               <!-- Pending Icon -->
-               <div class="flex-shrink-0">
-                    <div class="bg-yellow-100 rounded-full p-2">
-                         <svg class="w-6 h-6 text-yellow-500 animate-spin-slow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                         </svg>
+          <!-- Header Section -->
+          <div class="text-center mb-6">
+               <div class="relative inline-block">
+                    <div class="w-24 h-24 rounded-full bg-gradient-to-r from-orange-500 to-orange-600 p-1">
+                         <div class="w-full h-full rounded-full bg-white flex items-center justify-center">
+                              <span class="text-2xl font-bold text-orange-600">
+                                   <%= completionPercentage %>%
+                              </span>
+                         </div>
+                    </div>
+                    <div class="absolute -bottom-1 -right-1 w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center">
+                         <i class="fas <%= completionPercentage === 100 ? 'fa-check text-green-500' : 'fa-bolt text-orange-500' %>"></i>
                     </div>
                </div>
+               <h2 class="mt-4 text-xl font-bold text-gray-900 font-arabic">اكمل ملفك الشخصي</h2>
+               <p class="text-sm text-gray-600 font-arabic">اكمل المعلومات المطلوبة للحصول على شارة التوثيق</p>
+          </div>
 
-               <!-- Content -->
-               <div class="flex-1">
-                    <div class="flex items-center justify-between">
-                         <h3 class="text-lg font-semibold text-gray-900">
-                              Vérification en cours
-                              <span class="ml-2 inline-block px-2 py-1 text-xs font-medium text-yellow-600 bg-yellow-50 rounded-full">
-                                   <%= completionPercentage %>% Complété
+          <!-- Progress Cards Grid -->
+          <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+               <% requiredFields.forEach(field=> {
+                    const isCompleted = field.value;
+                    const bgColor = isCompleted ? `bg-${field.color}-50` : 'bg-gray-50';
+                    const borderColor = isCompleted ? `border-${field.color}-200` : 'border-gray-200';
+                    const iconColor = isCompleted ? `text-${field.color}-500` : 'text-gray-400';
+                    %>
+                    <a href="/dashboard/profile#<%= field.field %>" class="relative group rounded-xl p-4 border <%= borderColor %> <%= bgColor %> 
+                      transition-all duration-300 hover:shadow-md">
+                         <!-- Status Badge -->
+                         <div class="absolute top-3 right-3">
+                              <% if (isCompleted) { %>
+                                   <span class="flex h-6 w-6 items-center justify-center rounded-full bg-green-100">
+                                        <i class="fas fa-check text-xs text-green-600"></i>
+                                   </span>
+                                   <% } else { %>
+                                        <span class="flex h-6 w-6 items-center justify-center rounded-full bg-gray-100 
+                                   group-hover:bg-orange-100 transition-colors">
+                                             <i class="fas fa-plus text-xs text-gray-400 group-hover:text-orange-500"></i>
+                                        </span>
+                                        <% } %>
+                         </div>
+
+                         <!-- Icon -->
+                         <div class="mb-3">
+                              <span class="inline-block p-3 rounded-lg <%= bgColor %> <%= iconColor %>">
+                                   <i class="fas <%= field.icon %> text-xl"></i>
                               </span>
+                         </div>
+
+                         <!-- Content -->
+                         <h3 class="font-bold text-gray-900 mb-1 font-arabic">
+                              <%= field.label %>
                          </h3>
-                    </div>
+                         <p class="text-sm text-gray-600 font-arabic">
+                              <%= field.arabicHint %>
+                         </p>
 
-                    <!-- Progress -->
-                    <div class="mt-4">
-                         <div class="flex justify-between text-sm text-gray-600 mb-1">
-                              <span>Progression du profil</span>
-                              <span>
-                                   <%= completedFields %> sur <%= requiredFields.length %> complétés
-                              </span>
+                         <!-- Progress Indicator -->
+                         <div class="mt-3 flex items-center text-sm">
+                              <% if (isCompleted) { %>
+                                   <span class="text-green-600 font-arabic">مكتمل</span>
+                                   <% } else { %>
+                                        <span class="text-orange-500 font-arabic">غير مكتمل</span>
+                                        <% } %>
                          </div>
-                         <div class="w-full bg-gray-100 rounded-full h-2">
-                              <div class="bg-yellow-500 rounded-full h-2 transition-all duration-500" style="width: <%= completionPercentage %>%"></div>
-                         </div>
-                    </div>
+                    </a>
+                    <% }); %>
+          </div>
 
-                    <!-- Required Fields Checklist -->
-                    <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
-                         <% requiredFields.forEach(field=> { %>
-                              <div class="flex items-center text-sm">
-                                   <% if (field.value) { %>
-                                        <span class="flex-shrink-0 w-5 h-5 mr-2 rounded-full bg-green-100 flex items-center justify-center">
-                                             <i class="fas fa-check text-xs text-green-500"></i>
-                                        </span>
-                                        <span class="text-gray-600">
-                                             <%= field.label %>
-                                        </span>
-                                        <% } else { %>
-                                             <span class="flex-shrink-0 w-5 h-5 mr-2 rounded-full bg-gray-100 flex items-center justify-center">
-                                                  <i class="fas <%= field.icon %> text-xs text-gray-400"></i>
-                                             </span>
-                                             <a href="/dashboard/profile" class="text-blue-600 hover:underline">
-                                                  Ajouter <%= field.label %>
-                                             </a>
-                                             <% } %>
+          <!-- Status Message -->
+          <div class="mt-6">
+               <% if (completionPercentage < 100) { %>
+                    <div class="bg-gradient-to-r from-orange-50 to-orange-100 rounded-xl p-4">
+                         <div class="flex items-start">
+                              <div class="flex-shrink-0">
+                                   <i class="fas fa-medal text-orange-500 text-xl"></i>
                               </div>
-                              <% }); %>
-                    </div>
-
-                    <% if (completionPercentage < 100) { %>
-                         <!-- Action Required Message -->
-                         <div class="mt-4 bg-blue-50 rounded-lg p-4">
-                              <div class="flex">
-                                   <div class="flex-shrink-0">
-                                        <i class="fas fa-info-circle text-blue-400"></i>
+                              <div class="mr-3 flex-1">
+                                   <h3 class="text-lg font-medium text-orange-800 font-arabic">اكتمال الملف الشخصي</h3>
+                                   <p class="mt-1 text-sm text-orange-700 font-arabic">
+                                        باقي <%= requiredFields.length - completedFields %> خطوات للحصول على شارة التوثيق
+                                   </p>
+                                   <div class="mt-3 flex space-x-2 rtl:space-x-reverse">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium 
+                                       bg-orange-100 text-orange-800 font-arabic">
+                                             <i class="fas fa-clock mr-1"></i>
+                                             يستغرق التوثيق 24-48 ساعة
+                                        </span>
                                    </div>
-                                   <div class="ml-3">
-                                        <h3 class="text-sm font-medium text-blue-800">Action requise</h3>
-                                        <p class="mt-2 text-sm text-blue-700">
-                                             Complétez votre profil pour accélérer le processus de vérification. Il vous reste <%= requiredFields.length - completedFields %> éléments à remplir.
+                              </div>
+                         </div>
+                    </div>
+                    <% } else { %>
+                         <div class="bg-gradient-to-r from-green-50 to-green-100 rounded-xl p-4">
+                              <div class="flex items-start">
+                                   <div class="flex-shrink-0">
+                                        <i class="fas fa-check-circle text-green-500 text-xl"></i>
+                                   </div>
+                                   <div class="mr-3">
+                                        <h3 class="text-lg font-medium text-green-800 font-arabic">تم اكتمال الملف!</h3>
+                                        <p class="mt-1 text-sm text-green-700 font-arabic">
+                                             جاري مراجعة ملفك الشخصي من قبل فريقنا
                                         </p>
                                    </div>
                               </div>
                          </div>
-                         <% } else { %>
-                              <!-- All Complete Message -->
-                              <div class="mt-4 bg-green-50 rounded-lg p-4">
-                                   <div class="flex">
-                                        <div class="flex-shrink-0">
-                                             <i class="fas fa-check-circle text-green-400"></i>
-                                        </div>
-                                        <div class="ml-3">
-                                             <h3 class="text-sm font-medium text-green-800">Profil complet!</h3>
-                                             <p class="mt-2 text-sm text-green-700">
-                                                  Votre profil est complet. Notre équipe examine actuellement votre demande de vérification.
-                                             </p>
-                                        </div>
-                                   </div>
-                              </div>
-                              <% } %>
+                         <% } %>
+          </div>
+</div>
 
-                                   <!-- Timeframe -->
-                                   <div class="mt-4 text-sm text-gray-500 flex items-center">
-                                        <i class="fas fa-clock mr-2 text-gray-400"></i>
-                                        Temps estimé: 24-48 heures après complétion du profil
-                                   </div>
-               </div>
+<style>
+     @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
+
+     .font-arabic {
+          font-family: 'Tajawal', sans-serif;
+     }
+
+     /* Progress Card Hover Animation */
+     .progress-card {
+          transition: transform 0.2s ease-in-out;
+     }
+
+     .progress-card:hover {
+          transform: translateY(-2px);
+     }
+
+     /* Custom Animation for Progress Circle */
+     @keyframes progress-fill {
+          from {
+               stroke-dasharray: 0 100;
+          }
+
+          to {
+               stroke-dasharray: var(--percentage) 100;
+          }
+     }
+
+     /* Mobile-Friendly Touch States */
+     @media (hover: none) {
+          .progress-card:active {
+               transform: scale(0.98);
+          }
+     }
+
+     .rtl-grid {
+          direction: rtl;
+     }
+</style>
+
+<!-- Analytics Charts -->
+<div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+     <!-- Chart Header -->
+     <div class="px-6 py-4 border-b border-gray-100">
+          <div class="flex items-center justify-between">
+               <h2 class="text-xl font-bold text-gray-900 font-arabic">
+                    الزوار - آخر 7 أيام
+                    <span class="text-sm font-normal text-gray-500 mr-2 font-arabic" id="totalVisits"></span>
+               </h2>
           </div>
      </div>
 
-     <style>
-          @keyframes spin-slow {
-               from {
-                    transform: rotate(0deg);
-               }
-
-               to {
-                    transform: rotate(360deg);
-               }
-          }
-
-          .animate-spin-slow {
-               animation: spin-slow 3s linear infinite;
-          }
-     </style>
-
-     <!-- Analytics Charts -->
-     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <!-- Visitor Analytics -->
-          <div class="bg-white rounded-2xl shadow-md overflow-hidden">
-               <div class="px-6 py-4 border-b border-gray-200">
-                    <h2 class="text-xl font-semibold text-gray-800">
-                         Visiteurs du profil - Derniers 7 jours
-                    </h2>
-               </div>
-               <div class="p-6">
-                    <canvas id="visitorsChart" height="300"></canvas>
-               </div>
-          </div>
-
-          <!-- Additional Chart (optional) -->
-          <div class="bg-white rounded-2xl shadow-md overflow-hidden">
-               <div class="px-6 py-4 border-b border-gray-200">
-                    <h2 class="text-xl font-semibold text-gray-800">
-                         Autre graphique
-                    </h2>
-               </div>
-               <div class="p-6">
-                    <!-- Add another chart here -->
-               </div>
+     <!-- Chart Container -->
+     <div class="p-6">
+          <div class="relative" style="height: 300px;">
+               <canvas id="visitorsChart"></canvas>
           </div>
      </div>
-     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-     <input type="hidden" value="<%= JSON.stringify(analytics.detailedVisits1) %>" id="visitorsData">
-     <script>
-          // Visitor Analytics Chart Data
+</div>
+
+<input type="hidden" value="<%= JSON.stringify(analytics.detailedVisits1) %>" id="visitorsData">
+
+<script>
+     document.addEventListener('DOMContentLoaded', () => {
+          // Parse the visitors data
           const visitorsData = JSON.parse(document.getElementById('visitorsData').value);
-          console.log(visitorsData); // Check if parsed correctly
 
-          // Check if the parsed data is an array and map over it
           if (Array.isArray(visitorsData)) {
-               const visitorLabels = visitorsData.map(v => v.date);
+               const visitorLabels = visitorsData.map(v => formatDate(v.date));
                const visitorCounts = visitorsData.map(v => v.count);
 
-               console.log(visitorLabels); // Check the labels
-               console.log(visitorCounts); // Check the counts
+               // Calculate total visits
+               const totalVisits = visitorCounts.reduce((a, b) => a + b, 0);
+               document.getElementById('totalVisits').textContent = `(${totalVisits.toLocaleString('ar-SA')} زائر)`;
 
-               // Create Visitor Chart
+               // Create Enhanced Visitor Chart
                const ctxVisitors = document.getElementById('visitorsChart').getContext('2d');
+
+               // Create gradient
+               const gradient = ctxVisitors.createLinearGradient(0, 0, 0, 300);
+               gradient.addColorStop(0, 'rgba(59, 130, 246, 0.2)');
+               gradient.addColorStop(1, 'rgba(59, 130, 246, 0)');
+
                new Chart(ctxVisitors, {
-                    type: 'bar', // Column chart
+                    type: 'line',
                     data: {
                          labels: visitorLabels,
                          datasets: [{
-                              label: 'Nombre de Visites',
+                              label: 'الزوار',
                               data: visitorCounts,
-                              backgroundColor: 'rgba(54, 162, 235, 0.7)', // Softer color for bars
-                              borderColor: 'rgba(54, 162, 235, 1)',
-                              borderWidth: 1,
-                              borderRadius: 5, // Rounded corners for a softer look
-                              hoverBackgroundColor: 'rgba(54, 162, 235, 0.9)', // Slightly darker on hover
-                              hoverBorderColor: 'rgba(54, 162, 235, 1)'
+                              backgroundColor: gradient,
+                              borderColor: 'rgb(59, 130, 246)',
+                              borderWidth: 2,
+                              fill: true,
+                              tension: 0.4,
+                              pointRadius: 4,
+                              pointBackgroundColor: 'white',
+                              pointBorderColor: 'rgb(59, 130, 246)',
+                              pointBorderWidth: 2,
+                              pointHoverRadius: 6,
+                              pointHoverBackgroundColor: 'white',
+                              pointHoverBorderColor: 'rgb(59, 130, 246)',
+                              pointHoverBorderWidth: 3
                          }]
                     },
                     options: {
                          responsive: true,
-                         maintainAspectRatio: false, // Allows chart to adapt better to container size
+                         maintainAspectRatio: false,
+                         interaction: {
+                              mode: 'index',
+                              intersect: false,
+                         },
                          plugins: {
                               legend: {
-                                   display: false // Remove legend for a cleaner look (optional)
+                                   display: false
                               },
                               tooltip: {
-                                   backgroundColor: 'rgba(0, 0, 0, 0.8)', // Darker background for tooltip
-                                   titleColor: '#ffffff',
-                                   bodyColor: '#ffffff',
-                                   cornerRadius: 4
+                                   backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                   titleColor: 'white',
+                                   bodyColor: 'white',
+                                   bodyFont: {
+                                        family: 'Tajawal'
+                                   },
+                                   padding: 12,
+                                   cornerRadius: 8,
+                                   displayColors: false,
+                                   callbacks: {
+                                        label: function (context) {
+                                             return `${context.parsed.y.toLocaleString('ar-SA')} زائر`;
+                                        }
+                                   }
                               }
                          },
                          scales: {
                               x: {
                                    grid: {
-                                        display: false // Remove grid lines for a cleaner look
-                                   },
-                                   title: {
-                                        display: true,
-                                        text: 'Date',
-                                        color: '#333',
-                                        font: {
-                                             family: 'Arial',
-                                             size: 14,
-                                             weight: 'bold'
-                                        }
+                                        display: false
                                    },
                                    ticks: {
-                                        color: '#666'
+                                        font: {
+                                             family: 'Tajawal',
+                                             size: 12
+                                        },
+                                        color: '#64748b'
                                    }
                               },
                               y: {
+                                   position: 'right',
                                    grid: {
-                                        color: 'rgba(200, 200, 200, 0.3)' // Subtle grid lines
-                                   },
-                                   title: {
-                                        display: true,
-                                        text: 'Visites',
-                                        color: '#333',
-                                        font: {
-                                             family: 'Arial',
-                                             size: 14,
-                                             weight: 'bold'
-                                        }
+                                        color: 'rgba(226, 232, 240, 0.5)',
+                                        drawBorder: false
                                    },
                                    ticks: {
-                                        color: '#666'
-                                   }
+                                        font: {
+                                             family: 'Tajawal',
+                                             size: 12
+                                        },
+                                        color: '#64748b',
+                                        callback: function (value) {
+                                             return value.toLocaleString('ar-SA');
+                                        },
+                                        padding: 8
+                                   },
+                                   beginAtZero: true
+                              }
+                         },
+                         animations: {
+                              tension: {
+                                   duration: 1000,
+                                   easing: 'linear'
+                              },
+                              y: {
+                                   duration: 1000,
+                                   easing: 'easeInOutQuart'
                               }
                          }
                     }
                });
-          } else {
-               console.error('Parsed data is not an array:', visitorsData);
+          }
+     });
+
+     function formatDate(dateStr) {
+          const date = new Date(dateStr);
+          return new Intl.DateTimeFormat('ar-SA', {
+               weekday: 'short',
+               month: 'short',
+               day: 'numeric'
+          }).format(date);
+     }
+</script>
+
+<style>
+     @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
+
+     .font-arabic {
+          font-family: 'Tajawal', sans-serif;
+     }
+
+     /* Chart Animation */
+     @keyframes fadeIn {
+          from {
+               opacity: 0;
+               transform: translateY(10px);
           }
 
+          to {
+               opacity: 1;
+               transform: translateY(0);
+          }
+     }
 
-     </script>
+     .bg-white {
+          animation: fadeIn 0.5s ease-out;
+     }
 
+     /* Better Mobile Experience */
+     @media (max-width: 768px) {
+          canvas {
+               -webkit-tap-highlight-color: transparent;
+          }
 
+          .rounded-2xl {
+               border-radius: 1rem;
+          }
+     }
 
-     <!-- Initialize Charts -->
+     /* Smooth Hover States */
+     canvas {
+          transition: all 0.3s ease;
+     }
 
-     <script>
-          // Performance Chart
-          new Chart(document.getElementById('performanceChart'), {
-               type: 'line',
-               data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
-                    datasets: [{
-                         label: 'Revenus',
-                         data: [1500, 2200, 1800, 2400, 2800, 2600, 3200],
-                         borderColor: '#2563eb',
-                         tension: 0.4
-                    }]
-               },
-               options: {
-                    responsive: true,
-                    plugins: {
-                         legend: {
-                              display: false
-                         }
-                    },
-                    scales: {
-                         y: {
-                              beginAtZero: true,
-                              grid: {
-                                   display: false
-                              }
-                         },
-                         x: {
-                              grid: {
-                                   display: false
-                              }
-                         }
-                    }
-               }
-          });
-
-     </script>
+     canvas:hover {
+          cursor: pointer;
+     }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

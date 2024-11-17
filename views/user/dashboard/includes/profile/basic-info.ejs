@@ -1,183 +1,267 @@
-<!-- Section Informations de Base -->
-<div class="bg-white rounded-2xl shadow-sm overflow-hidden" id="basicInfoSection">
-     <!-- En-tête avec gradient animé -->
-     <div class="p-6 border-b border-gray-100 relative">
-          <div class="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
-          <div class="flex items-center justify-between">
-               <div class="flex items-center space-x-3">
-                    <h3 class="text-lg font-semibold text-gray-800">Informations de base</h3>
-                    <div class="relative group">
-                         <span class="flex h-6 w-6 items-center justify-center rounded-full bg-blue-50 text-blue-600 cursor-help">
-                              <i class="fas fa-info-circle text-sm"></i>
-                         </span>
-                         <div class="absolute left-0 bottom-full mb-2 hidden group-hover:block w-72 p-3 bg-gray-800 text-white text-sm rounded-xl shadow-xl z-10">
-                              <div class="flex items-start space-x-3">
-                                   <i class="fas fa-lightbulb text-yellow-400 mt-1"></i>
-                                   <p>Ces informations seront visibles sur votre profil public et aideront les clients à mieux vous connaître.</p>
+<!-- Section Header -->
+<% const cities=[ { arabic: 'الدار البيضاء' , french: 'Casablanca' }, { arabic: 'الرباط' , french: 'Rabat' }, { arabic: 'مراكش' , french: 'Marrakech' }, { arabic: 'أكادير' , french: 'Agadir' }, { arabic: 'طنجة' , french: 'Tanger' }, { arabic: 'فاس' , french: 'Fès' }, { arabic: 'مكناس' , french: 'Meknès' }, { arabic: 'وجدة' , french: 'Oujda' }, { arabic: 'القنيطرة' , french: 'Kénitra' }, { arabic: 'تطوان' , french: 'Tétouan' }, { arabic: 'آسفي' , french: 'Safi' }, { arabic: 'الجديدة' , french: 'El Jadida' }, { arabic: 'الناظور' , french: 'Nador' }, { arabic: 'برشيد' , french: 'Berrechid' }, { arabic: 'الخميسات' , french: 'Khemisset' }, { arabic: 'خريبكة' , french: 'Khouribga' }, { arabic: 'سطات' , french: 'Settat' }, { arabic: 'العرائش' , french: 'Larache' }, { arabic: 'بني ملال' , french: 'Beni Mellal' }, { arabic: 'كلميم' , french: 'Guelmim' }, { arabic: 'تازة' , french: 'Taza' }, { arabic: 'سيدي قاسم' , french: 'Sidi Kacem' }, { arabic: 'تزنيت' , french: 'Tiznit' }, { arabic: 'الصويرة' , french: 'Essaouira' }, { arabic: 'خنيفرة' , french: 'Khenifra' }, { arabic: 'طانطان' , french: 'Tan-Tan' }, { arabic: 'جرسيف' , french: 'Guercif' }, { arabic: 'شفشاون' , french: 'Chefchaouen' }, { arabic: 'المحمدية' , french: 'Mohammedia' }, { arabic: 'تاونات' , french: 'Taounate' }, { arabic: 'سيدي سليمان' , french: 'Sidi Slimane' }, { arabic: 'طرفاية' , french: 'Tarfaya' }, { arabic: 'ميدلت' , french: 'Midelt' }, { arabic: 'الرشيدية' , french: 'Errachidia' }, { arabic: 'أزرو' , french: 'Azrou' }, { arabic: 'بن جرير' , french: 'Ben Guerir' }, { arabic: 'شيشاوة' , french: 'Chichaoua' }, { arabic: 'ورزازات' , french: 'Ouarzazate' }, { arabic: 'زايو' , french: 'Zaio' } ]; %>
+     <% const languageOptions=['french', 'arabic' , 'english' , 'spanish' ]; %>
+
+
+          <div class="bg-white rounded-2xl shadow-lg overflow-hidden" id="basicInfoSection" dir="rtl">
+               <!-- Enhanced Header -->
+               <div class="p-6 border-b border-gray-100 relative bg-gradient-to-r from-blue-500/5 to-blue-600/5">
+                    <div class="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-blue-500 to-blue-600"></div>
+                    <div class="flex items-center justify-between">
+                         <div class="flex items-center gap-4">
+                              <h3 class="text-xl font-bold text-gray-800 font-arabic">المعلومات الأساسية</h3>
+                              <div class="relative group">
+                                   <span class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-50 text-blue-600 
+                                cursor-help transition-transform duration-300 group-hover:scale-110">
+                                        <i class="fas fa-info-circle"></i>
+                                   </span>
+                                   <div class="absolute right-0 bottom-full mb-2 hidden group-hover:block w-72 p-4 
+                                bg-gray-900 text-white text-sm rounded-xl shadow-xl z-10 
+                                transform transition-all duration-300 font-arabic">
+                                        <div class="flex items-start gap-3">
+                                             <i class="fas fa-lightbulb text-yellow-400 mt-1"></i>
+                                             <p>هذه المعلومات ستكون مرئية في ملفك الشخصي العام وستساعد العملاء على معرفتك بشكل أفضل.</p>
+                                        </div>
+                                   </div>
                               </div>
                          </div>
                     </div>
                </div>
-               <!-- Le bouton de modification a été retiré -->
-          </div>
-     </div>
 
-     <!-- Le mode vue a été retiré -->
+               <!-- Form Section -->
+               <form id="basicInfoForm" class="p-6 space-y-8">
+                    <!-- Personal Info Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                         <!-- Name Input -->
+                         <div class="space-y-3">
+                              <label for="displayName" class="block text-base font-semibold text-gray-700 font-arabic">
+                                   الإسم الكامل <span class="text-blue-500">*</span>
+                              </label>
+                              <div class="relative group">
+                                   <input type="text" id="displayName" name="displayName" value="<%= user.displayName %>" class="w-full h-12 pr-12 pl-4 bg-gray-50 border-2 border-gray-200 rounded-xl
+                                  text-right font-arabic
+                                  focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10
+                                  transition-all duration-300" required>
+                                   <i class="fas fa-user absolute right-4 top-1/2 -translate-y-1/2 text-gray-400
+                             group-focus-within:text-blue-500 transition-colors"></i>
+                              </div>
+                         </div>
 
-     <!-- Mode Édition -->
-     <form id="basicInfoForm">
-          <div class="p-6 space-y-8">
-               <!-- Section Informations Personnelles -->
-               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Nom d'affichage -->
-                    <div class="space-y-2">
-                         <label for="displayName" class="block text-sm font-medium text-gray-700">
-                              Nom d'affichage <span class="text-red-500">*</span>
+                         <!-- Phone Input -->
+                         <div class="space-y-3">
+                              <label for="phoneNumber" class="block text-base font-semibold text-gray-700 font-arabic">
+                                   رقم الهاتف <span class="text-blue-500">*</span>
+                              </label>
+                              <div class="relative group">
+                                   <input type="tel" id="phoneNumber" name="phoneNumber" value="<%= user.phoneNumber %>" class="w-full h-12 pr-12 pl-4 bg-gray-50 border-2 border-gray-200 rounded-xl
+                                  text-right font-arabic
+                                  focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10
+                                  transition-all duration-300" pattern="^(?:\+212|0)[567]\d{8}$" required>
+                                   <i class="fas fa-phone absolute right-4 top-1/2 -translate-y-1/2 text-gray-400
+                             group-focus-within:text-blue-500 transition-colors"></i>
+                              </div>
+                              <p class="text-sm text-gray-500 font-arabic">تنسيق: +212 أو 06/07</p>
+                         </div>
+
+                         <!-- City Select -->
+                         <div class="space-y-3">
+                              <label for="city" class="block text-base font-semibold text-gray-700 font-arabic">
+                                   المدينة <span class="text-blue-500">*</span>
+                              </label>
+                              <div class="relative group">
+                                   <select id="city" name="city" class="w-full h-12 pr-12 pl-4 bg-gray-50 border-2 border-gray-200 rounded-xl
+                                   text-right font-arabic appearance-none
+                                   focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10
+                                   transition-all duration-300" required>
+                                        <option value="" class="font-arabic">اختر مدينة</option>
+                                        <% cities.forEach(city=> { %>
+                                             <option value="<%= city.french %>" <%=user.location?.city===city.french ? 'selected' : '' %>
+                                                  class="font-arabic py-2">
+                                                  <%= city.arabic %>
+                                             </option>
+                                             <% }); %>
+                                   </select>
+                                   <i class="fas fa-map-marker-alt absolute right-4 top-1/2 -translate-y-1/2 text-gray-400
+                             group-focus-within:text-blue-500 transition-colors"></i>
+                                   <i class="fas fa-chevron-down absolute left-4 top-1/2 -translate-y-1/2 text-gray-400
+                             group-focus-within:text-blue-500 transition-colors"></i>
+                              </div>
+                         </div>
+                    </div>
+
+                    <!-- Bio Section -->
+                    <div class="space-y-3">
+                         <label for="bio" class="block text-base font-semibold text-gray-700 font-arabic">
+                              نبذة مهنية <span class="text-blue-500">*</span>
                          </label>
-                         <div class="relative">
-                              <i class="fas fa-user absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                              <input type="text" id="displayName" name="displayName" value="<%= user.displayName %>" class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" required>
+                         <div class="relative group">
+                              <textarea id="bio" name="bio" rows="4" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl
+                                 text-right font-arabic resize-none
+                                 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10
+                                 transition-all duration-300" maxlength="500" required><%= user.bio %></textarea>
+                              <div class="absolute left-3 bottom-3 px-2 py-1 text-sm font-medium text-blue-600 
+                            bg-blue-50 rounded-lg border border-blue-100 font-arabic">
+                                   <span id="bioLength">0</span>/500
+                              </div>
                          </div>
                     </div>
 
-                    <!-- Téléphone -->
-                    <div class="space-y-2">
-                         <label for="phoneNumber" class="block text-sm font-medium text-gray-700">
-                              Téléphone <span class="text-red-500">*</span>
-                         </label>
-                         <div class="relative">
-                              <i class="fas fa-phone-alt absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                              <input type="tel" id="phoneNumber" name="phoneNumber" value="<%= user.phoneNumber %>" class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" pattern="^(?:\+212|0)[567]\d{8}$" title="Format: +212XXXXXXXXX ou 06XXXXXXXX" required>
-                         </div>
-                         <p class="text-sm text-gray-500">Format: +212 ou 06/07</p>
-                    </div>
-
-                    <!-- Ville -->
-                    <div class="space-y-2">
-                         <label for="city" class="block text-sm font-medium text-gray-700">
-                              Ville <span class="text-red-500">*</span>
-                         </label>
-                         <div class="relative">
-                              <i class="fas fa-map-marker-alt absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                              <select id="city" name="city" class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none bg-white" required>
-                                   <option value="">Sélectionnez une ville</option>
-                                   <% const cities=[ { arabic: 'الدار البيضاء' , french: 'Casablanca' }, { arabic: 'الرباط' , french: 'Rabat' }, { arabic: 'مراكش' , french: 'Marrakech' }, { arabic: 'أكادير' , french: 'Agadir' }, { arabic: 'طنجة' , french: 'Tanger' }, { arabic: 'فاس' , french: 'Fès' }, { arabic: 'مكناس' , french: 'Meknès' }, { arabic: 'وجدة' , french: 'Oujda' }, { arabic: 'القنيطرة' , french: 'Kénitra' }, { arabic: 'تطوان' , french: 'Tétouan' }, { arabic: 'آسفي' , french: 'Safi' }, { arabic: 'الجديدة' , french: 'El Jadida' }, { arabic: 'الناظور' , french: 'Nador' }, { arabic: 'برشيد' , french: 'Berrechid' }, { arabic: 'الخميسات' , french: 'Khemisset' }, { arabic: 'خريبكة' , french: 'Khouribga' }, { arabic: 'سطات' , french: 'Settat' }, { arabic: 'العرائش' , french: 'Larache' }, { arabic: 'بني ملال' , french: 'Beni Mellal' }, { arabic: 'كلميم' , french: 'Guelmim' }, { arabic: 'تازة' , french: 'Taza' }, { arabic: 'سيدي قاسم' , french: 'Sidi Kacem' }, { arabic: 'تزنيت' , french: 'Tiznit' }, { arabic: 'الصويرة' , french: 'Essaouira' }, { arabic: 'خنيفرة' , french: 'Khenifra' }, { arabic: 'طانطان' , french: 'Tan-Tan' }, { arabic: 'جرسيف' , french: 'Guercif' }, { arabic: 'شفشاون' , french: 'Chefchaouen' }, { arabic: 'المحمدية' , french: 'Mohammedia' }, { arabic: 'تاونات' , french: 'Taounate' }, { arabic: 'سيدي سليمان' , french: 'Sidi Slimane' }, { arabic: 'طرفاية' , french: 'Tarfaya' }, { arabic: 'ميدلت' , french: 'Midelt' }, { arabic: 'الرشيدية' , french: 'Errachidia' }, { arabic: 'أزرو' , french: 'Azrou' }, { arabic: 'بن جرير' , french: 'Ben Guerir' }, { arabic: 'شيشاوة' , french: 'Chichaoua' }, { arabic: 'ورزازات' , french: 'Ouarzazate' }, { arabic: 'زايو' , french: 'Zaio' } ]; cities.forEach(city=> { %>
-                                        <option value="<%= city.french %>" <%=user.location?.city===city.french ? 'selected' : '' %>>
-                                             <%= city.arabic %> - <%= city.french %>
-                                        </option>
-                                        <% }); %>
-
-                              </select>
-                              <i class="fas fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"></i>
-                         </div>
-                    </div>
-               </div>
-
-               <!-- Section Bio -->
-               <div class="space-y-2">
-                    <label for="bio" class="block text-sm font-medium text-gray-700">
-                         Bio professionnelle <span class="text-red-500">*</span>
-                    </label>
-                    <div class="relative">
-                         <textarea id="bio" name="bio" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none" maxlength="500" required><%= user.bio %></textarea>
-                         <div class="absolute right-2 bottom-2 px-2 py-1 text-xs font-medium text-gray-500 bg-white rounded-md border">
-                              <span id="bioLength">0</span>/500
-                         </div>
-                    </div>
-               </div>
-               <hr>
-               <!-- Section Langues Parlées -->
-               <div class="mt-6">
-                    <label for="languages" class="block text-sm font-medium text-gray-700">Langues Parlées</label>
-                    <div class="mt-2 grid grid-cols-2 md:grid-cols-4 gap-4">
-                         <% const languageOptions=['french', 'arabic' , 'english' , 'spanish' ]; %>
-                              <% languageOptions.forEach(lang=> { %>
-                                   <div class="flex items-center">
-                                        <input id="lang-<%= lang %>" name="languages" type="checkbox" value="<%= lang %>" <%=user.languages && user.languages.includes(lang) ? 'checked' : '' %> class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                                        <label for="lang-<%= lang %>" class="ml-2 block text-sm text-gray-700 capitalize">
-                                             <%= lang %>
+                    <!-- Languages Section -->
+                    <div class="space-y-4">
+                         <label class="block text-base font-semibold text-gray-700 font-arabic">اللغات المتحدث بها</label>
+                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                              <% const languageMap={ 'french' : 'الفرنسية' , 'arabic' : 'العربية' , 'english' : 'الإنجليزية' , 'spanish' : 'الإسبانية' } %>
+                                   <% languageOptions.forEach(lang=> { %>
+                                        <label class="relative flex items-center gap-3 p-3 bg-gray-50 rounded-xl 
+                                 cursor-pointer group hover:bg-blue-50 transition-all duration-300">
+                                             <input type="checkbox" id="lang-<%= lang %>" name="languages" value="<%= lang %>" <%=user.languages && user.languages.includes(lang) ? 'checked' : '' %>
+                                             class="peer hidden">
+                                             <span class="w-5 h-5 rounded border-2 border-gray-300 flex items-center justify-center
+                                   peer-checked:border-blue-500 peer-checked:bg-blue-500 transition-all duration-300">
+                                                  <i class="fas fa-check text-white scale-0 peer-checked:scale-100 transition-transform"></i>
+                                             </span>
+                                             <span class="font-arabic text-gray-700 peer-checked:text-blue-600 transition-colors">
+                                                  <%= languageMap[lang] %>
+                                             </span>
                                         </label>
-                                   </div>
-                                   <% }); %>
-                    </div>
-               </div>
-               <hr>
-               <!-- Section Expérience -->
-               <div class="mt-6">
-                    <label class="block text-sm font-medium text-gray-700">Expérience</label>
-                    <div class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-6">
-                         <!-- Années d'expérience -->
-                         <div>
-                              <label for="experience-years" class="block text-sm font-medium text-gray-700">Années d'expérience</label>
-                              <input type="number" name="experienceYears" id="experience-years" min="0" value="<%= user.experience?.years || 0 %>" class="mt-1 block w-full pl-4 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                         </div>
-                         <!-- Description de l'expérience -->
-                         <div>
-                              <label for="experience-description" class="block text-sm font-medium text-gray-700">Description de l'expérience</label>
-                              <textarea name="experienceDescription" id="experience-description" rows="3" class="mt-1 block w-full pl-4 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"><%= user.experience?.description || '' %></textarea>
+                                        <% }); %>
                          </div>
                     </div>
-               </div>
 
-               <!-- Boutons d'action -->
-               <div class="flex gap-4 pt-6 border-t">
-                    <button type="button" id="cancelBasicInfoBtn" class="flex-1 px-4 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
-                         <i class="fas fa-times mr-2"></i>
-                         Annuler
-                    </button>
-                    <button type="submit" class="flex-1 px-4 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
-                         <i class="fas fa-check mr-2"></i>
-                         Enregistrer
-                    </button>
-               </div>
+                    <!-- Experience Section -->
+                    <div class="space-y-4">
+                         <label class="block text-base font-semibold text-gray-700 font-arabic">الخبرة</label>
+                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                              <!-- Years -->
+                              <div class="relative group">
+                                   <label class="block text-sm font-medium text-gray-600 mb-2 font-arabic">سنوات الخبرة</label>
+                                   <input type="number" name="experienceYears" id="experience-years" min="0" value="<%= user.experience?.years || 0 %>" class="w-full h-12 px-4 bg-gray-50 border-2 border-gray-200 rounded-xl
+                                  text-right font-arabic
+                                  focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10
+                                  transition-all duration-300">
+                              </div>
+                              <!-- Description -->
+                              <div class="relative group">
+                                   <label class="block text-sm font-medium text-gray-600 mb-2 font-arabic">وصف الخبرة</label>
+                                   <textarea name="experienceDescription" id="experience-description" rows="3" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl
+                                     text-right font-arabic resize-none
+                                     focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10
+                                     transition-all duration-300"><%= user.experience?.description || '' %></textarea>
+                              </div>
+                         </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex gap-4 pt-6 border-t">
+                         <button type="button" id="cancelBasicInfoBtn" class="flex-1 h-12 bg-gray-50 text-gray-700 rounded-xl font-arabic
+                           hover:bg-gray-100 focus:ring-4 focus:ring-gray-200
+                           transition-all duration-300 group">
+                              <i class="fas fa-times ml-2 group-hover:rotate-90 transition-transform"></i>
+                              إلغاء
+                         </button>
+                         <button type="submit" class="flex-1 h-12 bg-blue-600 text-white rounded-xl font-arabic
+                           hover:bg-blue-700 focus:ring-4 focus:ring-blue-500/30
+                           transition-all duration-300 group">
+                              <i class="fas fa-check ml-2 group-hover:scale-110 transition-transform"></i>
+                              حفظ
+                         </button>
+                    </div>
+               </form>
           </div>
-     </form>
-</div>
 
-<script>
-     document.addEventListener('DOMContentLoaded', function () {
-          const $bioTextarea = document.getElementById('bio');
-          const $bioLength = document.getElementById('bioLength');
+          <!-- Keep the original script but add these styles -->
+          <style>
+               @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700&display=swap');
 
-          // Mise à jour du compteur de caractères de la bio
-          function updateBioLength() {
-               const length = $bioTextarea.value.length;
-               $bioLength.textContent = length;
-
-               // Retour visuel
-               if (length > 450) {
-                    $bioLength.classList.add('text-orange-500');
-               } else if (length > 480) {
-                    $bioLength.classList.add('text-red-500');
-               } else {
-                    $bioLength.classList.remove('text-orange-500', 'text-red-500');
+               .font-arabic {
+                    font-family: 'Tajawal', sans-serif;
                }
-          }
 
-          $bioTextarea?.addEventListener('input', updateBioLength);
-          updateBioLength();
+               /* Enhanced focus states */
+               .group:focus-within i {
+                    transform: translateY(-50%) scale(1.1);
+               }
 
-          // Gestion du bouton Annuler
-          const $cancelBtn = document.getElementById('cancelBasicInfoBtn');
-          $cancelBtn.addEventListener('click', () => {
-               // Recharge la page pour réinitialiser le formulaire
-               window.location.reload();
-          });
+               /* Smooth transitions */
+               input,
+               select,
+               textarea {
+                    transition: all 0.3s ease;
+               }
 
-          // Soumission du formulaire avec validation
-          const $editForm = document.getElementById('basicInfoForm');
-          $editForm.addEventListener('submit', async function (e) {
-               e.preventDefault();
+               /* Custom checkbox styles */
+               input[type="checkbox"] {
+                    transition: all 0.2s ease;
+               }
 
-               const $submitBtn = this.querySelector('button[type="submit"]');
-               const $allInputs = this.querySelectorAll('input, select, textarea');
+               /* Input hover effects */
+               input:hover:not(:focus),
+               select:hover:not(:focus),
+               textarea:hover:not(:focus) {
+                    background-color: #F8FAFC;
+                    transform: translateY(-1px);
+               }
 
-               // Désactive tous les éléments du formulaire
-               $submitBtn.disabled = true;
-               $allInputs.forEach(input => input.disabled = true);
+               /* Button hover effects */
+               button:hover {
+                    transform: translateY(-1px);
+               }
 
-               // Ajoute un état de chargement au bouton de soumission
-               $submitBtn.innerHTML = `
+               button:active {
+                    transform: translateY(1px);
+               }
+
+               /* Direction specific styles */
+               .direction-ltr {
+                    direction: ltr;
+               }
+
+               /* The rest of your original styles... */
+          </style>
+          <script>
+               document.addEventListener('DOMContentLoaded', function () {
+                    const $bioTextarea = document.getElementById('bio');
+                    const $bioLength = document.getElementById('bioLength');
+
+                    // Mise à jour du compteur de caractères de la bio
+                    function updateBioLength() {
+                         const length = $bioTextarea.value.length;
+                         $bioLength.textContent = length;
+
+                         // Retour visuel
+                         if (length > 450) {
+                              $bioLength.classList.add('text-orange-500');
+                         } else if (length > 480) {
+                              $bioLength.classList.add('text-red-500');
+                         } else {
+                              $bioLength.classList.remove('text-orange-500', 'text-red-500');
+                         }
+                    }
+
+                    $bioTextarea?.addEventListener('input', updateBioLength);
+                    updateBioLength();
+
+                    // Gestion du bouton Annuler
+                    const $cancelBtn = document.getElementById('cancelBasicInfoBtn');
+                    $cancelBtn.addEventListener('click', () => {
+                         // Recharge la page pour réinitialiser le formulaire
+                         window.location.reload();
+                    });
+
+                    // Soumission du formulaire avec validation
+                    const $editForm = document.getElementById('basicInfoForm');
+                    $editForm.addEventListener('submit', async function (e) {
+                         e.preventDefault();
+
+                         const $submitBtn = this.querySelector('button[type="submit"]');
+                         const $allInputs = this.querySelectorAll('input, select, textarea');
+
+                         // Désactive tous les éléments du formulaire
+                         $submitBtn.disabled = true;
+                         $allInputs.forEach(input => input.disabled = true);
+
+                         // Ajoute un état de chargement au bouton de soumission
+                         $submitBtn.innerHTML = `
                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -185,84 +269,84 @@
                Enregistrement...
                `;
 
-               try {
-                    // Récupère les données du formulaire
-                    const formData = new FormData(this);
+                         try {
+                              // Récupère les données du formulaire
+                              const formData = new FormData(this);
 
-                    // Construit les données à envoyer
-                    const data = {
-                         displayName: document.getElementById('displayName').value,
-                         bio: document.getElementById('bio').value,
-                         phoneNumber: document.getElementById('phoneNumber').value,
-                         location: {
-                              city: document.getElementById('city').value
-                         },
-                         languages: Array.from(document.querySelectorAll('input[name="languages"]:checked')).map(el => el.value),
-                         experience: {
-                              years: parseInt(document.getElementById('experience-years').value, 10) || 0,
-                              description: document.getElementById('experience-description').value || 'Sans expérience.'
+                              // Construit les données à envoyer
+                              const data = {
+                                   displayName: document.getElementById('displayName').value,
+                                   bio: document.getElementById('bio').value,
+                                   phoneNumber: document.getElementById('phoneNumber').value,
+                                   location: {
+                                        city: document.getElementById('city').value
+                                   },
+                                   languages: Array.from(document.querySelectorAll('input[name="languages"]:checked')).map(el => el.value),
+                                   experience: {
+                                        years: parseInt(document.getElementById('experience-years').value, 10) || 0,
+                                        description: document.getElementById('experience-description').value || 'Sans expérience.'
+                                   }
+                              };
+
+                              // Envoie la requête avec l'état de chargement
+                              const response = await fetch('/dashboard/profile/update-basic-info', {
+                                   method: 'PUT',
+                                   headers: { 'Content-Type': 'application/json' },
+                                   body: JSON.stringify(data)
+                              });
+
+                              const result = await response.json();
+
+                              if (response.ok) {
+                                   // Affiche un message de succès avant de recharger
+                                   Swal.fire({
+                                        icon: 'success',
+                                        title: 'Succès !',
+                                        text: 'Vos informations ont été mises à jour avec succès',
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                   }).then(() => {
+                                        window.location.reload();
+                                   });
+                              } else {
+                                   throw new Error(result.message);
+                              }
+                         } catch (error) {
+                              // Affiche un message d'erreur avec SweetAlert2
+                              Swal.fire({
+                                   icon: 'error',
+                                   title: 'Erreur',
+                                   text: error.message || 'Une erreur est survenue lors de la mise à jour',
+                                   confirmButtonText: 'Réessayer',
+                                   confirmButtonColor: '#3B82F6'
+                              });
+
+                              // Réinitialise l'état du bouton et du formulaire
+                              $submitBtn.innerHTML = '<i class="fas fa-check mr-2"></i>Enregistrer';
+                              $submitBtn.disabled = false;
+                              $allInputs.forEach(input => input.disabled = false);
                          }
-                    };
-
-                    // Envoie la requête avec l'état de chargement
-                    const response = await fetch('/dashboard/profile/update-basic-info', {
-                         method: 'PUT',
-                         headers: { 'Content-Type': 'application/json' },
-                         body: JSON.stringify(data)
                     });
 
-                    const result = await response.json();
+                    // Validation et formatage du numéro de téléphone
+                    const $phoneInput = document.getElementById('phoneNumber');
+                    $phoneInput?.addEventListener('input', function (e) {
+                         let value = e.target.value.replace(/\D/g, '');
 
-                    if (response.ok) {
-                         // Affiche un message de succès avant de recharger
-                         Swal.fire({
-                              icon: 'success',
-                              title: 'Succès !',
-                              text: 'Vos informations ont été mises à jour avec succès',
-                              showConfirmButton: false,
-                              timer: 1500
-                         }).then(() => {
-                              window.location.reload();
-                         });
-                    } else {
-                         throw new Error(result.message);
-                    }
-               } catch (error) {
-                    // Affiche un message d'erreur avec SweetAlert2
-                    Swal.fire({
-                         icon: 'error',
-                         title: 'Erreur',
-                         text: error.message || 'Une erreur est survenue lors de la mise à jour',
-                         confirmButtonText: 'Réessayer',
-                         confirmButtonColor: '#3B82F6'
+                         if (value.startsWith('212')) {
+                              value = '+' + value;
+                         } else if (value.startsWith('0')) {
+                              value = value;
+                         } else if (value.length > 0) {
+                              value = '0' + value;
+                         }
+
+                         e.target.value = value;
                     });
 
-                    // Réinitialise l'état du bouton et du formulaire
-                    $submitBtn.innerHTML = '<i class="fas fa-check mr-2"></i>Enregistrer';
-                    $submitBtn.disabled = false;
-                    $allInputs.forEach(input => input.disabled = false);
-               }
-          });
-
-          // Validation et formatage du numéro de téléphone
-          const $phoneInput = document.getElementById('phoneNumber');
-          $phoneInput?.addEventListener('input', function (e) {
-               let value = e.target.value.replace(/\D/g, '');
-
-               if (value.startsWith('212')) {
-                    value = '+' + value;
-               } else if (value.startsWith('0')) {
-                    value = value;
-               } else if (value.length > 0) {
-                    value = '0' + value;
-               }
-
-               e.target.value = value;
-          });
-
-          // Ajout des styles d'animation
-          const style = document.createElement('style');
-          style.textContent = `
+                    // Ajout des styles d'animation
+                    const style = document.createElement('style');
+                    style.textContent = `
           @keyframes fadeSlideIn {
                from {
                     opacity: 0;
@@ -292,6 +376,6 @@
                box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
           }
           `;
-          document.head.appendChild(style);
-     });
-</script>
+                    document.head.appendChild(style);
+               });
+          </script>

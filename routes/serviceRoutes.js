@@ -269,7 +269,7 @@ const serviceConfig = {
      ]
 };
 
-router.get('/:serviceOption?/:location?', async (req, res) => {
+router.get('/', async (req, res) => {
      try {
           const { serviceOption = 'tous', location } = req.params;
           const page = parseInt(req.query.page) || 1;
@@ -326,12 +326,11 @@ router.get('/:serviceOption?/:location?', async (req, res) => {
 
           const uniqueLocations = await Service.distinct("location", { serviceOptions: serviceOption === 'tous' ? { $exists: true } : serviceOption.toLowerCase(), isActive: true });
 
-          // console.log(uniqueLocations)
-          // Prepare view data
-          const viewData = {
+          const topProviders = await User.find({ status: 'active' })
+               .limit(7)
+               .select('displayName profileImage location city specializations metrics averageRating slug isVerified');
 
 
-          };
 
           // Metadata for SEO
           const pageTitle = location
@@ -346,13 +345,14 @@ router.get('/:serviceOption?/:location?', async (req, res) => {
                ? `${serviceOption}, services animaliers, ${location}, dressage, garde animaux, NDRESSILIK, Maroc`
                : `${serviceOption}, services animaliers, Maroc, dressage, garde animaux, NDRESSILIK`;
 
+
           res.render('user/services', {
                pageTitle,
                description,
                keywords,
                currentLocation: location || null,
                locations: uniqueLocations,
-
+               topProviders,
                // Services data
                services: processedServices,
                serviceIcons: serviceConfig.icons,
@@ -490,10 +490,17 @@ router.get('/services/:serviceOption?/:location?', async (req, res) => {
                ? `${serviceOption}, services animaliers, ${location}, dressage, garde animaux, NDRESSILIK, Maroc`
                : `${serviceOption}, services animaliers, Maroc, dressage, garde animaux, NDRESSILIK`;
 
+          const topProviders = await User.find({ status: 'active' })
+               .limit(7)
+               .select('displayName profileImage location city specializations metrics averageRating slug isVerified');
+
+
+
           res.render('user/services', {
                pageTitle,
                description,
                keywords,
+               topProviders,
                currentLocation: location || null,
                locations: uniqueLocations,
 

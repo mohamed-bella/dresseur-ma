@@ -1,0 +1,249 @@
+<!-- Service Header -->
+<div class="pt-6 pb-4">
+     <div class="flex items-center gap-4">
+          <!-- <div class="relative">
+               <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-yellow-600 to-yellow-500 
+                         shadow-lg shadow-yellow-500/20 flex items-center justify-center
+                         transform -rotate-6 hover:rotate-0 transition-transform duration-300">
+                    <i class="fa-solid fa-user text-white text-lg"></i>
+               </div>
+               <div class="absolute -inset-0.5 bg-gradient-to-tr from-yellow-600 to-yellow-500 
+                         rounded-xl blur opacity-30"></div>
+          </div> -->
+
+          <div>
+               <h2 class="text-3xl font-bold text-gray-900 tracking-tight">Services Canine</h2>
+               <!-- <p class="text-sm text-gray-500 mt-0.5">Pour Votre Chien</p> -->
+          </div>
+     </div>
+</div>
+
+<!-- Modern Categories Navigation -->
+<nav class="sticky top-16 z-40  backdrop-blur-md border-b border-gray-100">
+     <div class="max-w-7xl mx-auto px-4">
+          <div class="categories-scroll">
+               <div class="categories-wrapper">
+                    <% const categories=[ { id: 'tous' , icon: '🔍' , label: 'Tous' , color: 'slate' }, { id: 'dressage' , icon: '🐕' , label: 'Dressage' , color: 'sky' }, { id: 'toilettage' , icon: '✂️' , label: 'Toilettage' , color: 'purple' }, { id: 'promenade' , icon: '🦮' , label: 'Promenade' , color: 'emerald' }, { id: 'veterinaire' , icon: '⚕️' , label: 'Vétérinaire' , color: 'rose' }, { id: 'pension' , icon: '🏠' , label: 'Pension' , color: 'amber' }, { id: 'transport' , icon: '🚗' , label: 'Transport' , color: 'indigo' } ]; const currentCategory=serviceOption || 'tous' ; %>
+
+                         <% categories.forEach(category=> {
+                              const isActive = currentCategory === category.id;
+                              %>
+                              <a href="/services/<%= category.id %>" class="category-item <%= isActive ? 'active' : '' %>" data-color="<%= category.color %>">
+                                   <div class="category-content">
+                                        <span class="category-icon">
+                                             <%= category.icon %>
+                                        </span>
+                                        <span class="category-label">
+                                             <%= category.label %>
+                                        </span>
+                                   </div>
+
+                              </a>
+                              <% }) %>
+               </div>
+          </div>
+     </div>
+</nav>
+
+<style>
+     /* Scroll Container */
+     .categories-scroll {
+          overflow-x: auto;
+          overflow-y: hidden;
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+          padding: 0.75rem 0;
+          margin: 0 -1rem;
+     }
+
+     .categories-scroll::-webkit-scrollbar {
+          display: none;
+     }
+
+     /* Categories Wrapper */
+     .categories-wrapper {
+          display: flex;
+          gap: 0.75rem;
+          padding: 0 1rem;
+          min-width: min-content;
+     }
+
+     /* Category Item */
+     .category-item {
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          padding: 0.75rem 1.25rem;
+          border-radius: 1rem;
+          background: #ffc10726;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          user-select: none;
+          -webkit-tap-highlight-color: transparent;
+     }
+
+     .category-content {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+     }
+
+     .category-icon {
+          font-size: 1.25rem;
+          transition: transform 0.3s ease;
+     }
+
+     .category-label {
+          font-size: 0.875rem;
+          font-weight: 500;
+          color: #6b4f00;
+          white-space: nowrap;
+          font-weight: bold;
+     }
+
+     /* Active & Hover States */
+     .category-item:hover {
+          background: rgba(243, 244, 246, 0.9);
+          transform: translateY(-1px);
+     }
+
+     .category-item:active {
+          transform: translateY(0);
+     }
+
+     .category-item.active {
+          background: #ffbf00;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+     }
+
+     /* Color-specific active states */
+     .category-item.active[data-color="slate"] {
+          @apply text-slate-600;
+     }
+
+     .category-item.active[data-color="sky"] {
+          @apply text-sky-600;
+     }
+
+     .category-item.active[data-color="purple"] {
+          @apply text-purple-600;
+     }
+
+     .category-item.active[data-color="emerald"] {
+          @apply text-emerald-600;
+     }
+
+     .category-item.active[data-color="rose"] {
+          @apply text-rose-600;
+     }
+
+     .category-item.active[data-color="amber"] {
+          @apply text-amber-600;
+     }
+
+     .category-item.active[data-color="indigo"] {
+          @apply text-indigo-600;
+     }
+
+
+
+     /* Animation for icon on hover */
+     .category-item:hover .category-icon {
+          transform: scale(1.1);
+     }
+
+     /* Touch Device Optimizations */
+     @media (hover: none) {
+          .category-item {
+               padding: 0.875rem 1.5rem;
+          }
+
+          .categories-scroll {
+               scroll-snap-type: x proximity;
+               scroll-behavior: smooth;
+          }
+
+          .category-item {
+               scroll-snap-align: start;
+          }
+     }
+
+     /* Responsive Adjustments */
+     @media (max-width: 640px) {
+          .category-item {
+               padding: 0.75rem 1rem;
+          }
+
+          .category-icon {
+               font-size: 1.125rem;
+          }
+
+          .category-label {
+               font-size: 0.813rem;
+          }
+     }
+</style>
+
+<script>
+     document.addEventListener('DOMContentLoaded', () => {
+          const categoriesScroll = document.querySelector('.categories-scroll');
+          const activeCategory = document.querySelector('.category-item.active');
+
+          // Scroll active category into view on load
+          if (activeCategory) {
+               requestAnimationFrame(() => {
+                    activeCategory.scrollIntoView({
+                         behavior: 'smooth',
+                         block: 'nearest',
+                         inline: 'center'
+                    });
+               });
+          }
+
+          let isDown = false;
+          let startX;
+          let scrollLeft;
+
+          // Mouse drag scrolling
+          categoriesScroll.addEventListener('mousedown', (e) => {
+               isDown = true;
+               categoriesScroll.style.cursor = 'grabbing';
+               startX = e.pageX - categoriesScroll.offsetLeft;
+               scrollLeft = categoriesScroll.scrollLeft;
+          });
+
+          categoriesScroll.addEventListener('mouseleave', () => {
+               isDown = false;
+               categoriesScroll.style.cursor = 'grab';
+          });
+
+          categoriesScroll.addEventListener('mouseup', () => {
+               isDown = false;
+               categoriesScroll.style.cursor = 'grab';
+          });
+
+          categoriesScroll.addEventListener('mousemove', (e) => {
+               if (!isDown) return;
+               e.preventDefault();
+               const x = e.pageX - categoriesScroll.offsetLeft;
+               const walk = (x - startX) * 2;
+               categoriesScroll.scrollLeft = scrollLeft - walk;
+          });
+
+          // Smooth scrolling on touch devices
+          let touchStartX;
+          let touchScrollLeft;
+
+          categoriesScroll.addEventListener('touchstart', (e) => {
+               touchStartX = e.touches[0].pageX - categoriesScroll.offsetLeft;
+               touchScrollLeft = categoriesScroll.scrollLeft;
+          }, { passive: true });
+
+          categoriesScroll.addEventListener('touchmove', (e) => {
+               const x = e.touches[0].pageX - categoriesScroll.offsetLeft;
+               const walk = (touchStartX - x);
+               categoriesScroll.scrollLeft = touchScrollLeft + walk;
+          }, { passive: true });
+     });
+</script>

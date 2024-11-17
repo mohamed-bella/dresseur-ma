@@ -364,14 +364,7 @@ router.put('/profile/update-basic-info', isAuthenticated, async (req, res) => {
                });
           }
 
-          // Validate city (assuming you have a list of allowed cities)
-          const allowedCities = ['casablanca', 'rabat', 'marrakech', 'agadir', 'tanger', 'fes'];
-          if (!allowedCities.includes(location.city.toLowerCase())) {
-               return res.status(400).json({
-                    success: false,
-                    message: 'Ville invalide sélectionnée',
-               });
-          }
+
 
           // Validate languages
           const allowedLanguages = ['french', 'arabic', 'english', 'spanish'];

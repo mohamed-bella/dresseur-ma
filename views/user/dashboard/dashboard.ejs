@@ -7,86 +7,238 @@
           <title>NDRESSILIK - Tableau de Bord</title>
 </head>
 
-<body class="bg-gray-200">
+<body class="bg-gray-50">
      <div class="">
           <%- include('includes/header') %>
 
                <main class="p-6">
                     <!-- Dashboard Content -->
                     <div class="max-w-5xl mx-auto space-y-6">
-                         <!-- Quick Actions Section -->
-                         <!-- Quick Actions Section -->
-                         <div class="bg-white rounded-xl shadow-sm p-4 sm:p-6">
-                              <!-- Section Header -->
-                              <div class="mb-6">
-                                   <h2 class="text-lg sm:text-xl font-semibold text-gray-900">Actions rapides</h2>
+                         <!-- Add Arabic font -->
+                         <style>
+                              @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700&display=swap');
+
+                              .font-tajawal {
+                                   font-family: 'Tajawal', sans-serif;
+                              }
+
+                              /* Card Hover Effects */
+                              .action-card {
+                                   position: relative;
+                                   isolation: isolate;
+                                   overflow: hidden;
+                              }
+
+                              .action-card::before {
+                                   content: '';
+                                   position: absolute;
+                                   inset: 0;
+                                   background: linear-gradient(45deg,
+                                             transparent 0%,
+                                             rgba(255, 255, 255, 0.5) 100%);
+                                   transform: translateX(-100%) rotate(45deg);
+                                   transition: transform 0.6s ease;
+                              }
+
+                              .action-card:hover::before {
+                                   transform: translateX(100%) rotate(45deg);
+                              }
+
+                              .action-card::after {
+                                   content: '';
+                                   position: absolute;
+                                   inset: 0;
+                                   border-radius: 16px;
+                                   background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+                                             rgba(255, 255, 255, 0.1) 0%,
+                                             transparent 100%);
+                                   opacity: 0;
+                                   transition: opacity 0.3s ease;
+                              }
+
+                              .action-card:hover::after {
+                                   opacity: 1;
+                              }
+
+                              .action-icon {
+                                   transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+                              }
+
+                              .action-card:hover .action-icon {
+                                   transform: scale(1.1) rotate(-10deg);
+                              }
+
+                              /* Stats Card Animation */
+                              .stat-card {
+                                   position: relative;
+                                   overflow: hidden;
+                                   transition: all 0.3s ease;
+                              }
+
+                              .stat-card:hover {
+                                   transform: translateY(-2px);
+                              }
+
+                              .stat-card::before {
+                                   content: '';
+                                   position: absolute;
+                                   top: 0;
+                                   left: 0;
+                                   right: 0;
+                                   height: 2px;
+                                   background: linear-gradient(to right, transparent, currentColor, transparent);
+                                   opacity: 0;
+                                   transition: opacity 0.3s ease;
+                              }
+
+                              .stat-card:hover::before {
+                                   opacity: 0.2;
+                              }
+
+                              /* Gradient Text Animation */
+                              .gradient-text {
+                                   background: linear-gradient(45deg, #3b82f6, #60a5fa);
+                                   -webkit-background-clip: text;
+                                   background-clip: text;
+                                   color: transparent;
+                                   background-size: 200% 200%;
+                                   animation: gradient 8s ease infinite;
+                              }
+
+                              @keyframes gradient {
+                                   0% {
+                                        background-position: 0% 50%;
+                                   }
+
+                                   50% {
+                                        background-position: 100% 50%;
+                                   }
+
+                                   100% {
+                                        background-position: 0% 50%;
+                                   }
+                              }
+
+                              /* Pulse Animation for Icons */
+                              @keyframes subtle-pulse {
+                                   0% {
+                                        transform: scale(1);
+                                   }
+
+                                   50% {
+                                        transform: scale(1.05);
+                                   }
+
+                                   100% {
+                                        transform: scale(1);
+                                   }
+                              }
+                         </style>
+
+                         <div class="rounded-2xl shadow-lg p-6 lg:p-8 font-tajawal bg-white">
+                              <!-- Enhanced Header -->
+                              <div class="relative mb-10">
+                                   <h2 class="text-2xl font-bold gradient-text text-right">إجراءات سريعة</h2>
+                                   <div class="absolute -bottom-3 right-0 w-20 h-1 bg-gradient-to-l from-blue-600 to-blue-400 rounded-full"></div>
                               </div>
 
-                              <!-- Actions Grid -->
-                              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                                   <!-- New Service Card -->
-                                   <a href="/dashboard/new-service" class="flex items-center p-4 bg-blue-50 rounded-xl transition hover:-translate-y-1 hover:shadow-md">
-                                        <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg bg-blue-600 text-white">
-                                             <i class="fas fa-plus"></i>
+                              <!-- Enhanced Actions Grid -->
+                              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                                   <!-- New Service Action -->
+                                   <a href="/dashboard/new-service" class="action-card group block p-6 rounded-2xl border border-gray-100 
+                  bg-gradient-to-br from-white to-blue-50/30
+                  hover:border-blue-200 transition-all duration-300 
+                  hover:shadow-lg hover:shadow-blue-500/10">
+                                        <div class="flex items-center justify-end gap-5">
+                                             <div class="flex-1 text-right">
+                                                  <h3 class="text-lg font-semibold text-gray-900 mb-1 group-hover:text-blue-600 transition-colors">
+                                                       إضافة خدمة
+                                                  </h3>
+                                                  <p class="text-sm text-gray-500">ابدأ في تقديم خدمة جديدة</p>
+                                                  <div class="mt-3 inline-flex items-center text-blue-600 text-sm font-medium
+                               group-hover:translate-x-2 transition-transform duration-300">
+                                                       <span class="ml-2">ابدأ الآن</span>
+                                                       <i class="fas fa-arrow-left text-xs"></i>
+                                                  </div>
+                                             </div>
+                                             <div class="action-icon w-14 h-14 bg-blue-50 rounded-xl flex items-center justify-center 
+                            group-hover:bg-blue-100 transition-all duration-300">
+                                                  <i class="fas fa-plus text-blue-600 text-xl"></i>
+                                             </div>
                                         </div>
-                                        <div class="ml-4 flex-1">
-                                             <p class="font-medium text-gray-900">Nouveau service</p>
-                                             <p class="text-sm text-gray-500">Ajouter un service</p>
-                                        </div>
-                                        <i class="fas fa-chevron-right text-blue-600 ml-2"></i>
                                    </a>
 
-                                   <!-- Edit Profile Card -->
-                                   <a href="/dashboard/profile" class="flex items-center p-4 bg-green-50 rounded-xl transition hover:-translate-y-1 hover:shadow-md">
-                                        <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg bg-green-600 text-white">
-                                             <i class="fas fa-user-edit"></i>
+                                   <!-- Edit Profile Action -->
+                                   <a href="/dashboard/profile" class="action-card group block p-6 rounded-2xl border border-gray-100 
+                  bg-gradient-to-br from-white to-purple-50/30
+                  hover:border-purple-200 transition-all duration-300 
+                  hover:shadow-lg hover:shadow-purple-500/10">
+                                        <div class="flex items-center justify-end gap-5">
+                                             <div class="flex-1 text-right">
+                                                  <h3 class="text-lg font-semibold text-gray-900 mb-1 group-hover:text-purple-600 transition-colors">
+                                                       تحديث الملف
+                                                  </h3>
+                                                  <p class="text-sm text-gray-500">عدّل معلومات حسابك</p>
+                                                  <div class="mt-3 inline-flex items-center text-purple-600 text-sm font-medium
+                               group-hover:translate-x-2 transition-transform duration-300">
+                                                       <span class="ml-2">تعديل الملف</span>
+                                                       <i class="fas fa-arrow-left text-xs"></i>
+                                                  </div>
+                                             </div>
+                                             <div class="action-icon w-14 h-14 bg-purple-50 rounded-xl flex items-center justify-center 
+                            group-hover:bg-purple-100 transition-all duration-300">
+                                                  <i class="fas fa-user-edit text-purple-600 text-xl"></i>
+                                             </div>
                                         </div>
-                                        <div class="ml-4 flex-1">
-                                             <p class="font-medium text-gray-900">Éditer profil</p>
-                                             <p class="text-sm text-gray-500">Modifier infos</p>
-                                        </div>
-                                        <i class="fas fa-chevron-right text-green-600 ml-2"></i>
                                    </a>
 
-                                   <!-- My Services Card -->
-                                   <a href="#services" class="flex items-center p-4 bg-purple-50 rounded-xl transition hover:-translate-y-1 hover:shadow-md">
-                                        <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg bg-purple-600 text-white">
-                                             <i class="fas fa-briefcase"></i>
+                                   <!-- Services Management Action -->
+                                   <a href="#services" class="action-card group block p-6 rounded-2xl border border-gray-100 
+                  bg-gradient-to-br from-white to-emerald-50/30
+                  hover:border-emerald-200 transition-all duration-300 
+                  hover:shadow-lg hover:shadow-emerald-500/10">
+                                        <div class="flex items-center justify-end gap-5">
+                                             <div class="flex-1 text-right">
+                                                  <h3 class="text-lg font-semibold text-gray-900 mb-1 group-hover:text-emerald-600 transition-colors">
+                                                       إدارة الخدمات
+                                                  </h3>
+                                                  <p class="text-sm text-gray-500">تحكم في خدماتك الحالية</p>
+                                                  <div class="mt-3 inline-flex items-center text-emerald-600 text-sm font-medium
+                               group-hover:translate-x-2 transition-transform duration-300">
+                                                       <span class="ml-2">عرض الخدمات</span>
+                                                       <i class="fas fa-arrow-left text-xs"></i>
+                                                  </div>
+                                             </div>
+                                             <div class="action-icon w-14 h-14 bg-emerald-50 rounded-xl flex items-center justify-center 
+                            group-hover:bg-emerald-100 transition-all duration-300">
+                                                  <i class="fas fa-briefcase text-emerald-600 text-xl"></i>
+                                             </div>
                                         </div>
-                                        <div class="ml-4 flex-1">
-                                             <p class="font-medium text-gray-900">Mes services</p>
-                                             <p class="text-sm text-gray-500">Gérer services</p>
-                                        </div>
-                                        <i class="fas fa-chevron-right text-purple-600 ml-2"></i>
                                    </a>
                               </div>
 
-                              <!-- Quick Stats -->
-                              <div class="grid grid-cols-3 gap-4 mt-6 pt-6 border-t border-gray-100">
-                                   <div class="text-center">
-                                        <p class="text-xl font-semibold text-blue-600">
-                                             <%= stats.totalServices %>
-                                        </p>
-                                        <p class="text-xs text-gray-500">Services</p>
-                                   </div>
-                                   <div class="text-center">
-                                        <p class="text-xl font-semibold text-green-600">
-                                             <%= stats.totalReviews %>
-                                        </p>
-                                        <p class="text-xs text-gray-500">Avis</p>
-                                   </div>
-                                   <div class="text-center">
-                                        <p class="text-xl font-semibold text-purple-600">0</p>
-                                        <p class="text-xs text-gray-500">Vues</p>
-                                   </div>
-                              </div>
+
                          </div>
+
+                         <script>
+                              // Mouse move effect for cards
+                              document.querySelectorAll('.action-card').forEach(card => {
+                                   card.addEventListener('mousemove', (e) => {
+                                        const rect = card.getBoundingClientRect();
+                                        const x = ((e.clientX - rect.left) / card.clientWidth) * 100;
+                                        const y = ((e.clientY - rect.top) / card.clientHeight) * 100;
+
+                                        card.style.setProperty('--mouse-x', `${x}%`);
+                                        card.style.setProperty('--mouse-y', `${y}%`);
+                                   });
+                              });
+                         </script>
 
                          <!-- Include Font Awesome -->
                          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
 
-                         <%- include('includes/analytics') %>
-                              <%- include('includes/services') %>
+                         <%- include('includes/services') %>
+                              <%- include('includes/analytics') %>
                     </div>
                </main>
      </div>
