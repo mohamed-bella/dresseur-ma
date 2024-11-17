@@ -365,7 +365,7 @@ router.post('/admin/users/:userId/verify', isAdmin, async (req, res) => {
 const { sendBroadcastEmail, sendEmail } = require('../utils/emails');
 
 // Route to render broadcast form in the admin dashboard
-router.get('/dashboard/admin/broadcast', isAdmin, async (req, res) => {
+router.get('/admin/broadcast', isAdmin, async (req, res) => {
      try {
           const users = await User.find().select('email');
           res.render('admin/broadcast', { users });
