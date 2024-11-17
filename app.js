@@ -128,7 +128,9 @@ app.use(serviceRoutes);
 app.use(aiRoutes);
 app.use('/dashboard', profileRoutes);
 app.use('/dashboard', galeryRoutes);
-
+app.get('/test', (req, res) => {
+     res.render('test')
+})
 const searchRouter = require('./routes/search');
 app.use(searchRouter);
 

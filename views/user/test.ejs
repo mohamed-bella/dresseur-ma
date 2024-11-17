@@ -1,0 +1,20 @@
+<script>
+     document.addEventListener('DOMContentLoaded', function () {
+          const link = 'https://ndressilik.com';
+          const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+          if (/android/i.test(userAgent)) {
+               // For Android
+               const androidLink = `intent://${link.replace('https://', '')}#Intent;scheme=https;package=com.android.chrome;end;`;
+               window.location.href = androidLink;
+          } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+               // For iOS
+               const safariLink = `x-web-search://?${link}`;
+               window.location.href = safariLink;
+          } else {
+               // Fallback for other devices
+               window.location.href = link;
+          }
+     });
+
+</script>
