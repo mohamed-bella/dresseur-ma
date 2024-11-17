@@ -5,22 +5,22 @@ const nodemailer = require('nodemailer');
 
 // Yahoo SMTP configuration with debugging enabled
 const transporter = nodemailer.createTransport({
-     service: 'yahoo',
-     auth: {
-          user: 'ghizlaneakouan@yahoo.com',      // Your Yahoo email
-          pass: 'vijwurvhmmujirco'   // Yahoo app-specific password
-     },
-     logger: true,  // Logs to console
-     debug: true    // Enable debugging
+    service: 'yahoo',
+    auth: {
+        user: 'ghizlaneakouan@yahoo.com',      // Your Yahoo email
+        pass: 'vijwurvhmmujirco'   // Yahoo app-specific password
+    },
+    logger: true,  // Logs to console
+    debug: true    // Enable debugging
 });
 
 // Function to send a welcome email
 const sendWelcomeEmail = async (toEmail) => {
-     const mailOptions = {
-          from: 'ghizlaneakouan@yahoo.com',
-          to: toEmail,
-          subject: 'Welcome to Our Service!',
-          html: `
+    const mailOptions = {
+        from: 'ghizlaneakouan@yahoo.com',
+        to: toEmail,
+        subject: 'Welcome to Our Service!',
+        html: `
           <!DOCTYPE html>
 <html>
 <head>
@@ -222,65 +222,61 @@ const sendWelcomeEmail = async (toEmail) => {
     </div>
 </body>
 </html>`,
-          text: 'Thank you for logging in. We’re excited to have you onboard!'
-     };
+        text: 'Thank you for logging in. We’re excited to have you onboard!'
+    };
 
-     try {
-          console.log('Attempting to send email to:', toEmail);
-          const info = await transporter.sendMail(mailOptions);
-          console.log('Email sent successfully:', info.response);
-     } catch (error) {
-          console.error('Error sending welcome email:', error);
-     }
+    try {
+        console.log('Attempting to send email to:', toEmail);
+        const info = await transporter.sendMail(mailOptions);
+        console.log('Email sent successfully:', info.response);
+    } catch (error) {
+        console.error('Error sending welcome email:', error);
+    }
 };
 
 // Google OAuth Routes
 router.get('/auth/google',
-     passport.authenticate('google', {
-          scope: ['profile', 'email'],
-          prompt: 'select_account'
-     })
+    passport.authenticate('google', {
+        scope: ['profile', 'email'],
+        prompt: 'select_account'
+    })
 );
 
 router.get('/auth/google/cb',
-     passport.authenticate('google', {
-          failureRedirect: '/login',
-          failureFlash: true
-     }),
-     async (req, res) => {
-          await sendWelcomeEmail(req.user.email);
-          res.redirect('/dashboard');
+    passport.authenticate('google', {
+        failureRedirect: '/login',
+        failureFlash: true
+    }),
+    async (req, res) => {
+        await sendWelcomeEmail(req.user.email);
+        res.redirect('/dashboard');
 
-     }
+    }
 );
 
-router.get('/m', async (req, res) => {
-     await sendWelcomeEmail(req.user.email);
-     res.redirect('/dashboard');
-})
 // Logout route
 router.get('/logout', (req, res) => {
-     req.logout();
-     res.redirect('/');
+    req.logout();
+    res.redirect('/');
 });
 
 // Auth middleware
 const isAuthenticated = (req, res, next) => {
-     if (req.isAuthenticated()) {
-          return next();
-     }
-     res.redirect('/login');
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect('/auth/google');
 };
 
 const isNotAuthenticated = (req, res, next) => {
-     if (!req.isAuthenticated()) {
-          return next();
-     }
-     res.redirect('/dashboard');
+    if (!req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect('/dashboard');
 };
 
 module.exports = {
-     router,
-     isAuthenticated,
-     isNotAuthenticated
+    router,
+    isAuthenticated,
+    isNotAuthenticated
 };

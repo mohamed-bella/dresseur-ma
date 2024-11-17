@@ -11,6 +11,7 @@ const Service = require('../models/service');
 const Review = require('../models/review');
 const User = require('../models/user')
 const Reservation = require('../models/reservation');
+const { isAuthenticated } = require('../middlewares/auth')
 
 const fs = require('fs');
 
@@ -69,7 +70,7 @@ const uploadToS3 = async (fileBuffer, key) => {
 };
 
 // GET: New Service Form
-router.get('/dashboard/new-service', async (req, res) => {
+router.get('/dashboard/new-service', isAuthenticated, async (req, res) => {
      try {
           // Metadata for SEO
           const pageTitle = 'Créer un nouveau service | NDRESSILIK';
@@ -110,7 +111,7 @@ router.get('/dashboard/new-service', async (req, res) => {
 });
 
 // Service creation endpoint
-router.post('/services/add', (req, res) => {
+router.post('/services/add', isAuthenticated, (req, res) => {
      upload(req, res, async (err) => {
           if (err) {
                return res.status(400).json({
@@ -166,7 +167,7 @@ router.post('/services/add', (req, res) => {
 });
 
 // FilePond temporary upload endpoint
-router.post('/services/upload-temp', (req, res) => {
+router.post('/services/upload-temp', isAuthenticated, (req, res) => {
      upload(req, res, async (err) => {
           if (err) {
                return res.status(400).json({ error: err.message });
@@ -208,7 +209,7 @@ router.post('/services/upload-temp', (req, res) => {
  */
 
 // POST: Like a service
-router.post('/services/:id/like', async (req, res) => {
+router.post('/services/:id/like', isAuthenticated, async (req, res) => {
      const serviceId = req.params.id;
      const likedServices = req.cookies.likedServices || [];
 
@@ -641,7 +642,7 @@ router.post('/services/:serviceId/review', async (req, res) => {
 });
 
 // Route: Toggle Service Status
-router.put('/dashboard/services/:serviceId/toggle-status', async (req, res) => {
+router.put('/dashboard/services/:serviceId/toggle-status', isAuthenticated, async (req, res) => {
      try {
           const { serviceId } = req.params;
           const { status } = req.body;
@@ -738,7 +739,7 @@ router.get('/dashboard/services/:serviceId/edit', async (req, res) => {
 
 
 // DELETE route for removing a service and redirecting
-router.post('/dashboard/services/:serviceId/delete', async (req, res) => {
+router.post('/dashboard/services/:serviceId/delete', isAuthenticated, async (req, res) => {
      try {
           const serviceId = req.params.serviceId;
           console.log(serviceId)
@@ -765,7 +766,7 @@ router.post('/dashboard/services/:serviceId/delete', async (req, res) => {
 });
 
 // Updated route with middleware
-router.post('/dashboard/services/:serviceId', upload, async (req, res) => {
+router.post('/dashboard/services/:serviceId', isAuthenticated, upload, async (req, res) => {
      try {
           const serviceId = req.params.serviceId;
           const service = await Service.findById(serviceId);

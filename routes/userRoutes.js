@@ -26,6 +26,8 @@ const Reservation = require('../models/reservation')
 const Review = require('../models/review');
 const { sendNewServiceEmail } = require('../utils/emails'); // Import the email service
 
+// auth mdlwr
+const { isAuthenticated } = require('../middlewares/auth')
 
 
 
@@ -79,9 +81,8 @@ const validateService = [
 ];
 
 
-
 // POST: Create New Service
-router.post('/dashboard/new-service', validateService, async (req, res) => {
+router.post('/dashboard/new-service', isAuthenticated, validateService, async (req, res) => {
      try {
           // Handle file upload with error handling
           upload(req, res, async function (err) {
@@ -431,7 +432,7 @@ const getDashboardStats = async (userId) => {
 
 
 // Updated dashboard route
-router.get('/dashboard', async (req, res) => {
+router.get('/dashboard', isAuthenticated, async (req, res) => {
      try {
 
           const requiredFields = [
@@ -607,7 +608,7 @@ const s3 = new S3Client({
 });
 
 // POST route to create a new announcement
-router.post('/announcements/new', upload.array('images', 10), async (req, res) => {
+router.post('/announcements/new', isAuthenticated, upload.array('images', 10), async (req, res) => {
      console.log('Image upload to S3 started');
 
      try {
@@ -789,7 +790,7 @@ router.get('/adoptions', async (req, res) => {
 
 
 // DELETE: Handle Deleting an Announcement
-router.post('/announcements/:id/delete', async (req, res) => {
+router.post('/announcements/:id/delete', isAuthenticated, async (req, res) => {
      try {
           // Find the announcement by ID and remove it
           await Announcement.findByIdAndDelete(req.params.id);
