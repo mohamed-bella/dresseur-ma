@@ -18,9 +18,7 @@
                                              <img src="<%= provider.profileImage || '/default-avatar.png' %>" alt="<%= provider.displayName %>" class="profile-image" loading="lazy" />
                                              <% if (provider.isVerified) { %>
                                                   <div class="verified-badge">
-                                                       <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                                       </svg>
+                                                       <img src="https://img.icons8.com/?size=100&id=uLBcIHPG2L9p&format=png&color=FD7E14" alt="Verified" class="verified-icon">
                                                   </div>
                                                   <% } %>
                                         </div>
@@ -109,7 +107,7 @@
           height: 90px;
           margin-bottom: 0.75rem;
           border-radius: 9999px;
-          overflow: hidden;
+          /* overflow: hidden; */
      }
 
      .profile-image {
@@ -133,7 +131,7 @@
           right: 0;
           width: 20px;
           height: 20px;
-          background: #3b82f6;
+          background: #ffffff;
           border-radius: 50%;
           z-index: 6;
           display: flex;

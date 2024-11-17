@@ -1,938 +1,301 @@
 <%- include('include/head') %>
+
      <%- include('include/navbar') %>
 
-          <div class="bg-white">
-               <!-- Stats and Quick Access Section -->
-               <div class="min-h-screen bg-gray-100">
-                    <!-- Mobile Header -->
 
+          <div class="bg-gradient-to-r from-orange-500 to-orange-600 h-32 sm:h-48"></div>
 
-                    <!-- Main Content -->
-                    <div class="max-w-2xl mx-auto px-1 py-6">
-                         <!-- Profile Card -->
-                         <div class="bg-white rounded-2xl p-6 shadow-sm">
-                              <div class="flex flex-col items-center px-4 py-6 sm:py-8">
-                                   <!-- Profile Header Section -->
-                                   <div class="relative pb-20 sm:pb-24"> <!-- Added padding to account for the floating stats cards -->
-                                        <!-- Background Pattern -->
-                                        <div class="absolute inset-0 h-48"></div>
-
-                                        <!-- Profile Content -->
-                                        <div class="relative">
-                                             <!-- Profile Image & Verification -->
-                                             <div class="flex flex-col items-center">
-                                                  <div class="relative group">
-                                                       <!-- Profile Image with Gradient Border -->
-                                                       <div class="rounded-full p-1 ">
-                                                            <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden ring-4 ring-white">
-                                                                 <img src="<%= profile.profileImage %>" alt="<%= profile.displayName %>" class="w-full h-full object-cover transform transition-all duration-300 group-hover:scale-105 filter group-hover:brightness-105" loading="lazy">
-                                                            </div>
-                                                       </div>
-
-                                                       <!-- Verification Badge -->
-                                                       <% if (profile.isVerified) { %>
-                                                            <div class="absolute -right-2 -bottom-1 transform translate-y-1">
-                                                                 <div class="flex items-center justify-center w-8 h-8 rounded-full bg-white shadow-md">
-                                                                      <div class="w-6 h-6 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 flex items-center justify-center p-1">
-                                                                           <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="currentColor">
-                                                                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
-                                                                           </svg>
-                                                                      </div>
-                                                                 </div>
-                                                            </div>
-                                                            <% } %>
-
-                                                                 <!-- Online Status Indicator -->
-                                                                 <div class="absolute -left-1 bottom-3">
-                                                                      <div class="flex items-center">
-                                                                           <span class="flex h-3 w-3">
-                                                                                <span class="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-green-400 opacity-75"></span>
-                                                                                <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                                                                           </span>
-                                                                      </div>
-                                                                 </div>
+          <!-- Main Content Container -->
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 -mt-12 relative">
+               <div class="flex flex-col lg:flex-row gap-6">
+                    <!-- Left Sidebar: Profile Card -->
+                    <div class="lg:w-80">
+                         <div class="sticky top-6">
+                              <!-- Profile Card -->
+                              <div class="bg-white rounded-lg border shadow-sm">
+                                   <!-- Profile Image & Basic Info -->
+                                   <div class="px-6 pt-6 pb-4">
+                                        <div class="relative -mt-20 mb-3">
+                                             <div class="w-32 h-32 mx-auto rounded-full border-4 border-white shadow-md overflow-hidden">
+                                                  <img src="<%= profile.profileImage %>" alt="<%= profile.displayName %>" class="w-full h-full object-cover">
+                                             </div>
+                                             <% if (profile.isVerified) { %>
+                                                  <div class="absolute bottom-0 right-1/3 bg-white rounded-full p-1 shadow-md">
+                                                       <img src="https://img.icons8.com/?size=100&id=uLBcIHPG2L9p&format=png&color=FD7E14" alt="Verified" class="w-6 h-6">
                                                   </div>
+                                                  <% } %>
+                                        </div>
 
-                                                  <!-- Profile Info -->
-                                                  <div class="mt-4 text-center">
-                                                       <h1 class="text-2xl font-bold text-gray-900 sm:text-3xl mb-1">
-                                                            <%= profile.displayName %>
-                                                       </h1>
-                                                       <div class="flex items-center justify-center gap-2 text-sm text-gray-600">
-                                                            <% if (profile.location.city) { %>
-                                                                 <span class="flex items-center">
-                                                                      <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                                                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                                      </svg>
-                                                                      <%= profile.location.city %>
-                                                                 </span>
-                                                                 <% } %>
-                                                                      <span class="flex items-center">
-                                                                           <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                                           </svg>
-                                                                           Membre depuis <%= new Date(profile.createdAt).toLocaleDateString('fr-FR', { month: 'long' , year: 'numeric' }) %>
-                                                                      </span>
+                                        <div class="text-center">
+                                             <h1 class="text-xl font-bold text-gray-900">
+                                                  <%= profile.displayName %>
+                                             </h1>
+                                             <div class="mt-1 text-sm text-gray-500 space-y-1">
+                                                  <% if (profile.location?.city) { %>
+                                                       <div class="flex items-center justify-center gap-1">
+                                                            <i class="fas fa-map-marker-alt text-gray-400"></i>
+                                                            <span>
+                                                                 <%= profile.location.city %>
+                                                            </span>
                                                        </div>
+                                                       <% } %>
+                                                            <div class="flex items-center justify-center gap-1">
+                                                                 <i class="fas fa-calendar text-gray-400"></i>
+                                                                 <span>Membre depuis <%= new Date(profile.createdAt).toLocaleDateString('fr-FR', { month: 'long' , year: 'numeric' }) %></span>
+                                                            </div>
+                                             </div>
+                                        </div>
 
-                                                       <!-- Quick Actions -->
-                                                       <!-- <div class="flex items-center justify-center gap-2 mt-4">
-                                                            <p href class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-full transition-colors duration-150 ease-in-out">
-                                                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                                                                 </svg>
-                                                                
-                                                            </p>
-                                                            <p href class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-full transition-colors duration-150 ease-in-out">
-                                                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                                                                 </svg>
-                                                                
-                                                            </p>
+                                        <!-- Share Profile Button -->
+                                        <button onclick="copyProfileLink()" class="w-full mt-4 flex items-center justify-center gap-2 px-4 py-2.5
+                                            bg-gray-50 hover:bg-gray-100 rounded-md text-sm font-medium
+                                            transition-colors duration-200 group">
+                                             <i class="fas fa-share-alt"></i>
+                                             <span>Partager le profil</span>
+                                             <div class="absolute -top-10 opacity-0 bg-gray-900 text-white text-sm px-3 py-1 
+                                           rounded-md transition-opacity duration-200 group-[.copied]:opacity-100">
+                                                  Lien copié!
+                                             </div>
+                                        </button>
+                                   </div>
 
-                                                       </div> -->
+                                   <!-- Karma-like Stats -->
+                                   <div class="border-t">
+                                        <div class="grid grid-cols-2 divide-x">
+                                             <div class="px-4 py-3 text-center">
+                                                  <div class="text-xl font-bold text-orange-500">
+                                                       <%= profile.ndressilikScore || 0 %>%
                                                   </div>
+                                                  <div class="text-xs text-gray-500">Score de confiance</div>
+                                             </div>
+                                             <div class="px-4 py-3 text-center">
+                                                  <div class="text-xl font-bold text-blue-500">
+                                                       <%= profile.metrics?.totalReviews || 0 %>
+                                                  </div>
+                                                  <div class="text-xs text-gray-500">Avis reçus</div>
                                              </div>
                                         </div>
                                    </div>
 
-                                   <!-- Badges Section - Directly under profile info -->
-                                   <div class="flex justify-center flex-wrap gap-3 -mt-2 px-4">
-                                        <% profile.badges.forEach((badge, index)=> { %>
-                                             <div class="show-badge-modal cursor-pointer group">
-                                                  <div class="relative w-16 h-16 transform transition-all duration-200 group-hover:-translate-y-1">
-                                                       <div class="absolute inset-0 rounded-2xl bg-gradient-to-br from-blue-500/10 to-indigo-500/10 animate-pulse"></div>
-                                                       <img src="<%= badge.image %>" alt="<%= badge.type %>" class="w-full h-full object-contain p-2 rounded-2xl bg-white border border-gray-100 shadow-sm group-hover:shadow-md transition-all duration-200" data-badge-image="<%= badge.image %>" data-badge-type="<%= badge.type %>" data-badge-label="<%= badge.label %>" data-badge-date="<%= badge.earnedAt %>">
-                                                  </div>
-                                             </div>
-                                             <% }) %>
-
-                                   </div>
-                                   <%= profile.phoneNumber %>
-                                        <div class="">
-                                             <p class="text-gray-600 whitespace-pre-line">
-                                                  <% if (profile.bio.length> 0) { %>
-                                                       <%= profile.phoneNumber %>
-                                                            <% } %>
+                                   <!-- Bio Section -->
+                                   <% if (profile.bio) { %>
+                                        <div class="px-4 py-3 border-t">
+                                             <h3 class="text-sm font-medium text-gray-900 mb-2">À propos</h3>
+                                             <p class="text-sm text-gray-600 whitespace-pre-line">
+                                                  <%= profile.bio %>
                                              </p>
                                         </div>
-                                        <% if (profile.phoneNumber) { %>
-                                             <div class="">
-                                                  <p class="text-gray-600 whitespace-pre-line">
-                                                       <%= profile.phoneNumber %>
-                                                  </p>
-                                             </div>
-                                             <% } %>
-                                                  <script>
-                                                       $(document).ready(function () {
-                                                            // Badge click handler
-                                                            $('.show-badge-modal').click(function () {
-                                                                 const badgeData = {
-                                                                      image: $(this).find('img').data('badge-image') || 'default-image.png', // Default in case image URL is missing
-                                                                      type: $(this).find('img').data('badge-type') || 'Type not specified',
-                                                                      label: $(this).find('img').data('badge-label') || 'Label not available',
-                                                                      date: new Date($(this).find('img').data('badge-date')).toLocaleDateString('fr-FR', {
-                                                                           day: 'numeric',
-                                                                           month: 'long',
-                                                                           year: 'numeric'
-                                                                      })
-                                                                 };
+                                        <% } %>
 
-                                                                 // Show SweetAlert2 modal
-                                                                 Swal.fire({
-                                                                      html: `
-                <div class="text-center">
-                    <div class="mb-4">
-                        <img src="${badgeData.image}" 
-                             alt="${badgeData.type}" 
-                             class="w-24 h-24 mx-auto object-contain">
-                    </div>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">
-                        ${badgeData.label}
-                    </h3>
-                    <p class="text-sm text-gray-500 flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" 
-                             class="h-4 w-4 mr-1" 
-                             fill="none" 
-                             viewBox="0 0 24 24" 
-                             stroke="currentColor">
-                            <path stroke-linecap="round" 
-                                  stroke-linejoin="round" 
-                                  stroke-width="2" 
-                                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                        ${badgeData.date}
-                    </p>
-                </div>
-            `,
-                                                                      showConfirmButton: false,
-                                                                      showCloseButton: true,
-                                                                      customClass: {
-                                                                           popup: 'badge-modal-popup rounded-lg',
-                                                                           closeButton: 'badge-modal-close focus:outline-none',
-                                                                      },
-                                                                      width: 'auto',
-                                                                      padding: '1.5rem'
-                                                                 });
-                                                            });
-                                                       });
-
-                                                  </script>
-
-                                                  <!-- Additional styles for SweetAlert2 customization -->
-                                                  <style>
-                                                       .badge-modal-popup {
-                                                            max-width: 320px !important;
-                                                       }
-
-                                                       .badge-modal-close {
-                                                            position: absolute !important;
-                                                            top: 0.75rem !important;
-                                                            right: 0.75rem !important;
-                                                            width: 2rem !important;
-                                                            height: 2rem !important;
-                                                            border-radius: 9999px !important;
-                                                            background: #f3f4f6 !important;
-                                                            color: #4b5563 !important;
-                                                       }
-
-                                                       .badge-modal-close:hover {
-                                                            background: #e5e7eb !important;
-                                                       }
-
-                                                       @media (max-width: 640px) {
-                                                            .badges-flex {
-                                                                 justify-content: flex-start;
-                                                            }
-
-                                                            .badge-item {
-                                                                 width: 60px;
-                                                                 height: 60px;
-                                                            }
-                                                       }
-                                                  </style>
-
-                              </div>
-
-                              <style>
-                                   /* Smooth animations */
-                                   .transition {
-                                        transition-property: all;
-                                        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-                                        transition-duration: 150ms;
-                                   }
-
-                                   /* Profile image hover effect */
-                                   .group:hover img {
-                                        transform: scale(1.05);
-                                        transition: transform 0.2s ease-in-out;
-                                   }
-
-                                   /* Tooltip animation */
-                                   .group:hover .invisible {
-                                        transition-delay: 100ms;
-                                   }
-
-                                   /* Better image loading */
-                                   img {
-                                        backface-visibility: hidden;
-                                        transform: translateZ(0);
-                                   }
-
-                                   /* Reduce motion if preferred */
-                                   @media (prefers-reduced-motion: reduce) {
-
-                                        .transition,
-                                        .group:hover img {
-                                             transition: none !important;
-                                        }
-                                   }
-
-                                   /* Optimize for touch devices */
-                                   @media (hover: none) {
-                                        .group:hover img {
-                                             transform: none;
-                                        }
-                                   }
-                              </style>
-
-                              <div class="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
-                                   <!-- Rating Stat -->
-                                   <div class="group relative isolate overflow-hidden rounded-2xl bg-white p-4 shadow-sm ring-1 ring-gray-900/5 hover:shadow-md transition-all duration-300">
-                                        <!-- Background Pattern -->
-                                        <div class="absolute inset-0 -z-10 bg-[linear-gradient(45deg,var(--tw-gradient-from)_0%,var(--tw-gradient-to)_100%)] from-yellow-50 to-yellow-100/50 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-
-                                        <div class="flex flex-col h-full">
-                                             <div class="flex items-start justify-between mb-1">
-                                                  <!-- Score -->
-                                                  <div class="flex items-baseline gap-1">
-                                                       <span class="text-2xl font-bold tracking-tight text-gray-900">
-                                                            <%= profile.metrics?.averageRating?.toFixed(1) || '0.0' %>
-                                                       </span>
-                                                       <span class="text-sm text-gray-500">/5.0</span>
-                                                  </div>
-
-                                                  <!-- Stars -->
-                                                  <div class="flex -space-x-1">
-                                                       <% const rating=profile.metrics?.averageRating || 0; Array(5).fill().forEach((_, i)=> { %>
-                                                            <div class="w-4 h-4 rounded-full flex items-center justify-center
-                                                          <%= i < rating ? 'text-yellow-400' : 'text-gray-200' %>
-                                                          transition-colors duration-300">
-                                                                 <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
-                                                                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                                                 </svg>
-                                                            </div>
-                                                            <% }); %>
-                                                  </div>
-                                             </div>
-
-                                             <p class="text-sm font-medium text-gray-600">Note moyenne</p>
-                                        </div>
-                                   </div>
-
-                                   <!-- Services Stat -->
-                                   <div class="group relative isolate overflow-hidden rounded-2xl bg-white p-4 shadow-sm ring-1 ring-gray-900/5 hover:shadow-md transition-all duration-300">
-                                        <!-- Background Pattern -->
-                                        <div class="absolute inset-0 -z-10 bg-[linear-gradient(45deg,var(--tw-gradient-from)_0%,var(--tw-gradient-to)_100%)] from-blue-50 to-blue-100/50 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-
-                                        <div class="flex flex-col h-full">
-                                             <div class="flex items-start justify-between mb-1">
-                                                  <span class="text-2xl font-bold tracking-tight text-gray-900">
-                                                       <%= profile.metrics?.totalServices || 0 %>
-                                                  </span>
-                                                  <div class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100/80 text-blue-600 ring-1 ring-inset ring-blue-500/20">
-                                                       <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                                       </svg>
-                                                  </div>
-                                             </div>
-
-                                             <p class="text-sm font-medium text-gray-600">Services</p>
-                                        </div>
-                                   </div>
-
-                                   <!-- Reviews Stat -->
-                                   <div class="group relative isolate overflow-hidden rounded-2xl bg-white p-4 shadow-sm ring-1 ring-gray-900/5 hover:shadow-md transition-all duration-300">
-                                        <!-- Background Pattern -->
-                                        <div class="absolute inset-0 -z-10 bg-[linear-gradient(45deg,var(--tw-gradient-from)_0%,var(--tw-gradient-to)_100%)] from-purple-50 to-purple-100/50 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-
-                                        <div class="flex flex-col h-full">
-                                             <div class="flex items-start justify-between mb-1">
-                                                  <span class="text-2xl font-bold tracking-tight text-gray-900">
-                                                       <%= profile.metrics?.totalReviews || 0 %>
-                                                  </span>
-                                                  <div class="flex h-8 w-8 items-center justify-center rounded-full bg-purple-100/80 text-purple-600 ring-1 ring-inset ring-purple-500/20">
-                                                       <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                                                       </svg>
-                                                  </div>
-                                             </div>
-
-                                             <p class="text-sm font-medium text-gray-600">Avis clients</p>
-                                        </div>
-                                   </div>
-
-                                   <!-- Trust Score -->
-                                   <div class="group relative isolate overflow-hidden rounded-2xl bg-white p-4 shadow-sm ring-1 ring-gray-900/5 hover:shadow-md transition-all duration-300">
-                                        <!-- Background Pattern -->
-                                        <div class="absolute inset-0 -z-10 bg-[linear-gradient(45deg,var(--tw-gradient-from)_0%,var(--tw-gradient-to)_100%)] from-green-50 to-green-100/50 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-
-                                        <div class="flex flex-col h-full">
-                                             <div class="flex items-start justify-between mb-1">
-                                                  <span class="text-2xl font-bold tracking-tight text-gray-900">
-                                                       <%= profile.ndressilikScore || 0 %>%
-                                                  </span>
-                                                  <div class="flex h-8 w-8 items-center justify-center rounded-full bg-green-100/80 text-green-600 ring-1 ring-inset ring-green-500/20">
-                                                       <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                                                       </svg>
-                                                  </div>
-                                             </div>
-
-                                             <p class="text-sm font-medium text-gray-600">Score de confiance</p>
-
-                                             <!-- Progress Bar -->
-                                             <div class="mt-2">
-                                                  <div class="h-1.5 w-full overflow-hidden rounded-full bg-gray-100">
-                                                       <div class="h-full rounded-full bg-green-500 transition-all duration-500" style="width: <%= profile.ndressilikScore || 0 %>%"></div>
-                                                  </div>
-                                             </div>
-                                        </div>
-                                   </div>
-                              </div>
-
-                              <style>
-                                   /* Smooth hover transitions */
-                                   .transition-all {
-                                        transition-property: all;
-                                        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-                                        transition-duration: 300ms;
-                                   }
-
-                                   /* Card hover effect */
-                                   .hover\:shadow-md:hover {
-                                        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1),
-                                             0 2px 4px -2px rgb(0 0 0 / 0.1);
-                                   }
-
-                                   /* Progress bar animation */
-                                   .group:hover .bg-green-500 {
-                                        transition-delay: 100ms;
-                                   }
-
-                                   /* Gradient animation */
-                                   @keyframes gradient {
-                                        0% {
-                                             background-position: 0% 50%;
-                                        }
-
-                                        50% {
-                                             background-position: 100% 50%;
-                                        }
-
-                                        100% {
-                                             background-position: 0% 50%;
-                                        }
-                                   }
-
-                                   /* Optimize for mobile */
-                                   @media (max-width: 640px) {
-                                        .text-2xl {
-                                             font-size: 1.25rem;
-                                        }
-
-                                        .p-4 {
-                                             padding: 0.875rem;
-                                        }
-
-                                        .gap-3 {
-                                             gap: 0.5rem;
-                                        }
-                                   }
-                              </style>
-                              <!-- Specializations -->
-                              <div class="mt-6">
-                                   <p class="text-sm font-medium text-gray-700 mb-3">Spécialisations</p>
-                                   <div class="flex flex-wrap gap-2">
-                                        <% const serviceIcons={ 'dog-training' : 'fa-dog' , 'grooming' : 'fa-cut' , 'walking' : 'fa-walking' , 'veterinary' : 'fa-stethoscope' , 'boarding' : 'fa-home' , 'transport' : 'fa-car' } %>
-
-                                             <% profile.specializations?.forEach(spec=> { %>
-                                                  <div class="inline-flex items-center px-3 py-1.5 bg-gray-100 hover:bg-gray-200 
-                                                 rounded-full transition-colors duration-200 cursor-pointer group">
-                                                       <i class="fas <%= serviceIcons[spec] || 'fa-paw' %> text-gray-500 
-                                                     group-hover:text-blue-500 mr-2"></i>
-                                                       <span class="text-sm font-medium text-gray-700 group-hover:text-gray-900">
-                                                            <%= spec.split('-').map(word=> word.charAt(0).toUpperCase() +
-                                                                 word.slice(1)).join(' ') %>
-                                                       </span>
-                                                  </div>
-                                                  <% }) %>
-                                   </div>
-                              </div>
-
-
-                         </div>
-                         <!-- Compact Business Hours Widget -->
-                         <div class="bg-white rounded-xl shadow-sm overflow-hidden mt-4">
-                              <% const days=[ { id: 'monday' , label: 'Lun' }, { id: 'tuesday' , label: 'Mar' }, { id: 'wednesday' , label: 'Mer' }, { id: 'thursday' , label: 'Jeu' }, { id: 'friday' , label: 'Ven' }, { id: 'saturday' , label: 'Sam' }, { id: 'sunday' , label: 'Dim' } ]; const today=new Date().getDay(); const todayId=days[today===0 ? 6 : today - 1].id; const todayHours=profile.businessHours?.[todayId]; const isOpenToday=todayHours && (todayHours.isOpen===true || todayHours.isOpen==='true' ); %>
-
-                                   <!-- Collapsed View -->
-                                   <div class="group" x-data="{ open: false }">
-                                        <!-- Summary Row -->
-                                        <div class="p-4 flex items-center justify-between cursor-pointer" @click="open = !open">
-                                             <div class="flex items-center space-x-3">
-                                                  <div class="flex items-center space-x-2">
-                                                       <span class="relative flex h-2.5 w-2.5">
-                                                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full <%= isOpenToday ? 'bg-green-400' : 'bg-gray-400' %> opacity-75"></span>
-                                                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 <%= isOpenToday ? 'bg-green-500' : 'bg-gray-500' %>"></span>
-                                                       </span>
-                                                       <span class="text-sm font-medium text-gray-900">
-                                                            <%= isOpenToday ? `Ouvert jusqu'à ${todayHours.close}` : 'Fermé aujourd\' hui' %>
-                                                       </span>
-                                                  </div>
-                                             </div>
-
-                                             <!-- Today's Hours Preview -->
-                                             <div class="flex items-center space-x-2">
-                                                  <% if (isOpenToday && todayHours.open && todayHours.close) { %>
-                                                       <span class="text-sm text-gray-600">
-                                                            <%= todayHours.open %> - <%= todayHours.close %>
-                                                       </span>
-                                                       <% } %>
-                                                            <svg class="w-5 h-5 text-gray-400 transform transition-transform" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                                                            </svg>
-                                             </div>
-                                        </div>
-
-                                        <!-- Expanded Hours -->
-                                        <div x-show="open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform -translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 transform translate-y-0" x-transition:leave-end="opacity-0 transform -translate-y-2" class="border-t border-gray-100">
-                                             <div class="grid grid-cols-2 gap-x-4 gap-y-1 p-4">
-                                                  <% days.forEach(day=> {
-                                                       const hours = profile.businessHours?.[day.id];
-                                                       const isOpen = hours && (hours.isOpen === true || hours.isOpen === 'true');
-                                                       const isToday = day.id === todayId;
-                                                       %>
-                                                       <div class="flex items-center justify-between py-1 
-                      <%= isToday ? 'text-blue-600 font-medium' : 'text-gray-600' %>">
-                                                            <span class="text-sm">
-                                                                 <%= day.label %>
-                                                            </span>
-                                                            <% if (isOpen && hours.open && hours.close) { %>
-                                                                 <span class="text-sm">
-                                                                      <%= hours.open.replace(':', 'h' ) %> - <%= hours.close.replace(':', 'h' ) %>
-                                                                 </span>
-                                                                 <% } else { %>
-                                                                      <span class="text-sm text-gray-400">Fermé</span>
-                                                                      <% } %>
+                                             <!-- Trophy Case (Badges) -->
+                                             <% if (profile.badges && profile.badges.length> 0) { %>
+                                                  <div class="px-4 py-3 border-t">
+                                                       <h3 class="text-sm font-medium text-gray-900 mb-2">Badges</h3>
+                                                       <div class="flex flex-wrap gap-2">
+                                                            <% profile.badges.forEach(badge=> { %>
+                                                                 <div class="w-8 h-8 rounded-md bg-gray-50 p-1 cursor-pointer hover:bg-gray-100
+                                                     transition-colors duration-200" onclick="showBadgeModal('<%= badge.image %>', '<%= badge.type %>', 
+                                                                    '<%= badge.label %>', '<%= badge.earnedAt %>')">
+                                                                      <img src="<%= badge.image %>" alt="<%= badge.type %>" class="w-full h-full">
+                                                                 </div>
+                                                                 <% }); %>
                                                        </div>
-                                                       <% }); %>
-                                             </div>
-                                        </div>
-                                   </div>
+                                                  </div>
+                                                  <% } %>
+                              </div>
                          </div>
+                    </div>
 
-
-                         <style>
-                              @keyframes ping {
-
-                                   75%,
-                                   100% {
-                                        transform: scale(2);
-                                        opacity: 0;
-                                   }
-                              }
-
-                              .animate-ping {
-                                   animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
-                              }
-                         </style>
-                         <!-- Tabs Section -->
-                         <div class="mt-6 bg-white rounded-2xl shadow-sm overflow-hidden" x-data="{ activeTab: 'services' }">
+                    <!-- Main Content Area -->
+                    <div class="flex-1">
+                         <!-- Content Tabs -->
+                         <div class="bg-white rounded-lg border shadow-sm">
                               <!-- Tab Navigation -->
-                              <nav class="flex items-center gap-1 md:gap-2 overflow-x-auto no-scrollbar border-b border-gray-200">
-                                   <button @click="activeTab = 'services'" :class="{'text-blue-600 border-blue-600': activeTab === 'services',
-                                               'text-gray-500 hover:text-gray-700 border-transparent': activeTab !== 'services'}" class="flex items-center gap-2 px-4 py-4 font-medium border-b-2 min-w-max transition-all">
-                                        <i class="fas fa-briefcase"></i>
-                                        <span>Services</span>
-                                        <span class="ml-1.5 text-xs py-0.5 px-2 bg-gray-100 text-gray-600 rounded-full">
-                                             <%= services.length %>
-                                        </span>
-                                   </button>
+                              <div class="flex items-center border-b">
+                                   <% const tabs=[ { id: 'services' , label: 'Services' , icon: 'fa-briefcase' , count: services.length }, { id: 'reviews' , label: 'Avis' , icon: 'fa-star' , count: reviews.length }, ] %>
 
-                                   <button @click="activeTab = 'reviews'" :class="{'text-blue-600 border-blue-600': activeTab === 'reviews',
-                                               'text-gray-500 hover:text-gray-700 border-transparent': activeTab !== 'reviews'}" class="flex items-center gap-2 px-4 py-4 font-medium border-b-2 min-w-max transition-all">
-                                        <i class="fas fa-star"></i>
-                                        <span>Avis</span>
-                                        <span class="ml-1.5 text-xs py-0.5 px-2 bg-gray-100 text-gray-600 rounded-full">
-                                             <%= reviews.length %>
-                                        </span>
-                                   </button>
-
-                                   <button @click="activeTab = 'gallery'" :class="{'text-blue-600 border-blue-600': activeTab === 'gallery',
-                                               'text-gray-500 hover:text-gray-700 border-transparent': activeTab !== 'gallery'}" class="flex items-center gap-2 px-4 py-4 font-medium border-b-2 min-w-max transition-all">
-                                        <i class="fas fa-images"></i>
-                                        <span>Galerie</span>
-                                        <span class="ml-1.5 text-xs py-0.5 px-2 bg-gray-100 text-gray-600 rounded-full">
-                                             <%= profile.gallery.length %>
-                                        </span>
-                                   </button>
-
-                                   <button @click="activeTab = 'about'" :class="{'text-blue-600 border-blue-600': activeTab === 'about',
-                                               'text-gray-500 hover:text-gray-700 border-transparent': activeTab !== 'about'}" class="flex items-center gap-2 px-4 py-4 font-medium border-b-2 min-w-max transition-all">
-                                        <i class="fas fa-user"></i>
-                                        <span>À propos</span>
-                                   </button>
-                              </nav>
+                                        <% tabs.forEach(tab=> { %>
+                                             <button @click="activeTab = '<%= tab.id %>'" class="flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium
+                                            border-b-2 transition-colors duration-200" :class="activeTab === '<%= tab.id %>' ? 
+                                             'border-orange-500 text-orange-600' : 
+                                             'border-transparent text-gray-500 hover:text-gray-700'">
+                                                  <i class="fas <%= tab.icon %>"></i>
+                                                  <span>
+                                                       <%= tab.label %>
+                                                  </span>
+                                                  <span class="ml-1.5 px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 text-xs">
+                                                       <%= tab.count %>
+                                                  </span>
+                                             </button>
+                                             <% }); %>
+                              </div>
 
                               <!-- Tab Panels -->
-                              <div class="p-6">
-                                   <!-- Services Panel -->
-                                   <!-- Services List Panel -->
-                                   <div x-show="activeTab === 'services'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
-                                        <div class="space-y-4">
-                                             <% services.forEach(service=> { %>
-                                                  <div class="group bg-white rounded-lg border border-gray-200 hover:border-blue-500 
-                                                         hover:shadow-lg transition-all duration-200 overflow-hidden">
-                                                       <div class="flex flex-col sm:flex-row">
-                                                            <!-- Service Image (Left Side) -->
-                                                            <div class="relative w-full sm:w-48 md:w-56">
-                                                                 <div class="relative aspect-video sm:aspect-square h-full">
-                                                                      <img src="<%= service.images[0] %>" alt="<%= service.serviceName %>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                                                                      <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent 
-                                                                         opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                                                 </div>
-                                                                 <!-- Service Type Tag -->
-                                                                 <div class="absolute top-3 left-3">
-                                                                      <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium
-                                                                          bg-blue-100 text-blue-800 border border-blue-200">
-                                                                           <%= service.type || service.category %>
+                              <div class="p-4">
+                                   <!-- Services Tab -->
+                                   <div class="space-y-4">
+                                        <% services.forEach(service=> { %>
+                                             <div style="overflow-wrap: break-word;" class="bg-white rounded-lg border hover:border-orange-200 transition-colors duration-200">
+                                                  <div class="flex flex-col sm:flex-row">
+                                                       <!-- Service Image -->
+                                                       <div class="sm:w-48 aspect-video sm:aspect-square relative">
+                                                            <img src="<%= service.images[0] %>" alt="<%= service.serviceName %>" class="w-full h-full object-cover">
+                                                            <div class="absolute top-2 left-2">
+                                                                 <span class="px-2 py-1 text-xs font-medium bg-white rounded-md shadow-sm">
+                                                                      <%= service.type || service.category %>
+                                                                 </span>
+                                                            </div>
+                                                       </div>
+
+                                                       <!-- Service Content -->
+                                                       <div class="flex-1 p-4">
+                                                            <div class="flex items-start justify-between gap-4">
+                                                                 <h3 class="text-lg font-medium text-gray-900">
+                                                                      <%= service.serviceName %>
+                                                                 </h3>
+                                                                 <div class="flex items-center gap-2 text-sm">
+                                                                      <div class="flex items-center text-yellow-500">
+                                                                           <i class="fas fa-star"></i>
+                                                                           <span class="ml-1 text-gray-900">
+                                                                                <%= service.rating || '0.0' %>
+                                                                           </span>
+                                                                      </div>
+                                                                      <span class="text-gray-300">•</span>
+                                                                      <span class="font-medium text-gray-900">
+                                                                           <%= service.priceRange %> DH
                                                                       </span>
                                                                  </div>
                                                             </div>
 
-                                                            <!-- Service Content (Right Side) -->
-                                                            <div class="flex-1 p-4 sm:p-5 flex flex-col">
-                                                                 <div class="flex items-start justify-between gap-4 mb-2">
-                                                                      <div>
-                                                                           <h3 class="font-semibold text-gray-900 group-hover:text-blue-600 
-                                                                            transition-colors text-lg mb-1">
-                                                                                <%= service.serviceName %>
-                                                                           </h3>
-                                                                           <!-- Rating & Price -->
-                                                                           <div class="flex items-center gap-3 text-sm text-gray-600">
-                                                                                <div class="flex items-center gap-1">
-                                                                                     <i class="fas fa-star text-yellow-400"></i>
-                                                                                     <span class="font-medium">
-                                                                                          <%= service.rating || '0.0' %>
-                                                                                     </span>
-                                                                                </div>
-                                                                                <span class="text-gray-300">•</span>
-                                                                                <span class="font-medium text-gray-900">
-                                                                                     <%= service.priceRange %>
-                                                                                </span>
-                                                                                <span class="text-gray-500">/service</span>
-                                                                           </div>
-                                                                      </div>
-                                                                 </div>
+                                                            <p class="mt-2 text-sm text-gray-600">
+                                                                 <%= service.description %>
+                                                            </p>
 
-                                                                 <!-- Description -->
-                                                                 <p class="text-sm text-gray-600 mb-4 line-clamp-2 flex-grow">
-                                                                      <%= service.description %>
-                                                                 </p>
+                                                            <div class="mt-4 flex items-center justify-between">
+                                                                 <a href="/service/<%= service._id %>" class="inline-flex items-center gap-1 text-sm font-medium text-orange-600 
+                                                           hover:text-orange-700">
+                                                                      Voir détails
+                                                                      <i class="fas fa-arrow-right text-xs"></i>
+                                                                 </a>
 
-                                                                 <!-- Bottom Section -->
-                                                                 <div class="flex items-center justify-between mt-auto pt-3 border-t border-gray-100">
-                                                                      <!-- Service Features/Tags -->
-                                                                      <div class="flex flex-wrap gap-2">
-                                                                           <% (service.features || []).slice(0, 2).forEach(feature=> { %>
-                                                                                <span class="inline-flex items-center px-2 py-1 rounded-md text-xs
-                                                                                  bg-gray-50 text-gray-600 border border-gray-100">
-                                                                                     <%= feature %>
-                                                                                </span>
-                                                                                <% }) %>
-                                                                      </div>
-
-                                                                      <!-- Action Link -->
-                                                                      <a href="/service/<%= service._id %>" class="inline-flex items-center gap-1 text-sm font-medium text-blue-600 
-                                                                         hover:text-blue-700 pl-3">
-                                                                           Voir détails
-                                                                           <i class="fas fa-arrow-right text-xs transition-transform 
-                                                                             group-hover:translate-x-1"></i>
-                                                                      </a>
-                                                                 </div>
-                                                            </div>
-                                                       </div>
-                                                  </div>
-                                                  <% }) %>
-                                        </div>
-                                   </div>
-
-                                   <style>
-                                        /* Ensure smooth transitions */
-                                        .group {
-                                             transform: translateZ(0);
-                                        }
-
-                                        /* Line clamp fallback for older browsers */
-                                        @supports not (-webkit-line-clamp: 2) {
-                                             .line-clamp-2 {
-                                                  display: block;
-                                                  display: -webkit-box;
-                                                  -webkit-box-orient: vertical;
-                                                  position: relative;
-                                                  line-height: 1.5;
-                                                  max-height: 3em;
-                                                  overflow: hidden;
-                                                  padding-right: 1rem;
-                                             }
-
-                                             .line-clamp-2::after {
-                                                  content: '...';
-                                                  position: absolute;
-                                                  right: 0;
-                                                  bottom: 0;
-                                                  background: white;
-                                                  padding-left: 0.25rem;
-                                             }
-                                        }
-
-                                        /* Improve touch targets on mobile */
-                                        @media (max-width: 640px) {
-                                             .group {
-                                                  cursor: pointer;
-                                             }
-
-                                             a,
-                                             button {
-                                                  min-height: 2.5rem;
-                                                  padding: 0.5rem;
-                                             }
-                                        }
-                                   </style>
-
-                                   <!-- Reviews Panel -->
-                                   <div x-show="activeTab === 'reviews'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
-                                        <div class="space-y-6">
-                                             <% reviews.forEach(review=> { %>
-                                                  <div class="group bg-white rounded-lg border border-gray-200 p-4 
-                                                     hover:border-blue-500 hover:shadow-lg transition-all duration-200">
-                                                       <div class="flex items-start gap-4">
-                                                            <!-- Reviewer Avatar -->
-                                                            <div class="flex-shrink-0">
-                                                                 <img src="<%= review.userId.profileImage %>" alt="<%= review.userId.displayName %>" class="w-10 h-10 rounded-full object-cover">
-                                                            </div>
-
-                                                            <!-- Review Content -->
-                                                            <div class="flex-1 min-w-0">
-                                                                 <div class="flex items-center justify-between gap-4 mb-2">
-                                                                      <div>
-                                                                           <h4 class="font-medium text-gray-900">
-                                                                                <%= review.userId.displayName %>
-                                                                           </h4>
-                                                                           <div class="flex items-center gap-2 text-sm text-gray-500">
-                                                                                <div class="flex items-center">
-                                                                                     <% for(let i=0; i < 5; i++) { %>
-                                                                                          <i class="fas fa-star text-xs <%= i < review.rating ? 'text-yellow-400' : 'text-gray-300' %>"></i>
-                                                                                          <% } %>
-                                                                                </div>
-                                                                                <span>•</span>
-                                                                                <time datetime="<%= review.createdAt %>">
-                                                                                     <%= new Date(review.createdAt).toLocaleDateString('fr-FR', { day: 'numeric' , month: 'long' , year: 'numeric' }) %>
-                                                                                </time>
-                                                                           </div>
-                                                                      </div>
-                                                                 </div>
-                                                                 <p class="text-gray-600 text-sm">
-                                                                      <%= review.comment %>
-                                                                 </p>
-                                                            </div>
-                                                       </div>
-                                                  </div>
-                                                  <% }) %>
-                                        </div>
-                                   </div>
-
-                                   <!-- Gallery Panel -->
-                                   <div x-show="activeTab === 'gallery'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
-                                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                                             <% profile.gallery.forEach(image=> { %>
-                                                  <div class="group relative aspect-square rounded-lg overflow-hidden bg-gray-100 cursor-zoom-in">
-                                                       <img src="<%= image %>" alt="Gallery image" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
-
-                                                       <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                                            <button onclick="openGalleryModal('<%= image %>')" class="w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors">
-                                                                 <i class="fas fa-expand text-white"></i>
-                                                            </button>
-                                                       </div>
-                                                  </div>
-                                                  <% }) %>
-                                        </div>
-                                   </div>
-
-                                   <!-- About Panel -->
-                                   <div x-show="activeTab === 'about'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
-                                        <div class="max-w-3xl">
-                                             <!-- Bio Section -->
-                                             <div class="mb-8">
-                                                  <h3 class="text-lg font-semibold text-gray-900 mb-4">Biographie</h3>
-                                                  <p class="text-gray-600 whitespace-pre-line">
-                                                       <%= profile.bio %>
-                                                  </p>
-                                             </div>
-
-                                             <!-- Experience Section -->
-                                             <div class="mb-8">
-                                                  <h3 class="text-lg font-semibold text-gray-900 mb-4">Expérience</h3>
-                                                  <div class="bg-gray-50 rounded-lg p-4">
-                                                       <div class="flex items-center gap-4">
-                                                            <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
-                                                                 <i class="fas fa-briefcase text-blue-600"></i>
-                                                            </div>
-                                                            <div>
-                                                                 <p class="font-medium text-gray-900">
-                                                                      <%= profile.experience.years %> années d'expérience
-                                                                 </p>
-                                                                 <p class="text-gray-600">
-                                                                      <%= profile.experience.description %>
-                                                                 </p>
+                                                                 <% if (service.availability) { %>
+                                                                      <span class="px-2 py-1 text-xs font-medium text-green-700 
+                                                                bg-green-50 rounded-md">
+                                                                           Disponible
+                                                                      </span>
+                                                                      <% } %>
                                                             </div>
                                                        </div>
                                                   </div>
                                              </div>
+                                             <% }); %>
+                                   </div>
 
-                                             <!-- Qualifications Section -->
-                                             <div>
-                                                  <h3 class="text-lg font-semibold text-gray-900 mb-4">Qualifications</h3>
-                                                  <div class="space-y-4">
-                                                       <% profile.qualifications.forEach(qual=> { %>
-                                                            <div class="bg-gray-50 rounded-lg p-4">
-                                                                 <div class="flex items-start gap-4">
-                                                                      <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center">
-                                                                           <i class="fas fa-graduation-cap text-purple-600"></i>
-                                                                      </div>
-                                                                      <div>
-                                                                           <h4 class="font-medium text-gray-900">
-                                                                                <%= qual.title %>
-                                                                           </h4>
-                                                                           <p class="text-gray-600">
-                                                                                <%= qual.institution %> • <%= qual.year %>
-                                                                           </p>
-                                                                      </div>
-                                                                 </div>
+                                   <!-- Reviews Tab -->
+                                   <div x-show="activeTab === 'reviews'" class="space-y-4">
+                                        <% reviews.forEach(review=> { %>
+                                             <div class="bg-white rounded-lg border p-4 hover:border-orange-200 
+                                           transition-colors duration-200">
+                                                  <div class="flex gap-4">
+                                                       <img src="<%= review.userId.profileImage %>" alt="<%= review.userId.displayName %>" class="w-10 h-10 rounded-full">
+
+                                                       <div class="flex-1">
+                                                            <div class="flex items-center justify-between">
+                                                                 <h4 class="font-medium text-gray-900">
+                                                                      <%= review.userId.displayName %>
+                                                                 </h4>
+                                                                 <time class="text-sm text-gray-500">
+                                                                      <%= new Date(review.createdAt).toLocaleDateString('fr-FR', { day: 'numeric' , month: 'long' , year: 'numeric' }) %>
+                                                                 </time>
                                                             </div>
-                                                            <% }) %>
+
+                                                            <div class="flex gap-1 text-yellow-400 my-2">
+                                                                 <% for(let i=0; i < 5; i++) { %>
+                                                                      <i class="fas fa-star text-sm <%= i < review.rating ? '' : 'text-gray-200' %>">
+                                                                      </i>
+                                                                      <% } %>
+                                                            </div>
+
+                                                            <p class="text-gray-600 text-sm">
+                                                                 <%= review.comment %>
+                                                            </p>
+                                                       </div>
                                                   </div>
                                              </div>
-                                        </div>
+                                             <% }); %>
                                    </div>
                               </div>
                          </div>
                     </div>
                </div>
+          </div>
 
-               <!-- Gallery Modal Template -->
-               <template id="gallery-modal">
-                    <div class="fixed inset-0 z-50 overflow-hidden" role="dialog" aria-modal="true">
-                         <div class="absolute inset-0 bg-black/90 backdrop-blur-sm"></div>
-                         <div class="relative flex items-center justify-center min-h-screen p-4">
-                              <div class="relative max-w-7xl w-full">
-                                   <img src="" alt="Gallery image" class="max-h-[85vh] mx-auto object-contain">
-                                   <button onclick="closeGalleryModal()" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 
-                               flex items-center justify-center transition-colors">
-                                        <i class="fas fa-times text-white"></i>
-                                   </button>
-                              </div>
-                         </div>
-                    </div>
-               </template>
+          <!-- Your existing modals code... -->
 
-               <!-- Styles -->
-               <style>
-                    /* Hide scrollbar while allowing scrolling */
-                    .no-scrollbar {
-                         -ms-overflow-style: none;
-                         scrollbar-width: none;
-                    }
+          <script>
+               function copyProfileLink() {
+                    const profileUrl = window.location.href;
+                    navigator.clipboard.writeText(profileUrl).then(() => {
+                         const button = document.querySelector('[onclick="copyProfileLink()"]');
+                         button.classList.add('copied');
+                         setTimeout(() => button.classList.remove('copied'), 2000);
+                    });
+               }
 
-                    .no-scrollbar::-webkit-scrollbar {
-                         display: none;
-                    }
+               // Add this if you want to handle tab state with vanilla JS instead of Alpine
+               document.addEventListener('DOMContentLoaded', () => {
+                    const tabButtons = document.querySelectorAll('[x-show]');
+                    const tabPanels = document.querySelectorAll('[x-show]');
 
-                    /* Line clamp for multi-line text truncation */
-                    .line-clamp-2 {
-                         display: -webkit-box;
-                         -webkit-line-clamp: 2;
-                         -webkit-box-orient: vertical;
-                         overflow: hidden;
-                    }
+                    tabButtons.forEach(button => {
+                         button.addEventListener('click', () => {
+                              const tabId = button.getAttribute('x-show').split("'")[1];
 
-                    /* Animations */
-                    @keyframes fadeIn {
-                         from {
-                              opacity: 0;
-                              transform: scale(0.95);
-                         }
+                              tabButtons.forEach(btn => btn.classList.remove('active-tab'));
+                              tabPanels.forEach(panel => panel.style.display = 'none');
 
-                         to {
-                              opacity: 1;
-                              transform: scale(1);
-                         }
-                    }
-
-                    @keyframes fadeOut {
-                         from {
-                              opacity: 1;
-                              transform: scale(1);
-                         }
-
-                         to {
-                              opacity: 0;
-                              transform: scale(0.95);
-                         }
-                    }
-
-                    .animate-fade-in {
-                         animation: fadeIn 0.2s ease-out forwards;
-                    }
-
-                    .animate-fade-out {
-                         animation: fadeOut 0.2s ease-out forwards;
-                    }
-
-                    /* Fix for iOS safari notch */
-                    @supports (padding-top: env(safe-area-inset-top)) {
-                         .pt-safe {
-                              padding-top: env(safe-area-inset-top);
-                         }
-                    }
-               </style>
-               <%- include('./include/footer.ejs') %>
-                    <!-- Scripts -->
-                    <script>
-                         // Gallery Modal Functionality
-                         function initGalleryModal() {
-                              const template = document.getElementById('gallery-modal');
-                              let modalInstance = null;
-
-                              window.openGalleryModal = function (imageSrc) {
-                                   if (!modalInstance) {
-                                        modalInstance = template.content.cloneNode(true);
-                                        document.body.appendChild(modalInstance);
-                                   }
-
-                                   const modal = document.querySelector('[role="dialog"]');
-                                   const modalImg = modal.querySelector('img');
-                                   modalImg.src = imageSrc;
-
-                                   modal.classList.add('animate-fade-in');
-                                   document.body.classList.add('overflow-hidden');
-
-                                   modal.addEventListener('click', (e) => {
-                                        if (e.target === modal) {
-                                             closeGalleryModal();
-                                        }
-                                   });
-
-                                   document.addEventListener('keydown', (e) => {
-                                        if (e.key === 'Escape') {
-                                             closeGalleryModal();
-                                        }
-                                   });
-                              };
-
-                              window.closeGalleryModal = function () {
-                                   const modal = document.querySelector('[role="dialog"]');
-                                   if (modal) {
-                                        modal.classList.add('animate-fade-out');
-                                        setTimeout(() => {
-                                             modal.remove();
-                                             document.body.classList.remove('overflow-hidden');
-                                        }, 200);
-                                   }
-                              };
-                         }
-
-                         // Initialize functionality
-                         document.addEventListener('DOMContentLoaded', () => {
-                              initGalleryModal();
-
-                              // Initialize Alpine.js data
-                              Alpine.data('profileTabs', () => ({
-                                   activeTab: 'services',
-                                   loading: false,
-
-                                   init() {
-                                        const hash = window.location.hash.slice(1);
-                                        if (['services', 'reviews', 'gallery', 'about'].includes(hash)) {
-                                             this.activeTab = hash;
-                                        }
-
-                                        this.$watch('activeTab', (value) => {
-                                             window.location.hash = value;
-                                        });
-                                   }
-                              }));
+                              button.classList.add('active-tab');
+                              document.querySelector(`[x-show="activeTab === '${tabId}'"]`).style.display = 'block';
                          });
-                    </script>
+                    });
+
+                    // Show first tab by default
+                    tabButtons[0]?.click();
+               });
+          </script>
+
+          <style>
+               /* Reddit-like styles */
+               .active-tab {
+                    color: #ff4500;
+                    border-color: #ff4500;
+               }
+
+               /* Smooth transitions */
+               .transition-all {
+                    transition-property: all;
+                    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+                    transition-duration: 150ms;
+               }
+
+               /* Custom scrollbar */
+               ::-webkit-scrollbar {
+                    width: 8px;
+                    height: 8px;
+               }
+
+               ::-webkit-scrollbar-track {
+                    background: #f1f1f1;
+               }
+
+               ::-webkit-scrollbar-thumb {
+                    background: #888;
+                    border-radius: 4px;
+               }
+
+               ::-webkit-scrollbar-thumb:hover {
+                    background: #555;
+               }
+          </style>
+
+          <%- include('include/footer') %>
