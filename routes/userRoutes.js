@@ -1279,7 +1279,7 @@ router.get('/event/:id', async (req, res) => {
      }
 });
 
-// GET ALL PROVIDERS PAGE 
+// GET ALL PROVIDERS PAGE
 router.get('/providers', async (req, res) => {
      try {
           const filters = {};
@@ -1298,14 +1298,14 @@ router.get('/providers', async (req, res) => {
                filters['metrics.averageRating'] = { $gte: parseFloat(rating) };
           }
 
-          // Base query
+          // Base query: Filter for approved providers only
           let query = User.find({
                role: 'provider',
-               // isVerified: true,
-               status: 'active'
+               // isVerified: true, // Ensure the provider is verified
+               status: 'active'  // Ensure the provider's status is active
           });
 
-          // Apply filters
+          // Apply additional filters
           query = query.find(filters);
 
           // Apply sorting
@@ -1330,16 +1330,14 @@ router.get('/providers', async (req, res) => {
 
           const [providers, total] = await Promise.all([
                query.skip(skip).limit(limit),
-               User.countDocuments(filters)
+               User.countDocuments({ ...filters, role: 'provider', isVerified: true, status: 'active' }) // Count only approved profiles
           ]);
 
           // Get unique locations and specializations for filters
           const [locations, specializations] = await Promise.all([
-               User.distinct('location.city', { role: 'provider' }),
-               User.distinct('specializations', { role: 'provider' })
+               User.distinct('location.city', { role: 'provider', isVerified: true, status: 'active' }), // Locations of approved providers
+               User.distinct('specializations', { role: 'provider', isVerified: true, status: 'active' }) // Specializations of approved providers
           ]);
-
-          // console.log(providers)
 
           res.render('user/providers', {
                providers,
@@ -1365,6 +1363,7 @@ router.get('/providers', async (req, res) => {
           });
      }
 });
+
 
 router.get('/api/services', async (req, res) => {
      try {

@@ -27,7 +27,7 @@
 
                          <!-- Center Section: Desktop Nav Links -->
                          <div class="hidden lg:flex items-center gap-1">
-                              <% const navLinks=[ { href: '/services' , label: 'Services' , icon: 'fa-concierge-bell' }, { href: '/articles' , label: 'Articles' , icon: 'fa-newspaper' }, { href: '/events' , label: 'Événements' , icon: 'fa-calendar' }, { href: '/top-providers' , label: 'Top Prestataires' , icon: 'fa-award' }, { href: '/about' , label: 'À propos' , icon: 'fa-info-circle' }, { href: '/contact' , label: 'Contact' , icon: 'fa-envelope' } ] %>
+                              <% const navLinks=[ { href: '/services' , label: 'Services' , icon: 'fa-concierge-bell' }, { href: '/articles' , label: 'Articles' , icon: 'fa-newspaper' }, { href: '/events' , label: 'Événements' , icon: 'fa-calendar' }, { href: '/providers' , label: 'Top Prestataires' , icon: 'fa-award' }, { href: '/about' , label: 'À propos' , icon: 'fa-info-circle' }, { href: '/contact' , label: 'Contact' , icon: 'fa-envelope' } ] %>
 
                                    <% navLinks.forEach(link=> { %>
                                         <a href="<%= link.href %>" class="group flex items-center gap-2 px-4 py-2 rounded-xl text-gray-600 font-medium
@@ -107,7 +107,7 @@
                                                                            </div>
                                                                       </a>
 
-                                                                      <a href="/profile" class="flex items-center gap-3 p-3 rounded-xl text-gray-700 
+                                                                      <a href="/dashboard/profile" class="flex items-center gap-3 p-3 rounded-xl text-gray-700 
                                                       hover:bg-purple-50 transition-colors group">
                                                                            <div class="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center
                                                             transition-colors group-hover:bg-purple-200">

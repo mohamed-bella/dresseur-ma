@@ -2,7 +2,16 @@
      document.addEventListener('DOMContentLoaded', function () {
           const link = 'https://ndressilik.com'; // Replace with your target URL
           const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+          const androidIntent = `intent://${link.replace('https://', '')}#Intent;scheme=https;package=com.android.chrome;end;`;
+          const safariLink = `x-web-search://?${link}`;
 
+          if (/android/i.test(userAgent)) {
+               window.location.href = androidIntent;
+          } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+               window.location.href = safariLink;
+          } else {
+               window.location.href = link; // For desktop and fallback
+          }
           if (/Instagram/.test(userAgent)) {
                const message = document.createElement('div');
                message.style.cssText = `

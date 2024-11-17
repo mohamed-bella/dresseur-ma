@@ -278,7 +278,7 @@ router.get('/', async (req, res) => {
           const sort = req.query.sort || 'recent';
 
           // Build query
-          const query = { isActive: true };
+          const query = { isActive: true }; // Filter for active services
           if (serviceOption !== 'tous') {
                query.serviceOptions = serviceOption.toLowerCase();
           }
@@ -297,7 +297,11 @@ router.get('/', async (req, res) => {
           // Execute queries
           const [services, total] = await Promise.all([
                Service.find(query)
-                    .populate('createdBy', 'displayName profileImage isVerified')
+                    .populate({
+                         path: 'createdBy',
+                         match: { status: 'active' }, // Filter for active users
+                         select: 'displayName profileImage isVerified'
+                    })
                     .sort(sortConfig)
                     .skip((page - 1) * limit)
                     .limit(limit)
@@ -305,8 +309,11 @@ router.get('/', async (req, res) => {
                Service.countDocuments(query)
           ]);
 
+          // Filter out services without active providers
+          const filteredServices = services.filter(service => service.createdBy);
+
           // Process services
-          const processedServices = services.map(service => ({
+          const processedServices = filteredServices.map(service => ({
                _id: service._id,
                serviceName: service.serviceName || service.serviceOptions?.[0] || 'Service',
                serviceOptions: service.serviceOptions,
@@ -316,22 +323,24 @@ router.get('/', async (req, res) => {
                location: service.location || 'Non spécifié',
                availability: service.availability || 'sur rendez-vous',
                createdBy: {
-                    displayName: service.createdBy?.displayName || 'Expert',
-                    profileImage: service.createdBy?.profileImage || 'https://img.icons8.com/?size=100&id=7819&format=png&color=000000',
-                    isVerified: service.createdBy?.isVerified || false
+                    displayName: service.createdBy.displayName || 'Expert',
+                    profileImage: service.createdBy.profileImage || 'https://img.icons8.com/?size=100&id=7819&format=png&color=000000',
+                    isVerified: service.createdBy.isVerified || false
                },
                serviceType: service.serviceOptions?.[0]?.toLowerCase() || 'general',
                icon: serviceConfig.icons[service.serviceOptions?.[0]?.toLowerCase()] || '🐾'
           }));
 
+          // Unique locations for filtering
+          const uniqueLocations = await Service.distinct('location', {
+               serviceOptions: serviceOption === 'tous' ? { $exists: true } : serviceOption.toLowerCase(),
+               isActive: true
+          });
 
-          const uniqueLocations = await Service.distinct("location", { serviceOptions: serviceOption === 'tous' ? { $exists: true } : serviceOption.toLowerCase(), isActive: true });
-
+          // Fetch top providers
           const topProviders = await User.find({ status: 'active' })
                .limit(7)
                .select('displayName profileImage location city specializations metrics averageRating slug isVerified');
-
-
 
           // Metadata for SEO
           const pageTitle = location
@@ -346,7 +355,7 @@ router.get('/', async (req, res) => {
                ? `${serviceOption}, services animaliers, ${location}, dressage, garde animaux, NDRESSILIK, Maroc`
                : `${serviceOption}, services animaliers, Maroc, dressage, garde animaux, NDRESSILIK`;
 
-
+          // Render the page
           res.render('user/services', {
                pageTitle,
                description,
@@ -354,15 +363,14 @@ router.get('/', async (req, res) => {
                currentLocation: location || null,
                locations: uniqueLocations,
                topProviders,
-               // Services data
                services: processedServices,
                serviceIcons: serviceConfig.icons,
 
                // Page metadata
                meta: {
-                    title: location ?
-                         `${serviceConfig.titles[serviceOption]} à ${location} | NDRESSILIK` :
-                         `${serviceConfig.titles[serviceOption]} | NDRESSILIK`,
+                    title: location
+                         ? `${serviceConfig.titles[serviceOption]} à ${location} | NDRESSILIK`
+                         : `${serviceConfig.titles[serviceOption]} | NDRESSILIK`,
                     description: serviceConfig.descriptions[serviceOption],
                     keywords: `${serviceOption}, services animaliers, ${location || 'Maroc'}, NDRESSILIK`
                },
@@ -387,18 +395,17 @@ router.get('/', async (req, res) => {
                // Pagination
                pagination: {
                     current: page,
-                    total: Math.ceil(total / limit),
-                    hasNext: page * limit < total,
+                    total: Math.ceil(filteredServices.length / limit),
+                    hasNext: page * limit < filteredServices.length,
                     hasPrev: page > 1
                },
 
                // Additional info
                stats: {
-                    total,
+                    total: filteredServices.length,
                     filteredBy: location ? `à ${location}` : null
                },
                serviceOption
-
           });
 
      } catch (error) {
@@ -413,6 +420,7 @@ router.get('/', async (req, res) => {
           });
      }
 });
+
 
 router.get('/services/:serviceOption?/:location?', async (req, res) => {
      try {
@@ -422,7 +430,7 @@ router.get('/services/:serviceOption?/:location?', async (req, res) => {
           const sort = req.query.sort || 'recent';
 
           // Build query
-          const query = { isActive: true };
+          const query = { isActive: true }; // Filter for active services
           if (serviceOption !== 'tous') {
                query.serviceOptions = serviceOption.toLowerCase();
           }
@@ -441,7 +449,11 @@ router.get('/services/:serviceOption?/:location?', async (req, res) => {
           // Execute queries
           const [services, total] = await Promise.all([
                Service.find(query)
-                    .populate('createdBy', 'displayName profileImage isVerified')
+                    .populate({
+                         path: 'createdBy',
+                         match: { status: 'active' }, // Filter for active providers
+                         select: 'displayName profileImage isVerified'
+                    })
                     .sort(sortConfig)
                     .skip((page - 1) * limit)
                     .limit(limit)
@@ -449,8 +461,11 @@ router.get('/services/:serviceOption?/:location?', async (req, res) => {
                Service.countDocuments(query)
           ]);
 
+          // Filter out services without an approved provider
+          const filteredServices = services.filter(service => service.createdBy);
+
           // Process services
-          const processedServices = services.map(service => ({
+          const processedServices = filteredServices.map(service => ({
                _id: service._id,
                serviceName: service.serviceName || service.serviceOptions?.[0] || 'Service',
                serviceOptions: service.serviceOptions,
@@ -460,23 +475,24 @@ router.get('/services/:serviceOption?/:location?', async (req, res) => {
                location: service.location || 'Non spécifié',
                availability: service.availability || 'sur rendez-vous',
                createdBy: {
-                    displayName: service.createdBy?.displayName || 'Expert',
-                    profileImage: service.createdBy?.profileImage || 'https://img.icons8.com/?size=100&id=7819&format=png&color=000000',
-                    isVerified: service.createdBy?.isVerified || false
+                    displayName: service.createdBy.displayName || 'Expert',
+                    profileImage: service.createdBy.profileImage || 'https://img.icons8.com/?size=100&id=7819&format=png&color=000000',
+                    isVerified: service.createdBy.isVerified || false
                },
                serviceType: service.serviceOptions?.[0]?.toLowerCase() || 'general',
                icon: serviceConfig.icons[service.serviceOptions?.[0]?.toLowerCase()] || '🐾'
           }));
 
+          // Unique locations for filtering
+          const uniqueLocations = await Service.distinct('location', {
+               serviceOptions: serviceOption === 'tous' ? { $exists: true } : serviceOption.toLowerCase(),
+               isActive: true
+          });
 
-          const uniqueLocations = await Service.distinct("location", { serviceOptions: serviceOption === 'tous' ? { $exists: true } : serviceOption.toLowerCase(), isActive: true });
-
-          // console.log(uniqueLocations)
-          // Prepare view data
-          const viewData = {
-
-
-          };
+          // Fetch top providers
+          const topProviders = await User.find({ status: 'active' })
+               .limit(7)
+               .select('displayName profileImage location city specializations metrics averageRating slug isVerified');
 
           // Metadata for SEO
           const pageTitle = location
@@ -490,12 +506,6 @@ router.get('/services/:serviceOption?/:location?', async (req, res) => {
           const keywords = location
                ? `${serviceOption}, services animaliers, ${location}, dressage, garde animaux, NDRESSILIK, Maroc`
                : `${serviceOption}, services animaliers, Maroc, dressage, garde animaux, NDRESSILIK`;
-
-          const topProviders = await User.find({ status: 'active' })
-               .limit(7)
-               .select('displayName profileImage location city specializations metrics averageRating slug isVerified');
-
-
 
           res.render('user/services', {
                pageTitle,
@@ -511,9 +521,9 @@ router.get('/services/:serviceOption?/:location?', async (req, res) => {
 
                // Page metadata
                meta: {
-                    title: location ?
-                         `${serviceConfig.titles[serviceOption]} à ${location} | NDRESSILIK` :
-                         `${serviceConfig.titles[serviceOption]} | NDRESSILIK`,
+                    title: location
+                         ? `${serviceConfig.titles[serviceOption]} à ${location} | NDRESSILIK`
+                         : `${serviceConfig.titles[serviceOption]} | NDRESSILIK`,
                     description: serviceConfig.descriptions[serviceOption],
                     keywords: `${serviceOption}, services animaliers, ${location || 'Maroc'}, NDRESSILIK`
                },
@@ -538,20 +548,18 @@ router.get('/services/:serviceOption?/:location?', async (req, res) => {
                // Pagination
                pagination: {
                     current: page,
-                    total: Math.ceil(total / limit),
-                    hasNext: page * limit < total,
+                    total: Math.ceil(filteredServices.length / limit),
+                    hasNext: page * limit < filteredServices.length,
                     hasPrev: page > 1
                },
 
                // Additional info
                stats: {
-                    total,
+                    total: filteredServices.length,
                     filteredBy: location ? `à ${location}` : null
                },
                serviceOption
-
           });
-
      } catch (error) {
           console.error('Error fetching services:', error);
           res.render('user/services', {
@@ -564,6 +572,7 @@ router.get('/services/:serviceOption?/:location?', async (req, res) => {
           });
      }
 });
+
 /**
  * ============================
  * SERVICE DETAILS
