@@ -28,14 +28,27 @@
      <script src="https://cdn.tailwindcss.com"></script>
      <script>
           document.addEventListener('DOMContentLoaded', function () {
-               const link = 'https://ndressilik.com';
+               // Prevent multiple initializations
+               if (window.browserRedirectInitialized) return;
+               window.browserRedirectInitialized = true;
+
+               // Get current URL and store original path
+               const currentUrl = window.location.href;
+               const currentPath = window.location.pathname + window.location.search + window.location.hash;
+
+               // Check if we should skip the redirect (e.g., after successful redirection)
+               if (sessionStorage.getItem('redirectComplete')) return;
+
                const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-
                const isWebView = /Instagram|FBAN|FBAV|FB_IAB|Line|WebView|wv|Telegram|TelegramBot|VKWebAppPlatform|Twitter|WhatsApp/.test(userAgent);
-               const androidIntent = `intent://${link.replace('https://', '')}#Intent;scheme=https;package=com.android.chrome;end`;
-               const safariLink = `x-web-search://?${link}`;
 
-               if (isWebView) {
+               if (isWebView && !sessionStorage.getItem('modalShown')) {
+                    const androidIntent = `intent://${currentUrl.replace('https://', '')}#Intent;scheme=https;package=com.android.chrome;end`;
+                    const safariLink = `x-web-search://?${currentUrl}`;
+
+                    sessionStorage.setItem('modalShown', 'true');
+                    sessionStorage.setItem('originalPath', currentPath);
+
                     const modal = document.createElement('div');
                     modal.innerHTML = `
                  <div id="browserModal" style="
@@ -49,7 +62,7 @@
                      flex-direction: column;
                      align-items: center;
                      justify-content: center;
-                     z-index: 9999;
+                     z-index: 99999;
                      padding: 24px;
                      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
                  ">
@@ -210,28 +223,51 @@
 
                     document.body.appendChild(modal);
 
-                    const openInBrowserBtn = document.getElementById('openInBrowser');
-                    openInBrowserBtn.addEventListener('click', function () {
-                         if (/iPhone|iPad|iPod/i.test(userAgent)) {
-                              window.location.href = safariLink;
-                              setTimeout(() => { window.location.href = link; }, 2000);
-                         } else if (/android/i.test(userAgent)) {
-                              window.location.href = androidIntent;
-                              setTimeout(() => { window.location.href = link; }, 2000);
-                         } else {
-                              window.location.href = link;
-                         }
-                    });
+                    const openInBrowser = document.getElementById('openInBrowser');
+                    if (openInBrowser) {
+                         openInBrowser.addEventListener('click', function (e) {
+                              e.preventDefault();
+                              sessionStorage.setItem('redirectInitiated', 'true');
+
+                              // Try to open in default browser
+                              try {
+                                   if (/iPhone|iPad|iPod/i.test(userAgent)) {
+                                        window.location.href = safariLink;
+                                   } else if (/android/i.test(userAgent)) {
+                                        window.location.href = androidIntent;
+                                   } else {
+                                        window.location.href = currentUrl;
+                                   }
+
+                                   // Fallback after delay
+                                   setTimeout(() => {
+                                        if (isWebView) {
+                                             window.location.href = currentUrl;
+                                        }
+                                   }, 2000);
+                              } catch (err) {
+                                   // Fallback if anything fails
+                                   window.location.href = currentUrl;
+                              }
+                         });
+                    }
                }
 
-               const hasRedirected = sessionStorage.getItem('hasRedirected');
-               if (!hasRedirected && !isWebView) {
-                    sessionStorage.setItem('hasRedirected', 'true');
-                    if (/iPhone|iPad|iPod/i.test(userAgent)) {
-                         window.location.href = safariLink;
-                    } else if (/android/i.test(userAgent)) {
-                         window.location.href = androidIntent;
+               // Handle redirection for normal browsers
+               if (!isWebView && sessionStorage.getItem('redirectInitiated') && !sessionStorage.getItem('redirectComplete')) {
+                    sessionStorage.setItem('redirectComplete', 'true');
+                    const originalPath = sessionStorage.getItem('originalPath');
+
+                    if (originalPath && window.location.pathname === '/') {
+                         window.location.replace(originalPath);
                     }
+               }
+          });
+
+          // Prevent back button from breaking the flow
+          window.addEventListener('pageshow', function (event) {
+               if (event.persisted) {
+                    window.location.reload();
                }
           });
      </script>
