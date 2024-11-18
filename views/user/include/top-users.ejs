@@ -1,15 +1,26 @@
 <!-- Modern Providers Section -->
-<section class="py-8">
-     <div class="max-w-7xl mx-auto px-4">
-          <!-- Header -->
-          <div class="flex items-center justify-between mb-8">
-               <h2 class="text-3xl font-bold text-gray-900">Prestataires Vérifiés</h2>
+<section class="py-8 ">
+     <div class="container mx-auto py-6">
+          <div class="flex items-center justify-between py-6 px-2">
+               <div class="relative">
+                    <h2 class="text-2xl sm:text-3xl font-semibold text-gray-900 flex items-center gap-3">
+                         <span class="bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-700">
+                              Prestataires Vérifiés
+                         </span>
+                         <div class="flex items-center">
+                              <span class="inline-flex items-center justify-center w-5 h-5 bg-blue-100 rounded-full">
+                                   <i class="fas fa-check text-xs text-blue-600"></i>
+                              </span>
+                         </div>
+                    </h2>
+                    <div class="absolute -bottom-2 left-0 w-12 h-1 bg-orange-500/30 rounded-full"></div>
+               </div>
           </div>
 
           <!-- Modern Profile Slider -->
-          <div class="providers-slider relative">
+          <div class="providers-slider relative ">
                <!-- Slider Track -->
-               <div class="slider-track">
+               <div class="slider-track" style="margin-right: 25px;">
                     <div class="slider-content">
                          <% topProviders.forEach(provider=> { %>
                               <div class="profile-item">
@@ -18,7 +29,7 @@
                                              <img src="<%= provider.profileImage || '/default-avatar.png' %>" alt="<%= provider.displayName %>" class="profile-image" loading="lazy" />
                                              <% if (provider.isVerified) { %>
                                                   <div class="verified-badge">
-                                                       <img src="https://img.icons8.com/?size=100&id=uLBcIHPG2L9p&format=png&color=FD7E14" alt="Verified" class="verified-icon">
+                                                       <img src="https://img.icons8.com/?size=100&id=uLBcIHPG2L9p&format=png&color=3b82f6" alt="Verified" class="verified-icon">
                                                   </div>
                                                   <% } %>
                                         </div>
