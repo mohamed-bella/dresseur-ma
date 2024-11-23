@@ -29,21 +29,16 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Express session middleware with MongoDB store
 app.use(session({
-     secret: 'your-secret-key', // Replace with a secure secret key
+     secret: 'your-secret-key',
      resave: false,
-     saveUninitialized: false, // Only save sessions if something is stored
+     saveUninitialized: true,
      store: MongoStore.create({
-         mongoUrl: process.env.DATABASE_URI,
-         ttl: 30 * 24 * 60 * 60, // 30 days in seconds
-         autoRemove: 'native',   // Automatically remove expired sessions
-     }),
-     cookie: {
-         maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days in milliseconds
-         httpOnly: true,                  // Prevent client-side access to the cookie
-         secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
-     }
- }));
- 
+          mongoUrl: process.env.DATABASE_URI,
+          ttl: 14 * 24 * 60 * 60, // Keep session for 14 days
+          autoRemove: 'native' // Automatically remove expired sessions
+     })
+}));
+
 
 // Passport middleware
 app.use(passport.initialize());
@@ -149,6 +144,6 @@ app.use((req, res) => {
 
 // Global error handling middleware
 app.use((err, req, res, next) => {
-     console.error(err.message);
+     console.error(err.stack);
      res.status(500).render('user/500', { message: 'Something went wrong!' });
 });
