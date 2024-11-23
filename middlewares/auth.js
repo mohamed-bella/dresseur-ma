@@ -247,7 +247,17 @@ router.get('/auth/google/cb',
         failureRedirect: '/login',
         failureFlash: true
     }),
+    
     async (req, res) => {
+        req.session.save((err) => {
+            if (err) {
+                console.error('Error saving session:', err);
+                return res.status(500).send('Error saving session.');
+            }
+            console.log('Session saved successfully.');
+            
+            res.redirect('/dashboard/new-service');
+        });
         await sendWelcomeEmail(req.user.email);
         res.redirect('/dashboard/new-service');
 

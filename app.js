@@ -28,16 +28,22 @@ app.use(express.static('public'));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Express session middleware with MongoDB store
+
 app.use(session({
-     secret: 'your-secret-key',
-     resave: false,
-     saveUninitialized: true,
-     store: MongoStore.create({
-          mongoUrl: process.env.DATABASE_URI,
-          ttl: 14 * 24 * 60 * 60, // Keep session for 14 days
-          autoRemove: 'native' // Automatically remove expired sessions
-     })
+    secret: 'your-secret-key',
+    resave: false,
+    saveUninitialized: false, // Recommended to save only authenticated sessions
+    store: MongoStore.create({
+        mongoUrl: process.env.DATABASE_URI,
+        collectionName: 'sessions', // Optional: use a specific collection
+        ttl: 14 * 24 * 60 * 60, // Session expiration in seconds
+        autoRemove: 'native' // Auto-remove expired sessions
+    }),
+    cookie: {
+        maxAge: 14 * 24 * 60 * 60 * 1000, // Match TTL in milliseconds
+    }
 }));
+
 
 
 // Passport middleware
