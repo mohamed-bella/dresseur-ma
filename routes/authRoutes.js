@@ -11,14 +11,12 @@ router.get('/auth/google',
 router.get('/auth/google/cb',
      passport.authenticate('google', { failureRedirect: '/', failureMessage: true }),
      (req, res) => {
-          req.session.save((err) => {
-               if (err) {
-                   console.error('Error saving session:', err);
-               } else {
-                   console.log('Session saved successfully.');
-               }
-           });
-         
+          if (req.authInfo) {
+               console.log('Authentication Info:', req.authInfo);
+          }
+          if (req.user) {
+               console.log('User Info:', req.user);  // This should log the authenticated user.
+          }
           res.redirect('/dashboard');
      }
 );
