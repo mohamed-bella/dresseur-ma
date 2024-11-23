@@ -149,6 +149,6 @@ app.use((req, res) => {
 
 // Global error handling middleware
 app.use((err, req, res, next) => {
-     console.error(err.stack);
+     console.error(err.message);
      res.status(500).render('user/500', { message: 'Something went wrong!' });
 });
