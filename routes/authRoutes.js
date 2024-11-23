@@ -11,12 +11,7 @@ router.get('/auth/google',
 router.get('/auth/google/cb',
      passport.authenticate('google', { failureRedirect: '/', failureMessage: true }),
      (req, res) => {
-          if (req.authInfo) {
-               console.log('Authentication Info:', req.authInfo);
-          }
-          if (req.user) {
-               console.log('User Info:', req.user);  // This should log the authenticated user.
-          }
+         
           res.redirect('/dashboard');
      }
 );
