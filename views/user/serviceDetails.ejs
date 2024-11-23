@@ -193,8 +193,7 @@ function hideModal(modal) {
                              <div id="description" class="text-gray-600 leading-relaxed overflow-hidden transition-all duration-300">
                                  <%= service.description %>
                              </div>
-                             <div id="fadeOverlay" class="absolute bottom-0 left-0 right-0 h-16 
-                                 bg-gradient-to-t from-white to-transparent"></div>
+                           
                              <button id="toggleDescription" 
                                  class="mt-4 text-blue-600 hover:text-blue-700 transition-colors flex items-center gap-2">
                                  <span id="toggleText">Voir plus</span>
@@ -230,8 +229,9 @@ function hideModal(modal) {
                                      class="flex items-center justify-between w-full p-4 bg-blue-600 
                                      text-white rounded-lg hover:bg-blue-700 transition-colors">
                                      <div class="flex items-center gap-3">
+                                         <span>+212 <%= service.serviceNumber %></span>
                                          <i class="fas fa-phone-alt"></i>
-                                         <span><%= service.serviceNumber %></span>
+
                                      </div>
                                      <i class="fas fa-arrow-right"></i>
                                  </a>
