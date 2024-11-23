@@ -270,156 +270,7 @@ const serviceConfig = {
      ]
 };
 
-router.get('/', async (req, res) => {
-     try {
-          const { serviceOption = 'tous', location } = req.params;
-          const page = parseInt(req.query.page) || 1;
-          const limit = parseInt(req.query.limit) || 12;
-          const sort = req.query.sort || 'recent';
 
-          // Build query
-          const query = { isActive: true }; // Filter for active services
-          if (serviceOption !== 'tous') {
-               query.serviceOptions = serviceOption.toLowerCase();
-          }
-          if (location) {
-               query.location = new RegExp(location, 'i');
-          }
-
-          // Get sort configuration
-          const sortConfig = {
-               'recent': { createdAt: -1 },
-               'price-asc': { priceRange: 1 },
-               'price-desc': { priceRange: -1 },
-               'rating': { rating: -1 }
-          }[sort] || { createdAt: -1 };
-
-          // Execute queries
-          const [services, total] = await Promise.all([
-               Service.find(query)
-                    .populate({
-                         path: 'createdBy',
-                         match: { status: 'active' }, // Filter for active users
-                         select: 'displayName profileImage isVerified'
-                    })
-                    .sort(sortConfig)
-                    .skip((page - 1) * limit)
-                    .limit(limit)
-                    .lean(),
-               Service.countDocuments(query)
-          ]);
-
-          // Filter out services without active providers
-          const filteredServices = services.filter(service => service.createdBy);
-
-          // Process services
-          const processedServices = filteredServices.map(service => ({
-               _id: service._id,
-               serviceName: service.serviceName || service.serviceOptions?.[0] || 'Service',
-               serviceOptions: service.serviceOptions,
-               images: service.images || [],
-               views: service.views || '0',
-               priceRange: service.priceRange ? `${service.priceRange} DH` : 'N/A',
-               location: service.location || 'Non spécifié',
-               availability: service.availability || 'sur rendez-vous',
-               createdBy: {
-                    displayName: service.createdBy.displayName || 'Expert',
-                    profileImage: service.createdBy.profileImage || 'https://img.icons8.com/?size=100&id=7819&format=png&color=000000',
-                    isVerified: service.createdBy.isVerified || false
-               },
-               serviceType: service.serviceOptions?.[0]?.toLowerCase() || 'general',
-               icon: serviceConfig.icons[service.serviceOptions?.[0]?.toLowerCase()] || '🐾'
-          }));
-
-          // Unique locations for filtering
-          const uniqueLocations = await Service.distinct('location', {
-               serviceOptions: serviceOption === 'tous' ? { $exists: true } : serviceOption.toLowerCase(),
-               isActive: true
-          });
-
-          // Fetch top providers
-          const topProviders = await User.find({ status: 'active' })
-               .limit(7)
-               .select('displayName profileImage location city specializations metrics averageRating slug isVerified');
-
-          // Metadata for SEO
-          const pageTitle = location
-               ? ` à ${location} | Services pour animaux au Maroc | NDRESSILIK`
-               : `${serviceConfig.titles[serviceOption]} | Services pour animaux au Maroc | NDRESSILIK`;
-
-          const description = location
-               ? `Trouvez des services de ${serviceConfig.titles[serviceOption]} pour animaux de compagnie à ${location}. Explorez les offres de dressage, toilettage, garde, et plus encore sur NDRESSILIK.`
-               : `Découvrez les meilleurs services de ${serviceConfig.titles[serviceOption]} pour animaux au Maroc sur NDRESSILIK. Nos partenaires de confiance proposent dressage, toilettage, et autres services pour le bien-être de vos animaux.`;
-
-          const keywords = location
-               ? `${serviceOption}, services animaliers, ${location}, dressage, garde animaux, NDRESSILIK, Maroc`
-               : `${serviceOption}, services animaliers, Maroc, dressage, garde animaux, NDRESSILIK`;
-
-          // Render the page
-          res.render('user/services', {
-               pageTitle,
-               description,
-               keywords,
-               currentLocation: location || null,
-               locations: uniqueLocations,
-               topProviders,
-               services: processedServices,
-               serviceIcons: serviceConfig.icons,
-
-               // Page metadata
-               meta: {
-                    title: location
-                         ? `${serviceConfig.titles[serviceOption]} à ${location} | NDRESSILIK`
-                         : `${serviceConfig.titles[serviceOption]} | NDRESSILIK`,
-                    description: serviceConfig.descriptions[serviceOption],
-                    keywords: `${serviceOption}, services animaliers, ${location || 'Maroc'}, NDRESSILIK`
-               },
-
-               // Current selections
-               current: {
-                    serviceOption,
-                    location,
-                    sort
-               },
-
-               // Options
-               options: {
-                    sorts: serviceConfig.sortOptions,
-                    serviceTypes: Object.entries(serviceConfig.titles).map(([key, value]) => ({
-                         value: key,
-                         label: value,
-                         icon: serviceConfig.icons[key] || '🐾'
-                    }))
-               },
-
-               // Pagination
-               pagination: {
-                    current: page,
-                    total: Math.ceil(filteredServices.length / limit),
-                    hasNext: page * limit < filteredServices.length,
-                    hasPrev: page > 1
-               },
-
-               // Additional info
-               stats: {
-                    total: filteredServices.length,
-                    filteredBy: location ? `à ${location}` : null
-               },
-               serviceOption
-          });
-
-     } catch (error) {
-          console.error('Error fetching services:', error);
-          res.render('user/services', {
-               services: [],
-               meta: {
-                    title: 'Services | NDRESSILIK',
-                    description: 'Découvrez nos services pour animaux'
-               },
-               error: 'Une erreur est survenue lors du chargement des services'
-          });
-     }
-});
 
 
 router.get('/services/:serviceOption?/:location?', async (req, res) => {
@@ -507,7 +358,7 @@ router.get('/services/:serviceOption?/:location?', async (req, res) => {
                ? `${serviceOption}, services animaliers, ${location}, dressage, garde animaux, NDRESSILIK, Maroc`
                : `${serviceOption}, services animaliers, Maroc, dressage, garde animaux, NDRESSILIK`;
 
-          res.render('user/services', {
+          res.render('user/allServices', {
                pageTitle,
                description,
                keywords,
@@ -572,6 +423,139 @@ router.get('/services/:serviceOption?/:location?', async (req, res) => {
           });
      }
 });
+router.get('/srvc/:serviceOption?/:location?', async (req, res) => {
+     try {
+         const { serviceOption = 'tous', location } = req.params;
+         const page = parseInt(req.query.page, 10) || 1;
+         const limit = parseInt(req.query.limit, 10) || 12;
+         const sort = req.query.sort || 'recent';
+ 
+         // Build query
+         const query = { isActive: true }; // Only fetch active services
+         if (serviceOption !== 'tous') {
+             query.serviceOptions = serviceOption.toLowerCase();
+         }
+         if (location) {
+             query.location = new RegExp(location, 'i'); // Case-insensitive regex
+         }
+ 
+         // Determine sort configuration
+         const sortConfig = {
+             recent: { createdAt: -1 },
+             'price-asc': { priceRange: 1 },
+             'price-desc': { priceRange: -1 },
+             rating: { rating: -1 },
+         }[sort] || { createdAt: -1 };
+ 
+         // Fetch services and count total for pagination
+         const [services, total] = await Promise.all([
+             Service.find(query)
+                 .populate({
+                     path: 'createdBy',
+                     match: { status: 'active' },
+                     select: 'displayName profileImage isVerified',
+                 })
+                 .sort(sortConfig)
+                 .skip((page - 1) * limit)
+                 .limit(limit)
+                 .lean(),
+             Service.countDocuments(query),
+         ]);
+ 
+         // Filter out services without an approved provider
+         const filteredServices = services.filter(service => service.createdBy);
+ 
+         // Process services data
+         const processedServices = filteredServices.map(service => ({
+             _id: service._id,
+             serviceName: service.serviceName || 'Service',
+             serviceOptions: service.serviceOptions || 'general',
+             images: service.images || [],
+             views: service.views || '0',
+             priceRange: service.priceRange ? `${service.priceRange} DH` : 'N/A',
+             location: service.location || 'Non spécifié',
+             createdBy: {
+                 displayName: service.createdBy.displayName || 'Expert',
+                 profileImage: service.createdBy.profileImage || 'https://img.icons8.com/ios-filled/50/000000/user-male-circle.png',
+                 isVerified: service.createdBy.isVerified || false,
+             },
+         }));
+ 
+         // Unique locations for filters
+         const uniqueLocations = await Service.distinct('location', {
+             isActive: true,
+             serviceOptions: serviceOption === 'tous' ? { $exists: true } : serviceOption.toLowerCase(),
+         });
+ 
+         // Prepare metadata
+         const pageTitle = location
+             ? `${serviceOption} à ${location} | NDRESSILIK`
+             : `${serviceOption} Services | NDRESSILIK`;
+ 
+         const description = location
+             ? `Découvrez les meilleurs services de ${serviceOption} à ${location}. Réservez dès maintenant sur NDRESSILIK.`
+             : `Explorez les services de ${serviceOption} disponibles au Maroc sur NDRESSILIK.`;
+ 
+         // Prepare response for frontend
+         res.json({
+             services: processedServices,
+             total,
+             hasMore: page * limit < total,
+             locations: uniqueLocations,
+             meta: {
+                 title: pageTitle,
+                 description,
+             },
+         });
+     } catch (error) {
+         console.error('Error fetching services:', error);
+ 
+         // Send error response
+         res.status(500).json({
+             error: 'Une erreur est survenue lors du chargement des services. Veuillez réessayer plus tard.',
+         });
+     }
+ });
+ router.get('/api/services', async (req, res) => {
+     try {
+         const { page = 1, sort = 'recent', price_max, rating, categories } = req.query;
+         const limit = 12;
+         const skip = (page - 1) * limit;
+ 
+         const query = { isActive: true }; // Fetch only active services
+ 
+         if (price_max) query.priceRange = { $lte: parseInt(price_max) };
+         if (rating) query.rating = { $gte: parseInt(rating) };
+         if (categories) query.categories = { $in: categories.split(',') };
+ 
+         // Sorting options
+         const sortOptions = {
+             recent: { createdAt: -1 },
+             'price-asc': { priceRange: 1 },
+             'price-desc': { priceRange: -1 },
+             rating: { rating: -1 },
+         };
+ 
+         const [services, total] = await Promise.all([
+             Service.find(query)
+                 .skip(skip)
+                 .limit(limit)
+                 .sort(sortOptions[sort] || { createdAt: -1 })
+                 .lean(),
+             Service.countDocuments(query),
+         ]);
+ 
+         res.json({
+             services,
+             hasMore: page * limit < total,
+         });
+     } catch (error) {
+         console.error('Error fetching services:', error);
+         res.status(500).json({ error: 'Erreur lors du chargement des services' });
+     }
+ });
+ 
+ 
 
 /**
  * ============================

@@ -3,7 +3,7 @@
      <%- include('include/navbar') %>
 
 
-          <div class="bg-gradient-to-r from-orange-500 to-orange-600 h-32 sm:h-48"></div>
+          <div class="bg-gradient-to-r from-gray-800 to-gray-900 h-32 sm:h-48"></div>
 
           <!-- Main Content Container -->
           <div class="max-w-7xl mx-auto px-4 sm:px-6 -mt-12 relative">
@@ -292,7 +292,7 @@
                                    <% const tabs=[ { id: 'services' , label: 'Services' , icon: 'fa-briefcase' , count: services.length }, ] %>
 
                                         <% tabs.forEach(tab=> { %>
-                                             <button @click="activeTab = '<%= tab.id %>'" class="flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium
+                                             <button class="flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm bg-gray-50 font-medium
                                             border-b-2 transition-colors duration-200" :class="activeTab === '<%= tab.id %>' ? 
                                              'border-orange-500 text-orange-600' : 
                                              'border-transparent text-gray-500 hover:text-gray-700'">
@@ -308,7 +308,7 @@
                               </div>
 
                               <!-- Tab Panels -->
-                              <div class="p-4">
+                              <div class="p-4 bg-gray-100">
                               <!-- Services Grid -->
                               <div class="space-y-4">
                                    <% services.forEach(service=> { %>
@@ -352,13 +352,13 @@
                               
                                                                  <!-- Price & Rating -->
                                                                  <div class="flex items-center gap-3 text-sm">
-                                                                      <div class="flex items-center gap-1.5 bg-yellow-50 text-yellow-700
+                                                                      <!-- <div class="flex items-center gap-1.5 bg-yellow-50 text-yellow-700
                                                                           px-2.5 py-1 rounded-full">
                                                                            <i class="fas fa-star text-yellow-400"></i>
                                                                            <span class="font-medium">
-                                                                                <%= service.rating || '0.0' %>
+                                                                                < % = service.rating || '0.0' %>
                                                                            </span>
-                                                                      </div>
+                                                                      </div> -->
                                                                       <div class="font-bold text-gray-900">
                                                                            <%= service.priceRange %> DH
                                                                       </div>

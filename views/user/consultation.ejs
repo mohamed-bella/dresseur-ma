@@ -1,474 +1,701 @@
+<!-- Complete Consultation Section -->
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
-     <meta charset="UTF-8">
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <title>Consultation Sharing - NDRESSILIK</title>
-     <script src="https://cdn.tailwindcss.com"></script>
-     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ndressilik - Consultation</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                        },
+                    },
+                }
+            }
+        }
+    </script>
 </head>
-
 <body class="bg-gray-50">
-     <div class="max-w-7xl mx-auto px-4 py-8">
-          <!-- Header Section -->
-          <div class="mb-8">
-               <h1 class="text-3xl font-bold text-gray-900">Partager une consultation</h1>
-               <p class="text-gray-600 mt-2">Partagez votre expertise et aidez d'autres propriétaires d'animaux</p>
-          </div>
 
-          <!-- Main Content -->
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-               <!-- Consultation Form -->
-               <div class="lg:col-span-2">
-                    <form action="/consultations/create" method="POST" class="space-y-6" id="consultationForm">
-                         <!-- Basic Information -->
-                         <div class="bg-white rounded-lg shadow-sm p-6">
-                              <h2 class="text-xl font-semibold mb-4">Informations de base</h2>
+<!-- Main Consultation Section -->
+<section class="min-h-screen bg-gray-50 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] bg-[size:20px_20px] py-12 px-4">
+    <div class="max-w-3xl mx-auto">
+        <!-- Section Header -->
+        <div class="text-center mb-12">
+            <span class="inline-flex items-center px-4 py-1.5 rounded-full text-sm font-semibold bg-primary-50 text-primary-600">
+                <i class="fas fa-comments-alt mr-2"></i>
+                Service de Consultation
+            </span>
+            <h1 class="mt-4 text-3xl font-bold text-gray-900">Besoin d'aide avec votre chien ?</h1>
+            <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
+                Notre équipe d'experts est là pour vous aider. Décrivez votre situation et nous vous accompagnerons vers la meilleure solution.
+            </p>
+        </div>
 
-                              <div class="space-y-4">
-                                   <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">
-                                             Titre de la consultation
-                                        </label>
-                                        <input type="text" name="title" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" placeholder="Ex: Conseils pour l'alimentation des chiots">
-                                   </div>
+        <!-- Main Form Container -->
+        <div class="bg-white/80 backdrop-blur-lg rounded-2xl border border-gray-100 p-8 shadow-sm">
+            <form id="consultationForm" class="space-y-8">
+                <!-- Consultation Type Selection -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-4">Type de consultation</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Free Option -->
+                        <div class="consultation-card group" data-type="free">
+                            <input type="radio" name="consultationType" value="free" class="sr-only" required>
+                            <div class="h-full p-6 border-2 border-gray-100 rounded-xl cursor-pointer transition-all duration-200">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div class="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                        <i class="fas fa-comments text-gray-400 text-xl"></i>
+                                    </div>
+                                    <span class="px-3 py-1 text-sm bg-gray-100 text-gray-600 rounded-full">
+                                        Gratuit
+                                    </span>
+                                </div>
+                                <h3 class="text-lg font-semibold text-gray-900 mb-2">Consultation Simple</h3>
+                                <ul class="space-y-2 text-sm text-gray-600">
+                                    <li class="flex items-center">
+                                        <i class="fas fa-check text-green-500 mr-2"></i>
+                                        Réponse sous 48h
+                                    </li>
+                                    <li class="flex items-center">
+                                        <i class="fas fa-check text-green-500 mr-2"></i>
+                                        Conseils de base
+                                    </li>
+                                    <li class="flex items-center">
+                                        <i class="fas fa-check text-green-500 mr-2"></i>
+                                        Par email
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
 
-                                   <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">
-                                             Catégorie d'animal
-                                        </label>
-                                        <select name="animalCategory" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
-                                             <option value="">Sélectionnez une catégorie</option>
-                                             <option value="dog">Chien</option>
-                                             <option value="cat">Chat</option>
-                                             <option value="bird">Oiseau</option>
-                                             <option value="reptile">Reptile</option>
-                                             <option value="other">Autre</option>
-                                        </select>
-                                   </div>
-
-                                   <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">
-                                             Tags (séparés par des virgules)
-                                        </label>
-                                        <input type="text" name="tags" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" placeholder="Ex: nutrition, chiot, alimentation">
-                                   </div>
-                              </div>
-                         </div>
-
-                         <!-- Consultation Details -->
-                         <div class="bg-white rounded-lg shadow-sm p-6">
-                              <h2 class="text-xl font-semibold mb-4">Détails de la consultation</h2>
-
-                              <div class="space-y-4">
-                                   <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">
-                                             Description du problème
-                                        </label>
-                                        <textarea name="problem" rows="4" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" placeholder="Décrivez le problème ou la situation..."></textarea>
-                                   </div>
-
-                                   <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">
-                                             Symptômes observés
-                                        </label>
-                                        <textarea name="symptoms" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" placeholder="Listez les symptômes observés..."></textarea>
-                                   </div>
-
-                                   <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">
-                                             Solution proposée
-                                        </label>
-                                        <textarea name="solution" rows="4" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" placeholder="Décrivez votre solution ou vos recommandations..."></textarea>
-                                   </div>
-
-                                   <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">
-                                             Recommandations supplémentaires
-                                        </label>
-                                        <textarea name="recommendations" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" placeholder="Ajoutez des conseils ou recommandations supplémentaires..."></textarea>
-                                   </div>
-                              </div>
-                         </div>
-
-                         <!-- Media Upload -->
-                         <div class="bg-white rounded-lg shadow-sm p-6">
-                              <h2 class="text-xl font-semibold mb-4">Médias</h2>
-
-                              <div class="space-y-4">
-                                   <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">
-                                             Images (optional)
-                                        </label>
-                                        <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                                             <div class="space-y-1 text-center">
-                                                  <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-                                                       <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                                  </svg>
-                                                  <div class="flex text-sm text-gray-600">
-                                                       <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
-                                                            <span>Télécharger des fichiers</span>
-                                                            <input id="file-upload" name="images" type="file" class="sr-only" multiple accept="image/*">
-                                                       </label>
-                                                       <p class="pl-1">ou glisser-déposer</p>
-                                                  </div>
-                                                  <p class="text-xs text-gray-500">PNG, JPG jusqu'à 10MB</p>
-                                             </div>
-                                        </div>
-                                   </div>
-
-                                   <div id="image-preview" class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-                                        <!-- Image previews will be inserted here -->
-                                   </div>
-                              </div>
-                         </div>
-
-                         <!-- Visibility Settings -->
-                         <div class="bg-white rounded-lg shadow-sm p-6">
-                              <h2 class="text-xl font-semibold mb-4">Paramètres de visibilité</h2>
-
-                              <div class="space-y-4">
-                                   <div class="flex items-center space-x-3">
-                                        <input type="radio" id="public" name="visibility" value="public" checked class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300">
-                                        <label for="public" class="text-sm font-medium text-gray-700">
-                                             Public - Visible par tous
-                                        </label>
-                                   </div>
-
-                                   <div class="flex items-center space-x-3">
-                                        <input type="radio" id="private" name="visibility" value="private" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300">
-                                        <label for="private" class="text-sm font-medium text-gray-700">
-                                             Privé - Visible uniquement avec le lien
-                                        </label>
-                                   </div>
-                              </div>
-                         </div>
-
-                         <!-- Submit Button -->
-                         <div class="flex justify-end">
-                              <button type="submit" class="px-6 py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
-                                   Partager la consultation
-                              </button>
-                         </div>
-                    </form>
-               </div>
-
-               <!-- Sidebar -->
-               <div class="lg:col-span-1">
-                    <!-- Preview Card -->
-                    <div class="bg-white rounded-lg shadow-sm p-6 sticky top-4">
-                         <h3 class="text-lg font-semibold mb-4">Aperçu</h3>
-                         <div id="preview-content" class="space-y-4">
-                              <div id="preview-title" class="text-xl font-medium">
-                                   Titre de la consultation
-                              </div>
-                              <div id="preview-category" class="text-sm text-gray-600">
-                                   Catégorie: -
-                              </div>
-                              <div id="preview-tags" class="flex flex-wrap gap-2">
-                                   <!-- Tags will be inserted here -->
-                              </div>
-                              <div class="border-t pt-4">
-                                   <div id="preview-problem" class="text-gray-700">
-                                        Description du problème apparaîtra ici...
-                                   </div>
-                              </div>
-                         </div>
+                        <!-- Paid Option -->
+                        <div class="consultation-card group" data-type="paid">
+                            <input type="radio" name="consultationType" value="paid" class="sr-only" required>
+                            <div class="h-full p-6 border-2 border-gray-100 rounded-xl cursor-pointer transition-all duration-200">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div class="w-12 h-12 rounded-xl bg-primary-50 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                        <i class="fas fa-star text-primary-500 text-xl"></i>
+                                    </div>
+                                    <span class="px-3 py-1 text-sm bg-primary-50 text-primary-600 rounded-full">
+                                        200 DH
+                                    </span>
+                                </div>
+                                <h3 class="text-lg font-semibold text-gray-900 mb-2">Consultation Pro</h3>
+                                <ul class="space-y-2 text-sm text-gray-600">
+                                    <li class="flex items-center">
+                                        <i class="fas fa-check text-green-500 mr-2"></i>
+                                        Appel vidéo 30min
+                                    </li>
+                                    <li class="flex items-center">
+                                        <i class="fas fa-check text-green-500 mr-2"></i>
+                                        Solutions personnalisées
+                                    </li>
+                                    <li class="flex items-center">
+                                        <i class="fas fa-check text-green-500 mr-2"></i>
+                                        Suivi 1 semaine
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
+                </div>
 
-                    <!-- Tips Card -->
-                    <div class="bg-white rounded-lg shadow-sm p-6 mt-6">
-                         <h3 class="text-lg font-semibold mb-4">Conseils pour une bonne consultation</h3>
-                         <ul class="space-y-3 text-sm text-gray-600">
-                              <li class="flex items-start">
-                                   <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                                   <span>Soyez précis dans la description du problème</span>
-                              </li>
-                              <li class="flex items-start">
-                                   <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                                   <span>Incluez tous les symptômes observés</span>
-                              </li>
-                              <li class="flex items-start">
-                                   <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                                   <span>Ajoutez des photos si pertinent</span>
-                              </li>
-                              <li class="flex items-start">
-                                   <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                                   <span>Détaillez la solution proposée</span>
-                              </li>
-                         </ul>
+                <!-- Problem Category -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-4">Type de problème</label>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                        <!-- Behavior Category -->
+                        <div class="category-card group" data-category="behavior">
+                            <input type="radio" name="category" value="behavior" class="sr-only" required>
+                            <div class="p-4 border-2 border-gray-100 rounded-xl cursor-pointer text-center transition-all duration-200">
+                                <div class="w-12 h-12 mx-auto rounded-xl bg-rose-50 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                                    <i class="fas fa-brain text-rose-500"></i>
+                                </div>
+                                <span class="text-sm font-medium text-gray-900">Comportement</span>
+                            </div>
+                        </div>
+
+                        <!-- Training Category -->
+                        <div class="category-card group" data-category="training">
+                            <input type="radio" name="category" value="training" class="sr-only" required>
+                            <div class="p-4 border-2 border-gray-100 rounded-xl cursor-pointer text-center transition-all duration-200">
+                                <div class="w-12 h-12 mx-auto rounded-xl bg-blue-50 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                                    <i class="fas fa-graduation-cap text-blue-500"></i>
+                                </div>
+                                <span class="text-sm font-medium text-gray-900">Éducation</span>
+                            </div>
+                        </div>
+
+                        <!-- Health Category -->
+                        <div class="category-card group" data-category="health">
+                            <input type="radio" name="category" value="health" class="sr-only" required>
+                            <div class="p-4 border-2 border-gray-100 rounded-xl cursor-pointer text-center transition-all duration-200">
+                                <div class="w-12 h-12 mx-auto rounded-xl bg-green-50 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                                    <i class="fas fa-heartbeat text-green-500"></i>
+                                </div>
+                                <span class="text-sm font-medium text-gray-900">Santé</span>
+                            </div>
+                        </div>
+
+                        <!-- Other Category -->
+                        <div class="category-card group" data-category="other">
+                            <input type="radio" name="category" value="other" class="sr-only" required>
+                            <div class="p-4 border-2 border-gray-100 rounded-xl cursor-pointer text-center transition-all duration-200">
+                                <div class="w-12 h-12 mx-auto rounded-xl bg-purple-50 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                                    <i class="fas fa-question-circle text-purple-500"></i>
+                                </div>
+                                <span class="text-sm font-medium text-gray-900">Autre</span>
+                            </div>
+                        </div>
                     </div>
-               </div>
-          </div>
+                </div>
+<!-- Dog Information -->
+<div class="space-y-6">
+     <label class="block text-sm font-medium text-gray-700">Information du chien</label>
+     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+         <!-- Dog Name -->
+         <div class="relative">
+             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                 <i class="fas fa-paw text-gray-400"></i>
+             </div>
+             <input 
+                 type="text" 
+                 name="dogName" 
+                 placeholder="Nom du chien"
+                 class="block w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                 required
+             >
+         </div>
+
+         <!-- Dog Age -->
+         <div class="relative">
+             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                 <i class="fas fa-birthday-cake text-gray-400"></i>
+             </div>
+             <input 
+                 type="text" 
+                 name="dogAge" 
+                 placeholder="Âge du chien"
+                 class="block w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+             >
+         </div>
+
+         <!-- Dog Breed -->
+         <div class="relative">
+             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                 <i class="fas fa-dog text-gray-400"></i>
+             </div>
+             <input 
+                 type="text" 
+                 name="dogBreed" 
+                 placeholder="Race du chien"
+                 class="block w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+             >
+         </div>
+
+         <!-- Dog Gender -->
+         <div class="relative">
+             <select 
+                 name="dogGender"
+                 class="block w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors appearance-none"
+             >
+                 <option value="">Sélectionner le sexe</option>
+                 <option value="male">Mâle</option>
+                 <option value="female">Femelle</option>
+             </select>
+             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                 <i class="fas fa-venus-mars text-gray-400"></i>
+             </div>
+         </div>
      </div>
+ </div>
 
-     <!-- JavaScript for form handling and preview -->
+ <!-- Contact Information -->
+ <div class="space-y-6">
+     <label class="block text-sm font-medium text-gray-700">Vos informations</label>
+     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+         <!-- Name -->
+         <div class="relative">
+             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                 <i class="fas fa-user text-gray-400"></i>
+             </div>
+             <input 
+                 type="text" 
+                 name="ownerName" 
+                 placeholder="Votre nom complet"
+                 class="block w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                 required
+             >
+         </div>
+
+         <!-- Email -->
+         <div class="relative">
+             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                 <i class="fas fa-envelope text-gray-400"></i>
+             </div>
+             <input 
+                 type="email" 
+                 name="email" 
+                 placeholder="Votre email"
+                 class="block w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                 required
+             >
+         </div>
+
+         <!-- Phone -->
+         <div class="relative">
+             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                 <i class="fas fa-phone text-gray-400"></i>
+             </div>
+             <input 
+                 type="tel" 
+                 name="phone" 
+                 placeholder="Votre numéro de téléphone"
+                 class="block w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                 required
+             >
+         </div>
+
+         <!-- Preferred Contact Method -->
+         <div class="relative">
+             <select 
+                 name="preferredContact"
+                 class="block w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors appearance-none"
+                 required
+             >
+                 <option value="">Moyen de contact préféré</option>
+                 <option value="whatsapp">WhatsApp</option>
+                 <option value="phone">Téléphone</option>
+                 <option value="email">Email</option>
+             </select>
+             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                 <i class="fas fa-comments text-gray-400"></i>
+             </div>
+         </div>
+     </div>
+ </div>
+
+ <!-- Problem Description -->
+ <div class="space-y-4">
+     <label class="block text-sm font-medium text-gray-700">Description du problème</label>
+     <div class="relative">
+         <textarea 
+             name="description" 
+             rows="4" 
+             placeholder="Décrivez en détail le problème que vous rencontrez avec votre chien..."
+             class="block w-full p-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors resize-none"
+             required
+         ></textarea>
+     </div>
+ </div>
+
+ <!-- Availability -->
+ <div class="space-y-4">
+     <label class="block text-sm font-medium text-gray-700">Disponibilités préférées</label>
+     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+         <label class="relative flex items-center justify-center p-3 border border-gray-200 rounded-xl cursor-pointer hover:border-primary-200 transition-all">
+             <input type="checkbox" name="availability[]" value="morning" class="sr-only peer">
+             <div class="text-center">
+                 <i class="fas fa-sun mb-2 text-gray-400 peer-checked:text-primary-500"></i>
+                 <p class="text-sm text-gray-600 peer-checked:text-primary-600">Matin</p>
+             </div>
+         </label>
+         <label class="relative flex items-center justify-center p-3 border border-gray-200 rounded-xl cursor-pointer hover:border-primary-200 transition-all">
+             <input type="checkbox" name="availability[]" value="afternoon" class="sr-only peer">
+             <div class="text-center">
+                 <i class="fas fa-cloud-sun mb-2 text-gray-400 peer-checked:text-primary-500"></i>
+                 <p class="text-sm text-gray-600 peer-checked:text-primary-600">Après-midi</p>
+             </div>
+         </label>
+         <label class="relative flex items-center justify-center p-3 border border-gray-200 rounded-xl cursor-pointer hover:border-primary-200 transition-all">
+             <input type="checkbox" name="availability[]" value="evening" class="sr-only peer">
+             <div class="text-center">
+                 <i class="fas fa-moon mb-2 text-gray-400 peer-checked:text-primary-500"></i>
+                 <p class="text-sm text-gray-600 peer-checked:text-primary-600">Soir</p>
+             </div>
+         </label>
+         <label class="relative flex items-center justify-center p-3 border border-gray-200 rounded-xl cursor-pointer hover:border-primary-200 transition-all">
+             <input type="checkbox" name="availability[]" value="weekend" class="sr-only peer">
+             <div class="text-center">
+                 <i class="fas fa-calendar mb-2 text-gray-400 peer-checked:text-primary-500"></i>
+                 <p class="text-sm text-gray-600 peer-checked:text-primary-600">Weekend</p>
+             </div>
+         </label>
+     </div>
+ </div>
+
+ <!-- Submit Button -->
+ <div class="pt-6">
+     <button 
+         type="submit" 
+         id="submitButton"
+         class="w-full py-4 px-6 bg-primary-600 text-white rounded-xl hover:bg-primary-700 
+                focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 
+                transition-all duration-200 flex items-center justify-center gap-2
+                disabled:opacity-50 disabled:cursor-not-allowed"
+         
+     >
+         <span>Envoyer la demande</span>
+         <i class="fas fa-paper-plane"></i>
+     </button>
+ </div>
+</form>
+</div>
+
+<!-- Trust Indicators -->
+<div class="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
+<div class="bg-white/80 backdrop-blur-lg rounded-xl p-4 flex items-center gap-3">
+ <div class="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center flex-shrink-0">
+     <i class="fas fa-check-circle text-green-500"></i>
+ </div>
+ <div>
+     <h4 class="font-medium text-gray-900">Experts Certifiés</h4>
+     <p class="text-sm text-gray-600">Professionnels qualifiés</p>
+ </div>
+</div>
+<div class="bg-white/80 backdrop-blur-lg rounded-xl p-4 flex items-center gap-3">
+ <div class="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0">
+     <i class="fas fa-clock text-blue-500"></i>
+ </div>
+ <div>
+     <h4 class="font-medium text-gray-900">Réponse Rapide</h4>
+     <p class="text-sm text-gray-600">Sous 24h maximum</p>
+ </div>
+</div>
+<div class="bg-white/80 backdrop-blur-lg rounded-xl p-4 flex items-center gap-3">
+ <div class="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center flex-shrink-0">
+     <i class="fas fa-shield-alt text-purple-500"></i>
+ </div>
+ <div>
+     <h4 class="font-medium text-gray-900">Confidentialité</h4>
+     <p class="text-sm text-gray-600">Données sécurisées</p>
+ </div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Add this before closing body tag -->
+
+<style>
+     /* Base Styles */
+     .consultation-card.selected > div,
+     .category-card.selected > div {
+         border-color: rgb(var(--color-primary-500));
+         background-color: rgb(var(--color-primary-50));
+     }
+     
+     /* Custom Radio and Checkbox Styles */
+     .custom-radio, .custom-checkbox {
+         position: relative;
+         padding-left: 28px;
+         cursor: pointer;
+         user-select: none;
+     }
+     
+     /* Animations */
+     @keyframes slideUp {
+         from {
+             transform: translateY(10px);
+             opacity: 0;
+         }
+         to {
+             transform: translateY(0);
+             opacity: 1;
+         }
+     }
+     
+     @keyframes slideDown {
+         from {
+             transform: translateY(-10px);
+             opacity: 0;
+         }
+         to {
+             transform: translateY(0);
+             opacity: 1;
+         }
+     }
+     
+     @keyframes fadeIn {
+         from { opacity: 0; }
+         to { opacity: 1; }
+     }
+     
+     @keyframes spin {
+         to { transform: rotate(360deg); }
+     }
+     
+     /* Loading Animation */
+     .loading-spinner {
+         border: 3px solid #f3f3f3;
+         border-radius: 50%;
+         border-top: 3px solid #3498db;
+         width: 20px;
+         height: 20px;
+         animation: spin 1s linear infinite;
+     }
+     
+     /* Toast Notifications */
+     .toast {
+         position: fixed;
+         bottom: 20px;
+         right: 20px;
+         padding: 16px 24px;
+         border-radius: 8px;
+         color: white;
+         animation: slideUp 0.3s ease-out;
+         z-index: 1000;
+     }
+     
+     .toast.success {
+         background-color: #10B981;
+     }
+     
+     .toast.error {
+         background-color: #EF4444;
+     }
+     
+     /* Form Validation Styles */
+     .input-error {
+         border-color: #EF4444 !important;
+     }
+     
+     .error-message {
+         color: #EF4444;
+         font-size: 0.875rem;
+         margin-top: 0.25rem;
+         animation: slideDown 0.2s ease-out;
+     }
+     
+     /* Card Hover Effects */
+     .consultation-card > div:hover,
+     .category-card > div:hover {
+         transform: translateY(-2px);
+         box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+     }
+     </style>
+     
      <script>
-          document.addEventListener('DOMContentLoaded', function () {
-               const form = document.getElementById('consultationForm');
-               const preview = {
-                    title: document.getElementById('preview-title'),
-                    category: document.getElementById('preview-category'),
-                    tags: document.getElementById('preview-tags'),
-                    problem: document.getElementById('preview-problem')
-               };
-
-               // Update preview on input changes
-               form.addEventListener('input', function (e) {
-                    switch (e.target.name) {
-                         case 'title':
-                              preview.title.textContent = e.target.value || 'Titre de la consultation';
-                              break;
-                         case 'animalCategory':
-                              preview.category.textContent = `Catégorie: ${e.target.options[e.target.selectedIndex].text}`;
-                              break;
-                         case 'tags':
-                              const tags = e.target.value.split(',').map(tag => tag.trim()).filter(tag => tag);
-                              preview.tags.innerHTML = tags.map(tag =>
-                                   `<span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">${tag}</span>`
-                              ).join('');
-                              break;
-                         case 'problem':
-                              preview.problem.textContent = e.target.value || 'Description du problème apparaîtra ici...';
-                              break;
-                    }
-               });
-
-               // Handle image upload and preview
-               const fileUpload = document.getElementById('file-upload');
-               const imagePreview = document.getElementById('image-preview');
-
-               fileUpload.addEventListener('change', function () {
-                    imagePreview.innerHTML = '';
-                    [...this.files].forEach(file => {
-                         if (file.type.startsWith('image/')) {
-                              const reader = new FileReader();
-                              reader.onload = function (e) {
-                                   const div = document.createElement('div');
-                                   div.className = 'relative';
-                                   div.innerHTML = `
-                                <img src="${e.target.result}" class="w-full h-32 object-cover rounded-lg">
-                                <button type="button" class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            `;
-                                   imagePreview.appendChild(div);
-
-                                   // Handle remove button
-                                   div.querySelector('button').addEventListener('click', function () {
-                                        div.remove();
-                                   });
-                              };
-                              reader.readAsDataURL(file);
-                         }
-                    }
-            });
-
-               // Form validation and submission
-               form.addEventListener('submit', async function (e) {
-                    e.preventDefault();
-
-                    // Show loading state
-                    const submitButton = form.querySelector('button[type="submit"]');
-                    const originalButtonText = submitButton.innerHTML;
-                    submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Publication en cours...';
-                    submitButton.disabled = true;
-
-                    try {
-                         const formData = new FormData(this);
-
-                         // Handle file uploads
-                         const imageFiles = [...imagePreview.children].map(div => {
-                              const imgSrc = div.querySelector('img').src;
-                              // Convert base64 to file if needed
-                              if (imgSrc.startsWith('data:')) {
-                                   return dataURLtoFile(imgSrc, 'image.jpg');
-                              }
-                              return null;
-                         }).filter(Boolean);
-
-                         imageFiles.forEach(file => {
-                              formData.append('images[]', file);
-                         });
-
-                         // Add tags as array
-                         const tags = formData.get('tags').split(',').map(tag => tag.trim()).filter(tag => tag);
-                         formData.delete('tags');
-                         tags.forEach(tag => formData.append('tags[]', tag));
-
-                         // Submit form data
-                         const response = await fetch('/consultations/create', {
-                              method: 'POST',
-                              body: formData
-                         });
-
-                         const result = await response.json();
-
-                         if (response.ok) {
-                              // Show success message
-                              showNotification('Consultation publiée avec succès!', 'success');
-
-                              // Redirect to the new consultation page
-                              setTimeout(() => {
-                                   window.location.href = `/consultations/${result.consultationId}`;
-                              }, 1500);
-                         } else {
-                              throw new Error(result.message || 'Erreur lors de la publication');
-                         }
-                    } catch (error) {
-                         showNotification(error.message, 'error');
-                         submitButton.innerHTML = originalButtonText;
-                         submitButton.disabled = false;
-                    }
-               });
-
-               // Character counter for text areas
-               document.querySelectorAll('textarea').forEach(textarea => {
-                    const maxLength = textarea.getAttribute('maxlength') || 1000;
-                    const counterDiv = document.createElement('div');
-                    counterDiv.className = 'text-sm text-gray-500 text-right mt-1';
-                    textarea.parentNode.appendChild(counterDiv);
-
-                    function updateCounter() {
-                         const remaining = maxLength - textarea.value.length;
-                         counterDiv.textContent = `${remaining} caractères restants`;
-                    }
-
-                    textarea.addEventListener('input', updateCounter);
-                    updateCounter();
-               });
-
-               // Drag and drop functionality for images
-               const dropZone = document.querySelector('.border-dashed');
-
-               ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-                    dropZone.addEventListener(eventName, preventDefaults, false);
-               });
-
-               function preventDefaults(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-               }
-
-               ['dragenter', 'dragover'].forEach(eventName => {
-                    dropZone.addEventListener(eventName, highlight, false);
-               });
-
-               ['dragleave', 'drop'].forEach(eventName => {
-                    dropZone.addEventListener(eventName, unhighlight, false);
-               });
-
-               function highlight(e) {
-                    dropZone.classList.add('border-blue-500', 'bg-blue-50');
-               }
-
-               function unhighlight(e) {
-                    dropZone.classList.remove('border-blue-500', 'bg-blue-50');
-               }
-
-               dropZone.addEventListener('drop', handleDrop, false);
-
-               function handleDrop(e) {
-                    const dt = e.dataTransfer;
-                    const files = [...dt.files];
-
-                    files.forEach(file => {
-                         if (file.type.startsWith('image/')) {
-                              const reader = new FileReader();
-                              reader.onload = function (e) {
-                                   addImagePreview(e.target.result);
-                              };
-                              reader.readAsDataURL(file);
-                         }
-                    });
-               }
-
-               // Utility functions
-               function addImagePreview(src) {
-                    const div = document.createElement('div');
-                    div.className = 'relative group';
-                    div.innerHTML = `
-                    <img src="${src}" class="w-full h-32 object-cover rounded-lg">
-                    <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
-                        <button type="button" class="text-white hover:text-red-500 transition-colors">
-                            <i class="fas fa-trash-alt text-xl"></i>
-                        </button>
-                    </div>
-                `;
-                    imagePreview.appendChild(div);
-
-                    // Handle remove button
-                    div.querySelector('button').addEventListener('click', function () {
-                         div.remove();
-                    });
-               }
-
-               function dataURLtoFile(dataurl, filename) {
-                    let arr = dataurl.split(','),
-                         mime = arr[0].match(/:(.*?);/)[1],
-                         bstr = atob(arr[1]),
-                         n = bstr.length,
-                         u8arr = new Uint8Array(n);
-
-                    while (n--) {
-                         u8arr[n] = bstr.charCodeAt(n);
-                    }
-
-                    return new File([u8arr], filename, { type: mime });
-               }
-
-               function showNotification(message, type = 'info') {
-                    const notification = document.createElement('div');
-                    notification.className = `fixed bottom-4 right-4 px-6 py-3 rounded-lg text-white ${type === 'success' ? 'bg-green-500' : 'bg-red-500'
-                         } transition-opacity duration-300`;
-                    notification.textContent = message;
-
-                    document.body.appendChild(notification);
-
-                    // Remove notification after 3 seconds
-                    setTimeout(() => {
-                         notification.style.opacity = '0';
-                         setTimeout(() => notification.remove(), 300);
-                    }, 3000);
-               }
-
-               // Auto-save functionality
-               let autoSaveTimeout;
-               const AUTO_SAVE_DELAY = 2000; // 2 seconds
-
-               form.addEventListener('input', function () {
-                    clearTimeout(autoSaveTimeout);
-                    autoSaveTimeout = setTimeout(saveFormData, AUTO_SAVE_DELAY);
-               });
-
-               function saveFormData() {
-                    const formData = new FormData(form);
-                    const data = {};
-                    for (let [key, value] of formData.entries()) {
-                         data[key] = value;
-                    }
-                    localStorage.setItem('consultationDraft', JSON.stringify(data));
-               }
-
-               // Load saved draft on page load
-               function loadSavedDraft() {
-                    const saved = localStorage.getItem('consultationDraft');
-                    if (saved) {
-                         const data = JSON.parse(saved);
-                         Object.entries(data).forEach(([key, value]) => {
-                              const input = form.querySelector(`[name="${key}"]`);
-                              if (input) {
-                                   input.value = value;
-                                   input.dispatchEvent(new Event('input'));
-                              }
-                         });
-                    }
-               }
-
-               loadSavedDraft();
+          document.addEventListener('DOMContentLoaded', function() {
+              const form = document.getElementById('consultationForm');
+              const submitButton = document.getElementById('submitButton');
+              let hasAttemptedSubmit = false; // Track if form has been submitted
+          
+              // Card Selection Handling
+              function handleCardSelection() {
+                  const consultationCards = document.querySelectorAll('.consultation-card');
+                  const categoryCards = document.querySelectorAll('.category-card');
+                  
+                  // Consultation Type Cards
+                  consultationCards.forEach(card => {
+                      card.addEventListener('click', () => {
+                          consultationCards.forEach(c => c.classList.remove('selected'));
+                          card.classList.add('selected');
+                          const radio = card.querySelector('input[type="radio"]');
+                          radio.checked = true;
+                          if (hasAttemptedSubmit) validateForm();
+                      });
+                  });
+                  
+                  // Category Cards
+                  categoryCards.forEach(card => {
+                      card.addEventListener('click', () => {
+                          categoryCards.forEach(c => c.classList.remove('selected'));
+                          card.classList.add('selected');
+                          const radio = card.querySelector('input[type="radio"]');
+                          radio.checked = true;
+                          if (hasAttemptedSubmit) validateForm();
+                      });
+                  });
+              }
+          
+              // Form Validation
+              function validateForm() {
+                  const requiredFields = form.querySelectorAll('[required]');
+                  let isValid = true;
+                  
+                  // Clear previous errors
+                  clearErrors();
+                  
+                  // Only validate if form has been attempted to submit
+                  if (hasAttemptedSubmit) {
+                      requiredFields.forEach(field => {
+                          if (!field.value.trim()) {
+                              isValid = false;
+                              showFieldError(field, 'Ce champ est requis');
+                          } else if (field.type === 'email' && !isValidEmail(field.value)) {
+                              isValid = false;
+                              showFieldError(field, 'Email invalide');
+                          } else if (field.type === 'tel' && !isValidPhone(field.value)) {
+                              isValid = false;
+                              showFieldError(field, 'Numéro de téléphone invalide');
+                          }
+                      });
+                      
+                      // Check consultation type and category
+                      const consultationType = form.querySelector('input[name="consultationType"]:checked');
+                      const category = form.querySelector('input[name="category"]:checked');
+                      
+                      if (!consultationType) {
+                          isValid = false;
+                          showToast('Veuillez sélectionner un type de consultation', 'error');
+                      }
+                      if (!category) {
+                          isValid = false;
+                          showToast('Veuillez sélectionner une catégorie', 'error');
+                      }
+                  }
+                  
+                  return isValid;
+              }
+          
+              // Clear all error messages
+              function clearErrors() {
+                  form.querySelectorAll('.error-message').forEach(msg => msg.remove());
+                  form.querySelectorAll('.input-error').forEach(input => input.classList.remove('input-error'));
+              }
+          
+              // Field Error Display
+              function showFieldError(field, message) {
+                  const wrapper = field.closest('.relative') || field.parentElement;
+                  field.classList.add('input-error');
+                  
+                  const errorDiv = document.createElement('div');
+                  errorDiv.className = 'error-message';
+                  errorDiv.innerHTML = message;
+                  
+                  wrapper.appendChild(errorDiv);
+              }
+          
+              // Form Submission
+              form.addEventListener('submit', async (e) => {
+                  e.preventDefault();
+                  hasAttemptedSubmit = true;
+                  
+                  if (!validateForm()) return;
+                  
+                  // Show loading state
+                  submitButton.disabled = true;
+                  const originalButtonText = submitButton.innerHTML;
+                  submitButton.innerHTML = `
+                      <span class="loading-spinner mr-2"></span>
+                      Envoi en cours...
+                  `;
+                  
+                  try {
+                      // Prepare form data
+                      const formData = new FormData(form);
+                      const data = Object.fromEntries(formData.entries());
+          
+                      // Add arrays for checkboxes
+                      data.availability = Array.from(formData.getAll('availability[]'));
+          
+                      // Send to backend
+                      const response = await fetch('/consultations/submit', {
+                          method: 'POST',
+                          headers: {
+                              'Content-Type': 'application/json',
+                          },
+                          body: JSON.stringify(data)
+                      });
+          
+                      const result = await response.json();
+          
+                      if (response.ok) {
+                          showToast('Votre demande a été envoyée avec succès!', 'success');
+                          form.reset();
+                          document.querySelectorAll('.selected').forEach(el => el.classList.remove('selected'));
+                          hasAttemptedSubmit = false;
+                          clearErrors();
+                      } else {
+                          throw new Error(result.error || 'Une erreur est survenue');
+                      }
+                      
+                  } catch (error) {
+                      showToast(error.message || 'Une erreur est survenue. Veuillez réessayer.', 'error');
+                  } finally {
+                      submitButton.disabled = false;
+                      submitButton.innerHTML = originalButtonText;
+                  }
+              });
+          
+              // Utility Functions
+              function isValidEmail(email) {
+                  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+              }
+              
+              function isValidPhone(phone) {
+                  return /^[\d\s+\-()]{8,}$/.test(phone);
+              }
+              
+              function showToast(message, type = 'success') {
+                  const toast = document.createElement('div');
+                  toast.className = `toast ${type}`;
+                  toast.innerHTML = `
+                      <div class="flex items-center">
+                          <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'} mr-2"></i>
+                          <span>${message}</span>
+                      </div>
+                  `;
+                  
+                  document.body.appendChild(toast);
+                  
+                  setTimeout(() => {
+                      toast.style.animation = 'slideDown 0.3s ease-in forwards';
+                      setTimeout(() => toast.remove(), 300);
+                  }, 3000);
+              }
+          
+              // Real-time validation only after first submit attempt
+              form.querySelectorAll('input, textarea, select').forEach(field => {
+                  field.addEventListener('input', () => {
+                      if (hasAttemptedSubmit) {
+                          validateForm();
+                      }
+                  });
+              });
+          
+              // Handle availability checkboxes
+              document.querySelectorAll('input[name="availability[]"]').forEach(checkbox => {
+                  checkbox.addEventListener('change', function() {
+                      const container = this.closest('label');
+                      if (this.checked) {
+                          container.classList.add('border-primary-500', 'bg-primary-50');
+                      } else {
+                          container.classList.remove('border-primary-500', 'bg-primary-50');
+                      }
+                  });
+              });
+          
+              // Initialize
+              handleCardSelection();
           });
-     </script>
-</body>
-
-</html>
+          </script>
+     
+     </body>
+     </html>

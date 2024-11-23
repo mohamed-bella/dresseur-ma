@@ -1,580 +1,420 @@
-<!-- Section Header -->
-<% const cities=[ { arabic: 'الدار البيضاء' , french: 'Casablanca' }, { arabic: 'الرباط' , french: 'Rabat' }, { arabic: 'مراكش' , french: 'Marrakech' }, { arabic: 'أكادير' , french: 'Agadir' }, { arabic: 'طنجة' , french: 'Tanger' }, { arabic: 'فاس' , french: 'Fès' }, { arabic: 'مكناس' , french: 'Meknès' }, { arabic: 'وجدة' , french: 'Oujda' }, { arabic: 'القنيطرة' , french: 'Kénitra' }, { arabic: 'تطوان' , french: 'Tétouan' }, { arabic: 'آسفي' , french: 'Safi' }, { arabic: 'الجديدة' , french: 'El Jadida' }, { arabic: 'الناظور' , french: 'Nador' }, { arabic: 'برشيد' , french: 'Berrechid' }, { arabic: 'الخميسات' , french: 'Khemisset' }, { arabic: 'خريبكة' , french: 'Khouribga' }, { arabic: 'سطات' , french: 'Settat' }, { arabic: 'العرائش' , french: 'Larache' }, { arabic: 'بني ملال' , french: 'Beni Mellal' }, { arabic: 'كلميم' , french: 'Guelmim' }, { arabic: 'تازة' , french: 'Taza' }, { arabic: 'سيدي قاسم' , french: 'Sidi Kacem' }, { arabic: 'تزنيت' , french: 'Tiznit' }, { arabic: 'الصويرة' , french: 'Essaouira' }, { arabic: 'خنيفرة' , french: 'Khenifra' }, { arabic: 'طانطان' , french: 'Tan-Tan' }, { arabic: 'جرسيف' , french: 'Guercif' }, { arabic: 'شفشاون' , french: 'Chefchaouen' }, { arabic: 'المحمدية' , french: 'Mohammedia' }, { arabic: 'تاونات' , french: 'Taounate' }, { arabic: 'سيدي سليمان' , french: 'Sidi Slimane' }, { arabic: 'طرفاية' , french: 'Tarfaya' }, { arabic: 'ميدلت' , french: 'Midelt' }, { arabic: 'الرشيدية' , french: 'Errachidia' }, { arabic: 'أزرو' , french: 'Azrou' }, { arabic: 'بن جرير' , french: 'Ben Guerir' }, { arabic: 'شيشاوة' , french: 'Chichaoua' }, { arabic: 'ورزازات' , french: 'Ouarzazate' }, { arabic: 'زايو' , french: 'Zaio' } ]; %>
-     <% const languageOptions=['french', 'arabic' , 'english' , 'spanish' ]; %>
-
-
-          <div class="bg-white rounded-2xl shadow-lg overflow-hidden" id="basicInfoSection" dir="rtl">
-               <!-- Enhanced Header -->
-               <div class="p-6 border-b border-gray-100 relative bg-gradient-to-r from-blue-500/5 to-blue-600/5">
-                    <div class="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-blue-500 to-blue-600"></div>
-                    <div class="flex items-center justify-between">
-                         <div class="flex items-center gap-4">
-                              <h3 class="text-xl font-bold text-gray-800 font-arabic">المعلومات الأساسية</h3>
-                              <div class="relative group">
-                                   <span class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-50 text-blue-600 
-                                cursor-help transition-transform duration-300 group-hover:scale-110">
-                                        <i class="fas fa-info-circle"></i>
-                                   </span>
-                                   <div class="absolute right-0 bottom-full mb-2 hidden group-hover:block w-72 p-4 
-                                bg-gray-900 text-white text-sm rounded-xl shadow-xl z-10 
-                                transform transition-all duration-300 font-arabic">
-                                        <div class="flex items-start gap-3">
-                                             <i class="fas fa-lightbulb text-yellow-400 mt-1"></i>
-                                             <p>هذه المعلومات ستكون مرئية في ملفك الشخصي العام وستساعد العملاء على معرفتك بشكل أفضل.</p>
-                                        </div>
-                                   </div>
-                              </div>
+<!-- basic-info.ejs -->
+<div class="bg-white rounded-xl shadow-sm overflow-hidden" id="basicInfoSection">
+     <!-- Header -->
+     <div class="p-6 border-b border-gray-100 relative bg-gradient-to-r from-indigo-50 to-indigo-100/50">
+         <div class="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-indigo-500 to-indigo-600"></div>
+         <div class="flex items-center justify-between">
+             <div class="flex items-center gap-4">
+                 <h3 class="text-xl font-semibold text-gray-800">Informations de base</h3>
+                 <div class="relative group">
+                     <span class="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-50 text-indigo-600 
+                         cursor-help transition duration-200 hover:scale-110">
+                         <i class="fas fa-info-circle"></i>
+                     </span>
+                     <div class="absolute left-0 bottom-full mb-2 hidden group-hover:block w-72 p-4 
+                         bg-gray-900 text-white text-sm rounded-xl shadow-xl z-10">
+                         <div class="flex items-start gap-3">
+                             <i class="fas fa-lightbulb text-yellow-400 mt-1"></i>
+                             <p>Ces informations seront visibles sur votre profil public et aideront les clients à mieux vous connaître.</p>
                          </div>
-                    </div>
-               </div>
-
-               <!-- Form Section -->
-               <form id="basicInfoForm" class="p-6 space-y-8">
-                    <!-- Personal Info Grid -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                         <!-- Name Input -->
-                         <div class="space-y-3">
-                              <label for="displayName" class="block text-base font-semibold text-gray-700 font-arabic">
-                                   الإسم الكامل <span class="text-blue-500">*</span>
-                              </label>
-                              <div class="relative group">
-                                   <input type="text" id="displayName" name="displayName" value="<%= user.displayName %>" class="w-full h-12 pr-12 pl-4 bg-gray-50 border-2 border-gray-200 rounded-xl
-                                  text-right font-arabic
-                                  focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10
-                                  transition-all duration-300" required>
-                                   <i class="fas fa-user absolute right-4 top-1/2 -translate-y-1/2 text-gray-400
-                             group-focus-within:text-blue-500 transition-colors"></i>
-                              </div>
-                         </div>
-
-                         <!-- Phone Input -->
-                         <div class="space-y-3">
-                              <label for="phoneNumber" class="block text-base font-semibold text-gray-700 font-arabic">
-                                   رقم الهاتف <span class="text-blue-500">*</span>
-                              </label>
-                              <div class="relative group">
-                                   <input type="tel" id="phoneNumber" name="phoneNumber" value="<%= user.phoneNumber %>" class="w-full h-12 pr-12 pl-4 bg-gray-50 border-2 border-gray-200 rounded-xl
-                                  text-right font-arabic
-                                  focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10
-                                  transition-all duration-300" pattern="^(?:\+212|0)[567]\d{8}$" required>
-                                   <i class="fas fa-phone absolute right-4 top-1/2 -translate-y-1/2 text-gray-400
-                             group-focus-within:text-blue-500 transition-colors"></i>
-                              </div>
-                              <p class="text-sm text-gray-500 font-arabic">تنسيق: +212 أو 06/07</p>
-                         </div>
-
-                         <!-- City Select -->
-                         <div class="space-y-3" id="location.city">
-                              <label for="city" class="block text-base font-semibold text-gray-700 font-arabic">
-                                   المدينة <span class="text-blue-500">*</span>
-                              </label>
-                              <div class="relative group">
-                                   <select id="city" name="city" class="w-full h-12 pr-12 pl-4 bg-gray-50 border-2 border-gray-200 rounded-xl
-                                   text-right font-arabic appearance-none
-                                   focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10
-                                   transition-all duration-300" required>
-                                        <option value="" class="font-arabic">اختر مدينة</option>
-                                        <% cities.forEach(city=> { %>
-                                             <option value="<%= city.french %>" <%=user.location?.city===city.french ? 'selected' : '' %>
-                                                  class="font-arabic py-2">
-                                                  <%= city.arabic %>
-                                             </option>
-                                             <% }); %>
-                                   </select>
-                                   <i class="fas fa-map-marker-alt absolute right-4 top-1/2 -translate-y-1/2 text-gray-400
-                             group-focus-within:text-blue-500 transition-colors"></i>
-                                   <i class="fas fa-chevron-down absolute left-4 top-1/2 -translate-y-1/2 text-gray-400
-                             group-focus-within:text-blue-500 transition-colors"></i>
-                              </div>
-                         </div>
-                    </div>
-
-                    <!-- Bio Section -->
-                    <div class="space-y-3">
-                         <label for="bio" class="block text-base font-semibold text-gray-700 font-arabic">
-                              نبذة مهنية <span class="text-blue-500">*</span>
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>
+ 
+     <!-- Form -->
+     <form id="basicInfoForm" class="p-6 space-y-8">
+         <!-- Personal Info Grid -->
+         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+             <!-- Name Input -->
+             <div class="space-y-3">
+                 <label for="displayName" class="block text-sm font-medium text-gray-700">
+                     Nom complet <span class="text-indigo-500">*</span>
+                 </label>
+                 <div class="relative group">
+                     <input type="text" id="displayName" name="displayName" 
+                         value="<%= user.displayName %>" 
+                         class="w-full h-12 pl-12 pr-4 bg-gray-50 border border-gray-200 rounded-lg
+                         focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10
+                         transition-all duration-200" required>
+                     <i class="fas fa-user absolute left-4 top-1/2 -translate-y-1/2 text-gray-400
+                         group-focus-within:text-indigo-500 transition-colors"></i>
+                 </div>
+             </div>
+ 
+             <!-- Phone Input -->
+             <div class="space-y-3">
+                 <label for="phoneNumber" class="block text-sm font-medium text-gray-700">
+                     Numéro de téléphone <span class="text-indigo-500">*</span>
+                 </label>
+                 <div class="relative group">
+                     <input type="tel" id="phoneNumber" name="phoneNumber" 
+                         value="<%= user.phoneNumber %>" 
+                         class="w-full h-12 pl-12 pr-4 bg-gray-50 border border-gray-200 rounded-lg
+                         focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10
+                         transition-all duration-200" 
+                         pattern="^(?:\+212|0)[567]\d{8}$" required>
+                     <i class="fas fa-phone absolute left-4 top-1/2 -translate-y-1/2 text-gray-400
+                         group-focus-within:text-indigo-500 transition-colors"></i>
+                 </div>
+                 <p class="text-sm text-gray-500">Format: +212 ou 06/07</p>
+             </div>
+ 
+             <!-- City Select -->
+             <div class="space-y-3">
+                 <label for="city" class="block text-sm font-medium text-gray-700">
+                     Ville <span class="text-indigo-500">*</span>
+                 </label>
+                 <div class="relative group">
+                     <select id="city" name="city" 
+                         class="w-full h-12 pl-12 pr-4 bg-gray-50 border border-gray-200 rounded-lg
+                         appearance-none focus:bg-white focus:border-indigo-500 focus:ring-4 
+                         focus:ring-indigo-500/10 transition-all duration-200" required>
+                         <option value="">Sélectionnez une ville</option>
+                         <% const cities = [
+                             {name: 'Casablanca'}, {name: 'Rabat'}, {name: 'Marrakech'},
+                             {name: 'Agadir'}, {name: 'Tanger'}, {name: 'Fès'},
+                             {name: 'Meknès'}, {name: 'Oujda'}, {name: 'Kénitra'},
+                             {name: 'Tétouan'}, {name: 'Safi'}, {name: 'El Jadida'},
+                             {name: 'Nador'}, {name: 'Berrechid'}, {name: 'Khemisset'},
+                             {name: 'Khouribga'}, {name: 'Settat'}, {name: 'Larache'},
+                             {name: 'Beni Mellal'}, {name: 'Guelmim'}, {name: 'Taza'},
+                             {name: 'Sidi Kacem'}, {name: 'Tiznit'}, {name: 'Essaouira'},
+                             {name: 'Khenifra'}, {name: 'Tan-Tan'}, {name: 'Guercif'},
+                             {name: 'Chefchaouen'}, {name: 'Mohammedia'}, {name: 'Taounate'},
+                             {name: 'Sidi Slimane'}, {name: 'Tarfaya'}, {name: 'Midelt'},
+                             {name: 'Errachidia'}, {name: 'Azrou'}, {name: 'Ben Guerir'},
+                             {name: 'Chichaoua'}, {name: 'Ouarzazate'}, {name: 'Zaio'}
+                         ]; %>
+                         <% cities.forEach(city => { %>
+                             <option value="<%= city.name %>" 
+                                 <%= user.location?.city === city.name ? 'selected' : '' %>>
+                                 <%= city.name %>
+                             </option>
+                         <% }); %>
+                     </select>
+                     <i class="fas fa-map-marker-alt absolute left-4 top-1/2 -translate-y-1/2 text-gray-400
+                         group-focus-within:text-indigo-500 transition-colors"></i>
+                     <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                 </div>
+             </div>
+ 
+             <!-- Languages -->
+             <div class="space-y-3">
+                 <label class="block text-sm font-medium text-gray-700">Langues parlées</label>
+                 <div class="grid grid-cols-2 gap-3">
+                     <% const languages = [
+                         {id: 'french', name: 'Français'},
+                         {id: 'arabic', name: 'Arabe'},
+                         {id: 'english', name: 'Anglais'},
+                         {id: 'spanish', name: 'Espagnol'}
+                     ]; %>
+                     <% languages.forEach(lang => { %>
+                         <label class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg cursor-pointer
+                             hover:bg-indigo-50 transition-all duration-200">
+                             <input type="checkbox" name="languages" value="<%= lang.id %>"
+                                 <%= user.languages?.includes(lang.id) ? 'checked' : '' %>
+                                 class="w-4 h-4 text-indigo-600 border-gray-300 rounded
+                                 focus:ring-indigo-500">
+                             <span class="text-sm text-gray-700"><%= lang.name %></span>
                          </label>
-                         <div class="relative group">
-                              <textarea id="bio" name="bio" rows="4" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl
-                                 text-right font-arabic resize-none
-                                 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10
-                                 transition-all duration-300" maxlength="500" required><%= user.bio %></textarea>
-                              <div class="absolute left-3 bottom-3 px-2 py-1 text-sm font-medium text-blue-600 
-                            bg-blue-50 rounded-lg border border-blue-100 font-arabic">
-                                   <span id="bioLength">0</span>/500
-                              </div>
-                         </div>
-                    </div>
-
-                    <!-- Languages Section -->
-                    <div class="space-y-4" id="languages">
-                         <label class=" block text-base font-semibold text-gray-700 font-arabic">اللغات المتحدث بها</label>
-                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                              <% const languageMap={ 'french' : 'الفرنسية' , 'arabic' : 'العربية' , 'english' : 'الإنجليزية' , 'spanish' : 'الإسبانية' } %>
-                                   <% languageOptions.forEach(lang=> { %>
-                                        <label class="relative flex items-center gap-3 p-3 bg-gray-50 rounded-xl 
-                                 cursor-pointer group hover:bg-blue-50 transition-all duration-300">
-                                             <input type="checkbox" id="lang-<%= lang %>" name="languages" value="<%= lang %>" <%=user.languages && user.languages.includes(lang) ? 'checked' : '' %>
-                                             class="peer hidden">
-                                             <span class="w-5 h-5 rounded border-2 border-gray-300 flex items-center justify-center
-                                   peer-checked:border-blue-500 peer-checked:bg-blue-500 transition-all duration-300">
-                                                  <i class="fas fa-check text-white scale-0 peer-checked:scale-100 transition-transform"></i>
-                                             </span>
-                                             <span class="font-arabic text-gray-700 peer-checked:text-blue-600 transition-colors">
-                                                  <%= languageMap[lang] %>
-                                             </span>
-                                        </label>
-                                        <% }); %>
-                         </div>
-                    </div>
-
-                    <!-- Experience Section -->
-                    <div class="space-y-4">
-                         <label class="block text-base font-semibold text-gray-700 font-arabic">الخبرة</label>
-                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                              <!-- Years -->
-                              <div class="relative group">
-                                   <label class="block text-sm font-medium text-gray-600 mb-2 font-arabic">سنوات الخبرة</label>
-                                   <input type="number" name="experienceYears" id="experience-years" min="0" value="<%= user.experience?.years || 0 %>" class="w-full h-12 px-4 bg-gray-50 border-2 border-gray-200 rounded-xl
-                                  text-right font-arabic
-                                  focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10
-                                  transition-all duration-300">
-                              </div>
-                              <!-- Description -->
-                              <div class="relative group">
-                                   <label class="block text-sm font-medium text-gray-600 mb-2 font-arabic">وصف الخبرة</label>
-                                   <textarea name="experienceDescription" id="experience-description" rows="3" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl
-                                     text-right font-arabic resize-none
-                                     focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10
-                                     transition-all duration-300"><%= user.experience?.description || '' %></textarea>
-                              </div>
-                         </div>
-                    </div>
-
-                    <!-- Action Buttons -->
-                    <div class="flex gap-4 pt-6 border-t">
-                         <button type="button" id="cancelBasicInfoBtn" class="flex-1 h-12 bg-gray-50 text-gray-700 rounded-xl font-arabic
-                           hover:bg-gray-100 focus:ring-4 focus:ring-gray-200
-                           transition-all duration-300 group">
-                              <i class="fas fa-times ml-2 group-hover:rotate-90 transition-transform"></i>
-                              إلغاء
-                         </button>
-                         <button type="submit" class="flex-1 h-12 bg-blue-600 text-white rounded-xl font-arabic
-                           hover:bg-blue-700 focus:ring-4 focus:ring-blue-500/30
-                           transition-all duration-300 group">
-                              <i class="fas fa-check ml-2 group-hover:scale-110 transition-transform"></i>
-                              حفظ
-                         </button>
-                    </div>
-               </form>
-          </div>
-
-          <!-- Keep the original script but add these styles -->
-          <style>
-               @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700&display=swap');
-
-               .font-arabic {
-                    font-family: 'Tajawal', sans-serif;
-               }
-
-               /* Enhanced focus states */
-               .group:focus-within i {
-                    transform: translateY(-50%) scale(1.1);
-               }
-
-               /* Smooth transitions */
-               input,
-               select,
-               textarea {
-                    transition: all 0.3s ease;
-               }
-
-               /* Custom checkbox styles */
-               input[type="checkbox"] {
-                    transition: all 0.2s ease;
-               }
-
-               /* Input hover effects */
-               input:hover:not(:focus),
-               select:hover:not(:focus),
-               textarea:hover:not(:focus) {
-                    background-color: #F8FAFC;
-                    transform: translateY(-1px);
-               }
-
-               /* Button hover effects */
-               button:hover {
-                    transform: translateY(-1px);
-               }
-
-               button:active {
-                    transform: translateY(1px);
-               }
-
-               /* Direction specific styles */
-               .direction-ltr {
-                    direction: ltr;
-               }
-
-               /* The rest of your original styles... */
-          </style>
-          <script>
-               document.addEventListener('DOMContentLoaded', function () {
-                    const $bioTextarea = document.getElementById('bio');
-                    const $bioLength = document.getElementById('bioLength');
-
-                    // Mise à jour du compteur de caractères de la bio
-                    function updateBioLength() {
-                         const length = $bioTextarea.value.length;
-                         $bioLength.textContent = length;
-
-                         // Retour visuel
-                         if (length > 450) {
-                              $bioLength.classList.add('text-orange-500');
-                         } else if (length > 480) {
-                              $bioLength.classList.add('text-red-500');
-                         } else {
-                              $bioLength.classList.remove('text-orange-500', 'text-red-500');
-                         }
-                    }
-
-                    $bioTextarea?.addEventListener('input', updateBioLength);
-                    updateBioLength();
-
-                    // Gestion du bouton Annuler
-                    const $cancelBtn = document.getElementById('cancelBasicInfoBtn');
-                    $cancelBtn.addEventListener('click', () => {
-                         // Recharge la page pour réinitialiser le formulaire
-                         window.location.reload();
-                    });
-
-                    // Soumission du formulaire avec validation
-                    const $editForm = document.getElementById('basicInfoForm');
-                    $editForm.addEventListener('submit', async function (e) {
-                         e.preventDefault();
-
-                         const $submitBtn = this.querySelector('button[type="submit"]');
-                         const $allInputs = this.querySelectorAll('input, select, textarea');
-
-                         // Désactive tous les éléments du formulaire
-                         $submitBtn.disabled = true;
-                         $allInputs.forEach(input => input.disabled = true);
-
-                         // Ajoute un état de chargement au bouton de soumission
-                         $submitBtn.innerHTML = `
-               <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                   <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                   <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-               </svg>
-               Enregistrement...
-               `;
-
-                         try {
-                              // Récupère les données du formulaire
-                              const formData = new FormData(this);
-
-                              // Construit les données à envoyer
-                              const data = {
-                                   displayName: document.getElementById('displayName').value,
-                                   bio: document.getElementById('bio').value,
-                                   phoneNumber: document.getElementById('phoneNumber').value,
-                                   location: {
-                                        city: document.getElementById('city').value
-                                   },
-                                   languages: Array.from(document.querySelectorAll('input[name="languages"]:checked')).map(el => el.value),
-                                   experience: {
-                                        years: parseInt(document.getElementById('experience-years').value, 10) || 0,
-                                        description: document.getElementById('experience-description').value || 'Sans expérience.'
-                                   }
-                              };
-
-                              // Envoie la requête avec l'état de chargement
-                              const response = await fetch('/dashboard/profile/update-basic-info', {
-                                   method: 'PUT',
-                                   headers: { 'Content-Type': 'application/json' },
-                                   body: JSON.stringify(data)
-                              });
-
-                              const result = await response.json();
-
-                              if (response.ok) {
-                                   // Affiche un message de succès avant de recharger
-                                   Swal.fire({
-                                        icon: 'success',
-                                        title: 'Succès !',
-                                        text: 'Vos informations ont été mises à jour avec succès',
-                                        showConfirmButton: false,
-                                        timer: 1500
-                                   }).then(() => {
-                                        window.location.reload();
-                                   });
-                              } else {
-                                   throw new Error(result.message);
-                              }
-                         } catch (error) {
-                              // Affiche un message d'erreur avec SweetAlert2
-                              Swal.fire({
-                                   icon: 'error',
-                                   title: 'Erreur',
-                                   text: error.message || 'Une erreur est survenue lors de la mise à jour',
-                                   confirmButtonText: 'Réessayer',
-                                   confirmButtonColor: '#3B82F6'
-                              });
-
-                              // Réinitialise l'état du bouton et du formulaire
-                              $submitBtn.innerHTML = '<i class="fas fa-check mr-2"></i>Enregistrer';
-                              $submitBtn.disabled = false;
-                              $allInputs.forEach(input => input.disabled = false);
-                         }
-                    });
-
-                    // Validation et formatage du numéro de téléphone
-                    const $phoneInput = document.getElementById('phoneNumber');
-                    $phoneInput?.addEventListener('input', function (e) {
-                         let value = e.target.value.replace(/\D/g, '');
-
-                         if (value.startsWith('212')) {
-                              value = '+' + value;
-                         } else if (value.startsWith('0')) {
-                              value = value;
-                         } else if (value.length > 0) {
-                              value = '0' + value;
-                         }
-
-                         e.target.value = value;
-                    });
-
-                    // Ajout des styles d'animation
-                    const style = document.createElement('style');
-                    style.textContent = `
-          @keyframes fadeSlideIn {
-               from {
-                    opacity: 0;
-                    transform: translateY(-10px);
-               }
-               to {
-                    opacity: 1;
-                    transform: translateY(0);
-               }
-          }
-
-          .animate-fade-slide-in {
-               animation: fadeSlideIn 0.3s ease-out forwards;
-          }
-
-          /* Styles personnalisés pour les cases à cocher */
-          input[type="checkbox"] {
-               transition: all 0.2s ease-in-out;
-          }
-
-          input[type="checkbox"]:checked + label {
-               color: #1D4ED8;
-          }
-
-          /* Effets de focus pour les champs de saisie */
-          input:focus, select:focus, textarea:focus {
-               box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
-          }
-          `;
-                    document.head.appendChild(style);
-               });
-          </script>
-
-
-
-
-
-
-
-
-
-
-          <!-- ####################### GALLERY ############################# -->
-          <!-- Gallery Section -->
-          <div class="bg-white rounded-2xl shadow-lg overflow-hidden mt-8" dir="rtl">
-               <!-- Header -->
-               <div class="p-6 border-b border-gray-100">
-                    <div class="flex items-center justify-between">
-                         <div class="flex items-center gap-3">
-                              <h2 class="text-xl font-bold text-gray-900 font-arabic">معرض الصور</h2>
-                              <% if (user.gallery?.length) { %>
-                                   <span class="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-sm font-arabic">
-                                        <%= user.gallery.length %> صورة
-                                   </span>
-                                   <% } %>
-                         </div>
-                    </div>
-               </div>
-
-               <!-- Gallery Preview/Upload Card -->
-               <div class="p-6">
-                    <a href="/dashboard/galery" class="block group relative overflow-hidden rounded-2xl transition-all duration-300
-                  hover:shadow-xl">
-                         <!-- Background Pattern -->
-                         <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5
-                        transition-all duration-500 group-hover:scale-110"></div>
-
-                         <!-- Content Container -->
-                         <div class="relative p-8">
-                              <div class="flex flex-col items-center gap-6 text-center">
-                                   <!-- Icon Container -->
-                                   <div class="w-20 h-20 flex items-center justify-center rounded-full
-                                bg-gradient-to-r from-blue-500 to-blue-600 text-white
-                                transform transition-all duration-500 
-                                group-hover:scale-110 group-hover:rotate-12">
-                                        <i class="fas fa-images text-3xl"></i>
-                                   </div>
-
-                                   <!-- Text Content -->
-                                   <div class="space-y-2">
-                                        <h3 class="text-xl font-bold text-gray-900 font-arabic">
-                                             <% if (user.gallery?.length) { %>
-                                                  إدارة معرض الصور
-                                                  <% } else { %>
-                                                       أضف صورك الأولى
-                                                       <% } %>
-                                        </h3>
-                                        <p class="text-gray-500 max-w-md mx-auto font-arabic">
-                                             <% if (user.gallery?.length) { %>
-                                                  يمكنك تحرير وإضافة المزيد من الصور لمعرضك
-                                                  <% } else { %>
-                                                       قم بإنشاء معرض صور احترافي لعرض خدماتك وأعمالك
-                                                       <% } %>
-                                        </p>
-                                   </div>
-
-                                   <!-- Gallery Preview or Upload Button -->
-                                   <% if (user.gallery?.length) { %>
-                                        <!-- Mini Gallery Preview -->
-                                        <div class="flex items-center gap-4">
-                                             <% user.gallery.slice(0, 3).forEach(image=> { %>
-                                                  <div class="w-16 h-16 rounded-xl overflow-hidden">
-                                                       <img src="<%= image %>" alt="Gallery preview" class="w-full h-full object-cover">
-                                                  </div>
-                                                  <% }) %>
-                                                       <% if (user.gallery.length> 3) { %>
-                                                            <div class="w-16 h-16 rounded-xl bg-gray-900/10 flex items-center 
-                                            justify-center text-gray-600 font-medium font-arabic">
-                                                                 +<%= user.gallery.length - 3 %>
-                                                            </div>
-                                                            <% } %>
-                                        </div>
-                                        <% } %>
-
-                                             <!-- Action Button -->
-                                             <button class="inline-flex items-center gap-2 px-6 py-3 
-                                 bg-gradient-to-r from-blue-500 to-blue-600
-                                 text-white rounded-xl font-arabic
-                                 transition-all duration-300 group-hover:shadow-lg 
-                                 group-hover:shadow-blue-500/25 group-hover:-translate-y-0.5">
-                                                  <i class="fas <%= user.gallery?.length ? 'fa-pen-to-square' : 'fa-plus' %>"></i>
-                                                  <span>
-                                                       <%= user.gallery?.length ? 'تحرير المعرض' : 'إنشاء معرض' %>
-                                                  </span>
-                                             </button>
-                              </div>
-                         </div>
-
-                         <!-- Hover Effect Overlay -->
-                         <div class="absolute inset-0 bg-gradient-to-r from-blue-600/0 to-blue-600/0
-                        transition-all duration-300 group-hover:from-blue-600/5 
-                        group-hover:to-blue-600/5"></div>
-                    </a>
-               </div>
-
-               <!-- Optional Quick Stats -->
-               <div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 bg-gray-50/50 border-t border-gray-100">
-                    <div class="text-center p-4 rounded-xl bg-white">
-                         <div class="text-2xl font-bold text-blue-600 font-arabic">
-                              <%= user.gallery?.length || 0 %>
-                         </div>
-                         <div class="text-sm text-gray-500 mt-1 font-arabic">إجمالي الصور</div>
-                    </div>
-
-               </div>
-          </div>
-
-          <style>
-               /* Enhanced Hover Animations */
-               @keyframes floatUp {
-
-                    0%,
-                    100% {
-                         transform: translateY(0);
-                    }
-
-                    50% {
-                         transform: translateY(-5px);
-                    }
-               }
-
-               .hover-float {
-                    animation: floatUp 3s ease-in-out infinite;
-               }
-
-               @keyframes shimmer {
-                    0% {
-                         transform: translateX(-100%);
-                    }
-
-                    100% {
-                         transform: translateX(200%);
-                    }
-               }
-
-               .hover-shimmer::before {
-                    content: '';
-                    position: absolute;
-                    top: 0;
-                    right: -100%;
-                    width: 50%;
-                    height: 100%;
-                    background: linear-gradient(90deg,
-                              transparent,
-                              rgba(255, 255, 255, 0.2),
-                              transparent);
-                    transform: skewX(-25deg);
-                    animation: shimmer 2s infinite;
-               }
-
-               /* Custom Scrollbar for Image Preview */
-               .custom-scrollbar::-webkit-scrollbar {
-                    width: 4px;
-                    height: 4px;
-               }
-
-               .custom-scrollbar::-webkit-scrollbar-track {
-                    background: #f1f5f9;
-               }
-
-               .custom-scrollbar::-webkit-scrollbar-thumb {
-                    background: #cbd5e1;
-                    border-radius: 2px;
-               }
-          </style>
-
-          <script>
-               // Optional: Add some interactive elements
-               document.addEventListener('DOMContentLoaded', () => {
-                    // Add loading state when clicking the gallery link
-                    const galleryLink = document.querySelector('a[href="/dashboard/galery"]');
-                    galleryLink?.addEventListener('click', (e) => {
-                         const button = e.currentTarget.querySelector('button');
-                         const originalText = button.innerHTML;
-
-                         // Show loading state
-                         button.innerHTML = `
-            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-            <span class="font-arabic">جارٍ التحميل...</span>
-        `;
-
-                         // Restore original text after navigation
-                         setTimeout(() => {
-                              button.innerHTML = originalText;
-                         }, 500);
-                    });
-               });
-          </script>
+                     <% }); %>
+                 </div>
+             </div>
+         </div>
+ 
+         <!-- Bio Section -->
+         <div class="space-y-3">
+             <label for="bio" class="block text-sm font-medium text-gray-700">
+                 Biographie professionnelle <span class="text-indigo-500">*</span>
+             </label>
+             <div class="relative group">
+                 <textarea id="bio" name="bio" rows="4" 
+                     class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg resize-none
+                     focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10
+                     transition-all duration-200" maxlength="500" required><%= user.bio %></textarea>
+                 <div class="absolute right-3 bottom-3 px-2 py-1 text-sm text-indigo-600 
+                     bg-indigo-50 rounded-md border border-indigo-100">
+                     <span id="bioLength">0</span>/500
+                 </div>
+             </div>
+         </div>
+ 
+         <!-- Experience Section -->
+         <div class="space-y-4">
+             <label class="block text-sm font-medium text-gray-700">Expérience</label>
+             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                 <div class="relative group">
+                     <label class="block text-sm text-gray-600 mb-2">Années d'expérience</label>
+                     <input type="number" name="experienceYears" min="0" 
+                         value="<%= user.experience?.years || 0 %>"
+                         class="w-full h-12 px-4 bg-gray-50 border border-gray-200 rounded-lg
+                         focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10
+                         transition-all duration-200">
+                 </div>
+                 <div class="relative group">
+                     <label class="block text-sm text-gray-600 mb-2">Description de l'expérience</label>
+                     <textarea name="experienceDescription" rows="3" 
+                         class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg resize-none
+                         focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10
+                         transition-all duration-200"><%= user.experience?.description || '' %></textarea>
+                 </div>
+             </div>
+         </div>
+ 
+         <!-- Action Buttons -->
+         <div class="flex gap-4 pt-6 border-t">
+           
+             <button type="submit" 
+                 class="flex-1 h-12 px-6 bg-indigo-600 text-white rounded-lg
+                 hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-500/30
+                 transition-all duration-200 flex items-center justify-center gap-2">
+                 <i class="fas fa-check"></i>
+                 <span>Enregistrer</span>
+             </button>
+         </div>
+     </form>
+ </div>
+ 
+ <script>
+ document.addEventListener('DOMContentLoaded', function() {
+     // Bio character counter
+     const bioTextarea = document.getElementById('bio');
+     const bioLength = document.getElementById('bioLength');
+     
+     function updateBioLength() {
+         const length = bioTextarea.value.length;
+         bioLength.textContent = length;
+         
+         // Visual feedback
+         if (length > 450) {
+             bioLength.classList.add('text-amber-500');
+             bioLength.classList.remove('text-red-500', 'text-indigo-600');
+         } else if (length > 480) {
+             bioLength.classList.add('text-red-500');
+             bioLength.classList.remove('text-amber-500', 'text-indigo-600');
+         } else {
+             bioLength.classList.add('text-indigo-600');
+             bioLength.classList.remove('text-amber-500', 'text-red-500');
+         }
+     }
+     
+     bioTextarea?.addEventListener('input', updateBioLength);
+     updateBioLength();
+     
+     // Phone number formatting
+     const phoneInput = document.getElementById('phoneNumber');
+     phoneInput?.addEventListener('input', function(e) {
+         let value = e.target.value.replace(/\D/g, '');
+         
+         if (value.startsWith('212')) {
+             value = '+' + value;
+         } else if (value.startsWith('0')) {
+             value = value;
+         } else if (value.length > 0) {
+             value = '0' + value;
+         }
+         
+         e.target.value = value;
+     });
+     
+     // Form submission
+     const form = document.getElementById('basicInfoForm');
+     form?.addEventListener('submit', async function(e) {
+         e.preventDefault();
+         
+         const submitBtn = this.querySelector('button[type="submit"]');
+         const allInputs = this.querySelectorAll('input, select, textarea');
+         
+         // Disable form during submission
+         submitBtn.disabled = true;
+         allInputs.forEach(input => input.disabled = true);
+         
+         // Update button state
+         const originalBtnContent = submitBtn.innerHTML;
+         submitBtn.innerHTML = `
+             <svg class="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+             </svg>
+             <span>Enregistrement...</span>
+         `;
+         
+         try {
+             const formData = new FormData(this);
+             <script>
+            // Continuing the form submission handler...
+            const data = {
+                displayName: formData.get('displayName'),
+                bio: formData.get('bio'),
+                phoneNumber: formData.get('phoneNumber'),
+                location: {
+                    city: formData.get('city')
+                },
+                languages: Array.from(document.querySelectorAll('input[name="languages"]:checked'))
+                    .map(el => el.value),
+                experience: {
+                    years: parseInt(formData.get('experienceYears'), 10) || 0,
+                    description: formData.get('experienceDescription') || 'Aucune expérience.'
+                }
+            };
+
+            const response = await fetch('/dashboard/profile/update-basic-info', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.message || 'Erreur lors de la mise à jour');
+            }
+
+            // Show success message
+            await Swal.fire({
+                icon: 'success',
+                title: 'Succès !',
+                text: 'Vos informations ont été mises à jour avec succès',
+                showConfirmButton: false,
+                timer: 1500
+            });
+
+            // Reload page to show updates
+            window.location.reload();
+
+        } catch (error) {
+            console.error('Update error:', error);
+            
+            // Show error message
+            await Swal.fire({
+                icon: 'error',
+                title: 'Erreur',
+                text: error.message || 'Une erreur est survenue lors de la mise à jour',
+                confirmButtonText: 'Réessayer',
+                confirmButtonColor: '#4f46e5'
+            });
+
+        } finally {
+            // Reset form state
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnContent;
+            allInputs.forEach(input => input.disabled = false);
+        }
+    });
+
+    // Cancel button handler
+    const cancelBtn = document.getElementById('cancelBasicInfoBtn');
+    cancelBtn?.addEventListener('click', async function() {
+        const result = await Swal.fire({
+            title: 'Êtes-vous sûr ?',
+            text: 'Les modifications non enregistrées seront perdues',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#4f46e5',
+            cancelButtonColor: '#d1d5db',
+            confirmButtonText: 'Oui, annuler',
+            cancelButtonText: 'Non, continuer'
+        });
+
+        if (result.isConfirmed) {
+            window.location.reload();
+        }
+    });
+
+    // Input validation and enhancement
+    document.querySelectorAll('input[type="text"], textarea').forEach(input => {
+        input.addEventListener('focus', function() {
+            this.closest('.group')?.classList.add('is-focused');
+        });
+
+        input.addEventListener('blur', function() {
+            this.closest('.group')?.classList.remove('is-focused');
+        });
+    });
+
+    // Enhanced city select
+    const citySelect = document.getElementById('city');
+    if (citySelect) {
+        // Add search functionality to city select
+        new Choices(citySelect, {
+            searchEnabled: true,
+            searchPlaceholderValue: 'Rechercher une ville...',
+            placeholder: true,
+            placeholderValue: 'Sélectionnez une ville',
+            classNames: {
+                containerOuter: 'choices w-full h-12 bg-gray-50 border border-gray-200 rounded-lg',
+                containerInner: 'choices__inner h-full flex items-center',
+                input: 'choices__input pl-12',
+                inputCloned: 'choices__input--cloned',
+                list: 'choices__list',
+                listItems: 'choices__list--multiple',
+                listSingle: 'choices__list--single',
+                listDropdown: 'choices__list--dropdown',
+                item: 'choices__item',
+                itemSelectable: 'choices__item--selectable',
+                itemDisabled: 'choices__item--disabled',
+                itemChoice: 'choices__item--choice',
+                placeholder: 'choices__placeholder',
+                group: 'choices__group',
+                groupHeading: 'choices__heading',
+                button: 'choices__button'
+            }
+        });
+    }
+
+    // Add form validation indicators
+    const requiredFields = document.querySelectorAll('input[required], select[required], textarea[required]');
+    requiredFields.forEach(field => {
+        field.addEventListener('input', function() {
+            const isValid = this.checkValidity();
+            const container = this.closest('.group');
+            if (container) {
+                container.classList.toggle('is-valid', isValid);
+                container.classList.toggle('is-invalid', !isValid);
+            }
+        });
+    });
+
+    // Add custom styles
+    const style = document.createElement('style');
+    style.textContent = `
+        .is-focused {
+            position: relative;
+        }
+
+        .is-focused::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 0.5rem;
+            background: linear-gradient(to right, #4f46e5, #6366f1);
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        .is-valid .group-focus-within:text-indigo-500 {
+            color: #059669;
+        }
+
+        .is-invalid .group-focus-within:text-indigo-500 {
+            color: #dc2626;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-2px); }
+            75% { transform: translateX(2px); }
+        }
+
+        .is-invalid input:invalid,
+        .is-invalid select:invalid,
+        .is-invalid textarea:invalid {
+            animation: shake 0.2s ease-in-out;
+            border-color: #dc2626;
+        }
+    `;
+    document.head.appendChild(style);
+});
+</script>

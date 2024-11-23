@@ -1,368 +1,223 @@
-<div class="bg-white rounded-2xl shadow-lg overflow-hidden" x-data="headerCard" dir="rtl">
-     <div class="p-8">
-          <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
-               <!-- Profile Image Section -->
-               <div class="relative group">
-                    <div class="w-32 h-32 md:w-36 md:h-36 rounded-2xl shadow-lg overflow-hidden
-                            bg-gradient-to-br from-blue-50 to-blue-100
-                            transition-all duration-300 group-hover:shadow-xl">
-                         <img src="<%= user.profileImage %>" alt="<%= user.displayName %>" class="w-full h-full object-cover transition-all duration-500 
-                                group-hover:scale-105">
-                    </div>
-
-                    <!-- Change Photo Button -->
-                    <button @click="$refs.profileInput.click()" class="absolute -bottom-3 right-1/2 translate-x-1/2 p-3 
-                               bg-blue-600 text-white rounded-xl shadow-lg
-                               transition-all duration-300 hover:bg-blue-700
-                               hover:scale-110 active:scale-95">
-                         <i class="fas fa-camera"></i>
-                    </button>
-                    <input type="file" x-ref="profileInput" @change="handleImageUpload($event, 'profile')" accept="image/*" class="hidden">
-
-                    <!-- Verification Badge -->
-                    <% if (user.isVerified) { %>
-                         <div class="absolute -top-2 -right-2 bg-white rounded-full p-2 shadow-lg
-                                transform transition-all duration-300 hover:scale-110
-                                hover:rotate-12 group/badge cursor-help">
-                              <img src="https://img.icons8.com/?size=30&id=GSYoL5PjLpC8&format=png&color=FA5252" alt="Verified" class="w-6 h-6">
-                              <div class="absolute -top-12 right-0 w-32 bg-black/80 text-white text-xs
-                                    rounded-lg px-2 py-1 opacity-0 group-hover/badge:opacity-100
-                                    transition-opacity duration-300 text-center font-arabic">
-                                   حساب موثق
-                              </div>
+<!-- header-card.ejs -->
+<div class="max-w-4xl mx-auto bg-white rounded-xl shadow-sm overflow-hidden" x-data="headerCard" dir="ltr">
+     <div class="p-6">
+         <div class="flex flex-col lg:flex-row items-center lg:items-start gap-8">
+             <!-- Profile Image Section -->
+             <div class="relative group">
+                 <div class="w-32 h-32 lg:w-40 lg:h-40 rounded-xl overflow-hidden bg-gray-50 ring-2 ring-gray-100">
+                     <img src="<%= user.profileImage %>" alt="<%= user.displayName %>" 
+                         class="w-full h-full object-cover transition duration-300 group-hover:scale-102">
+                 </div>
+ 
+                 <!-- Update Photo Button -->
+                 <button @click="triggerFileInput" 
+                     class="absolute -bottom-3 px-2 py-2 
+                     bg-indigo-600 text-white text-sm rounded-lg shadow-lg
+                     transition-all duration-200 hover:bg-indigo-700 
+                     active:scale-95 flex items-center gap-2">
+                     <i class="fas fa-camera"></i>
+                     <!-- <span>Modifier la photo</span> -->
+                 </button>
+                 <input type="file" x-ref="profileInput" @change="handleImageUpload" accept="image/*" class="hidden">
+ 
+                 <!-- Verification Badge -->
+                 <% if (user.isVerified) { %>
+                     <div class="absolute -top-2 -right-2 bg-white rounded-full p-1.5 shadow-md
+                         transition duration-200 hover:scale-110 cursor-help group/badge">
+                         <i class="fas fa-check-circle text-indigo-600 text-xl"></i>
+                         <div class="absolute -top-12 right-0 w-32 bg-gray-900 text-white text-xs
+                             rounded-lg px-2 py-1.5 opacity-0 group-hover/badge:opacity-100
+                             transition-opacity duration-200 text-center">
+                             Compte vérifié
                          </div>
-                         <% } %>
-               </div>
-
-               <!-- User Info Section -->
-               <div class="flex-1 text-center md:text-right">
-                    <div class="flex flex-col md:flex-row items-center md:items-start gap-3 mb-4">
-                         <h1 class="text-2xl md:text-3xl font-bold text-gray-900 font-arabic">
-                              <%= user.displayName %>
+                     </div>
+                 <% } %>
+             </div>
+ 
+             <!-- User Info Section -->
+             <div class="flex-1 text-center lg:text-left space-y-6">
+                 <div class="space-y-2">
+                     <div class="flex flex-col lg:flex-row items-center lg:items-start gap-3">
+                         <h1 class="text-2xl font-bold text-gray-900">
+                             <%= user.displayName %>
                          </h1>
-                         <span class="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-sm font-arabic">
-                              محترف
+                         <span class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-sm font-medium">
+                             Professionnel
                          </span>
-                    </div>
-
-                    <!-- Stats Grid -->
-                    <div class="flex flex-wrap items-center justify-center md:justify-start gap-4 mb-6">
+                     </div>
+ 
+                     <!-- Stats Grid -->
+                     <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4">
                          <% if (user.location?.city) { %>
-                              <div class="flex items-center px-4 py-2 bg-gray-50 rounded-xl
-                                    hover:bg-gray-100 transition-all duration-300 group">
-                                   <i class="fas fa-map-marker-alt text-red-500 ml-2 
-                                    group-hover:scale-110 transition-transform"></i>
-                                   <span class="text-sm text-gray-600 font-arabic">
-                                        <%= user.location.city %>
-                                   </span>
-                              </div>
-                              <% } %>
-
-                                   <% if (user.metrics?.totalServices) { %>
-                                        <div class="flex items-center px-4 py-2 bg-gray-50 rounded-xl
-                                    hover:bg-gray-100 transition-all duration-300 group">
-                                             <i class="fas fa-briefcase text-blue-500 ml-2 
-                                    group-hover:scale-110 transition-transform"></i>
-                                             <span class="text-sm text-gray-600 font-arabic">
-                                                  <%= user.metrics.totalServices %> خدمة
-                                             </span>
-                                        </div>
-                                        <% } %>
-
-                                             <% if (user.metrics?.averageRating) { %>
-                                                  <div class="flex items-center px-4 py-2 bg-gray-50 rounded-xl
-                                    hover:bg-gray-100 transition-all duration-300 group">
-                                                       <i class="fas fa-star text-yellow-500 ml-2 
-                                    group-hover:scale-110 transition-transform"></i>
-                                                       <span class="text-sm text-gray-600 font-arabic">
-                                                            <%= user.metrics.averageRating %>/5
-                                                       </span>
-                                                  </div>
-                                                  <% } %>
-                    </div>
-
-                    <!-- Share Button -->
-                    <button @click="shareProfile" class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-50
-                               text-gray-700 rounded-xl font-arabic
-                               transition-all duration-300 hover:bg-gray-100 
-                               hover:-translate-y-0.5 hover:shadow-md group">
-                         <i class="fas fa-share-alt transform transition-transform 
-                             duration-300 group-hover:rotate-12"></i>
-                         <span>مشاركة الملف الشخصي</span>
-                    </button>
-               </div>
-          </div>
-
-          <!-- Profile Completion Bar -->
-          <% if (completionPercentage < 100) { %>
-               <div class="mt-8 p-5 bg-gradient-to-l from-blue-50 to-blue-100/50 rounded-xl
-                        transition-all duration-300 hover:shadow-md">
-                    <div class="flex items-center justify-between mb-3">
-                         <span class="font-semibold text-blue-700 font-arabic">اكمل ملفك الشخصي</span>
-                         <span class="px-3 py-1 bg-white rounded-lg text-sm font-bold text-blue-600 font-arabic">
-                              <%= completionPercentage %>%
-                         </span>
-                    </div>
-                    <div class="relative h-2.5 bg-white/50 rounded-full overflow-hidden">
-                         <div class="absolute inset-y-0 right-0 bg-gradient-to-l from-blue-500 to-blue-600
-                                rounded-full transition-all duration-1000" style="width: <%= completionPercentage %>%"></div>
-                    </div>
-                    <button @click="showCompletionGuide" class="mt-3 text-sm text-blue-600 hover:text-blue-700 
-                               font-medium group inline-flex items-center gap-2 font-arabic">
-                         <span>عرض الخطوات المتبقية</span>
-                         <i class="fas fa-arrow-left transform transition-transform 
-                             duration-300 group-hover:-translate-x-1"></i>
-                    </button>
-               </div>
-               <% } %>
+                             <div class="flex items-center px-3 py-1.5 bg-gray-50 rounded-lg
+                                 transition duration-200 hover:bg-gray-100">
+                                 <i class="fas fa-map-marker-alt text-gray-500 mr-2"></i>
+                                 <span class="text-sm text-gray-600"><%= user.location.city %></span>
+                             </div>
+                         <% } %>
+ 
+                         <% if (user.metrics?.totalServices) { %>
+                             <div class="flex items-center px-3 py-1.5 bg-gray-50 rounded-lg
+                                 transition duration-200 hover:bg-gray-100">
+                                 <i class="fas fa-briefcase text-gray-500 mr-2"></i>
+                                 <span class="text-sm text-gray-600"><%= user.metrics.totalServices %> services</span>
+                             </div>
+                         <% } %>
+ 
+                         <% if (user.metrics?.averageRating) { %>
+                             <div class="flex items-center px-3 py-1.5 bg-gray-50 rounded-lg
+                                 transition duration-200 hover:bg-gray-100">
+                                 <i class="fas fa-star text-yellow-500 mr-2"></i>
+                                 <span class="text-sm text-gray-600"><%= user.metrics.averageRating %>/5</span>
+                             </div>
+                         <% } %>
+                     </div>
+                 </div>
+ 
+                 <!-- Profile Completion Bar -->
+                 <% if (completionPercentage < 100) { %>
+                     <div class="p-4 bg-gradient-to-r from-indigo-50 to-indigo-100/50 rounded-xl
+                         transition duration-300 hover:shadow-sm">
+                         <div class="flex items-center justify-between mb-3">
+                             <span class="font-medium text-indigo-700">Complétez votre profil</span>
+                             <span class="px-2 py-1 bg-white rounded-md text-sm font-medium text-indigo-600">
+                                 <%= completionPercentage %>%
+                             </span>
+                         </div>
+                         <div class="relative h-2 bg-white/50 rounded-full overflow-hidden">
+                             <div class="absolute inset-y-0 left-0 bg-indigo-600 rounded-full transition-all duration-1000" 
+                                 style="width: <%= completionPercentage %>%">
+                             </div>
+                         </div>
+                         <button @click="showCompletionGuide" 
+                             class="mt-3 text-sm text-indigo-600 hover:text-indigo-700 
+                             font-medium inline-flex items-center gap-2">
+                             <span>Voir les étapes restantes</span>
+                             <i class="fas fa-arrow-right transition duration-200 group-hover:translate-x-1"></i>
+                         </button>
+                     </div>
+                 <% } %>
+             </div>
+         </div>
      </div>
-</div>
-
-<script>
-     document.addEventListener('alpine:init', () => {
-          Alpine.data('headerCard', () => ({
-               async shareProfile() {
-                    try {
-                         const url = window.location.href;
-                         await navigator.clipboard.writeText(url);
-
-                         Swal.fire({
-                              icon: 'success',
-                              title: 'تم النسخ!',
-                              text: 'تم نسخ رابط الملف الشخصي',
-                              showConfirmButton: false,
-                              timer: 1500,
-                              customClass: {
-                                   popup: 'font-arabic'
-                              }
-                         });
-                    } catch (error) {
-                         Swal.fire({
-                              icon: 'error',
-                              title: 'خطأ',
-                              text: 'تعذر نسخ الرابط',
-                              customClass: {
-                                   popup: 'font-arabic'
-                              }
-                         });
-                    }
-               },
-
-               // Keep the rest of your existing methods...
-          }));
-     });
-</script>
-
-<style>
-     .font-arabic {
-          font-family: 'Tajawal', sans-serif;
-     }
-
-     /* Enhanced Animations */
-     @keyframes pulseScale {
-
-          0%,
-          100% {
-               transform: scale(1);
-          }
-
-          50% {
-               transform: scale(1.05);
-          }
-     }
-
-     .pulse-scale {
-          animation: pulseScale 2s ease-in-out infinite;
-     }
-
-     /* Rest of your existing styles... */
-</style>
-
-<style>
-     @keyframes shimmer {
-          0% {
-               transform: translateX(-100%);
-          }
-
-          100% {
-               transform: translateX(200%);
-          }
-     }
-
-     .animate-shimmer {
-          animation: shimmer 2s infinite;
-     }
-
-     @keyframes float {
-
-          0%,
-          100% {
-               transform: translateY(0);
-          }
-
-          50% {
-               transform: translateY(-5px);
-          }
-     }
-
-     .animate-float {
-          animation: float 3s ease-in-out infinite;
-     }
-</style>
-
-
-<!-- Alpine.js Component Logic -->
-<script>
-     document.addEventListener('alpine:init', () => {
-          Alpine.data('headerCard', () => ({
-               isHoveringCover: false,
-
-               async handleImageUpload(event, type) {
-                    const file = event.target.files[0];
-                    if (!file) return;
-
-                    // Validation
-                    if (!file.type.startsWith('image/')) {
-                         await this.showError('Type de fichier invalide', 'Veuillez sélectionner une image');
-                         return;
-                    }
-
-                    if (file.size > 5 * 1024 * 1024) {
-                         await this.showError('Fichier trop volumineux', 'La taille maximale est de 5MB');
-                         return;
-                    }
-
-                    // Show loading
-                    Swal.fire({
-                         title: 'Upload en cours...',
-                         html: `
-                    <div class="flex flex-col items-center">
-                        <div class="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-                        <p class="mt-4 text-gray-600">Traitement de l'image...</p>
-                    </div>
-                `,
-                         allowOutsideClick: false,
-                         showConfirmButton: false
-                    });
-
-                    try {
-                         const formData = new FormData();
-                         formData.append('image', file);
-                         formData.append('type', type);
-
-                         const response = await fetch('/dashboard/profile/update-image', {
-                              method: 'POST',
-                              body: formData
-                         });
-
-                         if (!response.ok) throw new Error('Upload failed');
-
-                         await Swal.fire({
-                              icon: 'success',
-                              title: 'Image mise à jour!',
-                              text: 'Votre profil a été actualisé avec succès',
-                              showConfirmButton: false,
-                              timer: 1500
-                         });
-
-                         window.location.reload();
-                    } catch (error) {
-                         console.error('Upload error:', error);
-                         await this.showError('Erreur', 'Une erreur est survenue lors de l\'upload');
-                    }
-               },
-
-               async showCompletionGuide() {
-                    const missingFields = document.getElementById('completionGuide').dataset.missingFields.split(',');
-                    if (missingFields.length === 0) return;
-
-                    const fields = {
-                         displayName: 'Nom d\'affichage',
-                         bio: 'Bio professionnelle',
-                         city: 'Ville',
-                         phone: 'Numéro de téléphone',
-                         specializations: 'Spécialisations'
-                    };
-
-                    const items = missingFields.map(field => `
-                <div class="flex items-center gap-3 p-3 rounded-lg bg-gray-50">
-                    <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
-                        <i class="fas fa-check text-blue-600"></i>
-                    </div>
-                    <span class="text-gray-700">${fields[field]}</span>
-                </div>
-            `).join('');
-
-                    const result = await Swal.fire({
-                         title: 'Complétez votre profil',
-                         html: `
-                    <div class="space-y-3 mt-4">
-                        ${items}
-                    </div>
-                `,
-                         showCancelButton: true,
-                         confirmButtonText: 'Compléter maintenant',
-                         cancelButtonText: 'Plus tard',
-                         confirmButtonColor: '#2563eb'
-                    });
-
-                    if (result.isConfirmed) {
-                         document.querySelector('#basicInfoSection')?.scrollIntoView({
-                              behavior: 'smooth'
-                         });
-                    }
-               },
-
-               async shareProfile() {
-                    const url = `${window.location.origin}/profile/${document.getElementById('shareButton').dataset.slug}`;
-
-                    try {
-                         await navigator.clipboard.writeText(url);
-                         await Swal.fire({
-                              icon: 'success',
-                              title: 'Lien copié!',
-                              text: 'Le lien a été copié dans le presse-papier',
-                              showConfirmButton: false,
-                              timer: 1500
-                         });
-                    } catch (error) {
-                         await this.showError('Erreur', 'Impossible de copier le lien');
-                    }
-               },
-
-               async showError(title, text) {
-                    await Swal.fire({
-                         icon: 'error',
-                         title,
-                         text,
-                         confirmButtonColor: '#2563eb'
-                    });
-               }
-          }));
-     });
-</script>
-
-<style>
-     @keyframes gradient-x {
-          0% {
-               background-position: 0% 50%;
-          }
-
-          50% {
-               background-position: 100% 50%;
-          }
-
-          100% {
-               background-position: 0% 50%;
-          }
-     }
-
-     .animate-gradient-x {
-          background-size: 200% 200%;
-          animation: gradient-x 15s ease infinite;
-     }
-
-     .group:hover .group-hover\:scale-105 {
-          transform: scale(1.05);
-     }
-</style>
+ </div>
+ 
+ <script>
+ document.addEventListener('alpine:init', () => {
+     Alpine.data('headerCard', () => ({
+         isUploading: false,
+ 
+         triggerFileInput() {
+             if (!this.isUploading) {
+                 this.$refs.profileInput.click();
+             }
+         },
+ 
+         async handleImageUpload(event) {
+             if (this.isUploading) return;
+             
+             const file = event.target.files[0];
+             if (!file) return;
+ 
+             // Validation
+             if (!file.type.startsWith('image/')) {
+                 await this.showError('Type de fichier invalide', 'Veuillez sélectionner une image');
+                 return;
+             }
+ 
+             if (file.size > 5 * 1024 * 1024) {
+                 await this.showError('Fichier trop volumineux', 'La taille maximale est de 5MB');
+                 return;
+             }
+ 
+             this.isUploading = true;
+ 
+             // Show loading
+             Swal.fire({
+                 title: 'Téléchargement en cours...',
+                 html: `
+                     <div class="flex flex-col items-center">
+                         <div class="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+                         <p class="mt-3 text-gray-600">Traitement de l'image...</p>
+                     </div>
+                 `,
+                 allowOutsideClick: false,
+                 showConfirmButton: false
+             });
+ 
+             try {
+                 const formData = new FormData();
+                 formData.append('image', file);
+                 formData.append('type', 'profile');
+ 
+                 const response = await fetch('/dashboard/profile/update-image', {
+                     method: 'POST',
+                     body: formData
+                 });
+ 
+                 if (!response.ok) throw new Error('Upload failed');
+ 
+                 await Swal.fire({
+                     icon: 'success',
+                     title: 'Image mise à jour!',
+                     text: 'Votre photo de profil a été actualisée avec succès',
+                     showConfirmButton: false,
+                     timer: 1500
+                 });
+ 
+                 window.location.reload();
+             } catch (error) {
+                 console.error('Upload error:', error);
+                 await this.showError('Erreur', "Une erreur est survenue lors du téléchargement");
+             } finally {
+                 this.isUploading = false;
+             }
+         },
+ 
+         async showCompletionGuide() {
+             const missingFields = {
+                 displayName: 'Nom d\'affichage',
+                 bio: 'Biographie professionnelle',
+                 city: 'Ville',
+                 phone: 'Numéro de téléphone',
+                 specializations: 'Spécialisations'
+             };
+ 
+             const result = await Swal.fire({
+                 title: 'Complétez votre profil',
+                 html: `
+                     <div class="space-y-3 mt-4">
+                         ${Object.entries(missingFields).map(([key, value]) => `
+                             <div class="flex items-center gap-3 p-3 rounded-lg bg-gray-50">
+                                 <div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center">
+                                     <i class="fas fa-check text-indigo-600"></i>
+                                 </div>
+                                 <span class="text-gray-700">${value}</span>
+                             </div>
+                         `).join('')}
+                     </div>
+                 `,
+                 showCancelButton: true,
+                 confirmButtonText: 'Compléter maintenant',
+                 cancelButtonText: 'Plus tard',
+                 confirmButtonColor: '#4f46e5'
+             });
+ 
+             if (result.isConfirmed) {
+                 document.querySelector('#basicInfoSection')?.scrollIntoView({
+                     behavior: 'smooth'
+                 });
+             }
+         },
+ 
+         async showError(title, text) {
+             await Swal.fire({
+                 icon: 'error',
+                 title,
+                 text,
+                 confirmButtonColor: '#4f46e5'
+             });
+         }
+     }));
+ });
+ </script>

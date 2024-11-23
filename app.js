@@ -29,16 +29,21 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Express session middleware with MongoDB store
 app.use(session({
-     secret: 'your-secret-key',
+     secret: 'your-secret-key', // Replace with a secure secret key
      resave: false,
-     saveUninitialized: true,
+     saveUninitialized: false, // Only save sessions if something is stored
      store: MongoStore.create({
-          mongoUrl: process.env.DATABASE_URI,
-          ttl: 14 * 24 * 60 * 60, // Keep session for 14 days
-          autoRemove: 'native' // Automatically remove expired sessions
-     })
-}));
-
+         mongoUrl: process.env.DATABASE_URI,
+         ttl: 30 * 24 * 60 * 60, // 30 days in seconds
+         autoRemove: 'native',   // Automatically remove expired sessions
+     }),
+     cookie: {
+         maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days in milliseconds
+         httpOnly: true,                  // Prevent client-side access to the cookie
+         secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+     }
+ }));
+ 
 
 // Passport middleware
 app.use(passport.initialize());
@@ -104,6 +109,7 @@ const aiRoutes = require('./routes/aiRoutes');
 const profileRoutes = require('./routes/profileRoutes');
 const galeryRoutes = require('./routes/galeryRoutes');
 const analyzeBreedRouter = require('./routes/analyzeBreed');
+const dogPostRouter = require('./routes/dogPost');
 
 
 app.get('/dog-breeds-analyzer', (req, res) => {
@@ -120,6 +126,7 @@ app.use('/', analyzeBreedRouter);
 
 
 app.use(userRoutes);
+app.use(dogPostRouter);
 app.use(authRoutes);
 app.use(adminRoutes);
 app.use(articleRoutes);

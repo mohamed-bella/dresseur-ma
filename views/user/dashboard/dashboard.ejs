@@ -7,21 +7,100 @@
           <title>NDRESSILIK - Tableau de Bord</title>
 </head>
 
-<body class="bg-gray-50">
+<body class="bg-gray-200">
      <div class="">
           <%- include('includes/header') %>
 
-               <main class="p-6">
-                    <!-- Dashboard Content -->
-                    <div class="max-w-5xl mx-auto space-y-6">
-                         <!-- Add Arabic font -->
+               <main class="p-6 max-w-4xl mx-auto">
+                    <% if (showConsultationAlert && (stats.pendingPaidCount > 0 || stats.pendingFreeCount > 0)) { %>
+                         <div class="mb-8">
+                             <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-2xl overflow-hidden">
+                                 <div class="p-6 sm:p-8">
+                                     <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+                                         <!-- Alert Content -->
+                                         <div class="space-y-3">
+                                             <div class="flex items-center gap-2 text-blue-600">
+                                                 <i class="fas fa-bell-exclamation text-lg"></i>
+                                                 <span class="font-semibold">Nouvelles opportunités <i class="fa-solid fa-dollar-sign"></i></span>
+                                             </div>
+                                             
+                                             <h3 class="text-xl sm:text-2xl font-bold text-gray-900">
+                                                 <%= stats.pendingPaidCount %> consultation<%= stats.pendingPaidCount > 1 ? 's' : '' %> payante<%= stats.pendingPaidCount > 1 ? 's' : '' %> 
+                                                 <% if (stats.pendingFreeCount > 0) { %>
+                                                     et <%= stats.pendingFreeCount %> gratuite<%= stats.pendingFreeCount > 1 ? 's' : '' %>
+                                                 <% } %>
+                                                 en attente !
+                                             </h3>
+                                             
+                                             <p class="text-gray-600">
+                                                 <% if (stats.pendingPaidCount > 0) { %>
+                                                     Ne manquez pas l'occasion de gagner jusqu'à <span class="font-semibold text-gray-900"><%= stats.potentialEarnings %> DH</span> 
+                                                     en répondant aux consultations payantes.
+                                                 <% } %>
+                                                 Les propriétaires attendent votre expertise !
+                                             </p>
+                                         </div>
+                     
+                                         <!-- Stats & CTA -->
+                                         <div class="flex flex-col sm:flex-row lg:flex-col gap-4 w-full lg:w-auto">
+                                             <!-- Quick Stats -->
+                                             <div class="grid grid-cols-2 gap-3 w-full lg:w-auto">
+                                                 <!-- Paid Consultations -->
+                                                 <div class="bg-white/60 rounded-xl p-4">
+                                                     <div class="text-sm text-gray-600 mb-1">Payantes</div>
+                                                     <div class="flex items-baseline gap-1">
+                                                         <span class="text-2xl font-bold text-gray-900"><%= stats.pendingPaidCount %></span>
+                                                         <% if (stats.pendingPaidCount > 0) { %>
+                                                             <span class="text-sm text-green-600">
+                                                                 <%= stats.potentialEarnings %> DH
+                                                             </span>
+                                                         <% } %>
+                                                     </div>
+                                                 </div>
+                                                 
+                                                 <!-- Free Consultations -->
+                                                 <div class="bg-white/60 rounded-xl p-4">
+                                                     <div class="text-sm text-gray-600 mb-1">Gratuites</div>
+                                                     <div class="flex items-baseline gap-1">
+                                                         <span class="text-2xl font-bold text-gray-900"><%= stats.pendingFreeCount %></span>
+                                                         <span class="text-sm text-blue-600">En attente</span>
+                                                     </div>
+                                                 </div>
+                                             </div>
+                     
+                                             <!-- CTA Button -->
+                                             <a href="/dashboard/consultations" 
+                                                class="flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white text-lg font-medium rounded-xl
+                                                       hover:bg-blue-700 transition-colors whitespace-nowrap w-full lg:w-auto">
+                                                 Répondre maintenant
+                                                 <i class="fas fa-arrow-right"></i>
+                                             </a>
+                                         </div>
+                                     </div>
+                                 </div>
+                     
+                                 <!-- Progress Bar -->
+                                 <div class="h-2 bg-gradient-to-r from-blue-500 to-indigo-500 w-full">
+                                     <div class="h-full bg-white/20 animate-progress"></div>
+                                 </div>
+                             </div>
+                         </div>
+                     
                          <style>
-                              @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700&display=swap');
-
-                              .font-tajawal {
-                                   font-family: 'Tajawal', sans-serif;
-                              }
-
+                             @keyframes progress {
+                                 0% { width: 0; }
+                                 50% { width: 100%; }
+                                 100% { width: 0; }
+                             }
+                     
+                             .animate-progress {
+                                 animation: progress 8s ease-in-out infinite;
+                             }
+                         </style>
+                     <% } %>
+                    <!-- Dashboard Content -->
+                    <div class="space-y-6">
+                         <style>
                               /* Card Hover Effects */
                               .action-card {
                                    position: relative;
@@ -135,88 +214,125 @@
                               }
                          </style>
 
-                         <div class="rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8 font-tajawal bg-white">
-                              <!-- Enhanced Header -->
-                              <div class="relative mb-6 sm:mb-10">
-                                   <h2 class="text-xl sm:text-2xl font-bold gradient-text text-right">إجراءات سريعة</h2>
-                                   <div class="absolute -bottom-2 sm:-bottom-3 right-0 w-16 sm:w-20 h-1 bg-gradient-to-l from-blue-600 to-blue-400 rounded-full"></div>
-                              </div>
-
-                              <!-- Enhanced Actions Grid -->
-                              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                                   <!-- New Service Action -->
-                                   <a href="/dashboard/new-service" class="action-card group block p-4 sm:p-6 rounded-xl sm:rounded-2xl border border-gray-100 
-                                      bg-gradient-to-br from-yellow-100 to-yellow-200
-                                      hover:border-blue-200 transition-all duration-300 
-                                      hover:shadow-lg hover:shadow-blue-500/10">
-                                        <div class="flex items-center justify-end gap-4 sm:gap-5">
-                                             <div class="flex-1 text-right">
-                                                  <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-1 group-hover:text-blue-600 transition-colors">
-                                                       إضافة خدمة
-                                                  </h3>
-                                                  <p class="text-xs sm:text-sm text-gray-500">ابدأ في تقديم خدمة جديدة</p>
-                                                  <div class="mt-2 sm:mt-3 inline-flex items-center text-blue-600 text-xs sm:text-sm font-medium
-                                                   group-hover:translate-x-2 transition-transform duration-300">
-                                                       <span class="ml-2">ابدأ الآن</span>
-                                                       <i class="fas fa-arrow-left text-xs"></i>
-                                                  </div>
-                                             </div>
-                                             <div class="action-icon w-12 h-12 sm:w-14 sm:h-14 bg-blue-50 rounded-lg sm:rounded-xl flex items-center justify-center 
-                                                group-hover:bg-blue-100 transition-all duration-300">
-                                                  <i class="fas fa-plus text-blue-600 text-lg sm:text-xl"></i>
-                                             </div>
-                                        </div>
-                                   </a>
-
-                                   <!-- Edit Profile Action -->
-                                   <a href="/dashboard/profile" class="action-card group block p-4 sm:p-6 rounded-xl sm:rounded-2xl border border-gray-100 
-                                      bg-gradient-to-br from-white to-purple-50/30
-                                      hover:border-purple-200 transition-all duration-300 
-                                      hover:shadow-lg hover:shadow-purple-500/10">
-                                        <div class="flex items-center justify-end gap-4 sm:gap-5">
-                                             <div class="flex-1 text-right">
-                                                  <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-1 group-hover:text-purple-600 transition-colors">
-                                                       تحديث الملف
-                                                  </h3>
-                                                  <p class="text-xs sm:text-sm text-gray-500">عدّل معلومات حسابك</p>
-                                                  <div class="mt-2 sm:mt-3 inline-flex items-center text-purple-600 text-xs sm:text-sm font-medium
-                                                   group-hover:translate-x-2 transition-transform duration-300">
-                                                       <span class="ml-2">تعديل الملف</span>
-                                                       <i class="fas fa-arrow-left text-xs"></i>
-                                                  </div>
-                                             </div>
-                                             <div class="action-icon w-12 h-12 sm:w-14 sm:h-14 bg-purple-50 rounded-lg sm:rounded-xl flex items-center justify-center 
-                                                group-hover:bg-purple-100 transition-all duration-300">
-                                                  <i class="fas fa-user-edit text-purple-600 text-lg sm:text-xl"></i>
-                                             </div>
-                                        </div>
-                                   </a>
-
-                                   <!-- Services Management Action -->
-                                   <a href="#services" class="action-card group block p-4 sm:p-6 rounded-xl sm:rounded-2xl border border-gray-100 
-                                      bg-gradient-to-br from-white to-emerald-50/30
-                                      hover:border-emerald-200 transition-all duration-300 
-                                      hover:shadow-lg hover:shadow-emerald-500/10">
-                                        <div class="flex items-center justify-end gap-4 sm:gap-5">
-                                             <div class="flex-1 text-right">
-                                                  <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-1 group-hover:text-emerald-600 transition-colors">
-                                                       إدارة الخدمات
-                                                  </h3>
-                                                  <p class="text-xs sm:text-sm text-gray-500">تحكم في خدماتك الحالية</p>
-                                                  <div class="mt-2 sm:mt-3 inline-flex items-center text-emerald-600 text-xs sm:text-sm font-medium
-                                                   group-hover:translate-x-2 transition-transform duration-300">
-                                                       <span class="ml-2">عرض الخدمات</span>
-                                                       <i class="fas fa-arrow-left text-xs"></i>
-                                                  </div>
-                                             </div>
-                                             <div class="action-icon w-12 h-12 sm:w-14 sm:h-14 bg-emerald-50 rounded-lg sm:rounded-xl flex items-center justify-center 
-                                                group-hover:bg-emerald-100 transition-all duration-300">
-                                                  <i class="fas fa-briefcase text-emerald-600 text-lg sm:text-xl"></i>
-                                             </div>
-                                        </div>
-                                   </a>
-                              </div>
-                         </div>
+<div class="rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8 bg-white">
+     <!-- Welcome Section -->
+     <div class="mb-8">
+         <h2 class="text-xl sm:text-2xl font-semibold text-gray-900">
+             Bienvenue dans votre espace professionnel
+         </h2>
+         <p class="mt-2 text-gray-600">
+             Commencez à configurer votre profil et vos services pour être visible par les clients
+         </p>
+     </div>
+ 
+     <!-- Progress Bar -->
+     <div class="mb-8">
+         <div class="flex items-center justify-between mb-2">
+             <span class="text-sm font-medium text-gray-600">Progression du profil</span>
+             <span class="text-sm font-medium text-primary-600"><%= user.completionPercentage %>%</span>
+         </div>
+         <div class="w-full h-2 bg-gray-100 rounded-full">
+             <div class="h-2 bg-yellow-500 rounded-full transition-all duration-500"
+                  style="width: <%= user.completionPercentage %>%"></div>
+         </div>
+     </div>
+ 
+     <!-- Setup Steps Grid -->
+     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+         <!-- Step 1: Complete Profile -->
+         <a href="/dashboard/profile" 
+            class="group block p-6 rounded-2xl border transition-all duration-300
+                   <%= !user.isProfileComplete ? 'bg-primary-50 border-primary-200 animate-pulse' : 'bg-gray-50 border-gray-100' %>
+                   hover:shadow-lg hover:border-primary-300">
+             <div class="flex items-center gap-4">
+                 <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-xl
+                             <%= !user.isProfileComplete ? 'bg-primary-100 text-primary-600' : 'bg-gray-100 text-gray-500' %>">
+                     <% if (user.isProfileComplete) { %>
+                         <i class="fas fa-check-circle text-xl text-green-500"></i>
+                     <% } else { %>
+                         <span class="text-lg font-bold">1</span>
+                     <% } %>
+                 </div>
+                 <div class="flex-1">
+                     <h3 class="text-lg font-semibold text-gray-900 mb-1">Compléter le profil</h3>
+                     <p class="text-sm text-blue-600 mb-2">
+                         <%= user.isProfileComplete ? 'Profil complété' : 'Ajoutez vos informations professionnelles' %>
+                     </p>
+                     <% if (!user.isProfileComplete) { %>
+                         <span class="text-sm text-primary-600 font-medium group-hover:underline">
+                             Commencer maintenant →
+                         </span>
+                     <% } %>
+                 </div>
+             </div>
+         </a>
+ 
+         <!-- Step 2: Add Services -->
+         <a href="/dashboard/new-service" 
+            class="group block p-6 rounded-2xl border transition-all duration-300
+                   <%= user.isProfileComplete && !user.hasServices ? 'bg-primary-50 border-primary-200 animate-pulse' : 'bg-gray-50 border-gray-100' %>
+                   hover:shadow-lg hover:border-primary-300">
+             <div class="flex items-center gap-4">
+                 <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-xl
+                             <%= user.isProfileComplete && !user.hasServices ? 'bg-primary-100 text-primary-600' : 'bg-gray-100 text-gray-500' %>">
+                     <% if (user.hasServices) { %>
+                         <i class="fas fa-check-circle text-xl text-green-500"></i>
+                     <% } else { %>
+                         <span class="text-lg font-bold">2</span>
+                     <% } %>
+                 </div>
+                 <div class="flex-1">
+                     <h3 class="text-lg font-semibold text-gray-900 mb-1">Ajouter vos services</h3>
+                     <p class="text-sm text-gray-600 mb-2">
+                         <%= user.hasServices ? `${user.servicesCount} services ajoutés` : 'Créez votre premier service' %>
+                     </p>
+                     <% if (!user.hasServices) { %>
+                         <span class="text-sm text-primary-600 font-medium group-hover:underline">
+                             Ajouter un service →
+                         </span>
+                     <% } %>
+                 </div>
+             </div>
+         </a>
+ 
+         <!-- Step 3: Manage Consultations -->
+         <a href="/dashboard/consultations" 
+            class="group block p-6 rounded-2xl border transition-all duration-300
+                   <%= user.isProfileComplete && user.hasServices ? 'bg-primary-50 border-primary-200' : 'bg-gray-50 border-gray-100' %>
+                   hover:shadow-lg hover:border-primary-300">
+             <div class="flex items-center gap-4">
+                 <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-xl bg-primary-100 text-primary-600">
+                     <i class="fas fa-comments text-xl"></i>
+                 </div>
+                 <div class="flex-1">
+                     <h3 class="text-lg font-semibold text-gray-900 mb-1">Gérer les consultations</h3>
+                     <p class="text-sm text-green-600 mb-2">
+                         <%=consultations.filter(c => c.status === 'pending').length  || 0 %> consultation(s) en attente
+                     </p>
+                     <span class="text-sm text-primary-600 font-medium group-hover:underline">
+                         Voir les demandes →
+                     </span>
+                 </div>
+             </div>
+         </a>
+     </div>
+ 
+     <!-- Help Section -->
+     <div class="mt-8 p-4 bg-gray-50 rounded-xl">
+         <div class="flex items-center gap-4">
+             <div class="w-10 h-10 flex items-center justify-center rounded-full bg-primary-100">
+                 <i class="fas fa-question text-primary-600"></i>
+             </div>
+             <div class="flex-1">
+                 <h4 class="text-sm font-medium text-gray-900">Besoin d'aide ?</h4>
+                 <p class="text-sm text-gray-600">Notre équipe est là pour vous aider à démarrer</p>
+             </div>
+             <a href="/help" class="px-4 py-2 text-sm text-primary-600 hover:bg-primary-50 rounded-lg transition-colors">
+                 Voir le guide
+             </a>
+         </div>
+     </div>
+ </div>
 
 
                          <script>
@@ -237,10 +353,13 @@
                          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
 
                          <%- include('includes/services') %>
-                              <%- include('includes/analytics') %>
+                              <!-- < %- include('includes/analytics') %> -->
                     </div>
+ 
                </main>
      </div>
+
+ 
 
      <%- include('includes/scripts') %>
 </body>

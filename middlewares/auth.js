@@ -248,25 +248,49 @@ router.get('/auth/google/cb',
         failureFlash: true
     }),
     async (req, res) => {
-        await sendWelcomeEmail(req.user.email);
-        res.redirect('/dashboard/new-service');
+        // Save the session after successful login
+        req.session.save((err) => {
+            if (err) {
+                console.error('Error saving session:', err);
+            } else {
+                console.log('Session saved successfully.');
+            }
+        });
 
+        // Send a welcome email
+        await sendWelcomeEmail(req.user.email);
+
+        // Redirect to the dashboard
+        res.redirect('/dashboard/new-service');
     }
 );
 
+
 // Logout route
 router.get('/logout', (req, res) => {
-    req.logout();
-    res.redirect('/');
+    req.logout((err) => {
+        if (err) {
+            console.error('Error logging out:', err);
+        }
+        res.clearCookie('user_info'); // Clear custom cookie
+        req.session.destroy((err) => {
+            if (err) {
+                console.error('Error destroying session:', err);
+            }
+            res.redirect('/');
+        });
+    });
 });
+
 
 // Auth middleware
 const isAuthenticated = (req, res, next) => {
-    if (req.isAuthenticated()) {
+    if (req.isAuthenticated() && req.session) {
         return next();
     }
     res.redirect('/auth/google');
 };
+
 
 const isNotAuthenticated = (req, res, next) => {
     if (!req.isAuthenticated()) {

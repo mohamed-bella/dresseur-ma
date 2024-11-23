@@ -1,0 +1,25 @@
+<!-- views/confirmation.ejs -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Publication Soumise</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <h1>Merci pour votre soumission!</h1>
+  <p>Votre annonce a été soumise et est en attente de validation par nos administrateurs.</p>
+  
+  <% if (type === 'lost') { %>
+    <h2>Conseils pour retrouver votre chien :</h2>
+    <ul>
+      <li>Contactez les vétérinaires ou refuges locaux.</li>
+      <li>Partagez votre annonce sur les réseaux sociaux.</li>
+      <li>Utilisez des photos claires montrant les marques distinctives de votre chien.</li>
+      <li>Assurez-vous que vos informations de contact sont exactes et à jour.</li>
+    </ul>
+  <% } %>
+
+  <a href="/">Retour à l'accueil</a>
+</body>
+</html>

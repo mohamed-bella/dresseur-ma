@@ -1,0 +1,375 @@
+<!-- views/index.ejs -->
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+     <%- include('includes/head') %>
+          <title>NDRESSILIK - Tableau de Bord</title>
+</head>
+
+<body class="bg-gray-200">
+     <div class="">
+          <%- include('includes/header') %>
+
+               <main class="p-6 max-w-4xl mx-auto">
+                   
+                         <!-- Consultation Management Section -->
+<div class="max-w-7xl mx-auto px-4 py-8">
+     <!-- Header with Stats -->
+     <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+         <div class="flex flex-col md:flex-row justify-between items-start gap-4">
+             <div>
+                 <h1 class="text-xl font-semibold text-gray-900">Demandes de Consultation</h1>
+                 <div class="flex gap-4 mt-2">
+                     <div class="flex items-center text-gray-500">
+                         <i class="fas fa-inbox mr-2"></i>
+                         <span><%= consultations.filter(c => c.status === 'pending').length %> en attente</span>
+                     </div>
+                     <div class="flex items-center text-gray-500">
+                         <i class="fas fa-clock mr-2"></i>
+                         <span><%= consultations.filter(c => c.status === 'in_progress').length %> en cours</span>
+                     </div>
+                 </div>
+             </div>
+ 
+             <!-- Filters -->
+             <div class="flex flex-wrap gap-3">
+                 <select id="typeFilter" onchange="applyFilters()" 
+                     class="px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary-500">
+                     <option value="all">Tous les types</option>
+                     <option value="paid">Consultations payantes</option>
+                     <option value="free">Consultations gratuites</option>
+                 </select>
+ 
+                 <select id="categoryFilter" onchange="applyFilters()"
+                     class="px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary-500">
+                     <option value="all">Toutes les catégories</option>
+                     <option value="behavior">Comportement</option>
+                     <option value="training">Éducation</option>
+                     <option value="health">Santé</option>
+                     <option value="other">Autre</option>
+                 </select>
+ 
+                 <select id="statusFilter" onchange="applyFilters()"
+                     class="px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary-500">
+                     <option value="all">Tous les statuts</option>
+                     <option value="pending">En attente</option>
+                     <option value="in_progress">En cours</option>
+                     <option value="completed">Terminées</option>
+                 </select>
+             </div>
+         </div>
+     </div>
+ 
+     <!-- Consultations List -->
+     <div class="space-y-4">
+         <% consultations.forEach(consultation => { %>
+             <div class="consultation-card bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-all"
+                  data-type="<%= consultation.type %>"
+                  data-category="<%= consultation.category %>"
+                  data-status="<%= consultation.status %>">
+                 <div class="p-6">
+                     <div class="flex items-start justify-between">
+                         <!-- Main Info -->
+                         <div class="flex-1">
+                             <div class="flex items-center gap-3 mb-3">
+                                 <!-- Status Badge -->
+                                 <span class="px-3 py-1 rounded-full text-xs font-medium
+                                     <%= consultation.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                                         consultation.status === 'in_progress' ? 'bg-blue-100 text-blue-800' :
+                                         'bg-green-100 text-green-800' %>">
+                                     <%= consultation.status === 'pending' ? 'En attente' :
+                                         consultation.status === 'in_progress' ? 'En cours' : 'Terminée' %>
+                                 </span>
+                                 
+                                 <!-- Type Badge -->
+                                 <span class="px-3 py-1 rounded-full text-xs font-medium
+                                     <%= consultation.type === 'paid' ? 'bg-purple-100 text-purple-800' : 'bg-gray-100 text-gray-800' %>">
+                                     <%= consultation.type === 'paid' ? 'Payante' : 'Gratuite' %>
+                                 </span>
+ 
+                                 <!-- Category Badge -->
+                                 <span class="px-3 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800">
+                                     <%= consultation.category %>
+                                 </span>
+                             </div>
+ 
+                             <!-- Dog Info -->
+                             <h3 class="text-lg font-medium text-gray-900 mb-2">
+                                 <%= consultation.dog.name %> • <%= consultation.dog.breed || 'Race non spécifiée' %>
+                             </h3>
+ 
+                             <!-- Description Preview -->
+                             <p class="text-gray-600 line-clamp-2 mb-4">
+                                 <%= consultation.problem.description %>
+                             </p>
+ 
+                             <!-- Owner Info -->
+                             <div class="flex items-center gap-4 text-sm text-gray-500">
+                                 <span class="flex items-center">
+                                     <i class="fas fa-user mr-2"></i>
+                                     <%= consultation.owner.name %>
+                                 </span>
+                                 <span class="flex items-center">
+                                     <i class="fas fa-clock mr-2"></i>
+                                     <%= moment(consultation.createdAt).fromNow() %>
+                                 </span>
+                             </div>
+                         </div>
+ 
+                         <!-- Actions -->
+                         <div class="flex flex-col gap-2 ml-4">
+                             <% if (consultation.status === 'pending') { %>
+                                 <button onclick="acceptConsultation('<%= consultation._id %>')"
+                                     class="px-4 py-2 bg-primary-600 text-white text-sm rounded-lg hover:bg-primary-700 transition-colors">
+                                     Accepter
+                                 </button>
+                             <% } %>
+                             
+                             <!-- View Details Button -->
+                             <button onclick="viewDetails('<%= consultation._id %>')"
+                                 class="px-4 py-2 bg-gray-100 text-gray-700 text-sm rounded-lg hover:bg-gray-200 transition-colors">
+                                 Détails
+                             </button>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         <% }) %>
+ 
+         <!-- Empty State -->
+         <% if (consultations.length === 0) { %>
+             <div class="text-center py-12 bg-white rounded-xl shadow-sm">
+                 <div class="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                     <i class="fas fa-inbox text-gray-400 text-2xl"></i>
+                 </div>
+                 <h3 class="text-lg font-medium text-gray-900 mb-2">Aucune consultation</h3>
+                 <p class="text-gray-500">Aucune demande de consultation ne correspond à vos critères</p>
+             </div>
+         <% } %>
+     </div>
+ 
+     <!-- Pagination if needed -->
+     <!-- < % if (pagination && pagination.total > 1) { %>
+         <div class="flex justify-center mt-6">
+             < % if  (pagination.hasPrev) { %>
+                 <a href="?page=< %= pagination.current - 1 %>" class="px-4 py-2 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 text-sm mr-2">
+                     Précédent
+                 </a>
+             < % } %>
+             < % if (pagination.hasNext) { %>
+                 <a href="?page=< %= pagination.current + 1 %>" class="px-4 py-2 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 text-sm">
+                     Suivant
+                 </a>
+             < % } %>
+         </div>
+     <  % } %> -->
+ </div>
+ 
+ <!-- Details Modal (hidden by default) -->
+ <div id="detailsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50">
+     <div class="fixed inset-0 flex items-center justify-center p-4">
+         <div class="bg-white rounded-xl shadow-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+             <!-- Modal content will be injected here -->
+         </div>
+     </div>
+ </div>
+               </main>
+     </div>
+
+ 
+ <script>
+ function applyFilters() {
+     const type = document.getElementById('typeFilter').value;
+     const category = document.getElementById('categoryFilter').value;
+     const status = document.getElementById('statusFilter').value;
+ 
+     document.querySelectorAll('.consultation-card').forEach(card => {
+         const matchesType = type === 'all' || card.dataset.type === type;
+         const matchesCategory = category === 'all' || card.dataset.category === category;
+         const matchesStatus = status === 'all' || card.dataset.status === status;
+ 
+         card.style.display = matchesType && matchesCategory && matchesStatus ? 'block' : 'none';
+     });
+ }
+ 
+ async function acceptConsultation(id) {
+     try {
+         const response = await fetch(`/consultations/${id}/accept`, {
+             method: 'POST',
+             headers: {
+                 'Content-Type': 'application/json'
+             }
+         });
+ 
+         const data = await response.json();
+         if (data.success) {
+             showToast('Consultation acceptée avec succès', 'success');
+             setTimeout(() => window.location.reload(), 1500);
+         } else {
+             throw new Error(data.error);
+         }
+     } catch (error) {
+         showToast(error.message || 'Erreur lors de l\'acceptation', 'error');
+     }
+ }
+ 
+ async function viewDetails(id) {
+     try {
+         const response = await fetch(`/consultations/${id}`);
+         const data = await response.json();
+         console.log(data)
+         if (data.success) {
+             const modal = document.getElementById('detailsModal');
+             modal.querySelector('.bg-white').innerHTML = generateDetailView(data.consultation);
+             modal.classList.remove('hidden');
+         }
+     } catch (error) {
+         showToast('Erreur lors du chargement des détails', 'error');
+     }
+ }
+ 
+ function generateDetailView(consultation) {
+    return `
+        <div class="p-6">
+            <!-- Modal Header -->
+            <div class="flex justify-between items-start mb-6">
+                <div>
+                    <h2 class="text-xl font-semibold text-gray-900">Détails de la consultation</h2>
+                    <div class="flex gap-2 mt-2">
+                        <span class="px-2 py-1 rounded-full text-xs font-medium
+                            ${consultation.type === 'paid' ? 'bg-purple-100 text-purple-800' : 'bg-gray-100 text-gray-800'}">
+                            ${consultation.type === 'paid' ? 'Payante' : 'Gratuite'}
+                        </span>
+                        <span class="px-2 py-1 rounded-full text-xs font-medium
+                            ${consultation.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'}">
+                            ${consultation.status === 'pending' ? 'En attente' : 'En cours'}
+                        </span>
+                    </div>
+                </div>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 p-1">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Content Grid -->
+            <div class="space-y-6">
+                <!-- Dog Information -->
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <h3 class="text-sm font-medium text-gray-700 mb-3">Information du chien</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <span class="text-sm text-gray-500">Nom</span>
+                            <p class="font-medium text-gray-900">${consultation.dog.name}</p>
+                        </div>
+                        ${consultation.dog.breed ? `
+                            <div>
+                                <span class="text-sm text-gray-500">Race</span>
+                                <p class="font-medium text-gray-900">${consultation.dog.breed}</p>
+                            </div>
+                        ` : ''}
+                        ${consultation.dog.age ? `
+                            <div>
+                                <span class="text-sm text-gray-500">Âge</span>
+                                <p class="font-medium text-gray-900">${consultation.dog.age}</p>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+
+                <!-- Problem Description -->
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <h3 class="text-sm font-medium text-gray-700 mb-3">Description du problème</h3>
+                    <p class="text-gray-600 whitespace-pre-wrap">${consultation.problem.description}</p>
+                </div>
+
+                <!-- Owner Contact -->
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <h3 class="text-sm font-medium text-gray-700 mb-3">Contact propriétaire</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-user text-gray-400"></i>
+                            <span class="text-gray-900">${consultation.owner.name}</span>
+                        </div>
+                        ${consultation.owner.email ? `
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-envelope text-gray-400"></i>
+                                <a href="mailto:${consultation.owner.email}" 
+                                   class="text-primary-600 hover:text-primary-700">
+                                    ${consultation.owner.email}
+                                </a>
+                            </div>
+                        ` : ''}
+                        ${consultation.owner.phone ? `
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-phone text-gray-400"></i>
+                                <a href="tel:${consultation.owner.phone}" 
+                                   class="text-primary-600 hover:text-primary-700">
+                                    ${consultation.owner.phone}
+                                </a>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+
+                <!-- Availability -->
+                ${consultation.availability && consultation.availability.length > 0 ? `
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h3 class="text-sm font-medium text-gray-700 mb-3">Disponibilités préférées</h3>
+                        <div class="flex flex-wrap gap-2">
+                            ${consultation.availability.map(time => `
+                                <span class="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm">
+                                    ${time === 'morning' ? 'Matin' :
+                                      time === 'afternoon' ? 'Après-midi' :
+                                      time === 'evening' ? 'Soir' : 'Weekend'}
+                                </span>
+                            `).join('')}
+                        </div>
+                    </div>
+                ` : ''}
+
+                <!-- Action Buttons -->
+                <div class="flex justify-end gap-3 pt-4">
+                    ${consultation.status === 'pending' ? `
+                        <button onclick="acceptConsultation('${consultation._id}')"
+                                class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
+                            Accepter
+                        </button>
+                    ` : ''}
+                    
+                    <div class="flex gap-2">
+                        ${consultation.owner.phone ? `
+                            <a href="tel:${consultation.owner.phone}" 
+                               class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center">
+                                <i class="fas fa-phone mr-2"></i>
+                                Appeler
+                            </a>
+                        ` : ''}
+                        
+                        ${consultation.owner.email ? `
+                            <a href="mailto:${consultation.owner.email}" 
+                               class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center">
+                                <i class="fas fa-envelope mr-2"></i>
+                                Email
+                            </a>
+                        ` : ''}
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+ 
+ function closeModal() {
+     document.getElementById('detailsModal').classList.add('hidden');
+ }
+ 
+ function showToast(message, type) {
+     // Implementation remains the same
+ }
+ </script>
+
+     <%- include('includes/scripts') %>
+</body>
+
+</html>

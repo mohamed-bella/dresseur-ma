@@ -1,0 +1,46 @@
+<!-- views/admin.ejs -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Administration des Publications</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <h1>Administration des Publications</h1>
+  
+  <div class="posts">
+    <% if (posts.length === 0) { %>
+      <p>Aucune publication en attente.</p>
+    <% } else { %>
+      <% posts.forEach(post => { %>
+        <div class="post">
+          <% if (post.photo) { %>
+            <img src="<%= post.photo %>" alt="Photo de <%= post.name %>">
+          <% } %>
+          <h2><%= post.name %> (<%= post.type === 'adoption' ? 'Adoption' : 'Perdu' %>)</h2>
+          <p><strong>Âge:</strong> <%= post.age %></p>
+          <p><strong>Race:</strong> <%= post.breed %></p>
+          <p><strong>Description:</strong> <%= post.description %></p>
+          <p><strong>Localisation:</strong> <%= post.location %></p>
+          <p><strong>Contact:</strong> 
+            <% if (post.contactInfo.email) { %>
+              <a href="mailto:<%= post.contactInfo.email %>"><%= post.contactInfo.email %></a>
+            <% } %>
+            <% if (post.contactInfo.phone) { %>
+              <span><%= post.contactInfo.phone %></span>
+            <% } %>
+          </p>
+          <form action="/admin/approve/<%= post._id %>" method="POST" style="display:inline;">
+            <button type="submit">Approuver</button>
+          </form>
+          <form action="/admin/reject/<%= post._id %>" method="POST" style="display:inline;">
+            <input type="text" name="feedback" placeholder="Raison du rejet" required>
+            <button type="submit">Rejeter</button>
+          </form>
+        </div>
+      <% }) %>
+    <% } %>
+  </div>
+</body>
+</html>

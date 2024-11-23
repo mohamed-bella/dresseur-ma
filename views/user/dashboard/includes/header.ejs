@@ -1,144 +1,174 @@
-<!-- views/partials/dashboard/header.ejs -->
-<header class="bg-white border-b border-gray-200 sticky top-0 z-30" x-data="{ isMobileSidebarOpen: false, isProfileOpen: false }">
-     <div class="flex items-center justify-between px-6 py-4">
-          <!-- Mobile Menu Button - Only show on mobile -->
-          <button @click="isMobileSidebarOpen = !isMobileSidebarOpen" class="lg:hidden text-gray-600 focus:outline-none" aria-label="Toggle Menu">
-               <i class="fas fa-bars text-xl"></i>
-          </button>
-
-          <!-- Breadcrumb/Title - Hide on mobile -->
-          <div class="hidden lg:flex items-center">
-               <h1 class="text-lg font-semibold text-gray-900">Dashboard</h1>
-          </div>
-
-          <!-- Search Bar -->
-          <div class="hidden md:flex flex-1 max-w-lg mx-6">
-               <div class="relative w-full">
-                    <input type="text" placeholder="Rechercher..." class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
-                    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
-               </div>
-          </div>
-
-          <!-- Right Menu -->
-          <div class="flex items-center space-x-4">
-               <!-- Notifications -->
-               <a href="/" class="p-2 text-gray-600 hover:bg-gray-100 rounded-full relative">
-                    <i class="fas fa-home"></i>
-                    <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-               </a>
-
-
-
-               <!-- Profile Dropdown -->
-               <div class="relative" id="profileDropdown">
-                    <button id="profileDropdownButton" class="flex items-center space-x-3 focus:outline-none">
-                         <img src="<%= user.profileImage || 'https://via.placeholder.com/150' %>" alt="Profile" class="w-8 h-8 rounded-full object-cover">
-                         <span class="hidden sm:block text-sm font-medium text-gray-700">
-                              <%= user.displayName %>
-                         </span>
-                         <i class="fas fa-chevron-down text-gray-600"></i>
-                    </button>
-
-                    <!-- Dropdown Menu -->
-                    <div id="profileDropdownMenu" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50 opacity-0 transform scale-95 transition-all duration-100 ease-out pointer-events-none">
-                         <a href="/dashboard/profile" class="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-100">
-                              <i class="fas fa-user w-5"></i>
-                              <span>Profile</span>
-                         </a>
-                         <a href="/settings" class="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-100">
-                              <i class="fas fa-cog w-5"></i>
-                              <span>Paramètres</span>
-                         </a>
-                         <hr class="my-2">
-                         <a href="/logout" class="flex items-center px-4 py-2 text-red-600 hover:bg-gray-100">
-                              <i class="fas fa-sign-out-alt w-5"></i>
-                              <span>Déconnexion</span>
-                         </a>
-                    </div>
-               </div>
-
-               <!-- Include Font Awesome if not already included -->
-               <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
-
-               <!-- JavaScript -->
-               <script>
-                    // Get the elements
-                    const dropdownButton = document.getElementById('profileDropdownButton');
-                    const dropdownMenu = document.getElementById('profileDropdownMenu');
-
-                    // Functions to show and hide the dropdown
-                    function showDropdownMenu() {
-                         dropdownMenu.classList.remove('opacity-0', 'scale-95', 'pointer-events-none');
-                    }
-
-                    function hideDropdownMenu() {
-                         dropdownMenu.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
-                    }
-
-                    // Toggle dropdown menu on button click
-                    dropdownButton.addEventListener('click', function (event) {
-                         event.stopPropagation();
-                         if (dropdownMenu.classList.contains('opacity-0')) {
-                              showDropdownMenu();
-                         } else {
-                              hideDropdownMenu();
-                         }
-                    });
-
-                    // Close dropdown menu when clicking outside
-                    document.addEventListener('click', function (event) {
-                         const isClickInside = dropdownButton.contains(event.target) || dropdownMenu.contains(event.target);
-                         if (!isClickInside) {
-                              hideDropdownMenu();
-                         }
-                    });
-               </script>
-
-          </div>
+<header class="bg-white border-b border-gray-200 sticky top-0 z-30">
+     <div class="px-4 sm:px-6">
+         <div class="flex items-center justify-between h-16">
+             <!-- Left Side -->
+             <div class="flex items-center">
+                 <!-- Mobile menu button -->
+                 <button id="mobileSidebarToggle" class="lg:hidden p-2 rounded-md text-gray-600 hover:bg-gray-100">
+                     <i class="fas fa-bars text-xl"></i>
+                 </button>
+ 
+                 <!-- Logo - Show only on mobile -->
+                 <div class="lg:hidden ml-2 text-xl font-bold text-primary-600">
+                     NDRESSILIK
+                 </div>
+ 
+                 <!-- Desktop Navigation Title -->
+                 <div class="hidden lg:flex items-center ml-4">
+                     <div class="flex items-center gap-2 px-3 py-1.5 bg-primary-50 rounded-lg">
+                         <span class="text-primary-600 font-medium"><%= user.role === 'professional' ? 'Professionnel' : 'Administrateur' %></span>
+                     </div>
+                 </div>
+             </div>
+ 
+             <!-- Center - Search Bar -->
+             <div class="hidden md:flex flex-1 max-w-2xl mx-8">
+                 <div class="relative w-full">
+                     <input 
+                         type="text" 
+                         placeholder="Rechercher une consultation, un service..." 
+                         class="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-xl 
+                                focus:bg-white focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                     >
+                     <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                 </div>
+             </div>
+ 
+             <!-- Right Side -->
+             <div class="flex items-center gap-2 sm:gap-4">
+                 <!-- Return Home -->
+                 <a href="/" 
+                    class="p-2 text-gray-600 hover:bg-gray-100 rounded-xl transition-colors flex items-center gap-2">
+                     <i class="fas fa-home"></i>
+                     <span class="hidden sm:block text-sm">Accueil</span>
+                 </a>
+ 
+                 <!-- Notifications -->
+                 <div class="relative">
+                     <button class="p-2 text-gray-600 hover:bg-gray-100 rounded-xl transition-colors flex items-center gap-2">
+                         <div class="relative">
+                             <i class="fas fa-bell"></i>
+                             <span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                         </div>
+                         <span class="hidden sm:block text-sm">Notifications</span>
+                     </button>
+                 </div>
+ 
+                 <!-- Profile Dropdown -->
+                 <div class="relative ml-2" id="profileDropdown">
+                     <button id="profileDropdownButton" 
+                             class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-xl transition-colors">
+                         <!-- Profile Image -->
+                         <div class="relative">
+                             <img src="<%= user.profileImage || 'https://via.placeholder.com/150' %>" 
+                                  alt="Profile" 
+                                  class="w-8 h-8 rounded-full object-cover ring-2 ring-white">
+                             <div class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full ring-2 ring-white"></div>
+                         </div>
+ 
+                         <!-- Name and Role - Hide on mobile -->
+                         <div class="hidden sm:block text-left">
+                             <p class="text-sm font-medium text-gray-700 line-clamp-1">
+                                 <%= user.displayName %>
+                             </p>
+                             <p class="text-xs text-gray-500 line-clamp-1">
+                                 <%= user.email %>
+                             </p>
+                         </div>
+ 
+                         <i class="fas fa-chevron-down text-gray-400 ml-1"></i>
+                     </button>
+ 
+                     <!-- Dropdown Menu -->
+                     <div id="profileDropdownMenu" 
+                          class="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg py-2 z-50 
+                                 opacity-0 scale-95 transition-all duration-100 ease-out pointer-events-none
+                                 border border-gray-100">
+                         <!-- User Info -->
+                         <div class="px-4 py-2 border-b border-gray-100">
+                             <p class="text-sm font-medium text-gray-900"><%= user.displayName %></p>
+                             <p class="text-xs text-gray-500"><%= user.email %></p>
+                         </div>
+ 
+                         <!-- Menu Items -->
+                         <div class="p-2 space-y-1">
+                             <a href="/dashboard/profile" 
+                                class="flex items-center gap-3 px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-lg">
+                                 <i class="fas fa-user w-5 text-gray-400"></i>
+                                 Mon Profil
+                             </a>
+                             <a href="/dashboard/settings" 
+                                class="flex items-center gap-3 px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-lg">
+                                 <i class="fas fa-cog w-5 text-gray-400"></i>
+                                 Paramètres
+                             </a>
+                             <a href="/help" 
+                                class="flex items-center gap-3 px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-lg">
+                                 <i class="fas fa-question-circle w-5 text-gray-400"></i>
+                                 Aide
+                             </a>
+                         </div>
+ 
+                         <!-- Logout -->
+                         <div class="p-2 border-t border-gray-100">
+                             <a href="/logout" 
+                                class="flex items-center gap-3 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg">
+                                 <i class="fas fa-sign-out-alt w-5"></i>
+                                 Déconnexion
+                             </a>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
      </div>
-
-     <!-- Mobile Sidebar -->
-     <div x-show="isMobileSidebarOpen" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0" x-transition:leave="transition ease-in duration-300" x-transition:leave-start="translate-x-0" x-transition:leave-end="-translate-x-full" class="fixed inset-y-0 left-0 transform w-64 bg-white shadow-lg z-40 lg:hidden">
-          <div class="flex flex-col h-full">
-               <!-- Mobile Sidebar Header -->
-               <div class="p-4 border-b">
-                    <div class="flex items-center justify-between">
-                         <div class="text-xl font-bold text-blue-600">NDRESSILIK</div>
-                         <button @click="isMobileSidebarOpen = false" class="text-gray-500 hover:text-gray-700">
-                              <i class="fas fa-times"></i>
-                         </button>
-                    </div>
-               </div>
-
-               <!-- Mobile Navigation -->
-               <nav class="flex-1 overflow-y-auto p-4">
-                    <div class="space-y-2">
-                         <a href="/dashboard" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
-                              <i class="fas fa-gauge w-5"></i>
-                              <span>Dashboard</span>
-                         </a>
-
-                         <a href="/dashboard/profile" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg <%= path === 'profile' ? 'bg-blue-50 text-blue-600' : '' %>">
-                              <i class="fas fa-user w-5"></i>
-                              <span>Profile</span>
-                         </a>
-                         <!-- <a href="/services" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg <%= path === 'services' ? 'bg-blue-50 text-blue-600' : '' %>">
-                                             <i class="fas fa-briefcase w-5"></i>
-                                             <span>Services</span>
-                                        </a> -->
-                         <!-- <a href="/reservations" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg <%= path === 'reservations' ? 'bg-blue-50 text-blue-600' : '' %>">
-                                             <i class="fas fa-calendar w-5"></i>
-                                             <span>Reservations</span>
-                                        </a> -->
-                         <a href="/dashboard/galery" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg <%= path === 'gallery' ? 'bg-blue-50 text-blue-600' : '' %>">
-                              <i class="fas fa-images w-5"></i>
-                              <span>Gallery</span>
-                         </a>
-                    </div>
-               </nav>
-          </div>
+ 
+     <!-- Search Bar for Mobile -->
+     <div class="lg:hidden p-4 border-t border-gray-200">
+         <div class="relative">
+             <input 
+                 type="text" 
+                 placeholder="Rechercher..." 
+                 class="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-xl 
+                        focus:bg-white focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+             >
+             <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+         </div>
      </div>
-
-     <!-- Mobile Sidebar Backdrop -->
-     <div x-show="isMobileSidebarOpen" @click="isMobileSidebarOpen = false" class="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"></div>
-</header>
+ </header>
+ 
+ <script>
+ // Toggle dropdown menu
+ const dropdownButton = document.getElementById('profileDropdownButton');
+ const dropdownMenu = document.getElementById('profileDropdownMenu');
+ let isDropdownOpen = false;
+ 
+ function toggleDropdown() {
+     isDropdownOpen = !isDropdownOpen;
+     if (isDropdownOpen) {
+         dropdownMenu.classList.remove('opacity-0', 'scale-95', 'pointer-events-none');
+         dropdownMenu.classList.add('opacity-100', 'scale-100');
+     } else {
+         dropdownMenu.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
+         dropdownMenu.classList.remove('opacity-100', 'scale-100');
+     }
+ }
+ 
+ dropdownButton.addEventListener('click', (e) => {
+     e.stopPropagation();
+     toggleDropdown();
+ });
+ 
+ // Close dropdown when clicking outside
+ document.addEventListener('click', () => {
+     if (isDropdownOpen) {
+         toggleDropdown();
+     }
+ });
+ 
+ // Mobile sidebar toggle
+ const mobileSidebarToggle = document.getElementById('mobileSidebarToggle');
+ mobileSidebarToggle.addEventListener('click', () => {
+     document.body.classList.toggle('sidebar-open');
+ });
+ </script>

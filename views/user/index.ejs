@@ -3,18 +3,128 @@
      <%- include('include/navbar.ejs') %>
 
 
-          <!-- Include the hero  -->
-          <%- include('include/hero.ejs') %>
-               <!-- Top Provider -->
-               <%- include('include/top-provider.ejs') %>
-                    <%- include('include/dogai.ejs') %>
-                         <%- include('include/events.ejs') %>
-                              <!-- Announcements Section -->
-                              <%- include('include/announcements.ejs') %>
-                                   <!-- Articles Section -->
-                                   <%- include('include/articles.ejs') %>
-                                        <!-- about section -->
-                                        <%- include('include/about.ejs') %>
+<!-- Main Section Container -->
+<section class="py-16 md:py-24 px-4">
+     <div class="max-w-7xl mx-auto">
+         <!-- Header -->
+         <div class="text-center max-w-3xl mx-auto mb-16">
+             <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                 Bienvenue sur <span class="text-primary-600">Ndressilik</span>
+             </h1>
+             <p class="text-gray-600 text-lg leading-relaxed">
+                 La première plateforme marocaine dédiée aux services canins. Découvrez nos solutions innovantes pour le bien-être de votre fidèle compagnon.
+             </p>
+         </div>
+ 
+         <!-- Services Grid -->
+         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 mb-16">
+             <!-- Adoption Card -->
+             <a href="/chiens-adoption-et-perdus" class="group block">
+                 <div class="h-full bg-rose-100 rounded-3xl p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+                     <div class="w-16 h-16 rounded-2xl bg-white flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                         <i class="fas fa-heart text-2xl text-rose-500"></i>
+                     </div>
+                     
+                     <h3 class="text-xl font-bold text-gray-900 mb-3">
+                         Adoption & Chiens Perdus
+                     </h3>
+                     <p class="text-gray-600 mb-6">
+                         Donnez une seconde chance aux chiens abandonnés ou aidez à retrouver les chiens perdus à travers le Maroc.
+                     </p>
+                     
+                     <div class="flex items-center text-rose-600 font-medium">
+                         Découvrir
+                         <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                     </div>
+                 </div>
+             </a>
+ 
+             <!-- Services Card -->
+             <a href="/services" class="group block">
+                 <div class="h-full bg-blue-100 rounded-3xl p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+                     <div class="w-16 h-16 rounded-2xl bg-white flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                         <i class="fas fa-shield-dog text-2xl text-blue-500"></i>
+                     </div>
+                     
+                     <h3 class="text-xl font-bold text-gray-900 mb-3">
+                         Services Canins
+                     </h3>
+                     <p class="text-gray-600 mb-6">
+                         Éducation, toilettage, pension et bien plus encore. Des services professionnels pour votre chien.
+                     </p>
+                     
+                     <div class="flex items-center text-blue-600 font-medium">
+                         Explorer
+                         <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                     </div>
+                 </div>
+             </a>
+ 
+             <!-- Profiles Card -->
+             <a href="/professionnels" class="group block">
+                 <div class="h-full bg-amber-100 rounded-3xl p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+                     <div class="w-16 h-16 rounded-2xl bg-white flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                         <i class="fas fa-user-tie text-2xl text-amber-500"></i>
+                     </div>
+                     
+                     <h3 class="text-xl font-bold text-gray-900 mb-3">
+                         Professionnels
+                     </h3>
+                     <p class="text-gray-600 mb-6">
+                         Trouvez les meilleurs vétérinaires, éducateurs et experts canins certifiés au Maroc.
+                     </p>
+                     
+                     <div class="flex items-center text-amber-600 font-medium">
+                         Consulter
+                         <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                     </div>
+                 </div>
+             </a>
+             <!-- Articles Card -->
+<a href="/articles" class="group block">
+     <div class="h-full bg-green-100 rounded-3xl p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+         <div class="w-16 h-16 rounded-2xl bg-white flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+             <i class="fas fa-book-open text-2xl text-green-500"></i>
+         </div>
+         
+         <h3 class="text-xl font-bold text-gray-900 mb-3">
+             Articles
+         </h3>
+         <p class="text-gray-600 mb-6">
+             Découvrez les derniers articles et conseils pour le bien-être de votre chien.
+         </p>
+         
+         <div class="flex items-center text-green-600 font-medium">
+             Lire plus
+             <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+         </div>
+     </div>
+ </a>
 
+ <!-- Consultation Card -->
+<a href="/consultation" class="group block">
+     <div class="h-full bg-blue-100 rounded-3xl p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+         <div class="w-16 h-16 rounded-2xl bg-white flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+             <i class="fas fa-comments text-2xl text-blue-500"></i>
+         </div>
+         
+         <h3 class="text-xl font-bold text-gray-900 mb-3">
+             Consultation avec Ndressilik
+         </h3>
+         <p class="text-gray-600 mb-6">
+             Obtenez des conseils personnalisés pour votre chien avec nos experts.
+         </p>
+         
+         <div class="flex items-center text-blue-600 font-medium">
+             Consulter
+             <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+         </div>
+     </div>
+ </a>
+ 
+         </div>
+ 
+     </div>
+ </section>
                                              <!-- Include the footer template -->
                                              <%- include('include/footer.ejs') %>
