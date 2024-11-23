@@ -345,7 +345,7 @@ router.get('/articles', async (req, res) => {
 
      try {
           // Fetch all articles
-          const articles = await Article.find({createdAt : -1});
+          const articles = await Article.find().sort({ createdAt: -1 });
           // console.log(articles)
           // Get unique categories from articles
           const categories = [...new Set(articles.map(article => article.category.trim()))];
