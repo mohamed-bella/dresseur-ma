@@ -1,37 +1,28 @@
 <%- include('include/head', { title: pageTitle, description: description, keywords: keywords }) %>
     <%- include('include/navbar') %>
-        <main class="max-w-5xl mx-auto">
-            <!-- Service Header -->
+        <!-- ServicesListing.ejs -->
+        <div class="min-h-screen bg-white">
+            <!-- Header Section -->
             <div class="pt-6 pb-4">
-                <div class="flex items-center gap-4">
-
-
-                    <div class="py-6">
-                        <h2 class="flex items-baseline gap-3 text-2xl sm:text-3xl font-semibold">
-                            <span class="bg-clip-text text-transparent bg-gradient-to-r from-gray-800 to-gray-600">
-                                Services Canine
-                            </span>
-                            <span class="flex items-center gap-1 text-sm font-normal text-gray-500 mt-1">
-                                <i class="fas fa-paw text-orange-400"></i>
-                            </span>
-                        </h2>
-                        <div class="mt-2 w-20 h-1 rounded-full bg-orange-500/20"></div>
-                    </div>
-                </div>
+                <h2 class="flex items-baseline gap-3 text-2xl sm:text-3xl font-semibold px-4 max-w-6xl mx-auto">
+                    <span class="bg-clip-text text-transparent bg-gradient-to-r from-amber-600 to-amber-500">
+                        Services Canine
+                    </span>
+                    <i class="fas fa-paw text-amber-400 text-sm"></i>
+                </h2>
             </div>
-            <!-- <p class="text-sm text-gray-500 mt-0.5">Pour Votre Chien</p> -->
 
-            <!-- Modern Categories Navigation -->
-            <nav class="sticky top-20 z-40  backdrop-blur-md border-b border-gray-100" id="services">
-                <div class="max-w-7xl mx-auto px-4">
+            <!-- Categories Navigation -->
+            <nav class="sticky top-20 z-40 bg-white border-b border-gray-100">
+                <div class="max-w-6xl mx-auto">
                     <div class="categories-scroll">
                         <div class="categories-wrapper">
-                            <% const categories=[ { id: 'tous' , icon: '🔍' , label: 'Tous' , color: 'slate' }, { id: 'dressage' , icon: '🐕' , label: 'Dressage' , color: 'sky' }, { id: 'toilettage' , icon: '✂️' , label: 'Toilettage' , color: 'purple' }, { id: 'promenade' , icon: '🦮' , label: 'Promenade' , color: 'emerald' }, { id: 'veterinaire' , icon: '⚕️' , label: 'Vétérinaire' , color: 'rose' }, { id: 'pension' , icon: '🏠' , label: 'Pension' , color: 'amber' }, { id: 'transport' , icon: '🚗' , label: 'Transport' , color: 'indigo' } ]; const currentCategory=serviceOption || 'tous' ; %>
+                            <% const categories=[ { id: 'tous' , icon: '🔍' , label: 'Tous' , color: 'slate' }, { id: 'dressage' , icon: '🐕' , label: 'Dressage' , color: 'amber' }, { id: 'toilettage' , icon: '✂️' , label: 'Toilettage' , color: 'purple' }, { id: 'promenade' , icon: '🦮' , label: 'Promenade' , color: 'emerald' }, { id: 'veterinaire' , icon: '⚕️' , label: 'Vétérinaire' , color: 'rose' }, { id: 'pension' , icon: '🏠' , label: 'Pension' , color: 'amber' }, { id: 'transport' , icon: '🚗' , label: 'Transport' , color: 'indigo' } ]; const currentCategory=serviceOption || 'tous' ; %>
 
                                 <% categories.forEach(category=> {
                                     const isActive = currentCategory === category.id;
                                     %>
-                                    <a href="/services/<%= category.id %>" class="category-item <%= isActive ? 'active' : '' %>" data-color="<%= category.color %>">
+                                    <a href="/services/<%= category.id %>" class="category-item <%= isActive ? 'active' : '' %>" data-category="<%= category.id %>">
                                         <div class="category-content">
                                             <span class="category-icon">
                                                 <%= category.icon %>
@@ -40,7 +31,6 @@
                                                 <%= category.label %>
                                             </span>
                                         </div>
-
                                     </a>
                                     <% }) %>
                         </div>
@@ -48,921 +38,475 @@
                 </div>
             </nav>
 
-            <style>
-                /* Scroll Container */
-                .categories-scroll {
-                    overflow-x: auto;
-                    overflow-y: hidden;
-                    -webkit-overflow-scrolling: touch;
-                    scrollbar-width: none;
-                    -ms-overflow-style: none;
-                    padding: 0.75rem 0;
-                    margin: 0 -1rem;
-                }
-
-                .categories-scroll::-webkit-scrollbar {
-                    display: none;
-                }
-
-                /* Categories Wrapper */
-                .categories-wrapper {
-                    display: flex;
-                    gap: 0.75rem;
-                    padding: 0 1rem;
-                    min-width: min-content;
-                }
-
-                /* Category Item */
-                .category-item {
-                    position: relative;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    padding: 0.75rem 1.25rem;
-                    border-radius: 1rem;
-                    background: #ffc10726;
-                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                    user-select: none;
-                    -webkit-tap-highlight-color: transparent;
-                }
-
-                .category-content {
-                    display: flex;
-                    align-items: center;
-                    gap: 0.5rem;
-                }
-
-                .category-icon {
-                    font-size: 1.25rem;
-                    transition: transform 0.3s ease;
-                }
-
-                .category-label {
-                    font-size: 0.875rem;
-                    font-weight: 500;
-                    color: #6b4f00;
-                    white-space: nowrap;
-                    font-weight: bold;
-                }
-
-                /* Active & Hover States */
-                .category-item:hover {
-                    background: rgba(243, 244, 246, 0.9);
-                    transform: translateY(-1px);
-                }
-
-                .category-item:active {
-                    transform: translateY(0);
-                }
-
-                .category-item.active {
-                    background: #ffbf00;
-                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-                }
-
-                /* Color-specific active states */
-                .category-item.active[data-color="slate"] {
-                    @apply text-slate-600;
-                }
-
-                .category-item.active[data-color="sky"] {
-                    @apply text-sky-600;
-                }
-
-                .category-item.active[data-color="purple"] {
-                    @apply text-purple-600;
-                }
-
-                .category-item.active[data-color="emerald"] {
-                    @apply text-emerald-600;
-                }
-
-                .category-item.active[data-color="rose"] {
-                    @apply text-rose-600;
-                }
-
-                .category-item.active[data-color="amber"] {
-                    @apply text-amber-600;
-                }
-
-                .category-item.active[data-color="indigo"] {
-                    @apply text-indigo-600;
-                }
-
-
-
-                /* Animation for icon on hover */
-                .category-item:hover .category-icon {
-                    transform: scale(1.1);
-                }
-
-                /* Touch Device Optimizations */
-                @media (hover: none) {
-                    .category-item {
-                        padding: 0.875rem 1.5rem;
-                    }
-
-                    .categories-scroll {
-                        scroll-snap-type: x proximity;
-                        scroll-behavior: smooth;
-                    }
-
-                    .category-item {
-                        scroll-snap-align: start;
-                    }
-                }
-
-                /* Responsive Adjustments */
-                @media (max-width: 640px) {
-                    .category-item {
-                        padding: 0.75rem 1rem;
-                    }
-
-                    .category-icon {
-                        font-size: 1.125rem;
-                    }
-
-                    .category-label {
-                        font-size: 0.813rem;
-                    }
-                }
-            </style>
-
-            <script>
-                document.addEventListener('DOMContentLoaded', () => {
-                    const categoriesScroll = document.querySelector('.categories-scroll');
-                    const activeCategory = document.querySelector('.category-item.active');
-
-                    // Scroll active category into view on load
-                    if (activeCategory) {
-                        requestAnimationFrame(() => {
-                            activeCategory.scrollIntoView({
-                                behavior: 'smooth',
-                                block: 'nearest',
-                                inline: 'center'
-                            });
-                        });
-                    }
-
-                    let isDown = false;
-                    let startX;
-                    let scrollLeft;
-
-                    // Mouse drag scrolling
-                    categoriesScroll.addEventListener('mousedown', (e) => {
-                        isDown = true;
-                        categoriesScroll.style.cursor = 'grabbing';
-                        startX = e.pageX - categoriesScroll.offsetLeft;
-                        scrollLeft = categoriesScroll.scrollLeft;
-                    });
-
-                    categoriesScroll.addEventListener('mouseleave', () => {
-                        isDown = false;
-                        categoriesScroll.style.cursor = 'grab';
-                    });
-
-                    categoriesScroll.addEventListener('mouseup', () => {
-                        isDown = false;
-                        categoriesScroll.style.cursor = 'grab';
-                    });
-
-                    categoriesScroll.addEventListener('mousemove', (e) => {
-                        if (!isDown) return;
-                        e.preventDefault();
-                        const x = e.pageX - categoriesScroll.offsetLeft;
-                        const walk = (x - startX) * 2;
-                        categoriesScroll.scrollLeft = scrollLeft - walk;
-                    });
-
-                    // Smooth scrolling on touch devices
-                    let touchStartX;
-                    let touchScrollLeft;
-
-                    categoriesScroll.addEventListener('touchstart', (e) => {
-                        touchStartX = e.touches[0].pageX - categoriesScroll.offsetLeft;
-                        touchScrollLeft = categoriesScroll.scrollLeft;
-                    }, { passive: true });
-
-                    categoriesScroll.addEventListener('touchmove', (e) => {
-                        const x = e.touches[0].pageX - categoriesScroll.offsetLeft;
-                        const walk = (touchStartX - x);
-                        categoriesScroll.scrollLeft = touchScrollLeft + walk;
-                    }, { passive: true });
-                });
-            </script>
-            <div class="relative mb-8">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-lg font-semibold text-gray-900 px-4">Choisissez votre ville</h2>
-
-                </div>
-
-                <!-- Mobile Slider -->
-                <div class="sm:hidden relative">
-                    <div class="flex overflow-x-auto scrollbar-hide snap-x snap-mandatory gap-2 pb-4" id="locationSlider">
+            <!-- Location Filter -->
+            <div class="max-w-6xl mx-auto px-4 my-6">
+                <h3 class="text-lg font-semibold mb-4">Choisissez votre ville</h3>
+                <!-- Mobile Locations -->
+                <div class="sm:hidden location-scroll">
+                    <div class="location-wrapper" id="locationSlider">
                         <% locations.forEach(location=> { %>
-                            <a href="/services/<%= serviceOption %>/<%= encodeURIComponent(location) %>" class="flex-none snap-start first:ml-4 last:mr-4">
-                                <div class="flex items-center px-4 py-2.5 rounded-full text-sm whitespace-nowrap
-                                                                     bg-white text-gray-700 border border-gray-200 shadow-sm
-                                                                     active:bg-blue-50 active:text-blue-600 active:border-blue-100
-                                                                     <%= (currentLocation === location) ? 'bg-blue-50 text-blue-600 border-blue-200' : '' %>">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5 <%= (currentLocation === location) ? 'text-blue-500' : 'text-gray-400' %>" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                    </svg>
+                            <a href="/services/<%= serviceOption %>/<%= location %>" class="location-pill <%= currentLocation === location ? 'active' : '' %>">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>
                                     <%= location.charAt(0).toUpperCase() + location.slice(1) %>
-                                </div>
+                                </span>
                             </a>
-                            <% }); %>
+                            <% }) %>
                     </div>
                 </div>
-
-                <!-- Desktop View -->
-                <div class="hidden sm:flex flex-wrap items-center gap-2 px-4">
+                <!-- Desktop Locations -->
+                <div class="hidden sm:flex flex-wrap gap-2">
                     <% locations.forEach(location=> { %>
-                        <a href="/services/<%= serviceOption %>/<%= encodeURIComponent(location) %>" class="inline-flex items-center px-4 py-2.5 rounded-full text-sm font-medium
-                                                             bg-white text-gray-700 hover:text-blue-600 border border-gray-200
-                                                             hover:border-blue-100 hover:bg-blue-50 shadow-sm
-                                                             transition-all duration-200 
-                                                             <%= (currentLocation === location) ? 'bg-blue-50 text-blue-600 border-blue-200' : '' %>">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5 <%= (currentLocation === location) ? 'text-blue-500' : 'text-gray-400' %>" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                            </svg>
-                            <%= location.charAt(0).toUpperCase() + location.slice(1) %>
+                        <a href="/services/<%= serviceOption %>/<%= location %>" class="location-pill <%= currentLocation === location ? 'active' : '' %>">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>
+                                <%= location.charAt(0).toUpperCase() + location.slice(1) %>
+                            </span>
                         </a>
-                        <% }); %>
+                        <% }) %>
                 </div>
             </div>
 
-            <section class="py-6 ">
-                <div class="max-w-7xl mx-auto ">
-                    <% if (services && services.length> 0) { %>
-                        <div class="grid gap-3 sm:gap-6">
-                            <% services.forEach(service=> { %>
-                                <a href="/service/<%= service._id %>" class="service-card">
-                                    <article class="bg-white rounded-2xl shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-300">
-                                        <!-- Mobile Design -->
-                                        <div class="flex sm:hidden items-center p-3">
-                                            <!-- Left: Image & Badge -->
-                                            <div class="relative flex-shrink-0">
-                                                <div class="mobile-image-container">
-                                                    <% if (service.images?.[0]) { %>
-                                                        <img src="<%= service.images[0] %>" alt="<%= service.serviceName %>" class="mobile-service-image" loading="lazy">
-                                                        <% } else { %>
-                                                            <div class="mobile-image-placeholder">
-                                                                <i class="fas fa-image text-gray-300"></i>
+            <!-- Services Grid -->
+            <div class="max-w-6xl mx-auto px-4 py-6">
+                <div class="grid gap-4">
+                    <% services.forEach(service=> { %>
+                        <a href="/service/<%= service._id %>" class="service-card">
+                            <article class="bg-white rounded-xl border border-gray-100 hover:shadow-lg transition-all duration-300">
+                                <div class="flex sm:hidden p-4">
+                                    <!-- Mobile Card Content -->
+                                    <div class="relative w-20 h-20 flex-shrink-0">
+                                        <img src="<%= service.images?.[0] %>" alt="<%= service.serviceName %>" class="w-full h-full object-cover rounded-xl" loading="lazy">
+                                        <div class="absolute top-2 left-2 bg-white/90 backdrop-blur-sm p-1.5 rounded-lg">
+                                            <%= serviceIcons[service.serviceOptions]?.emoji %>
+                                        </div>
+                                    </div>
+                                    <div class="flex-1 ml-4">
+                                        <div class="flex justify-between items-start">
+                                            <h3 class="font-medium text-gray-900">
+                                                <%= service.serviceName %>
+                                            </h3>
+                                            <span class="text-sm font-semibold text-amber-600">
+                                                <%= service.priceRange %> 
+                                            </span>
+                                        </div>
+                                        <div class="mt-2 flex items-center text-sm text-gray-500">
+                                            <i class="fas fa-map-marker-alt mr-1"></i>
+                                            <%= service.location %>
+                                                <span class="mx-2">•</span>
+                                                <i class="far fa-eye mr-1"></i>
+                                                <%= service.views %>
+                                        </div>
+                                        <div class="mt-3 flex items-center justify-between">
+                                            <div class="flex items-center">
+                                                <img src="<%= service.createdBy?.profileImage %>" class="w-6 h-6 rounded-full" alt="<%= service.createdBy?.displayName %>">
+                                                <span class="ml-2 text-sm text-gray-600">
+                                                    <%= service.createdBy?.displayName %>
+                                                        <% if(service.createdBy?.isVerified) { %>
+                                                            <i class="fas fa-check-circle text-blue-500 text-xs ml-1"></i>
+                                                            <% } %>
+                                                </span>
+                                            </div>
+                                            <i class="fas fa-chevron-right text-gray-400"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Desktop Card Content -->
+                                <div class="hidden sm:flex">
+                                    <div class="flex w-full">
+                                        <!-- Left: Image Section -->
+                                        <div class="w-[280px] relative flex-shrink-0">
+                                            <div class="relative h-full">
+                                                <img src="<%= service.images?.[0] || '/default-service.jpg' %>" alt="<%= service.serviceName %>" class="w-full h-full object-cover" loading="lazy">
+
+                                                <!-- Service Type Badge -->
+                                                <div class="absolute top-4 left-4 px-4 py-2 bg-white/95 backdrop-blur-sm 
+                    rounded-xl shadow-sm flex items-center gap-2">
+                                                    <span class="text-lg">
+                                                        <%= serviceIcons[service.serviceOptions]?.emoji %>
+                                                    </span>
+                                                    <span class="text-sm font-medium text-gray-900">
+                                                        <%= service.serviceOptions.charAt(0).toUpperCase() + service.serviceOptions.slice(1) %>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Right: Content Section -->
+                                        <div class="flex-1 p-6 flex flex-col">
+                                            <!-- Header -->
+                                            <div class="flex items-start justify-between gap-4">
+                                                <div class="flex-1">
+                                                    <h3 class="text-xl font-semibold text-gray-900 mb-2 line-clamp-1">
+                                                        <%= service.serviceName %>
+                                                    </h3>
+                                                    <div class="flex items-center gap-4 text-sm text-gray-500">
+                                                        <div class="flex items-center gap-1.5">
+                                                            <i class="fas fa-map-marker-alt text-gray-400"></i>
+                                                            <span>
+                                                                <%= service.location %>
+                                                            </span>
+                                                        </div>
+                                                        <div class="flex items-center gap-1.5">
+                                                            <i class="far fa-eye text-gray-400"></i>
+                                                            <span>
+                                                                <%= service.views %> vues
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Price -->
+                                                <div class="text-right flex-shrink-0">
+                                                    <div class="text-xl font-bold text-amber-600">
+                                                        <%= service.priceRange %> 
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Description -->
+                                            <p class="mt-4 text-gray-600 line-clamp-2 flex-1">
+                                                <%= service.description || 'Aucune description disponible.' %>
+                                            </p>
+
+                                            <!-- Footer -->
+                                            <div class="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
+                                                <!-- Provider Info -->
+                                                <div class="flex items-center gap-3">
+                                                    <div class="relative">
+                                                        <img src="<%= service.createdBy?.profileImage || '/default-avatar.jpg' %>" alt="<%= service.createdBy?.displayName %>" class="w-10 h-10 rounded-full object-cover ring-2 ring-white" loading="lazy">
+                                                        <% if(service.createdBy?.isVerified) { %>
+                                                            <div class="absolute -top-1 -right-1 w-5 h-5 bg-blue-500 text-white 
+                                rounded-full flex items-center justify-center ring-2 ring-white">
+                                                                <i class="fas fa-check text-[10px]"></i>
                                                             </div>
                                                             <% } %>
-
-                                                                <!-- Service Type Badge -->
-                                                                <div class="absolute top-0 left-0 m-1">
-                                                                    <div class="mobile-service-badge">
-                                                                        <%= serviceIcons[service.serviceOptions]?.emoji || '🐾' %>
-                                                                    </div>
-                                                                </div>
-                                                </div>
-                                            </div>
-
-                                            <!-- Right: Content -->
-                                            <div class="flex-1 min-w-0 ml-3">
-                                                <!-- Top Row -->
-                                                <div class="flex items-start justify-between gap-2">
-                                                    <h3 class="mobile-title">
-                                                        <%= service.serviceName || service.serviceOptions %>
-                                                    </h3>
-                                                    <div class="mobile-price-badge">
-                                                        <%= service.priceRange || 'Sur devis' %>
                                                     </div>
-                                                </div>
-
-                                                <!-- Middle Row -->
-                                                <div class="mobile-meta">
-                                                    <div class="flex items-center text-gray-500 text-xs">
-                                                        <i class="fas fa-map-marker-alt text-gray-400"></i>
-                                                        <span class="ml-1 truncate">
-                                                            <%= service.location || 'Non spécifié' %>
-                                                        </span>
-                                                        <span class="px-1.5">•</span>
-                                                        <span class="flex items-center">
-                                                            <i class="far fa-eye text-gray-400 mr-1"></i>
-                                                            <%= service.views %>
-                                                        </span>
-                                                    </div>
-                                                </div>
-
-                                                <!-- Bottom Row -->
-                                                <div class="flex items-center justify-between mt-2">
-                                                    <!-- Provider Info -->
-                                                    <div class="flex items-center gap-2">
-                                                        <div class="mobile-avatar">
-                                                            <img src="<%= service.createdBy?.profileImage || '/default-avatar.png' %>" alt="<%= service.createdBy?.displayName %>" loading="lazy">
+                                                    <div>
+                                                        <div class="font-medium text-gray-900">
+                                                            <%= service.createdBy?.displayName %>
                                                         </div>
-                                                        <div class="provider-info">
-                                                            <div class="mobile-provider-name">
-                                                                <%= service.createdBy?.displayName || 'Service Provider' %>
-                                                                    <% if (service.createdBy?.isVerified) { %>
-                                                                        <i class="fas fa-check-circle text-blue-500 text-xs ml-0.5"></i>
-                                                                        <% } %>
-                                                            </div>
-                                                        </div>
+                                                        <div class="text-sm text-gray-500">Prestataire professionnel</div>
                                                     </div>
+                                                </div>
 
-                                                    <!-- Arrow -->
-                                                    <div class="mobile-arrow">
-                                                        <i class="fas fa-chevron-right"></i>
-                                                    </div>
+                                                <!-- Action Button -->
+                                                <div class="flex items-center gap-2 text-gray-400 transition-colors 
+                    group-hover:text-amber-600">
+                                                    <span class="text-sm font-medium">Voir détails</span>
+                                                    <i class="fas fa-arrow-right transform transition-transform 
+                        group-hover:translate-x-1"></i>
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
 
-                                        <!-- Updated Desktop Design -->
-                                        <div class="hidden sm:block">
-                                            <div class="flex">
-                                                <!-- Left: Image Section -->
-                                                <div class="desktop-image-section">
-                                                    <div class="desktop-image-wrapper">
-                                                        <% if (service.images?.[0]) { %>
-                                                            <img src="<%= service.images[0] %>" alt="<%= service.serviceName %>" class="desktop-service-image" loading="lazy">
-                                                            <% } else { %>
-                                                                <div class="desktop-image-placeholder">
-                                                                    <svg class="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                                                    </svg>
-                                                                </div>
-                                                                <% } %>
+                                <style>
+                                    /* Desktop Card Specific Styles */
+                                    .line-clamp-1 {
+                                        display: -webkit-box;
+                                        -webkit-line-clamp: 1;
+                                        -webkit-box-orient: vertical;
+                                        overflow: hidden;
+                                    }
 
-                                                                    <!-- Service Type Badge -->
-                                                                    <div class="desktop-service-badge">
-                                                                        <span class="desktop-badge-icon">
-                                                                            <%= serviceIcons[service.serviceOptions]?.emoji || '🐾' %>
-                                                                        </span>
-                                                                        <span class="desktop-badge-text">
-                                                                            <%= service.serviceOptions %>
-                                                                        </span>
-                                                                    </div>
-                                                    </div>
-                                                </div>
+                                    .line-clamp-2 {
+                                        display: -webkit-box;
+                                        -webkit-line-clamp: 2;
+                                        -webkit-box-orient: vertical;
+                                        overflow: hidden;
+                                    }
 
-                                                <!-- Right: Content Section -->
-                                                <div class="desktop-content">
-                                                    <!-- Header Section -->
-                                                    <div class="desktop-header">
-                                                        <div class="flex-1 min-w-0">
-                                                            <h3 class="desktop-title">
-                                                                <%= service.serviceName || service.serviceOptions %>
-                                                            </h3>
-                                                            <div class="desktop-meta">
-                                                                <!-- Location -->
-                                                                <div class="meta-item">
-                                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                                                    </svg>
-                                                                    <span>
-                                                                        <%= service.location || 'Non spécifié' %>
-                                                                    </span>
-                                                                </div>
-                                                                <!-- Separator -->
-                                                                <span class="meta-separator"></span>
-                                                                <!-- Views -->
-                                                                <div class="meta-item">
-                                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                                                    </svg>
-                                                                    <span>
-                                                                        <%= service.views %> vues
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                    /* Image hover effect */
+                                    .service-card:hover img {
+                                        transform: scale(1.05);
+                                        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+                                    }
 
-                                                        <!-- Price Section -->
-                                                        <div class="desktop-price">
-                                                            <div class="price-amount">
-                                                                <%= service.priceRange || 'Sur devis' %>
-                                                            </div>
-                                                            <div class="price-label">par séance</div>
-                                                        </div>
-                                                    </div>
+                                    /* Badge blur effect */
+                                    .backdrop-blur-sm {
+                                        backdrop-filter: blur(4px);
+                                        -webkit-backdrop-filter: blur(4px);
+                                    }
 
-                                                    <!-- Provider Section -->
-                                                    <div class="desktop-provider">
-                                                        <div class="provider-profile">
-                                                            <img src="<%= service.createdBy?.profileImage || '/default-avatar.png' %>" alt="<%= service.createdBy?.displayName %>" class="provider-avatar" loading="lazy">
-                                                            <div class="provider-details">
-                                                                <div class="provider-name">
-                                                                    <%= service.createdBy?.displayName || 'Service Provider' %>
-                                                                        <% if (service.createdBy?.isVerified) { %>
-                                                                            <svg class="verified-icon" viewBox="0 0 24 24" fill="currentColor">
-                                                                                <path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-                                                                            </svg>
-                                                                            <% } %>
-                                                                </div>
-                                                                <div class="provider-label">Pro</div>
-                                                            </div>
-                                                        </div>
+                                    /* Smooth transitions */
+                                    .transition-all {
+                                        transition-property: all;
+                                        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+                                        transition-duration: 300ms;
+                                    }
 
-                                                        <!-- Arrow Icon -->
-                                                        <div class="view-arrow">
-                                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                                                            </svg>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    /* Provider image ring effect */
+                                    .ring-2 {
+                                        --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+                                        --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+                                        box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+                                    }
 
-                                        <style>
-                                            /* Desktop Image Section */
-                                            .desktop-image-section {
-                                                width: 220px;
-                                                position: relative;
-                                                flex-shrink: 0;
-                                            }
+                                    /* Enhanced hover states */
+                                    .group:hover .group-hover\:translate-x-1 {
+                                        --tw-translate-x: 0.25rem;
+                                        transform: var(--tw-transform);
+                                    }
 
-                                            .desktop-image-wrapper {
-                                                position: relative;
-                                                width: 100%;
-                                                height: 100%;
-                                                min-height: 180px;
-                                                background: #F9FAFB;
-                                                overflow: hidden;
-                                            }
-
-                                            .desktop-service-image {
-                                                width: 100%;
-                                                height: 100%;
-                                                object-fit: cover;
-                                                transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-                                            }
-
-                                            .service-card:hover .desktop-service-image {
-                                                transform: scale(1.05);
-                                            }
-
-                                            .desktop-image-placeholder {
-                                                width: 100%;
-                                                height: 100%;
-                                                display: flex;
-                                                align-items: center;
-                                                justify-content: center;
-                                                background: #F3F4F6;
-                                            }
-
-                                            /* Service Badge */
-                                            .desktop-service-badge {
-                                                position: absolute;
-                                                top: 1rem;
-                                                left: 1rem;
-                                                display: flex;
-                                                align-items: center;
-                                                gap: 0.5rem;
-                                                padding: 0.5rem 0.75rem;
-                                                background: rgba(255, 255, 255, 0.95);
-                                                backdrop-filter: blur(4px);
-                                                border-radius: 9999px;
-                                                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-                                            }
-
-                                            .desktop-badge-icon {
-                                                font-size: 1.125rem;
-                                            }
-
-                                            .desktop-badge-text {
-                                                font-size: 0.875rem;
-                                                font-weight: 500;
-                                                color: #1F2937;
-                                            }
-
-                                            /* Content Section */
-                                            .desktop-content {
-                                                flex: 1;
-                                                display: flex;
-                                                flex-direction: column;
-                                                padding: 1.5rem;
-                                                min-width: 0;
-                                            }
-
-                                            .desktop-header {
-                                                display: flex;
-                                                justify-content: space-between;
-                                                gap: 2rem;
-                                                margin-bottom: 1.5rem;
-                                            }
-
-                                            .desktop-title {
-                                                font-size: 1.25rem;
-                                                font-weight: 600;
-                                                color: #111827;
-                                                margin-bottom: 0.5rem;
-                                                line-height: 1.3;
-                                            }
-
-                                            .desktop-meta {
-                                                display: flex;
-                                                align-items: center;
-                                                gap: 1rem;
-                                                color: #6B7280;
-                                            }
-
-                                            .meta-item {
-                                                display: flex;
-                                                align-items: center;
-                                                gap: 0.375rem;
-                                                font-size: 0.875rem;
-                                            }
-
-                                            .meta-separator {
-                                                width: 3px;
-                                                height: 3px;
-                                                border-radius: 50%;
-                                                background: #D1D5DB;
-                                            }
-
-                                            /* Price Section */
-                                            .desktop-price {
-                                                text-align: right;
-                                                flex-shrink: 0;
-                                            }
-
-                                            .price-amount {
-                                                font-size: 1.25rem;
-                                                font-weight: 700;
-                                                color: #059669;
-                                            }
-
-                                            .price-label {
-                                                font-size: 0.75rem;
-                                                color: #6B7280;
-                                                margin-top: 0.125rem;
-                                            }
-
-                                            /* Provider Section */
-                                            .desktop-provider {
-                                                display: flex;
-                                                align-items: center;
-                                                justify-content: space-between;
-                                                margin-top: auto;
-                                                padding-top: 1.25rem;
-                                                border-top: 1px solid #E5E7EB;
-                                            }
-
-                                            .provider-profile {
-                                                display: flex;
-                                                align-items: center;
-                                                gap: 0.75rem;
-                                            }
-
-                                            .provider-avatar {
-                                                width: 2.5rem;
-                                                height: 2.5rem;
-                                                border-radius: 9999px;
-                                                object-fit: cover;
-                                                border: 2px solid white;
-                                                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-                                            }
-
-                                            .provider-details {
-                                                min-width: 0;
-                                            }
-
-                                            .provider-name {
-                                                display: flex;
-                                                align-items: center;
-                                                gap: 0.375rem;
-                                                font-weight: 500;
-                                                color: #111827;
-                                            }
-
-                                            .verified-icon {
-                                                width: 1rem;
-                                                height: 1rem;
-                                                color: #3B82F6;
-                                            }
-
-                                            .provider-label {
-                                                font-size: 0.75rem;
-                                                color: #6B7280;
-                                                margin-top: 0.125rem;
-                                            }
-
-                                            .view-arrow {
-                                                color: #3B82F6;
-                                                transition: transform 0.2s ease;
-                                            }
-
-                                            .service-card:hover .view-arrow {
-                                                transform: translateX(4px);
-                                            }
-                                        </style>
-                                    </article>
-                                </a>
-                                <% }) %>
-                        </div>
-                        <% } else { %>
-                            <!-- Empty State (Previous Implementation) -->
-                            <% } %>
+                                    .group:hover .group-hover\:text-amber-600 {
+                                        --tw-text-opacity: 1;
+                                        color: rgba(217, 119, 6, var(--tw-text-opacity));
+                                    }
+                                </style>
+                            </article>
+                        </a>
+                        <% }) %>
                 </div>
-            </section>
-            <style>
-                /* Soft Background Colors */
-                .bg-gradient-to-b {
-                    background-image: linear-gradient(to bottom,
-                            rgb(249, 250, 251) 0%,
-                            rgb(255, 255, 255) 100%);
-                }
-
-                /* Mobile Card Styles */
-                .service-card {
-                    @apply block transition-transform duration-200;
-                    -webkit-tap-highlight-color: transparent;
-                }
-
-                .service-card:active {
-                    transform: scale(0.99);
-                }
-
-                /* Mobile Image Container */
-                .mobile-image-container {
-                    width: 76px;
-                    height: 76px;
-                    position: relative;
-                    border-radius: 16px;
-                    overflow: hidden;
-                    background: #F9FAFB;
-                }
-
-                .mobile-service-image {
-                    width: 100%;
-                    height: 100%;
-                    object-fit: cover;
-                    transition: transform 0.3s ease;
-                }
-
-                .service-card:hover .mobile-service-image {
-                    transform: scale(1.05);
-                }
-
-                .mobile-image-placeholder {
-                    width: 100%;
-                    height: 100%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    background: #F3F4F6;
-                    font-size: 1.5rem;
-                }
-
-                /* Mobile Service Badge */
-                .mobile-service-badge {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    padding: 4px;
-                    background: rgba(255, 255, 255, 0.9);
-                    backdrop-filter: blur(4px);
-                    border-radius: 8px;
-                    font-size: 0.875rem;
-                    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-                }
-
-                /* Mobile Content */
-                .mobile-title {
-                    font-size: 0.9375rem;
-                    font-weight: 600;
-                    color: #1F2937;
-                    line-height: 1.3;
-                    margin-bottom: 0.25rem;
-                    display: -webkit-box;
-                    -webkit-line-clamp: 2;
-                    -webkit-box-orient: vertical;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                }
-
-                .mobile-price-badge {
-                    font-size: 0.8125rem;
-                    font-weight: 600;
-                    color: #059669;
-                    background: #ECFDF5;
-                    padding: 0.25rem 0.5rem;
-                    border-radius: 6px;
-                    white-space: nowrap;
-                }
-
-                .mobile-meta {
-                    margin-top: 0.25rem;
-                }
-
-                /* Mobile Avatar */
-                .mobile-avatar {
-                    width: 24px;
-                    height: 24px;
-                    border-radius: 50%;
-                    overflow: hidden;
-                    background: #F3F4F6;
-                    border: 2px solid white;
-                    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-                }
-
-                .mobile-avatar img {
-                    width: 100%;
-                    height: 100%;
-                    object-fit: cover;
-                }
-
-                .mobile-provider-name {
-                    font-size: 0.8125rem;
-                    font-weight: 500;
-                    color: #4B5563;
-                    display: flex;
-                    align-items: center;
-                }
-
-                .mobile-arrow {
-                    color: #9CA3AF;
-                    font-size: 0.75rem;
-                    transition: transform 0.2s ease;
-                }
-
-                .service-card:hover .mobile-arrow {
-                    transform: translateX(2px);
-                    color: #6B7280;
-                }
-
-                /* Animation Classes */
-                @keyframes fadeIn {
-                    from {
-                        opacity: 0;
-                        transform: translateY(8px);
-                    }
-
-                    to {
-                        opacity: 1;
-                        transform: translateY(0);
-                    }
-                }
-
-                .animate-fade-in {
-                    animation: fadeIn 0.3s ease forwards;
-                }
-
-                /* Loading Skeleton */
-                .skeleton {
-                    background: linear-gradient(90deg,
-                            #f3f4f6 0%,
-                            #e5e7eb 50%,
-                            #f3f4f6 100%);
-                    background-size: 200% 100%;
-                    animation: shimmer 1.5s infinite;
-                }
-
-                @keyframes shimmer {
-                    0% {
-                        background-position: 200% 0;
-                    }
-
-                    100% {
-                        background-position: -200% 0;
-                    }
-                }
-            </style>
-
-            <script>
-                document.addEventListener('DOMContentLoaded', () => {
-                    // Lazy loading for images
-                    const lazyImages = document.querySelectorAll('img[loading="lazy"]');
-                    const imageObserver = new IntersectionObserver((entries) => {
-                        entries.forEach(entry => {
-                            if (entry.isIntersecting) {
-                                const img = entry.target;
-                                if (img.dataset.src) {
-                                    img.src = img.dataset.src;
-                                    img.removeAttribute('data-src');
-                                }
-                                requestAnimationFrame(() => {
-                                    img.classList.add('animate-fade-in');
-                                });
-                                imageObserver.unobserve(img);
-                            }
-                        });
-                    }, {
-                        threshold: 0.1,
-                        rootMargin: '50px'
-                    });
-
-                    lazyImages.forEach(img => imageObserver.observe(img));
-
-                    // Touch feedback
-                    const cards = document.querySelectorAll('.service-card');
-                    cards.forEach(card => {
-                        let touchTimeout;
-
-                        card.addEventListener('touchstart', () => {
-                            clearTimeout(touchTimeout);
-                            card.style.transform = 'scale(0.98)';
-                        });
-
-                        card.addEventListener('touchend', () => {
-                            touchTimeout = setTimeout(() => {
-                                card.style.transform = '';
-                            }, 100);
-                        });
-
-                        card.addEventListener('touchcancel', () => {
-                            clearTimeout(touchTimeout);
-                            card.style.transform = '';
-                        });
-                    });
-                });
-            </script>
-
-
             </div>
+        </div>
 
+        <style>
+            /* Core Styles */
+            :root {
+                --primary-color: #F59E0B;
+                --transition-bezier: cubic-bezier(0.4, 0, 0.2, 1);
+            }
 
+            /* Categories Styling */
+            .categories-scroll {
+                overflow-x: auto;
+                scrollbar-width: none;
+                -webkit-overflow-scrolling: touch;
+                padding: 0.75rem 0;
+            }
 
+            .categories-scroll::-webkit-scrollbar {
+                display: none;
+            }
 
+            .categories-wrapper {
+                display: flex;
+                gap: 0.75rem;
+                padding: 0 1rem;
+                min-width: min-content;
+            }
 
-            <!-- Styles -->
-            <style>
-                /* Hide scrollbar but keep functionality */
-                .scrollbar-hide {
-                    -ms-overflow-style: none;
-                    scrollbar-width: none;
+            .category-item {
+                display: flex;
+                align-items: center;
+                padding: 0.75rem 1.25rem;
+                background: #ffc10726;
+                border-radius: 1rem;
+                transition: all 0.3s var(--transition-bezier);
+                user-select: none;
+            }
+
+            .category-content {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .category-icon {
+                font-size: 1.25rem;
+                transition: transform 0.3s ease;
+            }
+
+            .category-label {
+                font-size: 0.875rem;
+                font-weight: 500;
+                color: #6b4f00;
+                white-space: nowrap;
+            }
+
+            .category-item:hover {
+                background: rgba(243, 244, 246, 0.9);
+                transform: translateY(-1px);
+            }
+
+            .category-item.active {
+                background: #ffbf00;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            }
+
+            /* Location Pills */
+            .location-scroll {
+                overflow-x: auto;
+                scrollbar-width: none;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .location-wrapper {
+                display: flex;
+                gap: 0.5rem;
+                padding: 0.5rem 0;
+            }
+
+            .location-pill {
+                display: flex;
+                align-items: center;
+                padding: 0.625rem 1rem;
+                background: white;
+                border: 1px solid #E5E7EB;
+                border-radius: 9999px;
+                font-size: 0.875rem;
+                color: #374151;
+                transition: all 0.2s var(--transition-bezier);
+                white-space: nowrap;
+            }
+
+            .location-pill i {
+                margin-right: 0.5rem;
+                color: #9CA3AF;
+            }
+
+            .location-pill:hover {
+                border-color: var(--primary-color);
+                background: #FEF3C7;
+            }
+
+            .location-pill.active {
+                background: var(--primary-color);
+                border-color: var(--primary-color);
+                color: white;
+            }
+
+            .location-pill.active i {
+                color: white;
+            }
+
+            /* Service Cards */
+            .service-card {
+                transition: transform 0.2s var(--transition-bezier);
+            }
+
+            .service-card:hover {
+                transform: translateY(-2px);
+            }
+
+            @media (hover: none) {
+                .service-card:active {
+                    transform: scale(0.98);
+                }
+            }
+
+            /* Animations */
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(10px);
                 }
 
-                .scrollbar-hide::-webkit-scrollbar {
-                    display: none;
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
                 }
+            }
 
-                /* Smooth scroll behavior */
-                #locationSlider {
-                    -webkit-overflow-scrolling: touch;
-                    scroll-behavior: smooth;
-                }
+            .animate-fade-in {
+                animation: fadeIn 0.3s var(--transition-bezier) forwards;
+            }
+        </style>
 
-                /* Animation for card hover */
-                .group:hover .group-hover\:scale-105 {
-                    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-                    transition-duration: 500ms;
-                }
-            </style>
+        <script>
+            // Categories Scroll Logic
+            document.addEventListener('DOMContentLoaded', () => {
+                const categoriesScroll = document.querySelector('.categories-scroll');
+                const activeCategory = document.querySelector('.category-item.active');
 
-            <!-- JavaScript -->
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    const slider = document.getElementById('locationSlider');
-                    let isScrolling = false;
-
-                    // Handle scroll snap
-                    slider.addEventListener('scroll', () => {
-                        window.clearTimeout(isScrolling);
-                        isScrolling = setTimeout(() => {
-                            const scrollLeft = slider.scrollLeft;
-                            const itemWidth = slider.querySelector('a').offsetWidth;
-                            const newScrollLeft = Math.round(scrollLeft / itemWidth) * itemWidth;
-
-                            slider.scrollTo({
-                                left: newScrollLeft,
-                                behavior: 'smooth'
-                            });
-                        }, 150);
+                if (activeCategory) {
+                    requestAnimationFrame(() => {
+                        activeCategory.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'nearest',
+                            inline: 'center'
+                        });
                     });
+                }
 
+                // Touch scroll handling
+                let isDown = false;
+                let startX;
+                let scrollLeft;
 
-                    slider.addEventListener('scroll');
+                categoriesScroll.addEventListener('mousedown', (e) => {
+                    isDown = true;
+                    startX = e.pageX - categoriesScroll.offsetLeft;
+                    scrollLeft = categoriesScroll.scrollLeft;
                 });
-            </script>
-            <style>
-                /* Smooth transitions */
-                .group {
-                    cursor: pointer;
-                    transform: translateZ(0);
-                }
 
-                /* Line clamp fallback */
-                .line-clamp-1 {
-                    display: -webkit-box;
-                    -webkit-line-clamp: 1;
-                    -webkit-box-orient: vertical;
-                    overflow: hidden;
-                }
+                categoriesScroll.addEventListener('mouseleave', () => {
+                    isDown = false;
+                });
 
-                /* Touch-friendly sizing for mobile */
-                @media (max-width: 640px) {
+                categoriesScroll.addEventListener('mouseup', () => {
+                    isDown = false;
+                });
 
+                categoriesScroll.addEventListener('mousemove', (e) => {
+                    if (!isDown) return;
+                    e.preventDefault();
+                    const x = e.pageX - categoriesScroll.offsetLeft;
+                    const walk = (x - startX) * 2;
+                    categoriesScroll.scrollLeft = scrollLeft - walk;
+                });
+            });
 
-                    .group:active {
-                        transform: scale(0.98);
+            // Location Slider
+            const locationSlider = document.getElementById('locationSlider');
+            if (locationSlider) {
+                let isScrolling;
+
+                locationSlider.addEventListener('scroll', () => {
+                    window.clearTimeout(isScrolling);
+                    isScrolling = setTimeout(() => {
+                        const scrollLeft = locationSlider.scrollLeft;
+                        const itemWidth = locationSlider.querySelector('a').offsetWidth;
+                        const newScrollLeft = Math.round(scrollLeft / itemWidth) * itemWidth;
+
+                        locationSlider.scrollTo({
+                            left: newScrollLeft,
+                            behavior: 'smooth'
+                        });
+                    }, 150);
+                });
+            }
+
+            // Lazy Loading Images
+            const lazyImages = document.querySelectorAll('img[loading="lazy"]');
+            const imageObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.classList.add('animate-fade-in');
+                        imageObserver.unobserve(img);
                     }
-                }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '50px'
+            });
 
-                /* Image aspect ratio fix */
-                .aspect-square {
-                    aspect-ratio: 1;
-                }
-            </style>
+            lazyImages.forEach(img => imageObserver.observe(img));
 
+            // Touch Feedback
+            const serviceCards = document.querySelectorAll('.service-card');
+            serviceCards.forEach(card => {
+                let touchTimeout;
 
-        </main>
+                card.addEventListener('touchstart', () => {
+                    clearTimeout(touchTimeout);
+                    card.style.transform = 'scale(0.98)';
+                });
+
+                card.addEventListener('touchend', () => {
+                    touchTimeout = setTimeout(() => {
+                        card.style.transform = '';
+                    }, 100);
+                });
+
+                card.addEventListener('touchcancel', () => {
+                    clearTimeout(touchTimeout);
+                    card.style.transform = '';
+                });
+            });
+        </script>
         <%- include('./include/footer') %>

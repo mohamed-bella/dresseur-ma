@@ -1,135 +1,264 @@
 <%- include('include/head.ejs') %>
-     <%- include('include/navbar.ejs') %>
+<%- include('include/navbar.ejs') %>
 
-          <div class="bg-[#F0F2F5] min-h-screen lg:pt-20 pt-16">
-               <!-- Filter Bar -->
-               <div class="sticky top-16 z-20 bg-white border-b">
-                    <div class="max-w-5xl mx-auto px-4">
-                         <div class="flex items-center gap-3 h-14">
+<div class="min-h-screen bg-white lg:pt-20 pt-16">
+    <!-- Premium Filter Bar -->
+    <div class="sticky top-16 z-20 bg-white border-b border-gray-100">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex items-center gap-4 h-16">
+                <!-- Location Filter -->
+                <div class="relative flex-1 sm:flex-initial">
+                    <select name="location" 
+                        class="w-full sm:w-56 h-12 pl-10 pr-4 bg-gray-50 rounded-xl border-0 
+                        text-gray-900 appearance-none focus:ring-2 focus:ring-black/5 
+                        transition-all cursor-pointer" 
+                        onchange="applyFilter('location', this.value)">
+                        <option value="">Toutes les villes</option>
+                        <% locations.forEach(location => { %>
+                            <option value="<%= location %>" 
+                                <%= filters.location === location ? 'selected' : '' %>>
+                                <%= location.charAt(0).toUpperCase() + location.slice(1) %>
+                            </option>
+                        <% }) %>
+                    </select>
+                    <i class="fas fa-map-marker-alt absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"></i>
+                </div>
 
+                <!-- Specialization Filter -->
+                <div class="relative flex-1 sm:flex-initial">
+                    <select name="specialization" 
+                        class="w-full sm:w-72 h-12 pl-10 pr-4 bg-gray-50 rounded-xl border-0 
+                        text-gray-900 appearance-none focus:ring-2 focus:ring-black/5 
+                        transition-all cursor-pointer" 
+                        onchange="applyFilter('specialization', this.value)">
+                        <option value="">Toutes les spécialisations</option>
+                        <% specializations.forEach(spec => { %>
+                            <option value="<%= spec %>" 
+                                <%= filters.specialization === spec ? 'selected' : '' %>>
+                                <%= spec.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') %>
+                            </option>
+                        <% }) %>
+                    </select>
+                    <i class="fas fa-filter absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"></i>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                              <div class="flex-1 flex items-center gap-2">
-                                   <select name="location" class="flex-1 sm:flex-none w-full sm:w-44 h-9 px-3 text-sm bg-gray-100 
-                                   rounded-md border-0 text-gray-700 font-medium
-                                   focus:ring-1 focus:ring-blue-500" onchange="applyFilter('location', this.value)">
-                                        <option value="">📍 Toutes les villes</option>
-                                        <% locations.forEach(location=> { %>
-                                             <option value="<%= location %>" <%=filters.location===location ? 'selected' : '' %>>
-                                                  <%= location.charAt(0).toUpperCase() + location.slice(1) %>
-                                             </option>
-                                             <% }) %>
-                                   </select>
+    <!-- Main Content -->
+    <div class="max-w-6xl mx-auto px-4 py-12">
+        <!-- Providers Grid -->
+        <div class="grid gap-6">
+            <% const sortedProviders = [...providers].sort((a, b) => {
+                if (a.isVerified === b.isVerified) return 0;
+                return a.isVerified ? -1 : 1;
+            });
 
-                                   <select name="specialization" class="flex-1 sm:flex-none w-full sm:w-56 h-9 px-3 text-sm bg-gray-100 
-                                   rounded-md border-0 text-gray-700 font-medium
-                                   focus:ring-1 focus:ring-blue-500" onchange="applyFilter('specialization', this.value)">
-                                        <option value="">🎯 Toutes les spécialisations</option>
-                                        <% specializations.forEach(spec=> { %>
-                                             <option value="<%= spec %>" <%=filters.specialization===spec ? 'selected' : '' %>>
-                                                  <%= spec.split('-').map(word=> word.charAt(0).toUpperCase() + word.slice(1)).join(' ') %>
-                                             </option>
-                                             <% }) %>
-                                   </select>
-                              </div>
-                         </div>
-                    </div>
-               </div>
+            sortedProviders.forEach(provider => { %>
+                <div class="group bg-white rounded-2xl p-6 border border-gray-100 hover:shadow-xl 
+                    transition-all duration-300 cursor-pointer" 
+                    onclick='window.location.href = "/@<%= provider.slug %>"'>
+                    <div class="flex items-start gap-6">
+                        <!-- Profile Image -->
+                        <div class="relative">
+                            <div class="w-20 h-20 rounded-2xl overflow-hidden bg-gray-100 ring-1 ring-gray-100">
+                                <img src="<%= provider.profileImage %>" 
+                                    alt="<%= provider.displayName %>" 
+                                    class="w-full h-full object-cover">
+                            </div>
+                            <% if (provider.isVerified) { %>
+                                <div class="absolute -top-1 -right-1 w-6 h-6 bg-black text-white 
+                                    rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-check text-[10px]"></i>
+                                </div>
+                            <% } %>
+                        </div>
 
-               <!-- Main Content -->
-               <div class="max-w-5xl mx-auto px-4 py-6">
-                    <!-- Providers List -->
-                    <div class="space-y-3">
-                         <% const sortedProviders=[...providers].sort((a, b)=> {
-                              if (a.isVerified === b.isVerified) return 0;
-                              return a.isVerified ? -1 : 1;
-                              });
-
-                              sortedProviders.forEach(provider => {
-                              %>
-                              <div class="bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow" onclick='window.location.href = "/@<%= provider.slug %>"' style="cursor: pointer;">
-                                   <div class="flex items-start gap-4">
-                                        <!-- Profile Image -->
-                                        <div class="relative flex-shrink-0">
-                                             <img src="<%= provider.profileImage %>" alt="<%= provider.displayName %>" class="w-16 h-16 rounded-lg object-cover bg-gray-50">
-                                             <% if (provider.isVerified) { %>
-                                                  <div class="absolute -top-1 -right-1 bg-blue-500 text-white p-1 rounded-full">
-                                                       <i class="fas fa-check text-[10px]"></i>
-                                                  </div>
-                                                  <% } %>
-                                        </div>
-
-                                        <!-- Provider Info -->
-                                        <div class="flex-1 min-w-0" style="cursor: pointer;">
-                                             <div class="flex items-start justify-between gap-4">
-                                                  <div>
-                                                       <a style="text-decoration: underline;" href="/@<%= provider.slug %>" class="font-medium text-gray-900 truncate">
-                                                            <%= provider.displayName %>
-                                                                 <% if (provider.isVerified) { %>
-                                                                      <span class="ml-1 text-xs text-blue-500">Vérifié</span>
-                                                                      <% } %>
-                                                       </a>
-                                                       <p class="text-sm text-gray-500 flex items-center gap-1.5 mt-0.5">
-                                                            <i class="fas fa-map-marker-alt text-gray-400"></i>
-                                                            <%= provider.location?.city || 'Emplacement non spécifié' %>
-                                                                 <% if (provider.metrics?.averageRating) { %>
-                                                                      <span class="inline-flex items-center gap-1 text-gray-600">
-                                                                           • <i class="fas fa-star text-yellow-400"></i>
-                                                                           <%= provider.metrics.averageRating.toFixed(1) %>
-                                                                      </span>
-                                                                      <% } %>
-                                                       </p>
-                                                  </div>
-
-                                             </div>
-
-                                             <!-- Specializations -->
-                                             <div class="flex flex-wrap gap-1.5 mt-3">
-                                                  <% provider.specializations.forEach(spec=> { %>
-                                                       <span class="px-2 py-1 bg-gray-50 text-gray-600 rounded text-xs font-medium">
-                                                            <%= spec.split('-').map(word=> word.charAt(0).toUpperCase() + word.slice(1)).join(' ') %>
-                                                       </span>
-                                                       <% }) %>
-                                             </div>
-                                        </div>
-                                   </div>
-                              </div>
-                              <% }) %>
-                    </div>
-
-                    <!-- Pagination -->
-                    <% if (totalPages> 1) { %>
-                         <div class="flex justify-center mt-6">
-                              <div class="inline-flex rounded-md shadow-sm">
-                                   <% for (let i=1; i <=totalPages; i++) { %>
-                                        <a href="?page=<%= i %>&<%= new URLSearchParams({...filters, page: undefined}).toString() %>" class="relative inline-flex items-center px-4 py-2 text-sm font-medium
-                                  <%= i === 1 ? 'rounded-l-md' : '' %>
-                                  <%= i === totalPages ? 'rounded-r-md' : '' %>
-                                  <%= currentPage === i 
-                                      ? 'z-10 bg-blue-500 text-white' 
-                                      : 'bg-white text-gray-500 hover:bg-gray-50' %>
-                                  <%= i !== totalPages ? 'border-r' : '' %> border-gray-200">
-                                             <%= i %>
-                                        </a>
+                        <!-- Provider Info -->
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-start justify-between gap-4">
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-900 group-hover:text-black 
+                                        transition-colors flex items-center gap-2">
+                                        <%= provider.displayName %>
+                                        <% if (provider.isVerified) { %>
+                                            <span class="px-2 py-0.5 bg-black/5 rounded-full text-xs font-medium">
+                                                Vérifié
+                                            </span>
                                         <% } %>
-                              </div>
-                         </div>
-                         <% } %>
-               </div>
-          </div>
+                                    </h3>
+                                    
+                                    <div class="flex items-center gap-4 mt-1">
+                                        <div class="flex items-center gap-1.5 text-sm text-gray-500">
+                                            <i class="fas fa-map-marker-alt text-gray-400"></i>
+                                            <%= provider.location?.city || 'Emplacement non spécifié' %>
+                                        </div>
+                                        
+                                        <% if (provider.metrics?.averageRating) { %>
+                                            <div class="flex items-center gap-1 text-sm">
+                                                <div class="flex items-center gap-0.5">
+                                                    <i class="fas fa-star text-amber-400"></i>
+                                                    <span class="font-medium text-gray-900">
+                                                        <%= provider.metrics.averageRating.toFixed(1) %>
+                                                    </span>
+                                                </div>
+                                                <span class="text-gray-400">
+                                                    (<%= provider.metrics.totalReviews || 0 %>)
+                                                </span>
+                                            </div>
+                                        <% } %>
+                                    </div>
+                                </div>
 
-          <script>
-               function applyFilter(type, value) {
-                    const params = new URLSearchParams(window.location.search);
+                                <!-- Contact Button -->
+                                <button class="shrink-0 h-10 px-4 rounded-xl bg-black text-white 
+                                    flex items-center gap-2 hover:bg-black/90 transition-colors">
+                                    <i class="fas fa-phone-alt transform scale-x-[-1]"></i>
+                                    <span>Contacter</span>
+                                </button>
+                            </div>
 
-                    if (value) {
-                         params.set(type, value);
-                    } else {
-                         params.delete(type);
-                    }
+                            <!-- Specializations -->
+                            <div class="flex flex-wrap gap-2 mt-4">
+                                <% provider.specializations.forEach(spec => { %>
+                                    <span class="px-3 py-1.5 bg-gray-50 text-gray-600 rounded-lg 
+                                        text-sm font-medium">
+                                        <%= spec.split('-').map(word => 
+                                            word.charAt(0).toUpperCase() + word.slice(1)
+                                        ).join(' ') %>
+                                    </span>
+                                <% }) %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
 
-                    params.delete('page');
-                    window.location.href = `${window.location.pathname}?${params.toString()}`;
-               }
-          </script>
+        <!-- Premium Pagination -->
+        <% if (totalPages > 1) { %>
+            <div class="flex justify-center mt-12">
+                <div class="inline-flex items-center rounded-xl bg-gray-50 p-1">
+                    <% for (let i = 1; i <= totalPages; i++) { %>
+                        <a href="?page=<%= i %>&<%= new URLSearchParams({...filters, page: undefined}).toString() %>" 
+                            class="relative min-w-[40px] h-10 flex items-center justify-center px-4
+                            text-sm font-medium rounded-lg transition-colors
+                            <%= currentPage === i ? 
+                                'bg-black text-white' : 
+                                'text-gray-600 hover:bg-gray-100' %>">
+                            <%= i %>
+                        </a>
+                    <% } %>
+                </div>
+            </div>
+        <% } %>
+    </div>
+</div>
 
-          <%- include('include/footer.ejs') %>
+<script>
+// Enhanced filter functionality
+function applyFilter(type, value) {
+    const params = new URLSearchParams(window.location.search);
+
+    if (value) {
+        params.set(type, value);
+    } else {
+        params.delete(type);
+    }
+
+    // Reset page when filtering
+    params.delete('page');
+
+    // Smooth transition
+    document.body.style.opacity = '0.5';
+    window.location.href = `${window.location.pathname}?${params.toString()}`;
+}
+
+// Add loading state to selects
+document.querySelectorAll('select').forEach(select => {
+    select.addEventListener('change', () => {
+        select.classList.add('opacity-50', 'cursor-wait');
+    });
+});
+
+// Optional: Animate providers on scroll
+const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '50px'
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('fade-in-up');
+            observer.unobserve(entry.target);
+        }
+    });
+}, observerOptions);
+
+document.querySelectorAll('.group').forEach(card => {
+    observer.observe(card);
+});
+</script>
+
+<style>
+/* Premium animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Smooth transitions */
+.transition-all {
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+}
+
+/* Select styling */
+select {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+select:hover {
+    background-color: #f3f4f6;
+}
+
+/* Card hover effects */
+.group:hover {
+    transform: translateY(-2px);
+}
+
+/* Premium scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+</style>
+
+<%- include('include/footer.ejs') %>

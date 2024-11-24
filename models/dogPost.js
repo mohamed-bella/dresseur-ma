@@ -15,7 +15,7 @@ const dogPostSchema = new mongoose.Schema({
   breed: String,
   description: String,
   location: String,
-  photo: String, // URL ou chemin du fichier
+  photos: [String], // URL ou chemin du fichier
   contactInfo: {
     email: String,
     phone: String

@@ -50,25 +50,26 @@ router.get('/dogpost/add', (req, res) => {
 });
 
 // Route: Submit a New Post
-router.post('/submit', upload.single('photo'), async (req, res) => {
+router.post('/submit', upload.array('images[]', 5), async (req, res) => {
   try {
     const { type, name, age, breed, description, location, email, phone } = req.body;
 
-    // Upload image to S3 if provided
-    let photoUrl = null;
-    if (req.file) {
-      const key = `dogposts/${Date.now()}_${req.file.originalname}`;
-      await s3.send(
+    const photoUrls = [];
+    console.log(req.files)
+for (const file of req.files) {
+    const key = `dogposts/${Date.now()}_${file.originalname}`;
+    await s3.send(
         new PutObjectCommand({
-          Bucket: process.env.AWS_S3_BUCKET_NAME,
-          Key: key,
-          Body: req.file.buffer,
-          ContentType: req.file.mimetype,
-          ACL: 'public-read',
+            Bucket: process.env.AWS_S3_BUCKET_NAME,
+            Key: key,
+            Body: file.buffer,
+            ContentType: file.mimetype,
+            ACL: 'public-read',
         })
-      );
-      photoUrl = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
-    }
+    );
+    const photoUrl = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
+    photoUrls.push(photoUrl);
+}
 
     // Save post to MongoDB
     const newPost = new DogPost({
@@ -78,9 +79,9 @@ router.post('/submit', upload.single('photo'), async (req, res) => {
       breed,
       description,
       location,
-      photo: photoUrl,
+      photos: photoUrls,
       contactInfo: { email, phone },
-      status: 'pending', // Admin approval required
+      status: 'approved', // Admin approval required
     });
     await newPost.save();
 
@@ -221,7 +222,7 @@ router.get('/chiens-adoption-et-perdus', parseQueryParams, async (req, res) => {
       const skip = (page - 1) * limit;
 
       // Build sort object
-      const sortObj = {};
+      const sortObj = {createdAt : -1};
       const [sortField, sortOrder] = sort.startsWith('-') ? 
           [sort.slice(1), -1] : [sort, 1];
       sortObj[sortField] = sortOrder;
