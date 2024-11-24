@@ -130,7 +130,7 @@
                     <input type="text" id="title" name="title" value="<%= article.title %>" required>
                </div>
 
-               <div class="form-group">
+               <!-- <div class="form-group">
                     <label for="category">Catégorie</label>
                     <select id="category" name="category" required>
                          <option value="">-- Sélectionnez une catégorie --</option>
@@ -143,9 +143,9 @@
                          <option value="puppy-training" <%=article.category==='puppy-training' ? 'selected' : '' %>>Formation des chiots</option>
                          <option value="obedience-training" <%=article.category==='obedience-training' ? 'selected' : '' %>>Formation à l'obéissance</option>
                     </select>
-               </div>
+               </div> -->
 
-               <div class="form-group">
+               <!-- <div class="form-group">
                     <label for="summary">Summary</label>
                     <textarea id="summary" name="summary" rows="3" required><%= article.summary %></textarea>
                </div>
@@ -154,7 +154,7 @@
                     <label for="tags">Tags</label>
                     <input type="text" id="tags" name="tags">
                     <div id="tagContainer" class="tag-container"></div>
-               </div>
+               </div> -->
 
                <div class="form-group">
                     <label for="content">Content</label>
@@ -163,12 +163,12 @@
 
 
 
-               <div class="form-group">
+               <!-- <div class="form-group">
                     <label for="seoTitle">SEO Title</label>
                     <input type="text" id="seoTitle" name="seoTitle" value="<%= article.seo.title %>">
-               </div>
+               </div> -->
 
-               <div class="form-group">
+               <!-- <div class="form-group">
                     <label for="seoDescription">SEO Description</label>
                     <textarea id="seoDescription" name="seoDescription" rows="3"><%= article.seo.description %></textarea>
                </div>
@@ -181,7 +181,7 @@
                <div class="form-group">
                     <label for="author">Author</label>
                     <input type="text" id="author" name="author" value="<%= article.author %>">
-               </div>
+               </div> -->
                <button type="submit">Update Article</button>
           </form>
      </div>

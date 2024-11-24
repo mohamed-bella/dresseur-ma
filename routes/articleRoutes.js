@@ -12,7 +12,6 @@ const slugify = require('slugify');
 const Comment = require('../models/comment');
 const { body, validationResult } = require('express-validator');
 
-
 // Set up multer for file uploads (saving locally)
 const storage = multer.memoryStorage();
 
@@ -32,10 +31,15 @@ const s3 = new S3Client({
 });
 
 
-
+const isAdmin = (req, res, next) => {
+     if (!req.session.isAuthenticated) {
+          return res.redirect('/admin/login');
+     }
+     next()
+}
 
 // GET: Create new article
-router.get('/admin/articles/new', (req, res) => {
+router.get('/admin/articles/new',isAdmin,  (req, res) => {
      // Categories array with value/label pairs
      const categories = [
           { value: 'dog-training', label: 'Dressage de chiens' },
@@ -108,6 +112,24 @@ router.get('/admin/articles/new', (req, res) => {
                tags
           });
 });
+
+// GET : All Articles For Admin 
+// GET: Fetch all articles
+router.get('/admin/articles', isAdmin,  async (req, res) => {
+     try {
+         // Fetch all articles from the database, sorted by creation date (most recent first)
+         const articles = await Article.find()
+             .sort('-createdAt') // Sort by newest first
+             .populate('comments') // Populate comments if needed
+             .exec();
+ 
+         // Render the articles management page and pass the articles data
+         res.render('admin/articles', { articles });
+     } catch (error) {
+         console.error('Error fetching articles:', error);
+         res.status(500).send('Server Error: Unable to fetch articles');
+     }
+ });
 
 // POST: Submit new article
 router.post('/admin/articles', upload.single('featuredImage'), async (req, res) => {
@@ -197,17 +219,45 @@ router.post('/admin/articles', upload.single('featuredImage'), async (req, res) 
      }
 });
 // GET: Edit article
-router.get('/admin/articles/:slug/edit', async (req, res) => {
+router.get('/admin/articles/:slug/edit', isAdmin, async (req, res) => {
      try {
-          const article = await Article.find({ slug: req.params.slug });
-          res.render('admin/editArticle', { article: article[0] });
+         // Fetch the article using findOne for a single result
+         const article = await Article.findOne({ slug: req.params.slug });
+ 
+         // Check if the article exists
+         if (!article) {
+             req.flash('error', 'Article not found');
+             return res.redirect('/admin/dashboard');
+         }
+ 
+         // Prepare categories and tags for rendering (replace with actual values)
+         const categories = [
+             { value: 'dog-trainers', label: 'Dresseurs de chiens' },
+             { value: 'veterinarians', label: 'Vétérinaires' },
+             { value: 'pet-stores', label: 'Magasins pour animaux' },
+             { value: 'dog-sitters', label: 'Gardiens de chiens' },
+             { value: 'behavioral-psychology', label: 'Psychologie comportementale' },
+             { value: 'educational-training', label: 'Formation éducative' },
+             { value: 'puppy-training', label: 'Formation des chiots' },
+             { value: 'obedience-training', label: 'Formation à l\'obéissance' },
+         ];
+ 
+         const tags = [
+             'dressage', 'comportement', 'chiots', 'alimentation', 
+             'santé', 'toilettage', 'races', 'adoption',
+         ];
+ 
+         // Render the editArticle view with the necessary data
+         res.render('admin/editArticle', { article, categories, tags });
      } catch (err) {
-          console.error('Error fetching article:', err);
-          res.redirect('/admin/dashboard');
+         console.error('Error fetching article:', err);
+         req.flash('error', 'An error occurred while fetching the article');
+         res.redirect('/admin/dashboard');
      }
-});
+ });
+ 
 
-router.post('/admin/articles/:slug/edit', async (req, res) => {
+router.post('/admin/articles/:slug/edit',isAdmin, async (req, res) => {
      const { slug } = req.params;
      console.log(req.body)
 
@@ -246,7 +296,7 @@ router.post('/admin/articles/:slug/edit', async (req, res) => {
 });
 
 // DELETE: Delete article
-router.post('/admin/articles/:id/delete', async (req, res) => {
+router.post('/admin/articles/:id/delete',isAdmin, async (req, res) => {
      try {
           await Article.findByIdAndDelete(req.params.id);
           req.flash('success', 'Article deleted successfully');
