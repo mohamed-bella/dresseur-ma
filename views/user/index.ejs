@@ -1,130 +1,513 @@
-<!-- Include the head and navbar templates -->
+
 <%- include('include/head.ejs') %>
-     <%- include('include/navbar.ejs') %>
+<%- include('include/navbar.ejs') %>
 
+<!-- Hero Section -->
+<section class="relative min-h-[85vh] flex items-center">
+    <!-- Premium Background -->
+    <div class="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800 overflow-hidden">
+        <!-- Luxury Pattern Overlay -->
+        <div class="absolute inset-0 opacity-[0.03]" style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M54.627 4.383a9.23 9.23 0 0 1-2.426 1.604m6.606 0a9.23 9.23 0 0 0-2.426 1.604\' stroke=\'%23ffffff\' stroke-width=\'2\' fill=\'none\'/%3E%3C/svg%3E');"></div>
+    </div>
 
-<!-- Main Section Container -->
-<section class="py-16 md:py-24 px-4">
-     <div class="max-w-7xl mx-auto">
-         <!-- Header -->
-         <div class="text-center max-w-3xl mx-auto mb-16">
-             <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                 Bienvenue sur <span class="text-primary-600">Ndressilik</span>
-             </h1>
-             <p class="text-gray-600 text-lg leading-relaxed">
-                 La première plateforme marocaine dédiée aux services canins. Découvrez nos solutions innovantes pour le bien-être de votre fidèle compagnon.
-             </p>
-         </div>
- 
-         <!-- Services Grid -->
-         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 mb-16">
-             <!-- Adoption Card -->
-             <a href="/chiens-adoption-et-perdus" class="group block">
-                 <div class="h-full bg-rose-100 rounded-3xl p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-                     <div class="w-16 h-16 rounded-2xl bg-white flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                         <i class="fas fa-heart text-2xl text-rose-500"></i>
-                     </div>
-                     
-                     <h3 class="text-xl font-bold text-gray-900 mb-3">
-                         Adoption & Chiens Perdus
-                     </h3>
-                     <p class="text-gray-600 mb-6">
-                         Donnez une seconde chance aux chiens abandonnés ou aidez à retrouver les chiens perdus à travers le Maroc.
-                     </p>
-                     
-                     <div class="flex items-center text-rose-600 font-medium">
-                         Découvrir
-                         <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
-                     </div>
-                 </div>
-             </a>
- 
-             <!-- Services Card -->
-             <a href="/services" class="group block">
-                 <div class="h-full bg-blue-100 rounded-3xl p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-                     <div class="w-16 h-16 rounded-2xl bg-white flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                         <i class="fas fa-shield-dog text-2xl text-blue-500"></i>
-                     </div>
-                     
-                     <h3 class="text-xl font-bold text-gray-900 mb-3">
-                         Services Canins
-                     </h3>
-                     <p class="text-gray-600 mb-6">
-                         Éducation, toilettage, pension et bien plus encore. Des services professionnels pour votre chien.
-                     </p>
-                     
-                     <div class="flex items-center text-blue-600 font-medium">
-                         Explorer
-                         <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
-                     </div>
-                 </div>
-             </a>
- 
-             <!-- Profiles Card -->
-             <a href="/professionnels" class="group block">
-                 <div class="h-full bg-amber-100 rounded-3xl p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-                     <div class="w-16 h-16 rounded-2xl bg-white flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                         <i class="fas fa-user-tie text-2xl text-amber-500"></i>
-                     </div>
-                     
-                     <h3 class="text-xl font-bold text-gray-900 mb-3">
-                         Professionnels
-                     </h3>
-                     <p class="text-gray-600 mb-6">
-                         Trouvez les meilleurs vétérinaires, éducateurs et experts canins certifiés au Maroc.
-                     </p>
-                     
-                     <div class="flex items-center text-amber-600 font-medium">
-                         Consulter
-                         <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
-                     </div>
-                 </div>
-             </a>
-             <!-- Articles Card -->
-<a href="/articles" class="group block">
-     <div class="h-full bg-green-100 rounded-3xl p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-         <div class="w-16 h-16 rounded-2xl bg-white flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-             <i class="fas fa-book-open text-2xl text-green-500"></i>
-         </div>
-         
-         <h3 class="text-xl font-bold text-gray-900 mb-3">
-             Articles
-         </h3>
-         <p class="text-gray-600 mb-6">
-             Découvrez les derniers articles et conseils pour le bien-être de votre chien.
-         </p>
-         
-         <div class="flex items-center text-green-600 font-medium">
-             Lire plus
-             <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
-         </div>
-     </div>
- </a>
+    <!-- Hero Content -->
+    <div class="relative max-w-7xl mx-auto px-4 py-24">
+        <div class="max-w-3xl">
+            <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 
+                text-amber-300 backdrop-blur-sm border border-amber-500/20 text-sm mb-6">
+                <i class="fas fa-crown"></i>
+                Excellence & Prestige
+            </span>
+            
+            <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
+                Services Canins <br>
+                <span class="text-amber-400">d'Excellence</span>
+            </h1>
+            
+            <p class="text-xl text-gray-300 mb-8 leading-relaxed">
+                Découvrez une expérience premium dédiée au bien-être de votre compagnon. 
+                Services sur-mesure et expertise inégalée au Maroc.
+            </p>
 
- <!-- Consultation Card -->
-<a href="/consultation" class="group block">
-     <div class="h-full bg-blue-100 rounded-3xl p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-         <div class="w-16 h-16 rounded-2xl bg-white flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-             <i class="fas fa-comments text-2xl text-blue-500"></i>
-         </div>
-         
-         <h3 class="text-xl font-bold text-gray-900 mb-3">
-             Consultation avec Ndressilik
-         </h3>
-         <p class="text-gray-600 mb-6">
-             Obtenez des conseils personnalisés pour votre chien avec nos experts.
-         </p>
-         
-         <div class="flex items-center text-blue-600 font-medium">
-             Consulter
-             <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
-         </div>
-     </div>
- </a>
- 
-         </div>
- 
-     </div>
- </section>
-                                             <!-- Include the footer template -->
-                                             <%- include('include/footer.ejs') %>
+            <div class="flex flex-wrap gap-4 items-center">
+                <button onclick="window.location.href='/services'" 
+                    class="inline-flex items-center gap-3 px-8 py-4 bg-amber-500 
+                    text-gray-900 rounded-xl font-medium hover:bg-amber-400 
+                    transition-all duration-300 transform hover:-translate-y-0.5">
+                    <i class="fas fa-shield-dog"></i>
+                    Explorer Nos Services
+                </button>
+                
+                <div class="flex items-center gap-6 text-white/60">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-check-circle text-amber-400"></i>
+                        <span>Service Premium</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-check-circle text-amber-400"></i>
+                        <span>Experts Certifiés</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services Grid Section -->
+<section class="py-24 px-4 bg-white">
+    <div class="max-w-7xl mx-auto">
+        <!-- Section Header -->
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <span class="text-amber-500 font-medium mb-4 block">Nos Services d'Excellence</span>
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+                Une Gamme Complète de Services Haut de Gamme
+            </h2>
+            <p class="text-gray-600 text-lg">
+                Découvrez nos prestations exclusives, conçues pour répondre aux exigences 
+                les plus élevées en matière de soins canins.
+            </p>
+        </div>
+
+        <!-- Services Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Adoption Card -->
+            <a href="/chiens-adoption-et-perdus" class="group">
+                <div class="relative h-full bg-white rounded-2xl p-8 transition-all duration-300 
+                    hover:-translate-y-2 hover:shadow-xl border border-gray-100">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-rose-50 rounded-bl-[100px] 
+                        -z-10 transition-all duration-500 group-hover:bg-rose-100"></div>
+                    
+                    <div class="w-16 h-16 rounded-xl bg-rose-500/10 flex items-center justify-center 
+                        mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-heart text-2xl text-rose-500"></i>
+                    </div>
+                    
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">
+                        Adoption & Chiens Perdus
+                    </h3>
+                    <p class="text-gray-600 mb-6">
+                        Un service d'accompagnement personnalisé pour l'adoption responsable 
+                        et la recherche de chiens perdus.
+                    </p>
+                    
+                    <div class="flex items-center text-rose-500 font-medium">
+                        Découvrir
+                        <i class="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Services Card -->
+            <a href="/services" class="group">
+                <div class="relative h-full bg-white rounded-2xl p-8 transition-all duration-300 
+                    hover:-translate-y-2 hover:shadow-xl border border-gray-100">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-bl-[100px] 
+                        -z-10 transition-all duration-500 group-hover:bg-blue-100"></div>
+                    
+                    <div class="w-16 h-16 rounded-xl bg-blue-500/10 flex items-center justify-center 
+                        mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-shield-dog text-2xl text-blue-500"></i>
+                    </div>
+                    
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">
+                        Services Premium
+                    </h3>
+                    <p class="text-gray-600 mb-6">
+                        Des services haut de gamme : éducation personnalisée, toilettage spa, 
+                        pension de luxe et transport VIP.
+                    </p>
+                    
+                    <div class="flex items-center text-blue-500 font-medium">
+                        Explorer
+                        <i class="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Professionals Card -->
+            <a href="/professionnels" class="group">
+                <div class="relative h-full bg-white rounded-2xl p-8 transition-all duration-300 
+                    hover:-translate-y-2 hover:shadow-xl border border-gray-100">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-amber-50 rounded-bl-[100px] 
+                        -z-10 transition-all duration-500 group-hover:bg-amber-100"></div>
+                    
+                    <div class="w-16 h-16 rounded-xl bg-amber-500/10 flex items-center justify-center 
+                        mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-user-tie text-2xl text-amber-500"></i>
+                    </div>
+                    
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">
+                        Experts Certifiés
+                    </h3>
+                    <p class="text-gray-600 mb-6">
+                        Une sélection rigoureuse des meilleurs professionnels canins du Maroc, 
+                        certifiés et expérimentés.
+                    </p>
+                    
+                    <div class="flex items-center text-amber-500 font-medium">
+                        Consulter
+                        <i class="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Articles Card -->
+            <a href="/articles" class="group">
+                <div class="relative h-full bg-white rounded-2xl p-8 transition-all duration-300 
+                    hover:-translate-y-2 hover:shadow-xl border border-gray-100">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-50 rounded-bl-[100px] 
+                        -z-10 transition-all duration-500 group-hover:bg-emerald-100"></div>
+                    
+                    <div class="w-16 h-16 rounded-xl bg-emerald-500/10 flex items-center justify-center 
+                        mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-book-open text-2xl text-emerald-500"></i>
+                    </div>
+                    
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">
+                        Publications Exclusives
+                    </h3>
+                    <p class="text-gray-600 mb-6">
+                        Articles et guides d'experts pour une approche holistique du bien-être canin.
+                    </p>
+                    
+                    <div class="flex items-center text-emerald-500 font-medium">
+                        Découvrir
+                        <i class="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Premium Consultation -->
+            <a href="/consultation" class="group">
+                <div class="relative h-full bg-white rounded-2xl p-8 transition-all duration-300 
+                    hover:-translate-y-2 hover:shadow-xl border border-gray-100">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-purple-50 rounded-bl-[100px] 
+                        -z-10 transition-all duration-500 group-hover:bg-purple-100"></div>
+                    
+                    <div class="w-16 h-16 rounded-xl bg-purple-500/10 flex items-center justify-center 
+                        mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-comments text-2xl text-purple-500"></i>
+                    </div>
+                    
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">
+                        Consultation Privée
+                    </h3>
+                    <p class="text-gray-600 mb-6">
+                        Bénéficiez de conseils personnalisés de nos experts pour un 
+                        accompagnement sur mesure.
+                    </p>
+                    
+                    <div class="flex items-center text-purple-500 font-medium">
+                        En savoir plus
+                        <i class="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"></i>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Trust Section -->
+<section class="py-24 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="grid md:grid-cols-2 gap-16 items-center">
+            <!-- Left: Content -->
+            <div>
+                <span class="text-amber-500 font-medium mb-4 block">Excellence & Confiance</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+                    Une Expertise Reconnue au Service de Votre Compagnon
+                </h2>
+                
+                <div class="space-y-6">
+                    <!-- Trust Points -->
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center 
+                            justify-center flex-shrink-0">
+                            <i class="fas fa-certificate text-amber-500"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">
+                                Professionnels Certifiés
+                            </h3>
+                            <p class="text-gray-600">
+                                Nos experts sont rigoureusement sélectionnés et certifiés pour 
+                                garantir des services d'excellence.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center 
+                            justify-center flex-shrink-0">
+                            <i class="fas fa-star text-amber-500"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">
+                                Service Personnalisé
+                            </h3>
+                            <p class="text-gray-600">
+                                Une approche sur mesure adaptée aux besoins spécifiques de 
+                                votre compagnon.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center 
+                            justify-center flex-shrink-0">
+                            <i class="fas fa-shield-alt text-amber-500"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">
+                                Garantie de Satisfaction
+                            </h3>
+                            <p class="text-gray-600">
+                                Notre engagement pour votre satisfaction totale et le bien-être 
+                                de votre chien.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CTA Button -->
+                <button onclick="window.location.href='/contact'" 
+                    class="mt-10 inline-flex items-center gap-3 px-8 py-4 bg-gray-900 
+                    text-white rounded-xl font-medium hover:bg-gray-800 
+                    transition-all duration-300 transform hover:-translate-y-0.5">
+                    Nous Contacter  <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+
+            <!-- Right: Stats -->
+            <div class="grid grid-cols-2 gap-8">
+                <div class="text-center p-8 bg-white rounded-2xl border border-gray-100 
+                    shadow-sm hover:shadow-xl transition-all duration-300">
+                    <div class="text-4xl font-bold text-amber-500 mb-2">23+</div>
+                    <div class="text-gray-600">Clients Satisfaits</div>
+                </div>
+                <div class="text-center p-8 bg-white rounded-2xl border border-gray-100 
+                    shadow-sm hover:shadow-xl transition-all duration-300">
+                    <div class="text-4xl font-bold text-amber-500 mb-2">12</div>
+                    <div class="text-gray-600">Villes Couvertes</div>
+                </div>
+                <div class="text-center p-8 bg-white rounded-2xl border border-gray-100 
+                    shadow-sm hover:shadow-xl transition-all duration-300">
+                    <div class="text-4xl font-bold text-amber-500 mb-2">10+</div>
+                    <div class="text-gray-600">Experts Certifiés</div>
+                </div>
+                <div class="text-center p-8 bg-white rounded-2xl border border-gray-100 
+                    shadow-sm hover:shadow-xl transition-all duration-300">
+                    <div class="text-4xl font-bold text-amber-500 mb-2">4.9</div>
+                    <div class="text-gray-600">Note Moyenne</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Premium Testimonials Section -->
+<section class="py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <span class="text-amber-500 font-medium mb-4 block">Témoignages</span>
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+                Ce Que Disent Nos Clients
+            </h2>
+            <p class="text-gray-600 text-lg">
+                Découvrez les expériences de nos clients satisfaits et leur confiance 
+                dans nos services premium.
+            </p>
+        </div>
+
+        <!-- Testimonials Grid -->
+        <div class="grid md:grid-cols-3 gap-8">
+            <!-- Testimonial 1 -->
+            <div class="bg-gray-50 rounded-2xl p-8 relative">
+                <div class="absolute top-0 right-0 w-20 h-20 bg-amber-100 rounded-bl-[100px] -z-10"></div>
+                <div class="text-amber-500 mb-6">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <p class="text-gray-600 mb-6">
+                    "Un service d'exception, bien au-delà de nos attentes. Le professionnalisme 
+                    et l'attention portée à notre chien étaient remarquables."
+                </p>
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center">
+                        <i class="fas fa-user text-gray-500"></i>
+                    </div>
+                    <div>
+                        <div class="font-semibold text-gray-900">Sarah M.</div>
+                        <div class="text-sm text-gray-500">Casablanca</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testimonial 2 -->
+            <div class="bg-gray-50 rounded-2xl p-8 relative">
+                <div class="absolute top-0 right-0 w-20 h-20 bg-amber-100 rounded-bl-[100px] -z-10"></div>
+                <div class="text-amber-500 mb-6">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <p class="text-gray-600 mb-6">
+                    "Les meilleurs services canins au Maroc. L'expertise et le 
+                    professionnalisme sont vraiment au rendez-vous."
+                </p>
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center">
+                        <i class="fas fa-user text-gray-500"></i>
+                    </div>
+                    <div>
+                        <div class="font-semibold text-gray-900">Karim B.</div>
+                        <div class="text-sm text-gray-500">Rabat</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testimonial 3 -->
+            <div class="bg-gray-50 rounded-2xl p-8 relative">
+                <div class="absolute top-0 right-0 w-20 h-20 bg-amber-100 rounded-bl-[100px] -z-10"></div>
+                <div class="text-amber-500 mb-6">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <p class="text-gray-600 mb-6">
+                    "Une qualité de service incomparable. Je recommande vivement 
+                    leurs services premium à tous les propriétaires exigeants."
+                </p>
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center">
+                        <i class="fas fa-user text-gray-500"></i>
+                    </div>
+                    <div>
+                        <div class="font-semibold text-gray-900">Yasmine R.</div>
+                        <div class="text-sm text-gray-500">Marrakech</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-24 bg-gray-900 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+        <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M54.627 4.383a9.23 9.23 0 0 1-2.426 1.604m6.606 0a9.23 9.23 0 0 0-2.426 1.604\' stroke=\'%23ffffff\' stroke-width=\'2\' fill=\'none\'/%3E%3C/svg%3E');"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 relative">
+        <div class="text-center max-w-3xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
+                Offrez le Meilleur à Votre Compagnon
+            </h2>
+            <p class="text-gray-300 text-lg mb-10">
+                Rejoignez notre communauté exclusive et découvrez nos services premium 
+                adaptés à vos exigences.
+            </p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <button onclick="window.location.href='/services'" 
+                    class="px-8 py-4 bg-amber-500 text-gray-900 rounded-xl font-medium 
+                    hover:bg-amber-400 transition-all duration-300 w-full sm:w-auto">
+                    Découvrir Nos Services
+                </button>
+                <button onclick="window.location.href='/contact'" 
+                    class="px-8 py-4 bg-white/10 text-white rounded-xl font-medium 
+                    hover:bg-white/20 transition-all duration-300 w-full sm:w-auto">
+                    Nous Contacter
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+// Smooth scroll for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+});
+
+// Intersection Observer for animations
+const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '50px'
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('fade-in-up');
+            observer.unobserve(entry.target);
+        }
+    });
+}, observerOptions);
+
+document.querySelectorAll('.group').forEach(card => {
+    observer.observe(card);
+});
+</script>
+
+<style>
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Hover Effects */
+.hover-lift {
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hover-lift:hover {
+    transform: translateY(-4px);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+</style>
+
+<%- include('include/footer.ejs') %>
