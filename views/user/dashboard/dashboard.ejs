@@ -3,442 +3,467 @@
 <html lang="fr">
 
 <head>
-     <%- include('includes/head') %>
-          <title>NDRESSILIK - Tableau de Bord</title>
+    <%- include('includes/head') %>
+        <title>NDRESSILIK - Tableau de Bord</title>
 </head>
 
 <body class="bg-gray-200">
-     <div class="">
-          <%- include('includes/header') %>
+    <div class="">
+        <%- include('includes/header') %>
 
-               <main class="p-6 max-w-4xl mx-auto">
-                    <!-- Collapsible Opportunities Alert -->
-<div class="mb-8">
-     <% if (showConsultationAlert && (stats.pendingPaidCount > 0 || stats.pendingFreeCount > 0)) { %>
-         <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-xl overflow-hidden"
-             x-data="{ isOpen: false }">
-             <!-- Header - Always Visible -->
-             <button @click="isOpen = !isOpen" 
-                 class="w-full p-4 flex items-center justify-between hover:bg-white/40 transition-colors">
-                 <div class="flex items-center gap-3">
-                     <div class="relative">
-                         <i class="fas fa-bell text-blue-600 text-lg"></i>
-                         <!-- Animated Ping Effect -->
-                         <span class="absolute -top-1 -right-1 h-3 w-3">
-                             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                             <span class="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span>
-                         </span>
-                     </div>
-                     <div class="flex items-baseline gap-2">
-                         <h3 class="font-semibold text-gray-900">
-                             Nouvelles opportunités
-                         </h3>
-                         <span class="text-sm text-blue-600 font-medium">
-                             <%= stats.pendingPaidCount + stats.pendingFreeCount %> en attente
-                         </span>
-                     </div>
-                 </div>
- 
-                 <!-- Toggle Icon -->
-                 <div class="flex items-center gap-3">
-                     <div class="flex items-center gap-1.5 text-sm text-gray-500">
-                         <i class="fas fa-coins text-amber-500"></i>
-                         <span><%= stats.potentialEarnings %> DH</span>
-                     </div>
-                     <i class="fas fa-chevron-down text-gray-400 transition-transform duration-300"
-                         :class="{ 'rotate-180': isOpen }"></i>
-                 </div>
-             </button>
- 
-             <!-- Expandable Content -->
-             <div x-show="isOpen" 
-                 x-collapse
-                 x-cloak
-                 class="border-t border-blue-100">
-                 <div class="p-6 space-y-6">
-                     <!-- Stats Grid -->
-                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                         <!-- Paid Consultations -->
-                         <div class="bg-white/60 rounded-xl p-4">
-                             <div class="text-sm text-gray-500 mb-1">Consultations payantes</div>
-                             <div class="flex items-baseline gap-2">
-                                 <span class="text-2xl font-bold text-gray-900">
-                                     <%= stats.pendingPaidCount %>
-                                 </span>
-                                 <% if (stats.pendingPaidCount > 0) { %>
-                                     <span class="text-sm text-green-600 font-medium">
-                                         <%= stats.potentialEarnings %> DH
-                                     </span>
-                                 <% } %>
-                             </div>
-                         </div>
- 
-                         <!-- Free Consultations -->
-                         <div class="bg-white/60 rounded-xl p-4">
-                             <div class="text-sm text-gray-500 mb-1">Consultations gratuites</div>
-                             <div class="flex items-baseline gap-2">
-                                 <span class="text-2xl font-bold text-gray-900">
-                                     <%= stats.pendingFreeCount %>
-                                 </span>
-                                 <span class="text-sm text-blue-600 font-medium">En attente</span>
-                             </div>
-                         </div>
- 
-                         <!-- Response Rate -->
-                         <div class="bg-white/60 rounded-xl p-4">
-                             <div class="text-sm text-gray-500 mb-1">Taux de réponse</div>
-                             <div class="flex items-baseline gap-2">
-                                 <span class="text-2xl font-bold text-gray-900">92%</span>
-                                 <span class="text-sm text-green-600 font-medium">
-                                     <i class="fas fa-arrow-up"></i> 3%
-                                 </span>
-                             </div>
-                         </div>
- 
-                         <!-- Average Response Time -->
-                         <div class="bg-white/60 rounded-xl p-4">
-                             <div class="text-sm text-gray-500 mb-1">Temps de réponse</div>
-                             <div class="flex items-baseline gap-2">
-                                 <span class="text-2xl font-bold text-gray-900">2h</span>
-                                 <span class="text-sm text-green-600 font-medium">Excellent</span>
-                             </div>
-                         </div>
-                     </div>
- 
-                     <!-- Action Section -->
-                     <div class="flex items-center justify-between pt-4 border-t border-blue-100">
-                         <p class="text-sm text-gray-600">
-                             Répondez rapidement pour augmenter vos chances d'être sélectionné !
-                         </p>
-                         <a href="/dashboard/consultations" 
-                             class="inline-flex items-center gap-2 px-6 py-2.5 bg-blue-600 text-white 
+            <main class="p-6 max-w-4xl mx-auto">
+                <!-- Collapsible Opportunities Alert -->
+                <div class="mb-8">
+                    <% if (showConsultationAlert && (stats.pendingPaidCount> 0 || stats.pendingFreeCount > 0)) { %>
+                        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-xl overflow-hidden" x-data="{ isOpen: false }">
+                            <!-- Header - Always Visible -->
+                            <button @click="isOpen = !isOpen" class="w-full p-4 flex items-center justify-between hover:bg-white/40 transition-colors">
+                                <div class="flex items-center gap-3">
+                                    <div class="relative">
+                                        <i class="fas fa-bell text-blue-600 text-lg"></i>
+                                        <!-- Animated Ping Effect -->
+                                        <span class="absolute -top-1 -right-1 h-3 w-3">
+                                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                                            <span class="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span>
+                                        </span>
+                                    </div>
+                                    <div class="flex items-baseline gap-2">
+                                        <h3 class="font-semibold text-gray-900">
+                                            Nouvelles opportunités
+                                        </h3>
+                                        <span class="text-sm text-blue-600 font-medium">
+                                            <%= stats.pendingPaidCount + stats.pendingFreeCount %> en attente
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <!-- Toggle Icon -->
+                                <div class="flex items-center gap-3">
+                                    <div class="flex items-center gap-1.5 text-sm text-gray-500">
+                                        <i class="fas fa-coins text-amber-500"></i>
+                                        <span>
+                                            <%= stats.potentialEarnings %> DH
+                                        </span>
+                                    </div>
+                                    <i class="fas fa-chevron-down text-gray-400 transition-transform duration-300" :class="{ 'rotate-180': isOpen }"></i>
+                                </div>
+                            </button>
+
+                            <!-- Expandable Content -->
+                            <div x-show="isOpen" x-collapse x-cloak class="border-t border-blue-100">
+                                <div class="p-6 space-y-6">
+                                    <!-- Stats Grid -->
+                                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                                        <!-- Paid Consultations -->
+                                        <div class="bg-white/60 rounded-xl p-4">
+                                            <div class="text-sm text-gray-500 mb-1">Consultations payantes</div>
+                                            <div class="flex items-baseline gap-2">
+                                                <span class="text-2xl font-bold text-gray-900">
+                                                    <%= stats.pendingPaidCount %>
+                                                </span>
+                                                <% if (stats.pendingPaidCount> 0) { %>
+                                                    <span class="text-sm text-green-600 font-medium">
+                                                        <%= stats.potentialEarnings %> DH
+                                                    </span>
+                                                    <% } %>
+                                            </div>
+                                        </div>
+
+                                        <!-- Free Consultations -->
+                                        <div class="bg-white/60 rounded-xl p-4">
+                                            <div class="text-sm text-gray-500 mb-1">Consultations gratuites</div>
+                                            <div class="flex items-baseline gap-2">
+                                                <span class="text-2xl font-bold text-gray-900">
+                                                    <%= stats.pendingFreeCount %>
+                                                </span>
+                                                <span class="text-sm text-blue-600 font-medium">En attente</span>
+                                            </div>
+                                        </div>
+
+                                       
+
+                                      
+                                    </div>
+
+                                    <!-- Action Section -->
+                                    <div class="flex items-center justify-between pt-4 border-t border-blue-100">
+                                        <p class="text-sm text-gray-600">
+                                            Répondez rapidement pour augmenter vos chances d'être sélectionné !
+                                        </p>
+                                        <a href="/dashboard/consultations" class="inline-flex items-center gap-2 px-6 py-2.5 bg-blue-600 text-white 
                              rounded-lg hover:bg-blue-700 transition-colors">
-                             <span>Répondre</span>
-                             <i class="fas fa-arrow-right"></i>
-                         </a>
-                     </div>
-                 </div>
-             </div>
-         </div>
-     <% } %>
- </div>
- 
- <!-- Alpine.js Styles -->
- <style>
- [x-cloak] { 
-     display: none !important; 
- }
- 
- @keyframes ping {
-     75%, 100% {
-         transform: scale(2);
-         opacity: 0;
-     }
- }
- 
- .animate-ping {
-     animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
- }
- 
- /* Smooth collapse animation */
- .collapse-enter-active,
- .collapse-leave-active {
-     transition: all 0.3s ease-in-out;
-     overflow: hidden;
- }
- 
- .collapse-enter-from,
- .collapse-leave-to {
-     opacity: 0;
-     max-height: 0px;
- }
- 
- .collapse-enter-to,
- .collapse-leave-from {
-     opacity: 1;
-     max-height: 1000px;
- }
- </style>
- 
- <script>
- // Optional: Add this if you want to auto-expand based on certain conditions
- document.addEventListener('alpine:init', () => {
-     Alpine.data('opportunitiesAlert', () => ({
-         isOpen: false,
-         
-         init() {
-             // Auto-expand if there are high-value opportunities
-             if (this.stats.potentialEarnings > 1000) {
-                 this.isOpen = true;
-             }
-         }
-     }));
- });
- </script>
-                    <!-- Dashboard Content -->
-                    <div class="space-y-6">
-                         <style>
-                              /* Card Hover Effects */
-                              .action-card {
-                                   position: relative;
-                                   isolation: isolate;
-                                   overflow: hidden;
-                              }
+                                            <span>Répondre</span>
+                                            <i class="fas fa-arrow-right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <% } %>
+                </div>
 
-                              .action-card::before {
-                                   content: '';
-                                   position: absolute;
-                                   inset: 0;
-                                   background: linear-gradient(45deg,
-                                             transparent 0%,
-                                             rgba(255, 255, 255, 0.5) 100%);
-                                   transform: translateX(-100%) rotate(45deg);
-                                   transition: transform 0.6s ease;
-                              }
+                <!-- Alpine.js Styles -->
+                <style>
+                    [x-cloak] {
+                        display: none !important;
+                    }
 
-                              .action-card:hover::before {
-                                   transform: translateX(100%) rotate(45deg);
-                              }
+                    @keyframes ping {
 
-                              .action-card::after {
-                                   content: '';
-                                   position: absolute;
-                                   inset: 0;
-                                   border-radius: 16px;
-                                   background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-                                             rgba(255, 255, 255, 0.1) 0%,
-                                             transparent 100%);
-                                   opacity: 0;
-                                   transition: opacity 0.3s ease;
-                              }
+                        75%,
+                        100% {
+                            transform: scale(2);
+                            opacity: 0;
+                        }
+                    }
 
-                              .action-card:hover::after {
-                                   opacity: 1;
-                              }
+                    .animate-ping {
+                        animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+                    }
 
-                              .action-icon {
-                                   transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-                              }
+                    /* Smooth collapse animation */
+                    .collapse-enter-active,
+                    .collapse-leave-active {
+                        transition: all 0.3s ease-in-out;
+                        overflow: hidden;
+                    }
 
-                              .action-card:hover .action-icon {
-                                   transform: scale(1.1) rotate(-10deg);
-                              }
+                    .collapse-enter-from,
+                    .collapse-leave-to {
+                        opacity: 0;
+                        max-height: 0px;
+                    }
 
-                              /* Stats Card Animation */
-                              .stat-card {
-                                   position: relative;
-                                   overflow: hidden;
-                                   transition: all 0.3s ease;
-                              }
+                    .collapse-enter-to,
+                    .collapse-leave-from {
+                        opacity: 1;
+                        max-height: 1000px;
+                    }
+                </style>
 
-                              .stat-card:hover {
-                                   transform: translateY(-2px);
-                              }
+                <script>
+                    // Optional: Add this if you want to auto-expand based on certain conditions
+                    document.addEventListener('alpine:init', () => {
+                        Alpine.data('opportunitiesAlert', () => ({
+                            isOpen: false,
 
-                              .stat-card::before {
-                                   content: '';
-                                   position: absolute;
-                                   top: 0;
-                                   left: 0;
-                                   right: 0;
-                                   height: 2px;
-                                   background: linear-gradient(to right, transparent, currentColor, transparent);
-                                   opacity: 0;
-                                   transition: opacity 0.3s ease;
-                              }
+                            init() {
+                                // Auto-expand if there are high-value opportunities
+                                if (this.stats.potentialEarnings > 1000) {
+                                    this.isOpen = true;
+                                }
+                            }
+                        }));
+                    });
+                </script>
+                <!-- Dashboard Content -->
+                <div class="space-y-6">
+                    <style>
+                        /* Card Hover Effects */
+                        .action-card {
+                            position: relative;
+                            isolation: isolate;
+                            overflow: hidden;
+                        }
 
-                              .stat-card:hover::before {
-                                   opacity: 0.2;
-                              }
+                        .action-card::before {
+                            content: '';
+                            position: absolute;
+                            inset: 0;
+                            background: linear-gradient(45deg,
+                                    transparent 0%,
+                                    rgba(255, 255, 255, 0.5) 100%);
+                            transform: translateX(-100%) rotate(45deg);
+                            transition: transform 0.6s ease;
+                        }
 
-                              /* Gradient Text Animation */
-                              .gradient-text {
-                                   background: linear-gradient(45deg, #3b82f6, #60a5fa);
-                                   -webkit-background-clip: text;
-                                   background-clip: text;
-                                   color: transparent;
-                                   background-size: 200% 200%;
-                                   animation: gradient 8s ease infinite;
-                              }
+                        .action-card:hover::before {
+                            transform: translateX(100%) rotate(45deg);
+                        }
 
-                              @keyframes gradient {
-                                   0% {
-                                        background-position: 0% 50%;
-                                   }
+                        .action-card::after {
+                            content: '';
+                            position: absolute;
+                            inset: 0;
+                            border-radius: 16px;
+                            background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+                                    rgba(255, 255, 255, 0.1) 0%,
+                                    transparent 100%);
+                            opacity: 0;
+                            transition: opacity 0.3s ease;
+                        }
 
-                                   50% {
-                                        background-position: 100% 50%;
-                                   }
+                        .action-card:hover::after {
+                            opacity: 1;
+                        }
 
-                                   100% {
-                                        background-position: 0% 50%;
-                                   }
-                              }
+                        .action-icon {
+                            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+                        }
 
-                              /* Pulse Animation for Icons */
-                              @keyframes subtle-pulse {
-                                   0% {
-                                        transform: scale(1);
-                                   }
+                        .action-card:hover .action-icon {
+                            transform: scale(1.1) rotate(-10deg);
+                        }
 
-                                   50% {
-                                        transform: scale(1.05);
-                                   }
+                        /* Stats Card Animation */
+                        .stat-card {
+                            position: relative;
+                            overflow: hidden;
+                            transition: all 0.3s ease;
+                        }
 
-                                   100% {
-                                        transform: scale(1);
-                                   }
-                              }
-                         </style>
+                        .stat-card:hover {
+                            transform: translateY(-2px);
+                        }
+
+                        .stat-card::before {
+                            content: '';
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            right: 0;
+                            height: 2px;
+                            background: linear-gradient(to right, transparent, currentColor, transparent);
+                            opacity: 0;
+                            transition: opacity 0.3s ease;
+                        }
+
+                        .stat-card:hover::before {
+                            opacity: 0.2;
+                        }
+
+                        /* Gradient Text Animation */
+                        .gradient-text {
+                            background: linear-gradient(45deg, #3b82f6, #60a5fa);
+                            -webkit-background-clip: text;
+                            background-clip: text;
+                            color: transparent;
+                            background-size: 200% 200%;
+                            animation: gradient 8s ease infinite;
+                        }
+
+                        @keyframes gradient {
+                            0% {
+                                background-position: 0% 50%;
+                            }
+
+                            50% {
+                                background-position: 100% 50%;
+                            }
+
+                            100% {
+                                background-position: 0% 50%;
+                            }
+                        }
+
+                        /* Pulse Animation for Icons */
+                        @keyframes subtle-pulse {
+                            0% {
+                                transform: scale(1);
+                            }
+
+                            50% {
+                                transform: scale(1.05);
+                            }
+
+                            100% {
+                                transform: scale(1);
+                            }
+                        }
+                    </style>
 
 <div class="rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8 bg-white">
-     <!-- Welcome Section -->
-     <div class="mb-8">
-         <h2 class="text-xl sm:text-2xl font-semibold text-gray-900">
-             Bienvenue dans votre espace professionnel
-         </h2>
-         <p class="mt-2 text-gray-600">
-             Commencez à configurer votre profil et vos services pour être visible par les clients
-         </p>
-     </div>
- 
-     <!-- Progress Bar -->
-     <div class="mb-8">
-         <div class="flex items-center justify-between mb-2">
-             <span class="text-sm font-medium text-gray-600">Progression du profil</span>
-             <span class="text-sm font-medium text-primary-600"><%= user.completionPercentage %>%</span>
-         </div>
-         <div class="w-full h-2 bg-gray-100 rounded-full">
-             <div class="h-2 bg-yellow-500 rounded-full transition-all duration-500"
-                  style="width: <%= user.completionPercentage %>%"></div>
-         </div>
-     </div>
- 
-     <!-- Setup Steps Grid -->
-     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-         <!-- Step 1: Complete Profile -->
-         <a href="/dashboard/profile" 
-            class="group block p-6 rounded-2xl border transition-all duration-300
-                   <%= !user.isProfileComplete ? 'bg-primary-50 border-primary-200 animate-pulse' : 'bg-gray-50 border-gray-100' %>
-                   hover:shadow-lg hover:border-primary-300">
-             <div class="flex items-center gap-4">
-                 <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-xl
-                             <%= !user.isProfileComplete ? 'bg-primary-100 text-primary-600' : 'bg-gray-100 text-gray-500' %>">
-                     <% if (user.isProfileComplete) { %>
-                         <i class="fas fa-check-circle text-xl text-green-500"></i>
-                     <% } else { %>
-                         <span class="text-lg font-bold">1</span>
-                     <% } %>
-                 </div>
-                 <div class="flex-1">
-                     <h3 class="text-lg font-semibold text-gray-900 mb-1">Compléter le profil</h3>
-                     <p class="text-sm text-blue-600 mb-2">
-                         <%= user.isProfileComplete ? 'Profil complété' : 'Ajoutez vos informations professionnelles' %>
-                     </p>
-                     <% if (!user.isProfileComplete) { %>
-                         <span class="text-sm text-primary-600 font-medium group-hover:underline">
-                             Commencer maintenant →
-                         </span>
-                     <% } %>
-                 </div>
-             </div>
-         </a>
- 
-         <!-- Step 2: Add Services -->
-         <a href="/dashboard/new-service" 
-            class="group block p-6 rounded-2xl border transition-all duration-300
-                   <%= user.isProfileComplete && !user.hasServices ? 'bg-primary-50 border-primary-200 animate-pulse' : 'bg-gray-50 border-gray-100' %>
-                   hover:shadow-lg hover:border-primary-300">
-             <div class="flex items-center gap-4">
-                 <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-xl
-                             <%= user.isProfileComplete && !user.hasServices ? 'bg-primary-100 text-primary-600' : 'bg-gray-100 text-gray-500' %>">
-                     <% if (user.hasServices) { %>
-                         <i class="fas fa-check-circle text-xl text-green-500"></i>
-                     <% } else { %>
-                         <span class="text-lg font-bold">2</span>
-                     <% } %>
-                 </div>
-                 <div class="flex-1">
-                     <h3 class="text-lg font-semibold text-gray-900 mb-1">Ajouter vos services</h3>
-                     <p class="text-sm text-gray-600 mb-2">
-                         <%= user.hasServices ? `${user.servicesCount} services ajoutés` : 'Créez votre premier service' %>
-                     </p>
-                     <% if (!user.hasServices) { %>
-                         <span class="text-sm text-primary-600 font-medium group-hover:underline">
-                             Ajouter un service →
-                         </span>
-                     <% } %>
-                 </div>
-             </div>
-         </a>
- 
-         <!-- Step 3: Manage Consultations -->
-         <a href="/dashboard/consultations" 
-            class="group block p-6 rounded-2xl border transition-all duration-300
-                   <%= user.isProfileComplete && user.hasServices ? 'bg-primary-50 border-primary-200' : 'bg-gray-50 border-gray-100' %>
-                   hover:shadow-lg hover:border-primary-300">
-             <div class="flex items-center gap-4">
-                 <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-xl bg-primary-100 text-primary-600">
-                     <i class="fas fa-comments text-xl"></i>
-                 </div>
-                 <div class="flex-1">
-                     <h3 class="text-lg font-semibold text-gray-900 mb-1">Gérer les consultations</h3>
-                     <p class="text-sm text-green-600 mb-2">
-                         <%=consultations.filter(c => c.status === 'pending').length  || 0 %> consultation(s) en attente
-                     </p>
-                     <span class="text-sm text-primary-600 font-medium group-hover:underline">
-                         Voir les demandes →
-                     </span>
-                 </div>
-             </div>
-         </a>
-     </div>
- 
-     <!-- Help Section -->
-     <div class="mt-8 p-4 bg-gray-50 rounded-xl">
-         <div class="flex items-center gap-4">
-             <div class="w-10 h-10 flex items-center justify-center rounded-full bg-primary-100">
-                 <i class="fas fa-question text-primary-600"></i>
-             </div>
-             <div class="flex-1">
-                 <h4 class="text-sm font-medium text-gray-900">Besoin d'aide ?</h4>
-                 <p class="text-sm text-gray-600">Notre équipe est là pour vous aider à démarrer</p>
-             </div>
-             <a href="/help" class="px-4 py-2 text-sm text-primary-600 hover:bg-primary-50 rounded-lg transition-colors">
-                 Voir le guide
-             </a>
-         </div>
-     </div>
- </div>
+    <!-- Welcome Section -->
+    <div class="mb-8">
+        <h2 class="text-xl sm:text-2xl font-semibold text-gray-900">
+            Bienvenue dans votre espace professionnel
+        </h2>
+        <p class="mt-2 text-gray-600">
+            Commencez à configurer votre profil et vos services pour être visible par les clients
+        </p>
+    </div>
 
+    <!-- Progress Bar -->
+    <div class="mb-8">
+        <div class="flex items-center justify-between mb-2">
+            <span class="text-sm font-medium text-gray-600">Progression du profil</span>
+            <span class="text-sm font-medium text-primary-600">
+                <%= user.completionPercentage %>%
+            </span>
+        </div>
+        <div class="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden">
+            <div class="h-full bg-primary-500 rounded-full transition-all duration-700 ease-out" 
+                 style="width: <%= user.completionPercentage %>%">
+            </div>
+        </div>
+    </div>
 
-                         <script>
-                              // Mouse move effect for cards
-                              document.querySelectorAll('.action-card').forEach(card => {
-                                   card.addEventListener('mousemove', (e) => {
-                                        const rect = card.getBoundingClientRect();
-                                        const x = ((e.clientX - rect.left) / card.clientWidth) * 100;
-                                        const y = ((e.clientY - rect.top) / card.clientHeight) * 100;
-
-                                        card.style.setProperty('--mouse-x', `${x}%`);
-                                        card.style.setProperty('--mouse-y', `${y}%`);
-                                   });
-                              });
-                         </script>
-
-                         <!-- Include Font Awesome -->
-                         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
-
-                         <%- include('includes/services') %>
-                              <!-- < %- include('includes/analytics') %> -->
+    <!-- Enhanced Setup Steps Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        <!-- Step 1: Complete Profile -->
+        <button onclick="window.location.href='/dashboard/profile'" 
+                class="group relative w-full text-left cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
+            <div class="p-6 rounded-2xl border transition-all duration-300
+                <%= !user.isProfileComplete 
+                    ? 'bg-primary-50/60 border-primary-200 animate-pulse' 
+                    : 'bg-white border-gray-100' %>
+                group-hover:shadow-lg group-hover:border-primary-300
+                transform group-hover:-translate-y-0.5 group-active:translate-y-0">
+                <div class="flex items-center gap-4">
+                    <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-xl
+                        <%= !user.isProfileComplete 
+                            ? 'bg-primary-100 text-primary-600' 
+                            : 'bg-gray-100 text-gray-500' %>
+                        group-hover:scale-110 transition-transform duration-300">
+                        <% if (user.isProfileComplete) { %>
+                            <i class="fas fa-check-circle text-xl text-green-500"></i>
+                        <% } else { %>
+                            <span class="text-lg font-bold">1</span>
+                        <% } %>
                     </div>
- 
-               </main>
-     </div>
+                    <div class="flex-1">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-1 group-hover:text-primary-600 transition-colors">
+                            Compléter le profil
+                        </h3>
+                        <p class="text-sm text-gray-600 mb-2">
+                            <%= user.isProfileComplete ? 'Profil complété' : 'Ajoutez vos informations professionnelles' %>
+                        </p>
+                        <% if (!user.isProfileComplete) { %>
+                            <span class="inline-flex items-center text-sm text-primary-600 font-medium">
+                                Commencer maintenant
+                                <i class="fas fa-arrow-right ml-1 transform group-hover:translate-x-1 transition-transform"></i>
+                            </span>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </button>
 
- 
+        <!-- Step 2: Add Services -->
+        <button onclick="window.location.href='/dashboard/new-service'"
+                class="group relative w-full text-left cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
+            <div class="p-6 rounded-2xl border transition-all duration-300
+                <%= user.isProfileComplete && !user.hasServices 
+                    ? 'bg-primary-50/60 border-primary-200 animate-pulse' 
+                    : 'bg-white border-gray-100' %>
+                group-hover:shadow-lg group-hover:border-primary-300
+                transform group-hover:-translate-y-0.5 group-active:translate-y-0">
+                <div class="flex items-center gap-4">
+                    <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-xl
+                        <%= user.isProfileComplete && !user.hasServices 
+                            ? 'bg-primary-100 text-primary-600' 
+                            : 'bg-gray-100 text-gray-500' %>
+                        group-hover:scale-110 transition-transform duration-300">
+                        <% if (user.hasServices) { %>
+                            <i class="fas fa-check-circle text-xl text-green-500"></i>
+                        <% } else { %>
+                            <span class="text-lg font-bold">2</span>
+                        <% } %>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-1 group-hover:text-primary-600 transition-colors">
+                            Ajouter vos services
+                        </h3>
+                        <p class="text-sm text-gray-600 mb-2">
+                            <%= user.hasServices ? `${user.servicesCount} services ajoutés` : 'Créez votre premier service' %>
+                        </p>
+                        <% if (!user.hasServices) { %>
+                            <span class="inline-flex items-center text-sm text-primary-600 font-medium">
+                                Ajouter un service
+                                <i class="fas fa-arrow-right ml-1 transform group-hover:translate-x-1 transition-transform"></i>
+                            </span>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </button>
 
-     <%- include('includes/scripts') %>
+        <!-- Step 3: Manage Consultations -->
+        <button onclick="window.location.href='/dashboard/consultations'"
+                class="group relative w-full text-left cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
+            <div class="p-6 rounded-2xl border transition-all duration-300
+                <%= user.isProfileComplete && user.hasServices 
+                    ? 'bg-primary-50/60 border-primary-200' 
+                    : 'bg-white border-gray-100' %>
+                group-hover:shadow-lg group-hover:border-primary-300
+                transform group-hover:-translate-y-0.5 group-active:translate-y-0">
+                <div class="flex items-center gap-4">
+                    <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-xl
+                         bg-primary-100 text-primary-600
+                         group-hover:scale-110 transition-transform duration-300">
+                        <i class="fas fa-comments text-xl"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-1 group-hover:text-primary-600 transition-colors">
+                            Gérer les consultations
+                        </h3>
+                        <p class="text-sm text-gray-600 mb-2">
+                            <span class="text-primary-600 font-medium">
+                                <%= consultations.filter(c => c.status === 'pending').length || 0 %>
+                            </span> 
+                            consultation<%= consultations.filter(c => c.status === 'pending').length !== 1 ? 's' : '' %> en attente
+                        </p>
+                        <span class="inline-flex items-center text-sm text-primary-600 font-medium">
+                            Voir les demandes
+                            <i class="fas fa-arrow-right ml-1 transform group-hover:translate-x-1 transition-transform"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </button>
+    </div>
+
+    <!-- Enhanced Help Section -->
+    <div class="mt-8">
+        <button onclick="window.location.href='/help'"
+                class="w-full group">
+            <div class="p-4 bg-gray-50 rounded-xl border border-transparent hover:border-primary-200 hover:bg-primary-50/30 transition-all duration-300">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 flex items-center justify-center rounded-full bg-primary-100 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-question text-primary-600"></i>
+                    </div>
+                    <div class="flex-1 text-left">
+                        <h4 class="text-sm font-medium text-gray-900">Besoin d'aide ?</h4>
+                        <p class="text-sm text-gray-600">Notre équipe est là pour vous aider à démarrer</p>
+                    </div>
+                    <span class="px-4 py-2 text-sm font-medium text-primary-600 hover:bg-primary-100/50 rounded-lg transition-colors inline-flex items-center gap-2">
+                        Voir le guide
+                        <i class="fas fa-arrow-right transform group-hover:translate-x-1 transition-transform"></i>
+                    </span>
+                </div>
+            </div>
+        </button>
+    </div>
+</div>
+
+
+                    <script>
+                        // Mouse move effect for cards
+                        document.querySelectorAll('.action-card').forEach(card => {
+                            card.addEventListener('mousemove', (e) => {
+                                const rect = card.getBoundingClientRect();
+                                const x = ((e.clientX - rect.left) / card.clientWidth) * 100;
+                                const y = ((e.clientY - rect.top) / card.clientHeight) * 100;
+
+                                card.style.setProperty('--mouse-x', `${x}%`);
+                                card.style.setProperty('--mouse-y', `${y}%`);
+                            });
+                        });
+                    </script>
+
+                    <!-- Include Font Awesome -->
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+
+                    <%- include('includes/services') %>
+                        <!-- < %- include('includes/analytics') %> -->
+                </div>
+
+            </main>
+    </div>
+
+
+
+    <%- include('includes/scripts') %>
 </body>
 
 </html>

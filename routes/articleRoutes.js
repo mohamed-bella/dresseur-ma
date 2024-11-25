@@ -339,10 +339,11 @@ router.get('/articles/:slug', async (req, res) => {
                return Math.ceil(wordCount / wordsPerMinute); // Calculate reading time in minutes
           };
 
-          // Dynamic SEO metadata
-          const pageTitle = `${article.title} | NDRESSILIK`;
-          const description = article.summary || `${article.title} - Découvrez notre article complet sur ${article.category}.`;
-          const keywords = `${article.tags.join(', ')}, ${article.category}, articles NDRESSILIK`;
+         // Dynamic SEO metadata
+const pageTitle = `${article.title} - Articles sur ${article.category} | NDRESSILIK`;
+const description = article.summary || 
+    `${article.title} - Lisez notre article détaillé sur ${article.category} et obtenez des conseils pratiques, des informations utiles, et bien plus encore pour le bien-être des animaux.`;
+const keywords = `${article.tags.join(', ')}, ${article.category}, bien-être animal, conseils animaux, articles NDRESSILIK`;
 
           const comments = await Comment.find({ article: article._id });
 

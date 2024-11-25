@@ -83,11 +83,12 @@ const validateService = [
 
 router.get('/', async (req, res) => {
      res.render('user/index', {
-          pageTitle : '',
-          description : '',
-          keywords : ''
-     })
-});
+         pageTitle: 'Ndressilik - Trouvez les Meilleurs Services pour Chiens au Maroc',
+         description: 'Ndressilik est votre plateforme de confiance pour trouver les meilleurs services pour chiens au Maroc. Explorez un large éventail de services tels que l’éducation canine, le toilettage professionnel, les soins vétérinaires, la garde d’animaux, la pension pour chiens, et bien plus encore. Offrez à votre chien une expérience de qualité avec des experts qualifiés à travers tout le Maroc. Facilitez votre recherche et prenez soin de votre compagnon à quatre pattes grâce à nos solutions innovantes.',
+         keywords: 'services pour chiens Maroc, toilettage chien, éducation canine Maroc, soins vétérinaires chiens, pension pour chiens, garde de chiens, services pour animaux Maroc, Ndressilik, dressage de chiens Maroc, soins pour chiens professionnels, toilettage professionnel Maroc, vétérinaire pour chiens Maroc, services pour animaux de compagnie',
+     });
+ });
+ 
 
 // POST: Create New Service
 router.post('/dashboard/new-service', isAuthenticated, validateService, async (req, res) => {
@@ -338,10 +339,10 @@ router.post('/dashboard/new-service', isAuthenticated, validateService, async (r
 // GET ALL ARTICLES
 router.get('/articles', async (req, res) => {
 
-     // Metadata for the articles page
-     const pageTitle = 'Articles sur les animaux | NDRESSILIK';
-     const description = 'Lisez les derniers articles sur les soins, l’éducation, et l’adoption d’animaux sur NDRESSILIK.';
-     const keywords = 'articles sur les animaux, soins, éducation, adoption, NDRESSILIK';
+    // Metadata for the articles page
+const pageTitle = 'Articles sur les Animaux - Soins, Éducation et Adoption | NDRESSILIK';
+const description = 'Découvrez une collection complète d’articles sur les animaux sur NDRESSILIK. Apprenez tout sur les soins, l’éducation canine, l’adoption responsable, les comportements des animaux, et bien plus encore. Trouvez des conseils pratiques et des informations utiles pour le bien-être de vos compagnons à quatre pattes.';
+const keywords = 'articles sur les animaux, soins pour animaux, éducation canine, adoption d’animaux, comportement animal, bien-être animal, adoption responsable, NDRESSILIK, dressage de chiens, conseils pour animaux, soins vétérinaires, santé animale';
 
      try {
           // Fetch all articles
@@ -672,6 +673,7 @@ router.get('/dashboard', isAuthenticated, async (req, res) => {
          };
         const consults = await Consultation.find()
 
+
      //    Get Consultation Data
       // Get pending consultations count
       const consultationsStats = await Consultation.aggregate([
@@ -958,14 +960,14 @@ router.get('/dashboard/consultations', isAuthenticated, async (req, res) => {
              reservations: formatReservationsData(reservationsData),
              consultations: formatConsultationsData(consultationsData)
          };
-        const consults = await Consultation.find()
+        const consults = await Consultation.find().sort({createdAt : -1})
      //    console.log(consults)
  
-         // Render dashboard with all data
-         res.render('user/dashboard/consultations', {
-          pageTitle : 'dashboard',
-          description :'',
-          keywords : '',
+     // Render dashboard with all data
+res.render('user/dashboard/consultations', {
+     pageTitle: 'Tableau de Bord - Suivi des Consultations | NDRESSILIK',
+     description: 'Gérez et suivez vos consultations avec NDRESSILIK. Accédez à des statistiques détaillées, des consultations récentes et des informations essentielles sur vos services pour animaux.',
+     keywords: 'tableau de bord, consultations animaux, suivi des consultations, statistiques des services, NDRESSILIK, gestion des consultations, services pour animaux, suivi des animaux', 
              user: {
                  ...req.user.toObject(),
                  completionPercentage: Math.round(completedWeight)
@@ -1689,25 +1691,25 @@ router.get('/faq', (req, res) => {
 
 // Route for contact
 router.get('/contact', (req, res) => {
-     const pageTitle = 'Contact | NDRESSILIK';
-     const description = 'Contactez nous pour toute information supplemmentaire sur NDRESSILIK.';
+     const pageTitle = 'Contactez-nous - Assistance et Informations | NDRESSILIK';
+     const description = 'Besoin d’aide ou d’informations sur nos services pour animaux ? Contactez NDRESSILIK dès aujourd’hui. Nous sommes là pour répondre à toutes vos questions sur l’éducation canine, les soins, et l’adoption d’animaux.';
      const author = 'NDRESSILIK';
-     const keywords = 'contact, NDRESSILIK';
+     const keywords = 'contact NDRESSILIK, assistance animaux, éducation canine, soins pour animaux, adoption d’animaux, questions NDRESSILIK, services pour animaux, aide NDRESSILIK';
      res.render('user/contact', { formData: {}, pageTitle, description, author, keywords });
-});
+ });
+ 
 
 
-// route for consultation
+// Route for consultation
 router.get('/consultation', (req, res) => {
      res.render('user/consultation', {
-          formData: {},
-          pageTitle: 'Consultation | NDRESSILIK',
-          description: 'Lisez les derniers articles sur les soins, l\'éducation, et l\’adoption d\’animaux sur NDRESSILIK.',
-          keywords: 'consultation, soins, éducation, adoption, NDRESSILIK',
-
+         formData: {},
+         pageTitle: 'Consultation - Services et Conseils pour Animaux | NDRESSILIK',
+         description: 'Obtenez des conseils personnalisés et des services experts pour vos animaux grâce à NDRESSILIK. Que ce soit pour l’éducation, les soins, ou l’adoption, notre équipe est là pour vous guider à chaque étape.',
+         keywords: 'consultation animaux, conseils pour animaux, éducation canine, soins pour animaux, adoption responsable, NDRESSILIK, consultation expert animaux, services pour animaux',
      });
-});
-
+ });
+ 
 // Single event page
 router.get('/event/', async (req, res) => {
      try {
