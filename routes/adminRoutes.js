@@ -12,6 +12,13 @@ const Event = require('../models/event');
 const User = require('../models/user');
 const fs = require('fs');
 const { SearchUsersCommand } = require('@aws-sdk/client-rekognition');
+const { sendBroadcastEmail, sendEmail } = require('../utils/emails');
+const cookieParser = require('cookie-parser');
+router.use(cookieParser()); // Middleware for handling cookies
+const {adminAuth, ensureAdmin} = require('../middlewares/auth')
+require('dotenv').config(); // Load environment variables from .env
+
+
 
 // S3 Client initialization
 const s3 = new S3Client({
@@ -69,73 +76,61 @@ const isAdmin = (req, res, next) => {
      }
      next()
 }
-// Handle Admin Login
-router.get('/admin/login', (req, res) => {
-     res.render('admin/login');
-});
-
-require('dotenv').config(); // Load environment variables from .env
 
 
-// Admin Login Route
+
+
 router.post('/admin/login', async (req, res) => {
-     const { username, password } = req.body;
+    const { username, password } = req.body;
 
+    try {
+        // Validate credentials
+        const validUsernames = [process.env.ADMIN_USERNAME, process.env.AUTHOR_USERNAME];
+        const validPasswords = {
+            [process.env.ADMIN_USERNAME]: process.env.ADMIN_PASSWORD,
+            [process.env.AUTHOR_USERNAME]: process.env.AUTHOR_PASSWORD,
+        };
+
+        if (!validUsernames.includes(username) || password !== validPasswords[username]) {
+            req.flash('error', 'Invalid username or password');
+            return res.redirect('/admin/login');
+        }
+
+        // Set cookies for 9 days
+        res.cookie('isAuthenticated', true, { maxAge: 9 * 24 * 60 * 60 * 1000, httpOnly: true });
+        res.cookie('adminRole', username === process.env.ADMIN_USERNAME ? 'admin' : 'author', { maxAge: 9 * 24 * 60 * 60 * 1000 });
+
+        // Redirect to the dashboard
+        res.redirect('/admin/dashboard');
+    } catch (err) {
+        console.error('Error during login:', err);
+        res.status(500).send('Server Error');
+    }
+});
+
+
+
+router.get('/admin', adminAuth, (req, res) => {
+     res.redirect('/admin/login');
+ });
+ 
+ router.get('/admin/login', adminAuth, (req, res) => {
+     res.render('admin/login');
+ });
+ 
+ router.get('/admin/dashboard', ensureAdmin, async (req, res) => {
      try {
-          // Check if the username matches the one in the .env file
-          if (username !== process.env.ADMIN_USERNAME && username !== process.env.AUTHOR_USERNAME) {
-               req.flash('error', 'Invalid username');
-               return res.redirect('/admin/login');
-          }
-
-          // If the username is valid, check the password
-          const envPassword = username === process.env.ADMIN_USERNAME ? process.env.ADMIN_PASSWORD : process.env.AUTHOR_PASSWORD;
-
-          // Compare the password (if using plain text passwords in .env, otherwise you can use bcrypt for hashing)
-          const isMatch = password === envPassword;
-
-          if (!isMatch) {
-               req.flash('error', 'Invalid password');
-               return res.redirect('/admin/login');
-          }
-
-          // Set session and cookies based on the role
-          req.session.isAuthenticated = true;
-          req.session.adminRole = username === process.env.ADMIN_USERNAME ? 'admin' : 'author'; // Set the role based on the username
-
-          // Redirect to the appropriate dashboard
-          res.redirect('/admin/dashboard');
+         const users = await User.find().select('displayName email profileImage isVerified badges ndressilikScore').sort('-createdAt');
+         const articles = await Article.find();
+         res.render('admin/dashboard', { role: req.cookies.adminRole, users, articles });
      } catch (err) {
-          console.error('Error during admin login:', err);
-          res.status(500).send('Server Error');
+         console.error('Error fetching dashboard:', err);
+         res.status(500).send('Server Error');
      }
-});
+ });
+ 
 
 
-// Dashboard Route
-router.get('/admin/dashboard', async (req, res) => {
-     if (!req.session.isAuthenticated) {
-          return res.redirect('/admin/login');
-     }
-
-     try {
-          const users = await User.find()
-               .select('displayName email profileImage isVerified badges ndressilikScore')
-               .sort('-createdAt');
-          const articles = await Article.find();
-          // Only allow admins to view the full dashboard
-          if (req.session.adminRole === 'admin' || req.session.adminRole === 'author') {
-               return res.render('admin/dashboard', { role: 'admin', articles, users });
-          } else {
-               return res.redirect('/admin/login');
-          }
-     } catch (error) {
-          console.error('Error fetching dashboard data:', error);
-          res.status(500).send('Server Error');
-     }
-});
-
-module.exports = router;
 
 
 // Logout Route
@@ -259,7 +254,7 @@ router.delete('/admin/events/:id', async (req, res) => {
 
 
 // Get User Data
-router.get('/admin/users/:userId', isAdmin, async (req, res) => {
+router.get('/admin/users/:userId', ensureAdmin, async (req, res) => {
      try {
           const { userId } = req.params;
           const user = await User.findById(userId).select('-password'); // Exclude password if any
@@ -273,7 +268,7 @@ router.get('/admin/users/:userId', isAdmin, async (req, res) => {
      }
 });
 // Delete User
-router.delete('/admin/users/:userId/delete', isAdmin, async (req, res) => {
+router.delete('/admin/users/:userId/delete',ensureAdmin, async (req, res) => {
      try {
           const { userId } = req.params;
 
@@ -284,7 +279,7 @@ router.delete('/admin/users/:userId/delete', isAdmin, async (req, res) => {
           res.status(500).json({ error: 'Server error' });
      }
 });
-router.post('/admin/users/:userId/update', isAdmin, async (req, res) => {
+router.post('/admin/users/:userId/update', ensureAdmin, async (req, res) => {
      try {
           const { userId } = req.params;
           const { badgeTypes, trustScore, status } = req.body;
@@ -331,7 +326,7 @@ router.post('/admin/users/:userId/update', isAdmin, async (req, res) => {
 });
 
 // Verify user
-router.post('/admin/users/:userId/verify', isAdmin, async (req, res) => {
+router.post('/admin/users/:userId/verify', ensureAdmin, async (req, res) => {
      try {
           const { userId } = req.params;
 
@@ -362,37 +357,89 @@ router.post('/admin/users/:userId/verify', isAdmin, async (req, res) => {
 
 
 // Import the email service
-const { sendBroadcastEmail, sendEmail } = require('../utils/emails');
+// Email templates
+const EMAIL_TEMPLATES = {
+    welcome: {
+        name: 'Welcome Email',
+        subject: 'Welcome to our platform!',
+        content: `
+            Hi {{name}},
+            Welcome to our platform! We're excited to have you here.
+            Best regards,
+            The Team
+        `
+    },
+    newsletter: {
+        name: 'Monthly Newsletter',
+        subject: 'Monthly Newsletter - {{month}}',
+        content: `
+            Dear {{name}},
+            Here are our latest updates for {{month}}.
+            {{content}}
+            Best regards,
+            The Team
+        `
+    },
+    promotion: {
+        name: 'Special Promotion',
+        subject: 'Special Offer for You!',
+        content: `
+            Hello {{name}},
+            We have a special offer just for you!
+            {{content}}
+            Best regards,
+            The Team
+        `
+    }
+};
 
 // Route to render broadcast form in the admin dashboard
-router.get('/admin/broadcast', isAdmin, async (req, res) => {
-     try {
-          const users = await User.find().select('email');
-          res.render('admin/broadcast', { users });
-     } catch (error) {
-          console.error('Error fetching users:', error);
-          res.status(500).send('Error fetching users.');
-     }
+router.get('/admin/broadcast', ensureAdmin, async (req, res) => {
+    try {
+        const users = await User.find().select('email displayName customFields');
+        res.render('admin/broadcast', { 
+            users,
+            templates: EMAIL_TEMPLATES
+        });
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        res.status(500).send('Error fetching users.');
+    }
 });
 
 // Route to handle sending an email to a single user
-router.post('/admin/send-email', isAdmin, async (req, res) => {
-     const { email, subject, message } = req.body;
+router.post('/admin/send-email', ensureAdmin, async (req, res) => {
+    const { email, subject, message, template, customFields } = req.body;
 
-     // Input validation
-     if (!email || !subject || !message) {
-          return res.status(400).json({ success: false, message: 'Missing required fields.' });
-     }
+    if (!email || !subject || (!message && !template)) {
+        return res.status(400).json({ success: false, message: 'Missing required fields.' });
+    }
 
-     try {
-          await sendEmail(email, subject, message);
-          res.json({ success: true });
-     } catch (error) {
-          console.error(`Error sending email to ${email}:`, error);
-          res.status(500).json({ success: false, message: `Error sending email to ${email}` });
-     }
+    try {
+        const user = await User.findOne({ email });
+        let finalMessage = message;
+
+        if (template && EMAIL_TEMPLATES[template]) {
+            finalMessage = EMAIL_TEMPLATES[template].content
+                .replace('{{name}}', user.name || 'Valued Customer')
+                .replace('{{content}}', message)
+                .replace('{{month}}', new Date().toLocaleString('default', { month: 'long' }));
+
+            // Replace custom fields
+            if (customFields) {
+                Object.entries(customFields).forEach(([key, value]) => {
+                    finalMessage = finalMessage.replace(`{{${key}}}`, value);
+                });
+            }
+        }
+
+        await sendEmail(email, subject, finalMessage);
+        res.json({ success: true });
+    } catch (error) {
+        console.error(`Error sending email to ${email}:`, error);
+        res.status(500).json({ success: false, message: `Error sending email to ${email}` });
+    }
 });
-
 
 
 module.exports = router;

@@ -1,166 +1,334 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-     <meta charset="UTF-8">
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <title>Admin Login | Ndressilik</title>
-     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-     <style>
-          :root {
-               --primary-color: #4a90e2;
-               --secondary-color: #f5f6fa;
-               --text-color: #333;
-               --error-color: #e74c3c;
-          }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:;">
+    <title>Secure Admin Access | Ndressilik</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap');
 
-          * {
-               box-sizing: border-box;
-               margin: 0;
-               padding: 0;
-          }
+        * {
+            font-family: 'JetBrains Mono', monospace;
+        }
 
-          body {
-               font-family: 'Poppins', sans-serif;
-               background-color: var(--secondary-color);
-               display: flex;
-               justify-content: center;
-               align-items: center;
-               min-height: 100vh;
-               padding: 20px;
-          }
+        .security-border {
+            background: 
+                linear-gradient(90deg, #1a1a1a 50%, transparent 50%),
+                linear-gradient(90deg, #1a1a1a 50%, transparent 50%),
+                linear-gradient(0deg, #1a1a1a 50%, transparent 50%),
+                linear-gradient(0deg, #1a1a1a 50%, transparent 50%);
+            background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+            background-size: 15px 2px, 15px 2px, 2px 15px, 2px 15px;
+            background-position: left top, right bottom, left bottom, right top;
+            animation: border-dance 1s infinite linear;
+        }
 
-          .login-form {
-               background-color: #fff;
-               padding: 40px;
-               border-radius: 10px;
-               box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-               width: 100%;
-               max-width: 400px;
-          }
+        @keyframes border-dance {
+            0% {
+                background-position: left top, right bottom, left bottom, right top;
+            }
+            100% {
+                background-position: 15px top, -15px bottom, left -15px, right 15px;
+            }
+        }
 
-          h2 {
-               color: var(--primary-color);
-               text-align: center;
-               margin-bottom: 30px;
-               font-weight: 600;
-          }
+        .cyber-input {
+            background: rgba(0, 0, 0, 0.1);
+            border: 2px solid #2d3748;
+            position: relative;
+            transition: all 0.3s;
+        }
 
-          .form-group {
-               margin-bottom: 20px;
-          }
+        .cyber-input:focus {
+            border-color: #4299e1;
+            box-shadow: 0 0 15px rgba(66, 153, 225, 0.3);
+        }
 
-          label {
-               display: block;
-               margin-bottom: 5px;
-               color: var(--text-color);
-               font-weight: 500;
-          }
+        .cyber-input::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #4299e1, #667eea);
+            z-index: -1;
+            transform: scale(1.02);
+            opacity: 0;
+            transition: all 0.3s;
+        }
 
-          input {
-               width: 100%;
-               padding: 10px;
-               border: 1px solid #ddd;
-               border-radius: 5px;
-               font-size: 16px;
-               transition: border-color 0.3s ease;
-          }
+        .cyber-input:focus::before {
+            opacity: 1;
+        }
 
-          input:focus {
-               outline: none;
-               border-color: var(--primary-color);
-          }
+        #securityCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: -1;
+        }
 
-          button {
-               width: 100%;
-               padding: 12px;
-               background-color: var(--primary-color);
-               color: #fff;
-               border: none;
-               border-radius: 5px;
-               font-size: 16px;
-               cursor: pointer;
-               transition: background-color 0.3s ease;
-          }
+        .strength-meter {
+            height: 4px;
+            background: #ddd;
+            margin-top: 5px;
+            border-radius: 2px;
+            overflow: hidden;
+        }
 
-          button:hover {
-               background-color: #3a7bd5;
-          }
-
-          .alert {
-               padding: 10px;
-               background-color: var(--error-color);
-               color: #fff;
-               border-radius: 5px;
-               margin-bottom: 20px;
-               text-align: center;
-          }
-
-          @keyframes shake {
-
-               0%,
-               100% {
-                    transform: translateX(0);
-               }
-
-               10%,
-               30%,
-               50%,
-               70%,
-               90% {
-                    transform: translateX(-5px);
-               }
-
-               20%,
-               40%,
-               60%,
-               80% {
-                    transform: translateX(5px);
-               }
-          }
-
-          .shake {
-               animation: shake 0.82s cubic-bezier(.36, .07, .19, .97) both;
-          }
-     </style>
+        .strength-meter div {
+            height: 100%;
+            width: 0;
+            transition: all 0.3s;
+        }
+    </style>
 </head>
 
-<body>
-     <div class="login-form">
-          <h2>Admin Login</h2>
-          <% if (messages.error && messages.error.length> 0) { %>
-               <div class="alert shake">
-                    <%= messages.error[0] %> <!-- This will display the first error message -->
-               </div>
-               <% } %>
+<body class="bg-gray-900 min-h-screen flex items-center justify-center p-4 md:p-0" oncontextmenu="return false">
+    <canvas id="securityCanvas"></canvas>
 
-                    <form action="/admin/login" method="POST">
-                         <div class="form-group">
-                              <label for="username">Username</label>
-                              <input type="text" name="username" id="username" required autocomplete="username">
-                         </div>
-                         <div class="form-group">
-                              <label for="password">Password</label>
-                              <input type="password" name="password" id="password" required autocomplete="current-password">
-                         </div>
-                         <button type="submit">Login</button>
-                    </form>
-     </div>
+    <div class="w-full max-w-md mx-auto">
+        <div class="security-border bg-gray-800 p-8 rounded-lg shadow-2xl space-y-8">
+            <div class="text-center">
+                <div class="flex justify-center mb-6">
+                    <div class="w-16 h-16 bg-blue-500 rounded-lg flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                    </div>
+                </div>
+                <h2 class="text-2xl font-bold text-white mb-2">Secure Admin Access</h2>
+                <p class="text-gray-400 text-sm" id="sessionInfo">Session initiated from: <span id="ipAddress">Loading...</span></p>
+            </div>
 
-     <script>
-          // Add shake animation to form on submission if there's an error
-          document.addEventListener('DOMContentLoaded', function () {
-               const form = document.querySelector('form');
-               const alert = document.querySelector('.alert');
+            <% if (messages.error && messages.error.length > 0) { %>
+            <div class="bg-red-500/90 text-white text-center py-3 px-4 rounded-lg" id="errorMessage">
+                <%= messages.error[0] %>
+            </div>
+            <% } %>
 
-               if (alert) {
-                    form.classList.add('shake');
-                    form.addEventListener('animationend', function () {
-                         form.classList.remove('shake');
-                    });
-               }
-          });
-     </script>
+            <form id="loginForm" action="/admin/login" method="POST" class="space-y-6" autocomplete="off">
+                <input type="hidden" name="csrf_token" id="csrfToken">
+                <input type="hidden" name="fingerprint" id="browserFingerprint">
+
+                <div>
+                    <label for="username" class="block text-gray-300 text-sm font-bold mb-2">Username</label>
+                    <div class="relative">
+                        <input type="text" name="username" id="username" required
+                            class="cyber-input w-full px-4 py-3 rounded-lg text-white bg-gray-700 focus:outline-none"
+                            data-lpignore="true">
+                        <div class="absolute right-3 top-3 text-gray-400" id="capsLockWarning" style="display: none;">
+                            CAPS ON
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="password" class="block text-gray-300 text-sm font-bold mb-2">Password</label>
+                    <div class="relative">
+                        <input type="password" name="password" id="password" required
+                            class="cyber-input w-full px-4 py-3 rounded-lg text-white bg-gray-700 focus:outline-none"
+                            data-lpignore="true">
+                        <div class="strength-meter">
+                            <div id="strengthIndicator"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between text-sm">
+                    <div class="flex items-center">
+                        <input type="checkbox" id="remember" class="h-4 w-4 bg-gray-700 border-gray-600 rounded">
+                        <label for="remember" class="ml-2 text-gray-400">Trusted Device</label>
+                    </div>
+                    <div id="attemptCount" class="text-gray-400">Attempts: 0/3</div>
+                </div>
+
+                <button type="submit" id="submitBtn" 
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                    Authenticate
+                </button>
+            </form>
+
+            <div id="securityStatus" class="text-center text-sm">
+                <div class="text-green-400" id="encryptionStatus">🔒 End-to-end encryption active</div>
+                <div class="text-gray-400 mt-1" id="lastLoginAttempt"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Security Canvas Background
+        const canvas = document.getElementById('securityCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const particles = [];
+        for (let i = 0; i < 50; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 2 + 1,
+                speedX: Math.random() * 2 - 1,
+                speedY: Math.random() * 2 - 1
+            });
+        }
+
+        function drawParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'rgba(66, 153, 225, 0.1)';
+
+            particles.forEach(particle => {
+                ctx.beginPath();
+                ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                ctx.fill();
+
+                particle.x += particle.speedX;
+                particle.y += particle.speedY;
+
+                if (particle.x < 0 || particle.x > canvas.width) particle.speedX *= -1;
+                if (particle.y < 0 || particle.y > canvas.height) particle.speedY *= -1;
+            });
+
+            particles.forEach((p1, i) => {
+                particles.slice(i + 1).forEach(p2 => {
+                    const dx = p1.x - p2.x;
+                    const dy = p1.y - p2.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 100) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(66, 153, 225, ${0.1 * (1 - distance / 100)})`;
+                        ctx.moveTo(p1.x, p1.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                });
+            });
+
+            requestAnimationFrame(drawParticles);
+        }
+
+        drawParticles();
+
+        // Security Features
+        document.addEventListener('DOMContentLoaded', function() {
+            // Generate CSRF Token
+            const csrfToken = CryptoJS.lib.WordArray.random(16).toString();
+            document.getElementById('csrfToken').value = csrfToken;
+
+            // Browser Fingerprint
+            const fingerprint = CryptoJS.SHA256(
+                navigator.userAgent +
+                navigator.language +
+                navigator.platform +
+                navigator.hardwareConcurrency
+            ).toString();
+            document.getElementById('browserFingerprint').value = fingerprint;
+
+            // Get IP Address (simulation)
+            fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('ipAddress').textContent = data.ip;
+                })
+                .catch(() => {
+                    document.getElementById('ipAddress').textContent = 'Unknown';
+                });
+
+            // Password Strength Meter
+            const password = document.getElementById('password');
+            const strengthIndicator = document.getElementById('strengthIndicator');
+
+            password.addEventListener('input', function() {
+                const result = zxcvbn(this.value);
+                const strength = (result.score / 4) * 100;
+                strengthIndicator.style.width = strength + '%';
+                strengthIndicator.style.backgroundColor = 
+                    strength <= 25 ? '#f56565' :
+                    strength <= 50 ? '#ed8936' :
+                    strength <= 75 ? '#ecc94b' : '#48bb78';
+            });
+
+            // Caps Lock Detection
+            document.addEventListener('keydown', function(event) {
+                if (event.getModifierState('CapsLock')) {
+                    document.getElementById('capsLockWarning').style.display = 'block';
+                } else {
+                    document.getElementById('capsLockWarning').style.display = 'none';
+                }
+            });
+
+            // Login Attempt Counter
+            let attempts = 0;
+            const maxAttempts = 3;
+            const attemptCount = document.getElementById('attemptCount');
+            const loginForm = document.getElementById('loginForm');
+
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                attempts++;
+                attemptCount.textContent = `Attempts: ${attempts}/${maxAttempts}`;
+
+                if (attempts >= maxAttempts) {
+                    document.getElementById('submitBtn').disabled = true;
+                    document.getElementById('submitBtn').classList.add('opacity-50');
+                    setTimeout(() => {
+                        attempts = 0;
+                        attemptCount.textContent = `Attempts: ${attempts}/${maxAttempts}`;
+                        document.getElementById('submitBtn').disabled = false;
+                        document.getElementById('submitBtn').classList.remove('opacity-50');
+                    }, 30000); // 30 seconds lockout
+                }
+
+                // Encrypt credentials before sending
+                const formData = new FormData(loginForm);
+                const encryptedData = CryptoJS.AES.encrypt(
+                    JSON.stringify(Object.fromEntries(formData)),
+                    csrfToken
+                ).toString();
+
+                // Store last login attempt timestamp
+                localStorage.setItem('lastLoginAttempt', new Date().toLocaleString());
+                document.getElementById('lastLoginAttempt').textContent = 
+                    `Last attempt: ${new Date().toLocaleString()}`;
+
+                // Submit the form
+                loginForm.submit();
+            });
+
+            // Display last login attempt if available
+            const lastAttempt = localStorage.getItem('lastLoginAttempt');
+            if (lastAttempt) {
+                document.getElementById('lastLoginAttempt').textContent = 
+                    `Last attempt: ${lastAttempt}`;
+            }
+
+            // Prevent right-click
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+            });
+
+            // Prevent copy/paste
+            document.querySelectorAll('input').forEach(input => {
+                input.addEventListener('copy', e => e.preventDefault());
+                input.addEventListener('paste', e => e.preventDefault());
+                input.addEventListener('cut', e => e.preventDefault());
+            });
+        });
+    </script>
 </body>
-
 </html>

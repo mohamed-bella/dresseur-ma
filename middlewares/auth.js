@@ -3,6 +3,31 @@ const router = express.Router();
 const passport = require('passport');
 const nodemailer = require('nodemailer');
 
+
+function adminAuth(req, res, next) {
+    const isAuthenticated = req.cookies.isAuthenticated; // Read from cookies
+
+    if (isAuthenticated) {
+        // If authenticated, redirect to the dashboard
+        return res.redirect('/admin/dashboard');
+    }
+
+    // If not authenticated, proceed to login or requested route
+    next();
+}
+
+function ensureAdmin(req, res, next) {
+    const isAuthenticated = req.cookies.isAuthenticated; // Read from cookies
+
+    if (!isAuthenticated) {
+        // Redirect unauthenticated users to login
+        return res.redirect('/admin/login');
+    }
+
+    // Proceed if authenticated
+    next();
+}
+ 
 // Yahoo SMTP configuration with debugging enabled
 const transporter = nodemailer.createTransport({
     service: 'yahoo',
@@ -288,5 +313,7 @@ const isNotAuthenticated = (req, res, next) => {
 module.exports = {
     router,
     isAuthenticated,
-    isNotAuthenticated
+    isNotAuthenticated,
+    adminAuth,
+    ensureAdmin,
 };
