@@ -1,1156 +1,599 @@
 <%- include('./include/head.ejs')  %>
 <%- include('./include/navbar.ejs')  %>
-<script>
-     function showToast(message, type = 'success') {
-    // Remove existing toasts
-    document.querySelectorAll('.toast').forEach(toast => toast.remove());
-    
-    const toast = document.createElement('div');
-    toast.className = `toast fixed bottom-4 right-4 px-6 py-3 rounded-lg shadow-lg 
-        flex items-center gap-2 transform translate-y-full opacity-0 transition-all duration-300
-        ${type === 'success' ? 'bg-green-500' : 'bg-red-500'} text-white`;
-    
-    toast.innerHTML = `
-        <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
-        <span>${message}</span>
-    `;
-    
-    document.body.appendChild(toast);
-    
-    // Trigger animation
-    requestAnimationFrame(() => {
-        toast.classList.add('translate-y-0', 'opacity-100');
-    });
-    
-    // Remove toast after delay
-    setTimeout(() => {
-        toast.classList.remove('translate-y-0', 'opacity-100');
-        setTimeout(() => toast.remove(), 300);
-    }, 3000);
-}
 
-     // Share functionality
-function toggleShareModal(show = undefined) {
-    const modal = document.getElementById('shareModal');
-    if (show === undefined) {
-        show = modal.classList.contains('invisible');
-    }
-    
-    if (show) {
-        showModal(modal);
-    } else {
-        hideModal(modal);
-    }
-}
-
-function shareVia(platform) {
-    const url = window.location.href;
-    const title = '<%= service.serviceName %>';
-    const text = '<%= service.description %>';
-    
-    switch(platform) {
-        case 'whatsapp':
-            window.open(`https://wa.me/?text=${encodeURIComponent(`${title}\n\n${text}\n\n${url}`)}`);
-            break;
-            
-        case 'facebook':
-            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`);
-            break;
-            
-        default:
-            if (navigator.share) {
-                navigator.share({
-                    title: title,
-                    text: text,
-                    url: url
-                }).catch(console.error);
-            }
-    }
-    
-    toggleShareModal(false);
-}
-
-function copyLink() {
-    const linkInput = document.getElementById('shareLink');
-    
-    linkInput.select();
-    linkInput.setSelectionRange(0, 99999);
-    
-    navigator.clipboard.writeText(linkInput.value)
-        .then(() => showToast('Lien copié !'))
-        .catch(() => showToast('Erreur lors de la copie', 'error'));
-}
-
-// Utility functions
-function showModal(modal) {
-    modal.classList.remove('invisible');
-    document.body.style.overflow = 'hidden';
-    
-    // Trigger animation after adding visibility
-    setTimeout(() => {
-        modal.classList.add('opacity-100');
-    }, 50);
-}
-
-function hideModal(modal) {
-    modal.classList.remove('opacity-100');
-    document.body.style.overflow = '';
-    
-    // Remove visibility after animation
-    setTimeout(() => {
-        modal.classList.add('invisible');
-    }, 300);
-}
-
-</script>
 <!-- service-details.ejs -->
 <div class="relative min-h-screen">
-<!-- Premium Service Details -->
-<div class="min-h-screen bg-white">
-     <!-- Status Bar -->
-     <div class="bg-black/90 text-white py-2">
-         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-             <div class="flex items-center justify-between text-sm">
-                 <div class="flex items-center gap-3">
-                     <div class="flex items-center gap-2">
-                         <span class="relative flex h-2 w-2">
-                             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                             <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-400"></span>
-                         </span>
-                         <span class="text-amber-400 font-medium">Premium</span>
-                     </div>
-                     <span class=" sm:inline text-white/60">|</span>
-                     <div class=" sm:flex items-center gap-2">
-                         <i class="fas fa-eye text-white/60"></i>
-                         <span class="text-white/80"><%= service.views %> vues</span>
-                     </div>
-                 </div>
-                 <div class="flex items-center gap-2">
-                     <button onclick="toggleShareModal()" 
-                         class="p-1.5 hover:bg-white/10 rounded-full transition-colors">
-                         <i class="fas fa-share-alt"></i>
-                     </button>
-                 </div>
-             </div>
-         </div>
-     </div>
- 
-     <!-- Main Content -->
-     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-         <!-- Service Header -->
-         <div class="flex flex-col lg:flex-row gap-12">
-             <!-- Left Column -->
-             <div class="flex-1 space-y-8">
-                 <!-- Service Type & Title -->
-                 <div>
-                     <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-black/5 rounded-lg mb-4">
-                         <i class="<%= {
-                             'dressage': 'fas fa-dog',
-                             'toilettage': 'fas fa-cut',
-                             'pension': 'fas fa-home'
-                         }[service.serviceOptions] %> text-black/60"></i>
-                         <span class="text-sm font-medium text-black/60">
-                             <%= service.serviceOptions %>
-                         </span>
-                     </div>
-                     <h1 class="text-3xl sm:text-4xl font-semibold text-black tracking-tight">
-                         <%= service.serviceName %>
-                     </h1>
-                 </div>
- 
-                 <!-- Key Info -->
-                 <div class="grid grid-cols-2 gap-6">
-                     <div class="p-6 bg-black/5 rounded-2xl">
-                         <div class="text-sm text-black/60 mb-1">Prix</div>
-                         <div class="text-2xl font-semibold"><%= service.priceRange %> DH</div>
-                     </div>
-                     <div class="p-6 bg-black/5 rounded-2xl">
-                         <div class="text-sm text-black/60 mb-1">Localisation</div>
-                         <div class="text-2xl font-semibold"><%= service.location %></div>
-                     </div>
-                 </div>
- 
-                 <!-- Description -->
-                 <div>
-                     <h2 class="text-lg font-semibold mb-4">À propos du service</h2>
-                     <div id="description" class="relative">
-                         <div class="prose prose-gray max-w-none">
-                             <%= service.description %>
-                         </div>
-                         <div id="fadeOverlay" 
-                             class="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white to-transparent"></div>
-                     </div>
-                     <button id="toggleDescription" 
-                         class="mt-4 text-sm text-black/60 hover:text-black flex items-center gap-2 transition-colors">
-                         <span id="toggleText">Lire la suite</span>
-                         <i id="toggleIcon" class="fas fa-chevron-down transition-transform duration-300"></i>
-                     </button>
-                 </div>
-             </div>
- 
-             <!-- Right Column: Provider Card -->
-             <div class="lg:w-[400px]">
-                 <div class="sticky top-8">
-                     <div class="p-8 border border-black/10 rounded-2xl">
-                         <!-- Provider Info -->
-                         <div class="flex items-center gap-4 pb-6 mb-6 border-b border-black/10">
-                             <img src="<%= service.createdBy.profileImage || '/default-avatar.png' %>" 
-                                 alt="<%= service.createdBy.displayName %>"
-                                 class="w-16 h-16 rounded-xl object-cover">
-                             <div>
-                                 <div class="flex items-center gap-2">
-                                     <h3 class="text-lg font-semibold">
-                                         <%= service.createdBy.displayName %>
-                                     </h3>
-                                     <% if(service.createdBy.isVerified) { %>
-                                         <i class="fas fa-badge-check text-blue-500"></i>
-                                     <% } %>
-                                 </div>
-                                 <p class="text-sm text-black/60">Prestataire professionnel</p>
-                             </div>
-                         </div>
- 
-                         <!-- Contact Actions -->
-                         <div class="space-y-3">
-                             <!-- Mobile: Full Width Button -->
-                             <div class="lg:hidden">
-                                 <button id="mobileContactBtn" 
-                                     class="w-full p-4 bg-black text-white rounded-xl flex items-center justify-center gap-3 
-                                     hover:bg-black/90 transition-colors">
-                                     <i class="fas fa-phone-alt transform scale-x-[-1]"></i>
-                                     <span class="font-medium">Contacter</span>
-                                 </button>
-                             </div>
- 
-                             <!-- Desktop: Detailed Contact Options -->
-                             <div class="hidden lg:block space-y-3">
-                                 <a href="tel:+212<%= service.serviceNumber %>" 
-                                     class="flex items-center justify-between w-full p-4 bg-black text-white 
-                                     rounded-xl hover:bg-black/90 transition-colors group">
-                                     <div class="flex items-center gap-3">
-                                         <i class="fas fa-phone-alt transform scale-x-[-1]"></i>
-                                         <span>+212 <%= service.serviceNumber %></span>
-                                     </div>
-                                     <i class="fas fa-arrow-right opacity-0 group-hover:opacity-100 
-                                         transform translate-x-2 group-hover:translate-x-0 transition-all"></i>
-                                 </a>
- 
-                                 <% if (service.createdBy.email) { %>
-                                     <a href="mailto:<%= service.createdBy.email %>" 
-                                         class="flex items-center justify-between w-full p-4 bg-black/5 
-                                         text-black rounded-xl hover:bg-black/10 transition-colors group">
-                                         <div class="flex items-center gap-3">
-                                             <i class="fas fa-envelope"></i>
-                                             <span class="truncate"><%= service.createdBy.email %></span>
-                                         </div>
-                                         <i class="fas fa-arrow-right opacity-0 group-hover:opacity-100 
-                                             transform translate-x-2 group-hover:translate-x-0 transition-all"></i>
-                                     </a>
-                                 <% } %>
-                             </div>
-                         </div>
-                     </div>
-                 </div>
-             </div>
-         </div>
-     </div>
- </div>
- 
- <!-- Mobile Contact Sheet -->
- <div id="contactSheet" 
-     class="fixed inset-x-0 bottom-0 z-50 bg-white rounded-t-3xl transform translate-y-full transition-transform duration-300">
-     <div class="p-6 space-y-4">
-         <div class="flex items-center justify-between mb-2">
-             <h3 class="text-lg font-semibold">Contacter le prestataire</h3>
-             <button onclick="toggleContactSheet(false)" class="p-2 hover:bg-black/5 rounded-full">
-                 <i class="fas fa-times"></i>
-             </button>
-         </div>
-         
-         <a href="tel:+212<%= service.serviceNumber %>" 
-             class="flex items-center justify-between w-full p-4 bg-black text-white 
-             rounded-xl hover:bg-black/90 transition-colors">
-             <div class="flex items-center gap-3">
-                 <i class="fas fa-phone-alt transform scale-x-[-1]"></i>
-                 <span>+212 <%= service.serviceNumber %></span>
-             </div>
-             <i class="fas fa-arrow-right"></i>
-         </a>
- 
-         <% if (service.createdBy.email) { %>
-             <a href="mailto:<%= service.createdBy.email %>" 
-                 class="flex items-center justify-between w-full p-4 bg-black/5 
-                 text-black rounded-xl hover:bg-black/10 transition-colors">
-                 <div class="flex items-center gap-3">
-                     <i class="fas fa-envelope"></i>
-                     <span class="truncate"><%= service.createdBy.email %></span>
-                 </div>
-                 <i class="fas fa-arrow-right"></i>
-             </a>
-         <% } %>
-     </div>
- </div>
- 
- <!-- Share Modal -->
- <div id="shareModal" 
-    class="fixed inset-0 z-50 flex items-center justify-center opacity-0 pointer-events-none transition-all duration-500">
-    <!-- Backdrop with premium blur effect -->
-    <div class="absolute inset-0 bg-black/30 backdrop-blur-lg" onclick="toggleShareModal(false)"></div>
-    
-    <!-- Modal Content -->
-    <div class="relative w-full max-w-xl mx-4 bg-white rounded-3xl shadow-[0_20px_70px_-10px_rgba(0,0,0,0.3)] 
-        overflow-hidden transform translate-y-4 transition-all duration-500 scale-95">
-        
-        <!-- Decorative Top Bar -->
-        <div class="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
-
-        <!-- Header with premium styling -->
-        <div class="pt-8 px-8 pb-6 border-b border-gray-100">
-            <div class="flex items-center gap-4">
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-gray-900 to-gray-800 
-                    flex items-center justify-center text-white shadow-lg">
-                    <i class="fas fa-share-alt text-xl"></i>
-                </div>
-                <div class="flex-1">
-                    <h3 class="text-xl font-semibold text-gray-900">Partager ce service</h3>
-                    <p class="text-sm text-gray-500 mt-0.5">Choisissez votre méthode de partage préférée</p>
-                </div>
-                <button onclick="toggleShareModal(false)" 
-                    class="w-10 h-10 rounded-full flex items-center justify-center 
-                    hover:bg-gray-100 transition-colors">
-                    <i class="fas fa-times text-gray-400 hover:text-gray-600"></i>
-                </button>
-            </div>
-        </div>
-
-        <!-- Share Options -->
-        <div class="p-8 space-y-8">
-            <!-- Social Share Grid -->
-            <div class="grid grid-cols-1 gap-4">
-                <!-- WhatsApp -->
-                <button onclick="shareVia('whatsapp')" 
-                    class="group relative flex items-center gap-4 p-5 rounded-2xl 
-                    hover:bg-gray-100 bg-gray-50 transition-all duration-300">
-                    <div class="w-14 h-14 rounded-2xl bg-[#25D366] shadow-lg shadow-[#25D366]/20 
-                        flex items-center justify-center transform transition-all duration-300 
-                        group-hover:scale-110 group-hover:rotate-6">
-                        <i class="fab fa-whatsapp text-white text-2xl"></i>
+    <!-- Premium Service Details -->
+    <div class="min-h-screen bg-white">
+        <!-- Status Bar -->
+        <div class="bg-black/90 text-white py-2">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between text-sm">
+                    <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-2">
+                            <span class="relative flex h-2 w-2">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-400"></span>
+                            </span>
+                            <span class="text-amber-400 font-medium">Premium</span>
+                        </div>
+                        <span class="sm:inline text-white/60">|</span>
+                        <div class="sm:flex items-center gap-2">
+                            <i class="fas fa-eye text-white/60"></i>
+                            <span class="text-white/80"><%= service.views %> vues</span>
+                        </div>
                     </div>
-                    <div class="text-left">
-                        <div class="font-semibold text-gray-900">WhatsApp</div>
-                        <div class="text-sm text-gray-500 mt-0.5">Partager via message</div>
-                    </div>
-                </button>
-
-                <!-- Facebook -->
-                <button onclick="shareVia('facebook')" 
-                    class="group relative flex items-center gap-4 p-5 rounded-2xl 
-                    hover:bg-gray-100 bg-gray-50 transition-all duration-300">
-                    <div class="w-14 h-14 rounded-2xl bg-[#1877F2] shadow-lg shadow-[#1877F2]/20 
-                        flex items-center justify-center transform transition-all duration-300 
-                        group-hover:scale-110 group-hover:rotate-6">
-                        <i class="fab fa-facebook-f text-white text-2xl"></i>
-                    </div>
-                    <div class="text-left">
-                        <div class="font-semibold text-gray-900">Facebook</div>
-                        <div class="text-sm text-gray-500 mt-0.5">Partager sur Facebook</div>
-                    </div>
-                </button>
-            </div>
-
-            <!-- Copy Link Section -->
-            <div class="space-y-3">
-                <div class="text-sm font-medium text-gray-700">Ou copier le lien direct</div>
-                <div class="relative flex items-center">
-                    <input type="text" id="shareUrl" 
-                        value="<%= `https://ndressilik.com/service/${service._id}` %>"
-                        class="w-full pl-5 pr-32 py-4 bg-gray-50 border border-gray-200 
-                        rounded-xl text-gray-600 text-sm focus:outline-none focus:border-gray-300 
-                        transition-colors" readonly>
-                    <div class="absolute right-2">
-                        <button onclick="copyShareLink()" 
-                            class="px-6 py-2.5 bg-gray-900 text-white text-sm font-medium rounded-lg
-                            hover:bg-gray-800 focus:ring-4 focus:ring-gray-900/20 
-                            transition-all duration-300 flex items-center gap-2">
-                            <i class="fas fa-link"></i>
-                            <span>Copier</span>
+                    <div class="flex items-center gap-2">
+                        <button onclick="toggleShareModal()" 
+                            class="p-1.5 hover:bg-white/10 rounded-full transition-colors">
+                            <i class="fas fa-share-alt"></i>
                         </button>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Main Content -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <!-- Service Header -->
+            <div class="flex flex-col lg:flex-row gap-12">
+                <!-- Left Column -->
+                <div class="flex-1 space-y-8">
+                    <!-- Service Type & Title -->
+                    <div>
+                        <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-black/5 rounded-lg mb-4">
+                            <i class="<%= {
+                                'dressage': 'fas fa-dog',
+                                'toilettage': 'fas fa-cut',
+                                'pension': 'fas fa-home'
+                            }[service.serviceOptions] %> text-black/60"></i>
+                            <span class="text-sm font-medium text-black/60">
+                                <%= service.serviceOptions %>
+                            </span>
+                        </div>
+                        <h1 class="text-3xl sm:text-4xl font-semibold text-black tracking-tight">
+                            <%= service.serviceName %>
+                        </h1>
+                    </div>
+
+                    <!-- Key Info -->
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="p-6 bg-black/5 rounded-2xl">
+                            <div class="text-sm text-black/60 mb-1">Prix</div>
+                            <div class="text-2xl font-semibold"><%= service.priceRange %> DH</div>
+                        </div>
+                        <div class="p-6 bg-black/5 rounded-2xl">
+                            <div class="text-sm text-black/60 mb-1">Localisation</div>
+                            <div class="text-2xl font-semibold"><%= service.location %></div>
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div>
+                        <h2 class="text-lg font-semibold mb-4">À propos du service</h2>
+                        <div id="description" class="relative overflow-hidden max-h-[200px] transition-all duration-300">
+                            <div class="prose prose-gray max-w-none">
+                                <%= service.description %>
+                            </div>
+                            <div id="fadeOverlay" 
+                                class="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
+                        </div>
+                        <button id="toggleDescription" 
+                            class="mt-4 text-sm text-black/60 hover:text-black flex items-center gap-2 transition-colors">
+                            <span id="toggleText">Lire la suite</span>
+                            <i id="toggleIcon" class="fas fa-chevron-down transition-transform duration-300"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right Column: Provider Card -->
+                <div class="lg:w-[400px]">
+                    <div class="sticky top-8">
+                        <div class="p-8 border border-black/10 rounded-2xl">
+                            <!-- Provider Info -->
+                            <div class="flex items-center gap-4 pb-6 mb-6 border-b border-black/10">
+                                <img src="<%= service.createdBy.profileImage || '/default-avatar.png' %>" 
+                                    alt="<%= service.createdBy.displayName %>"
+                                    class="w-16 h-16 rounded-xl object-cover">
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <h3 class="text-lg font-semibold">
+                                            <%= service.createdBy.displayName %>
+                                        </h3>
+                                        <% if(service.createdBy.isVerified) { %>
+                                            <i class="fas fa-badge-check text-blue-500"></i>
+                                        <% } %>
+                                    </div>
+                                    <p class="text-sm text-black/60">Prestataire professionnel</p>
+                                </div>
+                            </div>
+
+                            <!-- Contact Actions -->
+                            <div class="space-y-3">
+                                <!-- Mobile: Full Width Button -->
+                                <div class="lg:hidden">
+                                    <button id="mobileContactBtn" 
+                                        class="w-full p-4 bg-black text-white rounded-xl flex items-center justify-center gap-3 
+                                        hover:bg-black/90 transition-colors">
+                                        <i class="fas fa-phone-alt transform scale-x-[-1]"></i>
+                                        <span class="font-medium">Contacter</span>
+                                    </button>
+                                </div>
+
+                                <!-- Desktop: Detailed Contact Options -->
+                                <div class="hidden lg:block space-y-3">
+                                    <button onclick="showContactNumber()" 
+                                        class="flex items-center justify-between w-full p-4 bg-black text-white 
+                                        rounded-xl hover:bg-black/90 transition-colors group">
+                                        <div class="flex items-center gap-3">
+                                            <i class="fas fa-phone-alt transform scale-x-[-1]"></i>
+                                            <span id="contactNumber">Afficher le numéro</span>
+                                        </div>
+                                        <i class="fas fa-arrow-right opacity-0 group-hover:opacity-100 
+                                            transform translate-x-2 group-hover:translate-x-0 transition-all"></i>
+                                    </button>
+
+                                    <% if (service.createdBy.email) { %>
+                                        <a href="mailto:<%= service.createdBy.email %>" 
+                                            class="flex items-center justify-between w-full p-4 bg-black/5 
+                                            text-black rounded-xl hover:bg-black/10 transition-colors group">
+                                            <div class="flex items-center gap-3">
+                                                <i class="fas fa-envelope"></i>
+                                                <span class="truncate"><%= service.createdBy.email %></span>
+                                            </div>
+                                            <i class="fas fa-arrow-right opacity-0 group-hover:opacity-100 
+                                                transform translate-x-2 group-hover:translate-x-0 transition-all"></i>
+                                        </a>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gallery Section -->
+        <div class="relative bg-gray-50 -mt-8 pt-20 pb-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Gallery Header -->
+                <div class="flex items-center justify-between mb-8">
+                    <div class="inline-flex items-center gap-2 bg-gray-900/10 px-4 py-2 rounded-full">
+                        <i class="fas fa-images text-gray-900"></i>
+                        <span class="text-sm font-medium text-gray-900">
+                            Photos du service (<%= service.images.length %>)
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Gallery Grid -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="gallery">
+                    <% let images = Array.isArray(service.images) ? service.images : JSON.parse(service.images); %>
+                    <% images.forEach((image, index) => { %>
+                        <div class="<%= index === 0 ? 'col-span-2 row-span-2' : '' %> 
+                            relative group overflow-hidden rounded-xl cursor-zoom-in"
+                            onclick="openGallery(<%= index %>)">
+                            <img src="<%= image %>" 
+                                alt="<%= service.serviceName %> - Image <%= index + 1 %>"
+                                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+
+                            <!-- Hover Overlay -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent 
+                            group-hover:opacity-100 transition-opacity duration-300
+                                flex items-end p-4">
+                                <div class="flex items-center gap-2 text-white">
+                                    <i class="fas fa-expand-alt"></i>
+                                    <span class="text-sm font-medium">Voir en plein écran</span>
+                                </div>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Contact Sheet -->
+    <div id="contactSheet" 
+        class="fixed inset-x-0 bottom-0 z-50 bg-white rounded-t-3xl transform translate-y-full transition-transform duration-300">
+        <div class="p-6 space-y-4">
+            <div class="flex items-center justify-between mb-2">
+                <h3 class="text-lg font-semibold">Contacter le prestataire</h3>
+                <button onclick="toggleContactSheet(false)" class="p-2 hover:bg-black/5 rounded-full">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <a href="tel:+212<%= service.serviceNumber %>" 
+                class="flex items-center justify-between w-full p-4 bg-black text-white 
+                rounded-xl hover:bg-black/90 transition-colors">
+                <div class="flex items-center gap-3">
+                    <i class="fas fa-phone-alt transform scale-x-[-1]"></i>
+                    <span>+212 <%= service.serviceNumber %></span>
+                </div>
+                <i class="fas fa-arrow-right"></i>
+            </a>
+
+            <% if (service.createdBy.email) { %>
+                <a href="mailto:<%= service.createdBy.email %>" 
+                    class="flex items-center justify-between w-full p-4 bg-black/5 
+                    text-black rounded-xl hover:bg-black/10 transition-colors">
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-envelope"></i>
+                        <span class="truncate"><%= service.createdBy.email %></span>
+                    </div>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            <% } %>
+        </div>
+    </div>
+
+    <!-- Share Modal -->
+    <div id="shareModal" 
+        class="fixed inset-0 z-50 flex items-center justify-center opacity-0 pointer-events-none transition-all duration-500">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-black/30 backdrop-blur-lg" onclick="toggleShareModal(false)"></div>
+        
+        <!-- Modal Content -->
+        <div class="relative w-full max-w-xl mx-4 bg-white rounded-3xl shadow-lg 
+            overflow-hidden transform translate-y-4 transition-all duration-500 scale-95">
+            
+            <!-- Header -->
+            <div class="pt-8 px-8 pb-6 border-b border-gray-100">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-gray-800 
+                        flex items-center justify-center text-white shadow-lg">
+                        <i class="fas fa-share-alt text-xl"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-semibold text-gray-900">Partager ce service</h3>
+                        <p class="text-sm text-gray-500 mt-0.5">Choisissez votre méthode de partage préférée</p>
+                    </div>
+                    <button onclick="toggleShareModal(false)" 
+                        class="w-10 h-10 rounded-full flex items-center justify-center 
+                        hover:bg-gray-100 transition-colors">
+                        <i class="fas fa-times text-gray-400 hover:text-gray-600"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Share Options -->
+            <div class="p-8 space-y-8">
+                <!-- Social Share Grid -->
+                <div class="grid grid-cols-1 gap-4">
+                    <!-- WhatsApp -->
+                    <button onclick="shareVia('whatsapp')" 
+                        class="group relative flex items-center gap-4 p-5 rounded-2xl 
+                        hover:bg-gray-100 bg-gray-50 transition-all duration-300">
+                        <div class="w-14 h-14 rounded-2xl bg-[#25D366] shadow-lg 
+                            flex items-center justify-center transform transition-all duration-300 
+                            group-hover:scale-110 group-hover:rotate-6">
+                            <i class="fab fa-whatsapp text-white text-2xl"></i>
+                        </div>
+                        <div class="text-left">
+                            <div class="font-semibold text-gray-900">WhatsApp</div>
+                            <div class="text-sm text-gray-500 mt-0.5">Partager via message</div>
+                        </div>
+                    </button>
+
+                    <!-- Facebook -->
+                    <button onclick="shareVia('facebook')" 
+                        class="group relative flex items-center gap-4 p-5 rounded-2xl 
+                        hover:bg-gray-100 bg-gray-50 transition-all duration-300">
+                        <div class="w-14 h-14 rounded-2xl bg-[#1877F2] shadow-lg 
+                            flex items-center justify-center transform transition-all duration-300 
+                            group-hover:scale-110 group-hover:rotate-6">
+                            <i class="fab fa-facebook-f text-white text-2xl"></i>
+                        </div>
+                        <div class="text-left">
+                            <div class="font-semibold text-gray-900">Facebook</div>
+                            <div class="text-sm text-gray-500 mt-0.5">Partager sur Facebook</div>
+                        </div>
+                    </button>
+                </div>
+
+                <!-- Copy Link Section -->
+                <div class="space-y-3">
+                    <div class="text-sm font-medium text-gray-700">Ou copier le lien direct</div>
+                    <div class="relative flex items-center">
+                        <input type="text" id="shareUrl" 
+                            value="<%= `https://ndressilik.com/service/${service._id}` %>"
+                            class="w-full pl-5 pr-32 py-4 bg-gray-50 border border-gray-200 
+                            rounded-xl text-gray-600 text-sm focus:outline-none focus:border-gray-300 
+                            transition-colors" readonly>
+                        <div class="absolute right-2">
+                            <button onclick="copyShareLink()" 
+                                class="px-6 py-2.5 bg-gray-900 text-white text-sm font-medium rounded-lg
+                                hover:bg-gray-800 focus:ring-4 focus:ring-gray-900/20 
+                                transition-all duration-300 flex items-center gap-2">
+                                <i class="fas fa-link"></i>
+                                <span>Copier</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gallery Modal -->
+    <div id="galleryModal" class="fixed inset-0 z-50 bg-black invisible opacity-0 transition-all duration-300">
+        <button onclick="closeGallery()" 
+            class="absolute top-4 right-4 z-50 w-10 h-10 flex items-center justify-center 
+            rounded-full bg-white/10 hover:bg-white/20 transition-colors">
+            <i class="fas fa-times text-white text-xl"></i>
+        </button>
+
+        <div class="absolute top-4 left-4 z-50 px-4 py-2 rounded-full bg-white/10 text-white text-sm">
+            <span id="currentImageIndex">1</span> / <%= images.length %>
+        </div>
+
+        <div class="relative w-full h-full">
+            <div id="gallerySlider" class="w-full h-full flex transition-transform duration-300">
+                <% images.forEach((image, index) => { %>
+                    <div class="min-w-full h-full flex items-center justify-center p-4">
+                        <img src="<%= image %>" 
+                            alt="<%= service.serviceName %> - Image <%= index + 1 %>"
+                            class="max-w-full max-h-full object-contain">
+                    </div>
+                <% }); %>
+            </div>
+
+            <button onclick="previousImage()" 
+                class="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 
+                flex items-center justify-center rounded-full bg-white/10 
+                hover:bg-white/20 transition-colors">
+                <i class="fas fa-chevron-left text-white text-xl"></i>
+            </button>
+            
+            <button onclick="nextImage()" 
+                class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 
+                flex items-center justify-center rounded-full bg-white/10 
+                hover:bg-white/20 transition-colors">
+                <i class="fas fa-chevron-right text-white text-xl"></i>
+            </button>
+        </div>
     </div>
 </div>
 
-<style>
-/* Premium animations */
-@keyframes modalEnter {
-    from {
-        opacity: 0;
-        transform: scale(0.95) translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-    }
-}
+<!-- Script -->
+<script>
+    // Core state management
+    const state = {
+        description: {
+            expanded: false,
+            originalHeight: 0
+        },
+        contactSheet: {
+            isOpen: false
+        },
+        shareModal: {
+            isOpen: false
+        }
+    };
 
-@keyframes backdropEnter {
-    from {
-        opacity: 0;
-        backdrop-filter: blur(0);
-    }
-    to {
-        opacity: 1;
-        backdrop-filter: blur(16px);
-    }
-}
+    // Description toggle functionality
+    document.addEventListener('DOMContentLoaded', () => {
+        const description = document.getElementById('description');
+        const fadeOverlay = document.getElementById('fadeOverlay');
+        const toggleBtn = document.getElementById('toggleDescription');
+        const toggleText = document.getElementById('toggleText');
+        const toggleIcon = document.getElementById('toggleIcon');
 
-.modal-enter {
-    animation: modalEnter 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
+        // Wait for content to load
+        setTimeout(() => {
+            // Get original height after content is fully loaded
+            state.description.originalHeight = description.scrollHeight;
+            updateDescriptionState();
+        }, 0);
 
-.backdrop-enter {
-    animation: backdropEnter 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
+        function updateDescriptionState() {
+            // If content is short, hide toggle
+            if (state.description.originalHeight <= 200) {
+                toggleBtn.style.display = 'none';
+                fadeOverlay.style.display = 'none';
+                description.style.maxHeight = 'none';
+                return;
+            }
 
-/* Copy button success state */
-.copy-success {
-    @apply bg-green-600;
-    transform: scale(0.95);
-}
-</style>
- <!-- js code  -->
- <script>
-     // Core state management
-     const state = {
-         description: {
-             expanded: false,
-             originalHeight: 0
-         },
-         contactSheet: {
-             isOpen: false
-         },
-         shareModal: {
-             isOpen: false
-         }
-     };
-     
-     // Description toggle functionality
-     document.addEventListener('DOMContentLoaded', () => {
-         const description = document.getElementById('description');
-         const fadeOverlay = document.getElementById('fadeOverlay');
-         const toggleBtn = document.getElementById('toggleDescription');
-         const toggleText = document.getElementById('toggleText');
-         const toggleIcon = document.getElementById('toggleIcon');
-     
-         // Get original height
-         state.description.originalHeight = description.scrollHeight;
-     
-         function updateDescriptionState() {
-             // If content is short, hide toggle
-             if (state.description.originalHeight <= 200) {
-                 toggleBtn.style.display = 'none';
-                 fadeOverlay.style.display = 'none';
-                 description.style.maxHeight = 'none';
-                 return;
-             }
-     
-             // Update UI based on state
-             description.style.maxHeight = state.description.expanded ? 
-                 `${state.description.originalHeight}px` : '200px';
-             fadeOverlay.style.opacity = state.description.expanded ? '0' : '1';
-             toggleText.textContent = state.description.expanded ? 'Voir moins' : 'Lire la suite';
-             toggleIcon.style.transform = state.description.expanded ? 'rotate(180deg)' : '';
-         }
-     
-         toggleBtn.addEventListener('click', () => {
-             state.description.expanded = !state.description.expanded;
-             updateDescriptionState();
-         });
-     
-         // Initial setup
-         updateDescriptionState();
-     });
-     
-     // Mobile Contact Sheet
-     function toggleContactSheet(show = null) {
-         const sheet = document.getElementById('contactSheet');
-         state.contactSheet.isOpen = show ?? !state.contactSheet.isOpen;
-     
-         if (state.contactSheet.isOpen) {
-             sheet.classList.remove('translate-y-full');
-             document.body.style.overflow = 'hidden';
-         } else {
-             sheet.classList.add('translate-y-full');
-             document.body.style.overflow = '';
-         }
-     }
-     
-     // Initialize mobile contact button
-     document.getElementById('mobileContactBtn')?.addEventListener('click', () => {
-         toggleContactSheet(true);
-     });
-     
-     // Share Modal Functionality
-     function toggleShareModal(show = null) {
-         const modal = document.getElementById('shareModal');
-         state.shareModal.isOpen = show ?? !state.shareModal.isOpen;
-     
-         if (state.shareModal.isOpen) {
-             modal.classList.remove('opacity-0', 'pointer-events-none');
-             modal.querySelector('.transform').classList.remove('translate-y-4');
-             document.body.style.overflow = 'hidden';
-         } else {
-             modal.classList.add('opacity-0', 'pointer-events-none');
-             modal.querySelector('.transform').classList.add('translate-y-4');
-             document.body.style.overflow = '';
-         }
-     }
-     
-     // Share functionality
-     function shareVia(platform) {
-         const url = window.location.href;
-         const title = '<%= service.serviceName %>';
-         const text = '<%= service.description.substring(0, 100) %>...';
-     
-         switch (platform) {
-             case 'whatsapp':
-                 window.open(`https://wa.me/?text=${encodeURIComponent(`${title}\n\n${text}\n\n${url}`)}`);
-                 break;
-             case 'facebook':
-                 window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`);
-                 break;
-         }
-     
-         toggleShareModal(false);
-     }
-     
-     // Copy link functionality
-     async function copyShareLink() {
-         const url = document.getElementById('shareUrl');
-         
-         try {
-             await navigator.clipboard.writeText(url.value);
-             showToast('Lien copié !', 'success');
-         } catch (err) {
-             showToast('Erreur lors de la copie', 'error');
-         }
-     }
-     
-     // Toast notification system
-     function showToast(message, type = 'success') {
-         // Remove existing toasts
-         document.querySelectorAll('.toast').forEach(toast => toast.remove());
-     
-         const toast = document.createElement('div');
-         toast.className = `toast fixed bottom-4 right-4 z-[60] px-6 py-3 rounded-xl shadow-lg 
-             flex items-center gap-3 transform translate-y-full opacity-0 transition-all duration-300
-             ${type === 'success' ? 'bg-black text-white' : 'bg-red-500 text-white'}`;
-     
-         toast.innerHTML = `
-             <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
-             <span class="font-medium">${message}</span>
-         `;
-     
-         document.body.appendChild(toast);
-     
-         // Trigger animation
-         requestAnimationFrame(() => {
-             toast.classList.remove('translate-y-full', 'opacity-0');
-         });
-     
-         // Remove toast after delay
-         setTimeout(() => {
-             toast.classList.add('translate-y-full', 'opacity-0');
-             setTimeout(() => toast.remove(), 300);
-         }, 3000);
-     }
-     
-     // Handle escape key
-     document.addEventListener('keydown', (e) => {
-         if (e.key === 'Escape') {
-             if (state.shareModal.isOpen) toggleShareModal(false);
-             if (state.contactSheet.isOpen) toggleContactSheet(false);
-         }
-     });
-     
-     // Scroll animations
-     function initScrollAnimations() {
-         const elements = document.querySelectorAll('[data-animate]');
-         const observer = new IntersectionObserver((entries) => {
-             entries.forEach(entry => {
-                 if (entry.isIntersecting) {
-                     entry.target.classList.add('animate-in');
-                     observer.unobserve(entry.target);
-                 }
-             });
-         }, {
-             threshold: 0.1
-         });
-     
-         elements.forEach(el => observer.observe(el));
-     }
-     
-     // Additional animations
-     const animations = {
-         fadeUp: 'animate-[fade-up_0.5s_ease-out_forwards]',
-         fadeIn: 'animate-[fade-in_0.5s_ease-out_forwards]',
-         scaleUp: 'animate-[scale-up_0.5s_ease-out_forwards]'
-     };
-     
-     // Initialize everything
-     document.addEventListener('DOMContentLoaded', () => {
-         initScrollAnimations();
-     });
-     
-     // Handle back button
-     window.addEventListener('popstate', () => {
-         if (state.shareModal.isOpen) toggleShareModal(false);
-         if (state.contactSheet.isOpen) toggleContactSheet(false);
-     });
-     
-     // Optional: Add smooth scroll for anchor links
-     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-         anchor.addEventListener('click', (e) => {
-             e.preventDefault();
-             const target = document.querySelector(anchor.getAttribute('href'));
-             if (target) {
-                 target.scrollIntoView({
-                     behavior: 'smooth',
-                     block: 'start'
-                 });
-             }
-         });
-     });
-     </script>
-     
-     <style>
-     /* Animation keyframes */
-     @keyframes fade-in {
-         from { opacity: 0; }
-         to { opacity: 1; }
-     }
-     
-     @keyframes fade-up {
-         from {
-             opacity: 0;
-             transform: translateY(20px);
-         }
-         to {
-             opacity: 1;
-             transform: translateY(0);
-         }
-     }
-     
-     @keyframes scale-up {
-         from {
-             opacity: 0;
-             transform: scale(0.95);
-         }
-         to {
-             opacity: 1;
-             transform: scale(1);
-         }
-     }
-     
-     /* Transition classes */
-     .transition-transform {
-         transition-property: transform;
-         transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-         transition-duration: 300ms;
-     }
-     
-     .transition-opacity {
-         transition-property: opacity;
-         transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-         transition-duration: 300ms;
-     }
-     
-     /* Toast animations */
-     .toast {
-         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-     }
-     
-     /* Mobile optimizations */
-     @media (max-width: 640px) {
-         .contact-sheet-open {
-             overflow: hidden;
-         }
-     }
-     </style>
- 
- <!-- Lightbox Gallery Modal -->
- <div id="galleryModal" class="fixed inset-0 z-50 bg-black invisible opacity-0 transition-all duration-300">
-     <!-- Close Button -->
-     <button onclick="closeGallery()" 
-         class="absolute top-4 right-4 z-50 w-10 h-10 flex items-center justify-center 
-         text-white rounded-full bg-black/50 hover:bg-black/70 transition-colors">
-         <i class="fas fa-times"></i>
-     </button>
- 
-     <!-- Counter -->
-     <div class="absolute top-4 left-4 z-50 px-4 py-2 rounded-full bg-black/50 text-white text-sm">
-         <span id="currentImageIndex">1</span> / <%= service.images.length %>
-     </div>
- 
-     <!-- Gallery Container -->
-     <div class="relative w-full h-full">
-         <div id="gallerySlider" class="w-full h-full flex transition-transform duration-300">
-             <% service.images.slice(0, -1).forEach((image, index) => { %>
-                 <div class="min-w-full h-full flex items-center justify-center p-4">
-                     <img src="<%= image %>" 
-                         alt="<%= service.serviceName %> - Image <%= index + 1 %>"
-                         class="max-w-full max-h-full object-contain">
-                 </div>
-             <% }); %>
-         </div>
- 
-         <!-- Navigation Buttons -->
-         <button onclick="previousImage()" 
-             class="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 
-             flex items-center justify-center text-white rounded-full 
-             bg-black/50 hover:bg-black/70 transition-colors">
-             <i class="fas fa-chevron-left"></i>
-         </button>
-         
-         <button onclick="nextImage()" 
-             class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 
-             flex items-center justify-center text-white rounded-full 
-             bg-black/50 hover:bg-black/70 transition-colors">
-             <i class="fas fa-chevron-right"></i>
-         </button>
-     </div>
- </div>
- 
- <script>
- // Gallery functionality
- let currentImageIndex = 0;
- const totalImages = <%= service.images.length %>;
- const galleryModal = document.getElementById('galleryModal');
- const slider = document.getElementById('gallerySlider');
- const counter = document.getElementById('currentImageIndex');
- 
- function openGallery(index) {
-     currentImageIndex = index;
-     updateGallery();
-     galleryModal.classList.remove('invisible', 'opacity-0');
-     document.body.style.overflow = 'hidden';
- }
- 
- function closeGallery() {
-     galleryModal.classList.add('invisible', 'opacity-0');
-     document.body.style.overflow = '';
- }
- 
- function updateGallery() {
-     counter.textContent = currentImageIndex + 1;
-     slider.style.transform = `translateX(-${currentImageIndex * 100}%)`;
- }
- 
- function previousImage() {
-     currentImageIndex = (currentImageIndex - 1 + totalImages) % totalImages;
-     updateGallery();
- }
- 
- function nextImage() {
-     currentImageIndex = (currentImageIndex + 1) % totalImages;
-     updateGallery();
- }
- 
- // Description toggle
- document.addEventListener('DOMContentLoaded', () => {
-     const description = document.getElementById('description');
-     const fadeOverlay = document.getElementById('fadeOverlay');
-     const toggleBtn = document.getElementById('toggleDescription');
-     const toggleText = document.getElementById('toggleText');
-     const toggleIcon = document.getElementById('toggleIcon');
-     
-     const originalHeight = description.scrollHeight;
-     let isExpanded = false;
- 
-     function updateDescription() {
-         if (originalHeight <= 100) {
-             toggleBtn.style.display = 'none';
-             fadeOverlay.style.display = 'none';
-             return;
-         }
- 
-         description.style.maxHeight = isExpanded ? originalHeight + 'px' : '100px';
-         fadeOverlay.style.opacity = isExpanded ? '0' : '1';
-         toggleText.textContent = isExpanded ? 'Voir moins' : 'Voir plus';
-         toggleIcon.style.transform = isExpanded ? 'rotate(180deg)' : '';
-     }
- 
-     toggleBtn.addEventListener('click', () => {
-         isExpanded = !isExpanded;
-         updateDescription();
-     });
- 
-     // Initialize
-     updateDescription();
- });
- 
- // Keyboard navigation
- document.addEventListener('keydown', e => {
-     if (galleryModal.classList.contains('invisible')) return;
-     
-     switch(e.key) {
-         case 'ArrowLeft':
-             previousImage();
-             break;
-         case 'ArrowRight':
-             nextImage();
-             break;
-         case 'Escape':
-             closeGallery();
-             break;
-     }
- });
- </script>
- 
-     <!-- Gallery Section -->
-     <div class="relative bg-gray-50 -mt-8 pt-20 pb-16">
-         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-             <!-- Gallery Header -->
-             <div class="flex items-center justify-between mb-8">
-                 <div class="inline-flex items-center gap-2 bg-gray-900/10 px-4 py-2 rounded-full">
-                     <i class="fas fa-images text-gray-900"></i>
-                     <span class="text-sm font-medium text-gray-900">
-                         Photos du service (<%= service.images.length - 1 %>)
-                     </span>
-                 </div>
-             </div>
- 
-             <!-- Gallery Grid -->
-             <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="gallery">
-                 <% let images = Array.isArray(service.images) ? service.images : JSON.parse(service.images); %>
-                 <% images.slice(0, -1).forEach((image, index) => { %>
-                     <div class="<%= index === 0 ? 'col-span-2 row-span-2' : '' %> 
-                         relative group overflow-hidden rounded-xl cursor-zoom-in"
-                         onclick="openGallery(<%= index %>)">
-                         <img src="<%= image %>" 
-                             alt="<%= service.serviceName %> - Image <%= index + 1 %>"
-                             class="w-full h-full object-cover group-hover:scale-110"
-                             >
-                         
-                         <!-- Hover Overlay -->
-                         <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent 
-                         group-hover:opacity-100 transition-opacity duration-300
-                             flex items-end p-4">
-                             <div class="flex items-center gap-2 text-white">
-                                 <i class="fas fa-expand-alt"></i>
-                                 <span class="text-sm font-medium">Voir en plein écran</span>
-                             </div>
-                         </div>
-                     </div>
-                 <% }); %>
-             </div>
-         </div>
-     </div>
- 
-     <!-- Gallery Modal -->
-     <div id="galleryModal" class="fixed inset-0 z-50 bg-black invisible opacity-0 transition-all duration-300">
-         <button onclick="closeGallery()" 
-             class="absolute top-4 right-4 z-50 w-10 h-10 flex items-center justify-center 
-             rounded-full bg-white/10 hover:bg-white/20 transition-colors">
-             <i class="fas fa-times text-white text-xl"></i>
-         </button>
- 
-         <div class="absolute top-4 left-4 z-50 px-4 py-2 rounded-full bg-white/10 text-white text-sm">
-             <span id="currentImageIndex">1</span> / <%= images.length %>
-         </div>
- 
-         <div class="relative w-full h-full">
-             <div id="gallerySlider" class="w-full h-full flex transition-transform duration-300">
-                 <% images.forEach((image, index) => { %>
-                     <div class="min-w-full h-full flex items-center justify-center p-4">
-                         <img src="<%= image %>" 
-                             alt="<%= service.serviceName %> - Image <%= index + 1 %>"
-                             class="max-w-full max-h-full object-contain">
-                     </div>
-                 <% }); %>
-             </div>
- 
-             <button onclick="previousImage()" 
-                 class="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 
-                 flex items-center justify-center rounded-full bg-white/10 
-                 hover:bg-white/20 transition-colors">
-                 <i class="fas fa-chevron-left text-white text-xl"></i>
-             </button>
-             
-             <button onclick="nextImage()" 
-                 class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 
-                 flex items-center justify-center rounded-full bg-white/10 
-                 hover:bg-white/20 transition-colors">
-                 <i class="fas fa-chevron-right text-white text-xl"></i>
-             </button>
-         </div>
-     </div>
- 
-     <!-- Share Modal -->
-     <div id="shareModal" class="fixed inset-0 z-50 bg-black/90 invisible opacity-0 transition-all duration-300">
-         <div class="min-h-screen px-4 text-center flex items-center justify-center">
-             <div class="w-full max-w-md p-6 bg-white rounded-xl shadow-xl relative">
-                 <button onclick="toggleShareModal()" 
-                     class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center 
-                     rounded-full hover:bg-gray-100 transition-colors">
-                     <i class="fas fa-times text-gray-500"></i>
-                 </button>
- 
-                 <div class="mt-4">
-                     <div class="flex items-center gap-3 mb-6">
-                         <div class="w-10 h-10 rounded-full bg-gray-900/10 
-                             flex items-center justify-center">
-                             <i class="fas fa-share-alt text-gray-900"></i>
-                         </div>
-                         <div>
-                             <h3 class="text-lg font-bold text-gray-900">Partager ce service</h3>
-                             <p class="text-sm text-gray-500">Choisissez une option de partage</p>
-                         </div>
-                     </div>
- 
-                     <!-- Share Options -->
-                     <div class="grid grid-cols-2 gap-4 mb-6">
-                         <button onclick="shareVia('whatsapp')" 
-                             class="flex items-center gap-3 p-4 rounded-xl 
-                             hover:bg-green-50 transition-colors group">
-                             <div class="w-10 h-10 rounded-full bg-green-100 
-                                 flex items-center justify-center">
-                                 <i class="fab fa-whatsapp text-green-500 text-xl"></i>
-                             </div>
-                             <span class="text-sm font-medium text-gray-700 
-                                 group-hover:text-green-600">WhatsApp</span>
-                         </button>
- 
-                         <button onclick="shareVia('facebook')" 
-                             class="flex items-center gap-3 p-4 rounded-xl 
-                             hover:bg-blue-50 transition-colors group">
-                             <div class="w-10 h-10 rounded-full bg-blue-100 
-                                 flex items-center justify-center">
-                                 <i class="fab fa-facebook text-blue-500 text-xl"></i>
-                             </div>
-                             <span class="text-sm font-medium text-gray-700 
-                                 group-hover:text-blue-600">Facebook</span>
-                         </button>
-                     </div>
- 
-                     <!-- Copy Link -->
-                     <div class="relative">
-                         <input type="text" id="shareLink" 
-                             value="<%= `https://ndressilik.com/service/${service._id}` %>"
-                             class="w-full px-4 py-3 pr-24 rounded-xl border border-gray-200 
-                             text-sm focus:outline-none focus:border-blue-500 
-                             focus:ring-2 focus:ring-blue-500/20" readonly>
-                         <button onclick="copyLink()" 
-                             class="absolute right-2 top-1/2 -translate-y-1/2 
-                             px-4 py-1.5 bg-gray-900 text-white rounded-lg text-sm 
-                             hover:bg-gray-700 transition-colors">
-                             Copier
-                         </button>
-                     </div>
-                 </div>
-             </div>
-         </div>
-     </div>
- </div>
- 
- <script>
- // Gallery functionality
- let currentImageIndex = 0;
- const totalImages = <%= images.length %>;
- const galleryModal = document.getElementById('galleryModal');
- const shareModal = document.getElementById('shareModal');
- const slider = document.getElementById('gallerySlider');
- const counter = document.getElementById('currentImageIndex');
- 
- function openGallery(index) {
-     currentImageIndex = index;
-     updateGallery();
-     showModal(galleryModal);
-     document.addEventListener('keydown', handleKeyPress);
-}
+            // Update UI based on state
+            description.style.maxHeight = state.description.expanded ? 
+                `${state.description.originalHeight}px` : '200px';
+            fadeOverlay.style.opacity = state.description.expanded ? '0' : '1';
+            toggleText.textContent = state.description.expanded ? 'Voir moins' : 'Lire la suite';
+            toggleIcon.style.transform = state.description.expanded ? 'rotate(180deg)' : '';
+        }
 
-function closeGallery() {
-    hideModal(galleryModal);
-    document.removeEventListener('keydown', handleKeyPress);
-}
+        toggleBtn.addEventListener('click', () => {
+            state.description.expanded = !state.description.expanded;
+            updateDescriptionState();
+        });
+    });
 
-function updateGallery() {
-    counter.textContent = currentImageIndex + 1;
-    slider.style.transform = `translateX(-${currentImageIndex * 100}%)`;
-}
+    // Mobile Contact Sheet
+    function toggleContactSheet(show = null) {
+        const sheet = document.getElementById('contactSheet');
+        state.contactSheet.isOpen = show ?? !state.contactSheet.isOpen;
 
-function previousImage() {
-    currentImageIndex = (currentImageIndex - 1 + totalImages) % totalImages;
-    updateGallery();
-}
-
-function nextImage() {
-    currentImageIndex = (currentImageIndex + 1) % totalImages;
-    updateGallery();
-}
-
-function handleKeyPress(e) {
-    switch(e.key) {
-        case 'ArrowLeft':
-            previousImage();
-            break;
-        case 'ArrowRight':
-            nextImage();
-            break;
-        case 'Escape':
-            closeGallery();
-            toggleShareModal(false);
-            break;
-    }
-}
-
-// Touch events for gallery
-let touchStartX = 0;
-let touchEndX = 0;
-
-slider.addEventListener('touchstart', e => {
-    touchStartX = e.changedTouches[0].screenX;
-});
-
-slider.addEventListener('touchend', e => {
-    touchEndX = e.changedTouches[0].screenX;
-    handleSwipe();
-});
-
-function handleSwipe() {
-    const swipeThreshold = 50;
-    const swipeDistance = touchEndX - touchStartX;
-    
-    if (Math.abs(swipeDistance) > swipeThreshold) {
-        if (swipeDistance > 0) {
-            previousImage();
+        if (state.contactSheet.isOpen) {
+            sheet.classList.remove('translate-y-full');
+            document.body.style.overflow = 'hidden';
         } else {
-            nextImage();
+            sheet.classList.add('translate-y-full');
+            document.body.style.overflow = '';
         }
     }
-}
 
+    // Initialize mobile contact button
+    document.getElementById('mobileContactBtn')?.addEventListener('click', () => {
+        toggleContactSheet(true);
+    });
 
+    // Show contact number
+    function showContactNumber() {
+        const contactNumber = document.getElementById('contactNumber');
+        contactNumber.textContent = '+212 <%= service.serviceNumber %>';
+    }
 
-// Image lazy loading
-document.addEventListener('DOMContentLoaded', () => {
-    const images = document.querySelectorAll('img[loading="lazy"]');
-    
-    images.forEach(img => {
-        if (img.complete) {
-            img.classList.add('loaded');
+    // Share Modal Functionality
+    function toggleShareModal(show = null) {
+        const modal = document.getElementById('shareModal');
+        state.shareModal.isOpen = show ?? !state.shareModal.isOpen;
+
+        if (state.shareModal.isOpen) {
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modal.querySelector('.transform').classList.remove('translate-y-4', 'scale-95');
+            document.body.style.overflow = 'hidden';
         } else {
-            img.addEventListener('load', () => img.classList.add('loaded'));
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modal.querySelector('.transform').classList.add('translate-y-4', 'scale-95');
+            document.body.style.overflow = '';
+        }
+    }
+
+    // Share functionality
+    function shareVia(platform) {
+        const url = window.location.href;
+        const title = <%- JSON.stringify(service.serviceName) %>;
+        const text = <%- JSON.stringify(service.description.replace(/(<([^>]+)>)/gi, "").substring(0, 100) + '...') %>;
+
+        switch (platform) {
+            case 'whatsapp':
+                window.open(`https://wa.me/?text=${encodeURIComponent(`${title}\n\n${text}\n\n${url}`)}`);
+                break;
+            case 'facebook':
+                window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`);
+                break;
+        }
+
+        toggleShareModal(false);
+    }
+
+    // Copy link functionality
+    async function copyShareLink() {
+        const url = document.getElementById('shareUrl');
+        
+        try {
+            await navigator.clipboard.writeText(url.value);
+            showToast('Lien copié !', 'success');
+        } catch (err) {
+            showToast('Erreur lors de la copie', 'error');
+        }
+    }
+
+    // Toast notification system
+    function showToast(message, type = 'success') {
+        // Remove existing toasts
+        document.querySelectorAll('.toast').forEach(toast => toast.remove());
+
+        const toast = document.createElement('div');
+        toast.className = `toast fixed bottom-4 right-4 z-[60] px-6 py-3 rounded-xl shadow-lg 
+            flex items-center gap-3 transform translate-y-full opacity-0 transition-all duration-300
+            ${type === 'success' ? 'bg-black text-white' : 'bg-red-500 text-white'}`;
+
+        toast.innerHTML = `
+            <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+            <span class="font-medium">${message}</span>
+        `;
+
+        document.body.appendChild(toast);
+
+        // Trigger animation
+        requestAnimationFrame(() => {
+            toast.classList.remove('translate-y-full', 'opacity-0');
+        });
+
+        // Remove toast after delay
+        setTimeout(() => {
+            toast.classList.add('translate-y-full', 'opacity-0');
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+
+    // Handle escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            if (state.shareModal.isOpen) toggleShareModal(false);
+            if (state.contactSheet.isOpen) toggleContactSheet(false);
+            if (!galleryModal.classList.contains('invisible')) closeGallery();
         }
     });
-});
 
-// Smooth scroll for anchor links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
+    // Gallery functionality
+    let currentImageIndex = 0;
+    const totalImages = <%= images.length %>;
+    const galleryModal = document.getElementById('galleryModal');
+    const slider = document.getElementById('gallerySlider');
+    const counter = document.getElementById('currentImageIndex');
+
+    function openGallery(index) {
+        currentImageIndex = index;
+        updateGallery();
+        galleryModal.classList.remove('invisible', 'opacity-0');
+        document.body.style.overflow = 'hidden';
+        document.addEventListener('keydown', handleKeyPress);
+    }
+
+    function closeGallery() {
+        galleryModal.classList.add('invisible', 'opacity-0');
+        document.body.style.overflow = '';
+        document.removeEventListener('keydown', handleKeyPress);
+    }
+
+    function updateGallery() {
+        counter.textContent = currentImageIndex + 1;
+        slider.style.transform = `translateX(-${currentImageIndex * 100}%)`;
+    }
+
+    function previousImage() {
+        currentImageIndex = (currentImageIndex - 1 + totalImages) % totalImages;
+        updateGallery();
+    }
+
+    function nextImage() {
+        currentImageIndex = (currentImageIndex + 1) % totalImages;
+        updateGallery();
+    }
+
+    function handleKeyPress(e) {
+        switch(e.key) {
+            case 'ArrowLeft':
+                previousImage();
+                break;
+            case 'ArrowRight':
+                nextImage();
+                break;
+            case 'Escape':
+                closeGallery();
+                break;
         }
-    });
-});
+    }
 
+    // Touch events for gallery
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    slider.addEventListener('touchstart', e => {
+        touchStartX = e.changedTouches[0].screenX;
+    });
+
+    slider.addEventListener('touchend', e => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    });
+
+    function handleSwipe() {
+        const swipeThreshold = 50;
+        const swipeDistance = touchEndX - touchStartX;
+        
+        if (Math.abs(swipeDistance) > swipeThreshold) {
+            if (swipeDistance > 0) {
+                previousImage();
+            } else {
+                nextImage();
+            }
+        }
+    }
 </script>
-
-<style>
-/* Transitions and  */
-.modal-enter {
-    animation: modalEnter 0.3s ease-out forwards;
-}
-
-.modal-leave {
-    animation: modalLeave 0.3s ease-in forwards;
-}
-
-@keyframes modalEnter {
-    from {
-        opacity: 0;
-        transform: scale(0.95);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-@keyframes modalLeave {
-    from {
-        opacity: 1;
-        transform: scale(1);
-    }
-    to {
-        opacity: 0;
-        transform: scale(0.95);
-    }
-}
-
-/* Image loading animation */
-img[loading="lazy"] {
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-}
-
-img[loading="lazy"].loaded {
-    opacity: 1;
-}
-
-/* Gallery slider transitions */
-#gallerySlider {
-    will-change: transform;
-}
-
-/* Toast animations */
-@keyframes toastEnter {
-    from {
-        transform: translateY(100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-@keyframes toastLeave {
-    from {
-        transform: translateY(0);
-        opacity: 1;
-    }
-    to {
-        transform: translateY(100%);
-        opacity: 0;
-    }
-}
-
-/* Custom scrollbar */
-.overflow-y-auto {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
-}
-
-.overflow-y-auto::-webkit-scrollbar {
-    width: 6px;
-}
-
-.overflow-y-auto::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.overflow-y-auto::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 3px;
-}
-</style>
 
 <%- include('./include/footer.ejs')  %>
