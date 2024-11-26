@@ -1,0 +1,144 @@
+  <!-- Collapsible Opportunities Alert -->
+                <div class="mb-8">
+                    <% if (showConsultationAlert && (stats.pendingPaidCount> 0 || stats.pendingFreeCount > 0)) { %>
+                        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-xl overflow-hidden" x-data="{ isOpen: false }">
+                            <!-- Header - Always Visible -->
+                            <button @click="isOpen = !isOpen" class="w-full p-4 flex items-center justify-between hover:bg-white/40 transition-colors">
+                                <div class="flex items-center gap-3">
+                                    <div class="relative">
+                                        <i class="fas fa-bell text-blue-600 text-lg"></i>
+                                        <!-- Animated Ping Effect -->
+                                        <span class="absolute -top-1 -right-1 h-3 w-3">
+                                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                                            <span class="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span>
+                                        </span>
+                                    </div>
+                                    <div class="flex items-baseline gap-2">
+                                        <h3 class="font-semibold text-gray-900">
+                                            Nouvelles opportunités
+                                        </h3>
+                                        <span class="text-sm text-blue-600 font-medium">
+                                            <%= stats.pendingPaidCount + stats.pendingFreeCount %> en attente
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <!-- Toggle Icon -->
+                                <div class="flex items-center gap-3">
+                                    <div class="flex items-center gap-1.5 text-sm text-gray-500">
+                                        <i class="fas fa-coins text-amber-500"></i>
+                                        <span>
+                                            <%= stats.potentialEarnings %> DH
+                                        </span>
+                                    </div>
+                                    <i class="fas fa-chevron-down text-gray-400 transition-transform duration-300" :class="{ 'rotate-180': isOpen }"></i>
+                                </div>
+                            </button>
+
+                            <!-- Expandable Content -->
+                            <div x-show="isOpen" x-collapse x-cloak class="border-t border-blue-100">
+                                <div class="p-6 space-y-6">
+                                    <!-- Stats Grid -->
+                                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                                        <!-- Paid Consultations -->
+                                        <div class="bg-white/60 rounded-xl p-4">
+                                            <div class="text-sm text-gray-500 mb-1">Consultations payantes</div>
+                                            <div class="flex items-baseline gap-2">
+                                                <span class="text-2xl font-bold text-gray-900">
+                                                    <%= stats.pendingPaidCount %>
+                                                </span>
+                                                <% if (stats.pendingPaidCount> 0) { %>
+                                                    <span class="text-sm text-green-600 font-medium">
+                                                        <%= stats.potentialEarnings %> DH
+                                                    </span>
+                                                    <% } %>
+                                            </div>
+                                        </div>
+
+                                        <!-- Free Consultations -->
+                                        <div class="bg-white/60 rounded-xl p-4">
+                                            <div class="text-sm text-gray-500 mb-1">Consultations gratuites</div>
+                                            <div class="flex items-baseline gap-2">
+                                                <span class="text-2xl font-bold text-gray-900">
+                                                    <%= stats.pendingFreeCount %>
+                                                </span>
+                                                <span class="text-sm text-blue-600 font-medium">En attente</span>
+                                            </div>
+                                        </div>
+
+                                       
+
+                                      
+                                    </div>
+
+                                    <!-- Action Section -->
+                                    <div class="flex items-center justify-between pt-4 border-t border-blue-100">
+                                        <p class="text-sm text-gray-600">
+                                            Répondez rapidement pour augmenter vos chances d'être sélectionné !
+                                        </p>
+                                        <a href="/dashboard/consultations" class="inline-flex items-center gap-2 px-6 py-2.5 bg-blue-600 text-white 
+                             rounded-lg hover:bg-blue-700 transition-colors">
+                                            <span>Répondre</span>
+                                            <i class="fas fa-arrow-right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <% } %>
+                </div>
+
+                <!-- Alpine.js Styles -->
+                <style>
+                    [x-cloak] {
+                        display: none !important;
+                    }
+
+                    @keyframes ping {
+
+                        75%,
+                        100% {
+                            transform: scale(2);
+                            opacity: 0;
+                        }
+                    }
+
+                    .animate-ping {
+                        animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+                    }
+
+                    /* Smooth collapse animation */
+                    .collapse-enter-active,
+                    .collapse-leave-active {
+                        transition: all 0.3s ease-in-out;
+                        overflow: hidden;
+                    }
+
+                    .collapse-enter-from,
+                    .collapse-leave-to {
+                        opacity: 0;
+                        max-height: 0px;
+                    }
+
+                    .collapse-enter-to,
+                    .collapse-leave-from {
+                        opacity: 1;
+                        max-height: 1000px;
+                    }
+                </style>
+
+                <script>
+                    // Optional: Add this if you want to auto-expand based on certain conditions
+                    document.addEventListener('alpine:init', () => {
+                        Alpine.data('opportunitiesAlert', () => ({
+                            isOpen: false,
+
+                            init() {
+                                // Auto-expand if there are high-value opportunities
+                                if (this.stats.potentialEarnings > 1000) {
+                                    this.isOpen = true;
+                                }
+                            }
+                        }));
+                    });
+                </script>
