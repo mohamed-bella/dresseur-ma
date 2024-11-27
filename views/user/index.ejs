@@ -147,6 +147,451 @@
         </div>
     </div>
 </section>
+<!-- First, add the html2canvas library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<!-- Top Providers Section with Achievement System -->
+<section class="bg-white p-4 sm:p-6 rounded-2xl shadow-lg border border-gray-100">
+    <!-- Gamified Header -->
+    <div class="flex items-center justify-between mb-6">
+        <div>
+            <div class="flex items-center gap-2">
+                <h3 class="text-lg sm:text-xl font-bold text-gray-900"> Top Prestataires</h3>
+                <span class="px-2 py-1 bg-amber-100 text-amber-700 text-xs rounded-full font-medium">
+                    Saison 1
+                </span>
+            </div>
+            <p class="text-xs sm:text-sm text-gray-500 mt-1"> Top Prestataires des Services Canine </p>
+        </div>
+        <a href="/top-users" 
+           class="hidden sm:flex items-center gap-2 px-4 py-2 bg-black text-white rounded-full hover:bg-black/90 transition-all text-sm font-semibold group">
+            Classement complet
+            <span class="group-hover:translate-x-0.5 transition-transform">→</span>
+        </a>
+    </div>
+
+    <!-- Rank Categories Banner (Desktop) -->
+    <div class="hidden sm:flex items-center justify-center gap-8 mb-8 text-center">
+        <div class="flex flex-col items-center">
+            <span class="text-xs text-gray-500 mb-1">Top Elite</span>
+            <div class="w-8 h-8 bg-amber-400 rounded-full flex items-center justify-center shadow-amber-100 shadow-lg">
+                🏆
+            </div>
+        </div>
+        <div class="flex flex-col items-center">
+            <span class="text-xs text-gray-500 mb-1">Expert</span>
+            <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center shadow-gray-100 shadow-lg">
+                💎
+            </div>
+        </div>
+        <div class="flex flex-col items-center">
+            <span class="text-xs text-gray-500 mb-1">Pro</span>
+            <div class="w-8 h-8 bg-amber-600 rounded-full flex items-center justify-center shadow-amber-50 shadow-lg">
+                ⭐
+            </div>
+        </div>
+    </div>
+
+    <!-- Desktop Grid -->
+    <div class="hidden sm:grid sm:grid-cols-3 gap-6">
+        <% topUsers.slice(0, 3).forEach((user, index) => { %>
+            <div id="provider-card-desktop-<%= user._id %>" 
+                class="relative group transform hover:scale-[1.02] transition-all duration-300"
+            >
+                <!-- Achievement Banner -->
+                <div class="absolute -top-2 left-1/2 -translate-x-1/2 px-3 py-1 text-xs font-semibold rounded-full z-20
+                    <%= index === 0 ? 'bg-amber-400 text-amber-900' : 
+                       index === 1 ? 'bg-gray-200 text-gray-700' : 
+                       'bg-amber-600 text-white' %>">
+                    <%= index === 0 ? 'Top Elite' : index === 1 ? 'Expert' : 'Pro' %>
+                </div>
+
+                <!-- Card -->
+                <div class="relative bg-white rounded-2xl p-6 pt-8 border-2 transition-all
+                    <%= index === 0 ? 'border-amber-400 shadow-amber-100' : 
+                       index === 1 ? 'border-gray-200 shadow-gray-100' : 
+                       'border-amber-600 shadow-amber-50' %> shadow-lg">
+                    
+                    <!-- Position & Level Banner -->
+                    <div class="absolute top-3 right-3 flex items-center gap-2">
+                        <div class="px-2 py-1 bg-gray-100 rounded-full text-xs font-medium text-gray-600">
+                            Niveau <%= Math.floor(user.totalScore / 50) + 1 %>
+                        </div>
+                        <div class="w-6 h-6 rounded-full bg-black text-white flex items-center justify-center text-xs font-bold">
+                            <%= index + 1 %>
+                        </div>
+                    </div>
+
+                    <!-- User Info -->
+                    <div class="flex items-center gap-4">
+                        <div class="relative">
+                            <div class="w-16 h-16 rounded-full overflow-hidden ring-2
+                                <%= index === 0 ? 'ring-amber-400' : 
+                                   index === 1 ? 'ring-gray-200' : 
+                                   'ring-amber-600' %>">
+                                <img src="<%= user.profileImage %>" 
+                                     alt="<%= user.displayName %>"
+                                     class="w-full h-full object-cover"
+                                />
+                            </div>
+                            <div class="absolute -bottom-1 -right-1 w-6 h-6 bg-white rounded-full shadow-md flex items-center justify-center">
+                                <%= user.totalScore >= 100 ? '👑' : user.totalScore >= 50 ? '🌟' : '✨' %>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-900"><%= user.displayName %></h4>
+                            <!-- Achievement Tags -->
+                            <div class="flex flex-wrap gap-1 mt-1">
+                                <% if (user.totalViews >= 50) { %>
+                                    <span class="px-2 py-0.5 bg-blue-50 text-blue-600 rounded text-xs">Populaire</span>
+                                <% } %>
+                                <% if (user.totalReviews >= 5) { %>
+                                    <span class="px-2 py-0.5 bg-green-50 text-green-600 rounded text-xs">Top Rated</span>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stats & Progress -->
+                    <div class="mt-6 space-y-4">
+                        <!-- Progress to Next Level -->
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="text-gray-600">Progression niveau <%= Math.floor(user.totalScore / 50) + 2 %></span>
+                                <span class="font-medium"><%= user.totalScore %> / <%= (Math.floor(user.totalScore / 50) + 1) * 50 %></span>
+                            </div>
+                            <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+                                <div class="h-full rounded-full transition-all duration-500
+                                    <%= index === 0 ? 'bg-amber-400' : 
+                                       index === 1 ? 'bg-gray-400' : 
+                                       'bg-amber-600' %>"
+                                    style="width: <%= Math.min((user.totalScore % 50) / 50 * 100, 100) %>%">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Achievements Grid -->
+                        <div class="grid grid-cols-3 gap-2">
+                            <div class="text-center p-2 rounded-lg bg-gray-50">
+                                <div class="text-lg font-bold text-gray-900"><%= user.totalViews %></div>
+                                <div class="text-xs text-gray-500">Vues</div>
+                            </div>
+                            <div class="text-center p-2 rounded-lg bg-gray-50">
+                                <div class="text-lg font-bold text-gray-900"><%= user.totalReviews %></div>
+                                <div class="text-xs text-gray-500">Avis</div>
+                            </div>
+                            <div class="text-center p-2 rounded-lg bg-gray-50">
+                                <div class="text-lg font-bold text-gray-900"><%= user.totalScore %></div>
+                                <div class="text-xs text-gray-500">Score</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Share Button -->
+                    <button onclick="shareProviderCard('desktop-<%= user._id %>')"
+                        class="w-full mt-6 flex items-center justify-center gap-2 px-4 py-3 bg-gray-900 text-white rounded-xl hover:bg-black transition-all text-sm font-medium">
+                        Partager ma carte
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+
+    <!-- Mobile Optimized List -->
+    <div class="sm:hidden space-y-4">
+        <% topUsers.slice(0, 3).forEach((user, index) => { %>
+            <div id="provider-card-mobile-<%= user._id %>" class="relative">
+                <div class="bg-white rounded-xl border border-gray-100 overflow-hidden">
+                    <!-- Achievement Banner -->
+                    <div class="bg-gray-50 px-3 py-2 border-b border-gray-100 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <div class="w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold
+                                <%= index === 0 ? 'bg-amber-400 text-amber-900' : 
+                                   index === 1 ? 'bg-gray-200 text-gray-700' : 
+                                   'bg-amber-600 text-white' %>">
+                                <%= index + 1 %>
+                            </div>
+                            <span class="text-xs font-medium text-gray-600">
+                                <%= index === 0 ? 'Top Elite' : index === 1 ? 'Expert' : 'Pro' %>
+                            </span>
+                        </div>
+                        <div class="px-2 py-0.5 bg-gray-100 rounded-full text-xs font-medium text-gray-600">
+                            Niveau <%= Math.floor(user.totalScore / 50) + 1 %>
+                        </div>
+                    </div>
+
+                    <div class="p-3">
+                        <!-- User Info -->
+                        <div class="flex items-center gap-3">
+                            <div class="relative">
+                                <img src="<%= user.profileImage %>" 
+                                     alt="<%= user.displayName %>"
+                                     class="w-12 h-12 rounded-full object-cover ring-2
+                                        <%= index === 0 ? 'ring-amber-400' : 
+                                           index === 1 ? 'ring-gray-200' : 
+                                           'ring-amber-600' %>"
+                                />
+                                <div class="absolute -bottom-1 -right-1 w-5 h-5 bg-white rounded-full shadow flex items-center justify-center text-xs">
+                                    <%= user.totalScore >= 100 ? '👑' : user.totalScore >= 50 ? '🌟' : '✨' %>
+                                </div>
+                            </div>
+                            
+                            <div class="flex-1 min-w-0">
+                                <h4 class="font-medium text-gray-900 truncate"><%= user.displayName %></h4>
+                                <div class="flex items-center gap-3 mt-1 text-xs text-gray-500">
+                                    <span class="flex items-center gap-1">
+                                        <i class="fas fa-eye"></i>
+                                        <%= user.totalViews %>
+                                    </span>
+                                    <span class="flex items-center gap-1">
+                                        <i class="fas fa-star"></i>
+                                        <%= user.totalReviews %>
+                                    </span>
+                                    <span class="flex items-center gap-1">
+                                        <i class="fas fa-trophy"></i>
+                                        <%= user.totalScore %>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Progress Bar -->
+                        <div class="mt-3">
+                            <div class="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                                <div class="h-full rounded-full transition-all duration-500
+                                    <%= index === 0 ? 'bg-amber-400' : 
+                                       index === 1 ? 'bg-gray-400' : 
+                                       'bg-amber-600' %>"
+                                    style="width: <%= Math.min((user.totalScore % 50) / 50 * 100, 100) %>%">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Footer -->
+                    <div class="grid grid-cols-2 divide-x border-t border-gray-100">
+                        <a href="/users/<%= user._id %>" 
+                           class="py-2 text-center text-xs font-medium text-gray-600 hover:bg-gray-50">
+                            Voir profil
+                        </a>
+                        <button onclick="shareProviderCard('mobile-<%= user._id %>')"
+                            class="py-2 flex items-center justify-center gap-1 text-xs font-medium text-gray-600 hover:bg-gray-50">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+                            </svg>
+                            Partager
+
+
+                        </button>
+                    </div>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+
+    <!-- Mobile Call-to-Action -->
+    <div class="mt-6 sm:hidden space-y-3">
+        <a href="/top-users" 
+           class="block w-full py-3 bg-black text-white text-center rounded-xl hover:bg-black/90 transition-all text-sm font-medium">
+            Voir le classement complet
+        </a>
+        <p class="text-xs text-center text-gray-500">
+            Gagnez des points pour monter dans le classement 🏆
+        </p>
+    </div>
+</section>
+
+<script>
+// Gamification animations and effects
+document.querySelectorAll('.achievement-unlock').forEach(achievement => {
+    achievement.addEventListener('mouseover', () => {
+        achievement.classList.add('scale-110', 'rotate-3');
+    });
+    achievement.addEventListener('mouseout', () => {
+        achievement.classList.remove('scale-110', 'rotate-3');
+    });
+});
+
+async function shareProviderCard(cardId) {
+    try {
+        const shareBtn = document.querySelector(`#provider-card-${cardId} button`);
+        const originalText = shareBtn.innerHTML;
+        
+        // Animated loading state
+        shareBtn.innerHTML = `
+            <div class="flex items-center gap-2">
+                <svg class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span>Génération...</span>
+            </div>
+        `;
+        shareBtn.disabled = true;
+
+        const card = document.getElementById(`provider-card-${cardId}`);
+        
+        // Add temporary celebration effects before capture
+        const confetti = document.createElement('div');
+        confetti.className = 'absolute inset-0 pointer-events-none z-50';
+        confetti.innerHTML = `
+            <div class="absolute top-0 left-0 w-full h-full overflow-hidden">
+                ${Array(20).fill().map(() => `
+                    <div class="absolute w-2 h-2 rounded-full bg-amber-400 opacity-0 animate-confetti"
+                         style="left: ${Math.random() * 100}%; animation-delay: ${Math.random() * 1}s">
+                    </div>
+                `).join('')}
+            </div>
+        `;
+        card.appendChild(confetti);
+
+        // Wait for animations
+        await new Promise(resolve => setTimeout(resolve, 100));
+
+        const canvas = await html2canvas(card, {
+            backgroundColor: '#FFFFFF',
+            scale: 2,
+            logging: false,
+            useCORS: true,
+            allowTaint: true,
+            onclone: (clonedDoc) => {
+                const clonedCard = clonedDoc.getElementById(`provider-card-${cardId}`);
+                if (clonedCard) {
+                    clonedCard.style.transform = 'none';
+                    clonedCard.style.transition = 'none';
+                }
+            }
+        });
+
+        // Remove celebration effects
+        card.removeChild(confetti);
+
+        canvas.toBlob(async (blob) => {
+            if (navigator.share) {
+                try {
+                    const file = new File([blob], 'ndressilik-achievement.png', { type: 'image/png' });
+                    await navigator.share({
+                        files: [file],
+                        title: 'Mon classement Ndressilik',
+                        text: '🏆 Découvrez mon rang sur Ndressilik! #NdressilikChampion'
+                    });
+                    showSuccessToast('Carte partagée !');
+                } catch (err) {
+                    if (err.name !== 'AbortError') {
+                        downloadCard(blob);
+                        showSuccessToast('Carte téléchargée !');
+                    }
+                }
+            } else {
+                downloadCard(blob);
+                showSuccessToast('Carte téléchargée !');
+            }
+        }, 'image/png', 1.0);
+    } catch (error) {
+        console.error('Error:', error);
+        showErrorToast('Oups! Une erreur est survenue');
+    } finally {
+        resetShareButton(cardId);
+    }
+}
+
+function downloadCard(blob) {
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `ndressilik-champion-${Date.now()}.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+}
+
+function showSuccessToast(message) {
+    showToast(message, 'success');
+}
+
+function showErrorToast(message) {
+    showToast(message, 'error');
+}
+
+function showToast(message, type = 'success') {
+    // Remove existing toasts
+    document.querySelectorAll('.toast').forEach(t => t.remove());
+
+    const toast = document.createElement('div');
+    toast.className = `toast fixed bottom-4 right-4 px-4 py-2 rounded-lg shadow-lg transform transition-all duration-300 z-50 ${
+        type === 'success' ? 'bg-black' : 'bg-red-500'
+    } text-white flex items-center gap-2 opacity-0 translate-y-6`;
+
+    const icon = type === 'success' ? '🏆' : '❌';
+    toast.innerHTML = `
+        <span class="text-base">${icon}</span>
+        <span class="text-sm font-medium">${message}</span>
+    `;
+    
+    document.body.appendChild(toast);
+    requestAnimationFrame(() => {
+        toast.classList.remove('opacity-0', 'translate-y-6');
+    });
+    
+    setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-6');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+function resetShareButton(cardId) {
+    const shareBtn = document.querySelector(`#provider-card-${cardId} button`);
+    if (shareBtn) {
+        shareBtn.innerHTML = `
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+            </svg>
+            Partager
+        `;
+        shareBtn.disabled = false;
+    }
+}
+</script>
+
+<style>
+@keyframes confetti {
+    0% { transform: translateY(0) rotate(0); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+.animate-confetti {
+    animation: confetti 3s ease-out forwards;
+}
+
+@keyframes shine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.achievement-shine::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,0.2),
+        transparent
+    );
+    animation: shine 2s infinite;
+}
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+
 <!-- Articles and Consultation Section -->
 <section class="py-12 bg-white">
     <div class="max-w-6xl mx-auto px-4">

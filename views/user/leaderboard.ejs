@@ -1,0 +1,173 @@
+<%- include('./include/head.ejs') %>
+<%- include('./include/navbar.ejs') %>
+
+<!-- Rankings Hero Section -->
+<div class="bg-gradient-to-b from-black to-gray-900 text-white py-12">
+    <div class="container mx-auto px-4">
+        <div class="text-center max-w-2xl mx-auto mb-8">
+            <h1 class="text-3xl font-bold mb-4">Hall of Fame</h1>
+            <p class="text-gray-400">Les meilleurs prestataires de services canins de la plateforme</p>
+            <div class="mt-6 flex items-center justify-center gap-4">
+                <div class="text-center">
+                    <div class="text-2xl font-bold"><%= topUsers.length %></div>
+                    <div class="text-sm text-gray-400">Prestataires</div>
+                </div>
+                <div class="h-8 w-px bg-gray-800"></div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold">Saison 1</div>
+                    <div class="text-sm text-gray-400">En cours</div>
+                </div>
+                <div class="h-8 w-px bg-gray-800"></div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-amber-400">15j</div>
+                    <div class="text-sm text-gray-400">Restants</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Rankings Section -->
+<section class="bg-gray-50 py-12">
+    <div class="container mx-auto px-4">
+        <!-- Rank Categories -->
+        <div class="flex flex-wrap justify-center gap-4 mb-12">
+            <div class="bg-white p-4 rounded-xl shadow-md text-center">
+                <div class="w-12 h-12 bg-amber-400 rounded-full flex items-center justify-center mx-auto mb-2">🏆</div>
+                <div class="font-semibold">Elite</div>
+                <div class="text-sm text-gray-500">Top 3</div>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-md text-center">
+                <div class="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-2">💎</div>
+                <div class="font-semibold">Expert</div>
+                <div class="text-sm text-gray-500">Top 10</div>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-md text-center">
+                <div class="w-12 h-12 bg-amber-600 rounded-full flex items-center justify-center mx-auto mb-2">⭐</div>
+                <div class="font-semibold">Pro</div>
+                <div class="text-sm text-gray-500">Top 20</div>
+            </div>
+        </div>
+
+        <!-- Rankings Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+            <% topUsers.forEach((user, index) => { %>
+                <div class="transform hover:scale-[1.02] transition-all duration-300">
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden relative">
+                        <!-- Rank Banner -->
+                        <div class="absolute top-4 right-4 flex items-center gap-2">
+                            <div class="px-3 py-1 rounded-full text-sm font-medium
+                                <%= index < 3 ? 'bg-amber-400 text-amber-900' : 
+                                   index < 10 ? 'bg-gray-200 text-gray-700' : 
+                                   'bg-amber-600 text-white' %>">
+                                <%= index < 3 ? 'Elite' : index < 10 ? 'Expert' : 'Pro' %>
+                            </div>
+                            <div class="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center font-bold">
+                                #<%= index + 1 %>
+                            </div>
+                        </div>
+
+                        <!-- User Info -->
+                        <div class="p-6">
+                            <div class="flex items-center gap-4 mb-6">
+                                <div class="relative">
+                                    <img src="<%= user.profileImage || 'https://via.placeholder.com/150' %>"
+                                         alt="<%= user.displayName %>"
+                                         class="w-16 h-16 rounded-full object-cover ring-2
+                                            <%= index < 3 ? 'ring-amber-400' : 
+                                               index < 10 ? 'ring-gray-200' : 
+                                               'ring-amber-600' %>"
+                                    />
+                                    <div class="absolute -bottom-1 -right-1 w-6 h-6 bg-white rounded-full shadow-md flex items-center justify-center">
+                                        <%= user.totalScore >= 100 ? '👑' : user.totalScore >= 50 ? '🌟' : '✨' %>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-900"><%= user.displayName %></h3>
+                                    <p class="text-sm text-gray-500">Niveau <%= Math.floor(user.totalScore / 50) + 1 %></p>
+                                </div>
+                            </div>
+
+                            <!-- Stats Grid -->
+                            <div class="grid grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg">
+                                <div class="text-center">
+                                    <div class="font-semibold"><%= user.servicesCount %></div>
+                                    <div class="text-xs text-gray-500">Services</div>
+                                </div>
+                                <div class="text-center border-x border-gray-200">
+                                    <div class="font-semibold"><%= user.totalViews %></div>
+                                    <div class="text-xs text-gray-500">Vues</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="font-semibold"><%= user.totalScore %></div>
+                                    <div class="text-xs text-gray-500">Score</div>
+                                </div>
+                            </div>
+
+                            <!-- Progress Bar -->
+                            <div class="mt-4">
+                                <div class="flex justify-between text-sm mb-2">
+                                    <span class="text-gray-500">Progression</span>
+                                    <span class="font-medium"><%= Math.min((user.totalScore / 200) * 100, 100).toFixed(0) %>%</span>
+                                </div>
+                                <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="h-full rounded-full transition-all duration-500
+                                        <%= index < 3 ? 'bg-amber-400' : 
+                                           index < 10 ? 'bg-gray-400' : 
+                                           'bg-amber-600' %>"
+                                        style="width: <%= Math.min((user.totalScore / 200) * 100, 100) %>%">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Achievements -->
+                            <div class="mt-4 flex flex-wrap gap-2">
+                                <% if (user.totalViews >= 50) { %>
+                                    <span class="px-2 py-1 bg-blue-50 text-blue-600 rounded-full text-xs">👁️ Populaire</span>
+                                <% } %>
+                                <% if (user.totalReviews >= 5) { %>
+                                    <span class="px-2 py-1 bg-green-50 text-green-600 rounded-full text-xs">⭐ Top Rated</span>
+                                <% } %>
+                                <% if (user.servicesCount >= 3) { %>
+                                    <span class="px-2 py-1 bg-purple-50 text-purple-600 rounded-full text-xs">🎯 Pro Services</span>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+</section>
+
+<!-- Motivation Section -->
+<section class="bg-white py-12">
+    <div class="container mx-auto px-4 text-center">
+        <h2 class="text-2xl font-bold mb-6">Comment améliorer votre classement ?</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            <div class="p-6">
+                <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span class="text-2xl">📈</span>
+                </div>
+                <h3 class="font-semibold mb-2">Augmentez vos vues</h3>
+                <p class="text-gray-600 text-sm">Optimisez vos services pour plus de visibilité</p>
+            </div>
+            <div class="p-6">
+                <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span class="text-2xl">⭐</span>
+                </div>
+                <h3 class="font-semibold mb-2">Collectez des avis</h3>
+                <p class="text-gray-600 text-sm">Encouragez vos clients à laisser des avis positifs</p>
+            </div>
+            <div class="p-6">
+                <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span class="text-2xl">🏆</span>
+                </div>
+                <h3 class="font-semibold mb-2">Gagnez des points</h3>
+                <p class="text-gray-600 text-sm">Complétez des actions pour gagner plus de points</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<%- include('./include/footer.ejs') %>

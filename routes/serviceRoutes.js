@@ -873,4 +873,93 @@ router.post('/dashboard/services/:serviceId', isAuthenticated, upload, async (re
      }
 });
 
+// GET: Top 10 Active Users
+router.get('/top-users', async (req, res) => {
+     try {
+         const topUsers = await User.aggregate([
+          {
+               $match: { status: 'active' }
+           },
+             {
+                 $lookup: {
+                     from: 'services',
+                     localField: '_id',
+                     foreignField: 'createdBy',
+                     as: 'services'
+                 }
+             },
+             {
+                 $lookup: {
+                     from: 'reviews',
+                     let: { userServices: '$services._id' },
+                     pipeline: [
+                         {
+                             $match: {
+                                 $expr: {
+                                     $in: ['$serviceId', '$$userServices']
+                                 }
+                             }
+                         },
+                         {
+                             $group: {
+                                 _id: null,
+                                 totalReviews: { $sum: 1 }
+                             }
+                         }
+                     ],
+                     as: 'reviews'
+                 }
+             },
+             {
+                 $addFields: {
+                     servicesCount: { $size: '$services' },
+                     totalViews: {
+                         $sum: {
+                             $map: {
+                                 input: '$services',
+                                 as: 'service',
+                                 in: { $ifNull: ['$$service.views', 0] }
+                             }
+                         }
+                     },
+                     totalReviews: { $ifNull: [{ $arrayElemAt: ['$reviews.totalReviews', 0] }, 0] }
+                 }
+             },
+             {
+                 $project: {
+                     _id: 1,
+                     displayName: 1,
+                     profileImage: 1,
+                     servicesCount: 1,
+                     totalViews: 1,
+                     totalReviews: 1,
+                     totalScore: {
+                         $add: ['$servicesCount', '$totalViews', '$totalReviews']
+                     }
+                 }
+             },
+             {
+                 $sort: { totalScore: -1 }
+             },
+             {
+                 $limit: 10
+             }
+         ]);
+ 
+         res.render('user/leaderboard', {
+          topUsers,
+          pageTitle : 'Top User Of Ndressilik.com',
+          description : 'top ndressilik users',
+          keywords: 'top, user, ndressilik'
+     });
+     } catch (error) {
+         console.error('Error fetching top users:', error);
+         res.status(500).json({
+             success: false,
+             message: 'Erreur lors de la récupération des utilisateurs'
+         });
+     }
+ });
+ 
+
 module.exports = router;
