@@ -932,6 +932,7 @@ router.get('/top-users', async (req, res) => {
                      profileImage: 1,
                      servicesCount: 1,
                      totalViews: 1,
+                     slug : 1,
                      totalReviews: 1,
                      totalScore: {
                          $add: ['$servicesCount', '$totalViews', '$totalReviews']
