@@ -566,44 +566,80 @@ router.get('/srvc/:serviceOption?/:location?', async (req, res) => {
 // GET: Service Details
 router.get('/service/:serviceId', async (req, res) => {
      try {
-          const { serviceId } = req.params;
-
-          // Find the service by ID and populate the creator details
-          const service = await Service.findById(serviceId)
-               .populate('createdBy', 'displayName profileImage slug');  // Populate only the display name of the service creator
-
-          if (!service) {
-               return res.status(404).send('Service non trouvé');
-          }
-
-          // Fetch reviews by serviceId and populate the user details for each review
-          const reviews = await Review.find({ serviceId })
-               .populate('userId', 'displayName image');  // Populate display name and image of each reviewer
-
-          // Increment view count for the service
-          service.views += 1;
-          await service.save();
-
-          console.log(service)
-          // Dynamic metadata for SEO
-          const pageTitle = `${service.serviceName} - NDRESSILIK`;
-          const description = `${service.serviceName} disponible à ${service.location}. Découvrez les détails de ce service proposé par ${service.createdBy.displayName || 'notre plateforme'}.`;
-          const keywords = `${service.serviceName}, services pour animaux, ${service.location}, ${service.createdBy.displayName || 'service'}`;
-
-          // Render the service details page with the service and its reviews
-          res.render('user/serviceDetails', {
-               service,
-               reviews,  // Pass reviews to the frontend template
-               pageTitle,
-               description,
-               keywords
-          });
+         const { serviceId } = req.params;
+ 
+         // Find the service by ID and populate the creator details
+         const service = await Service.findById(serviceId)
+             .populate('createdBy', 'displayName profileImage slug'); // Populate only the display name of the service creator
+ 
+         if (!service) {
+             return res.status(404).send('Service non trouvé');
+         }
+ 
+         // Fetch reviews by serviceId and populate the user details for each review
+         const reviews = await Review.find({ serviceId })
+             .populate('userId', 'displayName image') // Populate display name and image of each reviewer
+             .sort({ createdAt: -1 });
+ 
+         // Increment view count for the service
+         service.views += 1;
+         await service.save();
+ 
+         // Calculate the average review rating
+         let totalRating = 0;
+         const categorizedReviews = {
+             good: [],
+             average: [],
+             bad: [],
+         };
+ 
+         reviews.forEach((review) => {
+             totalRating += review.rating; // Assuming `rating` is a numeric field in the review schema
+ 
+             // Categorize reviews based on their rating value
+             if (review.rating >= 4) {
+                 categorizedReviews.good.push(review);
+             } else if (review.rating >= 2) {
+                 categorizedReviews.average.push(review);
+             } else {
+                 categorizedReviews.bad.push(review);
+             }
+         });
+ 
+         const moyenne = reviews.length ? (totalRating / reviews.length).toFixed(2) : 0;
+ 
+         // Add categorized data to the service object
+         const categorizedReviewsSummary = {
+             good: categorizedReviews.good.length,
+             average: categorizedReviews.average.length,
+             bad: categorizedReviews.bad.length,
+         };
+ 
+         console.log(`Moyenne: ${moyenne}`);
+         console.log('Catégorisation des avis:', categorizedReviewsSummary);
+ 
+         // Dynamic metadata for SEO
+         const pageTitle = `${service.serviceName} - NDRESSILIK`;
+         const description = `${service.serviceName} disponible à ${service.location}. Découvrez les détails de ce service proposé par ${service.createdBy.displayName || 'notre plateforme'}.`;
+         const keywords = `${service.serviceName}, services pour animaux, ${service.location}, ${service.createdBy.displayName || 'service'}`;
+ 
+         // Render the service details page with the service, reviews, and calculated data
+         res.render('user/serviceDetails', {
+             service,
+             reviews, // Pass reviews to the frontend template
+             moyenne, // Pass the average rating to the frontend
+             categorizedReviews, // Pass categorized reviews to the frontend
+             categorizedReviewsSummary, // Pass the summary to the frontend
+             pageTitle,
+             description,
+             keywords,
+         });
      } catch (err) {
-          console.error('Error fetching service details:', err);
-          res.status(500).json({ success: false, message: 'Erreur serveur.' });
+         console.error('Error fetching service details:', err);
+         res.status(500).json({ success: false, message: 'Erreur serveur.' });
      }
-});
-
+ });
+ 
 
 
 // Submit a review
@@ -611,10 +647,10 @@ router.post('/services/:serviceId/review', async (req, res) => {
      try {
           const { rating, comment } = req.body;
           console.log(req.body)
-          const userId = req.user._id;
+          // const userId = req.user._id;
           const newReview = new Review({
                serviceId: req.params.serviceId,
-               userId,
+               // userId,
                rating,
                comment
           });

@@ -5,33 +5,138 @@
 <div class="relative min-h-screen">
     <!-- Premium Service Details -->
     <div class="min-h-screen bg-white">
-        <!-- Status Bar -->
-        <div class="bg-black/90 text-white py-2">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex items-center justify-between text-sm">
-                    <div class="flex items-center gap-3">
-                        <div class="flex items-center gap-2">
-                            <span class="relative flex h-2 w-2">
-                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                                <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-400"></span>
-                            </span>
-                            <span class="text-amber-400 font-medium">Premium</span>
-                        </div>
-                        <span class="sm:inline text-white/60">|</span>
-                        <div class="sm:flex items-center gap-2">
-                            <i class="fas fa-eye text-white/60"></i>
-                            <span class="text-white/80"><%= service.views %> vues</span>
-                        </div>
+     <!-- Status Bar -->
+<div class="bg-black/90 text-white py-2">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Desktop View -->
+        <div class="hidden md:flex items-center justify-between text-sm">
+            <div class="flex items-center gap-6">
+                <!-- Premium Badge -->
+                <div class="flex items-center gap-2">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-400"></span>
+                    </span>
+                    <span class="text-amber-400 font-medium">Premium</span>
+                </div>
+
+                <!-- Views -->
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-eye text-white/60"></i>
+                    <span class="text-white/80"><%= service.views %></span>
+                </div>
+
+                <!-- Rating -->
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <span class="text-white/80"><%= moyenne %>/5</span>
+                </div>
+
+                <!-- Review Stats -->
+                <div class="flex items-center gap-2">
+                    <span class="text-white/80">
+                        <span class="text-green-400"><%= categorizedReviewsSummary.good %></span> bons,
+                        <span class="text-yellow-400"><%= categorizedReviewsSummary.average %></span> moyens,
+                        <span class="text-red-400"><%= categorizedReviewsSummary.bad %></span> mauvais
+                    </span>
+                </div>
+            </div>
+
+            <!-- Share Button -->
+            <button onclick="toggleShareModal()" 
+                class="p-1.5 hover:bg-white/10 rounded-full transition-colors">
+                <i class="fas fa-share-alt"></i>
+            </button>
+        </div>
+
+        <!-- Mobile View -->
+        <div class="md:hidden">
+            <!-- Top Row -->
+            <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-400"></span>
+                    </span>
+                    <span class="text-amber-400 font-medium">Premium</span>
+                </div>
+                <button onclick="toggleShareModal()" 
+                    class="p-1.5 hover:bg-white/10 rounded-full transition-colors">
+                    <i class="fas fa-share-alt"></i>
+                </button>
+            </div>
+
+            <!-- Bottom Row -->
+            <div class="flex items-center justify-between text-sm">
+                <div class="flex items-center gap-4">
+                    <!-- Views -->
+                    <div class="flex items-center gap-1.5">
+                        <i class="fas fa-eye text-white/60"></i>
+                        <span class="text-white/80"><%= service.views %></span>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <button onclick="toggleShareModal()" 
-                            class="p-1.5 hover:bg-white/10 rounded-full transition-colors">
-                            <i class="fas fa-share-alt"></i>
-                        </button>
+
+                    <!-- Rating -->
+                    <div class="flex items-center gap-1.5">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <span class="text-white/80"><%= moyenne %>/5</span>
+                    </div>
+                </div>
+
+                <!-- Mobile Review Summary Button -->
+                <button onclick="toggleReviewStats()" 
+                    class="text-white/80 text-xs px-2 py-1 rounded border border-white/20 hover:bg-white/10 transition-colors">
+                    Voir les avis
+                </button>
+            </div>
+
+            <!-- Mobile Review Stats Popup (Hidden by default) -->
+            <div id="reviewStatsPopup" class="hidden fixed z-50 inset-x-0 bottom-0 bg-black/95 p-4 transform transition-transform duration-300 translate-y-full">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-sm font-medium">Résumé des avis</h3>
+                    <button onclick="toggleReviewStats()" class="text-white/60">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center">
+                        <span class="text-green-400">Bons avis</span>
+                        <span><%= categorizedReviewsSummary.good %></span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-yellow-400">Avis moyens</span>
+                        <span><%= categorizedReviewsSummary.average %></span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-red-400">Mauvais avis</span>
+                        <span><%= categorizedReviewsSummary.bad %></span>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+</div>
+
+<script>
+function toggleReviewStats() {
+    const popup = document.getElementById('reviewStatsPopup');
+    const isHidden = popup.classList.contains('hidden');
+    
+    if (isHidden) {
+        popup.classList.remove('hidden');
+        // Wait a frame to ensure 'hidden' removal is processed
+        requestAnimationFrame(() => {
+            popup.classList.remove('translate-y-full');
+        });
+    } else {
+        popup.classList.add('translate-y-full');
+        // Wait for animation to complete before hiding
+        setTimeout(() => {
+            popup.classList.add('hidden');
+        }, 300);
+    }
+}
+</script>
+
 
         <!-- Main Content -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -161,7 +266,7 @@
                     <div class="inline-flex items-center gap-2 bg-gray-900/10 px-4 py-2 rounded-full">
                         <i class="fas fa-images text-gray-900"></i>
                         <span class="text-sm font-medium text-gray-900">
-                            Photos du service (<%= service.images.length %>)
+                            Photos du service (<%= service.images.length -1 %>)
                         </span>
                     </div>
                 </div>
@@ -169,7 +274,7 @@
                 <!-- Gallery Grid -->
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="gallery">
                     <% let images = Array.isArray(service.images) ? service.images : JSON.parse(service.images); %>
-                    <% images.forEach((image, index) => { %>
+                    <% images.slice(0, -1).forEach((image, index) => { %>
                         <div class="<%= index === 0 ? 'col-span-2 row-span-2' : '' %> 
                             relative group overflow-hidden rounded-xl cursor-zoom-in"
                             onclick="openGallery(<%= index %>)">
@@ -355,6 +460,338 @@
         </div>
     </div>
 </div>
+
+
+
+<!-- Main Reviews Container -->
+<!-- Main Container with clean background -->
+<div class="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto space-y-12">
+        <!-- Write Review Section -->
+        <section class="bg-white border border-black/5 shadow-sm">
+            <div class="relative p-6 sm:p-8">
+                <div class="relative">
+                    <h3 class="text-xl sm:text-2xl text-black mb-8 flex items-center">
+                        <span class="font-light tracking-tight">Votre expérience</span>
+                        <div class="h-px w-12 bg-black ml-4"></div>
+                    </h3>
+                    <div id="reviewLimitMessage" class="hidden mb-6 p-4 text-red-600">
+                        Vous avez atteint la limite d'avis autorisée.
+                    </div>
+                    <form id="reviewForm" class="space-y-8">
+                        <div class="bg-gray-50/50 p-6 border border-black/5">
+                            <label class="block mb-4 text-sm uppercase tracking-wide text-black/70">Note</label>
+                            <div class="flex flex-row-reverse justify-end gap-4">
+                                <% [5,4,3,2,1].forEach(num => { %>
+                                    <input type="radio" id="star<%= num %>" name="rating" value="<%= num %>" class="hidden peer">
+                                    <label for="star<%= num %>" 
+                                        class="text-3xl sm:text-4xl cursor-pointer text-gray-200 hover:text-black peer-checked:text-black transition-colors duration-300">
+                                        ★
+                                    </label>
+                                <% }) %>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label for="comment" class="block mb-3 text-sm uppercase tracking-wide text-black/70">Commentaire</label>
+                            <textarea 
+                                id="comment" 
+                                name="comment" 
+                                required 
+                                class="w-full px-6 py-4 border-b border-black/10 focus:border-black focus:ring-0 transition-colors duration-300 resize-none bg-gray-50/30"
+                                rows="4"
+                                placeholder="Partagez votre expérience..."
+                            ></textarea>
+                        </div>
+
+                        <button 
+                            type="submit" 
+                            id="submitReview"
+                            class="w-full bg-black text-white px-8 py-4 hover:bg-black/90 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transition duration-300 text-sm uppercase tracking-wide"
+                        >
+                            <span class="button-text">Soumettre</span>
+                            <svg class="hidden animate-spin ml-3 h-4 w-4 text-white" id="spinner" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reviews List Section -->
+        <section class="relative">
+            <div class="flex justify-between items-end mb-8">
+                <h3 class="text-xl sm:text-2xl text-black">
+                    <span class="font-light tracking-tight">Avis clients</span>
+                    <div class="h-px w-12 bg-black mt-4"></div>
+                </h3>
+                <p class="text-sm text-black/50 uppercase tracking-wide"><%= reviews?.length || 0 %> avis</p>
+            </div>
+            
+            <% if (reviews && reviews.length > 0) { %>
+                <div class="grid gap-8">
+                    <% reviews.forEach(review => { %>
+                        <div class="group relative bg-white border border-black/5 hover:border-black/10 p-6 sm:p-8 transition-all duration-300">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-6">
+                                <div class="flex items-start sm:items-center gap-4">
+                                    <div class="w-12 h-12 bg-black flex items-center justify-center flex-shrink-0">
+                                        <span class="text-white text-lg font-light">
+                                            N
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-medium text-black">Ndressilik Fan</h4>
+                                        <p class="text-xs text-black/50 uppercase tracking-wide mt-1">
+                                            <%= new Date(review.createdAt).toLocaleDateString('fr-FR', { 
+                                                day: 'numeric', 
+                                                month: 'long', 
+                                                year: 'numeric' 
+                                            }) %>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="flex gap-1.5">
+                                    <% for(let i = 1; i <= 5; i++) { %>
+                                        <span class="text-2xl <%= i <= review.rating ? 'text-black' : 'text-gray-200' %>">
+                                            ★
+                                        </span>
+                                    <% } %>
+                                </div>
+                            </div>
+                            <div class="sm:ml-16">
+                                <p class="text-black/70 leading-relaxed">"<%= review.comment %>"</p>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            <% } else { %>
+                <div class="text-center py-16 border border-black/5">
+                    <svg class="w-12 h-12 mx-auto text-black/20 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M8 12h.01M12 12h.01M16 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <p class="text-sm text-black/50 uppercase tracking-wide">Aucun avis pour le moment</p>
+                </div>
+            <% } %>
+        </section>
+    </div>
+</div>
+
+<script>
+    // Initialize IndexedDB
+    const initDB = () => {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open('ReviewsDB', 1);
+            
+            request.onerror = () => reject('IndexedDB initialization failed');
+            
+            request.onupgradeneeded = (event) => {
+                const db = event.target.result;
+                if (!db.objectStoreNames.contains('reviews')) {
+                    db.createObjectStore('reviews', { keyPath: 'serviceId' });
+                }
+            };
+            
+            request.onsuccess = () => resolve(request.result);
+        });
+    };
+    
+    // Review tracking system
+    class ReviewTracker {
+        constructor() {
+            this.maxReviews = 2;
+            this.storageKey = 'serviceReviews';
+            this.db = null;
+            this.initialized = false;
+        }
+    
+        async init() {
+            if (this.initialized) return;
+            
+            try {
+                this.db = await initDB();
+                this.initialized = true;
+            } catch (error) {
+                console.error('Failed to initialize IndexedDB:', error);
+            }
+        }
+    
+        // Get review count from both storage methods
+        async getReviewCount(serviceId) {
+            const counts = await Promise.all([
+                this.getLocalStorageCount(serviceId),
+                this.getIndexedDBCount(serviceId)
+            ]);
+            
+            // Use the highest count from either storage method
+            return Math.max(...counts);
+        }
+    
+        // Local Storage methods
+        getLocalStorageCount(serviceId) {
+            try {
+                const reviews = JSON.parse(localStorage.getItem(this.storageKey) || '{}');
+                return reviews[serviceId] || 0;
+            } catch {
+                return 0;
+            }
+        }
+    
+        incrementLocalStorage(serviceId) {
+            try {
+                const reviews = JSON.parse(localStorage.getItem(this.storageKey) || '{}');
+                reviews[serviceId] = (reviews[serviceId] || 0) + 1;
+                localStorage.setItem(this.storageKey, JSON.stringify(reviews));
+            } catch (error) {
+                console.error('LocalStorage increment failed:', error);
+            }
+        }
+    
+        // IndexedDB methods
+        async getIndexedDBCount(serviceId) {
+            if (!this.db) return 0;
+            
+            return new Promise((resolve) => {
+                const transaction = this.db.transaction(['reviews'], 'readonly');
+                const store = transaction.objectStore('reviews');
+                const request = store.get(serviceId);
+                
+                request.onsuccess = () => {
+                    resolve(request.result?.count || 0);
+                };
+                
+                request.onerror = () => {
+                    console.error('IndexedDB read failed');
+                    resolve(0);
+                };
+            });
+        }
+    
+        async incrementIndexedDB(serviceId) {
+            if (!this.db) return;
+            
+            const currentCount = await this.getIndexedDBCount(serviceId);
+            const transaction = this.db.transaction(['reviews'], 'readwrite');
+            const store = transaction.objectStore('reviews');
+            
+            store.put({
+                serviceId,
+                count: currentCount + 1,
+                lastUpdated: new Date().toISOString()
+            });
+        }
+    
+        // Main methods
+        async canSubmitReview(serviceId) {
+            await this.init();
+            const count = await this.getReviewCount(serviceId);
+            return count < this.maxReviews;
+        }
+    
+        async trackReview(serviceId) {
+            await this.init();
+            this.incrementLocalStorage(serviceId);
+            await this.incrementIndexedDB(serviceId);
+        }
+    }
+    
+    // Initialize the review tracker
+    const reviewTracker = new ReviewTracker();
+    
+    // Form submission handler
+    document.getElementById('reviewForm')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const serviceId = '<%= service._id %>';
+        const canSubmit = await reviewTracker.canSubmitReview(serviceId);
+        
+        if (!canSubmit) {
+            document.getElementById('reviewLimitMessage').classList.remove('hidden');
+            return;
+        }
+        
+        const button = document.getElementById('submitReview');
+        const buttonText = button.querySelector('.button-text');
+        const spinner = document.getElementById('spinner');
+        
+        const rating = document.querySelector('input[name="rating"]:checked')?.value;
+        const comment = document.getElementById('comment').value;
+        
+        if (!rating) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed bottom-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg transform transition-all duration-500 translate-y-20 opacity-0';
+            toast.textContent = 'Veuillez sélectionner une note';
+            document.body.appendChild(toast);
+            setTimeout(() => toast.classList.remove('translate-y-20', 'opacity-0'), 100);
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+                setTimeout(() => toast.remove(), 500);
+            }, 3000);
+            return;
+        }
+    
+        button.disabled = true;
+        buttonText.textContent = 'Envoi en cours...';
+        spinner.classList.remove('hidden');
+    
+        try {
+            const response = await fetch(`/services/${serviceId}/review`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ rating, comment })
+            });
+    
+            const data = await response.json();
+    
+            if (data.success) {
+                await reviewTracker.trackReview(serviceId);
+                
+                const toast = document.createElement('div');
+                toast.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform transition-all duration-500 translate-y-20 opacity-0';
+                toast.textContent = 'Avis ajouté avec succès!';
+                document.body.appendChild(toast);
+                
+                setTimeout(() => toast.classList.remove('translate-y-20', 'opacity-0'), 100);
+                setTimeout(() => {
+                    toast.classList.add('translate-y-20', 'opacity-0');
+                    setTimeout(() => toast.remove(), 500);
+                }, 3000);
+                
+                e.target.reset();
+                setTimeout(() => window.location.reload(), 1000);
+            } else {
+                throw new Error(data.message);
+            }
+        } catch (error) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed bottom-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg transform transition-all duration-500 translate-y-20 opacity-0';
+            toast.textContent = 'Erreur lors de l\'ajout de l\'avis';
+            document.body.appendChild(toast);
+            setTimeout(() => toast.classList.remove('translate-y-20', 'opacity-0'), 100);
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+                setTimeout(() => toast.remove(), 500);
+            }, 3000);
+        } finally {
+            button.disabled = false;
+            buttonText.textContent = 'Envoyer l\'avis';
+            spinner.classList.remove('hidden');
+        }
+    });
+    
+    // Check initial review count on page load
+    (async () => {
+        const serviceId = '<%= service._id %>';
+        const canSubmit = await reviewTracker.canSubmitReview(serviceId);
+        if (!canSubmit) {
+            document.getElementById('reviewLimitMessage').classList.remove('hidden');
+            document.getElementById('reviewForm').classList.add('opacity-50', 'pointer-events-none');
+        }
+    })();
+    </script>
 
 <!-- Script -->
 <script>

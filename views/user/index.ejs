@@ -20,11 +20,19 @@
                         <i class="fas fa-search mr-2"></i>
                         Trouver un Service
                     </a>
+                   <% if (!user) { %>
                     <a href="/auth/google" 
+                    class="inline-flex items-center justify-center px-6 py-3 bg-white text-blue-900 rounded-lg font-medium hover:bg-gray-100 transition-colors">
+                    <i class="fas fa-user-tie mr-2"></i>
+                    Devenir Prestataire
+                </a>
+                    <% } else { %>
+                        <a href="/dashboard" 
                         class="inline-flex items-center justify-center px-6 py-3 bg-white text-blue-900 rounded-lg font-medium hover:bg-gray-100 transition-colors">
                         <i class="fas fa-user-tie mr-2"></i>
-                        Devenir Prestataire
+                        Gerer Mes Services
                     </a>
+                        <% } %>
                 </div>
             </div>
            <!-- Right: Feature Highlights -->
@@ -287,7 +295,7 @@
 </section>
 
 <!-- Trust Indicators -->
-<section class="py-12 bg-gray-50">
+<!-- <section class="py-12 bg-gray-50">
     <div class="max-w-6xl mx-auto px-4">
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             <div>
@@ -308,7 +316,7 @@
             </div>
         </div>
     </div>
-</section>
+</section> -->
 
 <!-- CTA Section -->
 <section class="py-12 bg-blue-900 text-white">
@@ -317,11 +325,11 @@
             Prêt à Offrir le Meilleur à Votre Chien ?
         </h2>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="/trouver-service" 
+            <a href="/services" 
                 class="inline-flex items-center justify-center px-6 py-3 bg-white text-blue-900 rounded-lg font-medium hover:bg-gray-100 transition-colors">
                 Trouver un Service
             </a>
-            <a href="/devenir-prestataire" 
+            <a href="/auth/google" 
                 class="inline-flex items-center justify-center px-6 py-3 bg-blue-800 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">
                 Devenir Prestataire
             </a>
@@ -330,7 +338,7 @@
 </section>
 
 <!-- Mobile App Banner (Optional) -->
-<section class="py-6 bg-gray-100">
+<!-- <section class="py-6 bg-gray-100">
     <div class="max-w-6xl mx-auto px-4">
         <div class="flex items-center justify-between">
             <div class="flex items-center gap-4">
@@ -347,7 +355,7 @@
             </div>
         </div>
     </div>
-</section>
+</section> -->
 
 <%- include('include/footer.ejs') %>
 
