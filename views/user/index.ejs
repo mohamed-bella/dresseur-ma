@@ -225,7 +225,7 @@
 
                     <!-- User Info -->
                     <div class="flex items-center gap-4">
-                        <div class="relative"  onclick="window.location.href = '/@<%= user.slug%>'">
+                        <div  onclick="window.location.href = '/@<%= user.slug %>'" style="cursor: pointer;" class=" relative"  onclick="window.location.href = '/@<%= user.slug%>'">
                             <div class="w-16 h-16 rounded-full overflow-hidden ring-2
                                 <%= index === 0 ? 'ring-amber-400' : 
                                    index === 1 ? 'ring-gray-200' : 
@@ -289,12 +289,20 @@
                     </div>
 
                     <!-- Share Button -->
-                    <button onclick="shareProviderCard('desktop-<%= user._id %>')"
-                        class="w-full mt-6 flex items-center justify-center gap-2 px-4 py-3 bg-gray-900 text-white rounded-xl hover:bg-black transition-all text-sm font-medium">
-                        Partager ma carte
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
-                        </svg>
+                    <button onclick="window.location.href = '/@<%= user.slug %>'" class="w-full mt-6 flex items-center justify-center gap-2 px-4 py-3 bg-gray-900 text-white rounded-xl hover:bg-black transition-all text-sm font-medium">
+                        Voir 
+                        <g>
+                            <!-- Outer Eye Shape -->
+                            <path d="M40 60C40 40 60 30 80 30C100 30 120 40 120 60C120 80 100 90 80 90C60 90 40 80 40 60Z" 
+                                  fill="white" stroke="currentColor" stroke-width="3"/>
+                            <!-- Iris -->
+                            <circle cx="80" cy="60" r="20" fill="#4B5563"/>
+                            <!-- Pupil -->
+                            <circle cx="80" cy="60" r="10" fill="#111827"/>
+                            <!-- Light Reflection -->
+                            <circle cx="85" cy="55" r="4" fill="white"/>
+                            <circle cx="75" cy="65" r="2" fill="white" opacity="0.5"/>
+                        </g>
                     </button>
                 </div>
             </div>
