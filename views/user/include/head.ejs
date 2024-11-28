@@ -600,3 +600,118 @@
           });
      </script>
      
+
+     <!-- Floating Donation Button -->
+<button id="donationFloat" class="fixed bottom-6 right-6 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full p-4 shadow-lg hover:shadow-xl transition-all hover:scale-105 group z-50 flex items-center gap-2">
+     <i class="fas fa-coffee text-xl"></i>
+     <span class="max-w-0 overflow-hidden whitespace-nowrap group-hover:max-w-xs transition-all duration-300 ease-in-out">
+         Nous Soutenir
+     </span>
+ </button>
+ 
+ <!-- Modal Background -->
+ <div id="donationModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center backdrop-blur-sm">
+     <!-- Modal Content -->
+     <div class="bg-white rounded-xl max-w-sm w-full mx-4 transform transition-all scale-95 opacity-0" id="modalContent">
+         <!-- Modal Header -->
+         <div class="p-6 text-center relative border-b border-gray-100">
+             <button id="closeModal" class="absolute right-4 top-4 text-gray-400 hover:text-gray-600 transition-colors">
+                 <i class="fas fa-times"></i>
+             </button>
+             <div class="text-3xl mb-2">☕️</div>
+             <h3 class="text-xl font-semibold text-gray-900">Soutenez NDRESSILIK</h3>
+             <p class="text-gray-600 mt-2 text-sm">
+                 Votre soutien nous aide à améliorer la plateforme et développer de nouvelles fonctionnalités
+             </p>
+         </div>
+ 
+         <!-- Modal Footer -->
+         <div class="p-6 space-y-4">
+             <a href="https://ko-fi.com/ndressilik" 
+                target="_blank"
+                class="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all">
+                 <i class="fas fa-coffee"></i>
+                 Faire un don
+             </a>
+             
+             <div class="flex items-center gap-2 justify-center">
+                 <input type="checkbox" id="dontShowAgain" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                 <label for="dontShowAgain" class="text-sm text-gray-500">
+                     Ne plus afficher
+                 </label>
+             </div>
+         </div>
+     </div>
+ </div>
+ 
+ <script>
+ const donationFloat = document.getElementById('donationFloat');
+ const donationModal = document.getElementById('donationModal');
+ const modalContent = document.getElementById('modalContent');
+ const closeModal = document.getElementById('closeModal');
+ const dontShowAgain = document.getElementById('dontShowAgain');
+ 
+ // Check if user has chosen to not show again
+ function shouldShowModal() {
+     return !localStorage.getItem('dontShowDonationModal');
+ }
+ 
+ // Initialize floating button visibility
+ function initializeButton() {
+     if (!shouldShowModal()) {
+         donationFloat.classList.add('hidden');
+     }
+ }
+ 
+ // Show modal with animation
+ function showModal() {
+     donationModal.classList.remove('hidden');
+     modalContent.offsetHeight; // Trigger reflow
+     modalContent.classList.remove('scale-95', 'opacity-0');
+     modalContent.classList.add('scale-100', 'opacity-100');
+ }
+ 
+ // Hide modal with animation
+ function hideModal() {
+     modalContent.classList.remove('scale-100', 'opacity-100');
+     modalContent.classList.add('scale-95', 'opacity-0');
+     
+     if (dontShowAgain.checked) {
+         localStorage.setItem('dontShowDonationModal', 'true');
+         donationFloat.classList.add('hidden');
+     }
+     
+     setTimeout(() => {
+         donationModal.classList.add('hidden');
+     }, 200);
+ }
+ 
+ // Event listeners
+ donationFloat.addEventListener('click', showModal);
+ closeModal.addEventListener('click', hideModal);
+ 
+ // Close modal when clicking outside
+ donationModal.addEventListener('click', (e) => {
+     if (e.target === donationModal) {
+         hideModal();
+     }
+ });
+ 
+ // Close modal on escape key
+ document.addEventListener('keydown', (e) => {
+     if (e.key === 'Escape' && !donationModal.classList.contains('hidden')) {
+         hideModal();
+     }
+ });
+ 
+ // Initialize on page load
+ initializeButton();
+ 
+ // Trigger modal after 45 seconds if not shown before
+ if (shouldShowModal()) {
+     setTimeout(() => {
+         if (!donationModal.classList.contains('hidden')) return;
+         showModal();
+     }, 45000);
+ }
+ </script>
