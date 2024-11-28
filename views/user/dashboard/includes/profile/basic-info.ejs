@@ -1,420 +1,545 @@
-<!-- basic-info.ejs -->
-<div class="bg-white rounded-xl shadow-sm overflow-hidden" id="basicInfoSection">
-     <!-- Header -->
-     <div class="p-6 border-b border-gray-100 relative bg-gradient-to-r from-indigo-50 to-indigo-100/50">
-         <div class="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-indigo-500 to-indigo-600"></div>
-         <div class="flex items-center justify-between">
-             <div class="flex items-center gap-4">
-                 <h3 class="text-xl font-semibold text-gray-800">Informations de base</h3>
-                 <div class="relative group">
-                     <span class="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-50 text-indigo-600 
-                         cursor-help transition duration-200 hover:scale-110">
-                         <i class="fas fa-info-circle"></i>
-                     </span>
-                     <div class="absolute left-0 bottom-full mb-2 hidden group-hover:block w-72 p-4 
-                         bg-gray-900 text-white text-sm rounded-xl shadow-xl z-10">
-                         <div class="flex items-start gap-3">
-                             <i class="fas fa-lightbulb text-yellow-400 mt-1"></i>
-                             <p>Ces informations seront visibles sur votre profil public et aideront les clients à mieux vous connaître.</p>
-                         </div>
-                     </div>
-                 </div>
-             </div>
-         </div>
-     </div>
- 
-     <!-- Form -->
-     <form id="basicInfoForm" class="p-6 space-y-8">
-         <!-- Personal Info Grid -->
-         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-             <!-- Name Input -->
-             <div class="space-y-3">
-                 <label for="displayName" class="block text-sm font-medium text-gray-700">
-                     Nom complet <span class="text-indigo-500">*</span>
-                 </label>
-                 <div class="relative group">
-                     <input type="text" id="displayName" name="displayName" 
-                         value="<%= user.displayName %>" 
-                         class="w-full h-12 pl-12 pr-4 bg-gray-50 border border-gray-200 rounded-lg
-                         focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10
-                         transition-all duration-200" required>
-                     <i class="fas fa-user absolute left-4 top-1/2 -translate-y-1/2 text-gray-400
-                         group-focus-within:text-indigo-500 transition-colors"></i>
-                 </div>
-             </div>
- 
-             <!-- Phone Input -->
-             <div class="space-y-3">
-                 <label for="phoneNumber" class="block text-sm font-medium text-gray-700">
-                     Numéro de téléphone <span class="text-indigo-500">*</span>
-                 </label>
-                 <div class="relative group">
-                     <input type="tel" id="phoneNumber" name="phoneNumber" 
-                         value="<%= user.phoneNumber %>" 
-                         class="w-full h-12 pl-12 pr-4 bg-gray-50 border border-gray-200 rounded-lg
-                         focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10
-                         transition-all duration-200" 
-                         pattern="^(?:\+212|0)[567]\d{8}$" required>
-                     <i class="fas fa-phone absolute left-4 top-1/2 -translate-y-1/2 text-gray-400
-                         group-focus-within:text-indigo-500 transition-colors"></i>
-                 </div>
-                 <p class="text-sm text-gray-500">Format: +212 ou 06/07</p>
-             </div>
- 
-             <!-- City Select -->
-             <div class="space-y-3">
-                 <label for="city" class="block text-sm font-medium text-gray-700">
-                     Ville <span class="text-indigo-500">*</span>
-                 </label>
-                 <div class="relative group">
-                     <select id="city" name="city" 
-                         class="w-full h-12 pl-12 pr-4 bg-gray-50 border border-gray-200 rounded-lg
-                         appearance-none focus:bg-white focus:border-indigo-500 focus:ring-4 
-                         focus:ring-indigo-500/10 transition-all duration-200" required>
-                         <option value="">Sélectionnez une ville</option>
-                         <% const cities = [
-                             {name: 'Casablanca'}, {name: 'Rabat'}, {name: 'Marrakech'},
-                             {name: 'Agadir'}, {name: 'Tanger'}, {name: 'Fès'},
-                             {name: 'Meknès'}, {name: 'Oujda'}, {name: 'Kénitra'},
-                             {name: 'Tétouan'}, {name: 'Safi'}, {name: 'El Jadida'},
-                             {name: 'Nador'}, {name: 'Berrechid'}, {name: 'Khemisset'},
-                             {name: 'Khouribga'}, {name: 'Settat'}, {name: 'Larache'},
-                             {name: 'Beni Mellal'}, {name: 'Guelmim'}, {name: 'Taza'},
-                             {name: 'Sidi Kacem'}, {name: 'Tiznit'}, {name: 'Essaouira'},
-                             {name: 'Khenifra'}, {name: 'Tan-Tan'}, {name: 'Guercif'},
-                             {name: 'Chefchaouen'}, {name: 'Mohammedia'}, {name: 'Taounate'},
-                             {name: 'Sidi Slimane'}, {name: 'Tarfaya'}, {name: 'Midelt'},
-                             {name: 'Errachidia'}, {name: 'Azrou'}, {name: 'Ben Guerir'},
-                             {name: 'Chichaoua'}, {name: 'Ouarzazate'}, {name: 'Zaio'}
-                         ]; %>
-                         <% cities.forEach(city => { %>
-                             <option value="<%= city.name %>" 
-                                 <%= user.location?.city === city.name ? 'selected' : '' %>>
-                                 <%= city.name %>
-                             </option>
-                         <% }); %>
-                     </select>
-                     <i class="fas fa-map-marker-alt absolute left-4 top-1/2 -translate-y-1/2 text-gray-400
-                         group-focus-within:text-indigo-500 transition-colors"></i>
-                     <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                 </div>
-             </div>
- 
-             <!-- Languages -->
-             <div class="space-y-3">
-                 <label class="block text-sm font-medium text-gray-700">Langues parlées</label>
-                 <div class="grid grid-cols-2 gap-3">
-                     <% const languages = [
-                         {id: 'french', name: 'Français'},
-                         {id: 'arabic', name: 'Arabe'},
-                         {id: 'english', name: 'Anglais'},
-                         {id: 'spanish', name: 'Espagnol'}
-                     ]; %>
-                     <% languages.forEach(lang => { %>
-                         <label class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg cursor-pointer
-                             hover:bg-indigo-50 transition-all duration-200">
-                             <input type="checkbox" name="languages" value="<%= lang.id %>"
-                                 <%= user.languages?.includes(lang.id) ? 'checked' : '' %>
-                                 class="w-4 h-4 text-indigo-600 border-gray-300 rounded
-                                 focus:ring-indigo-500">
-                             <span class="text-sm text-gray-700"><%= lang.name %></span>
-                         </label>
-                     <% }); %>
-                 </div>
-             </div>
-         </div>
- 
-         <!-- Bio Section -->
-         <div class="space-y-3">
-             <label for="bio" class="block text-sm font-medium text-gray-700">
-                 Biographie professionnelle <span class="text-indigo-500">*</span>
-             </label>
-             <div class="relative group">
-                 <textarea id="bio" name="bio" rows="4" 
-                     class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg resize-none
-                     focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10
-                     transition-all duration-200" maxlength="500" required><%= user.bio %></textarea>
-                 <div class="absolute right-3 bottom-3 px-2 py-1 text-sm text-indigo-600 
-                     bg-indigo-50 rounded-md border border-indigo-100">
-                     <span id="bioLength">0</span>/500
-                 </div>
-             </div>
-         </div>
- 
-         <!-- Experience Section -->
-         <div class="space-y-4">
-             <label class="block text-sm font-medium text-gray-700">Expérience</label>
-             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                 <div class="relative group">
-                     <label class="block text-sm text-gray-600 mb-2">Années d'expérience</label>
-                     <input type="number" name="experienceYears" min="0" 
-                         value="<%= user.experience?.years || 0 %>"
-                         class="w-full h-12 px-4 bg-gray-50 border border-gray-200 rounded-lg
-                         focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10
-                         transition-all duration-200">
-                 </div>
-                 <div class="relative group">
-                     <label class="block text-sm text-gray-600 mb-2">Description de l'expérience</label>
-                     <textarea name="experienceDescription" rows="3" 
-                         class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg resize-none
-                         focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10
-                         transition-all duration-200"><%= user.experience?.description || '' %></textarea>
-                 </div>
-             </div>
-         </div>
- 
-         <!-- Action Buttons -->
-         <div class="flex gap-4 pt-6 border-t">
-           
-             <button type="submit" 
-                 class="flex-1 h-12 px-6 bg-indigo-600 text-white rounded-lg
-                 hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-500/30
-                 transition-all duration-200 flex items-center justify-center gap-2">
-                 <i class="fas fa-check"></i>
-                 <span>Enregistrer</span>
-             </button>
-         </div>
-     </form>
- </div>
- 
- <script>
- document.addEventListener('DOMContentLoaded', function() {
-     // Bio character counter
-     const bioTextarea = document.getElementById('bio');
-     const bioLength = document.getElementById('bioLength');
-     
-     function updateBioLength() {
-         const length = bioTextarea.value.length;
-         bioLength.textContent = length;
-         
-         // Visual feedback
-         if (length > 450) {
-             bioLength.classList.add('text-amber-500');
-             bioLength.classList.remove('text-red-500', 'text-indigo-600');
-         } else if (length > 480) {
-             bioLength.classList.add('text-red-500');
-             bioLength.classList.remove('text-amber-500', 'text-indigo-600');
-         } else {
-             bioLength.classList.add('text-indigo-600');
-             bioLength.classList.remove('text-amber-500', 'text-red-500');
-         }
-     }
-     
-     bioTextarea?.addEventListener('input', updateBioLength);
-     updateBioLength();
-     
-     // Phone number formatting
-     const phoneInput = document.getElementById('phoneNumber');
-     phoneInput?.addEventListener('input', function(e) {
-         let value = e.target.value.replace(/\D/g, '');
-         
-         if (value.startsWith('212')) {
-             value = '+' + value;
-         } else if (value.startsWith('0')) {
-             value = value;
-         } else if (value.length > 0) {
-             value = '0' + value;
-         }
-         
-         e.target.value = value;
-     });
-     
-     // Form submission
-     const form = document.getElementById('basicInfoForm');
-     form?.addEventListener('submit', async function(e) {
-         e.preventDefault();
-         
-         const submitBtn = this.querySelector('button[type="submit"]');
-         const allInputs = this.querySelectorAll('input, select, textarea');
-         
-         // Disable form during submission
-         submitBtn.disabled = true;
-         allInputs.forEach(input => input.disabled = true);
-         
-         // Update button state
-         const originalBtnContent = submitBtn.innerHTML;
-         submitBtn.innerHTML = `
-             <svg class="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
-                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
-                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
-             </svg>
-             <span>Enregistrement...</span>
-         `;
-         
-         try {
-             const formData = new FormData(this);
-             <script>
-            // Continuing the form submission handler...
-            const data = {
-                displayName: formData.get('displayName'),
-                bio: formData.get('bio'),
-                phoneNumber: formData.get('phoneNumber'),
-                location: {
-                    city: formData.get('city')
-                },
-                languages: Array.from(document.querySelectorAll('input[name="languages"]:checked'))
-                    .map(el => el.value),
-                experience: {
-                    years: parseInt(formData.get('experienceYears'), 10) || 0,
-                    description: formData.get('experienceDescription') || 'Aucune expérience.'
-                }
-            };
+<% const cities = [
+  { arabic: 'الدار البيضاء', french: 'Casablanca' },
+  { arabic: 'الرباط', french: 'Rabat' },
+  { arabic: 'مراكش', french: 'Marrakech' },
+  { arabic: 'أكادير', french: 'Agadir' },
+  { arabic: 'طنجة', french: 'Tanger' },
+  { arabic: 'فاس', french: 'Fès' },
+  { arabic: 'مكناس', french: 'Meknès' },
+  { arabic: 'وجدة', french: 'Oujda' },
+  { arabic: 'القنيطرة', french: 'Kénitra' },
+  { arabic: 'تطوان', french: 'Tétouan' },
+  { arabic: 'آسفي', french: 'Safi' },
+  { arabic: 'الجديدة', french: 'El Jadida' },
+  { arabic: 'الناظور', french: 'Nador' },
+  { arabic: 'برشيد', french: 'Berrechid' },
+  { arabic: 'الخميسات', french: 'Khemisset' },
+  { arabic: 'خريبكة', french: 'Khouribga' },
+  { arabic: 'سطات', french: 'Settat' },
+  { arabic: 'العرائش', french: 'Larache' },
+  { arabic: 'بني ملال', french: 'Beni Mellal' },
+  { arabic: 'كلميم', french: 'Guelmim' },
+  { arabic: 'تازة', french: 'Taza' },
+  { arabic: 'سيدي قاسم', french: 'Sidi Kacem' },
+  { arabic: 'تزنيت', french: 'Tiznit' },
+  { arabic: 'الصويرة', french: 'Essaouira' },
+  { arabic: 'خنيفرة', french: 'Khenifra' },
+  { arabic: 'طانطان', french: 'Tan-Tan' },
+  { arabic: 'جرسيف', french: 'Guercif' },
+  { arabic: 'شفشاون', french: 'Chefchaouen' },
+  { arabic: 'المحمدية', french: 'Mohammedia' },
+  { arabic: 'تاونات', french: 'Taounate' },
+  { arabic: 'سيدي سليمان', french: 'Sidi Slimane' },
+  { arabic: 'طرفاية', french: 'Tarfaya' },
+  { arabic: 'ميدلت', french: 'Midelt' },
+  { arabic: 'الرشيدية', french: 'Errachidia' },
+  { arabic: 'أزرو', french: 'Azrou' },
+  { arabic: 'بن جرير', french: 'Ben Guerir' },
+  { arabic: 'شيشاوة', french: 'Chichaoua' },
+  { arabic: 'ورزازات', french: 'Ouarzazate' },
+  { arabic: 'زايو', french: 'Zaio' }
+]; %>
 
-            const response = await fetch('/dashboard/profile/update-basic-info', {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
+<% const languageOptions = ['french', 'arabic', 'english', 'spanish']; %>
 
-            const result = await response.json();
+<div class="bg-white rounded-2xl shadow-lg overflow-hidden" id="basicInfoSection" dir="ltr">
+  <!-- En-tête amélioré -->
+  <div class="p-6 border-b border-gray-100 relative bg-gradient-to-r from-blue-500/5 to-blue-600/5">
+    <div class="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-blue-500 to-blue-600"></div>
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <h3 class="text-xl font-bold text-gray-800">Informations de base</h3>
+        <div class="relative group">
+          <span class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-50 text-blue-600 
+            cursor-help transition-transform duration-300 group-hover:scale-110">
+            <i class="fas fa-info-circle"></i>
+          </span>
+          <div class="absolute left-0 bottom-full mb-2 hidden group-hover:block w-72 p-4 
+            bg-gray-900 text-white text-sm rounded-xl shadow-xl z-10 
+            transform transition-all duration-300">
+            <div class="flex items-start gap-3">
+              <i class="fas fa-lightbulb text-yellow-400 mt-1"></i>
+              <p>Ces informations seront visibles sur votre profil public et aideront les clients à mieux vous connaître.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-            if (!response.ok) {
-                throw new Error(result.message || 'Erreur lors de la mise à jour');
-            }
+  <!-- Section du formulaire -->
+  <form id="basicInfoForm" class="p-6 space-y-8">
+    <!-- Grille d'informations personnelles -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Champ Nom complet -->
+      <div class="space-y-3">
+        <label for="displayName" class="block text-base font-semibold text-gray-700">
+          Nom complet <span class="text-blue-500">*</span>
+        </label>
+        <div class="relative group">
+          <input type="text" id="displayName" name="displayName" value="<%= user.displayName %>" class="w-full h-12 pl-12 pr-4 bg-gray-50 border-2 border-gray-200 rounded-xl
+            focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10
+            transition-all duration-300" required>
+          <i class="fas fa-user absolute left-4 top-1/2 -translate-y-1/2 text-gray-400
+            group-focus-within:text-blue-500 transition-colors"></i>
+        </div>
+      </div>
 
-            // Show success message
-            await Swal.fire({
-                icon: 'success',
-                title: 'Succès !',
-                text: 'Vos informations ont été mises à jour avec succès',
-                showConfirmButton: false,
-                timer: 1500
-            });
+      <!-- Champ Numéro de téléphone -->
+      <div class="space-y-3">
+        <label for="phoneNumber" class="block text-base font-semibold text-gray-700">
+          Numéro de téléphone <span class="text-blue-500">*</span>
+        </label>
+        <div class="relative group">
+          <input type="tel" id="phoneNumber" name="phoneNumber" value="<%= user.phoneNumber %>" class="w-full h-12 pl-12 pr-4 bg-gray-50 border-2 border-gray-200 rounded-xl
+            focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10
+            transition-all duration-300" pattern="^(?:\+212|0)[567]\d{8}$" required>
+          <i class="fas fa-phone absolute left-4 top-1/2 -translate-y-1/2 text-gray-400
+            group-focus-within:text-blue-500 transition-colors"></i>
+        </div>
+        <p class="text-sm text-gray-500">Format: +212 ou 06/07</p>
+      </div>
 
-            // Reload page to show updates
-            window.location.reload();
+      <!-- Sélection de la ville -->
+      <div class="space-y-3">
+        <label for="city" class="block text-base font-semibold text-gray-700">
+          Ville <span class="text-blue-500">*</span>
+        </label>
+        <div class="relative group">
+          <select id="city" name="city" class="w-full h-12 pl-12 pr-4 bg-gray-50 border-2 border-gray-200 rounded-xl
+            appearance-none focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10
+            transition-all duration-300" required>
+            <option value="">Sélectionnez une ville</option>
+            <% cities.forEach(city => { %>
+              <option value="<%= city.french %>" <%= user.location && user.location.city === city.french ? 'selected' : '' %>>
+                <%= city.french %>
+              </option>
+            <% }); %>
+          </select>
+          <i class="fas fa-map-marker-alt absolute left-4 top-1/2 -translate-y-1/2 text-gray-400
+            group-focus-within:text-blue-500 transition-colors"></i>
+          <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-400
+            group-focus-within:text-blue-500 transition-colors"></i>
+        </div>
+      </div>
+    </div>
 
-        } catch (error) {
-            console.error('Update error:', error);
-            
-            // Show error message
-            await Swal.fire({
-                icon: 'error',
-                title: 'Erreur',
-                text: error.message || 'Une erreur est survenue lors de la mise à jour',
-                confirmButtonText: 'Réessayer',
-                confirmButtonColor: '#4f46e5'
-            });
+    <!-- Section Biographie -->
+    <div class="space-y-3">
+      <label for="bio" class="block text-base font-semibold text-gray-700">
+        Biographie professionnelle <span class="text-blue-500">*</span>
+      </label>
+      <div class="relative group">
+        <textarea id="bio" name="bio" rows="4" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl
+          resize-none focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10
+          transition-all duration-300" maxlength="500" required><%= user.bio %></textarea>
+        <div class="absolute right-3 bottom-3 px-2 py-1 text-sm font-medium text-blue-600 
+          bg-blue-50 rounded-lg border border-blue-100">
+          <span id="bioLength">0</span>/500
+        </div>
+      </div>
+    </div>
 
-        } finally {
-            // Reset form state
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = originalBtnContent;
-            allInputs.forEach(input => input.disabled = false);
+    <!-- Section Langues parlées -->
+    <div class="space-y-4" id="languages">
+      <label class="block text-base font-semibold text-gray-700">Langues parlées</label>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <% const languageMap = { 'french': 'Français', 'arabic': 'Arabe', 'english': 'Anglais', 'spanish': 'Espagnol' }; %>
+        <% languageOptions.forEach(lang => { %>
+          <label class="relative flex items-center gap-3 p-3 bg-gray-50 rounded-xl 
+            cursor-pointer group hover:bg-blue-50 transition-all duration-300">
+            <input type="checkbox" id="lang-<%= lang %>" name="languages" value="<%= lang %>" <%= user.languages && user.languages.includes(lang) ? 'checked' : '' %>
+              class="peer hidden">
+            <span class="w-5 h-5 rounded border-2 border-gray-300 flex items-center justify-center
+              peer-checked:border-blue-500 peer-checked:bg-blue-500 transition-all duration-300">
+              <i class="fas fa-check text-white scale-0 peer-checked:scale-100 transition-transform"></i>
+            </span>
+            <span class="text-gray-700 peer-checked:text-blue-600 transition-colors">
+              <%= languageMap[lang] %>
+            </span>
+          </label>
+        <% }); %>
+      </div>
+    </div>
+
+    <!-- Section Expérience -->
+    <div class="space-y-4">
+      <label class="block text-base font-semibold text-gray-700">Expérience</label>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Années d'expérience -->
+        <div class="relative group">
+          <label class="block text-sm font-medium text-gray-600 mb-2">Années d'expérience</label>
+          <input type="number" name="experienceYears" id="experience-years" min="0" value="<%= user.experience && user.experience.years || 0 %>" class="w-full h-12 pl-4 pr-4 bg-gray-50 border-2 border-gray-200 rounded-xl
+            focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10
+            transition-all duration-300">
+        </div>
+        <!-- Description de l'expérience -->
+        <div class="relative group">
+          <label class="block text-sm font-medium text-gray-600 mb-2">Description de l'expérience</label>
+          <textarea name="experienceDescription" id="experience-description" rows="3" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl
+            resize-none focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10
+            transition-all duration-300"><%= user.experience && user.experience.description || '' %></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Boutons d'action -->
+    <div class="flex gap-4 pt-6 border-t">
+      <button type="button" id="cancelBasicInfoBtn" class="flex-1 h-12 bg-gray-50 text-gray-700 rounded-xl
+        hover:bg-gray-100 focus:ring-4 focus:ring-gray-200
+        transition-all duration-300 group">
+        <i class="fas fa-times mr-2 group-hover:rotate-90 transition-transform"></i>
+        Annuler
+      </button>
+      <button type="submit" class="flex-1 h-12 bg-blue-600 text-white rounded-xl
+        hover:bg-blue-700 focus:ring-4 focus:ring-blue-500/30
+        transition-all duration-300 group">
+        <i class="fas fa-check mr-2 group-hover:scale-110 transition-transform"></i>
+        Enregistrer
+      </button>
+    </div>
+  </form>
+</div>
+
+<!-- Inclusion de SweetAlert2 et Choices.js -->
+<!-- Incluez Choices.js CSS dans le head de votre HTML -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
+<!-- Incluez SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+
+<!-- Incluez FontAwesome pour les icônes -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+
+<!-- Vos styles personnalisés -->
+<style>
+  /* Ajoutez vos styles personnalisés ici */
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Compteur de caractères pour la bio
+  const bioTextarea = document.getElementById('bio');
+  const bioLength = document.getElementById('bioLength');
+
+  function updateBioLength() {
+    const length = bioTextarea.value.length;
+    bioLength.textContent = length;
+
+    // Retour visuel
+    if (length > 480) {
+      bioLength.classList.add('text-red-500');
+      bioLength.classList.remove('text-amber-500', 'text-blue-600');
+    } else if (length > 450) {
+      bioLength.classList.add('text-amber-500');
+      bioLength.classList.remove('text-red-500', 'text-blue-600');
+    } else {
+      bioLength.classList.add('text-blue-600');
+      bioLength.classList.remove('text-amber-500', 'text-red-500');
+    }
+  }
+
+  if (bioTextarea && bioLength) {
+    bioTextarea.addEventListener('input', updateBioLength);
+    updateBioLength();
+  }
+
+  // Formatage du numéro de téléphone
+  const phoneInput = document.getElementById('phoneNumber');
+  if (phoneInput) {
+    phoneInput.addEventListener('input', function(e) {
+      let value = e.target.value.replace(/\D/g, '');
+
+      if (value.startsWith('212')) {
+        value = '+' + value;
+      } else if (value.startsWith('0')) {
+        value = value;
+      } else if (value.length > 0) {
+        value = '0' + value;
+      }
+
+      e.target.value = value;
+    });
+  }
+
+  // Soumission du formulaire
+  const form = document.getElementById('basicInfoForm');
+  if (form) {
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const allInputs = this.querySelectorAll('input, select, textarea');
+
+      // Désactive le formulaire pendant la soumission
+      submitBtn.disabled = true;
+      allInputs.forEach(input => input.disabled = true);
+
+      // Met à jour l'état du bouton
+      const originalBtnContent = submitBtn.innerHTML;
+      submitBtn.innerHTML = `
+        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        Enregistrement...
+      `;
+
+      try {
+        // Collecte des données du formulaire
+        const data = {
+          displayName: document.getElementById('displayName').value,
+          bio: document.getElementById('bio').value,
+          phoneNumber: document.getElementById('phoneNumber').value,
+          location: {
+            city: document.getElementById('city').value
+          },
+          languages: Array.from(document.querySelectorAll('input[name="languages"]:checked')).map(el => el.value),
+          experience: {
+            years: parseInt(document.getElementById('experience-years').value, 10) || 0,
+            description: document.getElementById('experience-description').value || 'Sans expérience.'
+          }
+        };
+
+        const response = await fetch('/dashboard/profile/update-basic-info', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.message || 'Erreur lors de la mise à jour');
         }
+
+        // Affiche un message de succès
+        await Swal.fire({
+          icon: 'success',
+          title: 'Succès !',
+          text: 'Vos informations ont été mises à jour avec succès',
+          showConfirmButton: false,
+          timer: 1500
+        });
+
+        // Recharge la page pour afficher les mises à jour
+        window.location.reload();
+
+      } catch (error) {
+        console.error('Update error:', error);
+
+        // Affiche un message d'erreur
+        await Swal.fire({
+          icon: 'error',
+          title: 'Erreur',
+          text: error.message || 'Une erreur est survenue lors de la mise à jour',
+          confirmButtonText: 'Réessayer',
+          confirmButtonColor: '#3B82F6'
+        });
+
+      } finally {
+        // Réinitialise l'état du formulaire
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnContent;
+        allInputs.forEach(input => input.disabled = false);
+      }
     });
+  }
 
-    // Cancel button handler
-    const cancelBtn = document.getElementById('cancelBasicInfoBtn');
-    cancelBtn?.addEventListener('click', async function() {
-        const result = await Swal.fire({
-            title: 'Êtes-vous sûr ?',
-            text: 'Les modifications non enregistrées seront perdues',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#4f46e5',
-            cancelButtonColor: '#d1d5db',
-            confirmButtonText: 'Oui, annuler',
-            cancelButtonText: 'Non, continuer'
-        });
-
-        if (result.isConfirmed) {
-            window.location.reload();
-        }
+  // Gestion du bouton Annuler
+  const cancelBtn = document.getElementById('cancelBasicInfoBtn');
+  if (cancelBtn) {
+    cancelBtn.addEventListener('click', () => {
+      window.location.reload();
     });
+  }
 
-    // Input validation and enhancement
-    document.querySelectorAll('input[type="text"], textarea').forEach(input => {
-        input.addEventListener('focus', function() {
-            this.closest('.group')?.classList.add('is-focused');
-        });
-
-        input.addEventListener('blur', function() {
-            this.closest('.group')?.classList.remove('is-focused');
-        });
+  // Initialisation de Choices.js pour la sélection de la ville
+  const citySelect = document.getElementById('city');
+  if (citySelect) {
+    const choices = new Choices(citySelect, {
+      searchEnabled: true,
+      searchPlaceholderValue: 'Rechercher une ville...',
+      itemSelectText: '',
+      shouldSort: false,
     });
+  }
 
-    // Enhanced city select
-    const citySelect = document.getElementById('city');
-    if (citySelect) {
-        // Add search functionality to city select
-        new Choices(citySelect, {
-            searchEnabled: true,
-            searchPlaceholderValue: 'Rechercher une ville...',
-            placeholder: true,
-            placeholderValue: 'Sélectionnez une ville',
-            classNames: {
-                containerOuter: 'choices w-full h-12 bg-gray-50 border border-gray-200 rounded-lg',
-                containerInner: 'choices__inner h-full flex items-center',
-                input: 'choices__input pl-12',
-                inputCloned: 'choices__input--cloned',
-                list: 'choices__list',
-                listItems: 'choices__list--multiple',
-                listSingle: 'choices__list--single',
-                listDropdown: 'choices__list--dropdown',
-                item: 'choices__item',
-                itemSelectable: 'choices__item--selectable',
-                itemDisabled: 'choices__item--disabled',
-                itemChoice: 'choices__item--choice',
-                placeholder: 'choices__placeholder',
-                group: 'choices__group',
-                groupHeading: 'choices__heading',
-                button: 'choices__button'
-            }
-        });
+  // Ajout des styles personnalisés
+  const style = document.createElement('style');
+  style.textContent = `
+    /* Styles personnalisés */
+    .is-focused {
+      position: relative;
     }
 
-    // Add form validation indicators
-    const requiredFields = document.querySelectorAll('input[required], select[required], textarea[required]');
-    requiredFields.forEach(field => {
-        field.addEventListener('input', function() {
-            const isValid = this.checkValidity();
-            const container = this.closest('.group');
-            if (container) {
-                container.classList.toggle('is-valid', isValid);
-                container.classList.toggle('is-invalid', !isValid);
-            }
-        });
-    });
+    .is-focused::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 0.5rem;
+      background: linear-gradient(to right, #3b82f6, #60a5fa);
+      opacity: 0.1;
+      z-index: -1;
+    }
 
-    // Add custom styles
-    const style = document.createElement('style');
-    style.textContent = `
-        .is-focused {
-            position: relative;
-        }
+    .is-valid .group-focus-within:text-blue-500 {
+      color: #059669;
+    }
 
-        .is-focused::after {
-            content: '';
-            position: absolute;
-            inset: -2px;
-            border-radius: 0.5rem;
-            background: linear-gradient(to right, #4f46e5, #6366f1);
-            opacity: 0.1;
-            z-index: -1;
-        }
+    .is-invalid .group-focus-within:text-blue-500 {
+      color: #dc2626;
+    }
 
-        .is-valid .group-focus-within:text-indigo-500 {
-            color: #059669;
-        }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-2px); }
+      75% { transform: translateX(2px); }
+    }
 
-        .is-invalid .group-focus-within:text-indigo-500 {
-            color: #dc2626;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-2px); }
-            75% { transform: translateX(2px); }
-        }
-
-        .is-invalid input:invalid,
-        .is-invalid select:invalid,
-        .is-invalid textarea:invalid {
-            animation: shake 0.2s ease-in-out;
-            border-color: #dc2626;
-        }
-    `;
-    document.head.appendChild(style);
+    .is-invalid input:invalid,
+    .is-invalid select:invalid,
+    .is-invalid textarea:invalid {
+      animation: shake 0.2s ease-in-out;
+      border-color: #dc2626;
+    }
+  `;
+  document.head.appendChild(style);
 });
+</script>
+
+<!-- ####################### GALERIE ############################# -->
+<!-- Section Galerie -->
+<div class="bg-white rounded-2xl shadow-lg overflow-hidden mt-8">
+  <!-- En-tête -->
+  <div class="p-6 border-b border-gray-100">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <h2 class="text-xl font-bold text-gray-900">Galerie de photos</h2>
+        <% if (user.gallery && user.gallery.length) { %>
+          <span class="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-sm">
+            <%= user.gallery.length %> photo(s)
+          </span>
+        <% } %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Carte de prévisualisation/téléchargement de la galerie -->
+  <div class="p-6">
+    <a href="/dashboard/galery" class="block group relative overflow-hidden rounded-2xl transition-all duration-300
+      hover:shadow-xl">
+      <!-- Motif d'arrière-plan -->
+      <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5
+        transition-all duration-500 group-hover:scale-110"></div>
+
+      <!-- Conteneur de contenu -->
+      <div class="relative p-8">
+        <div class="flex flex-col items-center gap-6 text-center">
+          <!-- Conteneur d'icône -->
+          <div class="w-20 h-20 flex items-center justify-center rounded-full
+            bg-gradient-to-r from-blue-500 to-blue-600 text-white
+            transform transition-all duration-500 
+            group-hover:scale-110 group-hover:rotate-12">
+            <i class="fas fa-images text-3xl"></i>
+          </div>
+
+          <!-- Contenu textuel -->
+          <div class="space-y-2">
+            <h3 class="text-xl font-bold text-gray-900">
+              <% if (user.gallery && user.gallery.length) { %>
+                Gérer la galerie
+              <% } else { %>
+                Ajoutez vos premières photos
+              <% } %>
+            </h3>
+            <p class="text-gray-500 max-w-md mx-auto">
+              <% if (user.gallery && user.gallery.length) { %>
+                Vous pouvez modifier et ajouter plus de photos à votre galerie.
+              <% } else { %>
+                Créez une galerie professionnelle pour présenter vos services et travaux.
+              <% } %>
+            </p>
+          </div>
+
+          <!-- Aperçu de la galerie ou bouton de téléchargement -->
+          <% if (user.gallery && user.gallery.length) { %>
+            <!-- Mini aperçu de la galerie -->
+            <div class="flex items-center gap-4">
+              <% user.gallery.slice(0, 3).forEach(image => { %>
+                <div class="w-16 h-16 rounded-xl overflow-hidden">
+                  <img src="<%= image %>" alt="Aperçu de la galerie" class="w-full h-full object-cover">
+                </div>
+              <% }); %>
+              <% if (user.gallery.length > 3) { %>
+                <div class="w-16 h-16 rounded-xl bg-gray-900/10 flex items-center 
+                  justify-center text-gray-600 font-medium">
+                  +<%= user.gallery.length - 3 %>
+                </div>
+              <% } %>
+            </div>
+          <% } %>
+
+          <!-- Bouton d'action -->
+          <button class="inline-flex items-center gap-2 px-6 py-3 
+            bg-gradient-to-r from-blue-500 to-blue-600
+            text-white rounded-xl
+            transition-all duration-300 group-hover:shadow-lg 
+            group-hover:shadow-blue-500/25 group-hover:-translate-y-0.5">
+            <i class="fas <%= user.gallery && user.gallery.length ? 'fa-pen-to-square' : 'fa-plus' %>"></i>
+            <span>
+              <%= user.gallery && user.gallery.length ? 'Modifier la galerie' : 'Créer une galerie' %>
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Superposition d'effet de survol -->
+      <div class="absolute inset-0 bg-gradient-to-r from-blue-600/0 to-blue-600/0
+        transition-all duration-300 group-hover:from-blue-600/5 
+        group-hover:to-blue-600/5"></div>
+    </a>
+  </div>
+
+  <!-- Statistiques rapides optionnelles -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 bg-gray-50/50 border-t border-gray-100">
+    <div class="text-center p-4 rounded-xl bg-white">
+      <div class="text-2xl font-bold text-blue-600">
+        <%= user.gallery && user.gallery.length || 0 %>
+      </div>
+      <div class="text-sm text-gray-500 mt-1">Total des photos</div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Ajoutez des styles personnalisés supplémentaires ici */
+</style>
+
+<script>
+  // Optionnel : Ajoutez des éléments interactifs
+  document.addEventListener('DOMContentLoaded', () => {
+    // Ajoutez un état de chargement lors du clic sur le lien de la galerie
+    const galleryLink = document.querySelector('a[href="/dashboard/galery"]');
+    galleryLink?.addEventListener('click', (e) => {
+      const button = e.currentTarget.querySelector('button');
+      const originalText = button.innerHTML;
+
+      // Affiche l'état de chargement
+      button.innerHTML = `
+        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <span>Chargement...</span>
+      `;
+
+      // Restaure le texte original après la navigation
+      setTimeout(() => {
+        button.innerHTML = originalText;
+      }, 500);
+    });
+  });
 </script>

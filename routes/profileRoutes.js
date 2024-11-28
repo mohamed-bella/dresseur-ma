@@ -327,130 +327,130 @@ router.put('/profile/update-hours', isAuthenticated, async (req, res) => {
 
 // Route: Update Basic Info
 // Route: Update Basic Info
-router.put('/profile/update-basic-info', isAuthenticated, async (req, res) => {
-     console.log(req.body)
+// Assuming this is in routes/profile.js or similar
+router.put('/profile/update-basic-info', async (req, res) => {
      try {
-          const { displayName, bio, phoneNumber, location, languages, experience } = req.body;
-
-          // Validate required fields
-          if (
-               !displayName ||
-               !bio ||
-               !phoneNumber ||
-               !location ||
-               !location.city
-          ) {
-               return res.status(400).json({
-                    success: false,
-                    message: 'Veuillez remplir tous les champs obligatoires',
-               });
-          }
-
-          // Validate phone number format
-          const phoneRegex = /^(?:\+212|0)[567]\d{8}$/;
-          if (!phoneRegex.test(phoneNumber)) {
-               return res.status(400).json({
-                    success: false,
-                    message:
-                         'Numéro de téléphone invalide. Format attendu: +212XXXXXXXXX ou 06XXXXXXXX',
-               });
-          }
-
-          // Validate bio length
-          if (bio.length > 500) {
-               return res.status(400).json({
-                    success: false,
-                    message: 'La bio ne doit pas dépasser 500 caractères',
-               });
-          }
-
-
-
-          // Validate languages
-          const allowedLanguages = ['french', 'arabic', 'english', 'spanish'];
-          let languagesArray = [];
-
-          if (languages) {
-               if (Array.isArray(languages)) {
-                    languagesArray = languages;
-               } else {
-                    languagesArray = [languages];
-               }
-
-               // Ensure all submitted languages are allowed
-               const invalidLanguages = languagesArray.filter(
-                    (lang) => !allowedLanguages.includes(lang)
-               );
-
-               if (invalidLanguages.length > 0) {
-                    return res.status(400).json({
-                         success: false,
-                         message: `Langues invalides sélectionnées: ${invalidLanguages.join(', ')}`,
-                    });
-               }
-          }
-
-          // Validate experience
-          let experienceData = {
-               years: 0,
-               description: 'Sans Expérience.',
-          };
-
-          if (experience) {
-               const { years, description } = experience;
-
-               // Validate years
-               const yearsInt = parseInt(years, 10);
-               if (isNaN(yearsInt) || yearsInt < 0) {
-                    return res.status(400).json({
-                         success: false,
-                         message: "Le nombre d'années d'expérience doit être un entier positif",
-                    });
-               }
-
-               // Validate description length
-               if (description && description.length > 1000) {
-                    return res.status(400).json({
-                         success: false,
-                         message:
-                              "La description de l'expérience ne doit pas dépasser 1000 caractères",
-                    });
-               }
-
-               experienceData = {
-                    years: yearsInt,
-                    description: description || 'Sans Expérience.',
-               };
-          }
-
-          // Update user
-          await User.findByIdAndUpdate(
-               req.user._id,
-               {
-                    displayName,
-                    bio,
-                    phoneNumber,
-                    location: {
-                         city: location.city.toLowerCase(),
-                    },
-                    languages: languagesArray,
-                    experience: experienceData,
-               },
-               { new: true }
-          );
-
-          res.json({
-               success: true,
-               message: 'Informations mises à jour avec succès',
-          });
+         const { displayName, bio, phoneNumber, location, languages, experience } = req.body;
+          
+         console.log(req.body)
+         // Validate required fields
+         if (
+             !displayName ||
+             !bio ||
+             !phoneNumber ||
+             !location ||
+             !location.city
+         ) {
+             return res.status(400).json({
+                 success: false,
+                 message: 'Veuillez remplir tous les champs obligatoires',
+             });
+         }
+ 
+         // Validate phone number format
+         const phoneRegex = /^(?:\+212|0)[567]\d{8}$/;
+         if (!phoneRegex.test(phoneNumber)) {
+             return res.status(400).json({
+                 success: false,
+                 message:
+                     'Numéro de téléphone invalide. Format attendu: +212XXXXXXXXX ou 06XXXXXXXX',
+             });
+         }
+ 
+         // Validate bio length
+         if (bio.length > 500) {
+             return res.status(400).json({
+                 success: false,
+                 message: 'La bio ne doit pas dépasser 500 caractères',
+             });
+         }
+ 
+         // Validate languages
+         const allowedLanguages = ['french', 'arabic', 'english', 'spanish'];
+         let languagesArray = [];
+ 
+         if (languages) {
+             if (Array.isArray(languages)) {
+                 languagesArray = languages;
+             } else {
+                 languagesArray = [languages];
+             }
+ 
+             // Ensure all submitted languages are allowed
+             const invalidLanguages = languagesArray.filter(
+                 (lang) => !allowedLanguages.includes(lang)
+             );
+ 
+             if (invalidLanguages.length > 0) {
+                 return res.status(400).json({
+                     success: false,
+                     message: `Langues invalides sélectionnées: ${invalidLanguages.join(', ')}`,
+                 });
+             }
+         }
+ 
+         // Validate experience
+         let experienceData = {
+             years: 0,
+             description: 'Sans Expérience.',
+         };
+ 
+         if (experience) {
+             const { years, description } = experience;
+ 
+             // Validate years
+             const yearsInt = parseInt(years, 10);
+             if (isNaN(yearsInt) || yearsInt < 0) {
+                 return res.status(400).json({
+                     success: false,
+                     message: "Le nombre d'années d'expérience doit être un entier positif",
+                 });
+             }
+ 
+             // Validate description length
+             if (description && description.length > 1000) {
+                 return res.status(400).json({
+                     success: false,
+                     message:
+                         "La description de l'expérience ne doit pas dépasser 1000 caractères",
+                 });
+             }
+ 
+             experienceData = {
+                 years: yearsInt,
+                 description: description || 'Sans Expérience.',
+             };
+         }
+ 
+         // Update user
+         await User.findByIdAndUpdate(
+             req.user._id,
+             {
+                 displayName,
+                 bio,
+                 phoneNumber,
+                 location: {
+                     city: location.city.toLowerCase(),
+                 },
+                 languages: languagesArray,
+                 experience: experienceData,
+             },
+             { new: true }
+         );
+ 
+         res.json({
+             success: true,
+             message: 'Informations mises à jour avec succès',
+         });
      } catch (error) {
-          console.error('Basic info update error:', error);
-          res.status(500).json({
-               success: false,
-               message: 'Erreur lors de la mise à jour des informations',
-          });
+         console.error('Basic info update error:', error);
+         res.status(500).json({
+             success: false,
+             message: 'Erreur lors de la mise à jour des informations',
+         });
      }
-});
+ });
+ 
 
 
 // Route: Update Specializations

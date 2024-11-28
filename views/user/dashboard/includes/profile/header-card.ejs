@@ -74,29 +74,6 @@
                      </div>
                  </div>
  
-                 <!-- Profile Completion Bar -->
-                 <% if (completionPercentage < 100) { %>
-                     <div class="p-4 bg-gradient-to-r from-indigo-50 to-indigo-100/50 rounded-xl
-                         transition duration-300 hover:shadow-sm">
-                         <div class="flex items-center justify-between mb-3">
-                             <span class="font-medium text-indigo-700">Complétez votre profil</span>
-                             <span class="px-2 py-1 bg-white rounded-md text-sm font-medium text-indigo-600">
-                                 <%= completionPercentage %>%
-                             </span>
-                         </div>
-                         <div class="relative h-2 bg-white/50 rounded-full overflow-hidden">
-                             <div class="absolute inset-y-0 left-0 bg-indigo-600 rounded-full transition-all duration-1000" 
-                                 style="width: <%= completionPercentage %>%">
-                             </div>
-                         </div>
-                         <button @click="showCompletionGuide" 
-                             class="mt-3 text-sm text-indigo-600 hover:text-indigo-700 
-                             font-medium inline-flex items-center gap-2">
-                             <span>Voir les étapes restantes</span>
-                             <i class="fas fa-arrow-right transition duration-200 group-hover:translate-x-1"></i>
-                         </button>
-                     </div>
-                 <% } %>
              </div>
          </div>
      </div>
