@@ -568,17 +568,29 @@ router.get('/service/:serviceId', async (req, res) => {
      try {
          const { serviceId } = req.params;
  
-         // Find the service by ID and populate the creator details
+         // Find the service by ID and populate the creator details, including 'status'
          const service = await Service.findById(serviceId)
-             .populate('createdBy', 'displayName profileImage slug'); // Populate only the display name of the service creator
+             .populate('createdBy', 'displayName profileImage slug status'); // Include 'status' field
  
          if (!service) {
              return res.status(404).send('Service non trouvé');
          }
  
+         // Check if the service creator's account is active or if the logged-in user owns the service
+         let isOwner = false;
+         if (req.user) {
+             isOwner = service.createdBy._id.equals(req.user._id);
+         }
+ 
+         if (!isOwner && service.createdBy.status !== 'active') {
+          return res.status(403).render('403', {
+               message: 'Service non disponible'
+          });
+     }
+ 
          // Fetch reviews by serviceId and populate the user details for each review
          const reviews = await Review.find({ serviceId })
-             .populate('userId', 'displayName image') // Populate display name and image of each reviewer
+             .populate('userId', 'displayName image')
              .sort({ createdAt: -1 });
  
          // Increment view count for the service
@@ -594,7 +606,7 @@ router.get('/service/:serviceId', async (req, res) => {
          };
  
          reviews.forEach((review) => {
-             totalRating += review.rating; // Assuming `rating` is a numeric field in the review schema
+             totalRating += review.rating;
  
              // Categorize reviews based on their rating value
              if (review.rating >= 4) {
@@ -615,9 +627,6 @@ router.get('/service/:serviceId', async (req, res) => {
              bad: categorizedReviews.bad.length,
          };
  
-         console.log(`Moyenne: ${moyenne}`);
-         console.log('Catégorisation des avis:', categorizedReviewsSummary);
- 
          // Dynamic metadata for SEO
          const pageTitle = `${service.serviceName} - NDRESSILIK`;
          const description = `${service.serviceName} disponible à ${service.location}. Découvrez les détails de ce service proposé par ${service.createdBy.displayName || 'notre plateforme'}.`;
@@ -626,10 +635,10 @@ router.get('/service/:serviceId', async (req, res) => {
          // Render the service details page with the service, reviews, and calculated data
          res.render('user/serviceDetails', {
              service,
-             reviews, // Pass reviews to the frontend template
-             moyenne, // Pass the average rating to the frontend
-             categorizedReviews, // Pass categorized reviews to the frontend
-             categorizedReviewsSummary, // Pass the summary to the frontend
+             reviews,
+             moyenne,
+             categorizedReviews,
+             categorizedReviewsSummary,
              pageTitle,
              description,
              keywords,

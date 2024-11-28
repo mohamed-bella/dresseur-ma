@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Accès refusé - Ce profil n'est pas disponible ou vous n'avez pas les permissions nécessaires pour y accéder.">
+    <meta name="keywords" content="403, accès refusé, erreur, profil non disponible, permission refusée, sécurité">
+    <title>403 - Accès Refusé | Profil Non Disponible</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+<body class="bg-gradient-to-br from-gray-900 to-gray-800 min-h-screen overflow-hidden">
+    <!-- Animated Background -->
+    <div class="absolute inset-0 overflow-hidden">
+        <div class="relative w-full h-full">
+            <div id="particles" class="absolute inset-0"></div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="relative min-h-screen flex flex-col justify-center items-center px-6">
+        <!-- Police Tape Effect -->
+        <div class="absolute top-1/4 w-full transform -rotate-12 space-y-8 select-none">
+            <div class="bg-yellow-400 text-black py-2 text-center font-mono text-xl animate-pulse">
+                ACCÈS INTERDIT • ACCÈS INTERDIT • ACCÈS INTERDIT
+            </div>
+            <div class="bg-yellow-400 text-black py-2 text-center font-mono text-xl animate-pulse delay-75">
+                ZONE RESTREINTE • ZONE RESTREINTE • ZONE RESTREINTE
+            </div>
+        </div>
+
+        <!-- Main Container -->
+        <div class="bg-white/10 backdrop-blur-lg p-8 rounded-2xl shadow-2xl max-w-lg w-full text-center border border-white/20">
+            <!-- Glitch Effect -->
+            <div class="glitch-wrapper mb-8">
+                <h1 class="text-9xl font-bold text-red-500 glitch" data-text="403">403</h1>
+            </div>
+
+            <!-- Animated Shield Icon -->
+            <div class="relative w-32 h-32 mx-auto mb-8" id="shield-container">
+                <svg class="w-full h-full text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path class="shield-path" d="M12 2L3 7v6a12 12 0 0 0 9 11.66A12 12 0 0 0 21 13V7l-9-5z" stroke-width="2"/>
+                    <path class="lock-path" d="M8 11V7a4 4 0 0 1 8 0v4" stroke-width="2"/>
+                    <path class="lock-body" d="M7 11h10v8H7v-8z" stroke-width="2"/>
+                </svg>
+            </div>
+
+            <!-- Error Message -->
+            <h2 class="text-3xl font-bold text-white mb-4 tracking-wider">
+                <%= message %>
+            </h2>
+
+            <!-- Description -->
+            <p class="text-gray-300 mb-8 leading-relaxed">
+                Oups! Il semble que vous n'ayez pas les autorisations nécessaires pour accéder à cette zone. 
+                Ce profil est soit désactivé, soit vous n'avez pas les permissions requises.
+            </p>
+
+            <!-- Interactive Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button onclick="window.history.back()" 
+                        class="group relative px-8 py-4 bg-gradient-to-r from-red-500 to-red-600 rounded-lg overflow-hidden">
+                    <div class="absolute inset-0 w-3 bg-white/30 skew-x-[-20deg] group-hover:animate-shine"></div>
+                    <span class="relative text-white font-semibold tracking-wider">Retour</span>
+                </button>
+                <a href="/" 
+                   class="group relative px-8 py-4 bg-gradient-to-r from-gray-700 to-gray-800 rounded-lg overflow-hidden">
+                    <div class="absolute inset-0 w-3 bg-white/30 skew-x-[-20deg] group-hover:animate-shine"></div>
+                    <span class="relative text-white font-semibold tracking-wider">Accueil</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-8 text-gray-400">
+            <p>Besoin d'aide? <a href="/contact" class="text-red-400 hover:text-red-300 font-medium transition-colors duration-300">Contactez le support</a></p>
+        </div>
+    </div>
+
+    <style>
+        @keyframes shine {
+            from { transform: translateX(-100%) skewX(-20deg); }
+            to { transform: translateX(200%) skewX(-20deg); }
+        }
+
+        .animate-shine {
+            animation: shine 1s ease-in-out;
+        }
+
+        .glitch {
+            position: relative;
+            text-shadow: 0.05em 0 0 #00fffc, -0.03em -0.04em 0 #fc00ff,
+                         0.025em 0.04em 0 #fffc00;
+            animation: glitch 725ms infinite;
+        }
+
+        @keyframes glitch {
+            0% { text-shadow: 0.05em 0 0 #00fffc, -0.03em -0.04em 0 #fc00ff,
+                             0.025em 0.04em 0 #fffc00; }
+            15% { text-shadow: 0.05em 0 0 #00fffc, -0.03em -0.04em 0 #fc00ff,
+                             0.025em 0.04em 0 #fffc00; }
+            16% { text-shadow: -0.05em -0.025em 0 #00fffc, 0.025em 0.035em 0 #fc00ff,
+                             -0.05em -0.05em 0 #fffc00; }
+            49% { text-shadow: -0.05em -0.025em 0 #00fffc, 0.025em 0.035em 0 #fc00ff,
+                             -0.05em -0.05em 0 #fffc00; }
+            50% { text-shadow: 0.05em 0.035em 0 #00fffc, 0.03em 0 0 #fc00ff,
+                             0 -0.04em 0 #fffc00; }
+            99% { text-shadow: 0.05em 0.035em 0 #00fffc, 0.03em 0 0 #fc00ff,
+                             0 -0.04em 0 #fffc00; }
+            100% { text-shadow: -0.05em 0 0 #00fffc, -0.025em -0.04em 0 #fc00ff,
+                             -0.04em -0.025em 0 #fffc00; }
+        }
+    </style>
+
+    <script>
+        // Particles Animation
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'absolute w-1 h-1 bg-white/20 rounded-full';
+            particle.style.left = Math.random() * 100 + 'vw';
+            particle.style.top = -10 + 'px';
+            particle.style.opacity = Math.random();
+            document.getElementById('particles').appendChild(particle);
+
+            gsap.to(particle, {
+                y: '100vh',
+                duration: Math.random() * 3 + 2,
+                ease: 'none',
+                onComplete: () => {
+                    particle.remove();
+                }
+            });
+        }
+
+        // Create particles periodically
+        setInterval(createParticle, 100);
+
+        // Shield Animation
+        gsap.from('#shield-container', {
+            scale: 0.5,
+            rotation: 360,
+            opacity: 0,
+            duration: 1,
+            ease: 'back.out(1.7)'
+        });
+
+        // Entrance Animation
+        gsap.from('.bg-white/10', {
+            y: 50,
+            opacity: 0,
+            duration: 1,
+            ease: 'power3.out'
+        });
+    </script>
+</body>
+</html>

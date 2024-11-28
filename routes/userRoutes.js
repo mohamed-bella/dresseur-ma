@@ -1433,13 +1433,14 @@ const badgeData = {
      }
 };
 // GET Public Profile
+// GET Public Profile
 router.get('/@:slug', async (req, res) => {
      try {
           const { slug } = req.params;
 
-          // Fetch user with all necessary fields
+          // Récupérer l'utilisateur avec tous les champs nécessaires, y compris 'status'
           const user = await User.findOne({ slug })
-               .select('-password -email  -settings -verificationDocuments -googleId -__v');
+               .select('-password -email  -settings -verificationDocuments -googleId -__v'); // Assurez-vous que 'status' n'est pas exclu
 
           if (!user) {
                return res.status(404).render('user/404', {
@@ -1447,12 +1448,31 @@ router.get('/@:slug', async (req, res) => {
                });
           }
 
-          // Capture user visit for analytics
+          // Vérifier si l'utilisateur connecté consulte son propre profil
+          let isOwner = false;
+          if (req.user) {
+               isOwner = user._id.equals(req.user._id);
+          }
+
+          // Si le profil ne appartient pas à l'utilisateur connecté et que le statut du compte n'est pas 'active', ne pas afficher le profil
+          if (!isOwner && user.status !== 'active') {
+               return res.status(403).render('403', {
+                    message: 'Profil non disponible'
+               });
+          }
+
+          // Capturer la visite de l'utilisateur pour l'analyse
           await captureVisit(req, user._id);
 
-          // Fetch related data
+          // Récupérer les services en fonction du statut de l'utilisateur
+          let servicesQuery = { createdBy: user._id };
+          if (!isOwner) {
+               servicesQuery.status = 'active'; // Supposons que les services ont un champ 'status'
+          }
+
+          // Récupérer les données liées
           const [services, reviews, completedBookings] = await Promise.all([
-               Service.find({ createdBy: user._id }).sort('-createdAt'),
+               Service.find(servicesQuery).sort('-createdAt'),
                Review.find({ userId: user._id })
                     .sort('-createdAt')
                     .populate('userId', 'displayName profileImage'),
@@ -1462,26 +1482,26 @@ router.get('/@:slug', async (req, res) => {
                })
           ]);
 
-          // Calculate metrics
+          // Calculer les métriques
           const metrics = await calculateUserMetrics(user, services, reviews, completedBookings);
 
-          // Update trust factors
+          // Mettre à jour les facteurs de confiance
           const trustFactors = await calculateTrustFactors(user._id);
 
-          // Determine new badges to add
+          // Déterminer les nouveaux badges à ajouter
           const newBadges = await determineUserBadges(user, metrics, trustFactors);
 
-          // Extract existing badge types to prevent duplicates
+          // Extraire les types de badges existants pour éviter les doublons
           const existingBadgeTypes = user.badges.map(b => b.type);
 
-          // Filter out badges that the user already has
+          // Filtrer les badges que l'utilisateur n'a pas encore
           const badgesToAdd = newBadges.filter(badge => !existingBadgeTypes.includes(badge.type));
 
-          // If there are new badges to add, update the user document
+          // Si de nouveaux badges doivent être ajoutés, mettre à jour le document utilisateur
           if (badgesToAdd.length > 0) {
                user.badges.push(...badgesToAdd);
 
-               // Update user metrics and trust factors
+               // Mettre à jour les métriques et les facteurs de confiance de l'utilisateur
                user.metrics = metrics;
                user.trustFactors = trustFactors;
                user.ndressilikScore = user.calculateNdressilikScore();
@@ -1489,18 +1509,18 @@ router.get('/@:slug', async (req, res) => {
                await user.save();
           }
 
-          // Map user's badges to include image URLs and descriptions
+          // Mapper les badges de l'utilisateur pour inclure les URLs des images et les descriptions
           const userBadges = user.badges.map(badge => {
                const badgeInfo = badgeData[badge.type];
                return {
                     type: badge.type,
                     label: badgeInfo ? badgeInfo.description : 'Badge Inconnu',
-                    image: badgeInfo ? badgeInfo.image : 'https://ndressilik.s3.eu-north-1.amazonaws.com/badges/default-badge.png', // Fallback image
+                    image: badgeInfo ? badgeInfo.image : 'https://ndressilik.s3.eu-north-1.amazonaws.com/badges/default-badge.png', // Image par défaut
                     earnedAt: badge.earnedAt
                };
           });
 
-          // Prepare view data
+          // Préparer les données pour la vue
           const viewData = {
                profile: {
                     ...user.toObject(),
@@ -1508,7 +1528,7 @@ router.get('/@:slug', async (req, res) => {
                     trustFactors,
                     badges: userBadges,
                     gallery: user.gallery || [],
-                    badgeConfig: badgeData // Pass full config for reference
+                    badgeConfig: badgeData // Passer la configuration complète pour référence
                },
                services,
                reviews,
@@ -1522,7 +1542,7 @@ router.get('/@:slug', async (req, res) => {
 
           res.render('user/profile', {
                ...viewData,
-               pageTitle: `Profile de ${user.displayName}`,
+               pageTitle: `Profil de ${user.displayName}`,
                description: `Découvrez le profil professionnel de ${user.displayName} sur NDRESSILIK. ${user.specializations.join(', ')}`,
                author: "NDRESSILIK",
                keywords: `${user.displayName}, ${user.specializations.join(', ')}, services, ndressilik`,
