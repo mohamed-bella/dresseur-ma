@@ -1433,14 +1433,13 @@ const badgeData = {
      }
 };
 // GET Public Profile
-// GET Public Profile
 router.get('/@:slug', async (req, res) => {
      try {
           const { slug } = req.params;
 
-          // Récupérer l'utilisateur avec tous les champs nécessaires, y compris 'status'
+          // Récupérer l'utilisateur avec tous les champs nécessaires
           const user = await User.findOne({ slug })
-               .select('-password -email  -settings -verificationDocuments -googleId -__v'); // Assurez-vous que 'status' n'est pas exclu
+               .select('-password -email  -settings -verificationDocuments -googleId -__v'); // 'status' est inclus
 
           if (!user) {
                return res.status(404).render('user/404', {
@@ -1464,26 +1463,16 @@ router.get('/@:slug', async (req, res) => {
           // Capturer la visite de l'utilisateur pour l'analyse
           await captureVisit(req, user._id);
 
-          // Récupérer les services en fonction du statut de l'utilisateur
-          let servicesQuery = { createdBy: user._id };
-          if (!isOwner) {
-               servicesQuery.status = 'active'; // Supposons que les services ont un champ 'status'
-          }
+          // Récupérer les services créés par l'utilisateur
+          const services = await Service.find({ createdBy: user._id }).sort('-createdAt');
 
-          // Récupérer les données liées
-          const [services, reviews, completedBookings] = await Promise.all([
-               Service.find(servicesQuery).sort('-createdAt'),
-               Review.find({ userId: user._id })
-                    .sort('-createdAt')
-                    .populate('userId', 'displayName profileImage'),
-               Reservation.countDocuments({
-                    provider: user._id,
-                    status: 'completed'
-               })
-          ]);
+          // Récupérer les avis liés
+          const reviews = await Review.find({ userId: user._id })
+               .sort('-createdAt')
+               .populate('userId', 'displayName profileImage');
 
           // Calculer les métriques
-          const metrics = await calculateUserMetrics(user, services, reviews, completedBookings);
+          const metrics = await calculateUserMetrics(user, services, reviews);
 
           // Mettre à jour les facteurs de confiance
           const trustFactors = await calculateTrustFactors(user._id);
@@ -1555,6 +1544,7 @@ router.get('/@:slug', async (req, res) => {
           });
      }
 });
+
 
 // Helper Functions
 async function calculateUserMetrics(user, services, reviews, completedBookings) {
