@@ -35,51 +35,142 @@
                         <% } %>
                 </div>
             </div>
-           <!-- Right: Feature Highlights -->
-<div class="flex-1">
-    <div class="relative bg-white/5 backdrop-blur-sm rounded-xl p-6">
-        <!-- Decorative background pattern -->
-        <div class="absolute inset-0 opacity-5">
-            <svg width="100%" height="100%" class="rotate-180">
-                <pattern id="hero-pattern" x="0" y="0" width="32" height="32" patternUnits="userSpaceOnUse">
-                    <path d="M0 32V.5H32" fill="none" stroke="currentColor" stroke-width="1"></path>
-                </pattern>
-                <rect width="100%" height="100%" fill="url(#hero-pattern)"></rect>
-            </svg>
+    <!-- right -->
+    <div class="flex-1">
+        <div class="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl">
+            <form class="space-y-3">
+                <!-- Service Type Dropdown -->
+                <div class="flex flex-col md:flex-row gap-3">
+                    <div class="relative flex-1">
+                        <label class="block text-sm font-medium text-gray-700 mb-1 ml-1">Service</label>
+                        <select id="serviceType" required onchange="autoSearch()"
+                            class="w-full pl-10 pr-10 py-3.5 bg-white border border-gray-200 rounded-xl text-gray-700 appearance-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm"
+                        >
+                            <option value="" disabled selected>Choisir un service</option>
+                            <% services.forEach(service => { %>
+                                <option value="<%= service.value %>"><%= service.value %></option>
+                            <% }); %>
+                        </select>
+                        <div class="absolute bottom-0 left-3 flex items-center h-[50px] pointer-events-none">
+                            <i class="fas fa-paw text-blue-500"></i>
+                        </div>
+                        <div class="absolute bottom-0 right-3 flex items-center h-[50px] pointer-events-none">
+                            <i class="fas fa-chevron-down text-gray-400"></i>
+                        </div>
+                    </div>
+    
+                    <!-- Location Selection -->
+                    <div class="relative flex-1">
+                        <label class="block text-sm font-medium text-gray-700 mb-1 ml-1">Ville</label>
+                        <select id="citySelect" required onchange="autoSearch()"
+                            class="w-full pl-10 pr-10 py-3.5 bg-white border border-gray-200 rounded-xl text-gray-700 appearance-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm"
+                        >
+                            <option value="" disabled selected>Choisir une ville</option>
+                            <% locations.forEach(location => { %>
+                                <option value="<%= location.value %>"><%= location.label %></option>
+                            <% }); %>
+                        </select>
+                        <div class="absolute bottom-0 left-3 flex items-center h-[50px] pointer-events-none">
+                            <i class="fas fa-map-marker-alt text-blue-500"></i>
+                        </div>
+                        <div class="absolute bottom-0 right-3 flex items-center h-[50px] pointer-events-none">
+                            <i class="fas fa-chevron-down text-gray-400"></i>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Popular Searches -->
+                <div class="pt-2">
+                    <div class="flex flex-wrap gap-2">
+                        <% const topLocations = locations.slice(0, 3); %>
+                        <% const topServices = services.slice(0, 2); %>
+                        
+                        <% topServices.forEach(service => { %>
+                            <% topLocations.slice(0, 1).forEach(location => { %>
+                                <a href="/services/<%= service.value %>/<%= encodeURIComponent(location.value) %>" 
+                                   class="text-xs px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-full transition-colors">
+                                    <%= service.label %> <%= location.value %>
+                                </a>
+                            <% }); %>
+                        <% }); %>
+                    </div>
+                </div>
+            </form>
         </div>
-        
-        <!-- Feature list -->
-        <ul class="relative space-y-4">
-            <li class="flex items-center gap-3 text-white/90">
-                <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center">
-                    <i class="fas fa-certificate text-blue-400"></i>
-                </div>
-                <span class="text-sm">Services professionnels vérifiés et certifiés</span>
-            </li>
-            
-            <li class="flex items-center gap-3 text-white/90">
-                <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center">
-                    <i class="fas fa-clock text-blue-400"></i>
-                </div>
-                <span class="text-sm">Réservation en ligne simple et rapide</span>
-            </li>
-            
-            <li class="flex items-center gap-3 text-white/90">
-                <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center">
-                    <i class="fas fa-shield-alt text-blue-400"></i>
-                </div>
-                <span class="text-sm">Paiements sécurisés et garantie satisfaction</span>
-            </li>
-            
-            <li class="flex items-center gap-3 text-white/90">
-                <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center">
-                    <i class="fas fa-thumbs-up text-blue-400"></i>
-                </div>
-                <span class="text-sm">Avis clients vérifiés et authentiques</span>
-            </li>
-        </ul>
+    
+        <a href="/auth/google" 
+        class="mt-4 block text-center py-4 px-6 bg-[#FFD814] hover:bg-[#F7CA00] text-black rounded-lg transition-all transform active:scale-95 active:brightness-95 shadow-sm font-medium border border-[#FCD200]">
+         <div class="text-[15px]">Devenez prestataire de services</div>
+         <div class="text-xs text-gray-700">Rejoignez notre communauté et développez votre activité</div>
+      </a>
     </div>
-</div>
+    
+    <script>
+    let searchTimeout;
+    
+    function autoSearch() {
+        clearTimeout(searchTimeout);
+        
+        const service = document.getElementById('serviceType').value;
+        const city = document.getElementById('citySelect').value;
+        
+        if (service && city) {
+            searchTimeout = setTimeout(() => {
+                const url = `/services/${encodeURIComponent(service)}/${encodeURIComponent(city)}`;
+                window.location.href = url;
+            }, 300);
+        }
+    }
+    
+    window.addEventListener('load', () => {
+        const path = window.location.pathname;
+        const matches = path.match(/\/services\/([^\/]+)\/([^\/]+)/);
+        
+        if (matches) {
+            const [, service, city] = matches;
+            const serviceSelect = document.getElementById('serviceType');
+            const citySelect = document.getElementById('citySelect');
+            
+            if (serviceSelect) serviceSelect.value = decodeURIComponent(service);
+            if (citySelect) citySelect.value = decodeURIComponent(city);
+        }
+    });
+    </script>
+
+<script>
+function handleSearch(event) {
+    event.preventDefault();
+    
+    const service = document.getElementById('serviceType').value;
+    const city = document.getElementById('citySelect').value;
+    
+    if (service && city) {
+        const url = `/services/${encodeURIComponent(service)}/${encodeURIComponent(city)}`;
+        window.location.href = url;
+    }
+}
+
+// Pre-select values if they exist in URL
+window.addEventListener('load', () => {
+    const path = window.location.pathname;
+    const matches = path.match(/\/services\/([^\/]+)\/([^\/]+)/);
+    
+    if (matches) {
+        const [, service, city] = matches;
+        
+        const serviceSelect = document.getElementById('serviceType');
+        const citySelect = document.getElementById('citySelect');
+        
+        if (serviceSelect) {
+            serviceSelect.value = decodeURIComponent(service);
+        }
+        
+        if (citySelect) {
+            citySelect.value = decodeURIComponent(city);
+        }
+    }
+});
+</script>
         </div>
     </div>
 </section>

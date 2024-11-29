@@ -80,87 +80,134 @@ const validateService = [
           .isObject()
           .withMessage('La disponibilité doit être un objet valide')
 ];
-
 router.get('/', async (req, res) => {
-     const topUsers = await User.aggregate([
-          {
-               $match: { status: 'active' }
-           },
-             {
-                 $lookup: {
-                     from: 'services',
-                     localField: '_id',
-                     foreignField: 'createdBy',
-                     as: 'services'
-                 }
-             },
-             {
-                 $lookup: {
-                     from: 'reviews',
-                     let: { userServices: '$services._id' },
-                     pipeline: [
-                         {
-                             $match: {
-                                 $expr: {
-                                     $in: ['$serviceId', '$$userServices']
-                                 }
-                             }
-                         },
-                         {
-                             $group: {
-                                 _id: null,
-                                 totalReviews: { $sum: 1 }
-                             }
-                         }
-                     ],
-                     as: 'reviews'
-                 }
-             },
-             {
-                 $addFields: {
-                     servicesCount: { $size: '$services' },
-                     totalViews: {
-                         $sum: {
-                             $map: {
-                                 input: '$services',
-                                 as: 'service',
-                                 in: { $ifNull: ['$$service.views', 0] }
-                             }
-                         }
-                     },
-                     totalReviews: { $ifNull: [{ $arrayElemAt: ['$reviews.totalReviews', 0] }, 0] }
-                 }
-             },
-             {
-                 $project: {
-                     _id: 1,
-                     displayName: 1,
-                     profileImage: 1,
-                     servicesCount: 1,
-                     slug:1,
-                     totalViews: 1,
-                     totalReviews: 1,
-                     totalScore: {
-                         $add: ['$servicesCount', '$totalViews', '$totalReviews']
-                     }
-                 }
-             },
-             {
-                 $sort: { totalScore: -1 }
-             },
-             {
-                 $limit: 3
-             }
-         ]);
-     //     console.log(topUsers)
-     res.render('user/index', {
-          topUsers,
-         pageTitle: 'Ndressilik - Trouvez les Meilleurs Services pour Chiens au Maroc',
-         description: 'Ndressilik est votre plateforme de confiance pour trouver les meilleurs services pour chiens au Maroc. Explorez un large éventail de services tels que l’éducation canine, le toilettage professionnel, les soins vétérinaires, la garde d’animaux, la pension pour chiens, et bien plus encore. Offrez à votre chien une expérience de qualité avec des experts qualifiés à travers tout le Maroc. Facilitez votre recherche et prenez soin de votre compagnon à quatre pattes grâce à nos solutions innovantes.',
-         keywords: 'services pour chiens Maroc, toilettage chien, éducation canine Maroc, soins vétérinaires chiens, pension pour chiens, garde de chiens, services pour animaux Maroc, Ndressilik, dressage de chiens Maroc, soins pour chiens professionnels, toilettage professionnel Maroc, vétérinaire pour chiens Maroc, services pour animaux de compagnie',
-     });
- });
- 
+    try {
+        const [topUsers, locations, services] = await Promise.all([
+            // Top Users Query (existing)
+            User.aggregate([
+                { $match: { status: 'active' } },
+                {
+                    $lookup: {
+                        from: 'services',
+                        localField: '_id',
+                        foreignField: 'createdBy',
+                        as: 'services'
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'reviews',
+                        let: { userServices: '$services._id' },
+                        pipeline: [
+                            {
+                                $match: {
+                                    $expr: {
+                                        $in: ['$serviceId', '$$userServices']
+                                    }
+                                }
+                            },
+                            {
+                                $group: {
+                                    _id: null,
+                                    totalReviews: { $sum: 1 }
+                                }
+                            }
+                        ],
+                        as: 'reviews'
+                    }
+                },
+                {
+                    $addFields: {
+                        servicesCount: { $size: '$services' },
+                        totalViews: {
+                            $sum: {
+                                $map: {
+                                    input: '$services',
+                                    as: 'service',
+                                    in: { $ifNull: ['$$service.views', 0] }
+                                }
+                            }
+                        },
+                        totalReviews: { $ifNull: [{ $arrayElemAt: ['$reviews.totalReviews', 0] }, 0] }
+                    }
+                },
+                {
+                    $project: {
+                        _id: 1,
+                        displayName: 1,
+                        profileImage: 1,
+                        servicesCount: 1,
+                        slug: 1,
+                        totalViews: 1,
+                        totalReviews: 1,
+                        totalScore: {
+                            $add: ['$servicesCount', '$totalViews', '$totalReviews']
+                        }
+                    }
+                },
+                { $sort: { totalScore: -1 } },
+                { $limit: 3 }
+            ]),
+
+            // Get unique locations with service counts
+            Service.aggregate([
+                { $match: { isActive: true } },
+                {
+                    $group: {
+                        _id: '$location',
+                        count: { $sum: 1 },
+                        arabicName: { $first: '$locationArabic' }
+                    }
+                },
+                { $sort: { count: -1 } }
+            ]),
+
+            // Get service types with counts
+            Service.aggregate([
+                { $match: { isActive: true } },
+                { $unwind: '$serviceOptions' },
+                {
+                    $group: {
+                        _id: '$serviceOptions',
+                        count: { $sum: 1 }
+                    }
+                },
+                { $sort: { count: -1 } }
+            ])
+        ]);
+
+        // Process locations for the form
+        const processedLocations = locations
+            .filter(loc => loc._id) // Remove null/empty locations
+            .map(loc => ({
+                value: `${loc._id}${loc.arabicName ? ` - ${loc.arabicName}` : ''}`,
+                label: loc._id,
+                count: loc.count
+            }));
+
+        // Process service types for the form
+        const processedServices = services.map(service => ({
+            value: service._id.toLowerCase(),
+            // label: serviceConfig.titles[service._id] || service._id,
+            count: service.count,
+            // icon: serviceConfig.icons[service._id.toLowerCase()] || '🐾'
+        }));
+        console.log(processedLocations)
+        console.log(processedServices)
+
+        res.render('user/index', {
+            topUsers,
+            locations: processedLocations,
+            services: processedServices,
+            pageTitle: 'Ndressilik - Trouvez les Meilleurs Services pour Chiens au Maroc',
+            description: 'Ndressilik est votre plateforme de confiance pour trouver les meilleurs services pour chiens au Maroc...',
+            keywords: 'services pour chiens Maroc, toilettage chien, éducation canine Maroc...'
+        });
+    } catch (error) {
+        console.error('Error in home page:', error);
+        res.status(500).render('error', { error: 'Une erreur est survenue' });
+    }
+});
 
 // POST: Create New Service
 router.post('/dashboard/new-service', isAuthenticated, validateService, async (req, res) => {
