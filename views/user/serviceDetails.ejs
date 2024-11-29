@@ -196,14 +196,14 @@ function toggleReviewStats() {
                     <div class="sticky top-8">
                         <div class="p-8 border border-black/10 rounded-2xl">
                             <!-- Provider Info -->
-                            <div class="flex items-center gap-4 pb-6 mb-6 border-b border-black/10">
+                            <div class="flex items-center gap-4 pb-6 mb-6 border-b border-black/10" style="cursor: pointer;" onclick='window.location.href = "/@<%= service.createdBy.slug %>"'>
                                 <img src="<%= service.createdBy.profileImage || '/default-avatar.png' %>" 
                                     alt="<%= service.createdBy.displayName %>"
                                     class="w-16 h-16 rounded-xl object-cover">
                                 <div>
                                     <div class="flex items-center gap-2">
                                         <h3 class="text-lg font-semibold">
-                                            <%= service.createdBy.displayName %>
+                                            <%= service.createdBy.displayName %> 
                                         </h3>
                                         <% if(service.createdBy.isVerified) { %>
                                             <i class="fas fa-badge-check text-blue-500"></i>

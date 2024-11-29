@@ -590,7 +590,7 @@ router.get('/service/:serviceId', async (req, res) => {
  
          // Fetch reviews by serviceId and populate the user details for each review
          const reviews = await Review.find({ serviceId })
-             .populate('userId', 'displayName image')
+             .populate('userId', 'displayName image slug')
              .sort({ createdAt: -1 });
  
          // Increment view count for the service
