@@ -1,283 +1,347 @@
-<%- include('include/head.ejs') %>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <%- include('include/head') %>
+    <style>
+        /* Progress bar animation */
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
 
-     <body class="bg-[#F0F2F5]">
-          <%- include('include/navbar.ejs') %>
-               <% const currentUrl=`${process.env.BASE_URL || 'https://ndressilik.com' }/articles/${article.slug}`; %>
+        .progress-animated {
+            background: linear-gradient(90deg, #3B82F6 0%, #60A5FA 50%, #3B82F6 100%);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
 
-                    <!-- Reading Progress Bar -->
-                    <div class="fixed top-0 left-0 right-0 h-1 z-50">
-                         <div class="progress-bar bg-blue-500 h-full w-0 transition-all duration-150"></div>
+        /* Modern Prose Styling */
+        .article-prose {
+            font-size: 1.125rem;
+            line-height: 1.85;
+            color: #374151;
+        }
+
+        .article-prose h2 {
+            font-size: 1.875rem;
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            color: #111827;
+            scroll-margin-top: 100px;
+        }
+
+        .article-prose h3 {
+            font-size: 1.5rem;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            color: #1F2937;
+        }
+
+        .article-prose p {
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .article-prose strong {
+            color: #111827;
+            font-weight: 600;
+        }
+
+        .article-prose img {
+            border-radius: 1rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .article-prose a {
+            color: #2563EB;
+            text-decoration: none;
+            border-bottom: 2px solid #DBEAFE;
+            transition: border-color 0.2s;
+        }
+
+        .article-prose a:hover {
+            border-color: #2563EB;
+        }
+
+        .article-prose ul {
+            margin: 1.5rem 0;
+            padding-left: 1.25rem;
+        }
+
+        .article-prose li {
+            margin: 0.75rem 0;
+            padding-left: 0.5rem;
+        }
+
+        /* Table of Contents */
+        .toc-link {
+            position: relative;
+            padding-left: 1rem;
+            margin: 0.5rem 0;
+            display: block;
+        }
+
+        .toc-link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 3px;
+            height: 0;
+            background-color: #2563EB;
+            transform: translateY(-50%);
+            transition: height 0.2s;
+        }
+
+        .toc-link:hover::before {
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-gray-900">
+    <%- include('include/navbar') %>
+
+    <!-- Progress Bar -->
+    <div class="fixed top-0 left-0 right-0 h-1 z-50">
+        <div class="progress-bar progress-animated h-full w-0"></div>
+    </div>
+
+    <div class="pt-20 pb-12">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid lg:grid-cols-[300px_1fr] gap-8">
+                <!-- Sidebar -->
+                <div class="hidden lg:block">
+                    <div class="sticky top-24">
+                        <!-- Table of Contents -->
+                        <div class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+                            <h3 class="font-bold text-lg mb-4">Sommaire</h3>
+                            <nav class="space-y-1">
+                                <% headings.forEach(heading => { %>
+                                    <a href="#<%= heading.id %>" 
+                                       class="toc-link text-gray-600 hover:text-gray-900 text-sm transition-colors">
+                                        <%= heading.text %>
+                                    </a>
+                                <% }) %>
+                            </nav>
+                        </div>
+<%const currentUrl = `${process.env.BASE_URL || 'https://ndressilik.com'}/articles/${article.slug}`;%>
+                        <!-- Share Card -->
+                        <div class="bg-white rounded-2xl p-6 shadow-sm">
+                            <h3 class="font-bold text-lg mb-4">Partager</h3>
+                            <div class="flex flex-col gap-3">
+                                <a href="https://www.facebook.com/sharer/sharer.php?u=<%= encodeURIComponent(currentUrl) %>" 
+                                   target="_blank"
+                                   class="flex items-center gap-3 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors text-gray-700">
+                                    <i class="fab fa-facebook text-[#1877F2] text-xl"></i>
+                                    <span class="text-sm">Partager sur Facebook</span>
+                                </a>
+                                <a href="https://twitter.com/intent/tweet?url=<%= encodeURIComponent(currentUrl) %>&text=<%= encodeURIComponent(article.title) %>"
+                                   target="_blank"
+                                   class="flex items-center gap-3 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors text-gray-700">
+                                    <i class="fab fa-twitter text-[#1DA1F2] text-xl"></i>
+                                    <span class="text-sm">Partager sur Twitter</span>
+                                </a>
+                                <a href="https://wa.me/?text=<%= encodeURIComponent(article.title + ' ' + currentUrl) %>"
+                                   target="_blank"
+                                   class="flex items-center gap-3 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors text-gray-700">
+                                    <i class="fab fa-whatsapp text-[#25D366] text-xl"></i>
+                                    <span class="text-sm">Partager sur WhatsApp</span>
+                                </a>
+                            </div>
+                        </div>
                     </div>
+                </div>
 
-                    <!-- Compact Header -->
-                    <header class="pt-16 lg:pt-20 bg-white border-b">
-                         <div class="max-w-2xl mx-auto px-4 py-8">
-                              <!-- Category & Date -->
-                              <div class="flex items-center gap-3 mb-4">
-                                   <span class="px-2.5 py-1 bg-blue-100 text-blue-700 rounded-md text-sm font-medium">
-                                        <%= article.category %>
-                                   </span>
-                                   <span class="text-sm text-gray-500">
-                                        <%= new Date(article.publicationDate).toLocaleDateString('fr-FR', { year: 'numeric' , month: 'long' , day: 'numeric' }) %>
-                                   </span>
-                              </div>
+                <!-- Main Content -->
+                <main>
+                    <article class="bg-white rounded-2xl shadow-sm overflow-hidden">
+                        <!-- Featured Image -->
+                        <% if (article.featuredImage) { %>
+                            <div class="aspect-video">
+                                <img src="<%= article.featuredImage %>" 
+                                     alt="<%= article.title %>"
+                                     class="w-full h-full object-cover">
+                            </div>
+                        <% } %>
 
-                              <!-- Title -->
-                              <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
-                                   <%= article.title %>
-                              </h1>
-
-                              <!-- Author & Read Time -->
-                              <div class="flex items-center gap-4">
-                                   <div class="flex items-center gap-2">
-                                        <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
-                                             <i class="fas fa-user text-gray-600 text-sm"></i>
-                                        </div>
-                                        <span class="text-sm text-gray-600">
-                                             <%= article.author %>
-                                        </span>
-                                   </div>
-                                   <span class="text-gray-300">•</span>
-                                   <span class="text-sm text-gray-600">
+                        <!-- Article Header -->
+                        <div class="p-8 border-b">
+                            <div class="flex items-center gap-3 mb-4">
+                                <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
+                                    <%= article.category %>
+                                </span>
+                                <time class="text-sm text-gray-500">
+                                    <%= new Date(article.publicationDate).toLocaleDateString('fr-FR', { 
+                                        year: 'numeric', month: 'long', day: 'numeric' 
+                                    }) %>
+                                </time>
+                            </div>
+                            <h1 class="text-3xl sm:text-4xl font-bold mb-6"><%= article.title %></h1>
+                            <div class="flex items-center gap-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
+                                        <i class="fas fa-user text-gray-600"></i>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <span class="font-medium"><%= article.author %></span>
+                                        <span class="text-sm text-gray-500">Auteur</span>
+                                    </div>
+                                </div>
+                                <div class="w-px h-8 bg-gray-200"></div>
+                                <div class="flex items-center gap-2">
+                                    <i class="far fa-clock text-gray-400"></i>
+                                    <span class="text-sm text-gray-500">
                                         <%= readTime %> min de lecture
-                                   </span>
-                              </div>
-                         </div>
-                    </header>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
 
-                    <!-- Main Content -->
-                    <main class="max-w-2xl mx-auto px-4 py-8">
-                         <!-- Table of Contents -->
-                         <div class="bg-white rounded-lg p-4 mb-6">
-                              <h2 class="font-medium text-gray-900 mb-3">Sommaire</h2>
-                              <ul class="space-y-2">
-                                   <% headings.forEach(heading=> { %>
-                                        <li class="text-sm">
-                                             <a href="#<%= heading.id %>" class="text-gray-600 hover:text-blue-600 transition-colors flex items-center gap-2">
-                                                  <i class="fas fa-chevron-right text-xs text-gray-400"></i>
-                                                  <%= heading.text %>
-                                             </a>
-                                        </li>
-                                        <% }) %>
-                              </ul>
-                         </div>
+                        <!-- Article Content -->
+                        <div class="p-8">
+                            <div class="article-prose">
+                                <%- article.content %>
+                            </div>
 
-                         <!-- Featured Image -->
-                         <% if (article.featuredImage) { %>
-                              <div class="relative rounded-lg overflow-hidden mb-8">
-                                   <img src="<%= article.featuredImage %>" alt="<%= article.title %>" class="w-full aspect-[16/9] object-cover">
-                              </div>
-                              <% } %>
+                            <!-- Tags -->
+                            <div class="mt-8 pt-6 border-t flex flex-wrap gap-2">
+                                <% article.tags.filter(tag => tag).forEach(tag => { %>
+                                    <span class="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm">
+                                        #<%= tag %>
+                                    </span>
+                                <% }) %>
+                            </div>
+                        </div>
+                    </article>
 
-                                   <!-- Article Content -->
-                                   <article class="bg-white rounded-lg p-6 mb-8">
-                                        <div class="prose prose-gray prose-lg max-w-none" style="dir:ltr !importtant">
-                                             <%- article.content %>
+                    <!-- Comments Section -->
+                    <div class="mt-8 bg-white rounded-2xl shadow-sm p-8">
+                        <h2 class="text-2xl font-bold mb-6">Commentaires (<%= comments.length %>)</h2>
+
+                        <!-- Comment Form -->
+                        <form action="/articles/<%= article.slug %>/comments" method="POST" class="mb-8">
+                            <div class="space-y-4">
+                                <div class="grid sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Nom</label>
+                                        <input type="text" name="name" required 
+                                               class="w-full px-4 h-12 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                                        <input type="email" name="email" required 
+                                               class="w-full px-4 h-12 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Votre commentaire</label>
+                                    <textarea name="comment" rows="4" required 
+                                              class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"></textarea>
+                                </div>
+                                <button type="submit" 
+                                        class="h-12 px-6 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl transition-colors">
+                                    Publier le commentaire
+                                </button>
+                            </div>
+                        </form>
+
+                        <!-- Comments List -->
+                        <div class="space-y-6">
+                            <% comments.forEach(comment => { %>
+                                <div class="p-6 bg-gray-50 rounded-xl">
+                                    <div class="flex gap-4">
+                                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                                            <span class="text-blue-600 font-medium">
+                                                <%= comment.name.charAt(0).toUpperCase() %>
+                                            </span>
                                         </div>
-
-                                        <!-- Tags -->
-                                        <div class="mt-8 flex flex-wrap gap-2 pt-6 border-t">
-                                             <% article.tags.filter(tag=> tag).forEach(tag => { %>
-                                                  <span class="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm">
-                                                       #<%= tag %>
-                                                  </span>
-                                                  <% }) %>
+                                        <div class="flex-1 min-w-0">
+                                            <div class="flex items-center justify-between mb-2">
+                                                <span class="font-medium text-gray-900">
+                                                    <%= comment.name %>
+                                                </span>
+                                                <time class="text-sm text-gray-500">
+                                                    <%= new Date(comment.createdAt).toLocaleDateString() %>
+                                                </time>
+                                            </div>
+                                            <p class="text-gray-600">
+                                                <%= comment.comment %>
+                                            </p>
                                         </div>
-                                   </article>
-
-                                   <!-- Share Section -->
-                                   <div class="bg-white rounded-lg p-6 mb-8">
-                                        <h3 class="font-medium text-gray-900 mb-4">Partager l'article</h3>
-                                        <div class="flex gap-3">
-                                             <a href="https://www.facebook.com/sharer/sharer.php?u=<%= encodeURIComponent(currentUrl) %>" target="_blank" class="flex-1 flex items-center justify-center gap-2 p-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">
-                                                  <i class="fab fa-facebook text-[#1877F2]"></i>
-                                                  <span class="text-sm">Facebook</span>
-                                             </a>
-                                             <a href="https://twitter.com/intent/tweet?url=<%= encodeURIComponent(currentUrl) %>&text=<%= encodeURIComponent(article.title) %>" target="_blank" class="flex-1 flex items-center justify-center gap-2 p-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">
-                                                  <i class="fab fa-twitter text-[#1DA1F2]"></i>
-                                                  <span class="text-sm">Twitter</span>
-                                             </a>
-                                             <a href="https://wa.me/?text=<%= encodeURIComponent(article.title + ' ' + currentUrl) %>" target="_blank" class="flex-1 flex items-center justify-center gap-2 p-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">
-                                                  <i class="fab fa-whatsapp text-[#25D366]"></i>
-                                                  <span class="text-sm">WhatsApp</span>
-                                             </a>
-                                        </div>
-                                   </div>
-
-                                   <!-- Comments Section -->
-                                   <section class="bg-white rounded-lg p-6">
-                                        <h3 class="font-medium text-gray-900 mb-6">
-                                             Réponses (<%= comments.length %>)
-                                        </h3>
-
-                                        <!-- Comment Form -->
-                                        <form action="/articles/<%= article.slug %>/comments" method="POST" class="mb-8">
-                                             <div class="space-y-4">
-                                                  <div class="grid grid-cols-2 gap-4">
-                                                       <div>
-                                                            <label class="block text-sm text-gray-600 mb-1.5">Nom</label>
-                                                            <input type="text" name="name" required class="w-full px-3 h-10 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
-                                                       </div>
-                                                       <div>
-                                                            <label class="block text-sm text-gray-600 mb-1.5">Email</label>
-                                                            <input type="email" name="email" required class="w-full px-3 h-10 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
-                                                       </div>
-                                                  </div>
-                                                  <div>
-                                                       <label class="block text-sm text-gray-600 mb-1.5">Votre réponse</label>
-                                                       <textarea name="comment" rows="4" required class="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"></textarea>
-                                                  </div>
-                                                  <button type="submit" class="w-full sm:w-auto px-6 h-10 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg transition-colors">
-                                                       Publier la réponse
-                                                  </button>
-                                             </div>
-                                        </form>
-
-                                        <!-- Comments List -->
-                                        <div class="space-y-4">
-                                             <% comments.forEach(comment=> { %>
-                                                  <div class="p-4 bg-gray-50 rounded-lg">
-                                                       <div class="flex gap-3">
-                                                            <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 text-sm font-medium text-blue-600">
-                                                                 <%= comment.name.charAt(0).toUpperCase() %>
-                                                            </div>
-                                                            <div class="flex-1 min-w-0">
-                                                                 <div class="flex items-center justify-between mb-1">
-                                                                      <span class="font-medium text-gray-900">
-                                                                           <%= comment.name %>
-                                                                      </span>
-                                                                      <time class="text-sm text-gray-500">
-                                                                           <%= new Date(comment.createdAt).toLocaleDateString() %>
-                                                                      </time>
-                                                                 </div>
-                                                                 <p class="text-gray-600 text-sm">
-                                                                      <%= comment.comment %>
-                                                                 </p>
-                                                            </div>
-                                                       </div>
-                                                  </div>
-                                                  <% }) %>
-                                        </div>
-                                   </section>
-                    </main>
-
-                    <!-- Floating Reading Progress -->
-                    <div class="fixed bottom-6 right-6 flex gap-2">
-                         <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="p-3 bg-white shadow-lg rounded-full hover:shadow-xl transition-all duration-200
-                       opacity-0 invisible transform translate-y-4
-                       scrolled:opacity-100 scrolled:visible scrolled:translate-y-0">
-                              <i class="fas fa-arrow-up text-gray-600"></i>
-                         </button>
+                                    </div>
+                                </div>
+                            <% }) %>
+                        </div>
                     </div>
-     </body>
+                </main>
+            </div>
+        </div>
+    </div>
 
-     <script>
-          // Reading progress
-          const progressBar = document.querySelector('.progress-bar');
-          window.addEventListener('scroll', () => {
-               const winScroll = document.documentElement.scrollTop;
-               const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-               const scrolled = (winScroll / height) * 100;
-               progressBar.style.width = `${scrolled}%`;
+    <!-- Floating Reading Progress -->
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" 
+            class="fixed bottom-6 right-6 p-4 bg-white shadow-lg rounded-full hover:shadow-xl transition-all duration-200
+                   opacity-0 invisible transform translate-y-4
+                   scrolled:opacity-100 scrolled:visible scrolled:translate-y-0">
+        <i class="fas fa-arrow-up text-gray-600"></i>
+    </button>
 
-               // Toggle scroll-to-top button
-               const scrollButton = document.querySelector('button[onclick="window.scrollTo"]');
-               if (scrollButton) {
-                    scrollButton.classList.toggle('scrolled', winScroll > 500);
-               }
-          });
+    <script>
+        // Reading progress
+        const progressBar = document.querySelector('.progress-bar');
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            progressBar.style.width = `${scrolled}%`;
 
-          // Smooth scroll for table of contents
-          document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-               anchor.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const element = document.querySelector(anchor.getAttribute('href'));
-                    if (element) {
-                         element.scrollIntoView({
-                              behavior: 'smooth',
-                              block: 'start'
-                         });
-                    }
-               });
-          });
+            // Toggle scroll-to-top button
+            const scrollButton = document.querySelector('button[onclick="window.scrollTo"]');
+            scrollButton?.classList.toggle('scrolled', winScroll > 500);
 
-          // Auto-detect article language
-          document.addEventListener('DOMContentLoaded', () => {
-               const articleContent = document.querySelector('.prose');
-               if (articleContent) {
-                    const text = articleContent.textContent || articleContent.innerText;
-                    const arabicPattern = /[\u0600-\u06FF]/;
+            // Update active TOC item
+            updateTOC();
+        });
 
-                    if (arabicPattern.test(text)) {
-                         articleContent.classList.add('font-arabic');
-                         articleContent.dir = 'ltr';
-                    }
-               }
-          });
-     </script>
+        // Smooth scroll for table of contents
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', (e) => {
+                e.preventDefault();
+                const element = document.querySelector(anchor.getAttribute('href'));
+                element?.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            });
+        });
 
-     <style>
-          /* Prose Customization */
-          .prose {
-               font-size: 1.125rem;
-               line-height: 1.75;
-          }
+        // Update active TOC item based on scroll position
+        function updateTOC() {
+            const headings = document.querySelectorAll('h2, h3');
+            const tocLinks = document.querySelectorAll('.toc-link');
+            
+            let activeIndex = 0;
+            headings.forEach((heading, index) => {
+                const rect = heading.getBoundingClientRect();
+                if (rect.top <= 100) {
+                    activeIndex = index;
+                }
+            });
 
-          .prose h2 {
-               font-size: 1.5rem;
-               margin-top: 2.5rem;
-               margin-bottom: 1rem;
-               font-weight: 600;
-               color: #1f2937;
-          }
+            tocLinks.forEach((link, index) => {
+                if (index === activeIndex) {
+                    link.classList.add('text-blue-600', 'font-medium');
+                } else {
+                    link.classList.remove('text-blue-600', 'font-medium');
+                }
+            });
+        }
+    </script>
 
-          .prose p {
-               margin-top: 1.25rem;
-               margin-bottom: 1.25rem;
-          }
-
-          .prose img {
-               border-radius: 0.5rem;
-          }
-
-          .prose a {
-               color: #2563eb;
-               text-decoration: underline;
-               text-decoration-thickness: 1px;
-               text-underline-offset: 2px;
-          }
-
-          .prose ul {
-               margin-top: 1.25rem;
-               margin-bottom: 1.25rem;
-               list-style-type: disc;
-               padding-left: 1.625rem;
-          }
-
-          /* RTL Support */
-          [dir="rtl"] .prose {
-               font-family: 'Tajawal', sans-serif;
-          }
-
-          /* Smooth Transitions */
-          .transition-all {
-               transition-property: all;
-               transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-               transition-duration: 150ms;
-          }
-
-          /* Scroll Button States */
-          .scrolled\:opacity-100.scrolled {
-               opacity: 1;
-          }
-
-          .scrolled\:visible.scrolled {
-               visibility: visible;
-          }
-
-          .scrolled\:translate-y-0.scrolled {
-               transform: translateY(0);
-          }
-     </style>
-
-     <%- include('include/footer.ejs') %>
+    <%- include('include/footer') %>
+</body>
+</html>
