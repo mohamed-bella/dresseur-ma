@@ -1,9 +1,55 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" prefix="og: http://ogp.me/ns#">
 <head>
     <%- include('include/head') %>
+    
+    <!-- SEO Meta -->
+    <title><%= article.title %> | NDRESSILIK - Services pour Chiens au Maroc</title>
+    <meta name="description" content="<%= article.excerpt || article.content.substring(0, 160) %>">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    
+    <link rel="canonical" href="<%= `https://ndressilik.com/articles/${article.slug}` %>">
+    <% const currentUrl = `${process.env.BASE_URL || 'https://ndressilik.com'}/articles/${article.slug}`; %>
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="<%= article.title %>">
+    <meta property="og:description" content="<%= article.excerpt || article.content.substring(0, 160) %>">
+    <meta property="og:image" content="<%= article.featuredImage %>">
+    <meta property="og:url" content="<%= currentUrl %>">
+
+    <!-- Article Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "<%= currentUrl %>"
+        },
+        "headline": "<%= article.title %>",
+        "description": "<%= article.excerpt %>",
+        "image": "<%= article.featuredImage %>",
+        "author": {
+            "@type": "Person",
+            "name": "<%= article.author %>"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "NDRESSILIK",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://ndressilik.com/images/logo.png"
+            }
+        },
+        "datePublished": "<%= article.publicationDate %>",
+        "dateModified": "<%= article.updatedAt %>",
+        "articleSection": "<%= article.category %>",
+        "keywords": "<%= article.tags.join(', ') %>"
+    }
+    </script>
+
     <style>
-        /* Progress bar animation */
         @keyframes shimmer {
             0% { background-position: -200% 0; }
             100% { background-position: 200% 0; }
@@ -15,7 +61,6 @@
             animation: shimmer 2s infinite;
         }
 
-        /* Modern Prose Styling */
         .article-prose {
             font-size: 1.125rem;
             line-height: 1.85;
@@ -36,19 +81,10 @@
             margin-top: 2.5rem;
             margin-bottom: 1rem;
             font-weight: 600;
-            color: #1F2937;
         }
 
-        .article-prose p {
-            margin-top: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .article-prose strong {
-            color: #111827;
-            font-weight: 600;
-        }
-
+        .article-prose p { margin: 1.5rem 0; }
+        
         .article-prose img {
             border-radius: 1rem;
             margin: 2rem 0;
@@ -57,26 +93,10 @@
 
         .article-prose a {
             color: #2563EB;
-            text-decoration: none;
             border-bottom: 2px solid #DBEAFE;
             transition: border-color 0.2s;
         }
 
-        .article-prose a:hover {
-            border-color: #2563EB;
-        }
-
-        .article-prose ul {
-            margin: 1.5rem 0;
-            padding-left: 1.25rem;
-        }
-
-        .article-prose li {
-            margin: 0.75rem 0;
-            padding-left: 0.5rem;
-        }
-
-        /* Table of Contents */
         .toc-link {
             position: relative;
             padding-left: 1rem;
@@ -96,16 +116,14 @@
             transition: height 0.2s;
         }
 
-        .toc-link:hover::before {
-            height: 100%;
-        }
+        .toc-link:hover::before { height: 100%; }
     </style>
 </head>
 
 <body class="bg-gray-50 text-gray-900">
     <%- include('include/navbar') %>
 
-    <!-- Progress Bar -->
+    <!-- Progress -->
     <div class="fixed top-0 left-0 right-0 h-1 z-50">
         <div class="progress-bar progress-animated h-full w-0"></div>
     </div>
@@ -116,7 +134,7 @@
                 <!-- Sidebar -->
                 <div class="hidden lg:block">
                     <div class="sticky top-24">
-                        <!-- Table of Contents -->
+                        <!-- TOC -->
                         <div class="bg-white rounded-2xl p-6 shadow-sm mb-6">
                             <h3 class="font-bold text-lg mb-4">Sommaire</h3>
                             <nav class="space-y-1">
@@ -128,66 +146,72 @@
                                 <% }) %>
                             </nav>
                         </div>
-<%const currentUrl = `${process.env.BASE_URL || 'https://ndressilik.com'}/articles/${article.slug}`;%>
-                        <!-- Share Card -->
+
+                        <!-- Share -->
                         <div class="bg-white rounded-2xl p-6 shadow-sm">
                             <h3 class="font-bold text-lg mb-4">Partager</h3>
                             <div class="flex flex-col gap-3">
                                 <a href="https://www.facebook.com/sharer/sharer.php?u=<%= encodeURIComponent(currentUrl) %>" 
-                                   target="_blank"
-                                   class="flex items-center gap-3 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors text-gray-700">
+                                   target="_blank" rel="noopener"
+                                   class="flex items-center gap-3 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors">
                                     <i class="fab fa-facebook text-[#1877F2] text-xl"></i>
-                                    <span class="text-sm">Partager sur Facebook</span>
+                                    <span class="text-sm">Facebook</span>
                                 </a>
                                 <a href="https://twitter.com/intent/tweet?url=<%= encodeURIComponent(currentUrl) %>&text=<%= encodeURIComponent(article.title) %>"
-                                   target="_blank"
-                                   class="flex items-center gap-3 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors text-gray-700">
+                                   target="_blank" rel="noopener"
+                                   class="flex items-center gap-3 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors">
                                     <i class="fab fa-twitter text-[#1DA1F2] text-xl"></i>
-                                    <span class="text-sm">Partager sur Twitter</span>
+                                    <span class="text-sm">Twitter</span>
                                 </a>
                                 <a href="https://wa.me/?text=<%= encodeURIComponent(article.title + ' ' + currentUrl) %>"
-                                   target="_blank"
-                                   class="flex items-center gap-3 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors text-gray-700">
+                                   target="_blank" rel="noopener"
+                                   class="flex items-center gap-3 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors">
                                     <i class="fab fa-whatsapp text-[#25D366] text-xl"></i>
-                                    <span class="text-sm">Partager sur WhatsApp</span>
+                                    <span class="text-sm">WhatsApp</span>
                                 </a>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Main Content -->
+                <!-- Content -->
                 <main>
-                    <article class="bg-white rounded-2xl shadow-sm overflow-hidden">
-                        <!-- Featured Image -->
+                    <article class="bg-white rounded-2xl shadow-sm overflow-hidden" itemscope itemtype="https://schema.org/Article">
+                        <!-- Image -->
                         <% if (article.featuredImage) { %>
                             <div class="aspect-video">
                                 <img src="<%= article.featuredImage %>" 
                                      alt="<%= article.title %>"
-                                     class="w-full h-full object-cover">
+                                     class="w-full h-full object-cover"
+                                     itemprop="image">
                             </div>
                         <% } %>
 
-                        <!-- Article Header -->
+                        <!-- Header -->
                         <div class="p-8 border-b">
                             <div class="flex items-center gap-3 mb-4">
                                 <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
                                     <%= article.category %>
                                 </span>
-                                <time class="text-sm text-gray-500">
+                                <time datetime="<%= article.publicationDate %>" 
+                                      class="text-sm text-gray-500" itemprop="datePublished">
                                     <%= new Date(article.publicationDate).toLocaleDateString('fr-FR', { 
                                         year: 'numeric', month: 'long', day: 'numeric' 
                                     }) %>
                                 </time>
                             </div>
-                            <h1 class="text-3xl sm:text-4xl font-bold mb-6"><%= article.title %></h1>
+
+                            <h1 class="text-3xl sm:text-4xl font-bold mb-6" itemprop="headline">
+                                <%= article.title %>
+                            </h1>
+
                             <div class="flex items-center gap-4">
                                 <div class="flex items-center gap-3">
                                     <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
                                         <i class="fas fa-user text-gray-600"></i>
                                     </div>
                                     <div class="flex flex-col">
-                                        <span class="font-medium"><%= article.author %></span>
+                                        <span class="font-medium" itemprop="author"><%= article.author %></span>
                                         <span class="text-sm text-gray-500">Auteur</span>
                                     </div>
                                 </div>
@@ -201,9 +225,9 @@
                             </div>
                         </div>
 
-                        <!-- Article Content -->
+                        <!-- Content -->
                         <div class="p-8">
-                            <div class="article-prose">
+                            <div class="article-prose" itemprop="articleBody">
                                 <%- article.content %>
                             </div>
 
@@ -218,41 +242,43 @@
                         </div>
                     </article>
 
-                    <!-- Comments Section -->
+                    <!-- Comments -->
                     <div class="mt-8 bg-white rounded-2xl shadow-sm p-8">
-                        <h2 class="text-2xl font-bold mb-6">Commentaires (<%= comments.length %>)</h2>
+                        <h2 class="text-2xl font-bold mb-6">
+                            Commentaires (<span itemprop="commentCount"><%= comments.length %></span>)
+                        </h2>
 
-                        <!-- Comment Form -->
+                        <!-- Form -->
                         <form action="/articles/<%= article.slug %>/comments" method="POST" class="mb-8">
                             <div class="space-y-4">
                                 <div class="grid sm:grid-cols-2 gap-4">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Nom</label>
                                         <input type="text" name="name" required 
-                                               class="w-full px-4 h-12 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+                                               class="w-full px-4 h-12 rounded-xl border focus:border-blue-500 focus:ring-1">
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
                                         <input type="email" name="email" required 
-                                               class="w-full px-4 h-12 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+                                               class="w-full px-4 h-12 rounded-xl border focus:border-blue-500 focus:ring-1">
                                     </div>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Votre commentaire</label>
                                     <textarea name="comment" rows="4" required 
-                                              class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"></textarea>
+                                              class="w-full px-4 py-3 rounded-xl border focus:border-blue-500 focus:ring-1"></textarea>
                                 </div>
                                 <button type="submit" 
-                                        class="h-12 px-6 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl transition-colors">
+                                        class="h-12 px-6 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl">
                                     Publier le commentaire
                                 </button>
                             </div>
                         </form>
 
-                        <!-- Comments List -->
+                        <!-- List -->
                         <div class="space-y-6">
                             <% comments.forEach(comment => { %>
-                                <div class="p-6 bg-gray-50 rounded-xl">
+                                <div class="p-6 bg-gray-50 rounded-xl" itemprop="comment">
                                     <div class="flex gap-4">
                                         <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
                                             <span class="text-blue-600 font-medium">
@@ -261,14 +287,15 @@
                                         </div>
                                         <div class="flex-1 min-w-0">
                                             <div class="flex items-center justify-between mb-2">
-                                                <span class="font-medium text-gray-900">
+                                                <span class="font-medium text-gray-900" itemprop="author">
                                                     <%= comment.name %>
                                                 </span>
-                                                <time class="text-sm text-gray-500">
+                                                <time datetime="<%= comment.createdAt %>" 
+                                                      class="text-sm text-gray-500" itemprop="dateCreated">
                                                     <%= new Date(comment.createdAt).toLocaleDateString() %>
                                                 </time>
                                             </div>
-                                            <p class="text-gray-600">
+                                            <p class="text-gray-600" itemprop="text">
                                                 <%= comment.comment %>
                                             </p>
                                         </div>
@@ -277,71 +304,116 @@
                             <% }) %>
                         </div>
                     </div>
-                </main>
-            </div>
-        </div>
-    </div>
 
-    <!-- Floating Reading Progress -->
-    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" 
-            class="fixed bottom-6 right-6 p-4 bg-white shadow-lg rounded-full hover:shadow-xl transition-all duration-200
-                   opacity-0 invisible transform translate-y-4
-                   scrolled:opacity-100 scrolled:visible scrolled:translate-y-0">
-        <i class="fas fa-arrow-up text-gray-600"></i>
-    </button>
+                    <!-- Related Articles -->
+                    <section class="mt-8 bg-white rounded-2xl shadow-sm p-8">
+                        <h2 class="text-2xl font-bold mb-6">Articles similaires</h2>
+                        <div class="grid sm:grid-cols-2 gap-6">
+                            <% relatedArticles.forEach(related => { %>
+                                <a href="/articles/<%= related.slug %>" class="group">
+                                    <article class="bg-gray-50 rounded-xl overflow-hidden">
+                                        <img src="<%= related.featuredImage %>" 
+                                             alt="<%= related.title %>"
+                                             class="w-full aspect-video object-cover"
+                                             loading="lazy">
+                                        <div class="p-6">
+                                            <div class="text-sm text-blue-600 mb-2"><%= related.category %></div>
+                                            <h3 class="font-bold text-gray-900 group-hover:text-blue-600 transition-colors mb-2">
+                                             <%= related.title %>
+                                         </h3>
+                                         <p class="text-gray-600 text-sm line-clamp-2">
+                                             <%= related.excerpt %>
+                                         </p>
+                                     </div>
+                                 </article>
+                             </a>
+                         <% }) %>
+                     </div>
+                 </section>
+             </main>
+         </div>
+     </div>
+ </div>
 
-    <script>
-        // Reading progress
-        const progressBar = document.querySelector('.progress-bar');
-        window.addEventListener('scroll', () => {
-            const winScroll = document.documentElement.scrollTop;
-            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            const scrolled = (winScroll / height) * 100;
-            progressBar.style.width = `${scrolled}%`;
+ <!-- Scroll Top -->
+ <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" 
+         class="fixed bottom-6 right-6 p-4 bg-white shadow-lg rounded-full hover:shadow-xl transition-all duration-200
+                opacity-0 invisible transform translate-y-4
+                scrolled:opacity-100 scrolled:visible scrolled:translate-y-0">
+     <i class="fas fa-arrow-up text-gray-600"></i>
+ </button>
 
-            // Toggle scroll-to-top button
-            const scrollButton = document.querySelector('button[onclick="window.scrollTo"]');
-            scrollButton?.classList.toggle('scrolled', winScroll > 500);
+ <script>
+     // Progress bar
+     const progressBar = document.querySelector('.progress-bar');
+     window.addEventListener('scroll', () => {
+         const winScroll = document.documentElement.scrollTop;
+         const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+         const scrolled = (winScroll / height) * 100;
+         progressBar.style.width = `${scrolled}%`;
 
-            // Update active TOC item
-            updateTOC();
-        });
+         const scrollButton = document.querySelector('button[onclick="window.scrollTo"]');
+         scrollButton?.classList.toggle('scrolled', winScroll > 500);
+         updateTOC();
+     });
 
-        // Smooth scroll for table of contents
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', (e) => {
-                e.preventDefault();
-                const element = document.querySelector(anchor.getAttribute('href'));
-                element?.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            });
-        });
+     // TOC scroll
+     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+         anchor.addEventListener('click', (e) => {
+             e.preventDefault();
+             const element = document.querySelector(anchor.getAttribute('href'));
+             element?.scrollIntoView({behavior: 'smooth', block: 'start'});
+         });
+     });
 
-        // Update active TOC item based on scroll position
-        function updateTOC() {
-            const headings = document.querySelectorAll('h2, h3');
-            const tocLinks = document.querySelectorAll('.toc-link');
-            
-            let activeIndex = 0;
-            headings.forEach((heading, index) => {
-                const rect = heading.getBoundingClientRect();
-                if (rect.top <= 100) {
-                    activeIndex = index;
-                }
-            });
+     // Update active TOC
+     function updateTOC() {
+         const headings = document.querySelectorAll('h2, h3');
+         const tocLinks = document.querySelectorAll('.toc-link');
+         
+         let activeIndex = 0;
+         headings.forEach((heading, index) => {
+             if (heading.getBoundingClientRect().top <= 100) {
+                 activeIndex = index;
+             }
+         });
 
-            tocLinks.forEach((link, index) => {
-                if (index === activeIndex) {
-                    link.classList.add('text-blue-600', 'font-medium');
-                } else {
-                    link.classList.remove('text-blue-600', 'font-medium');
-                }
-            });
-        }
-    </script>
+         tocLinks.forEach((link, index) => {
+             link.classList.toggle('text-blue-600 font-medium', index === activeIndex);
+         });
+     }
 
-    <%- include('include/footer') %>
+     // Lazy load images
+     document.addEventListener('DOMContentLoaded', () => {
+         const lazyImages = document.querySelectorAll('img[loading="lazy"]');
+         const imageObserver = new IntersectionObserver((entries) => {
+             entries.forEach(entry => {
+                 if (entry.isIntersecting) {
+                     const img = entry.target;
+                     img.src = img.dataset.src;
+                     imageObserver.unobserve(img);
+                 }
+             });
+         });
+
+         lazyImages.forEach(img => imageObserver.observe(img));
+     });
+
+     // Share tracking
+     document.querySelectorAll('[data-share]').forEach(button => {
+         button.addEventListener('click', () => {
+             const platform = button.dataset.share;
+             if (typeof gtag !== 'undefined') {
+                 gtag('event', 'share', {
+                     method: platform,
+                     content_type: 'article',
+                     item_id: '<%= article.slug %>'
+                 });
+             }
+         });
+     });
+ </script>
+
+ <%- include('include/footer') %>
 </body>
 </html>

@@ -307,65 +307,72 @@ router.post('/admin/articles/:id/delete',isAdmin, async (req, res) => {
      }
 });
 
-// GET THE ARTICLE BY SLUG AND DISPLAY IT IN THE ARTICLE PAGE
-
 router.get('/articles/:slug', async (req, res) => {
-     const slug = req.params.slug;
-
+     const slug = req.params.slug
      try {
-          const article = await Article.findOne({ slug });
-          if (!article) {
-               return res.status(404).send('Article not found');
-          }
-
-          // Load article content with Cheerio
-          const $ = cheerio.load(article.content);
-          const headings = [];
-
-          // Extract headings and assign unique IDs
-          $('h2').each(function (i, elem) {
-               const headingText = $(this).text();
-               const headingId = 'heading-' + i;
-               headings.push({ id: headingId, text: headingText });
-               $(this).attr('id', headingId); // Add unique ID to each heading
-          });
-
-          // Update article content with IDs
-          article.content = $.html();
-          const calculateReadingTime = (content) => {
-               const wordsPerMinute = 200; // Average reading speed
-               const text = content.replace(/<[^>]*>/g, ''); // Remove HTML tags
-               const wordCount = text.trim().split(/\s+/).length; // Count words
-               return Math.ceil(wordCount / wordsPerMinute); // Calculate reading time in minutes
-          };
-
-         // Dynamic SEO metadata
-const pageTitle = `${article.title} - Articles sur ${article.category} | NDRESSILIK`;
-const description = article.summary || 
-    `${article.title} - Lisez notre article détaillé sur ${article.category} et obtenez des conseils pratiques, des informations utiles, et bien plus encore pour le bien-être des animaux.`;
-const keywords = `${article.tags.join(', ')}, ${article.category}, bien-être animal, conseils animaux, articles NDRESSILIK`;
-
-          const comments = await Comment.find({ article: article._id });
-
-          // Pass data to the template
-          res.render('user/article', {
-               pageTitle,
-               comments,
-               description,
-               keywords,
-               article,
-               headings,
-               pageUrl: `https://www.ndressilik.com/articles/${slug}`,
-               readTime: calculateReadingTime(article.content),
-               success: req.flash('success'),
-               error: req.flash('error')
-          });
+         const article = await Article.findOne({ slug });
+         if (!article) return res.status(404).send('Article not found');
+ 
+         // Load article content and extract headings
+         const $ = cheerio.load(article.content);
+         const headings = [];
+         $('h2').each(function (i, elem) {
+             const headingText = $(this).text();
+             const headingId = 'heading-' + i;
+             headings.push({ id: headingId, text: headingText });
+             $(this).attr('id', headingId);
+         });
+         article.content = $.html();
+ 
+         // Get related articles
+         const relatedArticles = await Article.find({
+             _id: { $ne: article._id },
+             $or: [
+                 { category: article.category },
+                 { tags: { $in: article.tags } }
+             ]
+         })
+         .select('title slug featuredImage category excerpt')
+         .sort('-publicationDate')
+         .limit(4);
+ 
+         // Calculate reading time
+         const calculateReadingTime = (content) => {
+             const wordsPerMinute = 200;
+             const text = content.replace(/<[^>]*>/g, '');
+             const wordCount = text.trim().split(/\s+/).length;
+             return Math.ceil(wordCount / wordsPerMinute);
+         };
+ 
+         // Get comments
+         const comments = await Comment.find({ article: article._id })
+             .sort('-createdAt');
+ 
+         // Prepare SEO metadata
+         const pageTitle = `${article.title} - Articles sur ${article.category} | NDRESSILIK`;
+         const description = article.summary || 
+             `${article.title} - Lisez notre article détaillé sur ${article.category} et obtenez des conseils pratiques, des informations utiles pour le bien-être des animaux.`;
+         const keywords = `${article.tags.join(', ')}, ${article.category}, bien-être animal, conseils animaux`;
+ 
+         res.render('user/article', {
+             pageTitle,
+             description,
+             keywords,
+             article,
+             headings,
+             comments,
+             relatedArticles,
+             pageUrl: `https://www.ndressilik.com/articles/${slug}`,
+             readTime: calculateReadingTime(article.content),
+             success: req.flash('success'),
+             error: req.flash('error')
+         });
+ 
      } catch (err) {
-          console.error('Error fetching article:', err);
-          res.status(500).send('Server Error');
+         console.error('Error fetching article:', err);
+         res.status(500).send('Server Error');
      }
-});
-
+ });
 
 
 // POST comment on an article
