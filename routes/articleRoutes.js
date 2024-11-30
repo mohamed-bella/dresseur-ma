@@ -329,11 +329,11 @@ router.get('/articles/:slug', async (req, res) => {
              _id: { $ne: article._id },
              $or: [
                  { category: article.category },
-                 { tags: { $in: article.tags } }
+               //   { tags: { $in: article.tags } }
              ]
          })
-         .select('title slug featuredImage category excerpt')
-         .sort('-publicationDate')
+         .select('title slug featuredImage category')
+         .sort('-createdAt')
          .limit(4);
  
          // Calculate reading time
@@ -353,7 +353,8 @@ router.get('/articles/:slug', async (req, res) => {
          const description = article.summary || 
              `${article.title} - Lisez notre article détaillé sur ${article.category} et obtenez des conseils pratiques, des informations utiles pour le bien-être des animaux.`;
          const keywords = `${article.tags.join(', ')}, ${article.category}, bien-être animal, conseils animaux`;
- 
+         
+         console.log(relatedArticles)
          res.render('user/article', {
              pageTitle,
              description,
