@@ -54,43 +54,7 @@
 
                         <!-- Setup Steps Grid -->
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <!-- Step 1: Complete Profile -->
-                            <button onclick="window.location.href='/dashboard/profile'" 
-                                class="group relative w-full text-left focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded-xl">
-                                <div class="p-6 rounded-xl border-2 transition-all duration-300
-                                    <%= !user.isProfileComplete 
-                                        ? 'border-primary-200 bg-primary-50/30' 
-                                        : 'border-gray-100 bg-white' %>
-                                    group-hover:border-primary-300 group-hover:shadow-md">
-                                    <div class="flex gap-4">
-                                        <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-xl
-                                            <%= !user.isProfileComplete 
-                                                ? 'bg-primary-100 text-primary-600' 
-                                                : 'bg-gray-100 text-gray-400' %>
-                                            group-hover:scale-110 transition-transform duration-300">
-                                            <% if (user.isProfileComplete) { %>
-                                                <i class="fas fa-check-circle text-xl text-green-500"></i>
-                                            <% } else { %>
-                                                <span class="text-lg font-bold">1</span>
-                                            <% } %>
-                                        </div>
-                                        <div class="flex-1 min-w-0">
-                                            <h3 class="text-lg font-semibold text-gray-900 mb-1 group-hover:text-primary-600 transition-colors truncate">
-                                                Compléter le profil
-                                            </h3>
-                                            <p class="text-sm text-gray-600 mb-2 line-clamp-2">
-                                                <%= user.isProfileComplete ? 'Profil complété' : 'Ajoutez vos informations professionnelles' %>
-                                            </p>
-                                            <% if (!user.isProfileComplete) { %>
-                                                <span class="inline-flex items-center text-sm text-primary-600 font-medium">
-                                                    Commencer maintenant
-                                                    <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i>
-                                                </span>
-                                            <% } %>
-                                        </div>
-                                    </div>
-                                </div>
-                            </button>
+                           
 
                             <!-- Step 2: Add Services -->
                             <button onclick="window.location.href='/dashboard/new-service'"
@@ -98,7 +62,7 @@
                                 <div class="p-6 rounded-xl border-2 transition-all duration-300
                                     <%= user.isProfileComplete && !user.hasServices 
                                         ? 'border-primary-200 bg-primary-50/30' 
-                                        : 'border-gray-100 bg-white' %>
+                                        : 'border-gray-500 bg-white' %>
                                     group-hover:border-primary-300 group-hover:shadow-md">
                                     <div class="flex gap-4">
                                         <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-xl
@@ -109,7 +73,7 @@
                                             <% if (user.hasServices) { %>
                                                 <i class="fas fa-check-circle text-xl text-green-500"></i>
                                             <% } else { %>
-                                                <span class="text-lg font-bold">2</span>
+                                                <span class="text-lg font-bold">1</span>
                                             <% } %>
                                         </div>
                                         <div class="flex-1 min-w-0">
