@@ -562,295 +562,176 @@ const getDashboardStats = async (userId) => {
 // Updated dashboard route
 
 router.get('/dashboard', isAuthenticated, async (req, res) => {
-     try {
-         // 1. Profile Completion Calculation
-         const requiredFields = [
-             { field: 'location.city', weight: 15 },
-             { field: 'specializations', weight: 20, isArray: true },
-             { field: 'languages', weight: 10, isArray: true },
-             { field: 'experience.description', weight: 15, notDefault: 'Sans Experience.' },
-             { field: 'qualifications', weight: 15, isArray: true },
-             { field: 'gallery', weight: 15, isArray: true },
-             { field: 'bio', weight: 10 }
-         ];
- 
-         let completedWeight = 0;
-         requiredFields.forEach(field => {
-             if (field.isArray) {
-                 const value = field.field.split('.').reduce((obj, key) => obj?.[key], req.user);
-                 if (value && Array.isArray(value) && value.length > 0) {
-                     completedWeight += field.weight;
-                 }
-             } else if (field.notDefault) {
-                 const value = field.field.split('.').reduce((obj, key) => obj?.[key], req.user);
-                 if (value && value !== field.notDefault) {
-                     completedWeight += field.weight;
-                 }
-             } else {
-                 const value = field.field.split('.').reduce((obj, key) => obj?.[key], req.user);
-                 if (value && value !== '') {
-                     completedWeight += field.weight;
-                 }
-             }
-         });
- 
-         // 2. Services Statistics
-         const services = await Service.aggregate([
-             {
-                 $match: {
-                     createdBy: new ObjectId(req.user._id)
-                 }
-             },
-             {
-                 $lookup: {
-                     from: 'reviews',
-                     localField: '_id',
-                     foreignField: 'serviceId',
-                     as: 'reviews'
-                 }
-             },
-             {
-                 $lookup: {
-                     from: 'reservations',
-                     localField: '_id',
-                     foreignField: 'serviceId',
-                     as: 'reservations'
-                 }
-             },
-             {
-                 $addFields: {
-                     averageRating: {
-                         $cond: [
-                             { $gt: [{ $size: '$reviews' }, 0] },
-                             { $avg: '$reviews.rating' },
-                             0
-                         ]
-                     },
-                     totalReservations: { $size: '$reservations' },
-                     status: {
-                         $cond: [
-                             { $eq: ['$isActive', true] },
-                             'active',
-                             'inactive'
-                         ]
-                     }
-                 }
-             }
-         ]);
- 
-         // 3. Consultations Statistics
-         const consultations = await Consultation.aggregate([
-             {
-                 $match: {
-                     assignedExpert: new ObjectId(req.user._id)
-                 }
-             },
-             {
-                 $facet: {
-                     'stats': [
-                         {
-                             $group: {
-                                 _id: null,
-                                 total: { $sum: 1 },
-                                 paid: {
-                                     $sum: { $cond: [{ $eq: ['$type', 'paid'] }, 1, 0] }
-                                 },
-                                 free: {
-                                     $sum: { $cond: [{ $eq: ['$type', 'free'] }, 1, 0] }
-                                 },
-                                 pending: {
-                                     $sum: { $cond: [{ $eq: ['$status', 'pending'] }, 1, 0] }
-                                 },
-                                 inProgress: {
-                                     $sum: { $cond: [{ $eq: ['$status', 'in_progress'] }, 1, 0] }
-                                 },
-                                 completed: {
-                                     $sum: { $cond: [{ $eq: ['$status', 'completed'] }, 1, 0] }
-                                 }
-                             }
-                         }
-                     ],
-                     'recent': [
-                         { $match: { status: 'pending' } },
-                         { $sort: { createdAt: -1 } },
-                         { $limit: 5 }
-                     ]
-                 }
-             }
-         ]);
- 
-         // 4. Overall Stats Calculation
-         const stats = {
-          pendingPaidCount: 0,
-            pendingFreeCount: 0,
-            potentialEarnings: 0,
-             totalServices: services.length,
-             activeServices: services.filter(s => s.status === 'active').length,
-             totalReservations: services.reduce((acc, s) => acc + s.totalReservations, 0),
-             totalRevenue: services.reduce((acc, s) => {
-                 const reservationRevenue = s.reservations.reduce((sum, r) => sum + (r.totalAmount || 0), 0);
-                 return acc + reservationRevenue;
-             }, 0),
-             averageRating: services.length > 0
-                 ? (services.reduce((acc, s) => acc + s.averageRating, 0) / services.length).toFixed(1)
-                 : 0,
-             totalReviews: services.reduce((acc, s) => acc + s.reviews.length, 0),
-             consultations: consultations[0].stats[0] || {
-                 total: 0, paid: 0, free: 0,
-                 pending: 0, inProgress: 0, completed: 0
-             }
-         };
- 
-         // 5. Analytics Data (Last 7 Days)
-         const now = new Date();
-         const last7Days = new Date(now.setDate(now.getDate() - 7));
- 
-         const [visitsData, reservationsData, consultationsData] = await Promise.all([
-             // Visits Analytics
-             Visit.aggregate([
-                 {
-                     $match: {
-                         providerId: new ObjectId(req.user._id),
-                         createdAt: { $gte: last7Days }
-                     }
-                 },
-                 {
-                     $group: {
-                         _id: {
-                             date: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
-                             device: '$device',
-                             location: '$location',
-                             userId: '$userId'
-                         },
-                         count: { $sum: 1 }
-                     }
-                 },
-                 { $sort: { '_id.date': 1 } }
-             ]),
- 
-             // Reservations Analytics
-             Service.aggregate([
-                 {
-                     $match: {
-                         createdBy: new ObjectId(req.user._id)
-                     }
-                 },
-                 {
-                     $lookup: {
-                         from: 'reservations',
-                         localField: '_id',
-                         foreignField: 'serviceId',
-                         as: 'reservations'
-                     }
-                 },
-                 { $unwind: '$reservations' },
-                 {
-                     $match: {
-                         'reservations.createdAt': { $gte: last7Days }
-                     }
-                 },
-                 {
-                     $group: {
-                         _id: { 
-                             date: { $dateToString: { format: '%Y-%m-%d', date: '$reservations.createdAt' } },
-                             status: '$reservations.status'
-                         },
-                         count: { $sum: 1 },
-                         revenue: { $sum: '$reservations.totalAmount' }
-                     }
-                 },
-                 { $sort: { '_id.date': 1 } }
-             ]),
- 
-             // Consultations Analytics
-             Consultation.aggregate([
-                 {
-                     $match: {
-                         assignedExpert: new ObjectId(req.user._id),
-                         createdAt: { $gte: last7Days }
-                     }
-                 },
-                 {
-                     $group: {
-                         _id: {
-                             date: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
-                             type: '$type',
-                             status: '$status'
-                         },
-                         count: { $sum: 1 }
-                     }
-                 },
-                 { $sort: { '_id.date': 1 } }
-             ])
-         ]);
- 
-         // Format analytics data
-         const analytics = {
-             visits: formatVisitsData(visitsData),
-             reservations: formatReservationsData(reservationsData),
-             consultations: formatConsultationsData(consultationsData)
-         };
-        const consults = await Consultation.find()
+    try {
+      // 1. Profile Completion Calculation
+const requiredFields = [
+    { field: 'location.city', label: 'Ajoutez votre localisation - أضف موقعك', link: '/dashboard/profile/#location', weight: 15 },
+    { field: 'specializations', label: 'Précisez vos spécialisations - حدد تخصصاتك', link: '/dashboard/profile/#specializations', weight: 20, isArray: true },
+    { field: 'languages', label: 'Listez les langues que vous parlez - اذكر اللغات التي تتحدثها', link: '/dashboard/profile/#languages', weight: 10, isArray: true },
+    { field: 'experience.description', label: 'Décrivez votre expérience - صِف تجربتك', link: '/dashboard/profile/#experience', weight: 15, notDefault: 'Sans Experience.' },
+    { field: 'qualifications', label: 'Ajoutez vos qualifications - أضف مؤهلاتك', link: '/dashboard/profile/#qualifications', weight: 15, isArray: true },
+    { field: 'gallery', label: 'Ajoutez des photos à votre galerie - أضف صورًا إلى معرضك', link: '/dashboard/profile/#gallery', weight: 15, isArray: true },
+    { field: 'bio', label: 'Ajoutez une biographie - أضف سيرتك الذاتية', link: '/dashboard/profile/#bio', weight: 10 }
+];
 
 
-     //    Get Consultation Data
-      // Get pending consultations count
-      const consultationsStats = await Consultation.aggregate([
-          {
-              $match: {
-                  status: 'pending',
-                  assignedExpert: null // Not yet assigned
-              }
-          },
-          {
-              $group: {
-                  _id: '$type',
-                  count: { $sum: 1 }
-              }
-          }
-      ]);
-      // Process the aggregation results
-      consultationsStats.forEach(stat => {
-          if (stat._id === 'paid') {
-              stats.pendingPaidCount = stat.count;
-              stats.potentialEarnings = stat.count * 200; // 200 DH per paid consultation
-          } else if (stat._id === 'free') {
-              stats.pendingFreeCount = stat.count;
-          }
-      });
-        // Only show alert if there are pending consultations
-        const showConsultationAlert = stats.pendingPaidCount > 0 || stats.pendingFreeCount > 0;
+        let completedWeight = 0;
+        const missingElements = [];
 
-      
-     
-          console.log(stats)
-         // Render dashboard with all data
-         res.render('user/dashboard/dashboard', {
-          pageTitle : 'dashboard',
-          description :'',
-          keywords : '',
-             user: {
-                 ...req.user.toObject(),
-                 completionPercentage: Math.round(completedWeight)
-             },
-             stats,
-             showConsultationAlert,
-             services,
-             recentConsultations: consultations[0].recent,
-             analytics,
-             consultations : consults,
-             moment,
-             path: 'dashboard'
-         });
- 
-     } catch (error) {
-         console.error('Dashboard Error:', error);
-         res.status(500).render('error', { 
-             message: 'Error loading dashboard',
-             error: process.env.NODE_ENV === 'development' ? error : {}
-         });
-     }
- });
+        requiredFields.forEach(field => {
+            const value = field.field.split('.').reduce((obj, key) => obj?.[key], req.user);
+
+            if (field.isArray) {
+                if (!value || !Array.isArray(value) || value.length === 0) {
+                    missingElements.push({ label: field.label, link: field.link });
+                } else {
+                    completedWeight += field.weight;
+                }
+            } else if (field.notDefault) {
+                if (!value || value === field.notDefault) {
+                    missingElements.push({ label: field.label, link: field.link });
+                } else {
+                    completedWeight += field.weight;
+                }
+            } else {
+                if (!value || value === '') {
+                    missingElements.push({ label: field.label, link: field.link });
+                } else {
+                    completedWeight += field.weight;
+                }
+            }
+        });
+
+        // 2. Services Statistics
+        const services = await Service.aggregate([
+            {
+                $match: {
+                    createdBy: new ObjectId(req.user._id)
+                }
+            },
+            {
+                $lookup: {
+                    from: 'reviews',
+                    localField: '_id',
+                    foreignField: 'serviceId',
+                    as: 'reviews'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'reservations',
+                    localField: '_id',
+                    foreignField: 'serviceId',
+                    as: 'reservations'
+                }
+            },
+            {
+                $addFields: {
+                    averageRating: {
+                        $cond: [
+                            { $gt: [{ $size: '$reviews' }, 0] },
+                            { $avg: '$reviews.rating' },
+                            0
+                        ]
+                    },
+                    totalReservations: { $size: '$reservations' },
+                    status: {
+                        $cond: [
+                            { $eq: ['$isActive', true] },
+                            'active',
+                            'inactive'
+                        ]
+                    }
+                }
+            }
+        ]);
+
+        // 3. Consultations Statistics
+        const consultations = await Consultation.aggregate([
+            {
+                $match: {
+                    assignedExpert: new ObjectId(req.user._id)
+                }
+            },
+            {
+                $facet: {
+                    'stats': [
+                        {
+                            $group: {
+                                _id: null,
+                                total: { $sum: 1 },
+                                paid: {
+                                    $sum: { $cond: [{ $eq: ['$type', 'paid'] }, 1, 0] }
+                                },
+                                free: {
+                                    $sum: { $cond: [{ $eq: ['$type', 'free'] }, 1, 0] }
+                                },
+                                pending: {
+                                    $sum: { $cond: [{ $eq: ['$status', 'pending'] }, 1, 0] }
+                                },
+                                inProgress: {
+                                    $sum: { $cond: [{ $eq: ['$status', 'in_progress'] }, 1, 0] }
+                                },
+                                completed: {
+                                    $sum: { $cond: [{ $eq: ['$status', 'completed'] }, 1, 0] }
+                                }
+                            }
+                        }
+                    ],
+                    'recent': [
+                        { $match: { status: 'pending' } },
+                        { $sort: { createdAt: -1 } },
+                        { $limit: 5 }
+                    ]
+                }
+            }
+        ]);
+
+        // 4. Overall Stats Calculation
+        const stats = {
+            totalServices: services.length,
+            activeServices: services.filter(s => s.status === 'active').length,
+            totalReservations: services.reduce((acc, s) => acc + s.totalReservations, 0),
+            totalRevenue: services.reduce((acc, s) => {
+                const reservationRevenue = s.reservations.reduce((sum, r) => sum + (r.totalAmount || 0), 0);
+                return acc + reservationRevenue;
+            }, 0),
+            averageRating: services.length > 0
+                ? (services.reduce((acc, s) => acc + s.averageRating, 0) / services.length).toFixed(1)
+                : 0,
+            totalReviews: services.reduce((acc, s) => acc + s.reviews.length, 0),
+            consultations: consultations[0].stats[0] || {
+                total: 0, paid: 0, free: 0,
+                pending: 0, inProgress: 0, completed: 0
+            }
+        };
+        console.log(missingElements)
+
+        // Render dashboard with all data
+        res.render('user/dashboard/dashboard', {
+            pageTitle: 'dashboard',
+            description: '',
+            keywords: '',
+            user: {
+                ...req.user.toObject(),
+                completionPercentage: Math.round(completedWeight)
+            },
+            stats,
+            missingElements, // Pass missing elements to the template
+            services,
+            recentConsultations: consultations[0].recent,
+            path: 'dashboard'
+        });
+
+    } catch (error) {
+        console.error('Dashboard Error:', error);
+        res.status(500).render('error', { 
+            message: 'Error loading dashboard',
+            error: process.env.NODE_ENV === 'development' ? error : {}
+        });
+    }
+});
+
 
 //  Dashboard Consultation
 router.get('/dashboard/consultations', isAuthenticated, async (req, res) => {

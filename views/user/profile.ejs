@@ -9,278 +9,143 @@
           <div class="max-w-7xl mx-auto px-4 sm:px-6 -mt-12 relative">
                <div class="flex flex-col lg:flex-row gap-6">
                     <!-- Left Sidebar: Profile Card -->
-                    <div class="lg:w-80">
-                         <div class="sticky top-6">
-                              <!-- Profile Card -->
-                              <div class="bg-white rounded-lg border shadow-sm">
-                                   <!-- Profile Image & Basic Info -->
-                                   <div class="px-6 pt-6 pb-4">
-                                        <div class="relative -mt-20 mb-3">
-                                             <div class="w-32 h-32 mx-auto rounded-full border-4 border-white shadow-md overflow-hidden">
-                                                  <img src="<%= profile.profileImage %>" alt="<%= profile.displayName %>" class="w-full h-full object-cover">
-                                             </div>
-                                             <% if (profile.isVerified) { %>
-                                                  <div class="absolute bottom-0 right-1/3 bg-white rounded-full p-1 shadow-md">
-                                                       <img src="https://img.icons8.com/?size=100&id=uLBcIHPG2L9p&format=png&color=FD7E14" alt="Verified" class="w-6 h-6">
-                                                  </div>
-                                                  <% } %>
-                                        </div>
-
-                                        <div class="text-center">
-                                             <h1 class="text-xl font-bold text-gray-900">
-                                                  <%= profile.displayName %>
-                                             </h1>
-                                             <div class="mt-1 text-sm text-gray-500 space-y-1">
-                                                  <% if (profile.location?.city) { %>
-                                                       <div class="flex items-center justify-center gap-1">
-                                                            <i class="fas fa-map-marker-alt text-gray-400"></i>
-                                                            <span>
-                                                                 <%= profile.location.city %>
-                                                            </span>
-                                                       </div>
-                                                       <% } %>
-                                                            <div class="flex items-center justify-center gap-1">
-                                                                 <i class="fas fa-calendar text-gray-400"></i>
-                                                                 <span>Membre depuis <%= new Date(profile.createdAt).toLocaleDateString('fr-FR', { month: 'long' , year: 'numeric' }) %></span>
-                                                            </div>
-                                             </div>
-                                        </div>
-
-                                        <!-- Share Profile Button -->
-                                        <button onclick="copyProfileLink()" class="w-full mt-4 flex items-center justify-center gap-2 px-4 py-2.5
-                                            bg-gray-50 hover:bg-gray-100 rounded-md text-sm font-medium
-                                            transition-colors duration-200 group">
-                                             <i class="fas fa-share-alt"></i>
-                                             <span>Partager le profil</span>
-                                             <div class="absolute -top-10 opacity-0 bg-gray-900 text-white text-sm px-3 py-1 
-                                           rounded-md transition-opacity duration-200 group-[.copied]:opacity-100">
-                                                  Lien copié!
-                                             </div>
-                                        </button>
-                                        <!-- Call Button  -->
-                                        <% if (profile.phoneNumber) { %>
-                                             <button onclick="openCallModal()" class="w-full mt-4 group relative flex items-center justify-center gap-3 px-6 py-3
-                                                      bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl
-                                                      hover:shadow-lg hover:shadow-green-500/25 hover:-translate-y-0.5
-                                                      active:translate-y-0 transition-all duration-300">
-                                                  <div class="absolute inset-0 bg-gradient-to-r from-green-600 to-green-700 
-                                                       opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-300">
-                                                  </div>
-                                                  <i class="fas fa-phone-alt relative animate-pulse"></i>
-                                                  <span class="relative font-medium">
-                                                       <%= profile.phoneNumber %>
-                                                  </span>
-                                             </button>
-                                             <% } %>
-
-                                                  <!-- Enhanced Call Modal -->
-                                                  <div id="callModal" class="fixed inset-0 z-50 hidden animate-fadeIn" onclick="handleModalClick(event)">
-                                                       <!-- Backdrop -->
-                                                       <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
-
-                                                       <!-- Modal Content -->
-                                                       <div class="fixed inset-0 flex items-center justify-center p-4">
-                                                            <div class="relative bg-white w-full max-w-md rounded-2xl shadow-2xl p-6
-                                                       transform transition-all duration-300 scale-95 opacity-0" id="modalContent">
-                                                                 <!-- Modal Header -->
-                                                                 <div class="text-center mb-6">
-                                                                      <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-green-100 
-                                                               flex items-center justify-center">
-                                                                           <i class="fas fa-phone-alt text-2xl text-green-600"></i>
-                                                                      </div>
-                                                                      <h2 class="text-xl font-bold text-gray-900 mb-2 font-arabic">
-                                                                           هل تريد الاتصال بهذا الرقم؟
-                                                                      </h2>
-                                                                      <p class="text-lg text-gray-600 font-medium dir-ltr">
-                                                                           <%= profile.phoneNumber %>
-                                                                      </p>
-                                                                 </div>
-
-                                                                 <!-- Action Buttons -->
-                                                                 <div class="grid grid-cols-2 gap-4">
-                                                                      <button onclick="closeCallModal()" class="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 
-                                                                  rounded-xl font-medium transition-colors duration-200 font-arabic">
-                                                                           إلغاء
-                                                                      </button>
-                                                                      <button onclick="confirmCall()" class="px-6 py-3 bg-green-600 hover:bg-green-700 text-white 
-                                                                  rounded-xl font-medium transition-colors duration-200 
-                                                                  hover:shadow-lg hover:shadow-green-500/25 font-arabic">
-                                                                           اتصال
-                                                                      </button>
-                                                                 </div>
-
-                                                                 <!-- Close Button -->
-                                                                 <button onclick="closeCallModal()" class="absolute -top-4 -right-4 w-8 h-8 bg-white rounded-full 
-                                                              shadow-lg flex items-center justify-center hover:bg-gray-50 
-                                                              transition-colors duration-200">
-                                                                      <i class="fas fa-times text-gray-500"></i>
-                                                                 </button>
-                                                            </div>
-                                                       </div>
-                                                  </div>
-
-                                                  <script>
-                                                       // Enhanced modal functionality
-                                                       function openCallModal() {
-                                                            const modal = document.getElementById('callModal');
-                                                            const modalContent = document.getElementById('modalContent');
-
-                                                            // Show modal
-                                                            modal.classList.remove('hidden');
-
-                                                            // Animate content
-                                                            setTimeout(() => {
-                                                                 modalContent.classList.remove('scale-95', 'opacity-0');
-                                                                 modalContent.classList.add('scale-100', 'opacity-100');
-                                                            }, 50);
-
-                                                            // Lock scroll
-                                                            document.body.style.overflow = 'hidden';
-                                                       }
-
-                                                       function closeCallModal() {
-                                                            const modal = document.getElementById('callModal');
-                                                            const modalContent = document.getElementById('modalContent');
-
-                                                            // Animate out
-                                                            modalContent.classList.remove('scale-100', 'opacity-100');
-                                                            modalContent.classList.add('scale-95', 'opacity-0');
-
-                                                            // Hide modal after animation
-                                                            setTimeout(() => {
-                                                                 modal.classList.add('hidden');
-                                                                 document.body.style.overflow = '';
-                                                            }, 200);
-                                                       }
-
-                                                       function handleModalClick(event) {
-                                                            if (event.target.id === 'callModal') {
-                                                                 closeCallModal();
-                                                            }
-                                                       }
-
-                                                       function confirmCall() {
-                                                            const phoneNumber = '<%= profile.phoneNumber %>';
-                                                            window.location.href = `tel:${phoneNumber}`;
-                                                            closeCallModal();
-                                                       }
-
-                                                       // Close on escape key
-                                                       document.addEventListener('keydown', (e) => {
-                                                            if (e.key === 'Escape' && !document.getElementById('callModal').classList.contains('hidden')) {
-                                                                 closeCallModal();
-                                                            }
-                                                       });
-                                                  </script>
-
-                                                  <style>
-                                                       /* Animation keyframes */
-                                                       @keyframes fadeIn {
-                                                            from {
-                                                                 opacity: 0;
-                                                            }
-
-                                                            to {
-                                                                 opacity: 1;
-                                                            }
-                                                       }
-
-                                                       .animate-fadeIn {
-                                                            animation: fadeIn 0.3s ease-out;
-                                                       }
-
-                                                       /* RTL support */
-                                                       .dir-ltr {
-                                                            direction: ltr;
-                                                       }
-
-                                                       /* Prevent text selection during modal interactions */
-                                                       .modal-open {
-                                                            user-select: none;
-                                                       }
-
-                                                       /* Modal animations */
-                                                       .modal-enter {
-                                                            animation: modalEnter 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                                                       }
-
-                                                       @keyframes modalEnter {
-                                                            from {
-                                                                 opacity: 0;
-                                                                 transform: scale(0.95) translateY(10px);
-                                                            }
-
-                                                            to {
-                                                                 opacity: 1;
-                                                                 transform: scale(1) translateY(0);
-                                                            }
-                                                       }
-
-                                                       /* Pulse animation for phone icon */
-                                                       .animate-pulse {
-                                                            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-                                                       }
-
-                                                       @keyframes pulse {
-
-                                                            0%,
-                                                            100% {
-                                                                 opacity: 1;
-                                                            }
-
-                                                            50% {
-                                                                 opacity: .7;
-                                                            }
-                                                       }
-                                                  </style>
-                                   </div>
-
-                                   <!-- Karma-like Stats -->
-                                   <div class="border-t">
-                                        <div class="grid grid-cols-2 divide-x">
-                                             <div class="px-4 py-3 text-center">
-                                                  <div class="text-xl font-bold text-orange-500">
-                                                       <%= profile.ndressilikScore || 0 %>%
-                                                  </div>
-                                                  <div class="text-xs text-gray-500">Score de confiance</div>
-                                             </div>
-                                             <div class="px-4 py-3 text-center">
-                                                  <div class="text-xl font-bold text-blue-500">
-                                                       <%= profile.metrics?.totalReviews || 0 %>
-                                                  </div>
-                                                  <div class="text-xs text-gray-500">Avis reçus</div>
-                                             </div>
-                                        </div>
-                                   </div>
-
-                                   <!-- Bio Section -->
-                                   <% if (profile.bio) { %>
-                                        <div class="px-4 py-3 border-t">
-                                             <h3 class="text-sm font-medium text-gray-900 mb-2">À propos</h3>
-                                             <p class="text-sm text-gray-600 whitespace-pre-line">
-                                                  <%= profile.bio %>
-                                             </p>
-                                        </div>
-                                        <% } %>
-
-                                             <!-- Trophy Case (Badges) -->
-                                             <% if (profile.badges && profile.badges.length> 0) { %>
-                                                  <div class="px-4 py-3 border-t">
-                                                       <h3 class="text-sm font-medium text-gray-900 mb-2">Badges</h3>
-                                                       <div class="flex flex-wrap gap-2">
-                                                            <% profile.badges.forEach(badge=> { %>
-                                                                 <div class="w-8 h-8 rounded-md bg-gray-50 p-1 cursor-pointer hover:bg-gray-100
-                                                     transition-colors duration-200" onclick="showBadgeModal('<%= badge.image %>', '<%= badge.type %>', 
-                                                                    '<%= badge.label %>', '<%= badge.earnedAt %>')">
-                                                                      <img src="<%= badge.image %>" alt="<%= badge.type %>" class="w-full h-full">
-                                                                 </div>
-                                                                 <% }); %>
-                                                       </div>
-                                                  </div>
-                                                  <% } %>
-                              </div>
+<div class="lg:w-80">
+     <div class="sticky top-6">
+         <!-- Profile Card -->
+         <div class="bg-white rounded-lg border shadow-sm">
+             <!-- Profile Image & Basic Info -->
+             <div class="px-6 pt-6 pb-4">
+                 <div class="relative -mt-20 mb-3">
+                     <div class="w-32 h-32 mx-auto rounded-full border-4 border-white shadow-md overflow-hidden">
+                         <img src="<%= profile.profileImage %>" alt="<%= profile.displayName %>" class="w-full h-full object-cover">
+                     </div>
+                     <% if (profile.isVerified) { %>
+                     <div class="absolute bottom-0 right-1/3 bg-white rounded-full p-1 shadow-md">
+                         <img src="https://img.icons8.com/?size=100&id=uLBcIHPG2L9p&format=png&color=FD7E14" alt="Verified" class="w-6 h-6">
+                     </div>
+                     <% } %>
+                 </div>
+ 
+                 <div class="text-center">
+                     <h1 class="text-xl font-bold text-gray-900">
+                         <%= profile.displayName %>
+                     </h1>
+                     <div class="mt-1 text-sm text-gray-500 space-y-1">
+                         <% if (profile.location?.city) { %>
+                         <div class="flex items-center justify-center gap-1">
+                             <i class="fas fa-map-marker-alt text-gray-400"></i>
+                             <span><%= profile.location.city %></span>
                          </div>
-                    </div>
+                         <% } %>
+                         <div class="flex items-center justify-center gap-1">
+                             <i class="fas fa-calendar text-gray-400"></i>
+                             <span>Membre depuis <%= new Date(profile.createdAt).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' }) %></span>
+                         </div>
+                     </div>
+                 </div>
+ 
+                 <!-- Call Button -->
+                 <% if (profile.phoneNumber) { %>
+                 <button onclick="openCallModal()" class="w-full mt-4 group relative flex items-center justify-center gap-3 px-6 py-3
+                     bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl
+                     hover:shadow-lg hover:shadow-green-500/25 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300">
+                     <i class="fas fa-phone-alt animate-pulse"></i>
+                     <span><%= profile.phoneNumber %></span>
+                 </button>
+                 <% } %>
+             </div>
+ 
+             <!-- Karma-like Stats -->
+             <div class="border-t">
+                 <div class="grid grid-cols-2 divide-x">
+                     <div class="px-4 py-3 text-center">
+                         <div class="text-xl font-bold text-orange-500"><%= profile.ndressilikScore || 0 %></div>
+                         <div class="text-xs text-gray-500">Score de confiance</div>
+                     </div>
+                     <div class="px-4 py-3 text-center">
+                         <div class="text-xl font-bold text-blue-500"><%= profile.metrics?.totalReviews || 0 %></div>
+                         <div class="text-xs text-gray-500">Avis reçus</div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>
+ </div>
+ 
+ <!-- Call Modal -->
+ <div id="callModal" class="fixed inset-0 z-50 hidden" onclick="handleModalClick(event)">
+     <!-- Backdrop -->
+     <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+ 
+     <!-- Modal Content -->
+     <div class="fixed inset-0 flex items-center justify-center p-4">
+         <div id="modalContent" class="bg-white w-full max-w-md rounded-2xl shadow-2xl p-6 transform scale-95 transition-all duration-300">
+             <!-- Modal Header -->
+             <div class="text-center mb-6">
+                 <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-green-100 flex items-center justify-center">
+                     <i class="fas fa-phone-alt text-2xl text-green-600"></i>
+                 </div>
+                 <h2 class="text-xl font-bold text-gray-900 mb-2">هل تريد الاتصال بهذا الرقم؟</h2>
+                 <p class="text-lg text-gray-600 dir-ltr"><%= profile.phoneNumber %></p>
+             </div>
+ 
+             <!-- Action Buttons -->
+             <div class="grid grid-cols-2 gap-4">
+                 <button onclick="closeCallModal()" class="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl transition-colors duration-200">إلغاء</button>
+                 <button onclick="confirmCall()" class="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl transition-colors duration-200">اتصال</button>
+             </div>
+ 
+             <!-- Close Button -->
+             <button onclick="closeCallModal()" class="absolute -top-4 -right-4 w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors duration-200">
+                 <i class="fas fa-times text-gray-500"></i>
+             </button>
+         </div>
+     </div>
+ </div>
+ 
+ <!-- JavaScript -->
+ <script>
+     function openCallModal() {
+         const modal = document.getElementById('callModal');
+         const modalContent = document.getElementById('modalContent');
+         modal.classList.remove('hidden');
+         setTimeout(() => {
+             modalContent.classList.remove('scale-95', 'opacity-0');
+             modalContent.classList.add('scale-100', 'opacity-100');
+         }, 50);
+         document.body.style.overflow = 'hidden';
+     }
+ 
+     function closeCallModal() {
+         const modal = document.getElementById('callModal');
+         const modalContent = document.getElementById('modalContent');
+         modalContent.classList.remove('scale-100', 'opacity-100');
+         modalContent.classList.add('scale-95', 'opacity-0');
+         setTimeout(() => {
+             modal.classList.add('hidden');
+             document.body.style.overflow = '';
+         }, 200);
+     }
+ 
+     function handleModalClick(event) {
+         if (event.target.id === 'callModal') {
+             closeCallModal();
+         }
+     }
+ 
+     function confirmCall() {
+         const phoneNumber = '<%= profile.phoneNumber %>';
+         window.location.href = `tel:${phoneNumber}`;
+         closeCallModal();
+     }
+ 
+     document.addEventListener('keydown', (e) => {
+         if (e.key === 'Escape' && !document.getElementById('callModal').classList.contains('hidden')) {
+             closeCallModal();
+         }
+     });
+ </script>
+ 
 
                     <!-- Main Content Area -->
                     <div class="flex-1">
