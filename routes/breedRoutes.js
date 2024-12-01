@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const DogBreed = require('../models/DogBreed');
+const DogBreed = require('../models/dogBreed');
 const fetch = require('node-fetch');
 
 // Image Service Helper
