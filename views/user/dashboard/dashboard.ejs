@@ -40,9 +40,9 @@
                         <% if (missingElements && missingElements.length > 0) { %>
                             <div class="bg-yellow-50 border-l-4 border-yellow-400 text-yellow-700 p-4 rounded-lg mb-6">
                                 <p class="font-bold mb-2">Pour améliorer votre profil :</p>
-                                <ul class="list-disc list-inside">
+                                <ul class="list-disc list-inside ">
                                     <% missingElements.forEach(element => { %>
-                                        <li>
+                                        <li class="mb-4">
                                             <a href="<%= element.link %>" class="text-blue-600 hover:underline underline">
                                                 <%= element.label %>
                                             </a>
