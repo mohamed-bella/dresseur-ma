@@ -71,7 +71,7 @@ class DogImageService {
 const imageService = new DogImageService();
 
 // Main breeds list route
-router.get('/les-races-des-chien', async (req, res) => {
+router.get('/tous-les-races-des-chiens', async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
         const limit = 12;
@@ -159,7 +159,7 @@ router.get('/les-races-des-chien', async (req, res) => {
 });
 
 // Breed details route
-router.get('/les-races-des-chien/:slug', async (req, res) => {
+router.get('/tous-les-races-des-chiens/:slug', async (req, res) => {
     try {
         const breed = await DogBreed.findOne({ slug: req.params.slug });
         
