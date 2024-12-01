@@ -1,0 +1,179 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.js"></script>
+<script>
+    let currentStep = 1;
+    const totalSteps = 4;
+
+    function showAddPostModal() {
+        document.getElementById('addPostModal').classList.remove('hidden');
+    }
+
+    function closeAddPostModal() {
+        document.getElementById('addPostModal').classList.add('hidden');
+    }
+
+    function nextStep() {
+        if (currentStep < totalSteps) {
+            document.querySelector(`[data-step="${currentStep}"]`).classList.add('hidden');
+            currentStep++;
+            document.querySelector(`[data-step="${currentStep}"]`).classList.remove('hidden');
+            
+            if (currentStep === totalSteps) {
+                document.querySelector('button[type="submit"]').classList.remove('hidden');
+                document.querySelector('button[onclick="nextStep()"]').classList.add('hidden');
+            }
+        }
+    }
+
+    function prevStep() {
+        if (currentStep > 1) {
+            document.querySelector(`[data-step="${currentStep}"]`).classList.add('hidden');
+            currentStep--;
+            document.querySelector(`[data-step="${currentStep}"]`).classList.remove('hidden');
+            
+            document.querySelector('button[type="submit"]').classList.add('hidden');
+            document.querySelector('button[onclick="nextStep()"]').classList.remove('hidden');
+        }
+    }
+
+    async function showPostDetails(postId) {
+        const response = await fetch(`/api/posts/${postId}`);
+        const post = await response.json();
+        
+        const modal = document.getElementById('postDetailsModal');
+        const content = document.getElementById('postDetailsContent');
+        
+        content.innerHTML = `
+            <div class="relative">
+                <button onclick="document.getElementById('postDetailsModal').classList.add('hidden')"
+                        class="absolute right-0 top-0 text-gray-500 hover:text-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+                
+                <div class="grid grid-cols-2 gap-6">
+                    <div>
+                        <img src="${post.photos[0]}" alt="${post.name}" class="w-full h-64 object-cover rounded-lg">
+                        <div class="grid grid-cols-4 gap-2 mt-2">
+                            ${post.photos.slice(1).map(photo => `
+                                <img src="${photo}" alt="" class="w-full h-20 object-cover rounded-lg">
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <span class="text-sm font-medium px-2 py-1 rounded
+                            ${post.type === 'adoption' ? 'bg-green-100 text-green-800' : 
+                              post.type === 'perdu' ? 'bg-red-100 text-red-800' : 
+                              'bg-yellow-100 text-yellow-800'}">
+                            ${post.type === 'adoption' ? 'À adopter' : 
+                              post.type === 'perdu' ? 'Perdu' : 'Trouvé'}
+                        </span>
+                        
+                        <h2 class="text-2xl font-bold mt-4">${post.name}</h2>
+                        <p class="text-gray-600 mt-2">${post.location}</p>
+                        
+                        <div class="mt-4 space-y-2">
+                            <p><strong>Race:</strong> ${post.breed}</p>
+                            <p><strong>Âge:</strong> ${post.age} ans</p>
+                        </div>
+                        
+                        <p class="mt-4">${post.description}</p>
+                        
+                        <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+                            <h3 class="font-semibold mb-2">Contact</h3>
+                            <p><strong>Email:</strong> ${post.contactInfo.email}</p>
+                            <p><strong>Téléphone:</strong> ${post.contactInfo.phone}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        modal.classList.remove('hidden');
+    }
+</script>
+<script>
+    // Add this to your existing script section
+document.getElementById('postForm').addEventListener('submit', async function(e) {
+e.preventDefault();
+
+// Show loading state
+const submitButton = document.querySelector('button[type="submit"]');
+const originalText = submitButton.textContent;
+submitButton.disabled = true;
+submitButton.innerHTML = `
+    <svg class="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+    </svg>
+    Publication en cours...
+`;
+
+try {
+    // Create FormData object
+    const formData = new FormData(this);
+    
+    // Send POST request
+    const response = await fetch('/submit', {
+        method: 'POST',
+        body: formData // FormData will automatically set the correct Content-Type
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+        // Show success message
+        alert('Annonce publiée avec succès!');
+        // Reload the page to show the new post
+        window.location.reload();
+    } else {
+        throw new Error(result.message || 'Erreur lors de la publication');
+    }
+} catch (error) {
+    console.error('Erreur:', error);
+    alert('Erreur lors de la publication de l\'annonce: ' + error.message);
+} finally {
+    // Reset button state
+    submitButton.disabled = false;
+    submitButton.textContent = originalText;
+}
+});
+
+// Add validation for each step
+function validateStep(step) {
+const currentStepElement = document.querySelector(`[data-step="${step}"]`);
+const inputs = currentStepElement.querySelectorAll('input[required], textarea[required]');
+let isValid = true;
+
+inputs.forEach(input => {
+    if (!input.value) {
+        isValid = false;
+        input.classList.add('border-red-500');
+    } else {
+        input.classList.remove('border-red-500');
+    }
+});
+
+return isValid;
+}
+
+// Update nextStep function
+function nextStep() {
+if (!validateStep(currentStep)) {
+    alert('Veuillez remplir tous les champs obligatoires.');
+    return;
+}
+
+if (currentStep < totalSteps) {
+    document.querySelector(`[data-step="${currentStep}"]`).classList.add('hidden');
+    currentStep++;
+    document.querySelector(`[data-step="${currentStep}"]`).classList.remove('hidden');
+    
+    if (currentStep === totalSteps) {
+        document.querySelector('button[type="submit"]').classList.remove('hidden');
+        document.querySelector('button[onclick="nextStep()"]').classList.add('hidden');
+    }
+}
+}
+</script>

@@ -1,36 +1,51 @@
-// models/DogPost.js
 const mongoose = require('mongoose');
 
 const dogPostSchema = new mongoose.Schema({
-  type: {
-    type: String,
-    enum: ['adoption', 'lost'],
-    required: true
-  },
-  name: {
-    type: String,
-    required: true
-  },
-  age: String,
-  breed: String,
-  description: String,
-  location: String,
-  photos: [String], // URL ou chemin du fichier
-  contactInfo: {
-    email: String,
-    phone: String
-  },
-  tips: String,
-  status: {
-    type: String,
-    enum: ['pending', 'approved', 'rejected'],
-    default: 'pending'
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now
-  },
-  adminFeedback: String // Feedback en cas de rejet
+    type: {
+        type: String,
+        enum: ['adoption', 'perdu', 'trouve'],
+        required: true
+    },
+    name: {
+        type: String,
+        required: true
+    },
+    age: {
+        type: Number,
+        required: true
+    },
+    breed: {
+        type: String,
+        required: true
+    },
+    description: {
+        type: String,
+        required: true
+    },
+    location: {
+        type: String,
+        required: true
+    },
+    photos: [{
+        type: String,
+        required: true
+    }],
+    contactInfo: {
+        email: {
+            type: String,
+            required: true
+        },
+        phone: {
+            type: String,
+            required: true
+        }
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    }
 });
 
-module.exports = mongoose.model('DogPost', dogPostSchema);
+const DogPost = mongoose.model('DogPost', dogPostSchema);
+
+module.exports = DogPost;

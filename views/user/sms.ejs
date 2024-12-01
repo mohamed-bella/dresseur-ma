@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test SMS Avancé</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-md mx-auto bg-white rounded-xl shadow-md p-6">
+        <h2 class="text-xl font-bold mb-6">Envoyer un SMS</h2>
+        
+        <form id="smsForm" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Numéro de téléphone</label>
+                <input type="tel" id="phoneNumber" required
+                       class="w-full px-3 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                       placeholder="0600000000">
+                <p id="phoneValidation" class="mt-1 text-sm text-gray-500"></p>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Template</label>
+                <select id="templateName" required
+                        class="w-full px-3 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                    <option value="">Sélectionner un template</option>
+                    <option value="verification">Code de vérification</option>
+                    <option value="welcome">Message de bienvenue</option>
+                    <option value="notification">Notification simple</option>
+                    <option value="alert">Alerte</option>
+                </select>
+            </div>
+
+            <div id="templateDataContainer" class="hidden space-y-4">
+                <!-- Template specific fields will be injected here -->
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Opérateur</label>
+                <select id="carrier" required
+                        class="w-full px-3 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                    <option value="">Sélectionner un opérateur</option>
+                    <option value="maroc_telecom">Maroc Telecom</option>
+                    <option value="orange">Orange</option>
+                    <option value="inwi">Inwi</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Priorité</label>
+                <select id="priority"
+                        class="w-full px-3 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                    <option value="normal">Normale</option>
+                    <option value="high">Haute</option>
+                </select>
+            </div>
+
+            <button type="submit"
+                    class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
+                Envoyer SMS
+            </button>
+        </form>
+
+        <!-- Status message -->
+        <div id="status" class="mt-4 hidden">
+            <div class="p-4 rounded-lg"></div>
+        </div>
+
+        <!-- Message tracking -->
+        <div id="tracking" class="mt-4 hidden">
+            <h3 class="font-medium text-gray-700 mb-2">Suivi du message</h3>
+            <div class="p-4 bg-gray-50 rounded-lg">
+                <p class="text-sm"><strong>Status:</strong> <span id="messageStatus">-</span></p>
+                <p class="text-sm"><strong>Envoyé le:</strong> <span id="sentAt">-</span></p>
+                <p class="text-sm"><strong>Tentatives:</strong> <span id="attempts">-</span></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Template management
+        const templateFields = {
+            verification: `
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Code</label>
+                    <input type="text" id="templateCode" required
+                           class="w-full px-3 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                           placeholder="Ex: 123456">
+                </div>
+            `,
+            welcome: `
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Nom</label>
+                    <input type="text" id="templateName" required
+                           class="w-full px-3 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                           placeholder="Nom du destinataire">
+                </div>
+            `,
+            notification: `
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Message</label>
+                    <textarea id="templateMessage" required rows="3"
+                            class="w-full px-3 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Votre message..."></textarea>
+                </div>
+            `,
+            alert: `
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Type d'alerte</label>
+                    <input type="text" id="alertType" required
+                           class="w-full px-3 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                           placeholder="Ex: Sécurité">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Détails</label>
+                    <textarea id="alertDetails" required rows="3"
+                            class="w-full px-3 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Détails de l'alerte..."></textarea>
+                </div>
+            `
+        };
+
+        // Phone number validation
+        const phoneInput = document.getElementById('phoneNumber');
+        const phoneValidation = document.getElementById('phoneValidation');
+
+        phoneInput.addEventListener('input', function() {
+            const number = this.value;
+            const pattern = /^(?:(?:(?:\+|00)212)|0)?[567]\d{8}$/;
+            
+            if (pattern.test(number.replace(/\D/g, ''))) {
+                phoneValidation.textContent = '✓ Numéro valide';
+                phoneValidation.className = 'mt-1 text-sm text-green-600';
+            } else {
+                phoneValidation.textContent = 'Numéro invalide';
+                phoneValidation.className = 'mt-1 text-sm text-red-600';
+            }
+        });
+
+        // Template selection handling
+        document.getElementById('templateName').addEventListener('change', function() {
+            const container = document.getElementById('templateDataContainer');
+            if (this.value && templateFields[this.value]) {
+                container.innerHTML = templateFields[this.value];
+                container.classList.remove('hidden');
+            } else {
+                container.innerHTML = '';
+                container.classList.add('hidden');
+            }
+        });
+
+        // Message tracking function
+        async function trackMessage(trackingId) {
+            try {
+                const response = await fetch(`/track/${trackingId}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('messageStatus').textContent = data.message.status;
+                    document.getElementById('sentAt').textContent = new Date(data.message.sentAt).toLocaleString();
+                    document.getElementById('attempts').textContent = data.message.attempts;
+                    
+                    // Continue tracking if message is pending
+                    if (data.message.status === 'pending' || data.message.status === 'sent') {
+                        setTimeout(() => trackMessage(trackingId), 5000);
+                    }
+                }
+            } catch (error) {
+                console.error('Error tracking message:', error);
+            }
+        }
+
+        // Form submission
+        document.getElementById('smsForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const button = e.target.querySelector('button');
+            const status = document.getElementById('status');
+            const statusDiv = status.querySelector('div');
+            const tracking = document.getElementById('tracking');
+
+            // Show loading state
+            button.disabled = true;
+            button.innerHTML = `
+                <svg class="animate-spin h-5 w-5 mx-auto" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+            `;
+
+            try {
+                // Get template data based on selected template
+                const templateName = document.getElementById('templateName').value;
+                let templateData;
+                
+                switch (templateName) {
+                    case 'verification':
+                        templateData = document.getElementById('templateCode').value;
+                        break;
+                    case 'welcome':
+                        templateData = document.getElementById('templateName').value;
+                        break;
+                    case 'notification':
+                        templateData = document.getElementById('templateMessage').value;
+                        break;
+                    case 'alert':
+                        templateData = {
+                            type: document.getElementById('alertType').value,
+                            details: document.getElementById('alertDetails').value
+                        };
+                        break;
+                }
+
+                const response = await fetch('/send', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        phoneNumber: document.getElementById('phoneNumber').value,
+                        templateName,
+                        templateData,
+                        carrier: document.getElementById('carrier').value,
+                        priority: document.getElementById('priority').value
+                    })
+                });
+
+                const data = await response.json();
+
+                status.classList.remove('hidden');
+                if (data.success) {
+                    statusDiv.className = 'p-4 rounded-lg bg-green-100 text-green-700';
+                    statusDiv.textContent = 'SMS envoyé avec succès !';
+                    
+                    // Start tracking
+                    tracking.classList.remove('hidden');
+                    trackMessage(data.trackingId);
+                } else {
+                    statusDiv.className = 'p-4 rounded-lg bg-red-100 text-red-700';
+                    statusDiv.textContent = data.error || 'Erreur lors de l\'envoi du SMS';
+                }
+            } catch (error) {
+                status.classList.remove('hidden');
+                statusDiv.className = 'p-4 rounded-lg bg-red-100 text-red-700';
+                statusDiv.textContent = 'Erreur de connexion';
+            } finally {
+                button.disabled = false;
+                button.textContent = 'Envoyer SMS';
+            }
+        });
+    </script>
+</body>
+</html>

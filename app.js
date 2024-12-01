@@ -111,8 +111,12 @@ const profileRoutes = require('./routes/profileRoutes');
 const galeryRoutes = require('./routes/galeryRoutes');
 const analyzeBreedRouter = require('./routes/analyzeBreed');
 const dogPostRouter = require('./routes/dogPost');
+const smsRouter = require('./routes/sms');
+const breedsRoutes = require('./routes/breedRoutes');
 
-
+app.get('/sms', (req, res) => {
+     res.render('user/sms')
+})
 app.get('/dog-breeds-analyzer', (req, res) => {
      res.render('user/dog-breeds-analyzer', {
           pageTitle: 'تحليل سلالات الكلاب - اكتشف سلالة الكلب من الصورة',
@@ -127,6 +131,7 @@ app.use('/', analyzeBreedRouter);
 
 
 app.use(userRoutes);
+app.use(breedsRoutes);
 app.use(dogPostRouter);
 app.use(authRoutes);
 app.use(adminRoutes);
@@ -134,6 +139,7 @@ app.use(articleRoutes);
 app.use(contactRoute);
 app.use(serviceRoutes);
 app.use(aiRoutes);
+app.use(smsRouter);
 app.use('/dashboard', profileRoutes);
 app.use('/dashboard', galeryRoutes);
 app.get('/test', (req, res) => {

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= metaTitle %></title>
+    <meta name="description" content="<%= metaDescription %>">
+    
+    <!-- Open Graph tags -->
+    <meta property="og:title" content="<%= metaTitle %>">
+    <meta property="og:description" content="<%= metaDescription %>">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="<%= `${process.env.WEBSITE_URL}/les-races-des-chien` %>">
+    <meta property="og:image" content="/images/og-breeds.jpg">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="<%= `${process.env.WEBSITE_URL}/les-races-des-chien` %>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css">
+    
+    <style>
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+        
+        .animate-slide-up {
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .filter-overlay {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .custom-gradient {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        }
+
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card-hover:hover {
+            transform: translateY(-4px);
+        }
+
+        .letter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(2rem, 1fr));
+            gap: 0.5rem;
+        }
+
+        /* Price Slider Custom Styles */
+        .noUi-handle {
+            border-radius: 8px;
+            background-color: #3b82f6;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .noUi-connect {
+            background-color: #3b82f6;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 to-slate-100 min-h-screen">
+    <!-- Header with Wave Effect -->
+    <header class="relative custom-gradient pt-20 pb-32 px-4 overflow-hidden">
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute inset-0 bg-[url('data:image/svg+xml,...')] opacity-10 animate-pulse"></div>
+        </div>
+        <div class="relative max-w-7xl mx-auto text-center">
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight">
+                Toutes les Races de Chiens
+            </h1>
+            <p class="text-lg md:text-xl text-blue-100 max-w-2xl mx-auto leading-relaxed">
+                Découvrez notre guide complet des races de chiens. Trouvez le compagnon idéal pour votre style de vie.
+            </p>
+        </div>
+        <!-- Wave SVG -->
+        <div class="absolute bottom-0 left-0 right-0">
+            <svg class="w-full h-8 fill-slate-50" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"></path>
+            </svg>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="relative -mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Mobile Filter Button -->
+            <div class="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-40 md:hidden">
+                <button onclick="toggleFilters()" 
+                        class="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-full shadow-lg
+                               hover:bg-blue-700 transition-colors duration-200">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                              d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>
+                    </svg>
+                    <span>Filtres</span>
+                </button>
+            </div>
+
+            <!-- Results Summary & Sort -->
+            <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
+                <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <p class="text-slate-700">
+                        <span class="text-3xl font-bold text-blue-600"><%= pagination.totalItems %></span> 
+                        <span class="text-slate-500 text-lg">races trouvées</span>
+                    </p>
+                    <div class="flex items-center gap-3">
+                        <label class="text-slate-600">Trier par:</label>
+                        <select class="bg-slate-50 border-0 rounded-xl py-2 px-4 text-slate-700 shadow-sm 
+                                     focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" 
+                                onchange="sortBreeds(this.value)">
+                            <option value="name">Alphabétique</option>
+                            <option value="popularity">Popularité</option>
+                            <option value="price">Prix</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Grid & Filters -->
+            <div class="flex flex-col md:flex-row gap-8">
+                <!-- Filters Sidebar -->
+                <div id="filtersSidebar" 
+                     class="fixed inset-0 z-50 md:relative md:z-0 hidden md:block">
+                    <!-- Mobile Overlay -->
+                    <div class="md:hidden filter-overlay absolute inset-0" onclick="toggleFilters()"></div>
+                    
+                    <!-- Filters Content -->
+                    <div class="absolute md:relative right-0 top-0 h-full w-[90%] md:w-80 
+                               bg-white md:rounded-2xl shadow-2xl md:shadow-lg
+                               transform transition-transform duration-300
+                               flex flex-col md:block">
+                        <!-- Mobile Header -->
+                        <div class="flex justify-between items-center p-4 border-b md:hidden">
+                            <h2 class="text-xl font-bold text-slate-800">Filtres</h2>
+                            <button onclick="toggleFilters()" class="p-2 hover:bg-slate-100 rounded-lg transition-colors">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <!-- Filters Form -->
+                        <form id="filterForm" class="flex-1 overflow-y-auto p-6 space-y-8">
+                            <!-- Alphabetical Filter -->
+                            <div class="space-y-4">
+                                <h3 class="font-semibold text-slate-800">Filtrer par lettre</h3>
+                                <div class="letter-grid">
+                                    <% filters.letters.forEach(letter => { %>
+                                        <a href="?letter=<%= letter %>" 
+                                           class="h-8 flex items-center justify-center rounded-lg transition-all duration-200
+                                                  <%= filters.currentLetter === letter 
+                                                      ? 'bg-blue-600 text-white shadow-md' 
+                                                      : 'bg-slate-50 text-slate-700 hover:bg-blue-50' %>">
+                                            <%= letter %>
+                                        </a>
+                                    <% }); %>
+                                </div>
+                            </div>
+
+                            <!-- Size Filter -->
+                            <div class="space-y-4">
+                                <h3 class="font-semibold text-slate-800">Taille</h3>
+                                <div class="space-y-2">
+                                    <% ['Petit chien', 'Chien moyen', 'Grand chien'].forEach(size => { %>
+                                        <label class="flex items-center p-3 bg-slate-50 rounded-xl cursor-pointer
+                                                      hover:bg-blue-50 transition-all duration-200">
+                                            <input type="radio" 
+                                                   name="size" 
+                                                   value="<%= size %>"
+                                                   <%= filters.size === size ? 'checked' : '' %>
+                                                   class="w-4 h-4 text-blue-600 border-slate-300 focus:ring-blue-500">
+                                            <span class="ml-3 text-slate-700"><%= size %></span>
+                                        </label>
+                                    <% }); %>
+                                </div>
+                            </div>
+
+                            <!-- Price Range -->
+                            <div class="space-y-4">
+                                <h3 class="font-semibold text-slate-800">Budget (MAD)</h3>
+                                <div id="priceSlider" class="mt-6"></div>
+                                <div class="flex justify-between text-sm text-slate-600 mt-2">
+                                    <span id="priceMin"></span>
+                                    <span id="priceMax"></span>
+                                </div>
+                                <input type="hidden" name="priceMin" value="<%= filters.priceMin %>">
+                                <input type="hidden" name="priceMax" value="<%= filters.priceMax %>">
+                            </div>
+
+                            <!-- Filter Actions -->
+                            <div class="space-y-3 pt-4 border-t">
+                                <button type="submit" 
+                                        class="w-full bg-blue-600 text-white rounded-xl px-6 py-3 
+                                               hover:bg-blue-700 transition-colors duration-200
+                                               focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                    Appliquer les filtres
+                                </button>
+                                <button type="reset"
+                                        class="w-full bg-slate-100 text-slate-700 rounded-xl px-6 py-3 
+                                               hover:bg-slate-200 transition-colors duration-200">
+                                    Réinitialiser
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="flex-1">
+                    <!-- Breeds Grid -->
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+                        <% breeds.forEach(breed => { %>
+                            <a href="/les-races-des-chien/<%= breed.slug %>" 
+                               class="group bg-white rounded-2xl shadow-lg overflow-hidden card-hover">
+                                <div class="relative">
+                                    <img src="<%= breed.imageUrl %>" 
+                                         alt="<%= breed.name %>"
+                                         class="w-full aspect-[4/3] object-cover"
+                                         loading="lazy">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent
+                                                opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                </div>
+                                <div class="p-4">
+                                    <h2 class="text-lg md:text-xl font-bold text-slate-800 mb-2 line-clamp-1
+                                               group-hover:text-blue-600 transition-colors duration-200">
+                                        <%= breed.name %>
+                                    </h2>
+                                    <p class="text-sm text-slate-600 line-clamp-2 mb-3">
+                                        <%= breed.description %>
+                                    </p>
+                                    <div class="flex flex-wrap gap-2">
+                                        <% breed.tags.slice(0, 2).forEach(tag => { %>
+                                            <span class="px-2 py-1 rounded-full text-xs font-medium 
+                                                       bg-blue-50 text-blue-700 whitespace-nowrap">
+                                                <%= tag %>
+                                            </span>
+                                        <% }); %>
+                                    </div>
+                                </div>
+                            </a>
+                        <% }); %>
+                    </div>
+
+                    <!-- Pagination -->
+                    <% if (pagination.total > 1) { %>
+                        <div class="mt-12 mb-20 md:mb-8">
+                            <div class="flex justify-center flex-wrap gap-2">
+                                <% if (pagination.current > 1) { %>
+                                    <a href="?page=<%= pagination.current - 1 %>" 
+                                       class="px-4 py-2 rounded-lg bg-white shadow-sm hover:bg-slate-50 
+                                              text-slate-700 text-sm transition-colors duration-200">
+                                        ← Précédent
+                                    </a>
+                                <% } %>
+
+                                <div class="flex gap-2 overflow-x-auto no-scrollbar px-4">
+                                    <% pagination.pages.forEach(page => { %>
+                                        <% if (page === '...') { %>
+                                            <span class="px-2 py-2 text-slate-400">...</span>
+                                        <% } else { %>
+                                            <a href="?page=<%= page %>" 
+                                               class="min-w-[40px] h-10 flex items-center justify-center rounded-lg
+                                                      <%= pagination.current === page 
+                                                          ? 'bg-blue-600 text-white shadow-md' 
+                                                          : 'bg-white text-slate-700 hover:bg-slate-50' %>
+                                                      text-sm shadow-sm transition-colors duration-200">
+                                                <%= page %>
+                                            </a>
+                                        <% } %>
+                                    <% }); %>
+                                </div>
+
+                                <% if (pagination.current < pagination.total) { %>
+                                    <a href="?page=<%= pagination.current + 1 %>" 
+                                       class="px-4 py-2 rounded-lg bg-white shadow-sm hover:bg-slate-50 
+                                              text-slate-700 text-sm transition-colors duration-200">
+                                        Suivant →
+                                    </a>
+                                <% } %>
+                            </div>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
+    <script>
+        // Mobile Filter Toggle
+        function toggleFilters() {
+            const sidebar = document.getElementById('filtersSidebar');
+            const body = document.body;
+            
+            sidebar.classList.toggle('hidden');
+            body.classList.toggle('overflow-hidden');
+            
+            const filterContent = sidebar.querySelector('div');
+            filterContent.classList.toggle('animate-slide-up');
+        }
+
+        // Initialize Price Range Slider
+        const priceSlider = document.getElementById('priceSlider');
+        if (priceSlider) {
+            noUiSlider.create(priceSlider, {
+                start: [<%= filters.priceMin || 5000 %>, <%= filters.priceMax || 30000 %>],
+                connect: true,
+                range: {
+                    'min': 5000,
+                    'max': 30000
+                },
+                step: 1000,
+                format: {
+                    to: value => Math.round(value),
+                    from: value => Math.round(value)
+                }
+            });
+
+            // Update hidden inputs and display values
+            priceSlider.noUiSlider.on('update', function (values) {
+                document.getElementById('priceMin').textContent = values[0] + ' MAD';
+                document.getElementById('priceMax').textContent = values[1] + ' MAD';
+                document.querySelector('input[name="priceMin"]').value = values[0];
+                document.querySelector('input[name="priceMax"]').value = values[1];
+            });
+        }
+
+        // Form Submission Handler
+        document.getElementById('filterForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const params = new URLSearchParams(formData);
+            window.location.href = `?${params.toString()}`;
+        });
+
+        // Form Reset Handler
+        document.getElementById('filterForm').addEventListener('reset', function() {
+            window.location.href = window.location.pathname;
+        });
+
+        // Sorting Handler
+        function sortBreeds(value) {
+            const url = new URL(window.location);
+            url.searchParams.set('sort', value);
+            window.location.href = url;
+        }
+
+        // Optional: Smooth Scroll to Top on Pagination Click
+        document.querySelectorAll('.pagination a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                setTimeout(() => {
+                    window.location.href = this.href;
+                }, 300);
+            });
+        });
+
+        // Optional: Add Loading State to Form Submit
+        document.getElementById('filterForm').addEventListener('submit', function() {
+            const submitBtn = this.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `
+                <svg class="animate-spin h-5 w-5 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>`;
+        });
+    </script>
+</body>
+</html>

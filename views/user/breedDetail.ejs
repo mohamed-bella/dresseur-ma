@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= breed.name %> | Race de Chien</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Breed Header -->
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Image Gallery -->
+                <div class="relative">
+                    <div class="aspect-w-4 aspect-h-3">
+                        <img src="<%= breed.imageUrl %>" 
+                             alt="<%= breed.name %>"
+                             class="w-full h-full object-cover"
+                             id="mainImage">
+                    </div>
+                    <% if (breed.images?.length > 0) { %>
+                        <div class="grid grid-cols-4 gap-2 mt-2 px-4">
+                            <% breed.images.forEach((image, index) => { %>
+                                <img src="<%= image.url %>" 
+                                     alt="<%= image.description || breed.name %>"
+                                     onclick="updateMainImage(this.src)"
+                                     class="w-full h-20 object-cover rounded-lg cursor-pointer hover:opacity-75 transition-opacity">
+                            <% }) %>
+                        </div>
+                    <% } %>
+                </div>
+
+                <!-- Breed Info -->
+                <div class="p-6">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h1 class="text-3xl font-bold text-gray-900"><%= breed.name %></h1>
+                            <% if (breed.origine) { %>
+                                <p class="text-gray-600 mt-1">Origine: <%= breed.origine %></p>
+                            <% } %>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-lg font-semibold text-gray-900"><%= breed.prixRange %></div>
+                            <div class="text-sm text-gray-500">Prix moyen</div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6">
+                        <p class="text-gray-700"><%= breed.description %></p>
+                    </div>
+
+                    <!-- Characteristics -->
+                    <div class="mt-8 grid grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h3 class="font-medium text-gray-900 mb-2">Taille</h3>
+                            <p class="text-gray-600">
+                                <% if (breed.taille?.male?.min) { %>
+                                    <%= breed.taille.male.min %> - <%= breed.taille.male.max %> cm
+                                <% } else { %>
+                                    <%= breed.caracteristiques.taille %>
+                                <% } %>
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h3 class="font-medium text-gray-900 mb-2">Poids</h3>
+                            <p class="text-gray-600">
+                                <% if (breed.poids?.male?.min) { %>
+                                    <%= breed.poids.male.min %> - <%= breed.poids.male.max %> kg
+                                <% } else { %>
+                                    <%= breed.caracteristiques.poids %>
+                                <% } %>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Personality Traits -->
+                    <div class="mt-8">
+                        <h3 class="font-medium text-gray-900 mb-3">Personnalité</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <% breed.caracteristiques.personnalite.forEach(trait => { %>
+                                <span class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">
+                                    <%= trait %>
+                                </span>
+                            <% }) %>
+                        </div>
+                    </div>
+
+                    <!-- Ratings -->
+                    <div class="mt-8 space-y-4">
+                        <% const ratings = {
+                            entretien: 'Niveau d\'entretien',
+                            exercise: 'Besoin d\'exercice'
+                        } %>
+                        <% Object.entries(ratings).forEach(([key, label]) => { %>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm font-medium text-gray-700"><%= label %></span>
+                                    <span class="text-sm text-gray-600">
+                                        <%= breed.caracteristiques[key] %>/5
+                                    </span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-blue-600 h-2 rounded-full" 
+                                         style="width: <%= (breed.caracteristiques[key] / 5) * 100 %>%">
+                                    </div>
+                                </div>
+                            </div>
+                        <% }) %>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Sections -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+            <!-- Health -->
+            <div class="bg-white rounded-xl shadow-sm p-6">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">Santé</h2>
+                <% if (breed.sante?.maladiesCommunes?.length > 0) { %>
+                    <div class="space-y-3">
+                        <% breed.sante.maladiesCommunes.forEach(maladie => { %>
+                            <div>
+                              <h4 class="font-medium text-gray-900"><%= maladie.nom %></h4>
+                                <p class="text-sm text-gray-600"><%= maladie.description %></p>
+                            </div>
+                        <% }); %>
+                    </div>
+                    <% if (breed.sante.preventions?.length > 0) { %>
+                        <div class="mt-4">
+                            <h4 class="font-medium text-gray-900 mb-2">Prévention</h4>
+                            <ul class="text-sm text-gray-600 space-y-1">
+                                <% breed.sante.preventions.forEach(prevention => { %>
+                                    <li class="flex items-start">
+                                        <svg class="w-4 h-4 text-green-500 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                        <%= prevention %>
+                                    </li>
+                                <% }); %>
+                            </ul>
+                        </div>
+                    <% } %>
+                <% } else { %>
+                    <p class="text-gray-600">Information non disponible</p>
+                <% } %>
+            </div>
+
+            <!-- Entretien -->
+            <div class="bg-white rounded-xl shadow-sm p-6">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">Entretien</h2>
+                <div class="space-y-4">
+                    <% if (breed.entretien?.toilettage) { %>
+                        <div>
+                            <h4 class="font-medium text-gray-900 mb-1">Toilettage</h4>
+                            <p class="text-sm text-gray-600"><%= breed.entretien.toilettage %></p>
+                        </div>
+                    <% } %>
+                    <% if (breed.entretien?.exercice) { %>
+                        <div>
+                            <h4 class="font-medium text-gray-900 mb-1">Exercice</h4>
+                            <p class="text-sm text-gray-600"><%= breed.entretien.exercice %></p>
+                        </div>
+                    <% } %>
+                    <% if (breed.entretien?.alimentation) { %>
+                        <div>
+                            <h4 class="font-medium text-gray-900 mb-1">Alimentation</h4>
+                            <p class="text-sm text-gray-600"><%= breed.entretien.alimentation %></p>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+
+            <!-- Histoire -->
+            <div class="bg-white rounded-xl shadow-sm p-6">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">Histoire</h2>
+                <% if (breed.histoire) { %>
+                    <p class="text-gray-600"><%= breed.histoire %></p>
+                <% } else { %>
+                    <p class="text-gray-600">Information non disponible</p>
+                <% } %>
+            </div>
+        </div>
+
+        <!-- Similar Breeds -->
+        <% if (similarBreeds?.length > 0) { %>
+            <div class="mt-12">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">Races similaires</h2>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <% similarBreeds.forEach(similar => { %>
+                        <a href="/breed/<%= similar.slug %>" 
+                           class="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+                            <img src="<%= similar.imageUrl %>" 
+                                 alt="<%= similar.name %>"
+                                 class="w-full h-48 object-cover">
+                            <div class="p-4">
+                                <h3 class="font-medium text-lg text-gray-900"><%= similar.name %></h3>
+                            </div>
+                        </a>
+                    <% }); %>
+                </div>
+            </div>
+        <% } %>
+    </div>
+
+    <!-- Share Modal -->
+    <div id="shareModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+        <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4">
+            <h3 class="text-xl font-bold mb-4">Partager cette race</h3>
+            <div class="space-y-4">
+                <button onclick="share('facebook')" class="w-full flex items-center justify-center gap-2 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                    Facebook
+                </button>
+                <button onclick="share('twitter')" class="w-full flex items-center justify-center gap-2 p-2 bg-sky-500 text-white rounded-lg hover:bg-sky-600">
+                    Twitter
+                </button>
+                <button onclick="share('whatsapp')" class="w-full flex items-center justify-center gap-2 p-2 bg-green-500 text-white rounded-lg hover:bg-green-600">
+                    WhatsApp
+                </button>
+                <button onclick="copyLink()" class="w-full flex items-center justify-center gap-2 p-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">
+                    Copier le lien
+                </button>
+            </div>
+            <button onclick="closeShareModal()" class="mt-4 w-full p-2 text-gray-600 hover:text-gray-800">
+                Fermer
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Image Gallery
+        function updateMainImage(src) {
+            document.getElementById('mainImage').src = src;
+        }
+
+        // Sharing functionality
+        function openShareModal() {
+            document.getElementById('shareModal').classList.remove('hidden');
+        }
+
+        function closeShareModal() {
+            document.getElementById('shareModal').classList.add('hidden');
+        }
+
+        function share(platform) {
+            const url = encodeURIComponent(window.location.href);
+            const title = encodeURIComponent('<%= breed.name %> - Race de Chien');
+            
+            let shareUrl;
+            switch (platform) {
+                case 'facebook':
+                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+                    break;
+                case 'twitter':
+                    shareUrl = `https://twitter.com/intent/tweet?url=${url}&text=${title}`;
+                    break;
+                case 'whatsapp':
+                    shareUrl = `https://wa.me/?text=${title}%20${url}`;
+                    break;
+            }
+            
+            window.open(shareUrl, '_blank');
+        }
+
+        async function copyLink() {
+            try {
+                await navigator.clipboard.writeText(window.location.href);
+                alert('Lien copié !');
+            } catch (err) {
+                alert('Erreur lors de la copie du lien');
+            }
+        }
+    </script>
+</body>
+</html>

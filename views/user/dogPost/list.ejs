@@ -1,481 +1,162 @@
-<!-- views/announcements/index.ejs -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <%- include('../include/head') %>
-    <title>Annonces de chiens</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plateforme Canine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.css" rel="stylesheet" />
 </head>
-<body class="bg-gray-50 min-h-screen">
-    <%- include('../include/navbar') %>
-
-    <main class="container mx-auto px-4 py-8">
-        <!-- Header with Stats -->
-        <div class="bg-white rounded-2xl shadow-sm p-6 mb-8">
-            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-                <div>
-                    <h1 class="text-2xl font-semibold text-gray-900">Annonces de chiens</h1>
-                    <div class="flex gap-4 mt-2">
-                       
-                        <div class="flex items-center text-gray-500">
-                            <i class="fas fa-heart mr-2"></i>
-                            <span><%= announcements.filter(a => a.type === 'adoption').length %> adoptions</span>
-                        </div>
-                        <div class="flex items-center text-gray-500">
-                            <i class="fas fa-search mr-2"></i>
-                            <span><%= announcements.filter(a => a.type === 'lost').length %> perdus</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Filter Trigger for Mobile -->
-                <button
-                    onclick="toggleFilters()"
-                    class="md:hidden px-4 py-2 bg-gray-100 rounded-lg text-gray-700 hover:bg-gray-200 transition-colors">
-                    <i class="fas fa-filter mr-2"></i>
-                    Filtres
+<body class="bg-gray-50">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Filtres -->
+        <div class="mb-8 bg-white p-4 rounded-lg shadow">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <select id="type" class="rounded-lg border-gray-300">
+                    <option value="">Tous les types</option>
+                    <option value="adoption">À adopter</option>
+                    <option value="perdu">Chien perdu</option>
+                    <option value="trouve">Chien trouvé</option>
+                </select>
+                <input type="text" id="location" placeholder="Localisation" class="rounded-lg border-gray-300">
+                <input type="date" id="date" class="rounded-lg border-gray-300">
+                <button id="filter" class="bg-blue-600 text-white rounded-lg px-4 py-2 hover:bg-blue-700">
+                    Filtrer
                 </button>
             </div>
         </div>
 
-        <!-- Main Content Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <!-- Filters Sidebar -->
-            <div id="filtersSidebar" class="hidden md:block space-y-6">
-                <!-- Filters Card -->
-                <div class="bg-white rounded-2xl shadow-sm p-6">
-                    <h2 class="text-lg font-semibold text-gray-900 mb-6">Filtres</h2>
-                    <form action="" method="GET" class="space-y-6">
-                        <!-- Type Filter -->
-                        <div class="space-y-4">
-                            <h3 class="text-sm font-medium text-gray-700">Type d'annonce</h3>
-                            <div class="grid grid-cols-2 gap-3">
-                                <label class="relative">
-                                    <input type="radio" name="type" value="all" 
-                                        <%= filters.type === 'all' ? 'checked' : '' %>
-                                        class="sr-only peer">
-                                    <div class="p-3 text-center border rounded-xl peer-checked:border-primary-500 peer-checked:bg-primary-50 hover:border-primary-200 transition-all cursor-pointer">
-                                        <i class="fas fa-globe mb-1 text-gray-400 peer-checked:text-primary-500"></i>
-                                        <p class="text-sm text-gray-600 peer-checked:text-primary-600">Tous</p>
-                                    </div>
-                                </label>
-                                <label class="relative">
-                                    <input type="radio" name="type" value="adoption" 
-                                        <%= filters.type === 'adoption' ? 'checked' : '' %>
-                                        class="sr-only peer">
-                                    <div class="p-3 text-center border rounded-xl peer-checked:border-primary-500 peer-checked:bg-primary-50 hover:border-primary-200 transition-all cursor-pointer">
-                                        <i class="fas fa-heart mb-1 text-gray-400 peer-checked:text-primary-500"></i>
-                                        <p class="text-sm text-gray-600 peer-checked:text-primary-600">Adoption</p>
-                                    </div>
-                                </label>
-                                <label class="relative col-span-2">
-                                    <input type="radio" name="type" value="lost" 
-                                        <%= filters.type === 'lost' ? 'checked' : '' %>
-                                        class="sr-only peer">
-                                    <div class="p-3 text-center border rounded-xl peer-checked:border-primary-500 peer-checked:bg-primary-50 hover:border-primary-200 transition-all cursor-pointer">
-                                        <i class="fas fa-search mb-1 text-gray-400 peer-checked:text-primary-500"></i>
-                                        <p class="text-sm text-gray-600 peer-checked:text-primary-600">Perdus</p>
-                                    </div>
-                                </label>
-                            </div>
-                        </div>
+        <!-- Bouton Ajouter -->
+        <div class="flex justify-end mb-6">
+            <button onclick="showAddPostModal()" class="bg-green-600 text-white rounded-lg px-6 py-2 hover:bg-green-700 flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                </svg>
+                Publier une annonce
+            </button>
+        </div>
 
-                        <!-- Location Filter -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Localisation</label>
-                            <div class="relative">
-                                <select name="location" 
-                                    class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl appearance-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
-                                    <option value="">Toutes les villes</option>
-                                    <% filterOptions.locations.forEach(loc => { %>
-                                        <option value="<%= loc %>" 
-                                            <%= filters.location === loc ? 'selected' : '' %>>
-                                            <%= loc %>
-                                        </option>
-                                    <% }) %>
-                                </select>
-                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                    <i class="fas fa-chevron-down text-gray-400"></i>
-                                </div>
-                            </div>
+        <!-- Grille des annonces -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="postsGrid">
+            <% posts.forEach(function(post) { %>
+                <div class="bg-white rounded-xl shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
+                     onclick="showPostDetails('<%= post._id %>')">
+                    <img src="<%= post.photos[0] %>" alt="<%= post.name %>" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm font-medium px-2 py-1 rounded
+                                <%= post.type === 'adoption' ? 'bg-green-100 text-green-800' : 
+                                   post.type === 'perdu' ? 'bg-red-100 text-red-800' : 
+                                   'bg-yellow-100 text-yellow-800' %>">
+                                <%= post.type === 'adoption' ? 'À adopter' : 
+                                   post.type === 'perdu' ? 'Perdu' : 'Trouvé' %>
+                            </span>
+                            <span class="text-gray-500 text-sm"><%= post.createdAt.toLocaleDateString() %></span>
                         </div>
-
-                        <!-- Breed Filter -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Race</label>
-                            <div class="relative">
-                                <select name="breed" 
-                                    class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl appearance-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
-                                    <option value="">Toutes les races</option>
-                                    <% filterOptions.breeds.forEach(breed => { %>
-                                        <option value="<%= breed %>"
-                                            <%= filters.breed === breed ? 'selected' : '' %>>
-                                            <%= breed %>
-                                        </option>
-                                    <% }) %>
-                                </select>
-                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                    <i class="fas fa-chevron-down text-gray-400"></i>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Sort Options -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Trier par</label>
-                            <div class="relative">
-                                <select name="sortBy" 
-                                    class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl appearance-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
-                                    <option value="newest" <%= filters.sortBy === 'newest' ? 'selected' : '' %>>
-                                        Plus récents
-                                    </option>
-                                    <option value="oldest" <%= filters.sortBy === 'oldest' ? 'selected' : '' %>>
-                                        Plus anciens
-                                    </option>
-                                    <option value="name" <%= filters.sortBy === 'name' ? 'selected' : '' %>>
-                                        Nom
-                                    </option>
-                                </select>
-                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                    <i class="fas fa-chevron-down text-gray-400"></i>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Apply Filters Button -->
-                        <button type="submit" 
-                            class="w-full py-3 bg-primary-500 text-white rounded-xl hover:bg-primary-600 transition-colors">
-                            <i class="fas fa-filter mr-2"></i>
-                            Appliquer les filtres
-                        </button>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Announcements List -->
-            <div class="md:col-span-3 space-y-4">
-                <% if (announcements.length === 0) { %>
-                    <!-- Empty State -->
-                    <div class="bg-white rounded-2xl shadow-sm p-12 text-center">
-                        <div class="w-20 h-20 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                            <i class="fas fa-search text-3xl text-gray-400"></i>
-                        </div>
-                        <h2 class="text-xl font-semibold text-gray-900 mb-2">Aucune annonce trouvée</h2>
-                        <p class="text-gray-500 mb-6">Essayez de modifier vos critères de recherche</p>
-                        <button onclick="openModal()" class="inline-flex items-center text-primary-500 hover:text-primary-600">
-                            <i class="fas fa-arrow-left mr-2"></i>
-                            Voir toutes les annonces
-                        </button>
+                        <h3 class="font-semibold text-lg mb-1"><%= post.name %></h3>
+                        <p class="text-gray-600 text-sm mb-2"><%= post.location %></p>
+                        <p class="text-gray-700 line-clamp-2"><%= post.description %></p>
                     </div>
-                <% } else { %>
-                    <!-- Announcements Cards -->
-                    <% announcements.forEach(announcement => { %>
-                        <div class="bg-white rounded-2xl shadow-sm overflow-hidden hover:shadow-md transition-all">
-                            <div class="flex flex-col md:flex-row">
-                                <!-- Image Section -->
-                                <div class="md:w-1/3 relative">
-                                    <% if (announcement.photo && announcement.photo.length > 0) { %>
-                                        <img 
-                                            src="<%= announcement.photo %>" 
-                                            alt="<%= announcement.name %>"
-                                            class="w-full h-48 md:h-full object-cover"
-                                        >
-                                    <% } else { %>
-                                        <div class="w-full h-48 md:h-full bg-gray-100 flex items-center justify-center">
-                                            <i class="fas fa-dog text-4xl text-gray-300"></i>
-                                        </div>
-                                    <% } %>
-                                    <!-- Type Badge -->
-                                    <div class="absolute top-4 left-4">
-                                        <span class="px-3 py-1 rounded-full text-sm font-medium <%= announcement.type === 'adoption' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' %>">
-                                            <%= announcement.type === 'adoption' ? 'Adoption' : 'Perdu' %>
-                                        </span>
-                                    </div>
-                                </div>
+                </div>
+            <% }); %>
+        </div>
 
-                                <!-- Content Section -->
-                                <div class="flex-1 p-6">
-                                    <div class="flex justify-between items-start mb-4">
-                                        <div>
-                                            <h3 class="text-xl font-semibold text-gray-900 mb-2">
-                                                <%= announcement.name %>
-                                            </h3>
-                                            <div class="flex flex-wrap gap-4 text-sm text-gray-500">
-                                                <% if (announcement.breed) { %>
-                                                    <span class="flex items-center">
-                                                        <i class="fas fa-paw mr-2"></i>
-                                                        <%= announcement.breed %>
-                                                    </span>
-                                                <% } %>
-                                                <span class="flex items-center">
-                                                    <i class="fas fa-map-marker-alt mr-2"></i>
-                                                    <%= announcement.location %>
-                                                </span>
-                                                <span class="flex items-center">
-                                                    <i class="fas fa-clock mr-2"></i>
-                                                    <%= new Date(announcement.createdAt).toLocaleDateString() %>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
+        <!-- Pagination -->
+        <div class="mt-8 flex justify-center">
+            <% if (totalPages > 1) { %>
+                <div class="flex space-x-2">
+                    <% for(let i = 1; i <= totalPages; i++) { %>
+                        <a href="?page=<%= i %>" 
+                           class="px-4 py-2 rounded-lg <%= currentPage == i ? 'bg-blue-600 text-white' : 'bg-white text-gray-700' %>">
+                            <%= i %>
+                        </a>
+                    <% } %>
+                </div>
+            <% } %>
+        </div>
+    </div>
 
-                                    <% if (announcement.description) { %>
-                                        <p class="text-gray-600 mb-6 line-clamp-2">
-                                            <%= announcement.description %>
-                                        </p>
-                                    <% } %>
+    <!-- Modal Ajout d'annonce -->
+    <div id="addPostModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white rounded-xl p-6 w-full max-w-2xl">
+            <h2 class="text-2xl font-bold mb-6">Publier une annonce</h2>
+            
+            <!-- Formulaire multi-étapes -->
+            <form id="postForm" class="space-y-6">
+                <!-- Étape 1 -->
+                <div class="step" data-step="1">
+                    <h3 class="text-lg font-semibold mb-4">Type d'annonce</h3>
+                    <div class="space-y-4">
+                        <label class="block">
+                            <input type="radio" name="type" value="adoption" required>
+                            <span class="ml-2">Chien à adopter</span>
+                        </label>
+                        <label class="block">
+                            <input type="radio" name="type" value="perdu">
+                            <span class="ml-2">Chien perdu</span>
+                        </label>
+                        <label class="block">
+                            <input type="radio" name="type" value="trouve">
+                            <span class="ml-2">Chien trouvé</span>
+                        </label>
+                    </div>
+                </div>
 
-                                    <!-- Contact Buttons -->
-                                    <div class="flex flex-wrap gap-3 mt-auto">
-                                        <% if (announcement.contactInfo.phone) { %>
-                                            <a href="tel:<%= announcement.contactInfo.phone %>" 
-                                               class="flex items-center px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
-                                                <i class="fas fa-phone mr-2"></i>
-                                                Appeler
-                                            </a>
-                                        <% } %>
-                                        <% if (announcement.contactInfo.email) { %>
-                                            <a href="mailto:<%= announcement.contactInfo.email %>" 
-                                               class="flex items-center px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
-                                                <i class="fas fa-envelope mr-2"></i>
-                                                Email
-                                            </a>
-                                        <% } %>
-                                        <a href="/post/<%= announcement._id %>" 
-                                           class="flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
-                                            <i class="fas fa-eye mr-2"></i>
-                                            Détails
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    <% }) %>
+                <!-- Étape 2 -->
+                <div class="step hidden" data-step="2">
+                    <h3 class="text-lg font-semibold mb-4">Informations sur le chien</h3>
+                    <div class="space-y-4">
+                        <input type="text" name="name" placeholder="Nom du chien" class="w-full rounded-lg" required>
+                        <input type="text" name="breed" placeholder="Race" class="w-full rounded-lg" required>
+                        <input type="number" name="age" placeholder="Âge approximatif" class="w-full rounded-lg" required>
+                        <textarea name="description" placeholder="Description" class="w-full rounded-lg" rows="4" required></textarea>
+                    </div>
+                </div>
 
-                    <!-- Pagination -->
-                    <% if (pagination.total > 1) { %>
-                        <div class="flex justify-center mt-8">
-                            <div class="flex gap-2">
-                                <% if (pagination.hasPrev) { %>
-                                    <a href="?page=<%= pagination.current - 1 %>&type=<%= filters.type %>&location=<%= filters.location %>&breed=<%= filters.breed %>&sortBy=<%= filters.sortBy %>"
-                                       class="px-4 py-2 bg-white border rounded-xl hover:bg-gray-50 transition-colors">
-                                        <i class="fas fa-chevron-left mr-2"></i>
-                                        Précédent
-                                    </a>
-                                <% } %>
+                <!-- Étape 3 -->
+                <div class="step hidden" data-step="3">
+                    <h3 class="text-lg font-semibold mb-4">Photos</h3>
+                    <div class="space-y-4">
+                        <input type="file" name="images" multiple accept="image/*" class="w-full" required>
+                        <p class="text-sm text-gray-500">Vous pouvez ajouter jusqu'à 5 photos</p>
+                    </div>
+                </div>
 
-                                <% if (pagination.hasNext) { %>
-                                  <a href="?page=<%= pagination.current + 1 %>&type=<%= filters.type %>&location=<%= filters.location %>&breed=<%= filters.breed %>&sortBy=<%= filters.sortBy %>"
-                                    class="px-4 py-2 bg-white border rounded-xl hover:bg-gray-50 transition-colors">
-                                     Suivant
-                                     <i class="fas fa-chevron-right ml-2"></i>
-                                 </a>
-                             <% } %>
-                         </div>
-                     </div>
-                 <% } %>
-             <% } %>
-         </div>
-     </div>
- </main>
+                <!-- Étape 4 -->
+                <div class="step hidden" data-step="4">
+                    <h3 class="text-lg font-semibold mb-4">Coordonnées</h3>
+                    <div class="space-y-4">
+                        <input type="email" name="email" placeholder="Email" class="w-full rounded-lg" required>
+                        <input type="tel" name="phone" placeholder="Téléphone" class="w-full rounded-lg" required>
+                        <input type="text" name="location" placeholder="Localisation" class="w-full rounded-lg" required>
+                    </div>
+                </div>
 
- <!-- Floating Add Button (Mobile) -->
- <div class="md:hidden fixed bottom-6 right-6">
-     <button 
-         onclick="openModal()"
-         class="w-14 h-14 bg-yellow-500 text-white rounded-full shadow-lg flex items-center justify-center hover:bg-primary-600 transition-colors">
-         <i class="fas fa-plus text-xl"></i>
-     </button>
- </div>
+                <!-- Navigation -->
+                <div class="flex justify-between mt-6">
+                    <button type="button" onclick="prevStep()" class="bg-gray-200 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-300">
+                        Précédent
+                    </button>
+                    <button type="button" onclick="nextStep()" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                        Suivant
+                    </button>
+                    <button type="submit" class="hidden bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">
+                        Publier
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
- <script>
-     // Filter Management
-     function toggleFilters() {
-         const filters = document.getElementById('filtersSidebar');
-         const isHidden = filters.classList.contains('hidden');
-         
-         if (isHidden) {
-             // Show filters with animation
-             filters.classList.remove('hidden');
-             requestAnimationFrame(() => {
-                 filters.classList.add('animate-in', 'slide-in-from-left');
-             });
-         } else {
-             // Hide filters with animation
-             filters.classList.add('animate-out', 'slide-out-to-left');
-             setTimeout(() => {
-                 filters.classList.add('hidden');
-                 filters.classList.remove('animate-out', 'slide-out-to-left');
-             }, 300);
-         }
-     }
+    <!-- Modal Détails de l'annonce -->
+    <div id="postDetailsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white rounded-xl p-6 w-full max-w-4xl">
+            <div id="postDetailsContent">
+                <!-- Le contenu sera injecté dynamiquement -->
+            </div>
+        </div>
+    </div>
 
-     // Auto-submit form when filters change
-     document.querySelectorAll('#filtersSidebar select, #filtersSidebar input[type="radio"]').forEach(input => {
-         input.addEventListener('change', () => {
-             showLoadingState();
-             input.closest('form').submit();
-         });
-     });
-
-     // Loading State
-     function showLoadingState() {
-         const loadingOverlay = document.createElement('div');
-         loadingOverlay.className = 'fixed inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-50';
-         loadingOverlay.id = 'loadingOverlay';
-         loadingOverlay.innerHTML = `
-             <div class="text-center">
-                 <div class="w-16 h-16 border-4 border-primary-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-                 <p class="text-gray-600">Chargement...</p>
-             </div>
-         `;
-         document.body.appendChild(loadingOverlay);
-     }
-
-     // Share Functionality
-     function shareAnnouncement(id, title) {
-         if (navigator.share) {
-             navigator.share({
-                 title: title,
-                 url: window.location.origin + '/announcements/' + id
-             }).catch(console.error);
-         } else {
-             // Fallback copy to clipboard
-             const url = window.location.origin + '/announcements/' + id;
-             navigator.clipboard.writeText(url).then(() => {
-                 showToast('Lien copié !', 'success');
-             }).catch(() => {
-                 showToast('Erreur lors de la copie du lien', 'error');
-             });
-         }
-     }
-
-     // Toast Notification
-     function showToast(message, type = 'success') {
-         const toast = document.createElement('div');
-         toast.className = `fixed bottom-4 right-4 px-6 py-3 rounded-xl shadow-lg text-white font-medium animate-fade-in
-             ${type === 'success' ? 'bg-green-500' : 'bg-red-500'}`;
-         
-         toast.innerHTML = `
-             <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'} mr-2"></i>
-             ${message}
-         `;
-         
-         document.body.appendChild(toast);
-         
-         setTimeout(() => {
-             toast.classList.add('animate-fade-out');
-             setTimeout(() => toast.remove(), 300);
-         }, 3000);
-     }
-
-     // Call/Email Tracking (optional)
-     function trackContact(type, id) {
-         fetch('/api/track-contact', {
-             method: 'POST',
-             headers: {
-                 'Content-Type': 'application/json',
-             },
-             body: JSON.stringify({
-                 type,
-                 announcementId: id,
-                 timestamp: new Date().toISOString()
-             })
-         }).catch(console.error); // Silent tracking
-     }
-
-     // Lazy Loading Images
-     document.addEventListener('DOMContentLoaded', () => {
-         const lazyImages = document.querySelectorAll('img[data-src]');
-         
-         const imageObserver = new IntersectionObserver((entries, observer) => {
-             entries.forEach(entry => {
-                 if (entry.isIntersecting) {
-                     const img = entry.target;
-                     img.src = img.dataset.src;
-                     img.removeAttribute('data-src');
-                     observer.unobserve(img);
-                 }
-             });
-         });
-
-         lazyImages.forEach(img => imageObserver.observe(img));
-     });
-
-     // Infinite Scroll (optional)
-     let loading = false;
-     let hasMore = <%= pagination.hasNext %>;
-     let currentPage = <%= pagination.current %>;
-
-     function loadMoreAnnouncements() {
-         if (loading || !hasMore) return;
-         
-         loading = true;
-         const nextPage = currentPage + 1;
-         const url = new URL(window.location.href);
-         url.searchParams.set('page', nextPage);
-         url.searchParams.set('format', 'json');
-
-         fetch(url)
-             .then(response => response.json())
-             .then(data => {
-                 if (data.announcements.length) {
-                     appendAnnouncements(data.announcements);
-                     currentPage = nextPage;
-                     hasMore = data.pagination.hasNext;
-                 } else {
-                     hasMore = false;
-                 }
-             })
-             .finally(() => {
-                 loading = false;
-             });
-     }
-
-     // Add these styles to your existing styles
-     const styles = `
-         @keyframes slideInFromLeft {
-             from {
-                 transform: translateX(-100%);
-                 opacity: 0;
-             }
-             to {
-                 transform: translateX(0);
-                 opacity: 1;
-             }
-         }
-
-         @keyframes slideOutToLeft {
-             from {
-                 transform: translateX(0);
-                 opacity: 1;
-             }
-             to {
-                 transform: translateX(-100%);
-                 opacity: 0;
-             }
-         }
-
-         .animate-in {
-             animation: slideInFromLeft 0.3s ease-out;
-         }
-
-         .animate-out {
-             animation: slideOutToLeft 0.3s ease-out;
-         }
-
-         .line-clamp-2 {
-             display: -webkit-box;
-             -webkit-line-clamp: 2;
-             -webkit-box-orient: vertical;
-             overflow: hidden;
-         }
-     `;
-
-     const styleSheet = document.createElement('style');
-     styleSheet.textContent = styles;
-     document.head.appendChild(styleSheet);
- </script>
-
-<%- include('submit.ejs')  %>
+  <%- include('./scripts.ejs')  %>
 </body>
 </html>

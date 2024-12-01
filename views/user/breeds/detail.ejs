@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= metaTitle %></title>
+    <meta name="description" content="<%= metaDescription %>">
+    
+    <!-- Open Graph tags -->
+    <meta property="og:title" content="<%= breed.name %> - Guide Complet de la Race">
+    <meta property="og:description" content="<%= breed.description %>">
+    <meta property="og:image" content="<%= breed.imageUrl %>">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="<%= `${process.env.WEBSITE_URL}/les-races-des-chien/${breed.slug}` %>">
+    
+    <link rel="canonical" href="<%= `${process.env.WEBSITE_URL}/les-races-des-chien/${breed.slug}` %>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
+
+    <style>
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        
+        .custom-gradient {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        }
+
+        .stat-card {
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .splide__arrow {
+            background: rgba(255, 255, 255, 0.9) !important;
+        }
+
+        .splide__pagination__page.is-active {
+            background: #3b82f6 !important;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 to-slate-100 min-h-screen">
+    <!-- Hero Section with Gallery -->
+    <div class="relative h-[70vh] overflow-hidden">
+        <div class="splide h-full">
+            <div class="splide__track h-full">
+                <ul class="splide__list h-full">
+                    <li class="splide__slide">
+                        <div class="relative h-full">
+                            <img src="<%= breed.imageUrl %>" 
+                                 alt="<%= breed.name %>"
+                                 class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent"></div>
+                        </div>
+                    </li>
+                    <% breedImages.forEach(image => { %>
+                        <li class="splide__slide">
+                            <div class="relative h-full">
+                                <img src="<%= image.url %>" 
+                                     alt="<%= image.alt %>"
+                                     class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent"></div>
+                            </div>
+                        </li>
+                    <% }); %>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Breed Title Overlay -->
+        <div class="absolute bottom-0 left-0 right-0 px-4 py-8 text-white z-10">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex flex-wrap items-start justify-between gap-4">
+                    <div>
+                        <h1 class="text-4xl md:text-5xl font-bold mb-4"><%= breed.name %></h1>
+                        <div class="flex flex-wrap gap-2">
+                            <% breed.tags.forEach(tag => { %>
+                                <span class="px-3 py-1 rounded-full text-sm font-medium 
+                                           bg-white/20 backdrop-blur-sm">
+                                    <%= tag %>
+                                </span>
+                            <% }); %>
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+
+        <!-- Share Button -->
+        <button onclick="toggleShare()" 
+                class="absolute top-6 right-6 glass-effect p-3 rounded-full 
+                       hover:bg-white/90 transition-colors z-20">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                      d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316"/>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 mt-20 relative z-10">
+        <!-- Quick Stats Grid -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <% const stats = [
+                { 
+                    icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z',
+                    label: 'Espérance de vie', 
+                    value: breed.sante?.esperanceVie 
+                        ? `${breed.sante.esperanceVie.min || '?'}-${breed.sante.esperanceVie.max || '?'} ans` 
+                        : 'Non disponible'
+                },
+                { 
+                    icon: 'M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3',
+                    label: 'Taille', 
+                    value: breed.taille?.male 
+                        ? `${breed.taille.male.min || '?'}-${breed.taille.male.max || '?'} cm` 
+                        : 'Non disponible'
+                },
+                { 
+                    icon: 'M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16',
+                    label: 'Entretien', 
+                    value: breed.caracteristiques?.entretien 
+                        ? `${breed.caracteristiques.entretien}/5` 
+                        : 'Non disponible'
+                },
+                { 
+                    icon: 'M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2M6 7v2m0 16V5m0 16H9m3 0h3',
+                    label: 'Poids', 
+                    value: breed.poids?.male 
+                        ? `${breed.poids.male.min || '?'}-${breed.poids.male.max || '?'} kg` 
+                        : 'Non disponible'
+                }
+            ] %>
+
+            <% stats.forEach(stat => { %>
+                <div class="stat-card glass-effect rounded-2xl p-4">
+                    <svg class="w-6 h-6 text-blue-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="<%= stat.icon %>"/>
+                    </svg>
+                    <p class="text-sm text-slate-600"><%= stat.label %></p>
+                    <p class="font-semibold text-lg text-slate-900"><%= stat.value %></p>
+                </div>
+            <% }); %>
+        </div>
+
+        <!-- Description & Details -->
+        <div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
+            <div class="prose max-w-none">
+                <p class="text-lg text-slate-600 leading-relaxed mb-8"><%= breed.description %></p>
+                
+                <!-- Personality Traits -->
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold text-slate-900 mb-4">Caractère</h2>
+                    <div class="flex flex-wrap gap-3">
+                        <% breed.caracteristiques.personnalite.forEach(trait => { %>
+                            <div class="flex items-center bg-blue-50 px-4 py-2 rounded-full">
+                                <svg class="w-5 h-5 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+                                </svg>
+                                <span class="text-blue-700 font-medium"><%= trait %></span>
+                            </div>
+                        <% }); %>
+                    </div>
+                </div>
+
+                <!-- Aptitudes Section -->
+                <% if (breed.caracteristiques.aptitudes?.length > 0) { %>
+                    <div class="mb-8">
+                        <h2 class="text-2xl font-bold text-slate-900 mb-4">Aptitudes</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <% breed.caracteristiques.aptitudes.forEach(aptitude => { %>
+                                <div class="flex items-center bg-slate-50 p-4 rounded-xl">
+                                    <svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    <span class="text-slate-700"><%= aptitude %></span>
+                                </div>
+                            <% }); %>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+
+        <!-- Info Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <!-- History Card -->
+            <div class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="p-2 bg-blue-50 rounded-lg">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <h2 class="text-xl font-bold text-slate-900">Histoire</h2>
+                </div>
+                <p class="text-slate-600 leading-relaxed"><%= breed.histoire %></p>
+            </div>
+
+            <!-- Health Card -->
+            <div class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="p-2 bg-red-50 rounded-lg">
+                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                        </svg>
+                    </div>
+                    <h2 class="text-xl font-bold text-slate-900">Santé</h2>
+                </div>
+                <% if (breed.sante.maladiesCommunes?.length > 0) { %>
+                    <ul class="space-y-4">
+                        <% breed.sante.maladiesCommunes.forEach(maladie => { %>
+                            <li class="bg-slate-50 p-4 rounded-xl">
+                                <h3 class="font-semibold text-slate-900 mb-1"><%= maladie.nom %></h3>
+                                <p class="text-sm text-slate-600"><%= maladie.description %></p>
+                            </li>
+                        <% }); %>
+                    </ul>
+                <% } else { %>
+                    <p class="text-slate-600">Information non disponible</p>
+                <% } %>
+            </div>
+
+            <!-- Care Card -->
+            <div class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="p-2 bg-green-50 rounded-lg">
+                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                  d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </div>
+                    <h2 class="text-xl font-bold text-slate-900">Entretien</h2>
+                </div>
+                <div class="space-y-4">
+                    <div class="bg-slate-50 p-4 rounded-xl">
+                        <h3 class="font-semibold text-slate-900 mb-2">Toilettage</h3>
+                        <p class="text-slate-600"><%= breed.entretien.toilettage %></p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-xl">
+                        <h3 class="font-semibold text-slate-900 mb-2">Exercice</h3>
+                        <p class="text-slate-600"><%= breed.entretien.exercice %></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Similar Breeds -->
+        <% if (similarBreeds?.length > 0) { %>
+            <div class="mb-12">
+                <h2 class="text-2xl font-bold text-slate-900 mb-6">Races similaires</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <% similarBreeds.forEach(similar => { %>
+                        <a href="/les-races-des-chien/<%= similar.slug %>" 
+                           class="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300">
+                            <div class="relative">
+                                <img src="<%= similar.imageUrl %>" 
+                                     alt="<%= similar.name %>"
+                                     class="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-500"
+                                     loading="lazy">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent 
+                                            opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">
+                                    <%= similar.name %>
+                                </h3>
+                            </div>
+                        </a>
+                    <% }); %>
+                </div>
+            </div>
+        <% } %>
+
+        <!-- Share Modal -->
+        <div id="shareModal" 
+             class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 
+                    flex items-center justify-center p-4">
+            <div class="bg-white rounded-2xl p-6 max-w-md w-full">
+                <h3 class="text-xl font-bold text-slate-900 mb-6">Partager cette race</h3>
+                <div class="space-y-3">
+                    <button onclick="share('facebook')" 
+                            class="w-full flex items-center justify-center gap-3 p-3 
+                                   bg-[#1877F2] text-white rounded-xl 
+                                   hover:bg-[#1864D9] transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.477 2 2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.879V14.89h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33V21.88C18.343 21.128 22 16.991 22 12c0-5.523-4.477-10-10-10z"/>
+                        </svg>
+                        Facebook
+                    </button>
+                    <button onclick="share('twitter')" 
+                            class="w-full flex items-center justify-center gap-3 p-3 
+                                   bg-[#1DA1F2] text-white rounded-xl 
+                                   hover:bg-[#1A91DA] transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                        </svg>
+                        Twitter
+                    </button>
+                    <button onclick="share('whatsapp')" 
+                            class="w-full flex items-center justify-center gap-3 p-3 
+                                   bg-[#25D366] text-white rounded-xl 
+                                   hover:bg-[#22BD5B] transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.477 2 2 6.477 2 12c0 1.82.487 3.53 1.338 5.002L2.5 21.5l4.498-.838A9.954 9.954 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 2c4.418 0 8 3.582 8 8s-3.582 8-8 8c-1.719 0-3.312-.544-4.615-1.467l-.329-.225-2.049.381.384-2.049-.225-.329C4.544 15.312 4 13.719 4 12c0-4.418 3.582-8 8-8z"/>
+                        </svg>
+                        WhatsApp
+                    </button>
+                    <button onclick="copyLink()" 
+                            class="w-full flex items-center justify-center gap-3 p-3 
+                                   bg-slate-100 text-slate-700 rounded-xl 
+                                   hover:bg-slate-200 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                  d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/>
+                        </svg>
+                        Copier le lien
+                    </button>
+                </div>
+                <button onclick="toggleShare()" 
+                        class="w-full p-3 mt-4 text-slate-500 hover:text-slate-700 transition-colors">
+                    Fermer
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <script>
+        // Initialize image gallery
+        new Splide('.splide', {
+            type: 'fade',
+            rewind: true,
+            arrows: true,
+            pagination: true,
+            autoplay: true,
+            interval: 5000,
+            speed: 800,
+            pauseOnHover: true,
+            classes: {
+                arrows: 'splide__arrows custom-arrows',
+                arrow: 'splide__arrow custom-arrow',
+                pagination: 'splide__pagination custom-pagination',
+            },
+        }).mount();
+
+        // Share functionality
+        function toggleShare() {
+            const modal = document.getElementById('shareModal');
+            modal.classList.toggle('hidden');
+            document.body.classList.toggle('overflow-hidden');
+        }
+
+        function share(platform) {
+            const url = encodeURIComponent(window.location.href);
+            const title = encodeURIComponent('<%= breed.name %> - Guide de la Race');
+            
+            const shareUrls = {
+                facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+                twitter: `https://twitter.com/intent/tweet?url=${url}&text=${title}`,
+                whatsapp: `https://wa.me/?text=${title}%20${url}`
+            };
+            
+            window.open(shareUrls[platform], '_blank');
+        }
+
+        async function copyLink() {
+            try {
+                await navigator.clipboard.writeText(window.location.href);
+                // Show success message
+                const copyButton = event.target.closest('button');
+                const originalText = copyButton.innerHTML;
+                copyButton.innerHTML = `
+                    <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    Lien copié !
+                `;
+                setTimeout(() => {
+                    copyButton.innerHTML = originalText;
+                }, 2000);
+            } catch (err) {
+                alert('Erreur lors de la copie du lien');
+            }
+        }
+
+        // Close modal on background click
+        document.getElementById('shareModal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) {
+                toggleShare();
+            }
+        });
+
+        // Close modal on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !document.getElementById('shareModal').classList.contains('hidden')) {
+                toggleShare();
+            }
+        });
+    </script>
+</body>
+</html>
