@@ -17,6 +17,86 @@
                          Retour au tableau de bord
                     </a>
                </div>
+               <!-- Alert Section -->
+<div class="mb-6" id="verificationAlertSection">
+     <!-- Dropdown Header -->
+     <button class="w-full p-4 relative hover:bg-gray-50/50 transition-colors duration-200 rounded-xl border border-amber-100 bg-amber-50/50" 
+         id="verificationAlertToggle" 
+         onclick="toggleSection('verificationAlertSection')">
+         <div class="flex items-center justify-between">
+             <div class="flex items-center gap-3">
+                 <div class="flex-shrink-0 w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center">
+                     <i class="fas fa-shield-alt text-amber-600"></i>
+                 </div>
+                 <div class="flex items-center gap-2">
+                     <h3 class="text-sm font-medium text-gray-900">
+                         <%= user.isVerified ? 'Profil vérifié ✨' : 'Vérification du profil requise' %>
+                     </h3>
+                     <% if (!user.isVerified) { %>
+                         <span class="px-2 py-0.5 text-xs bg-amber-100 text-amber-700 rounded-full">
+                             Action requise
+                         </span>
+                     <% } %>
+                 </div>
+             </div>
+             <div class="transform transition-transform duration-200" id="verificationAlertSectionIcon">
+                 <i class="fas fa-chevron-down text-gray-400"></i>
+             </div>
+         </div>
+     </button>
+ 
+     <!-- Dropdown Content -->
+     <div class="hidden transition-all duration-300 ease-in-out mt-2 rounded-xl border border-amber-100 bg-white" 
+         id="verificationAlertSectionContent">
+         <div class="p-4">
+             <% if (user.isVerified) { %>
+                 <div class="flex items-start gap-4">
+                     <div class="flex-shrink-0 w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+                         <i class="fas fa-check text-green-600"></i>
+                     </div>
+                     <div>
+                         <h4 class="text-sm font-medium text-gray-900">Votre profil est vérifié</h4>
+                         <p class="mt-1 text-sm text-gray-500">
+                             Profitez d'une meilleure visibilité et d'une confiance accrue des clients.
+                         </p>
+                     </div>
+                 </div>
+             <% } else { %>
+                 <div class="space-y-3">
+                     <div class="flex items-start gap-4">
+                         <div class="flex-shrink-0 w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center">
+                             <i class="fas fa-info text-amber-600"></i>
+                         </div>
+                         <div>
+                             <h4 class="text-sm font-medium text-gray-900">Complétez votre profil</h4>
+                             <p class="mt-1 text-sm text-gray-500">
+                                 Pour être vérifié par Ndressilik, assurez-vous d'avoir :
+                             </p>
+                         </div>
+                     </div>
+                     <div class="grid grid-cols-2 gap-2 pl-14">
+                         <div class="flex items-center gap-2 text-sm text-gray-600">
+                             <i class="fas fa-circle text-[6px] text-amber-500"></i>
+                             <span>Photos (min. 3)</span>
+                         </div>
+                         <div class="flex items-center gap-2 text-sm text-gray-600">
+                             <i class="fas fa-circle text-[6px] text-amber-500"></i>
+                             <span>Certificats</span>
+                         </div>
+                         <div class="flex items-center gap-2 text-sm text-gray-600">
+                             <i class="fas fa-circle text-[6px] text-amber-500"></i>
+                             <span>Spécialisations</span>
+                         </div>
+                         <div class="flex items-center gap-2 text-sm text-gray-600">
+                             <i class="fas fa-circle text-[6px] text-amber-500"></i>
+                             <span>Infos complètes</span>
+                         </div>
+                     </div>
+                 </div>
+             <% } %>
+         </div>
+     </div>
+ </div>
                <!-- Profile Header Card -->
                <%- include('includes/profile/header-card') %>
 
@@ -30,14 +110,172 @@
 
                          <!-- Main Content Area -->
                          <div class="md:col-span-2 space-y-6">
+                              
                               <%- include('includes/profile/basic-info') %>
                                    <%- include('includes/profile/specializations') %>
                                         <%- include('includes/profile/qualifications') %>
                                              <!-- < %- include('includes/profile/business-hours') %> -->
                                                   <!-- < %- include('includes/profile/settings') %> -->
+                         <!-- Section Conseils -->
+<div class="relative mt-8 overflow-hidden rounded-xl <%= user.isVerified ? 'bg-gradient-to-br from-green-50 via-green-50/80 to-white' : 'bg-gradient-to-br from-amber-50 via-amber-50/80 to-white' %>">
+     <!-- Décoration d'arrière-plan -->
+     <div class="absolute inset-0 opacity-30">
+         <svg class="h-full w-full" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+             <pattern id="dots" width="10" height="10" patternUnits="userSpaceOnUse">
+                 <circle cx="2" cy="2" r="1" fill="currentColor" class="<%= user.isVerified ? 'text-green-500/20' : 'text-amber-500/20' %>"/>
+             </pattern>
+             <rect width="100" height="100" fill="url(#dots)"/>
+         </svg>
+     </div>
+ 
+     <!-- Contenu -->
+     <div class="relative p-6">
+         <div class="flex items-start gap-4">
+             <!-- Icône -->
+             <div class="flex-shrink-0 rounded-full <%= user.isVerified ? 'bg-green-100' : 'bg-amber-100' %> p-3">
+                 <% if (user.isVerified) { %>
+                     <svg class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                             d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                     </svg>
+                 <% } else { %>
+                     <svg class="h-6 w-6 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                             d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                     </svg>
+                 <% } %>
+             </div>
+ 
+             <!-- Texte -->
+             <div class="flex-grow">
+                 <% if (user.isVerified) { %>
+                     <h3 class="mb-2 text-lg font-semibold text-gray-900">
+                         Félicitations ! Votre profil est vérifié
+                     </h3>
+                     <p class="text-gray-600">
+                         Votre profil a été vérifié par l'équipe Ndressilik. Vous bénéficiez maintenant de :
+                     </p>
+                     <ul class="mt-4 space-y-3">
+                         <li class="flex items-center gap-3 text-gray-600">
+                             <div class="flex h-6 w-6 items-center justify-center rounded-full bg-green-100">
+                                 <i class="fas fa-check text-sm text-green-600"></i>
+                             </div>
+                             Une meilleure visibilité dans les résultats de recherche
+                         </li>
+                         <li class="flex items-center gap-3 text-gray-600">
+                             <div class="flex h-6 w-6 items-center justify-center rounded-full bg-green-100">
+                                 <i class="fas fa-check text-sm text-green-600"></i>
+                             </div>
+                             Un badge de confiance visible sur votre profil
+                         </li>
+                         <li class="flex items-center gap-3 text-gray-600">
+                             <div class="flex h-6 w-6 items-center justify-center rounded-full bg-green-100">
+                                 <i class="fas fa-check text-sm text-green-600"></i>
+                             </div>
+                             Un taux de réponse plus élevé à vos propositions
+                         </li>
+                     </ul>
+ 
+                     <!-- Badge Actif -->
+                     <div class="mt-6 flex items-center gap-3 rounded-lg bg-white p-4 shadow-sm">
+                         <div class="flex items-center gap-2">
+                             <i class="fas fa-shield-check text-xl text-green-600"></i>
+                             <span class="font-medium text-gray-900">Badge Profil Vérifié</span>
                          </div>
+                         <div class="flex-grow"></div>
+                         <span class="rounded-full bg-green-100 px-3 py-1 text-sm text-green-700">Actif</span>
+                     </div>
+                 <% } else { %>
+                     <h3 class="mb-2 text-lg font-semibold text-gray-900">
+                         Complétez votre profil pour être vérifié
+                     </h3>
+                     <p class="text-gray-600">
+                         Pour gagner la confiance de vos clients potentiels et obtenir le badge de profil vérifié, assurez-vous de :
+                     </p>
+                     <ul class="mt-4 space-y-3">
+                         <li class="flex items-center gap-3 text-gray-600">
+                             <div class="flex h-6 w-6 items-center justify-center rounded-full bg-amber-100">
+                                 <i class="fas fa-check text-sm text-amber-600"></i>
+                             </div>
+                             Remplir toutes vos informations personnelles et professionnelles
+                         </li>
+                         <li class="flex items-center gap-3 text-gray-600">
+                             <div class="flex h-6 w-6 items-center justify-center rounded-full bg-amber-100">
+                                 <i class="fas fa-check text-sm text-amber-600"></i>
+                             </div>
+                             Ajouter au moins 3 photos dans votre galerie
+                         </li>
+                         <li class="flex items-center gap-3 text-gray-600">
+                             <div class="flex h-6 w-6 items-center justify-center rounded-full bg-amber-100">
+                                 <i class="fas fa-check text-sm text-amber-600"></i>
+                             </div>
+                             Télécharger vos certificats et diplômes
+                         </li>
+                         <li class="flex items-center gap-3 text-gray-600">
+                             <div class="flex h-6 w-6 items-center justify-center rounded-full bg-amber-100">
+                                 <i class="fas fa-check text-sm text-amber-600"></i>
+                             </div>
+                             Sélectionner vos spécialisations
+                         </li>
+                     </ul>
+ 
+                     <!-- Badge En Attente -->
+                     <div class="mt-6 flex items-center gap-3 rounded-lg bg-white p-4 shadow-sm">
+                         <div class="flex items-center gap-2">
+                             <i class="fas fa-shield-check text-xl text-amber-600"></i>
+                             <span class="font-medium text-gray-900">Badge Profil Vérifié</span>
+                         </div>
+                         <div class="flex-grow"></div>
+                         <span class="rounded-full bg-amber-100 px-3 py-1 text-sm text-amber-700">En attente</span>
+                     </div>
+ 
+                     <!-- Note -->
+                     <p class="mt-4 text-sm text-gray-500">
+                         Une fois votre profil complété, il sera examiné par l'équipe de Ndressilik pour vérification. 
+                         Cette certification augmentera votre visibilité et la confiance des clients.
+                     </p>
+                 <% } %>
+             </div>
+         </div>
+     </div>
+ </div>
+                                             </div>
                     </div>
           </div>
+          <script>
+               document.addEventListener('DOMContentLoaded', function() {
+    // Keep track of currently open section
+    let openSection = null;
+
+    // Function to handle section toggles
+    window.toggleSection = function(sectionId) {
+        const section = document.getElementById(sectionId);
+        const content = section.querySelector('[id$="Content"]');
+        const icon = section.querySelector('[id$="Icon"]');
+        
+        // If clicking the same section that's already open, just close it
+        if (openSection === section) {
+            content.classList.add('hidden');
+            icon.style.transform = 'rotate(0deg)';
+            openSection = null;
+            return;
+        }
+        
+        // Close currently open section if any
+        if (openSection) {
+            const openContent = openSection.querySelector('[id$="Content"]');
+            const openIcon = openSection.querySelector('[id$="Icon"]');
+            openContent.classList.add('hidden');
+            openIcon.style.transform = 'rotate(0deg)';
+        }
+        
+        // Open clicked section
+        content.classList.remove('hidden');
+        icon.style.transform = 'rotate(180deg)';
+        openSection = section;
+    };
+});
+          </script>
 
           <!-- Scripts -->
           <%- include('includes/scripts') %>

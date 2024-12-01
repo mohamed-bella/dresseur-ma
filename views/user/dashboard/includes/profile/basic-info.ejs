@@ -185,12 +185,7 @@
 
     <!-- Boutons d'action -->
     <div class="flex gap-4 pt-6 border-t">
-      <button type="button" id="cancelBasicInfoBtn" class="flex-1 h-12 bg-gray-50 text-gray-700 rounded-xl
-        hover:bg-gray-100 focus:ring-4 focus:ring-gray-200
-        transition-all duration-300 group">
-        <i class="fas fa-times mr-2 group-hover:rotate-90 transition-transform"></i>
-        Annuler
-      </button>
+      
       <button type="submit" class="flex-1 h-12 bg-blue-600 text-white rounded-xl
         hover:bg-blue-700 focus:ring-4 focus:ring-blue-500/30
         transition-all duration-300 group">
@@ -409,137 +404,157 @@ document.addEventListener('DOMContentLoaded', function() {
   document.head.appendChild(style);
 });
 </script>
-
-<!-- ####################### GALERIE ############################# -->
 <!-- Section Galerie -->
-<div class="bg-white rounded-2xl shadow-lg overflow-hidden mt-8">
-  <!-- En-tête -->
-  <div class="p-6 border-b border-gray-100">
-    <div class="flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <h2 class="text-xl font-bold text-gray-900">Galerie de photos</h2>
-        <% if (user.gallery && user.gallery.length) { %>
-          <span class="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-sm">
-            <%= user.gallery.length %> photo(s)
-          </span>
-        <% } %>
-      </div>
-    </div>
-  </div>
-
-  <!-- Carte de prévisualisation/téléchargement de la galerie -->
-  <div class="p-6">
-    <a href="/dashboard/galery" class="block group relative overflow-hidden rounded-2xl transition-all duration-300
-      hover:shadow-xl">
-      <!-- Motif d'arrière-plan -->
-      <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5
-        transition-all duration-500 group-hover:scale-110"></div>
-
-      <!-- Conteneur de contenu -->
-      <div class="relative p-8">
-        <div class="flex flex-col items-center gap-6 text-center">
-          <!-- Conteneur d'icône -->
-          <div class="w-20 h-20 flex items-center justify-center rounded-full
-            bg-gradient-to-r from-blue-500 to-blue-600 text-white
-            transform transition-all duration-500 
-            group-hover:scale-110 group-hover:rotate-12">
-            <i class="fas fa-images text-3xl"></i>
-          </div>
-
-          <!-- Contenu textuel -->
-          <div class="space-y-2">
-            <h3 class="text-xl font-bold text-gray-900">
+<div class="bg-white rounded-xl shadow-sm overflow-hidden" id="gallerySection">
+  <!-- Dropdown Header -->
+  <button class="w-full p-6 border-b border-gray-100 relative hover:bg-gray-50 transition-colors duration-200" 
+      id="galleryToggle" 
+      onclick="toggleSection('gallerySection')">
+      <div class="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-blue-500 to-blue-600"></div>
+      <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+              <h2 class="text-xl font-bold text-gray-900">Galerie de photos</h2>
               <% if (user.gallery && user.gallery.length) { %>
-                Gérer la galerie
-              <% } else { %>
-                Ajoutez vos premières photos
+                  <span class="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-sm">
+                      <%= user.gallery.length %> photo<%= user.gallery.length !== 1 ? 's' : '' %>
+                  </span>
               <% } %>
-            </h3>
-            <p class="text-gray-500 max-w-md mx-auto">
-              <% if (user.gallery && user.gallery.length) { %>
-                Vous pouvez modifier et ajouter plus de photos à votre galerie.
-              <% } else { %>
-                Créez une galerie professionnelle pour présenter vos services et travaux.
-              <% } %>
-            </p>
           </div>
+          <div class="transform transition-transform duration-200" id="gallerySectionIcon">
+              <i class="fas fa-chevron-down text-gray-400"></i>
+          </div>
+      </div>
+  </button>
 
-          <!-- Aperçu de la galerie ou bouton de téléchargement -->
-          <% if (user.gallery && user.gallery.length) { %>
-            <!-- Mini aperçu de la galerie -->
-            <div class="flex items-center gap-4">
-              <% user.gallery.slice(0, 3).forEach(image => { %>
-                <div class="w-16 h-16 rounded-xl overflow-hidden">
-                  <img src="<%= image %>" alt="Aperçu de la galerie" class="w-full h-full object-cover">
-                </div>
-              <% }); %>
-              <% if (user.gallery.length > 3) { %>
-                <div class="w-16 h-16 rounded-xl bg-gray-900/10 flex items-center 
-                  justify-center text-gray-600 font-medium">
-                  +<%= user.gallery.length - 3 %>
-                </div>
-              <% } %>
-            </div>
-          <% } %>
+  <!-- Dropdown Content -->
+  <div class="hidden transition-all duration-300 ease-in-out" id="gallerySectionContent">
+      <!-- Carte de prévisualisation/téléchargement de la galerie -->
+      <div class="p-6">
+          <a href="/dashboard/galery" class="block group relative overflow-hidden rounded-2xl transition-all duration-300
+              hover:shadow-xl">
+              <!-- Motif d'arrière-plan -->
+              <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5
+                  transition-all duration-500 group-hover:scale-110"></div>
 
-          <!-- Bouton d'action -->
-          <button class="inline-flex items-center gap-2 px-6 py-3 
-            bg-gradient-to-r from-blue-500 to-blue-600
-            text-white rounded-xl
-            transition-all duration-300 group-hover:shadow-lg 
-            group-hover:shadow-blue-500/25 group-hover:-translate-y-0.5">
-            <i class="fas <%= user.gallery && user.gallery.length ? 'fa-pen-to-square' : 'fa-plus' %>"></i>
-            <span>
-              <%= user.gallery && user.gallery.length ? 'Modifier la galerie' : 'Créer une galerie' %>
-            </span>
-          </button>
-        </div>
+              <!-- Conteneur de contenu -->
+              <div class="relative p-8">
+                  <div class="flex flex-col items-center gap-6 text-center">
+                      <!-- Conteneur d'icône -->
+                      <div class="w-20 h-20 flex items-center justify-center rounded-full
+                          bg-gradient-to-r from-blue-500 to-blue-600 text-white
+                          transform transition-all duration-500 
+                          group-hover:scale-110 group-hover:rotate-12">
+                          <i class="fas fa-images text-3xl"></i>
+                      </div>
+
+                      <!-- Contenu textuel -->
+                      <div class="space-y-2">
+                          <h3 class="text-xl font-bold text-gray-900">
+                              <% if (user.gallery && user.gallery.length) { %>
+                                  Gérer la galerie
+                              <% } else { %>
+                                  Ajoutez vos premières photos
+                              <% } %>
+                          </h3>
+                          <p class="text-gray-500 max-w-md mx-auto">
+                              <% if (user.gallery && user.gallery.length) { %>
+                                  Vous pouvez modifier et ajouter plus de photos à votre galerie.
+                              <% } else { %>
+                                  Créez une galerie professionnelle pour présenter vos services et travaux.
+                              <% } %>
+                          </p>
+                      </div>
+
+                      <!-- Aperçu de la galerie -->
+                      <% if (user.gallery && user.gallery.length) { %>
+                          <div class="flex items-center gap-4">
+                              <% user.gallery.slice(0, 3).forEach(image => { %>
+                                  <div class="w-16 h-16 rounded-xl overflow-hidden">
+                                      <img src="<%= image %>" alt="Aperçu de la galerie" class="w-full h-full object-cover">
+                                  </div>
+                              <% }); %>
+                              <% if (user.gallery.length > 3) { %>
+                                  <div class="w-16 h-16 rounded-xl bg-gray-900/10 flex items-center 
+                                      justify-center text-gray-600 font-medium">
+                                      +<%= user.gallery.length - 3 %>
+                                  </div>
+                              <% } %>
+                          </div>
+                      <% } %>
+
+                      <!-- Bouton d'action -->
+                      <button class="inline-flex items-center gap-2 px-6 py-3 
+                          bg-gradient-to-r from-blue-500 to-blue-600
+                          text-white rounded-xl
+                          transition-all duration-300 group-hover:shadow-lg 
+                          group-hover:shadow-blue-500/25 group-hover:-translate-y-0.5">
+                          <i class="fas <%= user.gallery && user.gallery.length ? 'fa-pen-to-square' : 'fa-plus' %>"></i>
+                          <span>
+                              <%= user.gallery && user.gallery.length ? 'Modifier la galerie' : 'Créer une galerie' %>
+                          </span>
+                      </button>
+                  </div>
+              </div>
+
+              <!-- Superposition d'effet de survol -->
+              <div class="absolute inset-0 bg-gradient-to-r from-blue-600/0 to-blue-600/0
+                  transition-all duration-300 group-hover:from-blue-600/5 
+                  group-hover:to-blue-600/5"></div>
+          </a>
       </div>
 
-      <!-- Superposition d'effet de survol -->
-      <div class="absolute inset-0 bg-gradient-to-r from-blue-600/0 to-blue-600/0
-        transition-all duration-300 group-hover:from-blue-600/5 
-        group-hover:to-blue-600/5"></div>
-    </a>
-  </div>
-
-  <!-- Statistiques rapides optionnelles -->
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 bg-gray-50/50 border-t border-gray-100">
-    <div class="text-center p-4 rounded-xl bg-white">
-      <div class="text-2xl font-bold text-blue-600">
-        <%= user.gallery && user.gallery.length || 0 %>
+      <!-- Statistiques -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 bg-gray-50/50 border-t border-gray-100">
+          <div class="text-center p-4 rounded-xl bg-white">
+              <div class="text-2xl font-bold text-blue-600">
+                  <%= user.gallery && user.gallery.length || 0 %>
+              </div>
+              <div class="text-sm text-gray-500 mt-1">Total des photos</div>
+          </div>
       </div>
-      <div class="text-sm text-gray-500 mt-1">Total des photos</div>
-    </div>
   </div>
 </div>
 
-<style>
-  /* Ajoutez des styles personnalisés supplémentaires ici */
-</style>
-
 <script>
-  // Optionnel : Ajoutez des éléments interactifs
-  document.addEventListener('DOMContentLoaded', () => {
-    // Ajoutez un état de chargement lors du clic sur le lien de la galerie
-    const galleryLink = document.querySelector('a[href="/dashboard/galery"]');
-    galleryLink?.addEventListener('click', (e) => {
+document.addEventListener('DOMContentLoaded', () => {
+  // Loading state handler
+  const galleryLink = document.querySelector('a[href="/dashboard/galery"]');
+  galleryLink?.addEventListener('click', (e) => {
       const button = e.currentTarget.querySelector('button');
       const originalText = button.innerHTML;
 
-      // Affiche l'état de chargement
+      // Show loading state
       button.innerHTML = `
-        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-        </svg>
-        <span>Chargement...</span>
+          <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span>Chargement...</span>
       `;
 
-      // Restaure le texte original après la navigation
+      // Restore original state after delay
       setTimeout(() => {
-        button.innerHTML = originalText;
+          button.innerHTML = originalText;
       }, 500);
-    });
   });
+});
 </script>
+
+<style>
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.2s ease-out forwards;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+</style>
