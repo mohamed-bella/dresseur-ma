@@ -140,45 +140,50 @@
             </form>
         </div>
 
-        <!-- Posts Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <% posts.forEach(function(post) { %>
-            <div class="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer"
-                 onclick="window.location.href='/chien-adoption-perdus/<%= post._id %>'">
-                <div class="relative">
-                    <img src="<%= post.photos[0] %>" alt="<%= post.name %>" class="w-full h-48 object-cover">
-                    <span class="absolute top-4 left-4 text-sm font-medium px-3 py-1 rounded-full 
-                        <%= post.type === 'adoption' ? 'bg-green-100 text-green-800' : 
-                           post.type === 'perdu' ? 'bg-red-100 text-red-800' : 
-                           'bg-yellow-100 text-yellow-800' %>">
-                        <%= post.type === 'adoption' ? 'À adopter' : 
-                           post.type === 'perdu' ? 'Perdu' : 'Trouvé' %>
+       <!-- Posts Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <% if (posts.length > 0) { %>
+        <% posts.forEach(function(post) { %>
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer"
+             onclick="window.location.href='/chien-adoption-perdus/<%= post._id %>'">
+            <div class="relative">
+                <img src="<%= post.photos[0] %>" alt="<%= post.name %>" class="w-full h-48 object-cover">
+                <span class="absolute top-4 left-4 text-sm font-medium px-3 py-1 rounded-full 
+                    <%= post.type === 'adoption' ? 'bg-green-100 text-green-800' : 
+                       post.type === 'perdu' ? 'bg-red-100 text-red-800' : 
+                       'bg-yellow-100 text-yellow-800' %>">
+                    <%= post.type === 'adoption' ? 'À adopter' : 
+                       post.type === 'perdu' ? 'Perdu' : 'Trouvé' %>
+                </span>
+            </div>
+            <div class="p-4">
+                <div class="flex justify-between items-center mb-2">
+                    <h3 class="font-semibold text-lg"><%= post.name %></h3>
+                    <span class="text-gray-500 text-sm">
+                        <%= new Date(post.createdAt).toLocaleDateString() %>
                     </span>
                 </div>
-                <div class="p-4">
-                    <div class="flex justify-between items-center mb-2">
-                        <h3 class="font-semibold text-lg"><%= post.name %></h3>
-                        <span class="text-gray-500 text-sm">
-                            <%= new Date(post.createdAt).toLocaleDateString() %>
-                        </span>
-                    </div>
-                    <p class="text-gray-600 text-sm mb-2 flex items-center gap-2">
-                        <i class="fas fa-map-marker-alt text-gray-400"></i>
-                        <%= post.location %>
-                    </p>
-                    <p class="text-gray-700 line-clamp-2"><%= post.description %></p>
-                </div>
+                <p class="text-gray-600 text-sm mb-2 flex items-center gap-2">
+                    <i class="fas fa-map-marker-alt text-gray-400"></i>
+                    <%= post.location %>
+                </p>
+                <p class="text-gray-700 line-clamp-2"><%= post.description %></p>
             </div>
-            <% }); %>
-
-            <% if (posts.length === 0) { %>
-            <div class="col-span-full text-center py-12">
-                <i class="fas fa-search text-gray-400 text-4xl mb-4"></i>
-                <h3 class="text-lg font-semibold text-gray-600">Aucune annonce trouvée</h3>
-                <p class="text-gray-500">Modifiez vos critères de recherche ou publiez une nouvelle annonce</p>
-            </div>
-            <% } %>
         </div>
+        <% }); %>
+    <% } else { %>
+        <!-- No Posts Section -->
+        <div class="col-span-full text-center py-12">
+            <i class="fas fa-dog text-gray-400 text-6xl mb-4"></i>
+            <h3 class="text-lg font-semibold text-gray-600">Aucune annonce disponible</h3>
+            <p class="text-gray-500">Il n'y a pas encore de chiens pour adoption ou autres annonces.</p>
+            <a href="#" class="mt-4 inline-block px-6 py-2 bg-blue-500 text-white rounded-lg shadow-sm hover:bg-blue-600 transition-all duration-300">
+                Publier une annonce
+            </a>
+        </div>
+    <% } %>
+</div>
+
 
         <!-- Pagination -->
         <% if (totalPages > 1) { %>
