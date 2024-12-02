@@ -1,537 +1,239 @@
 <%- include('include/head', { title: pageTitle, description: description, keywords: keywords }) %>
-    <%- include('include/navbar') %>
-        <!-- ServicesListing.ejs -->
-        <div class="min-h-screen bg-white">
-            <!-- Header Section -->
-            <div class="bg-white border-b border-gray-100">
-                <div class="max-w-7xl mx-auto px-4 py-12 sm:py-16">
-                    <div class="text-center max-w-3xl mx-auto">
-                        <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-                            Les Services Canines
-                            <span class="inline-block">
-                                <i class="fas fa-paw text-blue-500 ml-2"></i>
-                            </span>
-                        </h1>
-                        <p class="text-lg text-gray-600">
-                            Découvrez une expérience premium dédiée au bien-être de votre compagnon. Services sur-mesure et expertise inégalée au Maroc.
-                        </p>
-                        <div class="mt-4 w-20 h-1 bg-blue-500 mx-auto rounded-full"></div>
-                    </div>
-    
+<%- include('include/navbar') %>
+
+<main class="min-h-screen bg-gray-50/50">
+    <!-- Hero Section with Search Intent -->
+    <section class="bg-white border-b">
+        <div class="max-w-7xl mx-auto px-4 py-10 sm:py-16">
+            <div class="text-center space-y-4">
+                <h1 class="text-3xl sm:text-4xl font-semibold text-gray-900">
+                    Services Canines Professionnels
+                </h1>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                    Trouvez les meilleurs services pour votre compagnon à quatre pattes
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Filters Bar -->
+    <div class="sticky top-16 z-30 bg-white border-b shadow-sm">
+        <div class="max-w-5xl mx-auto">
+            <div class="overflow-x-auto scrollbar-hide">
+                <div class="flex whitespace-nowrap px-4 py-3 gap-3">
+                    <% const categories = [
+                        { id: 'tous', icon: '🔍', label: 'Tous les services' },
+                        { id: 'dressage', icon: '🐕', label: 'Dressage' },
+                        { id: 'toilettage', icon: '✂️', label: 'Toilettage' },
+                        { id: 'promenade', icon: '🦮', label: 'Promenade' },
+                        { id: 'veterinaire', icon: '⚕️', label: 'Vétérinaire' },
+                        { id: 'pension', icon: '🏠', label: 'Pension' },
+                        { id: 'transport', icon: '🚗', label: 'Transport' }
+                    ];
+                    const currentCategory = serviceOption || 'tous';
+                    %>
                     
-                </div>
-            </div>
-            <!-- Categories Navigation -->
-            <nav class="sticky top-20 z-40 bg-white border-b border-gray-100">
-                <div class="max-w-6xl mx-auto">
-                    <div class="categories-scroll">
-                        <div class="categories-wrapper">
-                            <% const categories=[ { id: 'tous' , icon: '🔍' , label: 'Tous' , color: 'slate' }, { id: 'dressage' , icon: '🐕' , label: 'Dressage' , color: 'amber' }, { id: 'toilettage' , icon: '✂️' , label: 'Toilettage' , color: 'purple' }, { id: 'promenade' , icon: '🦮' , label: 'Promenade' , color: 'emerald' }, { id: 'veterinaire' , icon: '⚕️' , label: 'Vétérinaire' , color: 'rose' }, { id: 'pension' , icon: '🏠' , label: 'Pension' , color: 'amber' }, { id: 'transport' , icon: '🚗' , label: 'Transport' , color: 'indigo' } ]; const currentCategory=serviceOption || 'tous' ; %>
-
-                                <% categories.forEach(category=> {
-                                    const isActive = currentCategory === category.id;
-                                    %>
-                                    <a href="/services/<%= category.id %>" class="category-item <%= isActive ? 'active' : '' %>" data-category="<%= category.id %>">
-                                        <div class="category-content">
-                                            <span class="category-icon">
-                                                <%= category.icon %>
-                                            </span>
-                                            <span class="category-label">
-                                                <%= category.label %>
-                                            </span>
-                                        </div>
-                                    </a>
-                                    <% }) %>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-
-            <!-- Location Filter -->
-            <div class="max-w-6xl mx-auto px-4 my-6">
-                <h3 class="text-lg font-semibold mb-4">Choisissez votre ville</h3>
-                <!-- Mobile Locations -->
-                <div class="sm:hidden location-scroll">
-                    <div class="location-wrapper" id="locationSlider">
-                        <% locations.forEach(location=> { %>
-                            <a href="/services/<%= serviceOption %>/<%= location %>" class="location-pill <%= currentLocation === location ? 'active' : '' %>">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span>
-                                    <%= location.charAt(0).toUpperCase() + location.slice(1) %>
-                                </span>
-                            </a>
-                            <% }) %>
-                    </div>
-                </div>
-                <!-- Desktop Locations -->
-                <div class="hidden sm:flex flex-wrap gap-2">
-                    <% locations.forEach(location=> { %>
-                        <a href="/services/<%= serviceOption %>/<%= location %>" class="location-pill <%= currentLocation === location ? 'active' : '' %>">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <span>
-                                <%= location.charAt(0).toUpperCase() + location.slice(1) %>
-                            </span>
+                    <% categories.forEach(category => { 
+                        const isActive = currentCategory === category.id;
+                    %>
+                        <a href="/services/<%= category.id %>" 
+                           class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium 
+                                  border transition duration-150 ease-in-out
+                                  <%= isActive ? 
+                                    'bg-blue-600 text-white border-transparent' : 
+                                    'bg-white text-gray-700 border-gray-200 hover:bg-gray-50' %>">
+                            <span class="mr-2"><%= category.icon %></span>
+                            <%= category.label %>
                         </a>
-                        <% }) %>
-                </div>
-            </div>
-
-            <!-- Services Grid -->
-            <div class="max-w-6xl mx-auto px-4 py-6">
-                <div class="grid gap-4">
-                   <% if (services.length > 0) {%>
-                    <% services.forEach(service=> { %>
-                        <a href="/service/<%= service._id %>" class="service-card">
-                            <article class="bg-white rounded-xl border border-gray-100 hover:shadow-lg transition-all duration-300">
-                                <div class="flex sm:hidden p-4">
-                                    <!-- Mobile Card Content -->
-                                    <div class="relative w-20 h-20 flex-shrink-0">
-                                        <img src="<%= service.images?.[0] %>" alt="<%= service.serviceName %>" class="w-full h-full object-cover rounded-xl" loading="lazy">
-                                        <div class="absolute top-2 left-2 bg-white/90 backdrop-blur-sm p-1.5 rounded-lg">
-                                            <%= serviceIcons[service.serviceOptions]?.emoji %>
-                                        </div>
-                                    </div>
-                                    <div class="flex-1 ml-4">
-                                        <div class="flex justify-between items-start">
-                                            <h3 class="font-medium text-gray-900">
-                                                <%= service.serviceName %>
-                                            </h3>
-                                            <span class="text-sm font-semibold text-amber-600">
-                                                <%= service.priceRange %> 
-                                            </span>
-                                        </div>
-                                        <div class="mt-2 flex items-center text-sm text-gray-500">
-                                            <i class="fas fa-map-marker-alt mr-1"></i>
-                                            <%= service.location %>
-                                                <span class="mx-2">•</span>
-                                                <i class="far fa-eye mr-1"></i>
-                                                <%= service.views %>
-                                        </div>
-                                        <div class="mt-3 flex items-center justify-between">
-                                            <div class="flex items-center">
-                                                <img src="<%= service.createdBy?.profileImage %>" class="w-6 h-6 rounded-full" alt="<%= service.createdBy?.displayName %>">
-                                                <span class="ml-2 text-sm text-gray-600">
-                                                    <%= service.createdBy?.displayName %>
-                                                        <% if(service.createdBy?.isVerified) { %>
-                                                            <i class="fas fa-check-circle text-blue-500 text-xs ml-1"></i>
-                                                            <% } %>
-                                                </span>
-                                            </div>
-                                            <i class="fas fa-chevron-right text-gray-400"></i>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Desktop Card Content -->
-                                <div class="hidden sm:flex">
-                                    <div class="flex w-full">
-                                        <!-- Left: Image Section -->
-                                        <div class="w-[280px] relative flex-shrink-0">
-                                            <div class="relative h-full">
-                                                <img src="<%= service.images?.[0] || '/default-service.jpg' %>" alt="<%= service.serviceName %>" class="w-full h-full object-cover" loading="lazy">
-
-                                                <!-- Service Type Badge -->
-                                                <div class="absolute top-4 left-4 px-4 py-2 bg-white/95 backdrop-blur-sm 
-                    rounded-xl shadow-sm flex items-center gap-2">
-                                                    <span class="text-lg">
-                                                        <%= serviceIcons[service.serviceOptions]?.emoji %>
-                                                    </span>
-                                                    <span class="text-sm font-medium text-gray-900">
-                                                        <%= service.serviceOptions.charAt(0).toUpperCase() + service.serviceOptions.slice(1) %>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Right: Content Section -->
-                                        <div class="flex-1 p-6 flex flex-col">
-                                            <!-- Header -->
-                                            <div class="flex items-start justify-between gap-4">
-                                                <div class="flex-1">
-                                                    <h3 class="text-xl font-semibold text-gray-900 mb-2 line-clamp-1">
-                                                        <%= service.serviceName %>
-                                                    </h3>
-                                                    <div class="flex items-center gap-4 text-sm text-gray-500">
-                                                        <div class="flex items-center gap-1.5">
-                                                            <i class="fas fa-map-marker-alt text-gray-400"></i>
-                                                            <span>
-                                                                <%= service.location %>
-                                                            </span>
-                                                        </div>
-                                                        <div class="flex items-center gap-1.5">
-                                                            <i class="far fa-eye text-gray-400"></i>
-                                                            <span>
-                                                                <%= service.views %> vues
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <!-- Price -->
-                                                <div class="text-right flex-shrink-0">
-                                                    <div class="text-xl font-bold text-amber-600">
-                                                        <%= service.priceRange %> 
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <!-- Description -->
-                                            <p class="mt-4 text-gray-600 line-clamp-2 flex-1">
-                                                <%= service.description || 'Aucune description disponible.' %>
-                                            </p>
-
-                                            <!-- Footer -->
-                                            <div class="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
-                                                <!-- Provider Info -->
-                                                <div class="flex items-center gap-3">
-                                                    <div class="relative">
-                                                        <img src="<%= service.createdBy?.profileImage || '/default-avatar.jpg' %>" alt="<%= service.createdBy?.displayName %>" class="w-10 h-10 rounded-full object-cover ring-2 ring-white" loading="lazy">
-                                                        <% if(service.createdBy?.isVerified) { %>
-                                                            <div class="absolute -top-1 -right-1 w-5 h-5 bg-blue-500 text-white 
-                                rounded-full flex items-center justify-center ring-2 ring-white">
-                                                                <i class="fas fa-check text-[10px]"></i>
-                                                            </div>
-                                                            <% } %>
-                                                    </div>
-                                                    <div>
-                                                        <div class="font-medium text-gray-900">
-                                                            <%= service.createdBy?.displayName %>
-                                                        </div>
-                                                        <div class="text-sm text-gray-500">Prestataire professionnel</div>
-                                                    </div>
-                                                </div>
-
-                                                <!-- Action Button -->
-                                                <div class="flex items-center gap-2 text-gray-400 transition-colors 
-                    group-hover:text-amber-600">
-                                                    <span class="text-sm font-medium">Voir détails</span>
-                                                    <i class="fas fa-arrow-right transform transition-transform 
-                        group-hover:translate-x-1"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <style>
-                                    /* Desktop Card Specific Styles */
-                                    .line-clamp-1 {
-                                        display: -webkit-box;
-                                        -webkit-line-clamp: 1;
-                                        -webkit-box-orient: vertical;
-                                        overflow: hidden;
-                                    }
-
-                                    .line-clamp-2 {
-                                        display: -webkit-box;
-                                        -webkit-line-clamp: 2;
-                                        -webkit-box-orient: vertical;
-                                        overflow: hidden;
-                                    }
-
-                                    /* Image hover effect */
-                                    .service-card:hover img {
-                                        transform: scale(1.05);
-                                        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-                                    }
-
-                                    /* Badge blur effect */
-                                    .backdrop-blur-sm {
-                                        backdrop-filter: blur(4px);
-                                        -webkit-backdrop-filter: blur(4px);
-                                    }
-
-                                    /* Smooth transitions */
-                                    .transition-all {
-                                        transition-property: all;
-                                        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-                                        transition-duration: 300ms;
-                                    }
-
-                                    /* Provider image ring effect */
-                                    .ring-2 {
-                                        --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
-                                        --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
-                                        box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
-                                    }
-
-                                    /* Enhanced hover states */
-                                    .group:hover .group-hover\:translate-x-1 {
-                                        --tw-translate-x: 0.25rem;
-                                        transform: var(--tw-transform);
-                                    }
-
-                                    .group:hover .group-hover\:text-amber-600 {
-                                        --tw-text-opacity: 1;
-                                        color: rgba(217, 119, 6, var(--tw-text-opacity));
-                                    }
-                                </style>
-                            </article>
-                        </a>
-                        <% }) %>
-                    <% } else {%>
-                        <div class="flex flex-col items-center justify-center text-center py-16">
-       <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-           <i class="fas fa-paw text-4xl text-gray-400"></i>
-       </div>
-       <h3 class="text-xl font-medium text-gray-900 mb-2">Aucun service disponible</h3>
-       <p class="text-gray-500 max-w-sm">
-           Les services ne sont pas encore disponibles dans cette ville. 
-           Revenez bientôt ou essayez une autre ville.
-       </p>
-       <a href="/" class="mt-6 text-blue-600 hover:text-blue-700 font-medium">
-           Retour à l'accueil
-       </a>
-   </div>
-                        <% } %>
+                    <% }) %>
                 </div>
             </div>
         </div>
+    </div>
 
-        <style>
-            /* Core Styles */
-            :root {
-                --primary-color: #F59E0B;
-                --transition-bezier: cubic-bezier(0.4, 0, 0.2, 1);
-            }
+    <!-- Main Content Area -->
+    <div class="max-w-5xl mx-auto px-4 py-8">
+        <!-- Location Selection -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-medium text-gray-900">Localisation</h2>
+                <button type="button" class="text-sm text-blue-600 hover:text-blue-700">
+                    Voir toutes les villes
+                </button>
+            </div>
+            <div class="flex flex-wrap gap-2">
+                <% locations.forEach(location => { %>
+                    <a href="/services/<%= serviceOption %>/<%= location %>" 
+                       class="inline-flex items-center px-4 py-2 rounded-full text-sm
+                              transition duration-150 ease-in-out
+                              <%= currentLocation === location ? 
+                                'bg-blue-600 text-white' : 
+                                'bg-white text-gray-700 border hover:bg-gray-50' %>">
+                        <i class="fas fa-map-marker-alt mr-2"></i>
+                        <%= location.charAt(0).toUpperCase() + location.slice(1) %>
+                    </a>
+                <% }) %>
+            </div>
+        </div>
 
-            /* Categories Styling */
-            .categories-scroll {
-                overflow-x: auto;
-                scrollbar-width: none;
-                -webkit-overflow-scrolling: touch;
-                padding: 0.75rem 0;
-            }
+        <!-- Services Grid -->
+<div class="space-y-6">
+    <div class="flex items-center justify-between px-4 sm:px-0">
+        <h2 class="text-xl font-semibold text-gray-900">Services disponibles</h2>
+        <div class="text-sm text-gray-500">
+            <%= services.length %> résultats
+        </div>
+    </div>
 
-            .categories-scroll::-webkit-scrollbar {
-                display: none;
-            }
+    <% if (services.length > 0) { %>
+        <div class="space-y-4">
+            <% services.forEach(service => { %>
+                <a href="/service/<%= service._id %>" class="block group">
+                    <article class="bg-gray-100 border border-2 hover:bg-gray-50 transition-colors duration-150 mb-12">
+                        <div class="flex flex-col sm:flex-row">
+                            <!-- Image Container -->
+                            <div class="relative w-full sm:w-64 h-48 sm:h-40 flex-shrink-0">
+                                <img 
+                                    src="<%= service.images?.[0] || '/default-service.jpg' %>" 
+                                    alt="<%= service.serviceName %>" 
+                                    class="w-full h-full object-cover"
+                                >
+                                <!-- Service Type Tag -->
+                                <div class="absolute bottom-0 left-0 bg-white px-3 py-1.5">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-base">
+                                            <%= serviceIcons[service.serviceOptions]?.emoji %>
+                                        </span>
+                                        <span class="text-sm font-medium text-gray-900">
+                                            <%= service.serviceOptions.charAt(0).toUpperCase() + 
+                                                service.serviceOptions.slice(1) %>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
 
-            .categories-wrapper {
-                display: flex;
-                gap: 0.75rem;
-                padding: 0 1rem;
-                min-width: min-content;
-            }
+                            <!-- Content Container -->
+                            <div class="flex-1 p-4 sm:p-6 flex flex-col">
+                                <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
+                                    <div>
+                                        <h3 class="text-lg font-medium text-gray-900 group-hover:text-blue-600">
+                                            <%= service.serviceName %>
+                                        </h3>
+                                        <div class="mt-1 flex items-center gap-4 text-sm text-gray-500">
+                                            <span class="flex items-center gap-1">
+                                                <i class="fas fa-map-marker-alt"></i>
+                                                <%= service.location %>
+                                            </span>
+                                            <span class="flex items-center gap-1">
+                                                <i class="far fa-eye"></i>
+                                                <%= service.views %>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="text-lg font-medium text-blue-600">
+                                        <%= service.priceRange %>
+                                    </div>
+                                </div>
 
-            .category-item {
-                display: flex;
-                align-items: center;
-                padding: 0.75rem 1.25rem;
-                background: #ffc10726;
-                border-radius: 1rem;
-                transition: all 0.3s var(--transition-bezier);
-                user-select: none;
-            }
+                                <p class="mt-3 text-gray-600 text-sm line-clamp-2 flex-grow">
+                                    <%= service.description || 'Aucune description disponible.' %>
+                                </p>
 
-            .category-content {
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-            }
+                                <!-- Provider Info -->
+                                <div class="flex items-center justify-between mt-4 pt-4 border-t">
+                                    <div class="flex items-center gap-3">
+                                        <div class="relative">
+                                            <img 
+                                                src="<%= service.createdBy?.profileImage || '/default-avatar.jpg' %>" 
+                                                alt="<%= service.createdBy?.displayName %>"
+                                                class="w-8 h-8 rounded-full object-cover"
+                                            >
+                                            <% if(service.createdBy?.isVerified) { %>
+                                                <div class="absolute -right-1 -bottom-1 w-4 h-4 bg-blue-500 
+                                                            rounded-full flex items-center justify-center">
+                                                    <i class="fas fa-check text-[8px] text-white"></i>
+                                                </div>
+                                            <% } %>
+                                        </div>
+                                        <div class="text-sm">
+                                            <div class="font-medium text-gray-900">
+                                                <%= service.createdBy?.displayName %>
+                                            </div>
+                                            <div class="text-gray-500">Professionnel</div>
+                                        </div>
+                                    </div>
+                                    <span class="text-sm font-medium text-blue-600 flex items-center gap-2">
+                                        En savoir plus
+                                        <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </a>
+            <% }) %>
+        </div>
+    <% } else { %>
+        <!-- Empty State -->
+        <div class="text-center py-12 bg-white border">
+            <div class="max-w-sm mx-auto">
+                <div class="w-16 h-16 bg-gray-100 flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-paw text-2xl text-gray-400"></i>
+                </div>
+                <h3 class="text-lg font-medium text-gray-900 mb-2">
+                    Aucun service disponible
+                </h3>
+                <p class="text-gray-500 mb-6">
+                    Aucun service n'est disponible dans cette ville pour le moment.
+                </p>
+                <a href="/" class="text-blue-600 hover:text-blue-700 font-medium">
+                    Retour à l'accueil
+                </a>
+            </div>
+        </div>
+    <% } %>
+</div>
 
-            .category-icon {
-                font-size: 1.25rem;
-                transition: transform 0.3s ease;
-            }
+<style>
+    .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+</style>
+    </div>
+</main>
 
-            .category-label {
-                font-size: 0.875rem;
-                font-weight: 500;
-                color: #6b4f00;
-                white-space: nowrap;
-            }
+<style>
+    /* Hide scrollbar but keep functionality */
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
 
-            .category-item:hover {
-                background: rgba(243, 244, 246, 0.9);
-                transform: translateY(-1px);
-            }
+    /* Line clamp utility */
+    .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
 
-            .category-item.active {
-                background: #ffbf00;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            }
+    /* Smooth transitions */
+    .transition {
+        transition-property: all;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
-            /* Location Pills */
-            .location-scroll {
-                overflow-x: auto;
-                scrollbar-width: none;
-                -webkit-overflow-scrolling: touch;
-            }
+    /* Custom animations */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
 
-            .location-wrapper {
-                display: flex;
-                gap: 0.5rem;
-                padding: 0.5rem 0;
-            }
-
-            .location-pill {
-                display: flex;
-                align-items: center;
-                padding: 0.625rem 1rem;
-                background: white;
-                border: 1px solid #E5E7EB;
-                border-radius: 9999px;
-                font-size: 0.875rem;
-                color: #374151;
-                transition: all 0.2s var(--transition-bezier);
-                white-space: nowrap;
-            }
-
-            .location-pill i {
-                margin-right: 0.5rem;
-                color: #9CA3AF;
-            }
-
-            .location-pill:hover {
-                border-color: var(--primary-color);
-                background: #FEF3C7;
-            }
-
-            .location-pill.active {
-                background: var(--primary-color);
-                border-color: var(--primary-color);
-                color: white;
-            }
-
-            .location-pill.active i {
-                color: white;
-            }
-
-            /* Service Cards */
-            .service-card {
-                transition: transform 0.2s var(--transition-bezier);
-            }
-
-            .service-card:hover {
-                transform: translateY(-2px);
-            }
-
-            @media (hover: none) {
-                .service-card:active {
-                    transform: scale(0.98);
-                }
-            }
-
-            /* Animations */
-            @keyframes fadeIn {
-                from {
-                    opacity: 0;
-                    transform: translateY(10px);
-                }
-
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-
-            .animate-fade-in {
-                animation: fadeIn 0.3s var(--transition-bezier) forwards;
-            }
-        </style>
-
-        <script>
-            // Categories Scroll Logic
-            document.addEventListener('DOMContentLoaded', () => {
-                const categoriesScroll = document.querySelector('.categories-scroll');
-                const activeCategory = document.querySelector('.category-item.active');
-
-                if (activeCategory) {
-                    requestAnimationFrame(() => {
-                        activeCategory.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'nearest',
-                            inline: 'center'
-                        });
-                    });
-                }
-
-                // Touch scroll handling
-                let isDown = false;
-                let startX;
-                let scrollLeft;
-
-                categoriesScroll.addEventListener('mousedown', (e) => {
-                    isDown = true;
-                    startX = e.pageX - categoriesScroll.offsetLeft;
-                    scrollLeft = categoriesScroll.scrollLeft;
-                });
-
-                categoriesScroll.addEventListener('mouseleave', () => {
-                    isDown = false;
-                });
-
-                categoriesScroll.addEventListener('mouseup', () => {
-                    isDown = false;
-                });
-
-                categoriesScroll.addEventListener('mousemove', (e) => {
-                    if (!isDown) return;
-                    e.preventDefault();
-                    const x = e.pageX - categoriesScroll.offsetLeft;
-                    const walk = (x - startX) * 2;
-                    categoriesScroll.scrollLeft = scrollLeft - walk;
-                });
-            });
-
-            // Location Slider
-            const locationSlider = document.getElementById('locationSlider');
-            if (locationSlider) {
-                let isScrolling;
-
-                locationSlider.addEventListener('scroll', () => {
-                    window.clearTimeout(isScrolling);
-                    isScrolling = setTimeout(() => {
-                        const scrollLeft = locationSlider.scrollLeft;
-                        const itemWidth = locationSlider.querySelector('a').offsetWidth;
-                        const newScrollLeft = Math.round(scrollLeft / itemWidth) * itemWidth;
-
-                        locationSlider.scrollTo({
-                            left: newScrollLeft,
-                            behavior: 'smooth'
-                        });
-                    }, 150);
-                });
-            }
-
-            // Lazy Loading Images
-            const lazyImages = document.querySelectorAll('img[loading="lazy"]');
-            const imageObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const img = entry.target;
-                        img.classList.add('animate-fade-in');
-                        imageObserver.unobserve(img);
-                    }
-                });
-            }, {
-                threshold: 0.1,
-                rootMargin: '50px'
-            });
-
-            lazyImages.forEach(img => imageObserver.observe(img));
-
-            // Touch Feedback
-            const serviceCards = document.querySelectorAll('.service-card');
-            serviceCards.forEach(card => {
-                let touchTimeout;
-
-                card.addEventListener('touchstart', () => {
-                    clearTimeout(touchTimeout);
-                    card.style.transform = 'scale(0.98)';
-                });
-
-                card.addEventListener('touchend', () => {
-                    touchTimeout = setTimeout(() => {
-                        card.style.transform = '';
-                    }, 100);
-                });
-
-                card.addEventListener('touchcancel', () => {
-                    clearTimeout(touchTimeout);
-                    card.style.transform = '';
-                });
-            });
-        </script>
-        <%- include('./include/footer') %>
+<%- include('./include/footer') %>
