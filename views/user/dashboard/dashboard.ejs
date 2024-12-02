@@ -1,223 +1,217 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <%- include('includes/head') %>
-    <title>NDRESSILIK - Tableau de Bord</title>
+        <title>NDRESSILIK - Tableau de Bord</title>
 </head>
 
 <body class="bg-gray-200">
     <div class="">
         <%- include('includes/header') %>
 
-        <main class="p-6 max-w-4xl mx-auto">
-            <!-- Dashboard Content -->
-            <div class="space-y-6">
-                <!-- Welcome Card -->
-                <div class="rounded-2xl shadow-lg bg-white overflow-hidden">
-                    <!-- Welcome Banner -->
-                    <div class="relative px-4 py-8 sm:p-8 bg-gradient-to-br from-blue-500 to-blue-600 text-white">
-                        <div class="absolute inset-0 opacity-10 pointer-events-none">
-                            <svg width="100%" height="100%" class="rotate-180">
-                                <pattern id="hero-pattern" x="0" y="0" width="32" height="32" patternUnits="userSpaceOnUse">
-                                    <path d="M0 32V.5H32" fill="none" stroke="currentColor" stroke-width="1"></path>
-                                </pattern>
-                                <rect width="100%" height="100%" fill="url(#hero-pattern)"></rect>
-                            </svg>
-                        </div>
-                        
-                        <div class="relative">
-                            <h2 class="text-2xl sm:text-3xl font-bold mb-2">
-                                Bienvenue dans votre espace professionnel
-                            </h2>
-                            <p class="text-primary-100">
-                                Commencez à configurer votre profil et vos services pour être visible par les clients
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="p-4 sm:p-8">
-                        <!-- Missing Elements Button Trigger -->
-<% if (missingElements && missingElements.length > 0) { %>
-    <button 
-        onclick="openMissingElementsModal()"
-        class="w-full bg-yellow-50 border-l-4 border-yellow-400 text-yellow-700 p-4 rounded-lg mb-6 hover:bg-yellow-100/50 transition-colors text-left"
-    >
-        <div class="flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <i class="fas fa-exclamation-circle text-yellow-500"></i>
-                <p class="font-medium">Pour améliorer votre profil (<%= missingElements.length %> éléments)</p>
-            </div>
-            <i class="fas fa-chevron-right text-yellow-500"></i>
-        </div>
-    </button>
-
-    <!-- Modal Backdrop -->
-    <div id="modalBackdrop" 
-         class="fixed inset-0 bg-black/50 opacity-0 pointer-events-none transition-opacity duration-300"
-         onclick="closeMissingElementsModal()">
-    </div>
-
-    <!-- Modal -->
-    <div id="missingElementsModal" 
-         class="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
-        <div class="w-full max-w-lg transform translate-y-8 opacity-0 pointer-events-none transition duration-300">
-            <div class="relative bg-white rounded-xl shadow-xl mx-4">
-                <!-- Modal Header -->
-                <div class="flex items-center justify-between p-4 border-b">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center">
-                            <i class="fas fa-exclamation-triangle text-yellow-600"></i>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-900">
-                            Améliorations recommandées
-                        </h3>
-                    </div>
-                    <button onclick="closeMissingElementsModal()" 
-                            class="text-gray-400 hover:text-gray-600 p-2 rounded-lg">
-                        <i class="fas fa-times text-xl"></i>
-                    </button>
-                </div>
-
-                <!-- Modal Content -->
-                <div class="p-4 space-y-4 max-h-[60vh] overflow-y-auto">
-                    <p class="text-gray-600">
-                        Complétez ces éléments pour optimiser votre profil et augmenter votre visibilité :
-                    </p>
-                    <div class="space-y-3">
-                        <% missingElements.forEach((element, index) => { %>
-                            <div class="flex items-start gap-4 p-3 bg-gray-50 rounded-lg">
-                                <div class="w-6 h-6 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0">
-                                    <span class="text-sm font-medium text-yellow-800"><%= index + 1 %></span>
-                                </div>
-                                <div class="flex-1">
-                                    <p class="font-medium text-gray-900 mb-1">
-                                        <%= element.label %>
-                                    </p>
-                                    <a href="<%= element.link %>" 
-                                       class="inline-flex items-center text-sm text-blue-600 hover:text-blue-700 group">
-                                        Compléter maintenant
-                                        <i class="fas fa-arrow-right ml-1 text-xs transition-transform group-hover:translate-x-1"></i>
-                                    </a>
-                                </div>
+            <main class="p-6 max-w-4xl mx-auto">
+                <!-- Dashboard Content -->
+                <div class="space-y-6">
+                    <!-- Welcome Card -->
+                    <div class="rounded-2xl shadow-lg bg-white overflow-hidden">
+                        <!-- Welcome Banner -->
+                        <div class="relative px-4 py-8 sm:p-8 bg-gradient-to-br from-blue-500 to-blue-600 text-white">
+                            <div class="absolute inset-0 opacity-10 pointer-events-none">
+                                <svg width="100%" height="100%" class="rotate-180">
+                                    <pattern id="hero-pattern" x="0" y="0" width="32" height="32" patternUnits="userSpaceOnUse">
+                                        <path d="M0 32V.5H32" fill="none" stroke="currentColor" stroke-width="1"></path>
+                                    </pattern>
+                                    <rect width="100%" height="100%" fill="url(#hero-pattern)"></rect>
+                                </svg>
                             </div>
-                        <% }); %>
-                    </div>
-                </div>
 
-                <!-- Modal Footer -->
-                <div class="border-t p-4">
-                    <button onclick="closeMissingElementsModal()" 
-                            class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors">
-                        Fermer
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+                            <div class="relative">
+                                <h2 class="text-2xl sm:text-3xl font-bold mb-2">
+                                    Bienvenue dans votre espace professionnel
+                                </h2>
+                                <p class="text-primary-100">
+                                    Commencez à configurer votre profil et vos services pour être visible par les clients
+                                </p>
+                            </div>
+                        </div>
 
-    <script>
-        function openMissingElementsModal() {
-            const modal = document.getElementById('missingElementsModal');
-            const modalContent = modal.querySelector('.transform');
-            const backdrop = document.getElementById('modalBackdrop');
-            
-            // Enable pointer events
-            modal.classList.remove('pointer-events-none');
-            modalContent.classList.remove('pointer-events-none');
-            backdrop.classList.remove('pointer-events-none');
-            
-            // Show backdrop
-            backdrop.classList.remove('opacity-0');
-            
-            // Animate modal
-            requestAnimationFrame(() => {
-                modalContent.classList.remove('translate-y-8', 'opacity-0');
-            });
-            
-            // Prevent body scroll
-            document.body.style.overflow = 'hidden';
-        }
+                        <div class="p-4 sm:p-8">
+                            <!-- Missing Elements Button Trigger -->
+                            <% if (missingElements && missingElements.length> 0) { %>
+                                <button onclick="openMissingElementsModal()" class="w-full bg-yellow-50 border-l-4 border-yellow-400 text-yellow-700 p-4 rounded-lg mb-6 hover:bg-yellow-100/50 transition-colors text-left">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-3">
+                                            <i class="fas fa-exclamation-circle text-yellow-500"></i>
+                                            <p class="font-medium">Pour améliorer votre profil (<%= missingElements.length %> éléments)</p>
+                                        </div>
+                                        <i class="fas fa-chevron-right text-yellow-500"></i>
+                                    </div>
+                                </button>
 
-        function closeMissingElementsModal() {
-            const modal = document.getElementById('missingElementsModal');
-            const modalContent = modal.querySelector('.transform');
-            const backdrop = document.getElementById('modalBackdrop');
-            
-            // Animate out
-            modalContent.classList.add('translate-y-8', 'opacity-0');
-            backdrop.classList.add('opacity-0');
-            
-            // Disable pointer events after animation
-            setTimeout(() => {
-                modal.classList.add('pointer-events-none');
-                modalContent.classList.add('pointer-events-none');
-                backdrop.classList.add('pointer-events-none');
-                
-                // Restore body scroll
-                document.body.style.overflow = '';
-            }, 300);
-        }
+                                <!-- Modal Backdrop -->
+                                <div id="modalBackdrop" class="fixed inset-0 bg-black/50 opacity-0 pointer-events-none transition-opacity duration-300" onclick="closeMissingElementsModal()">
+                                </div>
 
-        // Close modal on escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeMissingElementsModal();
-            }
-        });
-    </script>
-<% } %>
+                                <!-- Modal -->
+                                <div id="missingElementsModal" class="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
+                                    <div class="w-full max-w-lg transform translate-y-8 opacity-0 pointer-events-none transition duration-300">
+                                        <div class="relative bg-white rounded-xl shadow-xl mx-4">
+                                            <!-- Modal Header -->
+                                            <div class="flex items-center justify-between p-4 border-b">
+                                                <div class="flex items-center gap-3">
+                                                    <div class="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center">
+                                                        <i class="fas fa-exclamation-triangle text-yellow-600"></i>
+                                                    </div>
+                                                    <h3 class="text-lg font-semibold text-gray-900">
+                                                        Améliorations recommandées
+                                                    </h3>
+                                                </div>
+                                                <button onclick="closeMissingElementsModal()" class="text-gray-400 hover:text-gray-600 p-2 rounded-lg">
+                                                    <i class="fas fa-times text-xl"></i>
+                                                </button>
+                                            </div>
 
-                        <!-- Setup Steps Grid -->
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                           
+                                            <!-- Modal Content -->
+                                            <div class="p-4 space-y-4 max-h-[60vh] overflow-y-auto">
+                                                <p class="text-gray-600">
+                                                    Complétez ces éléments pour optimiser votre profil et augmenter votre visibilité :
+                                                </p>
+                                                <div class="space-y-3">
+                                                    <% missingElements.forEach((element, index)=> { %>
+                                                        <div class="flex items-start gap-4 p-3 bg-gray-50 rounded-lg">
+                                                            <div class="w-6 h-6 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                                                <span class="text-sm font-medium text-yellow-800">
+                                                                    <%= index + 1 %>
+                                                                </span>
+                                                            </div>
+                                                            <div class="flex-1">
+                                                                <p class="font-medium text-gray-900 mb-1">
+                                                                    <%= element.label %>
+                                                                </p>
+                                                                <a href="<%= element.link %>" class="inline-flex items-center text-sm text-blue-600 hover:text-blue-700 group">
+                                                                    Compléter maintenant
+                                                                    <i class="fas fa-arrow-right ml-1 text-xs transition-transform group-hover:translate-x-1"></i>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                        <% }); %>
+                                                </div>
+                                            </div>
 
-                            <!-- Step 2: Add Services -->
-                            <button onclick="window.location.href='/dashboard/new-service'"
-                                class="group relative w-full text-left focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded-xl">
-                                <div class="p-6 rounded-xl border-2 transition-all duration-300
+                                            <!-- Modal Footer -->
+                                            <div class="border-t p-4">
+                                                <button onclick="closeMissingElementsModal()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors">
+                                                    Fermer
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <script>
+                                    function openMissingElementsModal() {
+                                        const modal = document.getElementById('missingElementsModal');
+                                        const modalContent = modal.querySelector('.transform');
+                                        const backdrop = document.getElementById('modalBackdrop');
+
+                                        // Enable pointer events
+                                        modal.classList.remove('pointer-events-none');
+                                        modalContent.classList.remove('pointer-events-none');
+                                        backdrop.classList.remove('pointer-events-none');
+
+                                        // Show backdrop
+                                        backdrop.classList.remove('opacity-0');
+
+                                        // Animate modal
+                                        requestAnimationFrame(() => {
+                                            modalContent.classList.remove('translate-y-8', 'opacity-0');
+                                        });
+
+                                        // Prevent body scroll
+                                        document.body.style.overflow = 'hidden';
+                                    }
+
+                                    function closeMissingElementsModal() {
+                                        const modal = document.getElementById('missingElementsModal');
+                                        const modalContent = modal.querySelector('.transform');
+                                        const backdrop = document.getElementById('modalBackdrop');
+
+                                        // Animate out
+                                        modalContent.classList.add('translate-y-8', 'opacity-0');
+                                        backdrop.classList.add('opacity-0');
+
+                                        // Disable pointer events after animation
+                                        setTimeout(() => {
+                                            modal.classList.add('pointer-events-none');
+                                            modalContent.classList.add('pointer-events-none');
+                                            backdrop.classList.add('pointer-events-none');
+
+                                            // Restore body scroll
+                                            document.body.style.overflow = '';
+                                        }, 300);
+                                    }
+
+                                    // Close modal on escape key
+                                    document.addEventListener('keydown', (e) => {
+                                        if (e.key === 'Escape') {
+                                            closeMissingElementsModal();
+                                        }
+                                    });
+                                </script>
+                                <% } %>
+
+                                    <!-- Setup Steps Grid -->
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+
+                                        <!-- Step 2: Add Services -->
+                                        <button onclick="window.location.href='/dashboard/new-service'" class="group relative w-full text-left focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded-xl">
+                                            <div class="p-6 rounded-xl border-2 transition-all duration-300
                                     <%= user.isProfileComplete && !user.hasServices 
                                         ? 'border-primary-200 bg-primary-50/30' 
                                         : 'border-gray-500 bg-white' %>
                                     group-hover:border-primary-300 group-hover:shadow-md">
-                                    <div class="flex gap-4">
-                                        <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-xl
+                                                <div class="flex gap-4">
+                                                    <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-xl
                                             <%= user.isProfileComplete && !user.hasServices 
                                                 ? 'bg-primary-100 text-primary-600' 
                                                 : 'bg-gray-100 text-gray-400' %>
                                             group-hover:scale-110 transition-transform duration-300">
-                                            <% if (user.hasServices) { %>
-                                                <i class="fas fa-check-circle text-xl text-green-500"></i>
-                                            <% } else { %>
-                                                <span class="text-lg font-bold">1</span>
-                                            <% } %>
-                                        </div>
-                                        <div class="flex-1 min-w-0">
-                                            <h3 class="text-lg font-semibold text-gray-900 mb-1 group-hover:text-primary-600 transition-colors truncate">
-                                                Ajouter vos services
-                                            </h3>
-                                            <p class="text-sm text-gray-600 mb-2 line-clamp-2">
-                                                <%= user.hasServices ? `${user.servicesCount} services ajoutés` : 'Créez votre premier service' %>
-                                            </p>
-                                            <% if (!user.hasServices) { %>
-                                                <span class="inline-flex items-center text-sm text-primary-600 font-medium">
-                                                    Ajouter un service
-                                                    <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i>
-                                                </span>
-                                            <% } %>
-                                        </div>
+                                                        <% if (user.hasServices) { %>
+                                                            <i class="fas fa-check-circle text-xl text-green-500"></i>
+                                                            <% } else { %>
+                                                                <span class="text-lg font-bold">1</span>
+                                                                <% } %>
+                                                    </div>
+                                                    <div class="flex-1 min-w-0">
+                                                        <h3 class="text-lg font-semibold text-gray-900 mb-1 group-hover:text-primary-600 transition-colors truncate">
+                                                            Ajouter vos services
+                                                        </h3>
+                                                        <p class="text-sm text-gray-600 mb-2 line-clamp-2">
+                                                            <%= user.hasServices ? `${user.servicesCount} services ajoutés` : 'Créez votre premier service' %>
+                                                        </p>
+                                                        <% if (!user.hasServices) { %>
+                                                            <span class="inline-flex items-center text-sm text-primary-600 font-medium">
+                                                                Ajouter un service
+                                                                <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i>
+                                                            </span>
+                                                            <% } %>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </button>
                                     </div>
-                                </div>
-                            </button>
                         </div>
                     </div>
-                </div>
 
-                <!-- Services Section -->
-                <%- include('includes/services') %>
-            </div>
-        </main>
+                    <!-- Services Section -->
+                    <%- include('includes/services') %>
+                </div>
+            </main>
     </div>
 
     <%- include('includes/scripts') %>
 </body>
+
 </html>
