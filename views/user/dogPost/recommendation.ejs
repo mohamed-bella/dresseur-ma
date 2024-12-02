@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trouvez Votre Chien Idéal | DogFinder</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #888;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navbar -->
+    <nav class="bg-white border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold">🐕 DogFinder</span>
+                </div>
+                <div class="flex items-center space-x-8">
+                    <a href="/" class="text-gray-600 hover:text-gray-900">Accueil</a>
+                    <a href="/races" class="text-gray-600 hover:text-gray-900">Races</a>
+                    <a href="/guide" class="text-gray-600 hover:text-gray-900">Guide</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Hero Section -->
+        <div class="text-center mb-16">
+            <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl md:text-6xl">
+                Trouvez votre compagnon parfait
+            </h1>
+            <p class="mt-3 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
+                Notre algorithme analyse plus de 50 critères pour vous recommander les races de chiens qui correspondent le mieux à votre style de vie.
+            </p>
+        </div>
+
+        <!-- Quiz Form -->
+        <div class="max-w-3xl mx-auto">
+            <form id="dogQuiz" class="space-y-8 divide-y divide-gray-200">
+                <!-- Step 1: Lifestyle -->
+                <div class="step-content" id="step1">
+                    <div class="space-y-8">
+                        <div>
+                            <h2 class="text-2xl font-semibold text-gray-900 mb-6">Votre mode de vie</h2>
+                            <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+                                <!-- Living Space -->
+                                <div class="sm:col-span-2">
+                                    <label class="block text-lg font-medium text-gray-700">
+                                        Où vivez-vous ?
+                                    </label>
+                                    <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
+                                        <label class="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none">
+                                            <input type="radio" name="habitat" value="apartment" class="sr-only" required>
+                                            <div class="flex flex-1">
+                                                <div class="flex flex-col">
+                                                    <span class="block text-lg font-medium text-gray-900">Appartement</span>
+                                                    <span class="mt-1 flex items-center text-sm text-gray-500">Espace limité</span>
+                                                </div>
+                                            </div>
+                                            <div class="pointer-events-none absolute -inset-px rounded-lg border-2" aria-hidden="true"></div>
+                                        </label>
+
+                                        <label class="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none">
+                                            <input type="radio" name="habitat" value="house" class="sr-only" required>
+                                            <div class="flex flex-1">
+                                                <div class="flex flex-col">
+                                                    <span class="block text-lg font-medium text-gray-900">Maison</span>
+                                                    <span class="mt-1 flex items-center text-sm text-gray-500">Avec jardin</span>
+                                                </div>
+                                            </div>
+                                            <div class="pointer-events-none absolute -inset-px rounded-lg border-2" aria-hidden="true"></div>
+                                        </label>
+
+                                        <label class="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none">
+                                            <input type="radio" name="habitat" value="rural" class="sr-only" required>
+                                            <div class="flex flex-1">
+                                                <div class="flex flex-col">
+                                                    <span class="block text-lg font-medium text-gray-900">Rural</span>
+                                                    <span class="mt-1 flex items-center text-sm text-gray-500">Grand espace</span>
+                                                </div>
+                                            </div>
+                                            <div class="pointer-events-none absolute -inset-px rounded-lg border-2" aria-hidden="true"></div>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Activity Level -->
+                                <div class="sm:col-span-2">
+                                    <label class="block text-lg font-medium text-gray-700">
+                                        Niveau d'activité souhaité
+                                    </label>
+                                    <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
+                                        <label class="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none">
+                                            <input type="radio" name="activity" value="minimal" class="sr-only" required>
+                                            <div class="flex flex-1">
+                                                <div class="flex flex-col">
+                                                    <span class="block text-lg font-medium text-gray-900">Calme</span>
+                                                    <span class="mt-1 flex items-center text-sm text-gray-500">Peu d'exercice</span>
+                                                </div>
+                                            </div>
+                                            <div class="pointer-events-none absolute -inset-px rounded-lg border-2" aria-hidden="true"></div>
+                                        </label>
+
+                                        <label class="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none">
+                                            <input type="radio" name="activity" value="moderate" class="sr-only" required>
+                                            <div class="flex flex-1">
+                                                <div class="flex flex-col">
+                                                    <span class="block text-lg font-medium text-gray-900">Modéré</span>
+                                                    <span class="mt-1 flex items-center text-sm text-gray-500">Balades régulières</span>
+                                                </div>
+                                            </div>
+                                            <div class="pointer-events-none absolute -inset-px rounded-lg border-2" aria-hidden="true"></div>
+                                        </label>
+
+                                        <label class="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none">
+                                            <input type="radio" name="activity" value="lots" class="sr-only" required>
+                                            <div class="flex flex-1">
+                                                <div class="flex flex-col">
+                                                    <span class="block text-lg font-medium text-gray-900">Sportif</span>
+                                                    <span class="mt-1 flex items-center text-sm text-gray-500">Très actif</span>
+                                                </div>
+                                            </div>
+                                            <div class="pointer-events-none absolute -inset-px rounded-lg border-2" aria-hidden="true"></div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Preferences -->
+                <div class="step-content hidden" id="step2">
+                    <div class="space-y-8 pt-8">
+                        <div>
+                            <h2 class="text-2xl font-semibold text-gray-900 mb-6">Vos préférences</h2>
+                            
+                            <!-- Size Preference -->
+                            <div class="mb-8">
+                                <label class="block text-lg font-medium text-gray-700 mb-4">
+                                    Taille préférée
+                                </label>
+                                <div class="grid grid-cols-1 gap-4 sm:grid-cols-4">
+                                    <label class="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none">
+                                        <input type="radio" name="size" value="small" class="sr-only" required>
+                                        <div class="flex flex-1">
+                                            <div class="flex flex-col">
+                                                <span class="block text-lg font-medium text-gray-900">Petit</span>
+                                                <span class="mt-1 flex items-center text-sm text-gray-500">< 10kg</span>
+                                            </div>
+                                        </div>
+                                        <div class="pointer-events-none absolute -inset-px rounded-lg border-2" aria-hidden="true"></div>
+                                    </label>
+
+                                    <label class="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none">
+                                        <input type="radio" name="size" value="medium" class="sr-only" required>
+                                        <div class="flex flex-1">
+                                            <div class="flex flex-col">
+                                                <span class="block text-lg font-medium text-gray-900">Moyen</span>
+                                                <span class="mt-1 flex items-center text-sm text-gray-500">10-25kg</span>
+                                            </div>
+                                        </div>
+                                        <div class="pointer-events-none absolute -inset-px rounded-lg border-2" aria-hidden="true"></div>
+                                    </label>
+
+                                    <label class="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none">
+                                        <input type="radio" name="size" value="large" class="sr-only" required>
+                                        <div class="flex flex-1">
+                                            <div class="flex flex-col">
+                                                <span class="block text-lg font-medium text-gray-900">Grand</span>
+                                                <span class="mt-1 flex items-center text-sm text-gray-500">25-40kg</span>
+                                            </div>
+                                        </div>
+                                        <div class="pointer-events-none absolute -inset-px rounded-lg border-2" aria-hidden="true"></div>
+                                    </label>
+
+                                    <label class="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none">
+                                        <input type="radio" name="size" value="very large" class="sr-only" required>
+                                        <div class="flex flex-1">
+                                            <div class="flex flex-col">
+                                                <span class="block text-lg font-medium text-gray-900">Très grand</span>
+                                                <span class="mt-1 flex items-center text-sm text-gray-500">> 40kg</span>
+                                            </div>
+                                        </div>
+                                        <div class="pointer-events-none absolute -inset-px rounded-lg border-2" aria-hidden="true"></div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Additional Criteria -->
+                            <div>
+                                <label class="block text-lg font-medium text-gray-700 mb-4">
+                                    Critères importants
+                                </label>
+                                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                                    <label class="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none">
+                                        <input type="checkbox" name="criteria" value="children" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 mr-3">
+                                        <div class="flex flex-1">
+                                            <div class="flex flex-col">
+                                                <span class="block text-lg font-medium text-gray-900">Bon avec les enfants</span>
+                                                <span class="mt-1 flex items-center text-sm text-gray-500">Patient et doux</span>
+                                            </div>
+                                        </div>
+                                    </label>
+
+                                    <label class="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none">
+                                        <input type="checkbox" name="criteria" value="dogs" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 mr-3">
+                                        <div class="flex flex-1">
+                                            <div class="flex flex-col">
+                                                <span class="block text-lg font-medium text-gray-900">Sociable</span>
+                                                <span class="mt-1 flex items-center text-sm text-gray-500">Avec autres chiens</span>
+                                            </div>
+                                        </div>
+                                    </label>
+
+                                    <label class="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none">
+                                        <input type="checkbox" name="criteria" value="intelligent" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 mr-3">
+                                        <div class="flex flex-1">
+                                            <div class="flex flex-col">
+                                                <span class="block text-lg font-medium text-gray-900">Intelligent</span>
+                                                <span class="mt-1 flex items-center text-sm text-gray-500">Facile à éduquer</span>
+                                            </div>
+                                        </div>
+                                   </label>
+
+                                   <label class="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none">
+                                       <input type="checkbox" name="criteria" value="affectueux" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 mr-3">
+                                       <div class="flex flex-1">
+                                           <div class="flex flex-col">
+                                               <span class="block text-lg font-medium text-gray-900">Affectueux</span>
+                                               <span class="mt-1 flex items-center text-sm text-gray-500">Proche de sa famille</span>
+                                           </div>
+                                       </div>
+                                   </label>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+
+               <!-- Results Section -->
+               <div class="step-content hidden" id="step3">
+                   <div class="space-y-8 pt-8">
+                       <h2 class="text-2xl font-semibold text-gray-900">Vos matches parfaits</h2>
+                       <div id="loadingResults" class="hidden">
+                           <div class="flex justify-center items-center py-12">
+                               <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-gray-900"></div>
+                           </div>
+                           <p class="text-center text-gray-600">Recherche des meilleures races pour vous...</p>
+                       </div>
+                       <div id="resultContent" class="space-y-6"></div>
+                   </div>
+               </div>
+
+               <!-- Navigation Buttons -->
+               <div class="pt-8 flex justify-between">
+                   <button type="button" id="prevBtn" class="hidden px-6 py-3 text-base font-medium rounded-md text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                       Précédent
+                   </button>
+                   <button type="button" id="nextBtn" class="px-6 py-3 text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                       Suivant
+                   </button>
+               </div>
+           </form>
+       </div>
+   </main>
+
+   <script>
+       // Charger les données des races
+       let dogBreeds = [];
+       
+       fetch('https://raw.githubusercontent.com/mohamed-bella/udemy_downloader/refs/heads/main/dog_breeds_enhanced.json')
+           .then(response => response.json())
+           .then(data => {
+               dogBreeds = data.breeds;
+               console.log(`Loaded ${dogBreeds.length} breeds`);
+           })
+           .catch(error => console.error('Error loading breeds:', error));
+
+       let currentStep = 1;
+       const totalSteps = 3;
+
+       function updateUI() {
+           $('.step-content').addClass('hidden');
+           $(`#step${currentStep}`).removeClass('hidden');
+           
+           $('#prevBtn').toggleClass('hidden', currentStep === 1);
+           $('#nextBtn').text(currentStep === totalSteps ? 'Voir les résultats' : 'Suivant');
+
+           // Active radio button styles
+           $('input[type="radio"]').each(function() {
+               const parentLabel = $(this).closest('label');
+               const border = parentLabel.find('.pointer-events-none');
+               
+               if (this.checked) {
+                   border.addClass('border-indigo-600');
+                   parentLabel.addClass('border-indigo-600 ring-2 ring-indigo-600');
+               } else {
+                   border.removeClass('border-indigo-600');
+                   parentLabel.removeClass('border-indigo-600 ring-2 ring-indigo-600');
+               }
+           });
+       }
+
+       function calculateMatch(formData, dog) {
+           let score = 0;
+           let maxScore = 0;
+
+           // Habitat match
+           const habitat = formData.get('habitat');
+           if (dog.habitat.includes(habitat)) {
+               score += 20;
+           }
+           maxScore += 20;
+
+           // Size match
+           const size = formData.get('size');
+           if (dog.taille === size) {
+               score += 20;
+           }
+           maxScore += 20;
+
+           // Activity level match
+           const activity = formData.get('activity');
+           if (dog.timeNeeded.includes(activity)) {
+               score += 20;
+           }
+           maxScore += 20;
+
+           // Criteria matches
+           const criteria = formData.getAll('criteria');
+           criteria.forEach(criterion => {
+               if (dog.goodWith.includes(criterion) || dog.temperament.includes(criterion)) {
+                   score += 10;
+               }
+               maxScore += 10;
+           });
+
+           return (score / maxScore) * 100;
+       }
+
+       function showResults() {
+           $('#loadingResults').removeClass('hidden');
+           $('#resultContent').empty();
+           
+           const formData = new FormData(document.getElementById('dogQuiz'));
+           
+           setTimeout(() => {
+               const matches = dogBreeds
+                   .map(dog => ({
+                       ...dog,
+                       matchScore: calculateMatch(formData, dog)
+                   }))
+                   .filter(dog => dog.matchScore > 60)
+                   .sort((a, b) => b.matchScore - a.matchScore)
+                   .slice(0, 5);
+
+               $('#loadingResults').addClass('hidden');
+               
+               if (matches.length === 0) {
+                   $('#resultContent').html(`
+                       <div class="text-center py-8 bg-gray-50 rounded-lg">
+                           <p class="text-gray-600">Aucune race ne correspond exactement à vos critères.</p>
+                           <p class="mt-2 text-gray-500">Essayez de modifier vos préférences pour obtenir plus de résultats.</p>
+                       </div>
+                   `);
+                   return;
+               }
+
+               matches.forEach(dog => {
+                   $('#resultContent').append(`
+                       <div class="bg-white rounded-lg shadow-sm border">
+                           <div class="p-6">
+                               <div class="flex flex-col md:flex-row gap-6">
+                                   <div class="w-full md:w-1/3">
+                                       <img src="${dog.image}" alt="${dog.race}" 
+                                            class="w-full h-64 object-cover rounded-lg">
+                                       <div class="mt-4">
+                                           <div class="text-2xl font-bold text-gray-900">${Math.round(dog.matchScore)}% match</div>
+                                       </div>
+                                   </div>
+                                   
+                                   <div class="w-full md:w-2/3">
+                                       <div class="flex justify-between items-start mb-4">
+                                           <h3 class="text-2xl font-bold text-gray-900">${dog.race}</h3>
+                                           <span class="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm">
+                                               ${dog.groupe}
+                                           </span>
+                                       </div>
+                                       
+                                       <p class="text-gray-600 mb-4">${dog.description}</p>
+                                       
+                                       <div class="grid grid-cols-2 gap-4 mb-4">
+                                           <div class="space-y-2">
+                                               <p class="text-sm font-medium text-gray-500">Intelligence</p>
+                                               <div class="h-2 bg-gray-200 rounded-full">
+                                                   <div class="h-full bg-indigo-600 rounded-full" style="width: ${dog.stats.intelligence}%"></div>
+                                               </div>
+                                           </div>
+                                           <div class="space-y-2">
+                                               <p class="text-sm font-medium text-gray-500">Affection</p>
+                                               <div class="h-2 bg-gray-200 rounded-full">
+                                                   <div class="h-full bg-indigo-600 rounded-full" style="width: ${dog.stats.affection}%"></div>
+                                               </div>
+                                           </div>
+                                           <div class="space-y-2">
+                                               <p class="text-sm font-medium text-gray-500">Énergie</p>
+                                               <div class="h-2 bg-gray-200 rounded-full">
+                                                   <div class="h-full bg-indigo-600 rounded-full" style="width: ${dog.stats.energie}%"></div>
+                                               </div>
+                                           </div>
+                                           <div class="space-y-2">
+                                               <p class="text-sm font-medium text-gray-500">Gardien</p>
+                                               <div class="h-2 bg-gray-200 rounded-full">
+                                                   <div class="h-full bg-indigo-600 rounded-full" style="width: ${dog.stats.gardien}%"></div>
+                                               </div>
+                                           </div>
+                                       </div>
+
+                                       <div class="flex flex-wrap gap-2">
+                                           ${dog.caracteristiques.map(carac => 
+                                               `<span class="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm">${carac}</span>`
+                                           ).join('')}
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                   `);
+               });
+           }, 1500);
+       }
+
+       // Event Listeners
+       $('#nextBtn').click(() => {
+           if (currentStep < totalSteps) {
+               currentStep++;
+               updateUI();
+           } else {
+               showResults();
+           }
+       });
+
+       $('#prevBtn').click(() => {
+           if (currentStep > 1) {
+               currentStep--;
+               updateUI();
+           }
+       });
+
+       // Radio button event listeners
+       $('input[type="radio"]').change(function() {
+           const name = $(this).attr('name');
+           $(`input[name="${name}"]`).each(function() {
+               const parentLabel = $(this).closest('label');
+               const border = parentLabel.find('.pointer-events-none');
+               
+               if (this.checked) {
+                   border.addClass('border-indigo-600');
+                   parentLabel.addClass('border-indigo-600 ring-2 ring-indigo-600');
+               } else {
+                   border.removeClass('border-indigo-600');
+                   parentLabel.removeClass('border-indigo-600 ring-2 ring-indigo-600');
+               }
+           });
+       });
+
+       // Initialize
+       updateUI();
+   </script>
+</body>
+</html>

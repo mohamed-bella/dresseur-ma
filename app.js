@@ -114,6 +114,9 @@ const dogPostRouter = require('./routes/dogPost');
 const smsRouter = require('./routes/sms');
 const breedsRoutes = require('./routes/breedRoutes');
 
+const dogRecommendationsRouter = require('./routes/dogRecommendations');
+app.use('/', dogRecommendationsRouter);
+
 app.get('/sms', (req, res) => {
      res.render('user/sms')
 })
