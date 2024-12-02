@@ -142,7 +142,7 @@
 
        <!-- Posts Grid -->
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-    <% if (posts.length > 0) { %>
+    <% if (posts && posts.length > 0) { %>
         <% posts.forEach(function(post) { %>
         <div class="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer"
              onclick="window.location.href='/chien-adoption-perdus/<%= post._id %>'">
