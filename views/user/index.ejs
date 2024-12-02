@@ -693,7 +693,108 @@ function resetShareButton(cardId) {
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
+<section class="relative overflow-hidden bg-white py-12 sm:py-16">
+    <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <!-- Mobile version (full width, stacked) -->
+        <div class="lg:hidden space-y-8">
+            <div class="text-center">
+                <div class="mb-6 flex justify-center">
+                    <span class="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-sm font-medium text-blue-600">
+                        <span class="animate-pulse">•</span> Nouvelle fonctionnalité
+                    </span>
+                </div>
+                <h2 class="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl mb-4">
+                    Plateforme Canine
+                </h2>
+                <p class="text-lg text-gray-600 mb-6">
+                    Découvrez notre nouvelle section dédiée aux amis à quatre pattes. Un espace unique pour faciliter l'adoption de chiens et aider à retrouver les compagnons perdus.
+                </p>
+            </div>
 
+            <div class="relative rounded-2xl overflow-hidden shadow-xl">
+                <img 
+                    class="w-full h-64 object-cover" 
+                    src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2969&q=80" 
+                    alt="Chiens heureux"
+                    loading="lazy"
+                >
+                <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+                <div class="absolute top-4 right-4 bg-white rounded-lg shadow-lg p-3 flex items-center gap-2">
+                    <i class="fas fa-paw text-blue-600"></i>
+                    <span class="font-medium text-gray-900">100% Gratuit</span>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-4">
+                <a href="/chien-adoption-perdus" class="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-5 py-3 text-white font-medium hover:bg-blue-700 transition-colors">
+                    Découvrir la plateforme
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+                <a href="/publier-annonce" class="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-gray-50 px-5 py-3 text-gray-700 font-medium hover:bg-gray-100 transition-colors">
+                    Publier une annonce
+                    <i class="fas fa-plus"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Desktop version (grid) -->
+        <div class="hidden lg:grid lg:grid-cols-2 lg:items-center lg:gap-8">
+            <!-- Text content -->
+            <div>
+                <div class="mb-6">
+                    <span class="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-sm font-medium text-blue-600">
+                        <span class="animate-pulse">•</span> Nouvelle fonctionnalité
+                    </span>
+                </div>
+                <h2 class="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl mb-4">
+                    Publiez Votre Annonce : Adoption, Chiens Perdus et Plus Encore
+                </h2>
+                <p class="text-lg text-gray-600 mb-6">
+                    Découvrez notre nouvelle section dédiée aux amis à quatre pattes. Un espace unique pour faciliter l'adoption de chiens et aider à retrouver les compagnons perdus.
+                </p>
+                <div class="flex flex-row gap-4">
+                    <a href="/chien-adoption-perdus" class="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-5 py-3 text-white font-medium hover:bg-blue-700 transition-colors">
+                        Découvrir la plateforme
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                    <a href="/chien-adoption-perdus" class="inline-flex items-center justify-center gap-2 rounded-lg bg-gray-50 px-5 py-3 text-gray-700 font-medium hover:bg-gray-100 transition-colors">
+                        Publier une annonce
+                        <i class="fas fa-plus"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Image content -->
+            <div class="relative">
+                <div class="relative rounded-2xl overflow-hidden shadow-xl">
+                    <img 
+                        class="w-full h-[400px] object-cover" 
+                        src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2969&q=80" 
+                        alt="Chiens heureux"
+                        loading="lazy"
+                    >
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+                    <!-- Stats overlay -->
+                    <div class="absolute bottom-0 left-0 right-0 p-6 flex justify-between text-white">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-heart text-red-400"></i>
+                            <span>Adoptions</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-search text-blue-400"></i>
+                            <span>Recherches</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="absolute -right-4 -top-4 bg-white rounded-lg shadow-lg p-3 flex items-center gap-2">
+                    <i class="fas fa-paw text-blue-600"></i>
+                    <span class="font-medium text-gray-900">100% Gratuit</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 <!-- Articles and Consultation Section -->
 <section class="py-12 bg-white">
     <div class="max-w-6xl mx-auto px-4">
