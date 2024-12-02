@@ -1,143 +1,296 @@
 <%- include('include/head.ejs') %>
 <%- include('include/navbar.ejs') %>
 
-<!-- Hero Section - Simplified with clear CTA -->
-<section class="relative py-12 lg:py-20 bg-gradient-to-br from-blue-900 to-gray-900">
-    <div class="max-w-6xl mx-auto px-4">
-        <div class="flex flex-col lg:flex-row items-center gap-12">
-            <!-- Left: Main Content -->
-            <div class="flex-1 text-center lg:text-left">
-                <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">
-                    Trouvez les Meilleurs Services pour Votre Chien au Maroc
-                </h1>
-                <p class="text-xl text-gray-300 mb-8">
-                    Éducation, promenade, toilettage, soins vétérinaires - tous les services dont votre chien a besoin, en quelques clics.
-                </p>
-                <!-- Primary CTAs -->
-                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                    <a href="/services" 
-                        class="inline-flex items-center justify-center px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">
-                        <i class="fas fa-search mr-2"></i>
-                        Trouver un Service
-                    </a>
-                   <% if (!user) { %>
-                    <a href="/auth/google" 
-                    class="inline-flex items-center justify-center px-6 py-3 bg-white text-blue-900 rounded-lg font-medium hover:bg-gray-100 transition-colors">
-                    <i class="fas fa-user-tie mr-2"></i>
-                    Devenir Prestataire
-                </a>
-                    <% } else { %>
-                        <a href="/dashboard" 
-                        class="inline-flex items-center justify-center px-6 py-3 bg-white text-blue-900 rounded-lg font-medium hover:bg-gray-100 transition-colors">
-                        <i class="fas fa-user-tie mr-2"></i>
-                        Gerer Mes Services
-                    </a>
-                        <% } %>
-                </div>
-            </div>
-    <!-- right -->
-    <div class="flex-1">
-        <div class="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl">
-            <form class="space-y-3">
-                <!-- Service Type Dropdown -->
-                <div class="flex flex-col md:flex-row gap-3">
-                    <div class="relative flex-1">
-                        <label class="block text-sm font-medium text-gray-700 mb-1 ml-1">Service</label>
-                        <select id="serviceType" required onchange="autoSearch()"
-                            class="w-full pl-10 pr-10 py-3.5 bg-white border border-gray-200 rounded-xl text-gray-700 appearance-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm"
-                        >
-                            <option value="" disabled selected>Choisir un service</option>
-                            <% services.forEach(service => { %>
-                                <option value="<%= service.value %>"><%= service.value %></option>
-                            <% }); %>
-                        </select>
-                        <div class="absolute bottom-0 left-3 flex items-center h-[50px] pointer-events-none">
-                            <i class="fas fa-paw text-blue-500"></i>
-                        </div>
-                        <div class="absolute bottom-0 right-3 flex items-center h-[50px] pointer-events-none">
-                            <i class="fas fa-chevron-down text-gray-400"></i>
-                        </div>
-                    </div>
-    
-                    <!-- Location Selection -->
-                    <div class="relative flex-1">
-                        <label class="block text-sm font-medium text-gray-700 mb-1 ml-1">Ville</label>
-                        <select id="citySelect" required onchange="autoSearch()"
-                            class="w-full pl-10 pr-10 py-3.5 bg-white border border-gray-200 rounded-xl text-gray-700 appearance-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm"
-                        >
-                            <option value="" disabled selected>Choisir une ville</option>
-                            <% locations.forEach(location => { %>
-                                <option value="<%= location.value %>"><%= location.label %></option>
-                            <% }); %>
-                        </select>
-                        <div class="absolute bottom-0 left-3 flex items-center h-[50px] pointer-events-none">
-                            <i class="fas fa-map-marker-alt text-blue-500"></i>
-                        </div>
-                        <div class="absolute bottom-0 right-3 flex items-center h-[50px] pointer-events-none">
-                            <i class="fas fa-chevron-down text-gray-400"></i>
-                        </div>
-                    </div>
-                </div>
-    
-                <!-- Popular Searches -->
-                <div class="pt-2">
-                    <div class="flex flex-wrap gap-2">
-                        <% const topLocations = locations.slice(0, 3); %>
-                        <% const topServices = services.slice(0, 2); %>
-                        
-                        <% topServices.forEach(service => { %>
-                            <% topLocations.slice(0, 1).forEach(location => { %>
-                                <a href="/services/<%= service.value %>/<%= encodeURIComponent(location.value) %>" 
-                                   class="text-xs px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-full transition-colors">
-                                    <%= service.label %> <%= location.value %>
-                                </a>
-                            <% }); %>
-                        <% }); %>
-                    </div>
-                </div>
-            </form>
-        </div>
-    
-        <a href="/auth/google" 
-        class="mt-4 block text-center py-4 px-6 bg-[#FFD814] hover:bg-[#F7CA00] text-black rounded-lg transition-all transform active:scale-95 active:brightness-95 shadow-sm font-medium border border-[#FCD200]">
-         <div class="text-[15px]">Devenez prestataire de services</div>
-         <div class="text-xs text-gray-700">Rejoignez notre communauté et développez votre activité</div>
-      </a>
+<!-- Modern Hero Section -->
+<!-- Modern Hero Section -->
+<section class="relative min-h-screen bg-white overflow-hidden">
+    <!-- Background Pattern -->
+    <div class="absolute inset-0 z-0">
+        <div class="absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l from-blue-50 to-transparent"></div>
+        <div class="absolute inset-0 opacity-[0.03]" style="background-image: url('data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z'/%3E%3C/svg%3E')"></div>
     </div>
-    
-    <script>
-    let searchTimeout;
-    
-    function autoSearch() {
-        clearTimeout(searchTimeout);
-        
-        const service = document.getElementById('serviceType').value;
-        const city = document.getElementById('citySelect').value;
-        
-        if (service && city) {
-            searchTimeout = setTimeout(() => {
-                const url = `/services/${encodeURIComponent(service)}/${encodeURIComponent(city)}`;
-                window.location.href = url;
-            }, 300);
-        }
+
+    <!-- Main Content -->
+    <div class="relative max-w-7xl mx-auto px-4 pt-20 pb-32">
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
+            <!-- Left Column -->
+            <div class="relative z-10 space-y-8">
+                <!-- Badge -->
+                <div class="inline-flex items-center px-3 py-1.5 bg-blue-50 border border-blue-100 rounded-full">
+                    <span class="flex items-center gap-2 text-blue-600 text-sm font-medium">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                        </svg>
+                        <span>Ndressilik, La reference Canine</span>
+                    </span>
+                </div>
+
+                <!-- Main Heading -->
+                <h1 class="text-5xl lg:text-7xl font-bold text-gray-900 leading-tight">
+                    Des Services 
+                    <span class="relative inline-block">
+                        Exceptionnels
+                        <div class="absolute -bottom-2 left-0 right-0 h-3 bg-yellow-200 opacity-50 -skew-x-12"></div>
+                    </span>
+                    <br/>
+                    Pour Votre Chien
+                </h1>
+
+                <!-- Description -->
+                <p class="text-xl text-gray-600 max-w-xl leading-relaxed">
+                    Découvrez des services de qualité pour votre compagnon. Éducation, promenade, toilettage, et plus encore - le tout en quelques clics.
+                </p>
+
+               <!-- Search Form -->
+<form onsubmit="handleSearch(event)" class="flex flex-col sm:flex-row gap-3 w-full max-w-lg">
+    <!-- Service Type Dropdown -->
+    <div class="relative flex-1 group">
+        <label for="serviceType" class="absolute -top-2 left-3 px-2 bg-white text-sm font-medium text-gray-600 z-10">
+            Service
+        </label>
+        <select 
+            id="serviceType" 
+            required
+            class="w-full pl-12 pr-4 py-4 bg-white border-2 border-gray-200 text-gray-900 
+                   rounded-lg sm:rounded-none appearance-none transition-all duration-200
+                   focus:ring-2 focus:ring-blue-500 focus:border-transparent
+                   group-hover:border-blue-200"
+        >
+            <option value="" disabled selected>Choisir un service</option>
+            <% services.forEach(service => { %>
+                <option value="<%= service.value %>"><%= service.value %></option>
+            <% }); %>
+        </select>
+        <div class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 transition-colors duration-200 group-hover:text-blue-500">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+        </div>
+        <div class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Location Selection -->
+    <div class="relative flex-1 group">
+        <label for="citySelect" class="absolute -top-2 left-3 px-2 bg-white text-sm font-medium text-gray-600 z-10">
+            Ville
+        </label>
+        <select 
+            id="citySelect" 
+            required
+            class="w-full pl-12 pr-4 py-4 bg-white border-2 border-gray-200 text-gray-900 
+                   rounded-lg sm:rounded-none appearance-none transition-all duration-200
+                   focus:ring-2 focus:ring-blue-500 focus:border-transparent
+                   group-hover:border-blue-200"
+        >
+            <option value="" disabled selected>Choisir une ville</option>
+            <% locations.forEach(location => { %>
+                <option value="<%= location.value %>"><%= location.label %></option>
+            <% }); %>
+        </select>
+        <div class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 transition-colors duration-200 group-hover:text-blue-500">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+            </svg>
+        </div>
+        <div class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Search Button -->
+    <button 
+        type="submit" 
+        class="w-full sm:w-auto px-8 py-4 bg-blue-600 text-white font-medium 
+               rounded-lg sm:rounded-none
+               hover:bg-blue-700 focus:ring-4 focus:ring-blue-500/50 
+               transition-all duration-200 flex items-center justify-center gap-2"
+    >
+        <span class="hidden sm:inline">Rechercher</span>
+        <span class="sm:hidden">Rechercher un service</span>
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+    </button>
+</form>
+
+<style>
+/* Custom select styles for mobile */
+@media (max-width: 640px) {
+    select {
+        -webkit-tap-highlight-color: transparent;
     }
-    
-    window.addEventListener('load', () => {
-        const path = window.location.pathname;
-        const matches = path.match(/\/services\/([^\/]+)\/([^\/]+)/);
-        
-        if (matches) {
-            const [, service, city] = matches;
-            const serviceSelect = document.getElementById('serviceType');
-            const citySelect = document.getElementById('citySelect');
-            
-            if (serviceSelect) serviceSelect.value = decodeURIComponent(service);
-            if (citySelect) citySelect.value = decodeURIComponent(city);
-        }
-    });
-    </script>
+
+    /* Add native-like select UI for mobile */
+    select:focus {
+        background-image: linear-gradient(45deg, transparent 50%, blue 50%),
+                         linear-gradient(135deg, blue 50%, transparent 50%);
+        background-position: calc(100% - 20px) calc(1em + 2px),
+                           calc(100% - 15px) calc(1em + 2px);
+        background-size: 5px 5px,
+                        5px 5px;
+        background-repeat: no-repeat;
+    }
+}
+
+/* Floating label animation */
+.group:focus-within label {
+    color: #3B82F6;
+}
+
+/* Loading state */
+button[type="submit"].loading {
+    position: relative;
+    pointer-events: none;
+}
+
+button[type="submit"].loading svg {
+    opacity: 0;
+}
+
+button[type="submit"].loading::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 2px solid transparent;
+    border-top-color: white;
+    border-right-color: white;
+    border-radius: 50%;
+    animation: button-loading-spinner 0.7s linear infinite;
+}
+
+@keyframes button-loading-spinner {
+    from {
+        transform: rotate(0turn);
+    }
+    to {
+        transform: rotate(1turn);
+    }
+}
+</style>
 
 <script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Handle form submission with loading state
+    const form = document.querySelector('form');
+    const submitButton = form.querySelector('button[type="submit"]');
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        submitButton.classList.add('loading');
+        
+        // Simulate loading for demo (remove in production)
+        setTimeout(() => {
+            handleSearch(e);
+        }, 800);
+    });
+
+    // Add touch feedback for mobile
+    const selects = form.querySelectorAll('select');
+    selects.forEach(select => {
+        select.addEventListener('touchstart', () => {
+            select.parentElement.classList.add('active');
+        });
+        
+        select.addEventListener('touchend', () => {
+            select.parentElement.classList.remove('active');
+        });
+    });
+
+    // Handle floating labels
+    selects.forEach(select => {
+        select.addEventListener('change', () => {
+            const label = select.parentElement.querySelector('label');
+            if (select.value) {
+                label.classList.add('text-blue-500');
+            } else {
+                label.classList.remove('text-blue-500');
+            }
+        });
+    });
+});
+</script>
+
+                <!-- Trust Points -->
+                <div class="flex items-center gap-8 pt-8">
+                    <div class="flex items-center gap-2">
+                        <div class="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="font-semibold">100% Vérifié</div>
+                            <div class="text-sm text-gray-500">Prestataires certifiés</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-12 h-12 rounded-full bg-yellow-50 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="font-semibold">4.9/5 Stars</div>
+                            <div class="text-sm text-gray-500">+1000 avis clients</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column - Image Grid -->
+            <div class="relative">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-4">
+                        <div class="aspect-[4/5] rounded-2xl overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" 
+                                 alt="Dog care" 
+                                 class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <div class="aspect-[4/3] rounded-2xl overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80" 
+                                 alt="Dog grooming" 
+                                 class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                        </div>
+                    </div>
+                    <div class="space-y-4 pt-8">
+                        <div class="aspect-[4/3] rounded-2xl overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1601758228041-f3b2795255f1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" 
+                                 alt="Dog walking" 
+                                 class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <div class="aspect-[4/5] rounded-2xl overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1503256207526-0d5d80fa2f47?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2066&q=80" 
+                                 alt="Dog training" 
+                                 class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                        </div>
+                    </div>
+                </div>
+
+                
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+// Auto-search functionality
+function autoSearch() {
+    const service = document.getElementById('serviceType').value;
+    const city = document.getElementById('citySelect').value;
+    
+    if (service && city) {
+        window.location.href = `/services/${encodeURIComponent(service)}/${encodeURIComponent(city)}`;
+    }
+}
+
+// Handle form submission
 function handleSearch(event) {
     event.preventDefault();
     
@@ -145,11 +298,9 @@ function handleSearch(event) {
     const city = document.getElementById('citySelect').value;
     
     if (service && city) {
-        const url = `/services/${encodeURIComponent(service)}/${encodeURIComponent(city)}`;
-        window.location.href = url;
+        window.location.href = `/services/${encodeURIComponent(service)}/${encodeURIComponent(city)}`;
     }
 }
-
 // Pre-select values if they exist in URL
 window.addEventListener('load', () => {
     const path = window.location.pathname;
@@ -169,343 +320,607 @@ window.addEventListener('load', () => {
             citySelect.value = decodeURIComponent(city);
         }
     }
-});
-</script>
-        </div>
-    </div>
-</section>
-<!-- Services Section - Simplified Grid -->
-<section class="py-12 bg-gray-50">
-    <div class="max-w-6xl mx-auto px-4">
-       <div>
-        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 ">
-            Services Disponibles
-        </h2>
-        <p class="text-xs mb-12 sm:text-sm text-gray-500 mt-1"> Les top services de dressage, toilettage, transport, ... </p>
 
-       </div>
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    // Initialize animations
+    initializeAnimations();
+});
+
+// Debounced search functionality
+let searchTimeout;
+function debouncedSearch() {
+    clearTimeout(searchTimeout);
+    
+    const service = document.getElementById('serviceType').value;
+    const city = document.getElementById('citySelect').value;
+    
+    if (service && city) {
+        searchTimeout = setTimeout(() => {
+            window.location.href = `/services/${encodeURIComponent(service)}/${encodeURIComponent(city)}`;
+        }, 300);
+    }
+}
+
+// Add form animations and interactions
+function initializeAnimations() {
+    // Floating card animation
+    const statsCard = document.querySelector('.absolute.bottom-12');
+    if (statsCard) {
+        window.addEventListener('mousemove', (e) => {
+            const { clientX, clientY } = e;
+            const { left, top, width, height } = statsCard.getBoundingClientRect();
+            const centerX = left + width / 2;
+            const centerY = top + height / 2;
+            
+            const moveX = (clientX - centerX) * 0.02;
+            const moveY = (clientY - centerY) * 0.02;
+            
+            statsCard.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        });
+    }
+
+    // Image hover effects
+    const images = document.querySelectorAll('.aspect-[4/5] img, .aspect-[4/3] img');
+    images.forEach(img => {
+        img.addEventListener('mouseenter', () => {
+            img.style.transform = 'scale(1.05)';
+            img.style.transition = 'transform 0.5s ease-out';
+        });
+        
+        img.addEventListener('mouseleave', () => {
+            img.style.transform = 'scale(1)';
+        });
+    });
+
+    // Form focus effects
+    const formElements = document.querySelectorAll('select, button');
+    formElements.forEach(element => {
+        element.addEventListener('focus', () => {
+            element.closest('.relative')?.classList.add('focus-within:ring-2', 'focus-within:ring-blue-500');
+        });
+        
+        element.addEventListener('blur', () => {
+            element.closest('.relative')?.classList.remove('focus-within:ring-2', 'focus-within:ring-blue-500');
+        });
+    });
+
+    // Add scroll reveal animations
+    const revealElements = document.querySelectorAll('.space-y-8 > *');
+    let delay = 0;
+    revealElements.forEach(element => {
+        element.style.opacity = '0';
+        element.style.transform = 'translateY(20px)';
+        
+        setTimeout(() => {
+            element.style.transition = 'all 0.6s ease-out';
+            element.style.opacity = '1';
+            element.style.transform = 'translateY(0)';
+        }, delay);
+        
+        delay += 100;
+    });
+}
+
+// Enhanced form validation
+function validateForm() {
+    const service = document.getElementById('serviceType');
+    const city = document.getElementById('citySelect');
+    const isValid = service.value && city.value;
+    
+    if (!isValid) {
+        // Add shake animation to invalid fields
+        [service, city].forEach(field => {
+            if (!field.value) {
+                field.classList.add('shake-animation');
+                setTimeout(() => field.classList.remove('shake-animation'), 500);
+            }
+        });
+    }
+    
+    return isValid;
+}
+
+// Add CSS for animations
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-10px); }
+        75% { transform: translateX(10px); }
+    }
+
+    .shake-animation {
+        animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+    }
+
+    .focus-within\:ring-2:focus-within {
+        --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+        --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+        box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+    }
+
+    .focus-within\:ring-blue-500:focus-within {
+        --tw-ring-opacity: 1;
+        --tw-ring-color: rgb(59 130 246 / var(--tw-ring-opacity));
+    }
+`;
+
+document.head.appendChild(style);
+</script>
+
+<style>
+/* Add this to your CSS for the form animations */
+@keyframes borderAnimation {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+}
+
+.form-animate-border {
+    background: linear-gradient(90deg, #3B82F6, #FCD34D, #3B82F6);
+    background-size: 200% 100%;
+    animation: borderAnimation 3s infinite;
+}
+</style>
+<!-- Services Section - Modern Grid -->
+<section class="py-20 bg-white relative">
+    <!-- Decorative Separator Top -->
+    <div class="absolute top-0 left-0 right-0">
+        <div class="h-px w-full bg-gradient-to-r from-transparent via-black/10 to-transparent"></div>
+    </div>
+
+    <div class="max-w-6xl mx-auto px-4">
+        <!-- Section Header -->
+        <div class="mb-16 relative">
+            <div class="flex flex-col items-start">
+                <h2 class="text-4xl font-bold text-black relative">
+                    Services Disponibles
+                    <div class="absolute -bottom-4 left-0 w-20 h-1 bg-black"></div>
+                </h2>
+                <p class="mt-6 text-base text-gray-600">
+                    Les top services de dressage, toilettage, transport et plus encore
+                </p>
+            </div>
+        </div>
+
+        <!-- Services Grid -->
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8">
             <!-- Education -->
             <a href="/services/dressage" class="group">
-                <div class="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow text-center">
-                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-graduation-cap text-blue-600"></i>
+                <div class="bg-white p-8 border border-gray-100 hover:border-black transition-all duration-300">
+                    <div class="flex flex-col h-full">
+                        <div class="mb-6">
+                            <div class="w-14 h-14 bg-gray-50 group-hover:bg-black transition-colors duration-300 flex items-center justify-center">
+                                <svg class="w-6 h-6 text-black group-hover:text-white transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 14l9-5-9-5-9 5 9 5z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <h3 class="text-lg font-medium text-black mb-2">Dressage</h3>
+                        <div class="mt-auto">
+                            <span class="inline-flex items-center text-sm text-gray-500 group-hover:text-black transition-colors duration-300">
+                                En savoir plus
+                                <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                                </svg>
+                            </span>
+                        </div>
                     </div>
-                    <h3 class="font-medium text-gray-900">Dressage</h3>
                 </div>
             </a>
+
             <!-- Promenade -->
             <a href="/services/promenade" class="group">
-                <div class="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow text-center">
-                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-walking text-green-600"></i>
+                <div class="bg-white p-8 border border-gray-100 hover:border-black transition-all duration-300">
+                    <div class="flex flex-col h-full">
+                        <div class="mb-6">
+                            <div class="w-14 h-14 bg-gray-50 group-hover:bg-black transition-colors duration-300 flex items-center justify-center">
+                                <svg class="w-6 h-6 text-black group-hover:text-white transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <h3 class="text-lg font-medium text-black mb-2">Promenade</h3>
+                        <div class="mt-auto">
+                            <span class="inline-flex items-center text-sm text-gray-500 group-hover:text-black transition-colors duration-300">
+                                En savoir plus
+                                <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                                </svg>
+                            </span>
+                        </div>
                     </div>
-                    <h3 class="font-medium text-gray-900">Promenade</h3>
                 </div>
             </a>
+
+            <!-- Continue the same pattern for other services -->
             <!-- Toilettage -->
             <a href="/services/toilettage" class="group">
-                <div class="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow text-center">
-                    <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-cut text-purple-600"></i>
+                <div class="bg-white p-8 border border-gray-100 hover:border-black transition-all duration-300">
+                    <div class="flex flex-col h-full">
+                        <div class="mb-6">
+                            <div class="w-14 h-14 bg-gray-50 group-hover:bg-black transition-colors duration-300 flex items-center justify-center">
+                                <svg class="w-6 h-6 text-black group-hover:text-white transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243z"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <h3 class="text-lg font-medium text-black mb-2">Toilettage</h3>
+                        <div class="mt-auto">
+                            <span class="inline-flex items-center text-sm text-gray-500 group-hover:text-black transition-colors duration-300">
+                                En savoir plus
+                                <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                                </svg>
+                            </span>
+                        </div>
                     </div>
-                    <h3 class="font-medium text-gray-900">Toilettage</h3>
                 </div>
             </a>
-            <!-- Veterinaire -->
-            <a href="/services/veterinaire" class="group">
-                <div class="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow text-center">
-                    <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-stethoscope text-red-600"></i>
-                    </div>
-                    <h3 class="font-medium text-gray-900">Vétérinaire</h3>
+
+           <!-- Veterinaire -->
+<a href="/services/veterinaire" class="group">
+    <div class="bg-white p-8 border border-gray-100 hover:border-black transition-all duration-300">
+        <div class="flex flex-col h-full">
+            <div class="mb-6">
+                <div class="w-14 h-14 bg-gray-50 group-hover:bg-black transition-colors duration-300 flex items-center justify-center">
+                    <svg class="w-6 h-6 text-black group-hover:text-white transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.5 12.75l6 6 9-13.5"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3c.698 0 1.374.119 2 .34"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-6"/>
+                    </svg>
                 </div>
-            </a>
-             <!-- Pension -->
-             <a href="/services/pension" class="group">
-                <div class="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow text-center">
-                    <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-house text-red-600"></i>
-                    </div>
-                    <h3 class="font-medium text-gray-900">Pension</h3>
-                </div>
-            </a>
-            <!-- Transport -->
-            <a href="/services/transport" class="group">
-                <div class="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow text-center">
-                    <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-car text-yellow-600"></i>
-                    </div>
-                    <h3 class="font-medium text-gray-900">Transport</h3>
-                </div>
-            </a>
+            </div>
+            <h3 class="text-lg font-medium text-black mb-2">Vétérinaire</h3>
+            <div class="mt-auto">
+                <span class="inline-flex items-center text-sm text-gray-500 group-hover:text-black transition-colors duration-300">
+                    En savoir plus
+                    <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    </svg>
+                </span>
+            </div>
         </div>
+    </div>
+</a>
+
+<!-- Pension -->
+<a href="/services/pension" class="group">
+    <div class="bg-white p-8 border border-gray-100 hover:border-black transition-all duration-300">
+        <div class="flex flex-col h-full">
+            <div class="mb-6">
+                <div class="w-14 h-14 bg-gray-50 group-hover:bg-black transition-colors duration-300 flex items-center justify-center">
+                    <svg class="w-6 h-6 text-black group-hover:text-white transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                    </svg>
+                </div>
+            </div>
+            <h3 class="text-lg font-medium text-black mb-2">Pension</h3>
+            <div class="mt-auto">
+                <span class="inline-flex items-center text-sm text-gray-500 group-hover:text-black transition-colors duration-300">
+                    En savoir plus
+                    <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    </svg>
+                </span>
+            </div>
+        </div>
+    </div>
+</a>
+
+<!-- Transport -->
+<a href="/services/transport" class="group">
+    <div class="bg-white p-8 border border-gray-100 hover:border-black transition-all duration-300">
+        <div class="flex flex-col h-full">
+            <div class="mb-6">
+                <div class="w-14 h-14 bg-gray-50 group-hover:bg-black transition-colors duration-300 flex items-center justify-center">
+                    <svg class="w-6 h-6 text-black group-hover:text-white transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/>
+                    </svg>
+                </div>
+            </div>
+            <h3 class="text-lg font-medium text-black mb-2">Transport</h3>
+            <div class="mt-auto">
+                <span class="inline-flex items-center text-sm text-gray-500 group-hover:text-black transition-colors duration-300">
+                    En savoir plus
+                    <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    </svg>
+                </span>
+            </div>
+        </div>
+    </div>
+</a>
+        </div>
+    </div>
+
+    <!-- Decorative Separator Bottom -->
+    <div class="absolute bottom-0 left-0 right-0">
+        <div class="h-px w-full bg-gradient-to-r from-transparent via-black/10 to-transparent"></div>
     </div>
 </section>
 <!-- First, add the html2canvas library -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <!-- Top Providers Section with Achievement System -->
-<section class="bg-white py-12  rounded-2xl max-w-6xl mx-auto px-4">
-    <!-- Gamified Header -->
-    <div class="flex items-center justify-between mb-6">
-        <div>
-            <div class="flex items-center gap-2">
-                <h3 class="text-3xl sm:text-3xlg font-bold text-gray-900"> Top Services</h3>
-               
+<!-- Top Providers Section with Achievement System -->
+<section class="bg-white py-12 lg:py-20">
+    <div class="max-w-6xl mx-auto px-4">
+        <!-- Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-12">
+            <div>
+                <h3 class="text-3xl lg:text-4xl font-bold text-black relative inline-block">
+                    Top Services
+                    <div class="absolute -bottom-2 left-0 w-1/2 h-1 bg-black"></div>
+                </h3>
+                <p class="mt-4 text-gray-600">Top Prestataires des Services Canine</p>
             </div>
-            <p class="text-xs sm:text-sm text-gray-500 mt-1"> Top Prestataires des Services Canine </p>
+            <a href="/top-users" 
+               class="inline-flex items-center gap-2 px-6 py-3 bg-black text-white hover:bg-black/90 transition-all text-sm font-medium group">
+               <span>Tous Les Profiles</span>
+               <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+               </svg>
+            </a>
         </div>
-        <a href="/top-users" 
-           class="hidden sm:flex items-center gap-2 px-4 py-2 bg-black text-white rounded-full hover:bg-black/90 transition-all text-sm font-semibold group">
-           Tous Les Profiles
-            <span class="group-hover:translate-x-0.5 transition-transform">→</span>
-        </a>
-    </div>
 
-    <!-- Rank Categories Banner (Desktop) -->
-    <div class="hidden sm:flex items-center justify-center gap-8 mb-8 text-center">
-        <div class="flex flex-col items-center">
-            <span class="text-xs text-gray-500 mb-1">Top Elite</span>
-            <div class="w-8 h-8 bg-amber-400 rounded-full flex items-center justify-center shadow-amber-100 shadow-lg">
-                🏆
-            </div>
-        </div>
-        <div class="flex flex-col items-center">
-            <span class="text-xs text-gray-500 mb-1">Expert</span>
-            <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center shadow-gray-100 shadow-lg">
-                💎
-            </div>
-        </div>
-        <div class="flex flex-col items-center">
-            <span class="text-xs text-gray-500 mb-1">Pro</span>
-            <div class="w-8 h-8 bg-amber-600 rounded-full flex items-center justify-center shadow-amber-50 shadow-lg">
-                ⭐
-            </div>
-        </div>
-    </div>
-
-    <!-- Desktop Grid -->
-    <div class="hidden sm:grid sm:grid-cols-3 gap-6">
-        <% topUsers.slice(0, 3).forEach((user, index) => { %>
-            <div id="provider-card-desktop-<%= user._id %>" 
-                class="relative group transform hover:scale-[1.02] transition-all duration-300"
-            >
-                <!-- Achievement Banner -->
-                <div class="absolute -top-2 left-1/2 -translate-x-1/2 px-3 py-1 text-xs font-semibold rounded-full z-20
-                    <%= index === 0 ? 'bg-amber-400 text-amber-900' : 
-                       index === 1 ? 'bg-gray-200 text-gray-700' : 
-                       'bg-amber-600 text-white' %>">
-                    <%= index === 0 ? 'Top Elite' : index === 1 ? 'Expert' : 'Pro' %>
+        <!-- Rank Categories -->
+        <div class="flex items-center justify-center gap-8 mb-12 overflow-x-auto py-4 scrollbar-hide">
+            <div class="flex flex-col items-center min-w-[100px]">
+                <div class="w-12 h-12 bg-amber-400 rounded-full flex items-center justify-center shadow-xl mb-3">
+                    <span class="text-2xl">🏆</span>
                 </div>
-
-                <!-- Card -->
-                <div class="relative bg-white rounded-2xl p-6 pt-8 border-2 transition-all
-                    <%= index === 0 ? 'border-amber-400 shadow-amber-100' : 
-                       index === 1 ? 'border-gray-200 shadow-gray-100' : 
-                       'border-amber-600 shadow-amber-50' %> shadow-lg">
-                    
-                    <!-- Position & Level Banner -->
-                    <div class="absolute top-3 right-3 flex items-center gap-2">
-                        <div class="px-2 py-1 bg-gray-100 rounded-full text-xs font-medium text-gray-600">
-                            Niveau <%= Math.floor(user.totalScore / 50) + 1 %>
-                        </div>
-                        <div class="w-6 h-6 rounded-full bg-black text-white flex items-center justify-center text-xs font-bold">
-                            <%= index + 1 %>
-                        </div>
-                    </div>
-                    
-
-                    <!-- User Info -->
-                    <div class="flex items-center gap-4">
-                        <div  onclick="window.location.href = '/@<%= user.slug %>'" style="cursor: pointer;" class=" relative"  onclick="window.location.href = '/@<%= user.slug%>'">
-                            <div class="w-16 h-16 rounded-full overflow-hidden ring-2
-                                <%= index === 0 ? 'ring-amber-400' : 
-                                   index === 1 ? 'ring-gray-200' : 
-                                   'ring-amber-600' %>">
-                                <img src="<%= user.profileImage %>" 
-                                     alt="<%= user.displayName %>"
-                                     class="w-full h-full object-cover"
-                                />
-                            </div>
-                            <div class="absolute -bottom-1 -right-1 w-6 h-6 bg-white rounded-full shadow-md flex items-center justify-center">
-                                <%= user.totalScore >= 100 ? '👑' : user.totalScore >= 50 ? '🌟' : '✨' %>
-                            </div>
-                        </div>
-                        <div>
-                            <h4 class="font-semibold text-gray-900"><%= user.displayName %></h4>
-                            <!-- Achievement Tags -->
-                            <div class="flex flex-wrap gap-1 mt-1">
-                                <% if (user.totalViews >= 50) { %>
-                                    <span class="px-2 py-0.5 bg-blue-50 text-blue-600 rounded text-xs">Populaire</span>
-                                <% } %>
-                                <% if (user.totalReviews >= 5) { %>
-                                    <span class="px-2 py-0.5 bg-green-50 text-green-600 rounded text-xs">Top Rated</span>
-                                <% } %>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Stats & Progress -->
-                    <div class="mt-6 space-y-4">
-                        <!-- Progress to Next Level -->
-                        <div>
-                            <div class="flex justify-between text-sm mb-1">
-                                <span class="text-gray-600">Progression niveau <%= Math.floor(user.totalScore / 50) + 2 %></span>
-                                <span class="font-medium"><%= user.totalScore %> / <%= (Math.floor(user.totalScore / 50) + 1) * 50 %></span>
-                            </div>
-                            <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
-                                <div class="h-full rounded-full transition-all duration-500
-                                    <%= index === 0 ? 'bg-amber-400' : 
-                                       index === 1 ? 'bg-gray-400' : 
-                                       'bg-amber-600' %>"
-                                    style="width: <%= Math.min((user.totalScore % 50) / 50 * 100, 100) %>%">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Achievements Grid -->
-                        <div class="grid grid-cols-3 gap-2">
-                            <div class="text-center p-2 rounded-lg bg-gray-50">
-                                <div class="text-lg font-bold text-gray-900"><%= user.totalViews %></div>
-                                <div class="text-xs text-gray-500">Vues</div>
-                            </div>
-                            <div class="text-center p-2 rounded-lg bg-gray-50">
-                                <div class="text-lg font-bold text-gray-900"><%= user.totalReviews %></div>
-                                <div class="text-xs text-gray-500">Avis</div>
-                            </div>
-                            <div class="text-center p-2 rounded-lg bg-gray-50">
-                                <div class="text-lg font-bold text-gray-900"><%= user.totalScore %></div>
-                                <div class="text-xs text-gray-500">Score</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Share Button -->
-                    <button onclick="window.location.href = '/@<%= user.slug %>'" class="w-full mt-6 flex items-center justify-center gap-2 px-4 py-3 bg-gray-900 text-white rounded-xl hover:bg-black transition-all text-sm font-medium">
-                        Voir 
-                        <g>
-                            <!-- Outer Eye Shape -->
-                            <path d="M40 60C40 40 60 30 80 30C100 30 120 40 120 60C120 80 100 90 80 90C60 90 40 80 40 60Z" 
-                                  fill="white" stroke="currentColor" stroke-width="3"/>
-                            <!-- Iris -->
-                            <circle cx="80" cy="60" r="20" fill="#4B5563"/>
-                            <!-- Pupil -->
-                            <circle cx="80" cy="60" r="10" fill="#111827"/>
-                            <!-- Light Reflection -->
-                            <circle cx="85" cy="55" r="4" fill="white"/>
-                            <circle cx="75" cy="65" r="2" fill="white" opacity="0.5"/>
-                        </g>
-                    </button>
-                </div>
+                <span class="text-sm font-medium text-black">Top Elite</span>
+                <span class="text-xs text-gray-500 mt-1">100+ points</span>
             </div>
-        <% }) %>
-    </div>
 
-    <!-- Mobile Optimized List -->
-    <div class="sm:hidden space-y-4">
-        <% topUsers.slice(0, 3).forEach((user, index) => { %>
-            <div id="provider-card-mobile-<%= user._id %>" class="relative">
-                <div class="bg-white rounded-xl border border-gray-100 overflow-hidden">
-                    <!-- Achievement Banner -->
-                    <div class="bg-gray-50 px-3 py-2 border-b border-gray-100 flex items-center justify-between">
-                        <div class="flex items-center gap-2">
-                            <div class="w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold
-                                <%= index === 0 ? 'bg-amber-400 text-amber-900' : 
-                                   index === 1 ? 'bg-gray-200 text-gray-700' : 
-                                   'bg-amber-600 text-white' %>">
+            <div class="flex flex-col items-center min-w-[100px]">
+                <div class="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center shadow-xl mb-3">
+                    <span class="text-2xl">💎</span>
+                </div>
+                <span class="text-sm font-medium text-black">Expert</span>
+                <span class="text-xs text-gray-500 mt-1">50+ points</span>
+            </div>
+
+            <div class="flex flex-col items-center min-w-[100px]">
+                <div class="w-12 h-12 bg-amber-600 rounded-full flex items-center justify-center shadow-xl mb-3">
+                    <span class="text-2xl">⭐</span>
+                </div>
+                <span class="text-sm font-medium text-black">Pro</span>
+                <span class="text-xs text-gray-500 mt-1">25+ points</span>
+            </div>
+        </div>
+
+        <!-- Providers Grid -->
+        <div class=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ">
+            <% topUsers.slice(0, 3).forEach((user, index) => { %>
+                <div class="provider-card group relative transform hover:scale-[1.02] transition-all duration-300">
+                    <!-- Achievement Badge -->
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 z-20">
+                        <div class="px-4 py-1.5 text-sm font-semibold rounded-full
+                            <%= index === 0 ? 'bg-amber-400 text-black' : 
+                               index === 1 ? 'bg-gray-200 text-gray-800' : 
+                               'bg-amber-600 text-white' %>">
+                            <%= index === 0 ? 'Top Elite' : index === 1 ? 'Expert' : 'Pro' %>
+                        </div>
+                    </div>
+
+                    <!-- Provider Card -->
+                    <div class="relative bg-white p-6 pt-10 border-2 transition-all
+                        <%= index === 0 ? 'border-amber-400' : 
+                           index === 1 ? 'border-gray-200' : 
+                           'border-amber-600' %>">
+                        
+                        <!-- Stats Banner -->
+                        <div class="absolute top-4 right-4 flex items-center gap-2">
+                            <div class="px-3 py-1 bg-gray-100 rounded-full text-sm">
+                                Niveau <%= Math.floor(user.totalScore / 50) + 1 %>
+                            </div>
+                            <div class="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center text-sm font-bold">
                                 <%= index + 1 %>
                             </div>
-                            <span class="text-xs font-medium text-gray-600">
-                                <%= index === 0 ? 'Top Elite' : index === 1 ? 'Expert' : 'Pro' %>
-                            </span>
                         </div>
-                        <div class="px-2 py-0.5 bg-gray-100 rounded-full text-xs font-medium text-gray-600">
-                            Niveau <%= Math.floor(user.totalScore / 50) + 1 %>
-                        </div>
-                    </div>
 
-                    <div class="p-3">
                         <!-- User Info -->
-                        <div class="flex items-center gap-3">
-                            <div class="relative" onclick="window.location.href = '/@<%= user.slug%>'">
-                                <img src="<%= user.profileImage %>" 
-                                     alt="<%= user.displayName %>"
-                                     class="w-12 h-12 rounded-full object-cover ring-2
-                                        <%= index === 0 ? 'ring-amber-400' : 
-                                           index === 1 ? 'ring-gray-200' : 
-                                           'ring-amber-600' %>"
-                                />
-                                <div class="absolute -bottom-1 -right-1 w-5 h-5 bg-white rounded-full shadow flex items-center justify-center text-xs">
+                        <div class="flex items-center gap-6">
+                            <div class="relative cursor-pointer" onclick="window.location.href='/@<%= user.slug %>'">
+                                <div class="w-20 h-20 rounded-full overflow-hidden ring-2 ring-offset-2
+                                    <%= index === 0 ? 'ring-amber-400' : 
+                                       index === 1 ? 'ring-gray-200' : 
+                                       'ring-amber-600' %>">
+                                    <img src="<%= user.profileImage %>" 
+                                         alt="<%= user.displayName %>"
+                                         class="w-full h-full object-cover"
+                                    />
+                                </div>
+                                <div class="absolute -bottom-1 -right-1 w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center text-lg">
                                     <%= user.totalScore >= 100 ? '👑' : user.totalScore >= 50 ? '🌟' : '✨' %>
                                 </div>
                             </div>
-                            
-                            <div class="flex-1 min-w-0">
-                                <h4 class="font-medium text-gray-900 truncate"><%= user.displayName %></h4>
-                                <div class="flex items-center gap-3 mt-1 text-xs text-gray-500">
-                                    <span class="flex items-center gap-1">
-                                        <i class="fas fa-eye"></i>
-                                        <%= user.totalViews %>
-                                    </span>
-                                    <span class="flex items-center gap-1">
-                                        <i class="fas fa-star"></i>
-                                        <%= user.totalReviews %>
-                                    </span>
-                                    <span class="flex items-center gap-1">
-                                        <i class="fas fa-trophy"></i>
-                                        <%= user.totalScore %>
-                                    </span>
+
+                            <div>
+                                <h4 class="text-xl font-bold text-black"><%= user.displayName %></h4>
+                                <!-- Achievement Tags -->
+                                <div class="flex flex-wrap gap-2 mt-2">
+                                    <% if (user.totalViews >= 50) { %>
+                                        <span class="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-sm">Populaire</span>
+                                    <% } %>
+                                    <% if (user.totalReviews >= 5) { %>
+                                        <span class="px-3 py-1 bg-green-50 text-green-600 rounded-full text-sm">Top Rated</span>
+                                    <% } %>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Progress Bar -->
-                        <div class="mt-3">
-                            <div class="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                                <div class="h-full rounded-full transition-all duration-500
-                                    <%= index === 0 ? 'bg-amber-400' : 
-                                       index === 1 ? 'bg-gray-400' : 
-                                       'bg-amber-600' %>"
-                                    style="width: <%= Math.min((user.totalScore % 50) / 50 * 100, 100) %>%">
+
+                        <!-- Stats & Progress -->
+                        <div class="mt-8 space-y-6">
+                            <!-- Progress to Next Level -->
+                            <div>
+                                <div class="flex justify-between text-sm mb-2">
+                                    <span class="text-gray-600">Progression niveau <%= Math.floor(user.totalScore / 50) + 2 %></span>
+                                    <span class="font-medium"><%= user.totalScore %> / <%= (Math.floor(user.totalScore / 50) + 1) * 50 %></span>
+                                </div>
+                                <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="h-full transition-all duration-500 ease-out
+                                        <%= index === 0 ? 'bg-amber-400' : 
+                                           index === 1 ? 'bg-gray-400' : 
+                                           'bg-amber-600' %>"
+                                        style="width: <%= Math.min((user.totalScore % 50) / 50 * 100, 100) %>%">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Stats Grid -->
+                            <div class="grid grid-cols-3 gap-4">
+                                <div class="p-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold text-black"><%= user.totalViews %></div>
+                                        <div class="text-sm text-gray-500 mt-1">Vues</div>
+                                    </div>
+                                </div>
+                                <div class="p-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold text-black"><%= user.totalReviews %></div>
+                                        <div class="text-sm text-gray-500 mt-1">Avis</div>
+                                    </div>
+                                </div>
+                                <div class="p-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold text-black"><%= user.totalScore %></div>
+                                        <div class="text-sm text-gray-500 mt-1">Score</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Action Footer -->
-                    <div class="grid grid-cols-2 divide-x border-t border-gray-100">
-                        <a href="/@<%= user.slug %>" 
-                           class="py-2 text-center text-xs font-medium text-gray-600 hover:bg-gray-50">
-                            Voir profil
-                        </a>
-                        <button onclick="shareProviderCard('mobile-<%= user._id %>')"
-                            class="py-2 flex items-center justify-center gap-1 text-xs font-medium text-gray-600 hover:bg-gray-50">
-                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+                        <!-- Action Button -->
+                        <button onclick="window.location.href='/@<%= user.slug %>'" 
+                                class="w-full mt-6 flex items-center justify-center gap-2 px-6 py-4 bg-black text-white hover:bg-gray-900 transition-all text-sm font-medium group">
+                            <span>Voir le profil</span>
+                            <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                             </svg>
-                            Partager
-
-
                         </button>
                     </div>
                 </div>
-            </div>
-        <% }) %>
-    </div>
+            <% }) %>
+        </div>
 
-    <!-- Mobile Call-to-Action -->
-    <div class="mt-6 sm:hidden space-y-3">
-        <a href="/top-users" 
-           class="block w-full py-3 bg-black text-white text-center rounded-xl hover:bg-black/90 transition-all text-sm font-medium">
-            Voir le classement complet
-        </a>
-        <p class="text-xs text-center text-gray-500">
-            Gagnez des points pour monter dans le classement 🏆
-        </p>
+        <!-- Mobile Optimization -->
+        <div class="block hidden mt-8">
+            <div class="space-y-4">
+                <% topUsers.slice(0, 3).forEach((user, index) => { %>
+                    <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                        <!-- Mobile Header -->
+                        <div class="bg-gray-50 px-4 py-3 flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <div class="w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold
+                                    <%= index === 0 ? 'bg-amber-400 text-black' : 
+                                       index === 1 ? 'bg-gray-200 text-gray-800' : 
+                                       'bg-amber-600 text-white' %>">
+                                    <%= index + 1 %>
+                                </div>
+                                <span class="text-sm font-medium">
+                                    <%= index === 0 ? 'Top Elite' : index === 1 ? 'Expert' : 'Pro' %>
+                                </span>
+                            </div>
+                            <div class="px-2 py-1 bg-gray-100 rounded-full text-xs font-medium">
+                                Niveau <%= Math.floor(user.totalScore / 50) + 1 %>
+                            </div>
+                        </div>
+
+                        <!-- Mobile Content -->
+                        <div class="p-4">
+                            <div class="flex items-center gap-4">
+                                <div class="relative" onclick="window.location.href='/@<%= user.slug %>'">
+                                    <img src="<%= user.profileImage %>" 
+                                         alt="<%= user.displayName %>"
+                                         class="w-16 h-16 rounded-full object-cover ring-2 ring-offset-2
+                                            <%= index === 0 ? 'ring-amber-400' : 
+                                               index === 1 ? 'ring-gray-200' : 
+                                               'ring-amber-600' %>"
+                                    />
+                                    <div class="absolute -bottom-1 -right-1 w-6 h-6 bg-white rounded-full shadow-lg flex items-center justify-center text-sm">
+                                        <%= user.totalScore >= 100 ? '👑' : user.totalScore >= 50 ? '🌟' : '✨' %>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <h4 class="font-semibold text-lg"><%= user.displayName %></h4>
+                                    <div class="flex items-center gap-4 mt-2">
+                                        <span class="flex items-center gap-1 text-sm text-gray-500">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                            </svg>
+                                            <%= user.totalViews %>
+                                        </span>
+                                        <span class="flex items-center gap-1 text-sm text-gray-500">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+                                            </svg>
+                                            <%= user.totalReviews %>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Mobile Progress Bar -->
+                            <div class="mt-4">
+                                <div class="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="h-full transition-all duration-500
+                                        <%= index === 0 ? 'bg-amber-400' : 
+                                           index === 1 ? 'bg-gray-400' : 
+                                           'bg-amber-600' %>"
+                                        style="width: <%= Math.min((user.totalScore % 50) / 50 * 100, 100) %>%">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Mobile Action Buttons -->
+                            <div class="mt-4 flex gap-2">
+                                <a href="/@<%= user.slug %>" 
+                                   class="flex-1 py-2 text-center bg-black text-white text-sm font-medium hover:bg-gray-900 transition-all">
+                                    Voir profil
+                                </a>
+                                <button onclick="shareProfile('<%= user.slug %>')"
+                                    class="px-4 py-2 border border-gray-200 hover:border-black transition-all">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+
+            <!-- Mobile CTA -->
+            <div class="mt-8 space-y-4">
+                <a href="/top-users" 
+                   class="block w-full py-4 bg-black text-white text-center font-medium hover:bg-gray-900 transition-all">
+                    Voir le classement complet
+                </a>
+                <p class="text-sm text-center text-gray-500">
+                    Gagnez des points pour monter dans le classement 🏆
+                </p>
+            </div>
+        </div>
     </div>
 </section>
 
+<script>
+function shareProfile(slug) {
+    if (navigator.share) {
+        navigator.share({
+            title: 'Profile Prestataire',
+            url: window.location.origin + '/@' + slug
+        })
+        .catch(console.error);
+    }
+}
+</script>
 <script>
 // Gamification animations and effects
 document.querySelectorAll('.achievement-unlock').forEach(achievement => {
@@ -693,140 +1108,183 @@ function resetShareButton(cardId) {
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-<section class="relative overflow-hidden bg-white py-12 sm:py-16">
+<section class="relative overflow-hidden bg-white py-12 sm:py-20">
     <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <!-- Mobile version (full width, stacked) -->
-        <div class="lg:hidden space-y-8">
+        <!-- Mobile version -->
+        <div class="lg:hidden space-y-10">
             <div class="text-center">
-                <div class="mb-6 flex justify-center">
-                    <span class="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-sm font-medium text-blue-600">
+                <div class="mb-8">
+                    <span class="inline-flex items-center gap-2 rounded-none bg-black px-4 py-2 text-sm font-medium text-white">
                         <span class="animate-pulse">•</span> Nouvelle fonctionnalité
                     </span>
                 </div>
-                <h2 class="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl mb-4">
+                <h2 class="text-3xl font-bold text-black mb-6 tracking-tight">
                     Plateforme Canine
                 </h2>
-                <p class="text-lg text-gray-600 mb-6">
+                <p class="text-lg text-gray-600 leading-relaxed">
                     Découvrez notre nouvelle section dédiée aux amis à quatre pattes. Un espace unique pour faciliter l'adoption de chiens et aider à retrouver les compagnons perdus.
                 </p>
             </div>
 
-            <div class="relative rounded-2xl overflow-hidden shadow-xl">
-                <img 
-                    class="w-full h-64 object-cover" 
-                    src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2969&q=80" 
-                    alt="Chiens heureux"
-                    loading="lazy"
-                >
-                <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
-                <div class="absolute top-4 right-4 bg-white rounded-lg shadow-lg p-3 flex items-center gap-2">
-                    <i class="fas fa-paw text-blue-600"></i>
-                    <span class="font-medium text-gray-900">100% Gratuit</span>
+            <div class="relative group">
+                <div class="overflow-hidden">
+                    <img 
+                        class="w-full h-[400px] object-cover transition-transform duration-700 group-hover:scale-105" 
+                        src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2969&q=80" 
+                        alt="Chiens heureux"
+                        loading="lazy"
+                    >
+                    <div class="absolute inset-0 bg-black/20"></div>
+                </div>
+                <div class="absolute top-6 right-6">
+                    <div class="bg-white px-4 py-2 shadow-xl flex items-center gap-2 group-hover:bg-black group-hover:text-white transition-all duration-300">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 14l9-5-9-5-9 5 9 5z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
+                        </svg>
+                        <span class="font-medium">100% Gratuit</span>
+                    </div>
                 </div>
             </div>
 
             <div class="flex flex-col gap-4">
-                <a href="/chien-adoption-perdus" class="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-5 py-3 text-white font-medium hover:bg-blue-700 transition-colors">
-                    Découvrir la plateforme
-                    <i class="fas fa-arrow-right"></i>
+                <a href="/chien-adoption-perdus" class="group w-full inline-flex items-center justify-center gap-3 px-6 py-4 bg-black text-white font-medium transition-all duration-300">
+                    <span>Découvrir la plateforme</span>
+                    <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    </svg>
                 </a>
-                <a href="/publier-annonce" class="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-gray-50 px-5 py-3 text-gray-700 font-medium hover:bg-gray-100 transition-colors">
-                    Publier une annonce
-                    <i class="fas fa-plus"></i>
+                <a href="/publier-annonce" class="group w-full inline-flex items-center justify-center gap-3 px-6 py-4 bg-white border-2 border-black text-black font-medium hover:bg-black hover:text-white transition-all duration-300">
+                    <span>Publier une annonce</span>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
                 </a>
             </div>
         </div>
 
-        <!-- Desktop version (grid) -->
-        <div class="hidden lg:grid lg:grid-cols-2 lg:items-center lg:gap-8">
+        <!-- Desktop version -->
+        <div class="hidden lg:grid lg:grid-cols-2 lg:items-center lg:gap-16">
             <!-- Text content -->
-            <div>
-                <div class="mb-6">
-                    <span class="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-sm font-medium text-blue-600">
+            <div class="pr-8">
+                <div class="mb-8">
+                    <span class="inline-flex items-center gap-2 rounded-none bg-black px-4 py-2 text-sm font-medium text-white">
                         <span class="animate-pulse">•</span> Nouvelle fonctionnalité
                     </span>
                 </div>
-                <h2 class="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl mb-4">
+                <h2 class="text-4xl font-bold text-black mb-6 tracking-tight leading-tight">
                     Publiez Votre Annonce : Adoption, Chiens Perdus et Plus Encore
                 </h2>
-                <p class="text-lg text-gray-600 mb-6">
+                <p class="text-xl text-gray-600 mb-10 leading-relaxed">
                     Découvrez notre nouvelle section dédiée aux amis à quatre pattes. Un espace unique pour faciliter l'adoption de chiens et aider à retrouver les compagnons perdus.
                 </p>
                 <div class="flex flex-row gap-4">
-                    <a href="/chien-adoption-perdus" class="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-5 py-3 text-white font-medium hover:bg-blue-700 transition-colors">
-                        Découvrir la plateforme
-                        <i class="fas fa-arrow-right"></i>
+                    <a href="/chien-adoption-perdus" class="group inline-flex items-center justify-center gap-3 px-8 py-4 bg-black text-white font-medium transition-all duration-300">
+                        <span>Découvrir la plateforme</span>
+                        <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                        </svg>
                     </a>
-                    <a href="/chien-adoption-perdus" class="inline-flex items-center justify-center gap-2 rounded-lg bg-gray-50 px-5 py-3 text-gray-700 font-medium hover:bg-gray-100 transition-colors">
-                        Publier une annonce
-                        <i class="fas fa-plus"></i>
+                    <a href="/publier-annonce" class="group inline-flex items-center justify-center gap-3 px-8 py-4 bg-white border-2 border-black text-black font-medium hover:bg-black hover:text-white transition-all duration-300">
+                        <span>Publier une annonce</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
                     </a>
                 </div>
             </div>
 
             <!-- Image content -->
-            <div class="relative">
-                <div class="relative rounded-2xl overflow-hidden shadow-xl">
+            <div class="relative group">
+                <div class="overflow-hidden">
                     <img 
-                        class="w-full h-[400px] object-cover" 
+                        class="w-full h-[500px] object-cover transition-transform duration-700 group-hover:scale-105" 
                         src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2969&q=80" 
                         alt="Chiens heureux"
                         loading="lazy"
                     >
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
-                    <!-- Stats overlay -->
-                    <div class="absolute bottom-0 left-0 right-0 p-6 flex justify-between text-white">
-                        <div class="flex items-center gap-2">
-                            <i class="fas fa-heart text-red-400"></i>
-                            <span>Adoptions</span>
+                    <div class="absolute inset-0 bg-black/20 transition-opacity duration-300 group-hover:opacity-30"></div>
+                </div>
+
+                <!-- Stats overlay -->
+                <div class="absolute bottom-0 left-0 right-0 p-8">
+                    <div class="flex justify-between text-white">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-white/10 backdrop-blur-sm flex items-center justify-center">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                                </svg>
+                            </div>
+                            <span class="font-medium">Adoptions</span>
                         </div>
-                        <div class="flex items-center gap-2">
-                            <i class="fas fa-search text-blue-400"></i>
-                            <span>Recherches</span>
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-white/10 backdrop-blur-sm flex items-center justify-center">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                </svg>
+                            </div>
+                            <span class="font-medium">Recherches</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="absolute -right-4 -top-4 bg-white rounded-lg shadow-lg p-3 flex items-center gap-2">
-                    <i class="fas fa-paw text-blue-600"></i>
-                    <span class="font-medium text-gray-900">100% Gratuit</span>
+                <div class="absolute -right-6 -top-6">
+                    <div class="bg-white px-6 py-3 shadow-xl flex items-center gap-3 group-hover:bg-black group-hover:text-white transition-all duration-300">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 14l9-5-9-5-9 5 9 5z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
+                        </svg>
+                        <span class="font-medium">100% Gratuit</span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
 <!-- Articles and Consultation Section -->
-<section class="py-12 bg-white">
+<section class="py-16 lg:py-24 bg-white">
     <div class="max-w-6xl mx-auto px-4">
-        <div class="grid md:grid-cols-2 gap-8">
+        <div class="grid md:grid-cols-2 gap-12">
             <!-- Articles -->
-            <div class="bg-gray-50 rounded-2xl p-8">
-                <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-2xl font-bold text-gray-900">Articles et Guides</h3>
-                    <a href="/articles" class="text-blue-600 hover:text-blue-700 font-medium">
-                        Voir tout <i class="fas fa-arrow-right ml-2"></i>
+            <div class="space-y-8">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-2xl lg:text-3xl font-bold text-black relative">
+                        Articles et Guides
+                        <div class="absolute -bottom-2 left-0 w-12 h-1 bg-black"></div>
+                    </h3>
+                    <a href="/articles" class="group inline-flex items-center gap-2 text-black font-medium hover:opacity-70 transition-opacity">
+                        Voir tout
+                        <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                        </svg>
                     </a>
                 </div>
+
                 <div class="space-y-4">
-                    <a href="/articles" class="group block p-4 bg-white rounded-xl hover:shadow-md transition-shadow">
-                        <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                                <i class="fas fa-book text-blue-600"></i>
+                    <a href="/articles" class="group block p-6 bg-white border border-gray-200 hover:border-black transition-colors">
+                        <div class="flex items-start gap-6">
+                            <div class="w-14 h-14 bg-gray-100 group-hover:bg-black flex items-center justify-center flex-shrink-0 transition-colors">
+                                <svg class="w-6 h-6 text-black group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                                </svg>
                             </div>
                             <div>
-                                <h4 class="font-medium text-gray-900 group-hover:text-blue-600 transition-colors">Guide d'Éducation Canine</h4>
-                                <p class="text-sm text-gray-600">Conseils et astuces pour dresser votre chien</p>
+                                <h4 class="text-lg font-medium text-black mb-2">Guide d'Éducation Canine</h4>
+                                <p class="text-gray-600">Conseils et astuces pour dresser votre chien</p>
                             </div>
                         </div>
                     </a>
-                    <a href="/articles" class="group block p-4 bg-white rounded-xl hover:shadow-md transition-shadow">
-                        <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                                <i class="fas fa-heartbeat text-green-600"></i>
+
+                    <a href="/articles" class="group block p-6 bg-white border border-gray-200 hover:border-black transition-colors">
+                        <div class="flex items-start gap-6">
+                            <div class="w-14 h-14 bg-gray-100 group-hover:bg-black flex items-center justify-center flex-shrink-0 transition-colors">
+                                <svg class="w-6 h-6 text-black group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                                </svg>
                             </div>
                             <div>
-                                <h4 class="font-medium text-gray-900 group-hover:text-green-600 transition-colors">Santé et Bien-être</h4>
-                                <p class="text-sm text-gray-600">Maintenir votre chien en bonne santé</p>
+                                <h4 class="text-lg font-medium text-black mb-2">Santé et Bien-être</h4>
+                                <p class="text-gray-600">Maintenir votre chien en bonne santé</p>
                             </div>
                         </div>
                     </a>
@@ -834,30 +1292,40 @@ function resetShareButton(cardId) {
             </div>
 
             <!-- Consultation Services -->
-            <div class="bg-gray-50 rounded-2xl p-8">
-                <h3 class="text-2xl font-bold text-gray-900 mb-6">Consultation Professionnelle</h3>
+            <div class="space-y-8">
+                <h3 class="text-2xl lg:text-3xl font-bold text-black relative inline-block">
+                    Consultation Professionnelle
+                    <div class="absolute -bottom-2 left-0 w-12 h-1 bg-black"></div>
+                </h3>
+
                 <div class="space-y-6">
                     <!-- Free Consultation -->
-                    <div class="bg-white p-6 rounded-xl border border-gray-200">
-                        <div class="flex items-center justify-between mb-4">
-                            <h4 class="font-medium text-gray-900">Consultation Gratuite</h4>
-                            <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm">Gratuit</span>
+                    <div class="group p-6 bg-white border border-gray-200 hover:border-black transition-all">
+                        <div class="flex items-center justify-between mb-6">
+                            <h4 class="text-lg font-medium text-black">Consultation Gratuite</h4>
+                            <span class="px-4 py-1 bg-black text-white text-sm">Gratuit</span>
                         </div>
-                        <p class="text-gray-600 mb-4">Obtenez des conseils de base pour prendre soin de votre chien</p>
-                        <a href="/consultation" class="inline-block w-full text-center py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-gray-700 font-medium transition-colors">
-                            Commencer
+                        <p class="text-gray-600 mb-6">Obtenez des conseils de base pour prendre soin de votre chien</p>
+                        <a href="/consultation" class="group inline-flex w-full items-center justify-center gap-2 py-4 border-2 border-black text-black font-medium hover:bg-black hover:text-white transition-all">
+                            <span>Commencer</span>
+                            <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                            </svg>
                         </a>
                     </div>
 
                     <!-- Premium Consultation -->
-                    <div class="bg-white p-6 rounded-xl border-2 border-blue-200">
-                        <div class="flex items-center justify-between mb-4">
-                            <h4 class="font-medium text-gray-900">Consultation Premium</h4>
-                            <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">Premium</span>
+                    <div class="group p-6 bg-white border-2 border-black">
+                        <div class="flex items-center justify-between mb-6">
+                            <h4 class="text-lg font-medium text-black">Consultation Premium</h4>
+                            <span class="px-4 py-1 bg-black text-white text-sm">Premium</span>
                         </div>
-                        <p class="text-gray-600 mb-4">Consultation personnalisée avec nos experts certifiés</p>
-                        <a href="/consultation" class="inline-block w-full text-center py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-medium transition-colors">
-                            Réserver
+                        <p class="text-gray-600 mb-6">Consultation personnalisée avec nos experts certifiés</p>
+                        <a href="/consultation" class="group inline-flex w-full items-center justify-center gap-2 py-4 bg-black text-white font-medium hover:bg-gray-900 transition-colors">
+                            <span>Réserver</span>
+                            <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                            </svg>
                         </a>
                     </div>
                 </div>
@@ -865,41 +1333,52 @@ function resetShareButton(cardId) {
         </div>
     </div>
 </section>
-
 <!-- AI Feature Section -->
-<section class="py-12 bg-gradient-to-br from-purple-900 to-purple-800 text-white">
+<section class="py-16 bg-[#EDF2F7]">
     <div class="max-w-6xl mx-auto px-4">
         <div class="flex flex-col lg:flex-row items-center gap-12">
             <!-- Left: AI Feature Content -->
             <div class="flex-1">
-                <span class="inline-block px-3 py-1 bg-purple-500/20 text-purple-200 rounded-full text-sm mb-4">
-                    <i class="fas fa-robot mr-2"></i>Intelligence Artificielle
+                <span class="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 text-sm font-medium mb-6">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                    </svg>
+                    Intelligence Artificielle
                 </span>
-                <h2 class="text-3xl md:text-4xl font-bold mb-6">
+                <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
                     Découvrez la Race de Votre Chien avec Notre IA
                 </h2>
-                <p class="text-lg text-purple-100 mb-8">
+                <p class="text-xl text-gray-600 mb-8 leading-relaxed">
                     Téléchargez simplement une photo et notre intelligence artificielle identifiera la race de votre chien avec précision.
                 </p>
-                <a href="/dog-breeds-analyzer" class="inline-flex items-center gap-2 px-6 py-3 bg-purple-500 hover:bg-purple-600 rounded-lg font-medium transition-colors">
-                    <i class="fas fa-camera"></i>
-                    Analyser une Photo
+                <a href="/dog-breeds-analyzer" class="group inline-flex items-center gap-3 px-8 py-4 bg-blue-500 text-white font-medium hover:bg-blue-600 transition-all">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                    <span>Analyser une Photo</span>
+                    <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    </svg>
                 </a>
             </div>
+
             <!-- Right: Feature Preview -->
             <div class="flex-1">
-                <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
-                    <div class="aspect-video bg-purple-900/50 rounded-lg flex items-center justify-center mb-4">
-                        <i class="fas fa-dog text-6xl text-purple-300"></i>
+                <div class="bg-white shadow-xl p-8">
+                    <div class="aspect-video bg-blue-50 flex items-center justify-center mb-6">
+                        <svg class="w-24 h-24 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/>
+                        </svg>
                     </div>
-                    <div class="space-y-2">
-                        <div class="flex items-center justify-between py-2 px-4 bg-purple-800/50 rounded-lg">
-                            <span>Golden Retriever</span>
-                            <span>98%</span>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-4 bg-blue-50">
+                            <span class="font-medium text-gray-900">Golden Retriever</span>
+                            <span class="text-blue-600 font-medium">98%</span>
                         </div>
-                        <div class="flex items-center justify-between py-2 px-4 bg-purple-800/50 rounded-lg">
-                            <span>Labrador Retriever</span>
-                            <span>85%</span>
+                        <div class="flex items-center justify-between p-4 bg-yellow-50">
+                            <span class="font-medium text-gray-900">Labrador Retriever</span>
+                            <span class="text-yellow-600 font-medium">85%</span>
                         </div>
                     </div>
                 </div>
@@ -907,36 +1386,47 @@ function resetShareButton(cardId) {
         </div>
     </div>
 </section>
+
 <!-- How It Works - Simple Steps -->
-<section class="py-12 bg-white">
+<section class="py-16 bg-white">
     <div class="max-w-6xl mx-auto px-4">
-        <h2 class="text-2xl md:text-3xl font-bold text-center text-gray-900 mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-16">
             Comment Ça Marche
         </h2>
-        <div class="grid md:grid-cols-3 gap-8">
+        <div class="grid md:grid-cols-3 gap-12">
             <!-- Step 1 -->
-            <div class="text-center">
-                <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span class="text-blue-600 font-bold text-xl">1</span>
+            <div class="text-center group">
+                <div class="relative mb-8">
+                    <div class="w-20 h-20 bg-blue-50 flex items-center justify-center mx-auto group-hover:bg-blue-100 transition-colors">
+                        <span class="text-blue-500 font-bold text-2xl">1</span>
+                    </div>
+                    <div class="absolute -right-6 top-1/2 h-px w-12 bg-blue-100 hidden md:block"></div>
                 </div>
-                <h3 class="font-medium text-gray-900 mb-2">Choisissez un Service</h3>
-                <p class="text-gray-600">Sélectionnez le service dont votre chien a besoin</p>
+                <h3 class="text-xl font-semibold text-gray-900 mb-3">Choisissez un Service</h3>
+                <p class="text-gray-600 leading-relaxed">Sélectionnez le service dont votre chien a besoin</p>
             </div>
+
             <!-- Step 2 -->
-            <div class="text-center">
-                <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span class="text-blue-600 font-bold text-xl">2</span>
+            <div class="text-center group">
+                <div class="relative mb-8">
+                    <div class="w-20 h-20 bg-yellow-50 flex items-center justify-center mx-auto group-hover:bg-yellow-100 transition-colors">
+                        <span class="text-yellow-600 font-bold text-2xl">2</span>
+                    </div>
+                    <div class="absolute -right-6 top-1/2 h-px w-12 bg-yellow-100 hidden md:block"></div>
                 </div>
-                <h3 class="font-medium text-gray-900 mb-2">Contactez le Prestataire</h3>
-                <p class="text-gray-600">Discutez directement avec le professionnel</p>
+                <h3 class="text-xl font-semibold text-gray-900 mb-3">Contactez le Prestataire</h3>
+                <p class="text-gray-600 leading-relaxed">Discutez directement avec le professionnel</p>
             </div>
+
             <!-- Step 3 -->
-            <div class="text-center">
-                <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span class="text-blue-600 font-bold text-xl">3</span>
+            <div class="text-center group">
+                <div class="mb-8">
+                    <div class="w-20 h-20 bg-blue-50 flex items-center justify-center mx-auto group-hover:bg-blue-100 transition-colors">
+                        <span class="text-blue-500 font-bold text-2xl">3</span>
+                    </div>
                 </div>
-                <h3 class="font-medium text-gray-900 mb-2">Profitez du Service</h3>
-                <p class="text-gray-600">Réservez et profitez du service choisi</p>
+                <h3 class="text-xl font-semibold text-gray-900 mb-3">Profitez du Service</h3>
+                <p class="text-gray-600 leading-relaxed">Réservez et profitez du service choisi</p>
             </div>
         </div>
     </div>
