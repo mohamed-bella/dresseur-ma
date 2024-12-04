@@ -705,13 +705,16 @@ const requiredFields = [
                 pending: 0, inProgress: 0, completed: 0
             }
         };
-        console.log(missingElements)
+        const totalViews = services.reduce((acc, s) => acc + (s.views || 0), 0);
+
+        // console.log(totalViews)
 
         // Render dashboard with all data
         res.render('user/dashboard/dashboard', {
             pageTitle: 'dashboard',
             description: '',
             keywords: '',
+            totalViews,
             user: {
                 ...req.user.toObject(),
                 completionPercentage: Math.round(completedWeight)

@@ -1,129 +1,93 @@
-<header class="bg-white border-b border-gray-200 sticky top-0 z-30">
-    <div class="px-4 sm:px-6">
+<header class="fixed top-0 inset-x-0 bg-yellow-400 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
-            <!-- Left Side -->
-            <div class="flex items-center space-x-4">
-                <!-- Mobile Sidebar Toggle -->
-                <button id="mobileSidebarToggle" class="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors">
-                    <i class="fas fa-bars text-gray-600"></i>
+            <!-- Left Section -->
+            <div class="flex items-center gap-6">
+                <!-- Mobile Menu Button -->
+                <button id="mobileMenuBtn" class="lg:hidden p-2 text-gray-800 hover:bg-yellow-500/50 rounded-lg transition-colors">
+                    <i class="fas fa-bars text-lg"></i>
                 </button>
 
                 <!-- Logo -->
-                <div class="lg:hidden text-xl font-bold bg-gradient-to-r from-primary-600 to-primary-500 text-transparent bg-clip-text">
-                    NDRESSILIK
-                </div>
-
-                <!-- Desktop Navigation Title -->
-                <div class="hidden lg:flex items-center">
-                    <div class="flex items-center gap-2 px-4 py-1.5 bg-gradient-to-r from-primary-50 to-primary-100 rounded-lg">
-                        <i class="fas fa-user-shield text-primary-600"></i>
-                        <span class="text-primary-600 font-medium">
-                            <%= user.role === 'professional' ? 'Professionnel' : 'Administrateur' %>
-                        </span>
-                    </div>
-                </div>
+                <a href="/" class="flex items-center gap-2">
+                    <span class="text-xl font-bold text-gray-800">NDRESSILIK</span>
+                </a>
             </div>
 
-            <!-- Right Side -->
-            <div class="flex items-center space-x-4">
-                <!-- Desktop Section Navigation -->
-                <nav class="hidden lg:flex items-center space-x-2">
-                    <a href="#basic" class="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors flex items-center space-x-2">
-                        <i class="fas fa-user-circle text-blue-500"></i>
-                        <span class="text-sm">Basic</span>
-                    </a>
-                    <a href="#specializations" class="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors flex items-center space-x-2">
-                        <i class="fas fa-star text-yellow-500"></i>
-                        <span class="text-sm">Specializations</span>
-                    </a>
-                    <a href="#qualifications" class="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors flex items-center space-x-2">
-                        <i class="fas fa-certificate text-green-500"></i>
-                        <span class="text-sm">Qualifications</span>
-                    </a>
-                </nav>
-
-                <!-- Notifications -->
-                <button class="relative p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">
-                    <i class="fas fa-bell"></i>
-                    <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-                </button>
-
-                <!-- Return Home -->
-                <a href="/" class="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors flex items-center space-x-2">
-                    <i class="fas fa-home"></i>
-                    <span class="hidden sm:block text-sm">Accueil</span>
+            <!-- Right Section -->
+            <div class="flex items-center gap-3">
+                <!-- Add Service Button (Desktop) -->
+                <a href="/dashboard/new-service" 
+                   class="hidden md:flex items-center gap-2 px-4 py-2 bg-gray-800 text-white rounded-lg 
+                          hover:bg-gray-700 transition-all">
+                    <i class="fas fa-plus"></i>
+                    <span>Ajouter un service</span>
                 </a>
 
-                <!-- Profile Dropdown -->
-                <div class="relative" id="profileDropdown">
-                    <button id="profileDropdownButton" class="flex items-center space-x-3 p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                        <!-- Profile Image -->
+                <!-- User Profile Dropdown -->
+                <div class="relative">
+                    <button id="userDropdownBtn" 
+                            class="flex items-center gap-3 p-1.5 hover:bg-yellow-500/50 rounded-lg transition-colors">
                         <div class="relative">
                             <img src="<%= user.profileImage || 'https://ui-avatars.com/api/?background=0D8ABC&color=fff' %>" 
-                                 alt="Profile" 
-                                 class="w-10 h-10 rounded-full object-cover ring-2 ring-white"
+                                 alt="<%= user.displayName %>"
+                                 class="w-8 h-8 rounded-full object-cover ring-2 ring-white"
                                  onerror="this.src='https://ui-avatars.com/api/?name=<%= user.displayName %>&background=0D8ABC&color=fff'">
-                            <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full ring-2 ring-white"></div>
+                            <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full ring-2 ring-white"></div>
                         </div>
-
-                        <!-- Name and Role -->
                         <div class="hidden sm:block text-left">
-                            <p class="text-sm font-medium text-gray-800 line-clamp-1"><%= user.displayName %></p>
-                            <p class="text-xs text-gray-500 line-clamp-1"><%= user.email %></p>
+                            <div class="text-sm font-medium text-gray-800"><%= user.displayName %></div>
+                            <div class="text-xs text-gray-700"><%= user.role %></div>
                         </div>
-
-                        <i class="fas fa-chevron-down text-gray-400 transition-transform duration-200"></i>
+                        <i class="fas fa-chevron-down text-gray-800 transition-transform duration-200"></i>
                     </button>
 
-                    <!-- Profile Dropdown Menu -->
-                    <div id="profileDropdownMenu" 
-                         class="absolute right-0 mt-2 w-72 bg-white rounded-xl shadow-lg border border-gray-100
-                                opacity-0 scale-95 transition-all duration-200 ease-out pointer-events-none">
+                    <!-- User Dropdown Menu -->
+                    <div id="userDropdown" 
+                         class="hidden absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-gray-200
+                                transform opacity-0 scale-95 transition-all origin-top-right">
                         <!-- User Info -->
                         <div class="p-4 border-b border-gray-100">
-                            <div class="flex items-center space-x-3">
-                                <img src="<%= user.profileImage || 'https://ui-avatars.com/api/?background=0D8ABC&color=fff' %>" 
-                                     alt="Profile"
-                                     class="w-12 h-12 rounded-full object-cover"
-                                     onerror="this.src='https://ui-avatars.com/api/?name=<%= user.displayName %>&background=0D8ABC&color=fff'">
+                            <div class="flex items-center gap-3">
+                                <img src="<%= user.profileImage %>" 
+                                     alt="<%= user.displayName %>"
+                                     class="w-12 h-12 rounded-full object-cover ring-2 ring-gray-100">
                                 <div>
-                                    <p class="text-sm font-medium text-gray-900"><%= user.displayName %></p>
-                                    <p class="text-xs text-gray-500"><%= user.email %></p>
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-primary-100 text-primary-800 mt-1">
-                                        <%= user.role === 'professional' ? 'Professionnel' : 'Administrateur' %>
-                                    </span>
+                                    <div class="font-medium text-gray-900"><%= user.displayName %></div>
+                                    <div class="text-sm text-gray-500"><%= user.email %></div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Menu Items -->
                         <div class="p-2 space-y-1">
-                            <a href="/dashboard" 
-                               class="flex items-center space-x-3 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
-                                <i class="fas fa-th-large w-5 text-gray-400"></i>
-                                <span>Tableau de bord</span>
+                            <a href="/dashboard/profile" class="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
+                                <i class="fas fa-user w-5"></i>
+                                <span>Profile</span>
                             </a>
-                            <a href="/dashboard/profile" 
-                               class="flex items-center space-x-3 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
-                                <i class="fas fa-user w-5 text-gray-400"></i>
-                                <span> Editer Mon Profil</span>
+                            <a href="/dashboard/new-service" class="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
+                                <i class="fas fa-plus w-5"></i>
+                                <span>Ajouter Services</span>
                             </a>
-                            <!-- <a href="/dashboard/settings" 
-                               class="flex items-center space-x-3 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
-                                <i class="fas fa-cog w-5 text-gray-400"></i>
-                                <span>Paramètres</span>
-                            </a> -->
-                            <a href="https://ndressilik.com/contact" 
-                               class="flex items-center space-x-3 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
-                                <i class="fas fa-question-circle w-5 text-gray-400"></i>
-                                <span>Centre d'aide</span>
+                            <a href="#services" class="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
+                                <i class="fas fa-briefcase w-5"></i>
+                                <span>Mes Services</span>
+                            </a>
+                        </div>
+
+                        <!-- Special CTA -->
+                        <div class="p-2 border-t border-gray-100">
+                            <a href="/dashboard/new-service" 
+                               class="flex items-center justify-center gap-2 px-3 py-2 bg-gray-800 text-white rounded-lg
+                                      hover:bg-gray-700 transition-colors">
+                                <i class="fas fa-plus-circle"></i>
+                                <span>Ajouter un service</span>
                             </a>
                         </div>
 
                         <!-- Logout -->
                         <div class="p-2 border-t border-gray-100">
-                            <a href="/logout" 
-                               class="flex items-center space-x-3 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                            <a href="/logout" class="flex items-center gap-3 px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors">
                                 <i class="fas fa-sign-out-alt w-5"></i>
                                 <span>Déconnexion</span>
                             </a>
@@ -134,206 +98,137 @@
         </div>
     </div>
 
-    <!-- Mobile Navigation Menu -->
-    <div id="mobileMenu" class="fixed inset-0 bg-gray-800/50 z-40 hidden lg:hidden">
-        <div class="fixed inset-y-0 left-0 w-72 bg-white shadow-lg transform -translate-x-full transition-transform duration-300" id="mobileSidebar">
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" 
+         class="lg:hidden fixed inset-0 bg-black z-50 hidden"
+         onclick="this.classList.add('hidden')">
+        <div class="fixed inset-y-0 left-0 max-w-xs w-full bg-white shadow-xl"
+             onclick="event.stopPropagation()">
             <!-- Mobile Menu Header -->
-            <div class="p-4 border-b border-gray-200">
+            <div class="p-4 bg-yellow-400">
                 <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-2">
-                        <i class="fas fa-user-shield text-primary-600"></i>
-                        <span class="font-medium text-gray-900">Navigation</span>
-                    </div>
-                    <button id="closeMobileMenu" class="p-2 text-gray-500 hover:text-gray-700 rounded-lg">
+                    <span class="font-bold text-gray-800">Menu</span>
+                    <button onclick="document.getElementById('mobileMenu').classList.add('hidden')"
+                            class="p-2 text-gray-800 hover:bg-yellow-500/50 rounded-lg">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
             </div>
 
-            <!-- Mobile Navigation Links -->
-            <nav class="p-4 space-y-2">
-                <a href="#basic" class="mobile-nav-link flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 text-gray-700">
-                    <i class="fas fa-user-circle text-blue-500 w-6"></i>
-                    <span>Basic Information</span>
-                </a>
-                <a href="#specializations" class="mobile-nav-link flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 text-gray-700">
-                    <i class="fas fa-star text-yellow-500 w-6"></i>
-                    <span>Specializations</span>
-                </a>
-                <a href="#qualifications" class="mobile-nav-link flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 text-gray-700">
-                    <i class="fas fa-certificate text-green-500 w-6"></i>
-                    <span>Qualifications</span>
-                </a>
-                <a href="#scores" class="mobile-nav-link flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 text-gray-700">
-                    <i class="fas fa-chart-line text-purple-500 w-6"></i>
-                    <span>Scores & Analytics</span>
-                </a>
-            </nav>
+            <!-- Mobile Navigation -->
+            <div class="p-4 space-y-4">
+                <!-- User Info -->
+                <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                    <img src="<%= user.profileImage %>" 
+                         alt="<%= user.displayName %>"
+                         class="w-10 h-10 rounded-full object-cover">
+                    <div>
+                        <div class="font-medium text-gray-900"><%= user.displayName %></div>
+                        <div class="text-sm text-gray-500"><%= user.email %></div>
+                    </div>
+                </div>
+
+                <!-- Navigation Links -->
+                <nav class="space-y-2">
+                    <a href="/dashboard/profile" class="flex items-center gap-3 p-3 text-gray-700 hover:bg-gray-100 rounded-lg">
+                        <i class="fas fa-user w-5"></i>
+                        <span>Profile</span>
+                    </a>
+                    <a href="#services" class="flex items-center gap-3 p-3 text-gray-700 hover:bg-gray-100 rounded-lg">
+                        <i class="fas fa-briefcase w-5"></i>
+                        <span>Mes Services</span>
+                    </a>
+                    <a href="/dashboard/new-service" 
+                       class="flex items-center gap-3 p-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700">
+                        <i class="fas fa-plus-circle w-5"></i>
+                        <span>Ajouter un service</span>
+                    </a>
+                    <a href="/logout" class="flex items-center gap-3 p-3 text-red-600 hover:bg-red-50 rounded-lg mt-4">
+                        <i class="fas fa-sign-out-alt w-5"></i>
+                        <span>Déconnexion</span>
+                    </a>
+                </nav>
+            </div>
         </div>
     </div>
 </header>
 
 <script>
-// Enhanced dropdown functionality with animations
-const dropdownButton = document.getElementById('profileDropdownButton');
-const dropdownMenu = document.getElementById('profileDropdownMenu');
-let isDropdownOpen = false;
+// Dropdown Management
+const userDropdownBtn = document.getElementById('userDropdownBtn');
+const userDropdown = document.getElementById('userDropdown');
 
-function toggleDropdown(force = null) {
-    isDropdownOpen = force !== null ? force : !isDropdownOpen;
+function toggleDropdown() {
+    const isOpen = !userDropdown.classList.contains('hidden');
     
-    if (isDropdownOpen) {
-        // Open dropdown
-        dropdownMenu.classList.remove('opacity-0', 'scale-95', 'pointer-events-none');
-        dropdownMenu.classList.add('opacity-100', 'scale-100');
-        
-        // Rotate chevron
-        dropdownButton.querySelector('.fa-chevron-down').style.transform = 'rotate(180deg)';
-    } else {
+    if (isOpen) {
         // Close dropdown
-        dropdownMenu.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
-        dropdownMenu.classList.remove('opacity-100', 'scale-100');
-        
-        // Reset chevron
-        dropdownButton.querySelector('.fa-chevron-down').style.transform = 'rotate(0)';
+        userDropdown.classList.add('hidden', 'opacity-0', 'scale-95');
+        userDropdownBtn.querySelector('.fa-chevron-down').style.transform = 'rotate(0deg)';
+    } else {
+        // Open dropdown
+        userDropdown.classList.remove('hidden', 'opacity-0', 'scale-95');
+        userDropdownBtn.querySelector('.fa-chevron-down').style.transform = 'rotate(180deg)';
     }
 }
 
-// Toggle dropdown on button click
-dropdownButton.addEventListener('click', (e) => {
+userDropdownBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     toggleDropdown();
 });
 
-// Close dropdown when clicking outside
-document.addEventListener('click', (e) => {
-    if (!dropdownMenu.contains(e.target) && !dropdownButton.contains(e.target)) {
-        toggleDropdown(false);
-    }
+// Mobile Menu
+document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+    const mobileMenu = document.getElementById('mobileMenu');
+    mobileMenu.classList.remove('hidden');
 });
 
-// Close dropdown when pressing Escape
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && isDropdownOpen) {
-        toggleDropdown(false);
-    }
+// Close dropdowns when clicking outside
+document.addEventListener('click', () => {
+    userDropdown.classList.add('hidden', 'opacity-0', 'scale-95');
+    userDropdownBtn.querySelector('.fa-chevron-down').style.transform = 'rotate(0deg)';
 });
 
-// Enhanced Mobile Menu Functionality
-const mobileMenu = document.getElementById('mobileMenu');
-const mobileSidebar = document.getElementById('mobileSidebar');
-const mobileSidebarToggle = document.getElementById('mobileSidebarToggle');
-const closeMobileMenu = document.getElementById('closeMobileMenu');
-
-function toggleMobileMenu(show = null) {
-    const isOpen = show !== null ? show : !mobileMenu.classList.contains('block');
-    
-    if (isOpen) {
-        mobileMenu.classList.remove('hidden');
-        setTimeout(() => {
-            mobileSidebar.classList.remove('-translate-x-full');
-        }, 10);
-    } else {
-        mobileSidebar.classList.add('-translate-x-full');
-        setTimeout(() => {
-            mobileMenu.classList.add('hidden');
-        }, 300);
-    }
-}
-
-mobileSidebarToggle.addEventListener('click', () => toggleMobileMenu(true));
-closeMobileMenu.addEventListener('click', () => toggleMobileMenu(false));
-mobileMenu.addEventListener('click', (e) => {
-    if (e.target === mobileMenu) {
-        toggleMobileMenu(false);
-    }
+// Prevent dropdown close when clicking inside
+userDropdown.addEventListener('click', (e) => {
+    e.stopPropagation();
 });
 
-// Handle mobile navigation links
-document.querySelectorAll('.mobile-nav-link').forEach(link => {
-    link.addEventListener('click', () => {
-        toggleMobileMenu(false);
-        // Smooth scroll to section
-        const sectionId = link.getAttribute('href').substring(1);
-        const section = document.getElementById(sectionId);
-        if (section) {
-            section.scrollIntoView({ behavior: 'smooth' });
-        }
-    });
-});
+// Add scroll behavior
+let lastScrollTop = 0;
+const header = document.querySelector('header');
 
-// Add active state to navigation links based on scroll position
-const sections = document.querySelectorAll('section[id]');
 window.addEventListener('scroll', () => {
-    const scrollY = window.pageYOffset;
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     
-    sections.forEach(section => {
-        const sectionHeight = section.offsetHeight;
-        const sectionTop = section.offsetTop - 100;
-        const sectionId = section.getAttribute('id');
-        
-        const desktopLink = document.querySelector(`nav a[href="#${sectionId}"]`);
-        const mobileLink = document.querySelector(`.mobile-nav-link[href="#${sectionId}"]`);
-        
-        if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
-            if (desktopLink) desktopLink.classList.add('bg-gray-100');
-            if (mobileLink) mobileLink.classList.add('bg-gray-50');
-        } else {
-            if (desktopLink) desktopLink.classList.remove('bg-gray-100');
-            if (mobileLink) mobileLink.classList.remove('bg-gray-50');
-        }
-    });
-});
-
-// Initialize smooth transitions for chevron and mobile menu
-dropdownButton.querySelector('.fa-chevron-down').style.transition = 'transform 0.2s ease-in-out';
-
-// Handle smooth scrolling for all navigation links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const sectionId = this.getAttribute('href').substring(1);
-        const section = document.getElementById(sectionId);
-        
-        if (section) {
-            // Close mobile menu if open
-            toggleMobileMenu(false);
-            
-            // Smooth scroll to section
-            section.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-            
-            // Update URL without jumping
-            window.history.pushState(null, null, `#${sectionId}`);
-        }
-    });
-});
-
-// Initialize the active section on page load
-function setInitialActiveSection() {
-    const hash = window.location.hash;
-    if (hash) {
-        const section = document.querySelector(hash);
-        if (section) {
-            section.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
+    if (scrollTop > lastScrollTop && scrollTop > header.offsetHeight) {
+        header.style.transform = 'translateY(-100%)';
+        userDropdown.classList.add('hidden', 'opacity-0', 'scale-95');
+    } else {
+        header.style.transform = 'translateY(0)';
     }
-}
-
-// Run on page load
-document.addEventListener('DOMContentLoaded', () => {
-    setInitialActiveSection();
-});
-
-// Handle mobile menu closing on resize
-window.addEventListener('resize', () => {
-    if (window.innerWidth >= 1024) {
-        toggleMobileMenu(false);
-    }
+    
+    lastScrollTop = scrollTop;
 });
 </script>
+
+<style>
+header {
+    transition: transform 0.3s ease;
+}
+
+.mobile-menu-slide {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+}
+
+#mobileMenu > div {
+    transition: transform 0.3s ease-out;
+}
+
+@media (max-width: 768px) {
+    .mobile-menu-open {
+        transform: translateX(0);
+    }
+}
+</style>

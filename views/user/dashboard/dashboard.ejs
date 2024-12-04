@@ -1,217 +1,367 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
     <%- include('includes/head') %>
-        <title>NDRESSILIK - Tableau de Bord</title>
+    <title>NDRESSILIK - Tableau de Bord</title>
 </head>
 
-<body class="bg-gray-200">
-    <div class="">
-        <%- include('includes/header') %>
+<body class="bg-gray-50">
+    <%- include('includes/header') %>
 
-            <main class="p-6 max-w-4xl mx-auto">
-                <!-- Dashboard Content -->
-                <div class="space-y-6">
-                    <!-- Welcome Card -->
-                    <div class="rounded-2xl shadow-lg bg-white overflow-hidden">
-                        <!-- Welcome Banner -->
-                        <div class="relative px-4 py-8 sm:p-8 bg-gradient-to-br from-blue-500 to-blue-600 text-white">
-                            <div class="absolute inset-0 opacity-10 pointer-events-none">
-                                <svg width="100%" height="100%" class="rotate-180">
-                                    <pattern id="hero-pattern" x="0" y="0" width="32" height="32" patternUnits="userSpaceOnUse">
-                                        <path d="M0 32V.5H32" fill="none" stroke="currentColor" stroke-width="1"></path>
+    <main class="min-h-screen pt-20 pb-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Welcome Section -->
+            <div class="mb-8">
+                <div class="rounded-2xl bg-gray-900 overflow-hidden">
+                    <div class="relative px-6 py-12 sm:px-12 sm:py-16">
+                        <!-- Background Pattern -->
+                        <div class="absolute inset-0 opacity-10 pointer-events-none">
+                            <svg class="h-full w-full" viewBox="0 0 100 100">
+                                <defs>
+                                    <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
+                                        <path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" stroke-width="0.5"/>
                                     </pattern>
-                                    <rect width="100%" height="100%" fill="url(#hero-pattern)"></rect>
-                                </svg>
-                            </div>
-
-                            <div class="relative">
-                                <h2 class="text-2xl sm:text-3xl font-bold mb-2">
-                                    Bienvenue dans votre espace professionnel
-                                </h2>
-                                <p class="text-primary-100">
-                                    Commencez à configurer votre profil et vos services pour être visible par les clients
-                                </p>
-                            </div>
+                                </defs>
+                                <rect width="100%" height="100%" fill="url(#grid)"/>
+                            </svg>
                         </div>
 
-                        <div class="p-4 sm:p-8">
-                            <!-- Missing Elements Button Trigger -->
-                            <% if (missingElements && missingElements.length> 0) { %>
-                                <button onclick="openMissingElementsModal()" class="w-full bg-yellow-50 border-l-4 border-yellow-400 text-yellow-700 p-4 rounded-lg mb-6 hover:bg-yellow-100/50 transition-colors text-left">
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center gap-3">
-                                            <i class="fas fa-exclamation-circle text-yellow-500"></i>
-                                            <p class="font-medium">Pour améliorer votre profil (<%= missingElements.length %> éléments)</p>
-                                        </div>
-                                        <i class="fas fa-chevron-right text-yellow-500"></i>
+                        <!-- Content -->
+                        <div class="relative max-w-3xl">
+                            <h1 class="text-3xl sm:text-4xl font-bold text-white mb-4">
+                                Bienvenue, <%= user.firstName %>
+                            </h1>
+                            <p class="text-lg text-gray-300" id="#services">
+                                Gérez vos services et optimisez votre visibilité sur notre plateforme.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Grid -->
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Left Column: Profile & Actions -->
+                <div class="lg:col-span-2 space-y-8">
+                    <!-- Profile Completion Alert -->
+                    <% if (missingElements && missingElements.length > 0) { %>
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                            <div class="p-6">
+                                <div class="flex items-start gap-4">
+                                    <div class="w-12 h-12 rounded-full bg-yellow-50 flex items-center justify-center flex-shrink-0">
+                                        <i class="fas fa-user-edit text-yellow-600 text-xl"></i>
                                     </div>
-                                </button>
-
-                                <!-- Modal Backdrop -->
-                                <div id="modalBackdrop" class="fixed inset-0 bg-black/50 opacity-0 pointer-events-none transition-opacity duration-300" onclick="closeMissingElementsModal()">
-                                </div>
-
-                                <!-- Modal -->
-                                <div id="missingElementsModal" class="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
-                                    <div class="w-full max-w-lg transform translate-y-8 opacity-0 pointer-events-none transition duration-300">
-                                        <div class="relative bg-white rounded-xl shadow-xl mx-4">
-                                            <!-- Modal Header -->
-                                            <div class="flex items-center justify-between p-4 border-b">
-                                                <div class="flex items-center gap-3">
-                                                    <div class="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center">
-                                                        <i class="fas fa-exclamation-triangle text-yellow-600"></i>
-                                                    </div>
-                                                    <h3 class="text-lg font-semibold text-gray-900">
-                                                        Améliorations recommandées
-                                                    </h3>
-                                                </div>
-                                                <button onclick="closeMissingElementsModal()" class="text-gray-400 hover:text-gray-600 p-2 rounded-lg">
-                                                    <i class="fas fa-times text-xl"></i>
-                                                </button>
-                                            </div>
-
-                                            <!-- Modal Content -->
-                                            <div class="p-4 space-y-4 max-h-[60vh] overflow-y-auto">
-                                                <p class="text-gray-600">
-                                                    Complétez ces éléments pour optimiser votre profil et augmenter votre visibilité :
-                                                </p>
-                                                <div class="space-y-3">
-                                                    <% missingElements.forEach((element, index)=> { %>
-                                                        <div class="flex items-start gap-4 p-3 bg-gray-50 rounded-lg">
-                                                            <div class="w-6 h-6 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0">
-                                                                <span class="text-sm font-medium text-yellow-800">
-                                                                    <%= index + 1 %>
-                                                                </span>
-                                                            </div>
-                                                            <div class="flex-1">
-                                                                <p class="font-medium text-gray-900 mb-1">
-                                                                    <%= element.label %>
-                                                                </p>
-                                                                <a href="<%= element.link %>" class="inline-flex items-center text-sm text-blue-600 hover:text-blue-700 group">
-                                                                    Compléter maintenant
-                                                                    <i class="fas fa-arrow-right ml-1 text-xs transition-transform group-hover:translate-x-1"></i>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                        <% }); %>
-                                                </div>
-                                            </div>
-
-                                            <!-- Modal Footer -->
-                                            <div class="border-t p-4">
-                                                <button onclick="closeMissingElementsModal()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors">
-                                                    Fermer
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <script>
-                                    function openMissingElementsModal() {
-                                        const modal = document.getElementById('missingElementsModal');
-                                        const modalContent = modal.querySelector('.transform');
-                                        const backdrop = document.getElementById('modalBackdrop');
-
-                                        // Enable pointer events
-                                        modal.classList.remove('pointer-events-none');
-                                        modalContent.classList.remove('pointer-events-none');
-                                        backdrop.classList.remove('pointer-events-none');
-
-                                        // Show backdrop
-                                        backdrop.classList.remove('opacity-0');
-
-                                        // Animate modal
-                                        requestAnimationFrame(() => {
-                                            modalContent.classList.remove('translate-y-8', 'opacity-0');
-                                        });
-
-                                        // Prevent body scroll
-                                        document.body.style.overflow = 'hidden';
-                                    }
-
-                                    function closeMissingElementsModal() {
-                                        const modal = document.getElementById('missingElementsModal');
-                                        const modalContent = modal.querySelector('.transform');
-                                        const backdrop = document.getElementById('modalBackdrop');
-
-                                        // Animate out
-                                        modalContent.classList.add('translate-y-8', 'opacity-0');
-                                        backdrop.classList.add('opacity-0');
-
-                                        // Disable pointer events after animation
-                                        setTimeout(() => {
-                                            modal.classList.add('pointer-events-none');
-                                            modalContent.classList.add('pointer-events-none');
-                                            backdrop.classList.add('pointer-events-none');
-
-                                            // Restore body scroll
-                                            document.body.style.overflow = '';
-                                        }, 300);
-                                    }
-
-                                    // Close modal on escape key
-                                    document.addEventListener('keydown', (e) => {
-                                        if (e.key === 'Escape') {
-                                            closeMissingElementsModal();
-                                        }
-                                    });
-                                </script>
-                                <% } %>
-
-                                    <!-- Setup Steps Grid -->
-                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-
-
-                                        <!-- Step 2: Add Services -->
-                                        <button onclick="window.location.href='/dashboard/new-service'" class="group relative w-full text-left focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded-xl">
-                                            <div class="p-6 rounded-xl border-2 transition-all duration-300
-                                    <%= user.isProfileComplete && !user.hasServices 
-                                        ? 'border-primary-200 bg-primary-50/30' 
-                                        : 'border-gray-500 bg-white' %>
-                                    group-hover:border-primary-300 group-hover:shadow-md">
-                                                <div class="flex gap-4">
-                                                    <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-xl
-                                            <%= user.isProfileComplete && !user.hasServices 
-                                                ? 'bg-primary-100 text-primary-600' 
-                                                : 'bg-gray-100 text-gray-400' %>
-                                            group-hover:scale-110 transition-transform duration-300">
-                                                        <% if (user.hasServices) { %>
-                                                            <i class="fas fa-check-circle text-xl text-green-500"></i>
-                                                            <% } else { %>
-                                                                <span class="text-lg font-bold">1</span>
-                                                                <% } %>
-                                                    </div>
-                                                    <div class="flex-1 min-w-0">
-                                                        <h3 class="text-lg font-semibold text-gray-900 mb-1 group-hover:text-primary-600 transition-colors truncate">
-                                                            Ajouter vos services
-                                                        </h3>
-                                                        <p class="text-sm text-gray-600 mb-2 line-clamp-2">
-                                                            <%= user.hasServices ? `${user.servicesCount} services ajoutés` : 'Créez votre premier service' %>
-                                                        </p>
-                                                        <% if (!user.hasServices) { %>
-                                                            <span class="inline-flex items-center text-sm text-primary-600 font-medium">
-                                                                Ajouter un service
-                                                                <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i>
-                                                            </span>
-                                                            <% } %>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                    <div class="flex-1">
+                                        <h3 class="text-lg font-semibold text-gray-900 mb-2">
+                                            Complétez votre profil
+                                        </h3>
+                                        <p class="text-gray-600 mb-4">
+                                            Il vous reste <%= missingElements.length %> éléments à compléter pour optimiser votre profil.
+                                        </p>
+                                        <button onclick="openMissingElementsModal()" 
+                                                class="inline-flex items-center gap-2 px-4 py-2 rounded-lg
+                                                       bg-gray-800 text-white hover:bg-gray-700 
+                                                       transition-colors duration-200">
+                                            <span>Voir les éléments</span>
+                                            <i class="fas fa-arrow-right"></i>
                                         </button>
                                     </div>
+                                </div>
+                            </div>
+                            <% const totalElements = 5; %>
+                            <!-- Progress Bar -->
+                            <div class="h-2 bg-gray-100">
+                                <div class="h-full bg-yellow-500 transition-all duration-500"
+                                     style="width: <%= Math.round((1 - missingElements.length/totalElements) * 100) %>%">
+                                </div>
+                            </div>
+                        </div>
+                    <% } %>
+
+                  <!-- Quick Actions -->
+<div class="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+    <div class="p-6">
+        <div class="flex items-center justify-between mb-8">
+            <h2 class="text-xl font-bold text-gray-900">Actions rapides</h2>
+            <div class="h-1 w-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"></div>
+        </div>
+        
+        <div class="grid sm:grid-cols-2 gap-6">
+            <!-- Add Service Button -->
+            <a href="/dashboard/new-service" 
+               class="group relative p-6 bg-gradient-to-br from-gray-50 to-white rounded-xl
+                      border-2 border-gray-200 hover:border-gray-900
+                      hover:shadow-xl transform hover:-translate-y-1
+                      transition-all duration-300">
+                <!-- Decorative Elements -->
+                <div class="absolute top-0 right-0 p-2">
+                    <div class="w-20 h-20 bg-blue-500/5 rounded-full blur-2xl"></div>
+                </div>
+                
+                <div class="relative space-y-4">
+                    <!-- Icon -->
+                    <div class="inline-flex p-3 rounded-xl bg-gray-900 text-white
+                                shadow-lg group-hover:scale-110 transition-transform duration-300">
+                        <i class="fas fa-plus text-xl"></i>
+                    </div>
+
+                    <!-- Content -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Nouveau service</h3>
+                        <p class="text-sm text-gray-600 mb-4">Créez et publiez un nouveau service</p>
+                        
+                        <!-- Action Indicator -->
+                        <div class="flex items-center text-sm font-medium text-gray-900">
+                            <span>Commencer</span>
+                            <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i>
                         </div>
                     </div>
 
-                    <!-- Services Section -->
+                    <!-- Badge -->
+                    <div class="absolute top-4 right-4">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-800">
+                            Recommandé
+                        </span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Edit Profile Button -->
+            <a href="/dashboard/profile" 
+               class="group relative p-6 bg-gradient-to-br from-gray-50 to-white rounded-xl
+                      border-2 border-gray-200 hover:border-gray-900
+                      hover:shadow-xl transform hover:-translate-y-1
+                      transition-all duration-300">
+                <!-- Decorative Elements -->
+                <div class="absolute top-0 right-0 p-2">
+                    <div class="w-20 h-20 bg-purple-500/5 rounded-full blur-2xl"></div>
+                </div>
+
+                <div class="relative space-y-4">
+                    <!-- Icon -->
+                    <div class="inline-flex p-3 rounded-xl bg-gray-900 text-white
+                                shadow-lg group-hover:scale-110 transition-transform duration-300">
+                        <i class="fas fa-user-edit text-xl"></i>
+                    </div>
+
+                    <!-- Content -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Profil</h3>
+                        <p class="text-sm text-gray-600 mb-4">Complétez et optimisez votre profil</p>
+                        
+                        <!-- Action Indicator -->
+                        <div class="flex items-center text-sm font-medium text-gray-900">
+                            <span>Modifier</span>
+                            <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i>
+                        </div>
+                    </div>
+
+                    <!-- Completion Badge (optional) -->
+                    <% if (missingElements && missingElements.length > 0) { %>
+                        <div class="absolute top-4 right-4">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-50 text-yellow-800">
+                                <%= missingElements.length %> à compléter
+                            </span>
+                        </div>
+                    <% } %>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+                    <!-- Services List -->
                     <%- include('includes/services') %>
                 </div>
-            </main>
-    </div>
 
+                <!-- Right Column: Stats & Info -->
+                <div class="space-y-8">
+                    <!-- Profile Stats -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden p-6">
+                        <h2 class="text-xl font-semibold text-gray-900 mb-6">Statistiques</h2>
+                        <div class="space-y-4">
+                            <!-- Views -->
+                            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
+                                        <i class="fas fa-eye text-blue-500"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-sm text-gray-600">Vues totales (Les Services)</div>
+                                        <div class="text-lg font-semibold text-gray-900">
+                                            <%= totalViews || 0 %>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Services Count -->
+                            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center">
+                                        <i class="fas fa-briefcase text-green-500"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-sm text-gray-600">Services actifs</div>
+                                        <div class="text-lg font-semibold text-gray-900">
+                                            <%= services.length %> service<%= services.length > 1 ? 's' : '' %>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tips Card -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden p-6">
+                        <h2 class="text-xl font-semibold text-gray-900 mb-4">Conseils</h2>
+                        <ul class="space-y-3">
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                <p class="text-sm text-gray-600">Ajoutez des photos de qualité à vos services</p>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                <p class="text-sm text-gray-600">Détaillez vos descriptions de services</p>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                <p class="text-sm text-gray-600">Répondez rapidement aux messages</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Missing Elements Modal Components -->
+<!-- Modal Backdrop -->
+<div id="modalBackdrop" 
+class="fixed inset-0 bg-black/50 opacity-0 pointer-events-none transition-opacity duration-300" 
+onclick="closeMissingElementsModal()">
+</div>
+
+<!-- Modal -->
+<div id="missingElementsModal" class="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
+<div class="w-full max-w-lg transform translate-y-8 opacity-0 pointer-events-none transition duration-300">
+   <div class="relative bg-white rounded-xl shadow-xl mx-4">
+       <!-- Modal Header -->
+       <div class="flex items-center justify-between p-6 border-b">
+           <div class="flex items-center gap-3">
+               <div class="w-10 h-10 rounded-lg bg-yellow-50 flex items-center justify-center">
+                   <i class="fas fa-exclamation-circle text-yellow-600 text-xl"></i>
+               </div>
+               <h3 class="text-xl font-semibold text-gray-900">
+                   Améliorations recommandées
+               </h3>
+           </div>
+           <button onclick="closeMissingElementsModal()" 
+                   class="text-gray-400 hover:text-gray-600 p-2 rounded-lg transition-colors">
+               <i class="fas fa-times text-xl"></i>
+           </button>
+       </div>
+
+       <!-- Modal Content -->
+       <div class="p-6 space-y-6 max-h-[60vh] overflow-y-auto">
+           <p class="text-gray-600">
+               Complétez ces éléments pour optimiser votre profil et augmenter votre visibilité :
+           </p>
+           <div class="space-y-4">
+               <% missingElements.forEach((element, index) => { %>
+                   <div class="flex items-start gap-4 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                       <div class="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                           <span class="text-sm font-medium text-yellow-800">
+                               <%= index + 1 %>
+                           </span>
+                       </div>
+                       <div class="flex-1">
+                           <p class="font-medium text-gray-900 mb-2">
+                               <%= element.label %>
+                           </p>
+                           <a href="<%= element.link %>" 
+                              class="inline-flex items-center text-sm text-gray-800 hover:text-gray-600 
+                                     font-medium group">
+                               <span>Compléter maintenant</span>
+                               <i class="fas fa-arrow-right ml-2 text-xs transition-transform 
+                                        group-hover:translate-x-1"></i>
+                           </a>
+                       </div>
+                   </div>
+               <% }); %>
+           </div>
+       </div>
+
+       <!-- Modal Footer -->
+       <div class="border-t p-6">
+           <button onclick="closeMissingElementsModal()" 
+                   class="w-full bg-gray-800 hover:bg-gray-700 text-white font-medium
+                          py-3 px-4 rounded-lg transition-colors">
+               Fermer
+           </button>
+       </div>
+   </div>
+</div>
+</div>
+
+<!-- Modal Scripts -->
+<script>
+function openMissingElementsModal() {
+   const modal = document.getElementById('missingElementsModal');
+   const modalContent = modal.querySelector('.transform');
+   const backdrop = document.getElementById('modalBackdrop');
+
+   // Enable pointer events
+   modal.classList.remove('pointer-events-none');
+   modalContent.classList.remove('pointer-events-none');
+   backdrop.classList.remove('pointer-events-none');
+
+   // Show backdrop
+   backdrop.classList.remove('opacity-0');
+
+   // Animate modal
+   requestAnimationFrame(() => {
+       modalContent.classList.remove('translate-y-8', 'opacity-0');
+   });
+
+   // Prevent body scroll
+   document.body.style.overflow = 'hidden';
+}
+
+function closeMissingElementsModal() {
+   const modal = document.getElementById('missingElementsModal');
+   const modalContent = modal.querySelector('.transform');
+   const backdrop = document.getElementById('modalBackdrop');
+
+   // Animate out
+   modalContent.classList.add('translate-y-8', 'opacity-0');
+   backdrop.classList.add('opacity-0');
+
+   // Disable pointer events after animation
+   setTimeout(() => {
+       modal.classList.add('pointer-events-none');
+       modalContent.classList.add('pointer-events-none');
+       backdrop.classList.add('pointer-events-none');
+
+       // Restore body scroll
+       document.body.style.overflow = '';
+   }, 300);
+}
+
+// Close modal on escape key
+document.addEventListener('keydown', (e) => {
+   if (e.key === 'Escape') {
+       closeMissingElementsModal();
+   }
+});
+
+// Close modal on backdrop click
+document.getElementById('modalBackdrop').addEventListener('click', (e) => {
+   if (e.target === e.currentTarget) {
+       closeMissingElementsModal();
+   }
+});
+</script>
     <%- include('includes/scripts') %>
 </body>
-
 </html>

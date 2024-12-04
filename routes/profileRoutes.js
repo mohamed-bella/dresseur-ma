@@ -76,6 +76,7 @@ const deleteFromS3 = async (url) => {
 
 
 // Route: Get Profile Info
+// Route: Get Profile Info
 router.get('/profile', isAuthenticated, async (req, res) => {
      try {
           // Fetch user with select fields
@@ -97,33 +98,38 @@ router.get('/profile', isAuthenticated, async (req, res) => {
           );
 
           // Calculate service metrics
-          const metrics = {
-               totalServices: await Service.countDocuments({ createdBy: user._id }),
-               totalReviews: await Review.countDocuments({ serviceId: { $in: await Service.find({ createdBy: user._id }).distinct('_id') } }),
-               averageRating: await Review.aggregate([
-                    {
-                         $match: {
-                              serviceId: {
-                                   $in: await Service.find({ createdBy: user._id }).distinct('_id')
-                              }
-                         }
-                    },
-                    {
-                         $group: {
-                              _id: null,
-                              average: { $avg: '$rating' }
-                         }
+          const totalServices = await Service.countDocuments({ createdBy: user._id });
+          const userServiceIds = await Service.find({ createdBy: user._id }).distinct('_id');
+          const totalReviews = await Review.countDocuments({ serviceId: { $in: userServiceIds } });
+
+          // Calculate average rating
+          const averageRatingResult = await Review.aggregate([
+               {
+                    $match: {
+                         serviceId: { $in: userServiceIds }
                     }
-               ]).then(result => result[0]?.average || 0)
-          };
+               },
+               {
+                    $group: {
+                         _id: null,
+                         average: { $avg: '$rating' }
+                    }
+               }
+          ]);
+          const averageRating = averageRatingResult[0]?.average || 0;
+
+          // Retrieve profile views from user.metrics
+          const profileViews = user.metrics?.profileViews || 0; // Ensure this field exists in your user model
 
           // Format data for template
           const viewData = {
                user: {
                     ...user,
-                    metrics: {
-                         ...metrics,
-                         averageRating: Number(metrics.averageRating.toFixed(1))
+                    stats: {
+                         views: profileViews,
+                         services: totalServices,
+                         reviews: totalReviews,
+                         rating: Number(averageRating.toFixed(1))
                     }
                },
                completionPercentage,
@@ -132,7 +138,7 @@ router.get('/profile', isAuthenticated, async (req, res) => {
                path: 'profile',
                breadcrumbs: [
                     { label: 'Dashboard', url: '/dashboard' },
-                    { label: 'Profile', url: '#' }
+                    { label: 'Profil', url: '#' }
                ],
                specializations: [
                     { value: 'dog-training', label: 'Dressage', icon: 'fa-dog' },
@@ -145,24 +151,24 @@ router.get('/profile', isAuthenticated, async (req, res) => {
           };
 
           // Add verification status
-          if (user.verificationStatus === 'pending') {
+          if (user.status === 'pending') {
                viewData.verificationPending = true;
           }
-          // console.log(viewData)
 
           // Render the profile page
-          console.log(req.user.businessHours)
           res.render('user/dashboard/profile', viewData);
 
      } catch (error) {
           console.error('Profile fetch error:', error);
-
-
+          res.status(500).send('Erreur du serveur');
      }
 });
 
+
+
 // Upload route for profile/cover images
 router.post('/profile/update-image', isAuthenticated, upload.single('image'), async (req, res) => {
+     console.log(req.body, req.file)
      try {
           if (!req.file) {
                return res.status(400).json({

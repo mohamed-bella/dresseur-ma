@@ -110,7 +110,6 @@ router.get('/dashboard/new-service', isAuthenticated, async (req, res) => {
      }
 });
 
-// Service creation endpoint
 router.post('/services/add', isAuthenticated, (req, res) => {
      upload(req, res, async (err) => {
           if (err) {
@@ -193,6 +192,31 @@ router.post('/services/upload-temp', isAuthenticated, (req, res) => {
           }
      });
 });
+ 
+ 
+ // Helper function to clean up temporary files
+ async function cleanupTempFiles(keys) {
+     try {
+         for (const key of keys) {
+             await s3.deleteObject({
+                 Bucket: process.env.AWS_S3_BUCKET_NAME,
+                 Key: key
+             }).promise();
+         }
+     } catch (error) {
+         console.error('Error cleaning up temp files:', error);
+     }
+ }
+ 
+ // Add error handling middleware
+ router.use((error, req, res, next) => {
+     console.error('Unhandled error in upload route:', error);
+     res.status(500).json({
+         success: false,
+         error: 'An unexpected error occurred',
+         message: process.env.NODE_ENV === 'development' ? error.message : undefined
+     });
+ });
 
 /**
  * ============================
