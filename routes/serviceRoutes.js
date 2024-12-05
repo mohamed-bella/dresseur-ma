@@ -12,6 +12,7 @@ const Review = require('../models/review');
 const User = require('../models/user')
 const Reservation = require('../models/reservation');
 const { isAuthenticated } = require('../middlewares/auth')
+const slugify = require('slugify') 
 
 const fs = require('fs');
 
@@ -135,6 +136,10 @@ router.post('/services/add', isAuthenticated, (req, res) => {
                // }
 
                // console.log(serviceImages)
+               // Generate SEO-friendly slug
+            const slugBase = `${serviceName} ${location} ${serviceType}`;
+            const slug = slugify(slugBase, { lower: true, strict: true });
+
 
                // Create new service
                const newService = new Service({
@@ -145,7 +150,8 @@ router.post('/services/add', isAuthenticated, (req, res) => {
                     serviceOptions: serviceType,
                     serviceNumber: serviceNumber,
                     createdBy: req.user ? req.user._id : null,
-                    images: serviceImages
+                    images: serviceImages,
+                    slug : slug
                });
 
                await newService.save();
