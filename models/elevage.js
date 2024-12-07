@@ -58,7 +58,7 @@ const elevageSchema = new mongoose.Schema({
 
     services: [{
         type: String,
-        enum: ['Élevage', 'Pension', 'Dressage', 'Formation', 'Toilettage'],
+        // enum: ['Élevage', 'Pension', 'Dressage', 'Formation', 'Toilettage'],
     }],
     facilities: {
         area: Number, // in square meters
