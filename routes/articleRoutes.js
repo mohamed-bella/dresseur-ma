@@ -9,6 +9,7 @@ require('dotenv').config();
 const sharp = require('sharp');
 const cheerio = require('cheerio');
 const slugify = require('slugify');
+const {adminAuth, ensureAdmin} = require('../middlewares/auth')
 const Comment = require('../models/comment');
 const { body, validationResult } = require('express-validator');
 
@@ -31,15 +32,15 @@ const s3 = new S3Client({
 });
 
 
-const isAdmin = (req, res, next) => {
-     if (!req.session.isAuthenticated) {
-          return res.redirect('/admin/login');
-     }
-     next()
-}
+// const isAdmin = (req, res, next) => {
+//      if (!req.session.isAuthenticated) {
+//           return res.redirect('/admin/login');
+//      }
+//      next()
+// }
 
 // GET: Create new article
-router.get('/admin/articles/new',isAdmin,  (req, res) => {
+router.get('/admin/articles/new',ensureAdmin,  (req, res) => {
      // Categories array with value/label pairs
      const categories = [
           { value: 'dog-training', label: 'Dressage de chiens' },
@@ -115,7 +116,7 @@ router.get('/admin/articles/new',isAdmin,  (req, res) => {
 
 // GET : All Articles For Admin 
 // GET: Fetch all articles
-router.get('/admin/articles', isAdmin,  async (req, res) => {
+router.get('/admin/articles', ensureAdmin,  async (req, res) => {
      try {
          // Fetch all articles from the database, sorted by creation date (most recent first)
          const articles = await Article.find()
@@ -219,7 +220,7 @@ router.post('/admin/articles', upload.single('featuredImage'), async (req, res) 
      }
 });
 // GET: Edit article
-router.get('/admin/articles/:slug/edit', isAdmin, async (req, res) => {
+router.get('/admin/articles/:slug/edit', ensureAdmin, async (req, res) => {
      try {
          // Fetch the article using findOne for a single result
          const article = await Article.findOne({ slug: req.params.slug });
@@ -257,7 +258,7 @@ router.get('/admin/articles/:slug/edit', isAdmin, async (req, res) => {
  });
  
 
-router.post('/admin/articles/:slug/edit',isAdmin, async (req, res) => {
+router.post('/admin/articles/:slug/edit',ensureAdmin, async (req, res) => {
      const { slug } = req.params;
      console.log(req.body)
 
@@ -296,7 +297,7 @@ router.post('/admin/articles/:slug/edit',isAdmin, async (req, res) => {
 });
 
 // DELETE: Delete article
-router.post('/admin/articles/:id/delete',isAdmin, async (req, res) => {
+router.post('/admin/articles/:id/delete',ensureAdmin, async (req, res) => {
      try {
           await Article.findByIdAndDelete(req.params.id);
           req.flash('success', 'Article deleted successfully');

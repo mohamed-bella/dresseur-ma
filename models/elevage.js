@@ -121,7 +121,7 @@ const elevageSchema = new mongoose.Schema({
     status: {
         type: String,
         enum: ['active', 'pending', 'suspended'],
-        default: 'pending'
+        default: 'active'
     }
 }, {
     timestamps: true,
