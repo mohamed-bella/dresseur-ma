@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <%- include('../includes/head') %>
+    <title>dog details</title>
+</head>
+
+<body class="bg-gray-50"> 
+<div class="container mx-auto mt-6 p-4">
+     <h1 class="text-2xl font-bold text-gray-800">Détails du Chien</h1>
+     <p class="text-gray-600 mt-2">Voici les informations détaillées sur ce chien.</p>
+ 
+     <!-- Dog Details -->
+     <div class="bg-white rounded shadow p-6 mt-6">
+         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+             <!-- Dog Images -->
+             <div>
+                 <h2 class="text-lg font-semibold text-gray-800">Photos</h2>
+                 <div class="mt-4 flex gap-4 overflow-x-auto">
+                     <% dog.images.forEach(image => { %>
+                         <img src="<%= image %>" alt="<%= dog.name %>" class="w-48 h-48 object-cover rounded shadow">
+                     <% }) %>
+                 </div>
+             </div>
+ 
+             <!-- Dog Information -->
+             <div>
+                 <h2 class="text-lg font-semibold text-gray-800">Informations</h2>
+                 <p class="mt-4"><span class="font-semibold text-gray-700">Nom :</span> <%= dog.name %></p>
+                 <p><span class="font-semibold text-gray-700">Âge :</span> <%= dog.age %> ans</p>
+                 <p><span class="font-semibold text-gray-700">Race :</span> <%= dog.breed %></p>
+                 <p><span class="font-semibold text-gray-700">Description :</span></p>
+                 <p class="text-gray-700 mt-2"><%= dog.description %></p>
+             </div>
+         </div>
+     </div>
+ 
+     <!-- Actions -->
+     <div class="mt-6 flex justify-between">
+         <a href="/dashboard/breedings/<%= elevage._id %>/dogs/<%= dog._id %>/edit" class="bg-yellow-500 text-white px-4 py-2 rounded shadow hover:bg-yellow-600">
+             Modifier
+         </a>
+         <form action="/dashboard/breedings/<%= elevage._id %>/dogs/<%= dog._id %>/delete" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce chien ?')">
+             <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded shadow hover:bg-red-600">
+                 Supprimer
+             </button>
+         </form>
+     </div>
+ </div>
+ 

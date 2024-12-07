@@ -5,7 +5,7 @@
     <title>NDRESSILIK - Tableau de Bord</title>
 </head>
 
-<body class="bg-gray-50">
+<body class="bg-gray-100">
     <%- include('includes/header') %>
 
     <main class="min-h-screen pt-20 pb-12">
@@ -79,96 +79,195 @@
                     <% } %>
 
                   <!-- Quick Actions -->
-<div class="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
-    <div class="p-6">
-        <div class="flex items-center justify-between mb-8">
-            <h2 class="text-xl font-bold text-gray-900">Actions rapides</h2>
-            <div class="h-1 w-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"></div>
-        </div>
-        
-        <div class="grid sm:grid-cols-2 gap-6">
-            <!-- Add Service Button -->
-            <a href="/dashboard/new-service" 
-               class="group relative p-6 bg-gradient-to-br from-gray-50 to-white rounded-xl
-                      border-2 border-gray-200 hover:border-gray-900
-                      hover:shadow-xl transform hover:-translate-y-1
-                      transition-all duration-300">
-                <!-- Decorative Elements -->
-                <div class="absolute top-0 right-0 p-2">
-                    <div class="w-20 h-20 bg-blue-500/5 rounded-full blur-2xl"></div>
+                  <div class=" px-4 sm:px-6 lg:px-8 py-8">
+                    <!-- Main Container -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100">
+                        <!-- Header Section -->
+                        <div class="p-6 border-b border-gray-100">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-4">
+                                    <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Dashboard</h2>
+                                    <div class="h-1.5 w-12 bg-blue-500 rounded-full"></div>
+                                </div>
+                                <!-- User Status -->
+                                <div class="hidden sm:flex items-center space-x-2">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-50 text-blue-700">
+                                        <span class="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
+                                        <%= user.role === 'breeder' ? 'Éleveur Certifié' : 'Membre' %>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                
+                        <!-- Breeder Section -->
+                        <div class="p-6 space-y-6">
+                            <% if (user.role === 'breeder') { %>
+                                <a href="/dashboard/breedings" 
+                                   class="block hover:bg-gray-50 rounded-xl p-6 transition-all duration-200 border border-transparent hover:border-gray-200">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center space-x-4">
+                                            <div class="flex-shrink-0">
+                                                <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center">
+                                                    <i class="fas fa-paw text-blue-500 text-3xl"></i>
+                                                </div>
+                                            </div>
+                                            <div class="space-y-1">
+                                                <h3 class="text-xl font-medium text-gray-900">Gestion d'Élevage</h3>
+                                                <p class="text-base text-gray-500">Gérer vos animaux et services</p>
+                                                <div class="flex items-center space-x-4 mt-2">
+                                                    <span class="inline-flex items-center text-sm text-gray-500">
+                                                        <i class="fas fa-dog mr-1"></i>
+                                                        <!-- < %= totalPets || 0 %> animaux -->
+                                                    </span>
+                                                    <span class="inline-flex items-center text-sm text-gray-500">
+                                                        <i class="fas fa-calendar-check mr-1"></i>
+                                                        <!-- < %= totalServices || 0 %> services -->
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </div>
+                                </a>
+                            <% } %>
+                
+                          
+                
+                            <!-- Quick Actions Grid -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                <!-- New Service Card -->
+                                <a href="/dashboard/new-service" 
+                                   class="group block p-6 bg-white rounded-xl border border-gray-100 hover:border-blue-500 transition-all duration-200">
+                                    <div class="flex items-center space-x-4">
+                                        <div class="w-16 h-16 bg-gray-900 rounded-full flex items-center justify-center group-hover:bg-blue-500 transition-colors duration-200">
+                                            <i class="fas fa-plus text-white text-2xl"></i>
+                                        </div>
+                                        <div class="space-y-2">
+                                            <h3 class="text-xl font-medium text-gray-900">Nouveau service</h3>
+                                            <p class="text-base text-gray-500">Créer et publier vos services</p>
+                                            <div class="flex items-center text-sm text-blue-500 group-hover:text-blue-600">
+                                                <span>Commencer</span>
+                                                <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                
+                                <!-- Profile Card -->
+                                <a href="/dashboard/profile" 
+                                   class="group block p-6 bg-white rounded-xl border border-gray-100 hover:border-blue-500 transition-all duration-200">
+                                    <div class="flex items-center space-x-4">
+                                        <div class="w-16 h-16 bg-gray-900 rounded-full flex items-center justify-center group-hover:bg-blue-500 transition-colors duration-200">
+                                            <i class="fas fa-user-edit text-white text-2xl"></i>
+                                        </div>
+                                        <div class="space-y-2">
+                                            <h3 class="text-xl font-medium text-gray-900">Profil</h3>
+                                            <% if (missingElements && missingElements.length > 0) { %>
+                                                <div class="flex items-center space-x-2">
+                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-50 text-yellow-800">
+                                                        <%= missingElements.length %> à compléter
+                                                    </span>
+                                                </div>
+                                                <p class="text-base text-gray-500">Complétez votre profil pour plus de visibilité</p>
+                                            <% } else { %>
+                                                <p class="text-base text-gray-500">Gérez vos informations personnelles</p>
+                                            <% } %>
+                                            <div class="flex items-center text-sm text-blue-500 group-hover:text-blue-600">
+                                                <span>Modifier</span>
+                                                <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                
+                            </div>
+                            <% if (user.role !== 'breeder') { %>
+                                <div class="border border-gray-100 rounded-xl p-8 bg-white">
+                                    <div class="flex items-center space-x-4 mb-6">
+                                        <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center">
+                                            <i class="fas fa-star text-blue-500 text-3xl"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-2xl font-semibold text-gray-900">Devenez Éleveur</h3>
+                                            <p class="text-gray-500 mt-1">Rejoignez notre communauté d'éleveurs certifiés</p>
+                                        </div>
+                                    </div>
+                
+                                    <div class="grid sm:grid-cols-2 gap-6 mb-8">
+                                        <div class="space-y-4">
+                                            <h4 class="text-lg font-medium text-gray-900">Avantages</h4>
+                                            <ul class="space-y-4">
+                                                <li class="flex items-center text-lg text-gray-600">
+                                                    <div class="w-1.5 h-1.5 bg-blue-500 rounded-full mr-3"></div>
+                                                    <span>Gérer votre élevage professionnellement</span>
+                                                </li>
+                                                <li class="flex items-center text-lg text-gray-600">
+                                                    <div class="w-1.5 h-1.5 bg-blue-500 rounded-full mr-3"></div>
+                                                    <span>Ajouter et suivre vos chiens</span>
+                                                </li>
+                                                <li class="flex items-center text-lg text-gray-600">
+                                                    <div class="w-1.5 h-1.5 bg-blue-500 rounded-full mr-3"></div>
+                                                    <span>Partager votre expertise</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="space-y-4">
+                                            <h4 class="text-lg font-medium text-gray-900">Fonctionnalités</h4>
+                                            <ul class="space-y-4">
+                                                <li class="flex items-center text-lg text-gray-600">
+                                                    <div class="w-1.5 h-1.5 bg-green-500 rounded-full mr-3"></div>
+                                                    <span>Gestion des pedigrees</span>
+                                                </li>
+                                                <li class="flex items-center text-lg text-gray-600">
+                                                    <div class="w-1.5 h-1.5 bg-green-500 rounded-full mr-3"></div>
+                                                    <span>Suivi des vaccinations</span>
+                                                </li>
+                                                <li class="flex items-center text-lg text-gray-600">
+                                                    <div class="w-1.5 h-1.5 bg-green-500 rounded-full mr-3"></div>
+                                                    <span>Calendrier des événements</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                
+                                    <button id="become-breeder-btn" 
+                                            class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium px-8 py-4 rounded-full transition-colors duration-200 flex items-center justify-center text-lg">
+                                        <span>Devenir Éleveur</span>
+                                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="relative space-y-4">
-                    <!-- Icon -->
-                    <div class="inline-flex p-3 rounded-xl bg-gray-900 text-white
-                                shadow-lg group-hover:scale-110 transition-transform duration-300">
-                        <i class="fas fa-plus text-xl"></i>
-                    </div>
-
-                    <!-- Content -->
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Nouveau service</h3>
-                        <p class="text-sm text-gray-600 mb-4">Créez et publiez un nouveau service</p>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+                <script>
+                $(document).ready(function() {
+                    $('#become-breeder-btn').click(function() {
+                        const button = $(this);
+                        button.prop('disabled', true)
+                              .html('<i class="fas fa-spinner fa-spin mr-2"></i> Traitement en cours...');
                         
-                        <!-- Action Indicator -->
-                        <div class="flex items-center text-sm font-medium text-gray-900">
-                            <span>Commencer</span>
-                            <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i>
-                        </div>
-                    </div>
-
-                    <!-- Badge -->
-                    <div class="absolute top-4 right-4">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-800">
-                            Recommandé
-                        </span>
-                    </div>
-                </div>
-            </a>
-
-            <!-- Edit Profile Button -->
-            <a href="/dashboard/profile" 
-               class="group relative p-6 bg-gradient-to-br from-gray-50 to-white rounded-xl
-                      border-2 border-gray-200 hover:border-gray-900
-                      hover:shadow-xl transform hover:-translate-y-1
-                      transition-all duration-300">
-                <!-- Decorative Elements -->
-                <div class="absolute top-0 right-0 p-2">
-                    <div class="w-20 h-20 bg-purple-500/5 rounded-full blur-2xl"></div>
-                </div>
-
-                <div class="relative space-y-4">
-                    <!-- Icon -->
-                    <div class="inline-flex p-3 rounded-xl bg-gray-900 text-white
-                                shadow-lg group-hover:scale-110 transition-transform duration-300">
-                        <i class="fas fa-user-edit text-xl"></i>
-                    </div>
-
-                    <!-- Content -->
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Profil</h3>
-                        <p class="text-sm text-gray-600 mb-4">Complétez et optimisez votre profil</p>
-                        
-                        <!-- Action Indicator -->
-                        <div class="flex items-center text-sm font-medium text-gray-900">
-                            <span>Modifier</span>
-                            <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i>
-                        </div>
-                    </div>
-
-                    <!-- Completion Badge (optional) -->
-                    <% if (missingElements && missingElements.length > 0) { %>
-                        <div class="absolute top-4 right-4">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-50 text-yellow-800">
-                                <%= missingElements.length %> à compléter
-                            </span>
-                        </div>
-                    <% } %>
-                </div>
-            </a>
-        </div>
-    </div>
-</div>
+                        $.ajax({
+                            url: '/dashboard/change-role/breeder',
+                            method: 'POST',
+                            success: function(response) {
+                                window.location.reload();
+                            },
+                            error: function(error) {
+                                button.prop('disabled', false)
+                                      .html('Devenir Éleveur <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>');
+                                alert('Une erreur est survenue. Veuillez réessayer plus tard.');
+                            }
+                        });
+                    });
+                });
+                </script>
 
                     <!-- Services List -->
                     <%- include('includes/services') %>

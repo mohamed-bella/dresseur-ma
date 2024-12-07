@@ -1,0 +1,828 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <%- include('../includes/head') %>
+    <title>Détails de l'Élevage - <%= elevage.name %></title>
+    <style>
+        .step-indicator.active .step-circle {
+            @apply bg-blue-600 text-white border-blue-600;
+        }
+        .step-indicator.completed .step-circle {
+            @apply bg-green-600 text-white border-green-600;
+        }
+        [x-cloak] { display: none !important; }
+    </style>
+</head>
+
+<body class="bg-gray-200" x-data="dogManagement">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Page Header -->
+<div class="container mx-auto px-4 py-8">
+    <!-- Back & Actions Row -->
+    <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+        <a href="/dashboard/breedings" 
+           class="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-xl
+                  hover:bg-gray-200 transition-all duration-200 group">
+            <i class="fas fa-arrow-left text-gray-400 group-hover:text-gray-600"></i>
+            <span class="text-sm font-medium">Retour aux élevages</span>
+        </a>
+
+        <div class="flex items-center gap-3">
+            <button onclick="window.location.href= '/dashboard/breedings/<%= elevage._id%>/edit'" 
+                    class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200
+                           transition-all duration-200 flex items-center gap-2">
+                <i class="fas fa-pen"></i>
+                <span class="hidden sm:inline">Modifier l'elevage</span>
+            </button>
+
+            <button @click="openAddDogModal" 
+                    class="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700
+                           transition-all duration-200 flex items-center gap-2
+                           hover:shadow-lg hover:shadow-blue-600/25">
+                <i class="fas fa-plus"></i>
+                <span>Ajouter un chien</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Breeding Info Header -->
+    <div class="bg-white rounded-2xl shadow-sm overflow-hidden mb-8">
+        <div class="flex flex-col md:flex-row">
+            <!-- Logo Section -->
+            <div class="w-full md:w-64 p-6 bg-gray-50">
+                <div class="aspect-square rounded-xl overflow-hidden">
+                    <img src="<%= elevage.logo %>" 
+                         alt="<%= elevage.name %>" 
+                         class="w-full h-full object-cover">
+                </div>
+            </div>
+
+            <!-- Info Section -->
+            <div class="flex-1 p-6">
+                <div class="flex flex-wrap items-start justify-between gap-4 mb-6">
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-900"><%= elevage.name %></h1>
+                        <p class="text-gray-500 mt-1 flex items-center gap-2">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <%= elevage.location.city %>, <%= elevage.location.address %>
+                        </p>
+                    </div>
+                    <span class="px-3 py-1 rounded-full text-sm font-medium
+                               <%= elevage.status === 'active' ? 'bg-green-100 text-green-800' :
+                                  elevage.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                                  'bg-red-100 text-red-800' %>">
+                        <%= elevage.status === 'active' ? 'Actif' :
+                            elevage.status === 'pending' ? 'En attente' : 'Suspendu' %>
+                    </span>
+                </div>
+
+                <p class="text-gray-600 mb-6"><%= elevage.description %></p>
+
+                <!-- Quick Stats -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div class="p-4 bg-blue-50 rounded-xl">
+                        <div class="text-2xl font-bold text-gray-900">
+                            <%= elevage.dogs?.length || 0 %>
+                        </div>
+                        <div class="text-sm text-gray-500">Chiens</div>
+                    </div>
+                    <div class="p-4 bg-green-50 rounded-xl">
+                        <div class="text-2xl font-bold text-gray-900">
+                            <%= elevage.dogs?.filter(d => d.status === 'Disponible').length || 0 %>
+                        </div>
+                        <div class="text-sm text-gray-500">Disponibles</div>
+                    </div>
+                    <div class="p-4 bg-purple-50 rounded-xl">
+                        <div class="text-2xl font-bold text-gray-900">
+                            <%= elevage.services?.length || 0 %>
+                        </div>
+                        <div class="text-sm text-gray-500">Services</div>
+                    </div>
+                    <div class="p-4 bg-yellow-50 rounded-xl">
+                        <div class="text-2xl font-bold text-gray-900">
+                            <%= elevage.stats?.totalViews || 0 %>
+                        </div>
+                        <div class="text-sm text-gray-500">Vues</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Additional Info Blocks -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <!-- Contact Info -->
+        <div class="bg-white rounded-2xl shadow-sm p-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Informations de Contact</h2>
+            
+            <div class="space-y-4">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
+                        <i class="fas fa-phone text-blue-500"></i>
+                    </div>
+                    <div>
+                        <div class="text-sm text-gray-500">Téléphone</div>
+                        <a href="tel:<%= elevage.contactInfo.phone %>" class="text-gray-900">
+                            <%= elevage.contactInfo.phone %>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
+                        <i class="fas fa-envelope text-blue-500"></i>
+                    </div>
+                    <div>
+                        <div class="text-sm text-gray-500">Email</div>
+                        <a href="mailto:<%= elevage.contactInfo.email %>" class="text-gray-900">
+                            <%= elevage.contactInfo.email %>
+                        </a>
+                    </div>
+                </div>
+
+                <% if (elevage.contactInfo.whatsapp) { %>
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center">
+                            <i class="fab fa-whatsapp text-green-500"></i>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-500">WhatsApp</div>
+                            <a href="https://wa.me/<%= elevage.contactInfo.whatsapp %>" class="text-gray-900">
+                                <%= elevage.contactInfo.whatsapp %>
+                            </a>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+
+        <!-- Services & Facilities -->
+        <div class="bg-white rounded-2xl shadow-sm p-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Services & Installations</h2>
+            
+            <% if (elevage.services?.length > 0) { %>
+                <div class="flex flex-wrap gap-2 mb-6">
+                    <% elevage.services.forEach(service => { %>
+                        <span class="px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-700">
+                            <%= service %>
+                        </span>
+                    <% }) %>
+                </div>
+            <% } %>
+
+            <% if (elevage.facilities) { %>
+                <div class="grid grid-cols-2 gap-4">
+                    <% if (elevage.facilities.area) { %>
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center">
+                                <i class="fas fa-ruler text-gray-500"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm text-gray-500">Surface</div>
+                                <div class="text-gray-900"><%= elevage.facilities.area %>m²</div>
+                            </div>
+                        </div>
+                    <% } %>
+
+                    <% if (elevage.facilities.hasTrainingArea) { %>
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center">
+                                <i class="fas fa-running text-green-500"></i>
+                            </div>
+                            <span class="text-sm text-gray-600">Zone d'entraînement</span>
+                        </div>
+                    <% } %>
+
+                    <% if (elevage.facilities.hasGroomingService) { %>
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center">
+                                <i class="fas fa-cut text-purple-500"></i>
+                            </div>
+                            <span class="text-sm text-gray-600">Service toilettage</span>
+                        </div>
+                    <% } %>
+
+                    <% if (elevage.facilities.hasVetService) { %>
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-red-100 flex items-center justify-center">
+                                <i class="fas fa-clinic-medical text-red-500"></i>
+                            </div>
+                            <span class="text-sm text-gray-600">Service vétérinaire</span>
+                        </div>
+                    <% } %>
+                </div>
+            <% } %>
+        </div>
+    </div>
+
+    <!-- Dogs Section Header -->
+    <div class="flex items-center justify-between mb-6">
+        <div>
+            <h2 class="text-2xl font-semibold text-gray-900">Chiens</h2>
+            <p class="text-gray-500 mt-1">Gérez vos chiens et leurs informations</p>
+        </div>
+        
+        <!-- Filter/Sort Options -->
+        <div class="flex items-center gap-3">
+            <select class="px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm
+                          focus:border-blue-500 focus:ring-blue-500">
+                <option value="all">Tous les chiens</option>
+                <option value="available">Disponibles</option>
+                <option value="reserved">Réservés</option>
+                <option value="sold">Vendus</option>
+            </select>
+        </div>
+    </div>
+
+
+        <!-- Dogs List -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <% elevage.dogs.forEach(dog => { %>
+                <div class="bg-white rounded-2xl shadow-sm overflow-hidden group">
+                    <!-- Image Section -->
+                    <div class="relative aspect-[4/3] overflow-hidden bg-gray-100">
+                        <% if (dog.images && dog.images.length > 0) { %>
+                            <img src="<%= dog.images[0].url %>" 
+                                 alt="<%= dog.name %>" 
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                            <% if (dog.status) { %>
+                                <div class="absolute top-4 right-4">
+                                    <span class="px-3 py-1 rounded-full text-sm font-medium
+                                               <%= dog.status === 'Disponible' ? 'bg-green-100 text-green-800' :
+                                                  dog.status === 'Réservé' ? 'bg-orange-100 text-orange-800' :
+                                                  'bg-red-100 text-red-800' %>">
+                                        <%= dog.status %>
+                                    </span>
+                                </div>
+                            <% } %>
+                        <% } else { %>
+                            <div class="w-full h-full flex items-center justify-center">
+                                <i class="fas fa-dog text-gray-400 text-4xl"></i>
+                            </div>
+                        <% } %>
+                    </div>
+
+                    <!-- Content Section -->
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2"><%= dog.name %></h3>
+                        
+                        <div class="grid grid-cols-2 gap-4 text-sm mb-4">
+                            <div class="flex items-center gap-2 text-gray-600">
+                                <i class="fas fa-birthday-cake text-gray-400"></i>
+                                <%= dog.age.years %> ans <%= dog.age.months %> mois
+                            </div>
+                            <div class="flex items-center gap-2 text-gray-600">
+                                <i class="fas fa-paw text-gray-400"></i>
+                                <%= dog.breed %>
+                            </div>
+                            <% if (dog.gender) { %>
+                                <div class="flex items-center gap-2 text-gray-600">
+                                    <i class="fas fa-venus-mars text-gray-400"></i>
+                                    <%= dog.gender %>
+                                </div>
+                            <% } %>
+                            <% if (dog.price) { %>
+                                <div class="flex items-center gap-2 text-gray-600">
+                                    <i class="fas fa-tag text-gray-400"></i>
+                                    <%= dog.price.toLocaleString() %> DH
+                                </div>
+                            <% } %>
+                        </div>
+
+                        <% if (dog.description) { %>
+                            <p class="text-gray-600 text-sm line-clamp-2 mb-4">
+                                <%= dog.description %>
+                            </p>
+                        <% } %>
+
+                        <!-- Actions -->
+                        <div class="flex justify-between mt-4 pt-4 border-t border-gray-100">
+                            <button onclick="window.location.href = '/dashboard/breedings/<%= elevage._id %>/dogs/<%= dog._id %>/edit'"
+                                    class="text-blue-600 hover:text-blue-700 text-sm font-medium">
+                                Modifier
+                            </button>
+                            <button @click="confirmDeleteDog('<%= dog._id %>')" 
+                                    class="text-red-600 hover:text-red-700 text-sm font-medium">
+                                Supprimer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+
+        <!-- Add Dog Modal -->
+        <div x-show="isModalOpen" 
+             x-cloak 
+             @keydown.escape.window="closeModal"
+             class="fixed inset-0 z-50 overflow-y-auto"
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100"
+             x-transition:leave-end="opacity-0">
+            
+            <div class="flex min-h-screen items-center justify-center p-4">
+                <div class="fixed inset-0 bg-black/50 backdrop-blur-sm" @click="closeModal"></div>
+                
+                <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-3xl mx-auto"
+                     x-transition:enter="transition ease-out duration-300"
+                     x-transition:enter-start="opacity-0 scale-95"
+                     x-transition:enter-end="opacity-100 scale-100"
+                     x-transition:leave="transition ease-in duration-200"
+                     x-transition:leave-start="opacity-100 scale-100"
+                     x-transition:leave-end="opacity-0 scale-95">
+
+                    <!-- Modal Header -->
+                    <div class="p-6 border-b border-gray-100">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-2xl font-bold text-gray-900">Ajouter un chien</h2>
+                            <button @click="closeModal" class="text-gray-400 hover:text-gray-500">
+                                <i class="fas fa-times text-xl"></i>
+                            </button>
+                        </div>
+
+                        <!-- Progress Steps -->
+                        <div class="flex justify-between relative">
+                            <div class="absolute top-1/2 h-0.5 bg-gray-200 left-0 right-0 -translate-y-1/2"></div>
+                            
+                            <template x-for="(step, index) in steps" :key="index">
+                                <div class="relative z-10 flex flex-col items-center">
+                                    <div :class="{
+                                            'bg-blue-600 text-white': currentStep === index + 1,
+                                            'bg-green-600 text-white': currentStep > index + 1,
+                                            'bg-white text-gray-400': currentStep < index + 1
+                                         }"
+                                         class="w-10 h-10 rounded-full border-2 border-gray-200 flex items-center justify-center
+                                                transition-all duration-200">
+                                        <template x-if="currentStep <= index + 1">
+                                            <span x-text="index + 1"></span>
+                                        </template>
+                                        <template x-if="currentStep > index + 1">
+                                            <i class="fas fa-check"></i>
+                                        </template>
+                                    </div>
+                                    <div class="absolute top-12 text-sm font-medium whitespace-nowrap"
+                                         :class="{
+                                            'text-blue-600': currentStep === index + 1,
+                                            'text-green-600': currentStep > index + 1,
+                                            'text-gray-400': currentStep < index + 1
+                                         }"
+                                         x-text="step">
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Form Steps -->
+                    <form id="addDogForm" @submit.prevent="submitForm" class="p-6">
+                        <!-- Step 1: Basic Information -->
+                        <div x-show="currentStep === 1" class="space-y-6">
+                            <!-- Name Field -->
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Nom du chien <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text" 
+                                       id="name" 
+                                       name="name"
+                                       x-model="formData.name"
+                                       @input="validateField('name')"
+                                       class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+                                       :class="{'border-red-500': errors.name}">
+                                <p x-show="errors.name" 
+                                   x-text="errors.name" 
+                                   class="mt-1 text-sm text-red-500"></p>
+                            </div>
+
+                            <!-- Breed Field -->
+                            <div>
+                                <label for="breed" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Race <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text" 
+                                       id="breed" 
+                                       name="breed"
+                                       x-model="formData.breed"
+                                       @input="validateField('breed')"
+                                       class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+                                       :class="{'border-red-500': errors.breed}">
+                                <p x-show="errors.breed" 
+                                   x-text="errors.breed" 
+                                   class="mt-1 text-sm text-red-500"></p>
+                            </div>
+
+                            <!-- Age Fields -->
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label for="ageYears" class="block text-sm font-medium text-gray-700 mb-2">
+                                        Années
+                                    </label>
+                                    <input type="number" 
+                                           id="ageYears" 
+                                           name="ageYears"
+                                           x-model="formData.ageYears"
+                                           min="0"
+                                           class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-blue-500 focus:ring-blue-500">
+                                </div>
+                                <div>
+                                    <label for="ageMonths" class="block text-sm font-medium text-gray-700 mb-2">
+                                        Mois
+                                    </label>
+                                    <input type="number" 
+                                           id="ageMonths" 
+                                           name="ageMonths"
+                                           x-model="formData.ageMonths"
+                                           min="0"
+                                           max="11"
+                                           class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-blue-500 focus:ring-blue-500">
+                                </div>
+                            </div>
+
+                            <!-- Gender Selection -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    Genre
+                                </label>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <label class="relative flex cursor-pointer">
+                                        <input type="radio" 
+                                               name="gender" 
+                                               value="Mâle"
+                                               x-model="formData.gender"
+                                               class="sr-only peer">
+                                        <div class="w-full p-4 bg-white border-2 border-gray-200 rounded-xl
+                                                    peer-checked:border-blue-500 peer-checked:bg-blue-50
+                                                    hover:bg-gray-50 transition-all duration-200">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <i class="fas fa-mars text-blue-500"></i>
+                                                <span>Mâle</span>
+                                            </div>
+                                        </div>
+                                    </label>
+                                    <label class="relative flex cursor-pointer">
+                                        <input type="radio" 
+                                               name="gender" 
+                                               value="Femelle"
+                                               x-model="formData.gender"
+                                               class="sr-only peer">
+                                        <div class="w-full p-4 bg-white border-2 border-gray-200 rounded-xl
+                                                    peer-checked:border-pink-500 peer-checked:bg-pink-50
+                                                    hover:bg-gray-50 transition-all duration-200">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <i class="fas fa-venus text-pink-500"></i>
+                                                <span>Femelle</span>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Details -->
+                        <div x-show="currentStep === 2" class="space-y-6">
+                            <!-- Price Field -->
+                            <div>
+                                <label for="price" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Prix (DH)
+                                </label>
+                                <input type="number" 
+                                       id="price" 
+                                       name="price"
+                                       x-model="formData.price"
+                                       min="0"
+                                       class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-blue-500 focus:ring-blue-500">
+                            </div>
+                            <!-- Description Field -->
+                            <div>
+                                <label for="description" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Description <span class="text-red-500">*</span>
+                                </label>
+                                <textarea id="description" 
+                                          name="description"
+                                          x-model="formData.description"
+                                          @input="validateField('description')"
+                                          rows="4"
+                                          class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+                                          :class="{'border-red-500': errors.description}"></textarea>
+                                <p x-show="errors.description" 
+                                   x-text="errors.description" 
+                                   class="mt-1 text-sm text-red-500"></p>
+                            </div>
+
+                            <!-- Status Selection -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    Statut
+                                </label>
+                                <select x-model="formData.status"
+                                        class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-blue-500 focus:ring-blue-500">
+                                    <option value="Disponible">Disponible</option>
+                                    <option value="Réservé">Réservé</option>
+                                    <option value="Vendu">Vendu</option>
+                                </select>
+                            </div>
+
+                            <!-- Pedigree Information -->
+                            <div class="space-y-4">
+                                <div class="flex items-center">
+                                    <input type="checkbox" 
+                                           id="hasPedigree"
+                                           x-model="formData.pedigree.has"
+                                           class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                    <label for="hasPedigree" class="ml-2 text-sm font-medium text-gray-700">
+                                        A un pédigrée
+                                    </label>
+                                </div>
+
+                                <div x-show="formData.pedigree.has">
+                                    <label for="pedigreeNumber" class="block text-sm font-medium text-gray-700 mb-2">
+                                        Numéro de pédigrée
+                                    </label>
+                                    <input type="text" 
+                                           id="pedigreeNumber"
+                                           x-model="formData.pedigree.number"
+                                           class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-blue-500 focus:ring-blue-500">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Images -->
+                        <div x-show="currentStep === 3" class="space-y-6">
+                            <!-- Image Upload -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-4">
+                                    Photos du chien
+                                </label>
+                                <div class="flex items-center justify-center w-full">
+                                    <label class="relative flex flex-col items-center justify-center w-full h-64 
+                                                 border-2 border-dashed border-gray-300 rounded-xl
+                                                 hover:border-blue-500 hover:bg-blue-50 transition-all duration-200
+                                                 cursor-pointer">
+                                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                            <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-4"></i>
+                                            <p class="mb-2 text-sm text-gray-500">
+                                                <span class="font-semibold">Cliquez pour ajouter</span> ou glissez et déposez
+                                            </p>
+                                            <p class="text-xs text-gray-500">PNG, JPG jusqu'à 5MB (max 5 images)</p>
+                                        </div>
+                                        <input type="file"
+                                               class="hidden"
+                                               accept="image/*"
+                                               multiple
+                                               @change="handleImageUpload">
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Image Previews -->
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4" x-show="imagePreviewUrls.length > 0">
+                                <template x-for="(url, index) in imagePreviewUrls" :key="index">
+                                    <div class="relative aspect-square rounded-xl overflow-hidden">
+                                        <img :src="url" class="w-full h-full object-cover">
+                                        <button @click="removeImage(index)" 
+                                                type="button"
+                                                class="absolute top-2 right-2 w-8 h-8 rounded-full bg-red-500 text-white
+                                                       flex items-center justify-center hover:bg-red-600 transition-colors">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+
+                        <!-- Navigation Buttons -->
+                        <div class="flex justify-between mt-8">
+                            <button type="button"
+                                    x-show="currentStep > 1"
+                                    @click="previousStep"
+                                    class="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl
+                                           hover:bg-gray-200 transition-colors">
+                                <i class="fas fa-arrow-left mr-2"></i>
+                                Précédent
+                            </button>
+
+                            <button type="button"
+                                    x-show="currentStep < 3"
+                                    @click="nextStep"
+                                    class="ml-auto px-6 py-3 bg-blue-600 text-white rounded-xl
+                                           hover:bg-blue-700 transition-colors">
+                                Suivant
+                                <i class="fas fa-arrow-right ml-2"></i>
+                            </button>
+
+                            <button type="submit"
+                                    x-show="currentStep === 3"
+                                    :disabled="isSubmitting"
+                                    class="ml-auto px-6 py-3 bg-blue-600 text-white rounded-xl
+                                           hover:bg-blue-700 transition-colors disabled:opacity-50 
+                                           disabled:cursor-not-allowed">
+                                <span x-show="!isSubmitting">
+                                    <i class="fas fa-check mr-2"></i>
+                                    Ajouter le chien
+                                </span>
+                                <span x-show="isSubmitting">
+                                    <i class="fas fa-spinner fa-spin mr-2"></i>
+                                    Envoi en cours...
+                                </span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alpine.js Script -->
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('dogManagement', () => ({
+                isModalOpen: false,
+                currentStep: 1,
+                isSubmitting: false,
+                imagePreviewUrls: [],
+                selectedFiles: [],
+                steps: ['Informations', 'Détails', 'Photos'],
+                formData: {
+                    name: '',
+                    breed: '',
+                    ageYears: 0,
+                    ageMonths: 0,
+                    gender: '',
+                    price: '',
+                    description: '',
+                    status: 'Disponible',
+                    pedigree: {
+                        has: false,
+                        number: ''
+                    }
+                },
+                errors: {},
+
+                openAddDogModal() {
+                    this.isModalOpen = true;
+                    document.body.style.overflow = 'hidden';
+                },
+
+                closeModal() {
+                    this.isModalOpen = false;
+                    document.body.style.overflow = '';
+                    this.resetForm();
+                },
+
+                validateField(field) {
+                    this.errors[field] = '';
+                    
+                    switch (field) {
+                        case 'name':
+                            if (!this.formData.name) {
+                                this.errors.name = 'Le nom est requis';
+                            } else if (this.formData.name.length < 2) {
+                                this.errors.name = 'Le nom doit contenir au moins 2 caractères';
+                            }
+                            break;
+                        case 'breed':
+                            if (!this.formData.breed) {
+                                this.errors.breed = 'La race est requise';
+                            }
+                            break;
+                        case 'description':
+                            if (!this.formData.description) {
+                                this.errors.description = 'La description est requise';
+                            }
+                            break;
+                    }
+
+                    return !this.errors[field];
+                },
+
+                validateStep() {
+                    let isValid = true;
+                    
+                    if (this.currentStep === 1) {
+                        isValid = this.validateField('name') && 
+                                this.validateField('breed');
+                    } else if (this.currentStep === 2) {
+                        isValid = this.validateField('description');
+                    }
+
+                    return isValid;
+                },
+
+                nextStep() {
+                    if (this.validateStep()) {
+                        this.currentStep++;
+                    }
+                },
+
+                previousStep() {
+                    this.currentStep--;
+                },
+
+                handleImageUpload(event) {
+                    const files = Array.from(event.target.files);
+                    const maxFiles = 5 - this.selectedFiles.length;
+                    const validFiles = files.slice(0, maxFiles);
+
+                    validFiles.forEach(file => {
+                        if (file.size <= 5 * 1024 * 1024) { // 5MB limit
+                            const reader = new FileReader();
+                            reader.onload = (e) => {
+                                this.imagePreviewUrls.push(e.target.result);
+                            };
+                            reader.readAsDataURL(file);
+                            this.selectedFiles.push(file);
+                        }
+                    });
+                },
+
+                removeImage(index) {
+                    this.imagePreviewUrls.splice(index, 1);
+                    this.selectedFiles.splice(index, 1);
+                },
+
+                async submitForm() {
+                    if (!this.validateStep()) return;
+
+                    this.isSubmitting = true;
+                    const formData = new FormData();
+
+                    // Append all form fields
+                    Object.entries(this.formData).forEach(([key, value]) => {
+                        if (key === 'pedigree') {
+                            formData.append('pedigreeHas', value.has);
+                            formData.append('pedigreeNumber', value.number);
+                        } else {
+                            formData.append(key, value);
+                        }
+                    });
+
+                    // Append images
+                    this.selectedFiles.forEach(file => {
+                        formData.append('images', file);
+                    });
+
+                    try {
+                        const response = await fetch(`/dashboard/breedings/<%= elevage._id %>/dogs/add`, {
+                            method: 'POST',
+                            body: formData
+                        });
+
+                        const data = await response.json();
+
+                        if (response.ok) {
+                            showToast('Chien ajouté avec succès', 'success');
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 1500);
+                        } else {
+                            throw new Error(data.message || 'Erreur lors de l\'ajout du chien');
+                        }
+                    } catch (error) {
+                        showToast(error.message, 'error');
+                    } finally {
+                        this.isSubmitting = false;
+                    }
+                },
+
+                resetForm() {
+                    this.currentStep = 1;
+                    this.formData = {
+                        name: '',
+                        breed: '',
+                        ageYears: 0,
+                        ageMonths: 0,
+                        gender: '',
+                        price: '',
+                        description: '',
+                        status: 'Disponible',
+                        pedigree: {
+                            has: false,
+                            number: ''
+                        }
+                    };
+                    this.errors = {};
+                    this.imagePreviewUrls = [];
+                    this.selectedFiles = [];
+                }
+            }));
+        });
+
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `fixed z-50 bottom-4 right-4 px-6 py-3 rounded-xl shadow-lg 
+                             ${type === 'success' ? 'bg-green-500' : 'bg-red-500'} text-white
+                             transform transition-all duration-300`;
+            toast.innerHTML = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

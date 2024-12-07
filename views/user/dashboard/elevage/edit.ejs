@@ -1,0 +1,612 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <%- include('../includes/head') %>
+    <title>Modifier <%= elevage.name %> | NDRESSILIK</title>
+    <style>
+        .form-group.error input,
+        .form-group.error textarea,
+        .form-group.error select {
+            border-color: rgb(239, 68, 68);
+        }
+
+        .image-preview {
+            transition: all 0.3s ease;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .spinner {
+            animation: spin 1s linear infinite;
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-gray-50 to-gray-100">
+    <div class="min-h-screen py-12">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <!-- Back Button -->
+            <a href="/dashboard/breedings" 
+               class="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-xl text-gray-600
+                      hover:bg-gray-50 transition-colors duration-200 mb-8">
+                <i class="fas fa-arrow-left"></i>
+                <span>Retour aux élevages</span>
+            </a>
+
+            <!-- Header -->
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold text-gray-900">Modifier l'Élevage</h1>
+                <p class="text-gray-600 mt-2">
+                    Mettez à jour les informations de votre élevage
+                </p>
+            </div>
+
+            <!-- Main Form -->
+            <form id="breedingEditForm" class="space-y-8">
+                <!-- Basic Information Card -->
+                <div class="bg-white rounded-2xl shadow-sm p-6 space-y-6">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-6">
+                        Informations Générales
+                    </h2>
+
+                    <!-- Logo Upload -->
+                    <div class="form-group">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Logo de l'Élevage
+                        </label>
+                        <div class="flex items-center gap-6">
+                            <div class="relative w-32 h-32 rounded-2xl overflow-hidden bg-gray-100">
+                                <img src="<%= elevage.logo %>" 
+                                     alt="Logo actuel"
+                                     id="logoPreview"
+                                     class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100
+                                            flex items-center justify-center transition-opacity">
+                                    <button type="button"
+                                            onclick="document.getElementById('logoInput').click()"
+                                            class="text-white text-sm">
+                                        Modifier
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <input type="file"
+                                       id="logoInput"
+                                       name="logo"
+                                       accept="image/*"
+                                       class="hidden"
+                                       onchange="handleLogoUpload(event)">
+                                <button type="button"
+                                        onclick="document.getElementById('logoInput').click()"
+                                        class="px-4 py-2 border-2 border-gray-200 rounded-xl text-sm
+                                               hover:bg-gray-50 transition-colors">
+                                    Choisir une image
+                                </button>
+                                <p class="text-xs text-gray-500 mt-2">
+                                    PNG, JPG jusqu'à 5MB
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Name -->
+                    <div class="form-group">
+                        <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
+                            Nom de l'Élevage <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text"
+                               id="name"
+                               name="name"
+                               value="<%= elevage.name %>"
+                               required
+                               class="w-full px-4 py-3 rounded-xl border-2 border-gray-200
+                                      focus:ring-2 focus:ring-blue-100 focus:border-blue-500
+                                      transition-colors">
+                        <div class="error-message mt-1 text-sm text-red-500"></div>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="form-group">
+                        <label for="description" class="block text-sm font-medium text-gray-700 mb-2">
+                            Description <span class="text-red-500">*</span>
+                        </label>
+                        <textarea id="description"
+                                 name="description"
+                                 rows="4"
+                                 required
+                                 class="w-full px-4 py-3 rounded-xl border-2 border-gray-200
+                                        focus:ring-2 focus:ring-blue-100 focus:border-blue-500
+                                        transition-colors"><%= elevage.description %></textarea>
+                        <div class="error-message mt-1 text-sm text-red-500"></div>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="form-group">
+                        <label for="status" class="block text-sm font-medium text-gray-700 mb-2">
+                            Statut
+                        </label>
+                        <select id="status"
+                                name="status"
+                                class="w-full px-4 py-3 rounded-xl border-2 border-gray-200
+                                       focus:ring-2 focus:ring-blue-100 focus:border-blue-500">
+                            <option value="active" <%= elevage.status === 'active' ? 'selected' : '' %>>
+                                Actif
+                            </option>
+                            <option value="pending" <%= elevage.status === 'pending' ? 'selected' : '' %>>
+                                En attente
+                            </option>
+                            <option value="suspended" <%= elevage.status === 'suspended' ? 'selected' : '' %>>
+                                Suspendu
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Location Card -->
+                <div class="bg-white rounded-2xl shadow-sm p-6 space-y-6">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-6">
+                        Localisation
+                    </h2>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- City -->
+                        <div class="form-group">
+                            <label for="city" class="block text-sm font-medium text-gray-700 mb-2">
+                                Ville <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text"
+                                   id="city"
+                                   name="city"
+                                   value="<%= elevage.location.city %>"
+                                   required
+                                   class="w-full px-4 py-3 rounded-xl border-2 border-gray-200
+                                          focus:ring-2 focus:ring-blue-100 focus:border-blue-500">
+                            <div class="error-message mt-1 text-sm text-red-500"></div>
+                        </div>
+
+                        <!-- Address -->
+                        <div class="form-group">
+                            <label for="address" class="block text-sm font-medium text-gray-700 mb-2">
+                                Adresse <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text"
+                                   id="address"
+                                   name="address"
+                                   value="<%= elevage.location.address %>"
+                                   required
+                                   class="w-full px-4 py-3 rounded-xl border-2 border-gray-200
+                                          focus:ring-2 focus:ring-blue-100 focus:border-blue-500">
+                            <div class="error-message mt-1 text-sm text-red-500"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Information Card -->
+                <div class="bg-white rounded-2xl shadow-sm p-6 space-y-6">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-6">
+                        Informations de Contact
+                    </h2>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Phone -->
+                        <div class="form-group">
+                            <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">
+                                Téléphone <span class="text-red-500">*</span>
+                            </label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <i class="fas fa-phone text-gray-400"></i>
+                                </div>
+                                <input type="tel"
+                                       id="phone"
+                                       name="phone"
+                                       value="<%= elevage.contactInfo.phone %>"
+                                       required
+                                       class="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-gray-200
+                                              focus:ring-2 focus:ring-blue-100 focus:border-blue-500">
+                            </div>
+                            <div class="error-message mt-1 text-sm text-red-500"></div>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="form-group">
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+                                Email <span class="text-red-500">*</span>
+                            </label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <i class="fas fa-envelope text-gray-400"></i>
+                                </div>
+                                <input type="email"
+                                       id="email"
+                                       name="email"
+                                       value="<%= elevage.contactInfo.email %>"
+                                       required
+                                       class="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-gray-200
+                                              focus:ring-2 focus:ring-blue-100 focus:border-blue-500">
+                            </div>
+                            <div class="error-message mt-1 text-sm text-red-500"></div>
+                        </div>
+
+                        <!-- WhatsApp -->
+                        <div class="form-group">
+                            <label for="whatsapp" class="block text-sm font-medium text-gray-700 mb-2">
+                                WhatsApp
+                            </label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <i class="fab fa-whatsapp text-gray-400"></i>
+                                </div>
+                                <input type="tel"
+                                       id="whatsapp"
+                                       name="whatsapp"
+                                       value="<%= elevage.contactInfo.whatsapp || '' %>"
+                                       class="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-gray-200
+                                              focus:ring-2 focus:ring-blue-100 focus:border-blue-500">
+                            </div>
+                        </div>
+
+                        <!-- Website -->
+                        <div class="form-group">
+                            <label for="website" class="block text-sm font-medium text-gray-700 mb-2">
+                                Site Web
+                            </label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <i class="fas fa-globe text-gray-400"></i>
+                                </div>
+                                <input type="url"
+                                       id="website"
+                                       name="website"
+                                       value="<%= elevage.contactInfo.website || '' %>"
+                                       class="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-gray-200
+                                              focus:ring-2 focus:ring-blue-100 focus:border-blue-500">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Social Media -->
+                    <div class="pt-6 border-t border-gray-100">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">
+                            Réseaux Sociaux
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <!-- Facebook -->
+                            <div class="form-group">
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                        <i class="fab fa-facebook text-gray-400"></i>
+                                    </div>
+                                    <input type="text"
+                                           id="facebook"
+                                           name="socialMedia[facebook]"
+                                           value="<%= elevage.contactInfo.socialMedia?.facebook || '' %>"
+                                           placeholder="Facebook"
+                                           class="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-gray-200
+                                                  focus:ring-2 focus:ring-blue-100 focus:border-blue-500">
+                                </div>
+                            </div>
+
+                            <!-- Instagram -->
+                            <div class="form-group">
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                        <i class="fab fa-instagram text-gray-400"></i>
+                                    </div>
+                                    <input type="text"
+                                           id="instagram"
+                                           name="socialMedia[instagram]"
+                                           value="<%= elevage.contactInfo.socialMedia?.instagram || '' %>"
+                                           placeholder="Instagram"
+                                           class="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-gray-200
+                                                  focus:ring-2 focus:ring-blue-100 focus:border-blue-500">
+                                </div>
+                            </div>
+
+                            <!-- YouTube -->
+                            <div class="form-group">
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                        <i class="fab fa-youtube text-gray-400"></i>
+                                    </div>
+                                    <input type="text"
+                                    id="youtube"
+                                    name="socialMedia[youtube]"
+                                    value="<%= elevage.contactInfo.socialMedia?.youtube || '' %>"
+                                    placeholder="YouTube"
+                                    class="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-gray-200
+                                           focus:ring-2 focus:ring-blue-100 focus:border-blue-500">
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+
+         <!-- Services & Facilities Card -->
+         <div class="bg-white rounded-2xl shadow-sm p-6">
+             <h2 class="text-xl font-semibold text-gray-900 mb-6">
+                 Services & Installations
+             </h2>
+
+             <!-- Services -->
+             <div class="mb-8">
+                 <label class="block text-sm font-medium text-gray-700 mb-4">
+                     Services Proposés
+                 </label>
+                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                     <% ['Élevage', 'Pension', 'Dressage', 'Formation', 'Toilettage'].forEach(service => { %>
+                         <label class="relative flex cursor-pointer">
+                             <input type="checkbox"
+                                    name="services[]"
+                                    value="<%= service %>"
+                                    <%= elevage.services?.includes(service) ? 'checked' : '' %>
+                                    class="peer sr-only">
+                             <div class="w-full p-4 bg-white border-2 border-gray-200 rounded-xl
+                                         peer-checked:border-blue-500 peer-checked:bg-blue-50
+                                         hover:bg-gray-50 transition-all duration-200">
+                                 <div class="flex items-center justify-between">
+                                     <span class="text-sm font-medium text-gray-900">
+                                         <%= service %>
+                                     </span>
+                                     <i class="fas fa-check text-blue-500 opacity-0 peer-checked:opacity-100
+                                               transition-opacity"></i>
+                                 </div>
+                             </div>
+                         </label>
+                     <% }) %>
+                 </div>
+             </div>
+
+             <!-- Facilities -->
+             <div class="space-y-6">
+                 <div>
+                     <label for="area" class="block text-sm font-medium text-gray-700 mb-2">
+                         Surface Totale (m²)
+                     </label>
+                     <input type="number"
+                            id="area"
+                            name="facilities[area]"
+                            value="<%= elevage.facilities?.area || '' %>"
+                            min="0"
+                            class="w-full px-4 py-3 rounded-xl border-2 border-gray-200
+                                   focus:ring-2 focus:ring-blue-100 focus:border-blue-500">
+                 </div>
+
+                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                     <label class="relative flex items-start cursor-pointer">
+                         <input type="checkbox"
+                                name="facilities[hasTrainingArea]"
+                                <%= elevage.facilities?.hasTrainingArea ? 'checked' : '' %>
+                                class="w-4 h-4 mt-1 text-blue-600 border-gray-300 rounded
+                                       focus:ring-blue-500">
+                         <span class="ml-3">
+                             <span class="block text-sm font-medium text-gray-900">
+                                 Zone d'entraînement
+                             </span>
+                             <span class="block text-xs text-gray-500">
+                                 Espace dédié à l'entraînement
+                             </span>
+                         </span>
+                     </label>
+
+                     <label class="relative flex items-start cursor-pointer">
+                         <input type="checkbox"
+                                name="facilities[hasGroomingService]"
+                                <%= elevage.facilities?.hasGroomingService ? 'checked' : '' %>
+                                class="w-4 h-4 mt-1 text-blue-600 border-gray-300 rounded
+                                       focus:ring-blue-500">
+                         <span class="ml-3">
+                             <span class="block text-sm font-medium text-gray-900">
+                                 Service de toilettage
+                             </span>
+                             <span class="block text-xs text-gray-500">
+                                 Équipements de toilettage
+                             </span>
+                         </span>
+                     </label>
+
+                     <label class="relative flex items-start cursor-pointer">
+                         <input type="checkbox"
+                                name="facilities[hasPension]"
+                                <%= elevage.facilities?.hasPension ? 'checked' : '' %>
+                                class="w-4 h-4 mt-1 text-blue-600 border-gray-300 rounded
+                                       focus:ring-blue-500">
+                         <span class="ml-3">
+                             <span class="block text-sm font-medium text-gray-900">
+                                 Service de pension
+                             </span>
+                             <span class="block text-xs text-gray-500">
+                                 Hébergement pour chiens
+                             </span>
+                         </span>
+                     </label>
+
+                     <label class="relative flex items-start cursor-pointer">
+                         <input type="checkbox"
+                                name="facilities[hasVetService]"
+                                <%= elevage.facilities?.hasVetService ? 'checked' : '' %>
+                                class="w-4 h-4 mt-1 text-blue-600 border-gray-300 rounded
+                                       focus:ring-blue-500">
+                         <span class="ml-3">
+                             <span class="block text-sm font-medium text-gray-900">
+                                 Service vétérinaire
+                             </span>
+                             <span class="block text-xs text-gray-500">
+                                 Suivi médical sur place
+                             </span>
+                         </span>
+                     </label>
+                 </div>
+             </div>
+         </div>
+
+         <!-- Form Actions -->
+         <div class="flex items-center justify-between gap-4">
+             <button type="button"
+                     onclick="history.back()"
+                     class="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl
+                            hover:bg-gray-200 transition-colors">
+                 Annuler
+             </button>
+             <button type="submit"
+                     id="submitButton"
+                     class="px-6 py-3 bg-blue-600 text-white rounded-xl
+                            hover:bg-blue-700 transition-colors">
+                 <span class="flex items-center gap-2">
+                     <i class="fas fa-save"></i>
+                     <span>Enregistrer</span>
+                 </span>
+             </button>
+         </div>
+     </form>
+ </div>
+</div>
+
+<!-- Toast Notification -->
+<div id="toast" 
+  class="fixed bottom-4 right-4 transform translate-y-full opacity-0 transition-all duration-300">
+ <div class="px-6 py-3 rounded-xl shadow-lg flex items-center gap-3"></div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('breedingEditForm');
+    const submitButton = document.getElementById('submitButton');
+    const toast = document.getElementById('toast');
+
+    // Validation rules
+    const validationRules = {
+        required: value => value.trim().length > 0,
+        minLength: (value, min) => value.trim().length >= parseInt(min),
+        maxLength: (value, max) => value.trim().length <= parseInt(max),
+        email: value => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
+        phone: value => /^(?:\+212|0)[567]\d{8}$/.test(value),
+        url: value => /^(https?:\/\/)?([\w\-]+\.)+[\w\-]{2,}(\/.*)?$/.test(value),
+        number: value => !isNaN(value) && Number(value) >= 0,
+    };
+
+    // Real-time field validation
+    function validateField(input) {
+        const validations = input.dataset.validate?.split('|') || [];
+        const errorMessages = input.dataset.error?.split('|') || [];
+        const errorDiv = input.parentElement.querySelector('.error-message');
+        let isValid = true;
+        let errorMessage = '';
+
+        validations.forEach((rule, index) => {
+            const [validationType, param] = rule.split(':');
+            const value = input.type === 'checkbox' ? input.checked : input.value;
+
+            if (validationRules[validationType] && !validationRules[validationType](value, param)) {
+                isValid = false;
+                errorMessage = errorMessages[index] || 'Champ invalide';
+            }
+        });
+
+        if (errorDiv) {
+            errorDiv.textContent = isValid ? '' : errorMessage;
+        }
+
+        input.classList.toggle('border-red-500', !isValid);
+        input.classList.toggle('border-green-500', isValid);
+        return isValid;
+    }
+
+    // Attach validation listeners
+    form.querySelectorAll('input, textarea, select').forEach(input => {
+        if (input.dataset.validate) {
+            ['input', 'blur'].forEach(event => {
+                input.addEventListener(event, () => validateField(input));
+            });
+        }
+    });
+
+    // Logo upload preview
+    const logoInput = document.getElementById('logoInput');
+    const logoPreview = document.getElementById('logoPreview');
+    logoInput.addEventListener('change', () => {
+        const file = logoInput.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = e => {
+                logoPreview.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Submit form via AJAX
+    form.addEventListener('submit', async event => {
+        event.preventDefault();
+
+        // Validate all fields
+        const allInputs = Array.from(form.querySelectorAll('input, textarea, select'));
+        const allValid = allInputs.every(input => validateField(input));
+
+        if (!allValid) {
+            showToast('Veuillez corriger les erreurs dans le formulaire.', 'error');
+            return;
+        }
+
+        const formData = new FormData(form);
+
+        submitButton.disabled = true;
+        submitButton.innerHTML = `
+            <i class="fas fa-spinner spinner"></i>
+            Enregistrement...
+        `;
+
+        try {
+            const response = await fetch(`/dashboard/breedings/<%= elevage._id %>/edit`, {
+                method: 'POST',
+                body: formData,
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                showToast(result.message, 'success');
+                setTimeout(() => {
+                    window.location.href = result.data.redirectUrl;
+                }, 2000);
+            } else {
+                throw new Error(result.message);
+            }
+        } catch (error) {
+            showToast(error.message, 'error');
+        } finally {
+            submitButton.disabled = false;
+            submitButton.innerHTML = `
+                <i class="fas fa-save"></i>
+                Enregistrer
+            `;
+        }
+    });
+
+    // Show toast notifications
+    function showToast(message, type = 'success') {
+        const iconClass =
+            type === 'success'
+                ? 'fa-check-circle text-green-500'
+                : 'fa-exclamation-circle text-red-500';
+
+        toast.innerHTML = `
+            <i class="fas ${iconClass}"></i>
+            <span>${message}</span>
+        `;
+        toast.classList.remove('opacity-0', 'translate-y-full');
+        toast.classList.add('opacity-100', 'translate-y-0');
+
+        setTimeout(() => {
+            toast.classList.remove('opacity-100', 'translate-y-0');
+            toast.classList.add('opacity-0', 'translate-y-full');
+        }, 3000);
+    }
+});
+
+</script>
+</body>
+</html>

@@ -1,573 +1,529 @@
 <%- include('include/head.ejs') %>
-<%- include('include/navbar.ejs') %>
+    <%- include('include/navbar.ejs') %>
 
-<!-- Modern Hero Section -->
+        <!-- Modern Hero Section -->
 
-<section class="relative min-h-screen bg-white flex flex-col justify-center items-center px-4">
-    <!-- Main Content -->
-    <div class="max-w-12xl mx-auto text-center space-y-12 py-20">
-        <!-- Main Heading -->
-        <h1 class="text-5xl sm:text-7xl lg:text-8xl font-bold text-gray-800 leading-tight max-w-4xl mx-auto tracking-tight">
-            Les Services Canins Au
-            <span class="block mt-2"> Maroc</span>
-        </h1>
+        <section class="relative min-h-screen bg-white flex flex-col justify-center items-center px-4">
+            <!-- Main Content -->
+            <div class="max-w-12xl mx-auto text-center space-y-12 py-20">
+                <!-- Main Heading -->
+                <h1 class="text-5xl sm:text-7xl lg:text-8xl font-bold text-gray-800 leading-tight max-w-4xl mx-auto tracking-tight">
+                    Les Services Canins Au
+                    <span class="block mt-2"> Maroc</span>
+                </h1>
 
-        <!-- Description -->
-        <p class="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-            Trouvez des services canins de qualité près de chez vous. Éducation, promenade, toilettage - nous prenons soin de votre compagnon.
-        </p>
+                <!-- Description -->
+                <p class="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+                    Trouvez des services canins de qualité près de chez vous. Éducation, promenade, toilettage - nous prenons soin de votre compagnon.
+                </p>
 
-        <!-- Search Form -->
-        <div class="space-y-4">
-            <form onsubmit="handleSearch(event)" class="max-w-3xl mx-auto flex flex-col sm:flex-row gap-3 bg-white p-2 rounded-xl shadow-lg">
-                <!-- Service Type -->
-                <div class="flex-1 relative">
-                    <select 
-                        id="serviceType" 
-                        required
-                        class="w-full pl-10 pr-4 py-4 bg-white border border-gray-200 text-gray-800 rounded-lg
+                <!-- Search Form -->
+                <div class="space-y-4">
+                    <form onsubmit="handleSearch(event)" class="max-w-3xl mx-auto flex flex-col sm:flex-row gap-3 bg-white p-2 rounded-xl shadow-lg">
+                        <!-- Service Type -->
+                        <div class="flex-1 relative">
+                            <select id="serviceType" required class="w-full pl-10 pr-4 py-4 bg-white border border-gray-200 text-gray-800 rounded-lg
                                appearance-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400
-                               transition-all duration-200"
-                    >
-                        <option value="" disabled selected>Type de service</option>
-                        <% services.forEach(service => { %>
-                            <option value="<%= service.value %>"><%= service.value %></option>
-                        <% }); %>
-                    </select>
-                    <div class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-                        <i class="fas fa-search w-5 h-5"></i>
-                    </div>
-                </div>
+                               transition-all duration-200">
+                                <option value="" disabled selected>Type de service</option>
+                                <% services.forEach(service=> { %>
+                                    <option value="<%= service.value %>">
+                                        <%= service.value %>
+                                    </option>
+                                    <% }); %>
+                            </select>
+                            <div class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                                <i class="fas fa-search w-5 h-5"></i>
+                            </div>
+                        </div>
 
-                <!-- Location -->
-                <div class="flex-1 relative">
-                    <select 
-                        id="citySelect" 
-                        required
-                        class="w-full pl-10 pr-4 py-4 bg-white border border-gray-200 text-gray-800 rounded-lg
+                        <!-- Location -->
+                        <div class="flex-1 relative">
+                            <select id="citySelect" required class="w-full pl-10 pr-4 py-4 bg-white border border-gray-200 text-gray-800 rounded-lg
                                appearance-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400
-                               transition-all duration-200"
-                    >
-                        <option value="" disabled selected>Votre ville</option>
-                        <% locations.forEach(location => { %>
-                            <option value="<%= location.value %>"><%= location.label %></option>
-                        <% }); %>
-                    </select>
-                    <div class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-                        <i class="fas fa-location-dot w-5 h-5"></i>
-                    </div>
-                </div>
+                               transition-all duration-200">
+                                <option value="" disabled selected>Votre ville</option>
+                                <% locations.forEach(location=> { %>
+                                    <option value="<%= location.value %>">
+                                        <%= location.label %>
+                                    </option>
+                                    <% }); %>
+                            </select>
+                            <div class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                                <i class="fas fa-location-dot w-5 h-5"></i>
+                            </div>
+                        </div>
 
-                <!-- Search Button -->
-                <button 
-                    type="submit" 
-                    class="px-8 py-4 bg-gray-800 text-white font-medium rounded-lg
+                        <!-- Search Button -->
+                        <button type="submit" class="px-8 py-4 bg-gray-800 text-white font-medium rounded-lg
                            hover:bg-gray-700 focus:ring-4 focus:ring-gray-200
-                           transition-all duration-200 flex items-center justify-center gap-2 min-w-[120px]"
-                >
-                    <span>Rechercher</span>
-                </button>
-            </form>
+                           transition-all duration-200 flex items-center justify-center gap-2 min-w-[120px]">
+                            <span>Rechercher</span>
+                        </button>
+                    </form>
 
-            <!-- Add Service Link -->
-            <% if (user) { %>
-                <a href="/dashboard/" 
-                   class="relative max-w-3xl mx-auto flex items-center justify-center gap-3 px-8 py-4 
+                    <!-- Add Service Link -->
+                    <% if (user) { %>
+                        <a href="/dashboard/" class="relative max-w-3xl mx-auto flex items-center justify-center gap-3 px-8 py-4 
                           bg-gradient-to-r from-purple-500 via-blue-500 to-cyan-500 
                           text-white font-medium rounded-xl shadow-lg
                           hover:shadow-xl hover:scale-[1.02] 
                           transition-all duration-300 group
                           before:absolute before:inset-0 before:bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PGZpbHRlciBpZD0iYSIgeD0iMCIgeT0iMCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBmaWx0ZXJVbml0cz0idXNlclNwYWNlT25Vc2UiIGNvbG9yLWludGVycG9sYXRpb24tZmlsdGVycz0ic1JHQiI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9Ii40IiBudW1PY3RhdmVzPSI0IiBzZWVkPSIxNSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgeD0iMCIgeT0iMCIvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgZmlsdGVyPSJ1cmwoI2EpIiBvcGFjaXR5PSIuMSIvPjwvc3ZnPg==')] before:opacity-30 before:rounded-xl">
-                    <div class="relative flex items-center gap-3">
-                        <i class="fas fa-paw text-xl"></i>
-                        <span class="text-lg">Manager mes services canins</span>
-                    </div>
-                </a>
-            <% } else { %>
-                <a href="/auth/google" 
-                   class="relative max-w-3xl mx-auto flex flex-col items-center justify-center gap-3 px-8 py-6 
+                            <div class="relative flex items-center gap-3">
+                                <i class="fas fa-paw text-xl"></i>
+                                <span class="text-lg">Manager mes services canins</span>
+                            </div>
+                        </a>
+                        <% } else { %>
+                            <a href="/auth/google" class="relative max-w-3xl mx-auto flex flex-col items-center justify-center gap-3 px-8 py-6 
                           bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 
                           text-white font-medium rounded-xl shadow-lg overflow-hidden
                           hover:shadow-xl hover:scale-[1.02] 
                           transition-all duration-300 group
                           before:absolute before:inset-0 before:bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PGZpbHRlciBpZD0iYSIgeD0iMCIgeT0iMCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBmaWx0ZXJVbml0cz0idXNlclNwYWNlT25Vc2UiIGNvbG9yLWludGVycG9sYXRpb24tZmlsdGVycz0ic1JHQiI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9Ii40IiBudW1PY3RhdmVzPSI0IiBzZWVkPSIxNSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgeD0iMCIgeT0iMCIvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgZmlsdGVyPSJ1cmwoI2EpIiBvcGFjaXR5PSIuMSIvPjwvc3ZnPg==')] before:opacity-30 before:rounded-xl">
-                    <div class="relative flex flex-col items-center text-center space-y-3">
-                        <div class="flex items-center justify-center w-12 h-12 bg-white/10 rounded-full">
-                            <i class="fas fa-paw text-2xl"></i>
-                        </div>
-                        <div class="space-y-2">
-                            <h3 class="text-xl font-semibold">Créez votre compte professionnel</h3>
-                            <p class="text-sm text-white/90 max-w-sm">
-                                Proposez vos services canins : toilettage, dressage, garde, et plus encore
-                            </p>
-                        </div>
-                        <div class="flex items-center gap-2 bg-white/10 rounded-lg px-4 py-2 mt-2">
-                            <i class="fab fa-google"></i>
-                            <span>Continuer avec Google</span>
-                        </div>
-                    </div>
-                    <div class="absolute top-2 right-2 flex space-x-1">
-                        <span class="h-2 w-2 rounded-full bg-white/40 animate-pulse"></span>
-                        <span class="h-2 w-2 rounded-full bg-white/40 animate-pulse delay-75"></span>
-                        <span class="h-2 w-2 rounded-full bg-white/40 animate-pulse delay-150"></span>
-                    </div>
-                </a>
-            <% } %>
-        </div>
-    </div>
+                                <div class="relative flex flex-col items-center text-center space-y-3">
+                                    <div class="flex items-center justify-center w-12 h-12 bg-white/10 rounded-full">
+                                        <i class="fas fa-paw text-2xl"></i>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <h3 class="text-xl font-semibold">Créez votre compte professionnel</h3>
+                                        <p class="text-sm text-white/90 max-w-sm">
+                                            Proposez vos services canins : toilettage, dressage, garde, et plus encore
+                                        </p>
+                                    </div>
+                                    <div class="flex items-center gap-2 bg-white/10 rounded-lg px-4 py-2 mt-2">
+                                        <i class="fab fa-google"></i>
+                                        <span>Continuer avec Google</span>
+                                    </div>
+                                </div>
+                                <div class="absolute top-2 right-2 flex space-x-1">
+                                    <span class="h-2 w-2 rounded-full bg-white/40 animate-pulse"></span>
+                                    <span class="h-2 w-2 rounded-full bg-white/40 animate-pulse delay-75"></span>
+                                    <span class="h-2 w-2 rounded-full bg-white/40 animate-pulse delay-150"></span>
+                                </div>
+                            </a>
+                            <% } %>
+                </div>
+            </div>
 
-    <!-- Bottom Decorative Element -->
-    <div class="absolute bottom-0 left-0 right-0">
-        <div class="h-px w-full bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
-    </div>
-</section>
+            <!-- Bottom Decorative Element -->
+            <div class="absolute bottom-0 left-0 right-0">
+                <div class="h-px w-full bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
+            </div>
+        </section>
 
-<style>
-/* Custom select styles */
-select {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236B7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 1rem center;
-    background-size: 1.5em;
-}
+        <style>
+            /* Custom select styles */
+            select {
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                appearance: none;
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236B7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+                background-repeat: no-repeat;
+                background-position: right 1rem center;
+                background-size: 1.5em;
+            }
 
-/* Rainbow border animation */
-@keyframes border-rainbow {
-    0% { background-position: 0% 50% }
-    50% { background-position: 100% 50% }
-    100% { background-position: 0% 50% }
-}
-
-.animate-border-rainbow {
-    background: linear-gradient(90deg, rgba(255,255,255,1) calc(100% - 4px), rgba(0,0,0,0) calc(100% - 4px));
-    background-size: 200% 200%;
-    animation: border-rainbow 3s ease infinite;
-    position: relative;
-}
-
-.animate-border-rainbow::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border-radius: 0.5rem;
-    padding: 2px;
-    background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
-    background-size: 200% 200%;
-    animation: border-rainbow 3s ease infinite;
-    -webkit-mask: 
-        linear-gradient(#fff 0 0) content-box, 
-        linear-gradient(#fff 0 0);
-    -webkit-mask-composite: destination-out;
-    mask-composite: exclude;
-}
-
-/* Loading animation */
-@keyframes button-loading-spinner {
-    from { transform: rotate(0turn); }
-    to { transform: rotate(1turn); }
-}
-
-.loading {
-    position: relative;
-    pointer-events: none;
-}
-
-.loading span {
-    opacity: 0;
-}
-
-.loading::after {
-    content: "";
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    border: 2px solid transparent;
-    border-top-color: white;
-    border-right-color: white;
-    border-radius: 50%;
-    animation: button-loading-spinner 0.7s linear infinite;
-}
-</style>
-
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.querySelector('form');
-    const submitButton = form.querySelector('button[type="submit"]');
-
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        if (!form.checkValidity()) return;
-        
-        submitButton.classList.add('loading');
-        handleSearch(e);
-    });
-});
-
-function handleSearch(event) {
-    event.preventDefault();
-    const service = document.getElementById('serviceType').value;
-    const city = document.getElementById('citySelect').value;
-    
-    if (service && city) {
-        window.location.href = `/services/${encodeURIComponent(service)}/${encodeURIComponent(city)}`;
-    }
-}
-</script>
-<!-- Services Section - Modern Grid -->
-<section class="py-24 bg-white relative overflow-hidden">
-    <!-- Background and Separators remain the same -->
-    <div class="absolute inset-0 opacity-[0.03]" style="background-image: url('data:image/svg+xml,%3Csvg width=\'20\' height=\'20\' viewBox=\'0 0 20 20\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M1 1h2v2H1V1zm4 0h2v2H5V1zm4 0h2v2H9V1zm4 0h2v2h-2V1zm4 0h2v2h-2V1z\' fill=\'%23000000\'/%3E%3C/svg%3E');"></div>
-
-    <!-- Separators -->
-    <div class="absolute top-0 left-0 right-0">
-        <div class="h-px w-full bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
-    </div>
-
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        <!-- Header remains the same -->
-        <div class="mb-16 relative text-center">
-            <h2 class="text-4xl sm:text-5xl font-bold text-gray-800 mb-6">
-                Services Disponibles
-                <div class="absolute left-1/2 -bottom-4 w-24 h-1 bg-gray-800 -translate-x-1/2"></div>
-            </h2>
-            <p class="mt-8 text-lg text-gray-600 max-w-2xl mx-auto">
-                Explorez notre gamme complète de services professionnels pour votre compagnon
-            </p>
-        </div>
-
-        <!-- Updated Services Grid -->
-        <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8">
-            <% 
-            const services_cards = [
-                {
-                    title: "Dressage",
-                    href: "/services/dressage",
-                    icon: "fa-solid fa-graduation-cap",
-                    bgColor: "bg-blue-50",
-                    iconColor: "text-blue-500"
-                },
-                {
-                    title: "Promenade",
-                    href: "/services/promenade",
-                    icon: "fa-solid fa-person-walking-with-cane",
-                    bgColor: "bg-green-50",
-                    iconColor: "text-green-500"
-                },
-                {
-                    title: "Toilettage",
-                    href: "/services/toilettage",
-                    icon: "fa-solid fa-shower",
-                    bgColor: "bg-purple-50",
-                    iconColor: "text-purple-500"
-                },
-                {
-                    title: "Vétérinaire",
-                    href: "/services/veterinaire",
-                    icon: "fa-solid fa-stethoscope",
-                    bgColor: "bg-red-50",
-                    iconColor: "text-red-500"
-                },
-                {
-                    title: "Pension",
-                    href: "/services/pension",
-                    icon: "fa-solid fa-house",
-                    bgColor: "bg-yellow-50",
-                    iconColor: "text-yellow-600"
-                },
-                {
-                    title: "Transport",
-                    href: "/services/transport",
-                    icon: "fa-solid fa-truck",
-                    bgColor: "bg-indigo-50",
-                    iconColor: "text-indigo-500"
+            /* Rainbow border animation */
+            @keyframes border-rainbow {
+                0% {
+                    background-position: 0% 50%
                 }
-            ].forEach(service => { %>
-                <a href="<%= service.href %>" class="group">
-                    <div class="h-full bg-white rounded-lg p-4 sm:p-8 
-                               border border-gray-200 hover:border-gray-800
-                               transition-all duration-300">
-                        <div class="flex flex-col h-full">
-                            <!-- Icon with soft color background -->
-                            <div class="mb-4 sm:mb-6">
-                                <div class="w-12 h-12 sm:w-14 sm:h-14 <%= service.bgColor %> rounded-lg group-hover:bg-gray-800 
-                                            transition-colors duration-300 flex items-center justify-center">
-                                    <i class="<%= service.icon %> text-xl sm:text-2xl <%= service.iconColor %> group-hover:text-white transition-colors duration-300"></i>
-                                </div>
-                            </div>
 
-                            <!-- Title -->
-                            <h2 class="text-lg sm:text-xl font-semibold text-gray-800 mb-2 sm:mb-3">
-                                <%= service.title %>
-                            </h2>
+                50% {
+                    background-position: 100% 50%
+                }
 
-                            <!-- Arrow (hidden on mobile) -->
-                            <div class="mt-auto hidden sm:flex items-center text-sm text-gray-600 group-hover:text-gray-800 transition-colors duration-300">
-                                <span>En savoir plus</span>
-                                <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform duration-300" 
-                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                          d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            <% }); %>
-        </div>
+                100% {
+                    background-position: 0% 50%
+                }
+            }
 
-        <!-- Bottom CTA -->
-        <div class="mt-12 sm:mt-16 text-center">
-            <a href="/services" class="inline-flex items-center px-6 py-3 
-                                    text-base font-medium rounded-lg text-white bg-gray-800 
-                                    hover:bg-gray-700 transition-colors duration-300">
-                Voir tous les services
-                <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                          d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-                </svg>
-            </a>
-        </div>
-    </div>
+            .animate-border-rainbow {
+                background: linear-gradient(90deg, rgba(255, 255, 255, 1) calc(100% - 4px), rgba(0, 0, 0, 0) calc(100% - 4px));
+                background-size: 200% 200%;
+                animation: border-rainbow 3s ease infinite;
+                position: relative;
+            }
 
-    <!-- Bottom Separator -->
-    <div class="absolute bottom-0 left-0 right-0">
-        <div class="h-px w-full bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
-    </div>
-</section>
+            .animate-border-rainbow::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                border-radius: 0.5rem;
+                padding: 2px;
+                background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+                background-size: 200% 200%;
+                animation: border-rainbow 3s ease infinite;
+                -webkit-mask:
+                    linear-gradient(#fff 0 0) content-box,
+                    linear-gradient(#fff 0 0);
+                -webkit-mask-composite: destination-out;
+                mask-composite: exclude;
+            }
 
-<!-- Add Font Awesome CDN in your head section -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+            /* Loading animation */
+            @keyframes button-loading-spinner {
+                from {
+                    transform: rotate(0turn);
+                }
+
+                to {
+                    transform: rotate(1turn);
+                }
+            }
+
+            .loading {
+                position: relative;
+                pointer-events: none;
+            }
+
+            .loading span {
+                opacity: 0;
+            }
+
+            .loading::after {
+                content: "";
+                position: absolute;
+                width: 20px;
+                height: 20px;
+                border: 2px solid transparent;
+                border-top-color: white;
+                border-right-color: white;
+                border-radius: 50%;
+                animation: button-loading-spinner 0.7s linear infinite;
+            }
+        </style>
 
 
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const form = document.querySelector('form');
+                const submitButton = form.querySelector('button[type="submit"]');
 
+                form.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    if (!form.checkValidity()) return;
 
+                    submitButton.classList.add('loading');
+                    handleSearch(e);
+                });
+            });
 
+            function handleSearch(event) {
+                event.preventDefault();
+                const service = document.getElementById('serviceType').value;
+                const city = document.getElementById('citySelect').value;
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+                if (service && city) {
+                    window.location.href = `/services/${encodeURIComponent(service)}/${encodeURIComponent(city)}`;
+                }
+            }
+        </script>
+        <section class="py-24 bg-white relative overflow-hidden">
+            <!-- Background Pattern -->
+            <div class="absolute inset-0 opacity-[0.03]" style="background-image: url('data:image/svg+xml,%3Csvg width=\'20\' height=\'20\' viewBox=\'0 0 20 20\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M1 1h2v2H1V1zm4 0h2v2H5V1zm4 0h2v2H9V1zm4 0h2v2h-2V1zm4 0h2v2h-2V1z\' fill=\'%23000000\'/%3E%3C/svg%3E');"></div>
 
-<section class="bg-white py-20">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex flex-col lg:flex-row items-center gap-12">
-            <!-- Content -->
-            <div class="flex-1 text-center lg:text-left">
-                <h2 class="text-4xl font-bold text-gray-800 relative inline-block mb-6">
-                    Chiens à Adopter & Perdus
-                    <div class="absolute -bottom-2 left-0 w-24 h-1 bg-gray-800"></div>
-                </h2>
-                <p class="text-lg text-gray-600 mb-8 max-w-2xl">
-                    Trouvez votre futur compagnon parmi nos chiens à adopter ou aidez à réunir des chiens perdus avec leurs familles. Ensemble, nous pouvons faire la différence.
-                </p>
-                <a href="/chien-adoption-perdus" 
-                   class="inline-flex items-center gap-2 px-6 py-3 bg-gray-800 text-white rounded-lg 
-                          hover:bg-gray-700 transition-colors duration-300 group">
-                    <span>Découvrir</span>
-                    <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" 
-                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                              d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-                    </svg>
-                </a>
+            <!-- Separators -->
+            <div class="absolute top-0 left-0 right-0">
+                <div class="h-px w-full bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
             </div>
 
-            <!-- Preview Images -->
-            <div class="flex-1">
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="aspect-[4/5] rounded-lg overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1601758174114-e711c0cbaa69?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" 
-                             alt="Chien à adopter" 
-                             class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
-                    </div>
-                    <div class="aspect-[4/5] rounded-lg overflow-hidden mt-8">
-                        <img src="https://images.unsplash.com/photo-1709497083548-b6669f390b64?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" 
-                             alt="Chien perdu" 
-                             class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<section class="py-16 lg:py-24 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid md:grid-cols-2 gap-8 lg:gap-12">
-            <!-- Articles Column -->
-            <div class="space-y-8">
-                <div class="flex items-center justify-between">
-                    <h2 class="text-2xl lg:text-3xl font-bold text-gray-800 relative inline-block">
-                        Articles et Guides
-                        <div class="absolute -bottom-2 left-0 w-16 h-1 bg-gray-800"></div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+                <!-- Header -->
+                <div class="mb-16 relative text-center">
+                    <h2 class="text-4xl sm:text-5xl font-bold text-gray-800 mb-6">
+                        Nos Services
+                        <div class="absolute left-1/2 -bottom-4 w-24 h-1 bg-gray-800 -translate-x-1/2"></div>
                     </h2>
-                    <a href="/articles" class="group inline-flex items-center gap-2 text-gray-800 font-medium hover:opacity-80 transition-all">
-                        Voir tout
-                        <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-                        </svg>
-                    </a>
-                </div>
-
-                <div class="space-y-4">
-                    <!-- Article 1 -->
-                    <a href="/articles/education-canine" class="group block p-6 bg-white border border-gray-200 rounded-lg hover:border-gray-800 transition-all duration-300">
-                        <div class="flex items-start gap-6">
-                            <div class="w-14 h-14 bg-blue-50 rounded-lg group-hover:bg-gray-800 flex items-center justify-center flex-shrink-0 transition-colors duration-300">
-                                <i class="fa-solid fa-book text-blue-500 text-xl group-hover:text-white transition-colors"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-semibold text-gray-800 mb-2">Guide d'Éducation Canine</h3>
-                                <p class="text-gray-600">Conseils et astuces pour dresser votre chien efficacement</p>
-                            </div>
-                        </div>
-                    </a>
-
-                    <!-- Article 2 -->
-                    <a href="/articles/sante-chien" class="group block p-6 bg-white border border-gray-200 rounded-lg hover:border-gray-800 transition-all duration-300">
-                        <div class="flex items-start gap-6">
-                            <div class="w-14 h-14 bg-red-50 rounded-lg group-hover:bg-gray-800 flex items-center justify-center flex-shrink-0 transition-colors duration-300">
-                                <i class="fa-solid fa-heart text-red-500 text-xl group-hover:text-white transition-colors"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-semibold text-gray-800 mb-2">Santé et Bien-être</h3>
-                                <p class="text-gray-600">Guide complet pour maintenir votre chien en bonne santé</p>
-                            </div>
-                        </div>
-                    </a>
-
-                    <!-- Article 3 -->
-                    <a href="/articles/nutrition" class="group block p-6 bg-white border border-gray-200 rounded-lg hover:border-gray-800 transition-all duration-300">
-                        <div class="flex items-start gap-6">
-                            <div class="w-14 h-14 bg-green-50 rounded-lg group-hover:bg-gray-800 flex items-center justify-center flex-shrink-0 transition-colors duration-300">
-                                <i class="fa-solid fa-bowl-food text-green-500 text-xl group-hover:text-white transition-colors"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-semibold text-gray-800 mb-2">Nutrition Canine</h3>
-                                <p class="text-gray-600">Alimentation équilibrée pour votre compagnon</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Consultation Column -->
-            <div class="space-y-8">
-                <h2 class="text-2xl lg:text-3xl font-bold text-gray-800 relative inline-block">
-                    Consultation Professionnelle
-                    <div class="absolute -bottom-2 left-0 w-16 h-1 bg-gray-800"></div>
-                </h2>
-
-                <div class="space-y-6">
-                    <!-- Free Consultation -->
-                    <div class="group p-6 bg-white border border-gray-200 rounded-lg hover:border-gray-800 transition-all duration-300">
-                        <div class="flex items-center justify-between mb-6">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center">
-                                    <i class="fa-solid fa-comments text-purple-500"></i>
-                                </div>
-                                <h3 class="text-lg font-semibold text-gray-800">Consultation Gratuite</h3>
-                            </div>
-                            <span class="px-4 py-1 bg-gray-100 text-gray-800 text-sm rounded-full font-medium">Gratuit</span>
-                        </div>
-                        <p class="text-gray-600 mb-6">Obtenez des conseils de base pour prendre soin de votre chien avec nos experts</p>
-                        <a href="/consultation" class="group inline-flex w-full items-center justify-center gap-2 px-6 py-3 border-2 border-gray-800 rounded-lg text-gray-800 font-medium hover:bg-gray-800 hover:text-white transition-all duration-300">
-                            <span>Commencer</span>
-                            <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-                            </svg>
-                        </a>
-                    </div>
-
-                    <!-- Premium Consultation -->
-                    <div class="group p-6 bg-white border-2 border-gray-800 rounded-lg">
-                        <div class="flex items-center justify-between mb-6">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 bg-yellow-50 rounded-lg flex items-center justify-center">
-                                    <i class="fa-solid fa-crown text-yellow-500"></i>
-                                </div>
-                                <h3 class="text-lg font-semibold text-gray-800">Consultation Premium</h3>
-                            </div>
-                            <span class="px-4 py-1 bg-gray-800 text-white text-sm rounded-full font-medium">Premium</span>
-                        </div>
-                        <p class="text-gray-600 mb-6">Consultation personnalisée avec nos experts certifiés et suivi approfondi</p>
-                        <a href="/consultation" class="group inline-flex w-full items-center justify-center gap-2 px-6 py-3 bg-gray-800 rounded-lg text-white font-medium hover:bg-gray-700 transition-all duration-300">
-                            <span>Réserver</span>
-                            <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- AI Feature Section -->
-<section class="py-20 bg-[#EDF2F7]">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-            <!-- Left: AI Feature Content -->
-            <div class="flex-1 space-y-8">
-                <!-- Badge -->
-                <div class="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-full text-sm font-medium border border-blue-100">
-                    <i class="fa-solid fa-robot text-blue-500"></i>
-                    Intelligence Artificielle
-                </div>
-
-                <!-- Content -->
-                <div class="space-y-6">
-                    <h2 class="text-3xl lg:text-4xl font-bold text-gray-900">
-                        Découvrez la Race de <br class="hidden lg:block"/>
-                        Votre Chien avec Notre IA
-                    </h2>
-                    <p class="text-lg text-gray-600 leading-relaxed">
-                        Téléchargez simplement une photo et notre intelligence artificielle identifiera la race de votre chien avec précision. Un outil rapide et fiable pour mieux connaître votre compagnon.
+                    <p class="mt-8 text-lg text-gray-600 max-w-2xl mx-auto">
+                        Des solutions complètes pour le bien-être de votre compagnon
                     </p>
                 </div>
 
-                <!-- CTA Button -->
-                <a href="/dog-breeds-analyzer" 
-                   class="inline-flex items-center gap-3 px-8 py-4 bg-gray-800 text-white rounded-lg font-medium 
-                          hover:bg-gray-700 transition-all duration-300 group">
-                    <i class="fa-solid fa-camera text-lg"></i>
-                    <span>Analyser une Photo</span>
-                    <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" 
-                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-                    </svg>
-                </a>
+                <!-- Services Grid -->
+                <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8">
+                    <% const services_cards=[ { title: "Dressage" , description: "Formation professionnelle et personnalisée pour votre chien" , href: "/services/dressage" , icon: "fa-solid fa-graduation-cap" , bgColor: "bg-blue-100" , iconColor: "text-blue-600" , tag: "Service" , tagColor: "bg-blue-200 text-blue-700" }, { title: "Promenade" , description: "Services de promenade adaptés à vos besoins" , href: "/services/promenade" , icon: "fa-solid fa-person-walking-with-cane" , bgColor: "bg-green-100" , iconColor: "text-green-600" , tag: "Service" , tagColor: "bg-green-200 text-green-700" }, { title: "Toilettage" , description: "Soins esthétiques professionnels pour votre animal" , href: "/services/toilettage" , icon: "fa-solid fa-shower" , bgColor: "bg-purple-100" , iconColor: "text-purple-600" , tag: "Service" , tagColor: "bg-purple-200 text-purple-700" }, { title: "Articles & Conseils" , description: "Découvrez nos articles et conseils d'experts" , href: "/articles" , icon: "fa-solid fa-newspaper" , bgColor: "bg-amber-100" , iconColor: "text-amber-600" , tag: "Blog" , tagColor: "bg-amber-200 text-amber-700" }, { title: "Consultation" , description: "Consultations en ligne avec nos experts" , href: "/consultation" , icon: "fa-solid fa-comments" , bgColor: "bg-pink-100" , iconColor: "text-pink-600" , tag: "Expert" , tagColor: "bg-pink-200 text-pink-700" }, { title: "Adoption & Perdus" , description: "Adoptez un compagnon ou signalez un chien perdu" , href: "/chien-adoption-perdus" , icon: "fa-solid fa-heart" , bgColor: "bg-red-100" , iconColor: "text-red-600" , tag: "Solidarité" , tagColor: "bg-red-200 text-red-700" }, { title: "Pension" , description: "Hébergement sécurisé et confortable" , href: "/services/pension" , icon: "fa-solid fa-house" , bgColor: "bg-yellow-100" , iconColor: "text-yellow-600" , tag: "Service" , tagColor: "bg-yellow-200 text-yellow-700" }, { title: "Transport" , description: "Service de transport sécurisé pour animaux" , href: "/services/transport" , icon: "fa-solid fa-truck" , bgColor: "bg-indigo-100" , iconColor: "text-indigo-600" , tag: "Service" , tagColor: "bg-indigo-200 text-indigo-700" }, { title: "Analyse Race IA" , description: "Analysez la race de votre chien avec l'IA" , href: "/dog-breeds-analyzer" , icon: "fa-solid fa-robot" , bgColor: "bg-cyan-100" , iconColor: "text-cyan-600" , tag: "IA" , tagColor: "bg-cyan-200 text-cyan-700" }, { title: "Les Élevages" , description: "Trouvez un élevage près de chez vous et découvrez leurs chiens" , href: "/les-elevages" , icon: "fa-solid fa-paw" , bgColor: "bg-teal-100" , iconColor: "text-teal-600" , tag: "Élevages" , tagColor: "bg-teal-200 text-teal-700" } ].forEach(service=> { %>
+                        <a href="<%= service.href %>" class="group">
+                            <div class="h-full <%= service.bgColor %> rounded-2xl p-6 sm:p-8 
+                               border-2 border-transparent hover:border-gray-800
+                               transition-all duration-300 relative">
+                                <!-- Tag -->
+                                <div class="absolute top-4 right-4">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <%= service.tagColor %>">
+                                        <%= service.tag %>
+                                    </span>
+                                </div>
+
+                                <div class="flex flex-col h-full">
+                                    <!-- Icon -->
+                                    <div class="mb-6">
+                                        <div class="w-14 h-14 sm:w-16 sm:h-16 bg-white/80 rounded-xl group-hover:bg-gray-800 
+                                            transition-colors duration-300 flex items-center justify-center">
+                                            <i class="<%= service.icon %> text-2xl sm:text-3xl <%= service.iconColor %> group-hover:text-white transition-colors duration-300"></i>
+                                        </div>
+                                    </div>
+
+                                    <!-- Content -->
+                                    <div>
+                                        <h2 class="text-xl sm:text-2xl font-semibold text-gray-800 mb-3">
+                                            <%= service.title %>
+                                        </h2>
+                                        <p class="text-sm sm:text-base text-gray-600 mb-4">
+                                            <%= service.description %>
+                                        </p>
+                                    </div>
+
+                                    <!-- Arrow -->
+                                    <div class="mt-auto flex items-center text-sm text-gray-700 group-hover:text-gray-900 transition-colors duration-300">
+                                        <span class="font-medium">En savoir plus</span>
+                                        <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <% }); %>
+                </div>
+
+                <!-- Bottom CTA -->
+                <div class="mt-16 text-center">
+                    <a href="/services" class="inline-flex items-center px-8 py-4 
+                                    text-lg font-medium rounded-xl text-white bg-gray-800 
+                                    hover:bg-gray-700 transition-colors duration-300">
+                        Explorer tous nos services
+                        <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                    </a>
+                </div>
             </div>
 
-           
-        </div>
-    </div>
-</section>
+            <!-- Bottom Separator -->
+            <div class="absolute bottom-0 left-0 right-0">
+                <div class="h-px w-full bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
+            </div>
+        </section>
+        <!-- Add Font Awesome CDN in your head section -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-<!-- CTA Section -->
-<section class="py-12 bg-blue-900 text-white">
-    <div class="max-w-6xl mx-auto px-4 text-center">
-        <h2 class="text-2xl md:text-3xl font-bold mb-6">
-            Prêt à Offrir le Meilleur à Votre Chien ?
-        </h2>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="/services" 
-                class="inline-flex items-center justify-center px-6 py-3 bg-white text-blue-900 rounded-lg font-medium hover:bg-gray-100 transition-colors">
-                Trouver un Service
-            </a>
-            <a href="/auth/google" 
-                class="inline-flex items-center justify-center px-6 py-3 bg-blue-800 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">
-                Devenir Prestataire
-            </a>
-        </div>
-    </div>
-</section>
 
-<!-- Mobile App Banner (Optional) -->
-<!-- <section class="py-6 bg-gray-100">
+
+
+
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+        <section class="bg-white py-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col lg:flex-row items-center gap-12">
+                    <!-- Content -->
+                    <div class="flex-1 text-center lg:text-left">
+                        <h2 class="text-4xl font-bold text-gray-800 relative inline-block mb-6">
+                            Chiens à Adopter & Perdus
+                            <div class="absolute -bottom-2 left-0 w-24 h-1 bg-gray-800"></div>
+                        </h2>
+                        <p class="text-lg text-gray-600 mb-8 max-w-2xl">
+                            Trouvez votre futur compagnon parmi nos chiens à adopter ou aidez à réunir des chiens perdus avec leurs familles. Ensemble, nous pouvons faire la différence.
+                        </p>
+                        <a href="/chien-adoption-perdus" class="inline-flex items-center gap-2 px-6 py-3 bg-gray-800 text-white rounded-lg 
+                          hover:bg-gray-700 transition-colors duration-300 group">
+                            <span>Découvrir</span>
+                            <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                            </svg>
+                        </a>
+                    </div>
+
+                    <!-- Preview Images -->
+                    <div class="flex-1">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="aspect-[4/5] rounded-lg overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1601758174114-e711c0cbaa69?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Chien à adopter" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                            </div>
+                            <div class="aspect-[4/5] rounded-lg overflow-hidden mt-8">
+                                <img src="https://images.unsplash.com/photo-1709497083548-b6669f390b64?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Chien perdu" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="py-16 lg:py-24 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid md:grid-cols-2 gap-8 lg:gap-12">
+                    <!-- Articles Column -->
+                    <div class="space-y-8">
+                        <div class="flex items-center justify-between">
+                            <h2 class="text-2xl lg:text-3xl font-bold text-gray-800 relative inline-block">
+                                Articles et Guides
+                                <div class="absolute -bottom-2 left-0 w-16 h-1 bg-gray-800"></div>
+                            </h2>
+                            <a href="/articles" class="group inline-flex items-center gap-2 text-gray-800 font-medium hover:opacity-80 transition-all">
+                                Voir tout
+                                <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                                </svg>
+                            </a>
+                        </div>
+
+                        <div class="space-y-4">
+                            <!-- Article 1 -->
+                            <a href="/articles/education-canine" class="group block p-6 bg-white border border-gray-200 rounded-lg hover:border-gray-800 transition-all duration-300">
+                                <div class="flex items-start gap-6">
+                                    <div class="w-14 h-14 bg-blue-50 rounded-lg group-hover:bg-gray-800 flex items-center justify-center flex-shrink-0 transition-colors duration-300">
+                                        <i class="fa-solid fa-book text-blue-500 text-xl group-hover:text-white transition-colors"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Guide d'Éducation Canine</h3>
+                                        <p class="text-gray-600">Conseils et astuces pour dresser votre chien efficacement</p>
+                                    </div>
+                                </div>
+                            </a>
+
+                            <!-- Article 2 -->
+                            <a href="/articles/sante-chien" class="group block p-6 bg-white border border-gray-200 rounded-lg hover:border-gray-800 transition-all duration-300">
+                                <div class="flex items-start gap-6">
+                                    <div class="w-14 h-14 bg-red-50 rounded-lg group-hover:bg-gray-800 flex items-center justify-center flex-shrink-0 transition-colors duration-300">
+                                        <i class="fa-solid fa-heart text-red-500 text-xl group-hover:text-white transition-colors"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Santé et Bien-être</h3>
+                                        <p class="text-gray-600">Guide complet pour maintenir votre chien en bonne santé</p>
+                                    </div>
+                                </div>
+                            </a>
+
+                            <!-- Article 3 -->
+                            <a href="/articles/nutrition" class="group block p-6 bg-white border border-gray-200 rounded-lg hover:border-gray-800 transition-all duration-300">
+                                <div class="flex items-start gap-6">
+                                    <div class="w-14 h-14 bg-green-50 rounded-lg group-hover:bg-gray-800 flex items-center justify-center flex-shrink-0 transition-colors duration-300">
+                                        <i class="fa-solid fa-bowl-food text-green-500 text-xl group-hover:text-white transition-colors"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Nutrition Canine</h3>
+                                        <p class="text-gray-600">Alimentation équilibrée pour votre compagnon</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Consultation Column -->
+                    <div class="space-y-8">
+                        <h2 class="text-2xl lg:text-3xl font-bold text-gray-800 relative inline-block">
+                            Consultation Professionnelle
+                            <div class="absolute -bottom-2 left-0 w-16 h-1 bg-gray-800"></div>
+                        </h2>
+
+                        <div class="space-y-6">
+                            <!-- Free Consultation -->
+                            <div class="group p-6 bg-white border border-gray-200 rounded-lg hover:border-gray-800 transition-all duration-300">
+                                <div class="flex items-center justify-between mb-6">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center">
+                                            <i class="fa-solid fa-comments text-purple-500"></i>
+                                        </div>
+                                        <h3 class="text-lg font-semibold text-gray-800">Consultation Gratuite</h3>
+                                    </div>
+                                    <span class="px-4 py-1 bg-gray-100 text-gray-800 text-sm rounded-full font-medium">Gratuit</span>
+                                </div>
+                                <p class="text-gray-600 mb-6">Obtenez des conseils de base pour prendre soin de votre chien avec nos experts</p>
+                                <a href="/consultation" class="group inline-flex w-full items-center justify-center gap-2 px-6 py-3 border-2 border-gray-800 rounded-lg text-gray-800 font-medium hover:bg-gray-800 hover:text-white transition-all duration-300">
+                                    <span>Commencer</span>
+                                    <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                                    </svg>
+                                </a>
+                            </div>
+
+                            <!-- Premium Consultation -->
+                            <div class="group p-6 bg-white border-2 border-gray-800 rounded-lg">
+                                <div class="flex items-center justify-between mb-6">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 bg-yellow-50 rounded-lg flex items-center justify-center">
+                                            <i class="fa-solid fa-crown text-yellow-500"></i>
+                                        </div>
+                                        <h3 class="text-lg font-semibold text-gray-800">Consultation Premium</h3>
+                                    </div>
+                                    <span class="px-4 py-1 bg-gray-800 text-white text-sm rounded-full font-medium">Premium</span>
+                                </div>
+                                <p class="text-gray-600 mb-6">Consultation personnalisée avec nos experts certifiés et suivi approfondi</p>
+                                <a href="/consultation" class="group inline-flex w-full items-center justify-center gap-2 px-6 py-3 bg-gray-800 rounded-lg text-white font-medium hover:bg-gray-700 transition-all duration-300">
+                                    <span>Réserver</span>
+                                    <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- AI Feature Section -->
+        <section class="py-20 bg-[#EDF2F7]">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+                    <!-- Left: AI Feature Content -->
+                    <div class="flex-1 space-y-8">
+                        <!-- Badge -->
+                        <div class="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-full text-sm font-medium border border-blue-100">
+                            <i class="fa-solid fa-robot text-blue-500"></i>
+                            Intelligence Artificielle
+                        </div>
+
+                        <!-- Content -->
+                        <div class="space-y-6">
+                            <h2 class="text-3xl lg:text-4xl font-bold text-gray-900">
+                                Découvrez la Race de <br class="hidden lg:block" />
+                                Votre Chien avec Notre IA
+                            </h2>
+                            <p class="text-lg text-gray-600 leading-relaxed">
+                                Téléchargez simplement une photo et notre intelligence artificielle identifiera la race de votre chien avec précision. Un outil rapide et fiable pour mieux connaître votre compagnon.
+                            </p>
+                        </div>
+
+                        <!-- CTA Button -->
+                        <a href="/dog-breeds-analyzer" class="inline-flex items-center gap-3 px-8 py-4 bg-gray-800 text-white rounded-lg font-medium 
+                          hover:bg-gray-700 transition-all duration-300 group">
+                            <i class="fa-solid fa-camera text-lg"></i>
+                            <span>Analyser une Photo</span>
+                            <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                            </svg>
+                        </a>
+                    </div>
+
+
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="py-12 bg-blue-900 text-white">
+            <div class="max-w-6xl mx-auto px-4 text-center">
+                <h2 class="text-2xl md:text-3xl font-bold mb-6">
+                    Prêt à Offrir le Meilleur à Votre Chien ?
+                </h2>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="/services" class="inline-flex items-center justify-center px-6 py-3 bg-white text-blue-900 rounded-lg font-medium hover:bg-gray-100 transition-colors">
+                        Trouver un Service
+                    </a>
+                    <a href="/auth/google" class="inline-flex items-center justify-center px-6 py-3 bg-blue-800 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                        Devenir Prestataire
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mobile App Banner (Optional) -->
+        <!-- <section class="py-6 bg-gray-100">
     <div class="max-w-6xl mx-auto px-4">
         <div class="flex items-center justify-between">
             <div class="flex items-center gap-4">
@@ -586,52 +542,53 @@ function handleSearch(event) {
     </div>
 </section> -->
 
-<%- include('include/footer.ejs') %>
+        <%- include('include/footer.ejs') %>
 
-<script>
-// Simple scroll animations
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '20px'
-};
+            <script>
+                // Simple scroll animations
+                const observerOptions = {
+                    threshold: 0.1,
+                    rootMargin: '20px'
+                };
 
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('fade-in');
-            observer.unobserve(entry.target);
-        }
-    });
-}, observerOptions);
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('fade-in');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, observerOptions);
 
-document.querySelectorAll('section').forEach(section => {
-    observer.observe(section);
-});
+                document.querySelectorAll('section').forEach(section => {
+                    observer.observe(section);
+                });
 
-// Mobile menu functionality (if needed)
-const mobileMenuButton = document.getElementById('mobile-menu-button');
-const mobileMenu = document.getElementById('mobile-menu');
+                // Mobile menu functionality (if needed)
+                const mobileMenuButton = document.getElementById('mobile-menu-button');
+                const mobileMenu = document.getElementById('mobile-menu');
 
-if (mobileMenuButton && mobileMenu) {
-    mobileMenuButton.addEventListener('click', () => {
-        mobileMenu.classList.toggle('hidden');
-    });
-}
-</script>
+                if (mobileMenuButton && mobileMenu) {
+                    mobileMenuButton.addEventListener('click', () => {
+                        mobileMenu.classList.toggle('hidden');
+                    });
+                }
+            </script>
 
-<style>
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
+            <style>
+                @keyframes fadeIn {
+                    from {
+                        opacity: 0;
+                        transform: translateY(20px);
+                    }
 
-.fade-in {
-    animation: fadeIn 0.6s ease-out forwards;
-}
-</style>
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+
+                .fade-in {
+                    animation: fadeIn 0.6s ease-out forwards;
+                }
+            </style>

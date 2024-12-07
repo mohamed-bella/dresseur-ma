@@ -113,6 +113,7 @@ const analyzeBreedRouter = require('./routes/analyzeBreed');
 const dogPostRouter = require('./routes/dogPost');
 const smsRouter = require('./routes/sms');
 const breedsRoutes = require('./routes/breedRoutes');
+const elevageRoutes = require('./routes/elevageRoutes');
 
 const dogRecommendationsRouter = require('./routes/dogRecommendations');
 app.use('/', dogRecommendationsRouter);
@@ -135,6 +136,7 @@ app.use('/', analyzeBreedRouter);
 
 app.use(userRoutes);
 app.use(breedsRoutes);
+app.use(elevageRoutes)
 app.use(dogPostRouter);
 app.use(authRoutes);
 app.use(adminRoutes);

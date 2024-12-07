@@ -208,7 +208,17 @@ router.get('/', async (req, res) => {
         res.status(500).render('error', { error: 'Une erreur est survenue' });
     }
 });
-
+// change user role 
+router.post('/dashboard/change-role/breeder', isAuthenticated, async (req, res) => {
+    try {
+        const userId = req.user._id;
+        await User.findByIdAndUpdate(userId, { role: 'breeder' }, { new: true });
+        res.status(200).json({ success: true, message: 'Role updated to breeder.' });
+    } catch (error) {
+        console.error('Error updating role:', error);
+        res.status(500).json({ success: false, message: 'Failed to update role.' });
+    }
+});
 // POST: Create New Service
 router.post('/dashboard/new-service', isAuthenticated, validateService, async (req, res) => {
      try {
