@@ -1,716 +1,644 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <%- include('../includes/head') %>
-    <title>Ajouter un élevage | NDRESSILIK</title>
-    <style>
-        .step-line {
-            @apply flex-1 h-0.5 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200;
-            margin: 0 12px;
-        }
+        <title>Ajouter un élevage | NDRESSILIK</title>
+        <style>
+            .step-line {
+                @apply flex-1 h-0.5 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200;
+                margin: 0 12px;
+            }
 
-        .step-circle {
-            @apply w-12 h-12 flex items-center justify-center rounded-full 
-                   border-2 transition-all duration-300 text-lg font-semibold;
-        }
+            .step-circle {
+                @apply w-12 h-12 flex items-center justify-center rounded-full border-2 transition-all duration-300 text-lg font-semibold;
+            }
 
-        .step-circle.active {
-            @apply border-blue-500 bg-blue-500 text-white shadow-lg shadow-blue-200;
-        }
+            .step-circle.active {
+                @apply border-blue-500 bg-blue-500 text-white shadow-lg shadow-blue-200;
+            }
 
-        .step-circle.completed {
-            @apply border-green-500 bg-green-500 text-white shadow-lg shadow-green-200;
-        }
+            .step-circle.completed {
+                @apply border-green-500 bg-green-500 text-white shadow-lg shadow-green-200;
+            }
 
-        .form-input:focus {
-            @apply ring-2 ring-blue-100 border-blue-500;
-        }
-    </style>
+            .form-input:focus {
+                @apply ring-2 ring-blue-100 border-blue-500;
+            }
+        </style>
 </head>
+
 <body class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
     <%- include('../includes/navbar') %>
 
-    <div class="py-16">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-            <!-- Header Section -->
-            <div class="text-center mb-12">
-                <h1 class="text-4xl font-bold text-gray-900 mb-4">
-                    Ajouter votre élevage
-                </h1>
-                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-                    Créez votre profil d'élevage professionnel et rejoignez notre communauté d'éleveurs certifiés
-                </p>
-            </div>
-
-            <!-- Steps Progress -->
-            <div class="max-w-4xl mx-auto mb-12">
-                <div class="flex justify-between items-center relative">
-                    <!-- Progress Bar Background -->
-                    <div class="absolute top-6 left-0 right-0 h-0.5 bg-gray-200"></div>
-                    
-                    <div class="step relative z-10" data-step="1">
-                        <div class="step-circle active bg-white border-blue-500">1</div>
-                        <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 w-max">
-                            <div class="font-medium text-gray-900">Informations</div>
-                            <div class="text-sm text-gray-500">Détails principaux</div>
-                        </div>
-                    </div>
-
-                    <div class="step relative z-10" data-step="2">
-                        <div class="step-circle bg-white border-gray-300">2</div>
-                        <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 w-max">
-                            <div class="font-medium text-gray-900">Contact</div>
-                            <div class="text-sm text-gray-500">Coordonnées</div>
-                        </div>
-                    </div>
-
-                    <div class="step relative z-10" data-step="3">
-                        <div class="step-circle bg-white border-gray-300">3</div>
-                        <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 w-max">
-                            <div class="font-medium text-gray-900">Services</div>
-                            <div class="text-sm text-gray-500">Détails avancés</div>
-                        </div>
-                    </div>
+        <div class="py-16">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
+                <!-- Header Section -->
+                <div class="text-center mb-12">
+                    <h1 class="text-4xl font-bold text-gray-900 mb-4">
+                        Ajouter votre élevage
+                    </h1>
+                    <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                        Créez votre profil d'élevage professionnel et rejoignez notre communauté d'éleveurs certifiés
+                    </p>
                 </div>
-            </div>
 
-            <!-- Form Container -->
-            <div class="max-w-4xl mx-auto mt-24">
-                <form id="breedingForm" class="space-y-8">
-                    <!-- Step 1: Basic Info -->
-                    <div class="form-step" data-step="1">
-                        <div class="bg-white rounded-2xl shadow-lg p-8">
-                            <!-- Logo Upload -->
-                            <div class="mb-8">
-                                <label class="block text-lg font-semibold text-gray-900 mb-4">
-                                    Logo de l'élevage
-                                </label>
-                                <div class="flex items-center gap-6">
-                                    <div class="relative group">
-                                        <div class="w-40 h-40 rounded-2xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100
+                <!-- Steps Progress -->
+<div class="max-w-3xl mx-auto mb-16 px-4 sm:px-6 md:mb-12">
+    <div class="flex justify-between items-center relative">
+        <!-- Progress Bar Background -->
+        <div class="absolute top-6 left-0 right-0 h-0.5 bg-gray-200"></div>
+
+        <!-- Step 1 -->
+        <div class="step relative z-10" data-step="1">
+            <div class="step-circle active bg-white border-blue-500 w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center rounded-full border-2">
+                <span class="text-sm sm:text-base">1</span>
+            </div>
+            <div class="absolute -bottom-8 sm:-bottom-10 left-1/2 -translate-x-1/2 w-max">
+                <div class="font-medium text-gray-900 text-xs sm:text-sm whitespace-nowrap">Informations</div>
+                <div class="text-xs sm:text-sm text-gray-500 hidden sm:block">Détails principaux</div>
+            </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step relative z-10" data-step="2">
+            <div class="step-circle bg-white border-gray-300 w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center rounded-full border-2">
+                <span class="text-sm sm:text-base">2</span>
+            </div>
+            <div class="absolute -bottom-8 sm:-bottom-10 left-1/2 -translate-x-1/2 w-max">
+                <div class="font-medium text-gray-900 text-xs sm:text-sm whitespace-nowrap">Contact</div>
+                <div class="text-xs sm:text-sm text-gray-500 hidden sm:block">Coordonnées</div>
+            </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step relative z-10" data-step="3">
+            <div class="step-circle bg-white border-gray-300 w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center rounded-full border-2">
+                <span class="text-sm sm:text-base">3</span>
+            </div>
+            <div class="absolute -bottom-8 sm:-bottom-10 left-1/2 -translate-x-1/2 w-max">
+                <div class="font-medium text-gray-900 text-xs sm:text-sm whitespace-nowrap">Services</div>
+                <div class="text-xs sm:text-sm text-gray-500 hidden sm:block">Détails avancés</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+                <!-- Form Container -->
+                <div class="max-w-4xl mx-auto mt-24">
+                    <form id="breedingForm" class="space-y-8">
+                        <!-- Step 1: Basic Info -->
+                        <div class="form-step" data-step="1">
+                            <div class="bg-white rounded-2xl shadow-lg p-8">
+                                <!-- Logo Upload -->
+                                <div class="mb-8">
+                                    <label class="block text-lg font-semibold text-gray-900 mb-4">
+                                        Logo de l'élevage
+                                    </label>
+                                    <div class="flex items-center gap-6">
+                                        <div class="relative group">
+                                            <div class="w-40 h-40 rounded-2xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100
                                                     border-2 border-dashed border-gray-300 group-hover:border-blue-500
                                                     transition-all duration-300" id="logoPreview">
-                                            <div class="flex flex-col items-center justify-center h-full text-gray-400
+                                                <div class="flex flex-col items-center justify-center h-full text-gray-400
                                                         group-hover:text-blue-500 transition-colors">
-                                                <i class="fas fa-cloud-upload-alt text-4xl mb-2"></i>
-                                                <span class="text-sm text-gray-500">Cliquez pour ajouter</span>
+                                                    <i class="fas fa-cloud-upload-alt text-4xl mb-2"></i>
+                                                    <span class="text-sm text-gray-500">Cliquez pour ajouter</span>
+                                                </div>
                                             </div>
+                                            <input type="file" name="logo" accept="image/*" class="" id="logoInput">
                                         </div>
-                                        <input type="file" 
-                                               name="logo" 
-                                               accept="image/*"
-                                               class="" 
-                                               id="logoInput">
-                                    </div>
-                                    <div class="flex-1">
-                                        <div class="text-sm text-gray-600 mb-2">
-                                            Format accepté: JPG, PNG jusqu'à 5MB
-                                        </div>
-                                        <div class="flex flex-col gap-2 text-sm text-gray-500">
-                                            <div class="flex items-center gap-2">
-                                                <i class="fas fa-check-circle text-green-500"></i>
-                                                Taille recommandée: 800x800px
+                                        <!-- <div class="flex-1">
+                                            <div class="text-sm text-gray-600 mb-2">
+                                                Format accepté: JPG, PNG jusqu'à 5MB
                                             </div>
-                                            <div class="flex items-center gap-2">
-                                                <i class="fas fa-check-circle text-green-500"></i>
-                                                Format carré pour un meilleur rendu
+                                            <div class="flex flex-col gap-2 text-sm text-gray-500">
+                                                <div class="flex items-center gap-2">
+                                                    <i class="fas fa-check-circle text-green-500"></i>
+                                                    Taille recommandée: 800x800px
+                                                </div>
+                                                <div class="flex items-center gap-2">
+                                                    <i class="fas fa-check-circle text-green-500"></i>
+                                                    Format carré pour un meilleur rendu
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="error-message mt-2 text-red-500 text-sm"></div>
+                                            <div class="error-message mt-2 text-red-500 text-sm"></div>
+                                        </div> -->
                                     </div>
                                 </div>
-                            </div>
 
-                            <!-- Name Field -->
-                            <div class="mb-8">
-                                <label for="name" class="block text-lg font-semibold text-gray-900 mb-4">
-                                    Nom de l'élevage <span class="text-red-500">*</span>
-                                </label>
-                                <div class="relative">
-                                    <input type="text" 
-                                           id="name" 
-                                           name="name" 
-                                           class="w-full px-5 py-4 rounded-xl border-2 border-gray-200
+                                <!-- Name Field -->
+                                <div class="mb-8">
+                                    <label for="name" class="block text-lg font-semibold text-gray-900 mb-4">
+                                        Nom de l'élevage <span class="text-red-500">*</span>
+                                    </label>
+                                    <div class="relative">
+                                        <input type="text" id="name" name="name" class="w-full px-5 py-4 rounded-xl border-2 border-gray-200
                                                   focus:border-blue-500 focus:ring-4 focus:ring-blue-50
                                                   transition-all duration-300 text-gray-800
-                                                  placeholder-gray-400"
-                                           placeholder="Ex: Élevage du Bonheur"
-                                           data-validate="required|minLength:3|maxLength:100">
-                                    <div class="error-message mt-2 text-red-500 text-sm"></div>
+                                                  placeholder-gray-400" placeholder="Ex: Élevage du Bonheur" data-validate="required|minLength:3|maxLength:100">
+                                        <div class="error-message mt-2 text-red-500 text-sm"></div>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <!-- Description Field -->
-                            <div class="mb-8">
-                                <label for="description" class="block text-lg font-semibold text-gray-900 mb-4">
-                                    Description <span class="text-red-500">*</span>
-                                </label>
-                                <div class="relative">
-                                    <textarea id="description" 
-                                              name="description" 
-                                              rows="5"
-                                              class="w-full px-5 py-4 rounded-xl border-2 border-gray-200
+                                <!-- Description Field -->
+                                <div class="mb-8">
+                                    <label for="description" class="block text-lg font-semibold text-gray-900 mb-4">
+                                        Description <span class="text-red-500">*</span>
+                                    </label>
+                                    <div class="relative">
+                                        <textarea id="description" name="description" rows="5" class="w-full px-5 py-4 rounded-xl border-2 border-gray-200
                                                      focus:border-blue-500 focus:ring-4 focus:ring-blue-50
                                                      transition-all duration-300 text-gray-800
-                                                     placeholder-gray-400 resize-none"
-                                              placeholder="Décrivez votre élevage, votre expérience et vos valeurs..."
-                                              data-validate="required|minLength:100|maxLength:2000"></textarea>
-                                    <div class="flex justify-between mt-2">
-                                        <div class="error-message text-red-500 text-sm"></div>
-                                        <div class="text-sm text-gray-500">
-                                            <span id="charCount">0</span>/2000
+                                                     placeholder-gray-400 resize-none" placeholder="Décrivez votre élevage, votre expérience et vos valeurs..." data-validate="required|minLength:100|maxLength:2000"></textarea>
+                                        <div class="flex justify-between mt-2">
+                                            <div class="error-message text-red-500 text-sm"></div>
+                                            <div class="text-sm text-gray-500">
+                                                <span id="charCount">0</span>/2000
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Location Fields -->
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <!-- City -->
+                                    <div>
+                                        <label for="city" class="block text-lg font-semibold text-gray-900 mb-4">
+                                            Ville <span class="text-red-500">*</span>
+                                        </label>
+                                        <div class="relative">
+                                            <input type="text" id="city" name="city" class="w-full px-5 py-4 rounded-xl border-2 border-gray-200
+                                                      focus:border-blue-500 focus:ring-4 focus:ring-blue-50
+                                                      transition-all duration-300 text-gray-800" data-validate="required|minLength:2|maxLength:50">
+                                            <div class="error-message mt-2 text-red-500 text-sm"></div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Address -->
+                                    <div>
+                                        <label for="address" class="block text-lg font-semibold text-gray-900 mb-4">
+                                            Adresse <span class="text-red-500">*</span>
+                                        </label>
+                                        <div class="relative">
+                                            <textarea id="address" name="address" rows="1" class="w-full px-5 py-4 rounded-xl border-2 border-gray-200
+                                                         focus:border-blue-500 focus:ring-4 focus:ring-blue-50
+                                                         transition-all duration-300 text-gray-800" data-validate="required|minLength:10|maxLength:200"></textarea>
+                                            <div class="error-message mt-2 text-red-500 text-sm"></div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-                            <!-- Location Fields -->
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <!-- City -->
-                                <div>
-                                    <label for="city" class="block text-lg font-semibold text-gray-900 mb-4">
-                                        Ville <span class="text-red-500">*</span>
-                                    </label>
-                                    <div class="relative">
-                                        <input type="text" 
-                                               id="city" 
-                                               name="city" 
-                                               class="w-full px-5 py-4 rounded-xl border-2 border-gray-200
-                                                      focus:border-blue-500 focus:ring-4 focus:ring-blue-50
-                                                      transition-all duration-300 text-gray-800"
-                                               data-validate="required|minLength:2|maxLength:50">
-                                        <div class="error-message mt-2 text-red-500 text-sm"></div>
+                        </div>
+                        <!-- Step 2: Contact Info -->
+                        <div class="form-step hidden" data-step="2">
+                            <div class="bg-white rounded-2xl shadow-lg p-8">
+                                <!-- Contact Section Title -->
+                                <div class="flex items-center gap-4 mb-8">
+                                    <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center">
+                                        <i class="fas fa-address-card text-blue-500 text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-xl font-semibold text-gray-900">Informations de contact</h3>
+                                        <p class="text-gray-500">Comment vos clients peuvent vous joindre</p>
                                     </div>
                                 </div>
 
-                                <!-- Address -->
-                                <div>
-                                    <label for="address" class="block text-lg font-semibold text-gray-900 mb-4">
-                                        Adresse <span class="text-red-500">*</span>
-                                    </label>
-                                    <div class="relative">
-                                        <textarea id="address" 
-                                                  name="address" 
-                                                  rows="1"
-                                                  class="w-full px-5 py-4 rounded-xl border-2 border-gray-200
-                                                         focus:border-blue-500 focus:ring-4 focus:ring-blue-50
-                                                         transition-all duration-300 text-gray-800"
-                                                  data-validate="required|minLength:10|maxLength:200"></textarea>
-                                        <div class="error-message mt-2 text-red-500 text-sm"></div>
+                                <!-- Contact Fields Grid -->
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <!-- Phone -->
+                                    <div class="form-group">
+                                        <label for="phone" class="block text-lg font-semibold text-gray-900 mb-4">
+                                            Téléphone <span class="text-red-500">*</span>
+                                        </label>
+                                        <div class="relative">
+                                            <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+                                                <i class="fas fa-phone text-gray-400"></i>
+                                            </div>
+                                            <input type="tel" id="phone" name="phone" class="w-full pl-12 pr-5 py-4 rounded-xl border-2 border-gray-200
+                                  focus:border-blue-500 focus:ring-4 focus:ring-blue-50
+                                  transition-all duration-300 text-gray-800" placeholder="+212 6XX XXXXXX" data-validate="required|phone">
+                                            <div class="error-message mt-2 text-red-500 text-sm"></div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Email -->
+                                    <div class="form-group">
+                                        <label for="email" class="block text-lg font-semibold text-gray-900 mb-4">
+                                            Email <span class="text-red-500">*</span>
+                                        </label>
+                                        <div class="relative">
+                                            <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+                                                <i class="fas fa-envelope text-gray-400"></i>
+                                            </div>
+                                            <input type="email" id="email" name="email" class="w-full pl-12 pr-5 py-4 rounded-xl border-2 border-gray-200
+                                  focus:border-blue-500 focus:ring-4 focus:ring-blue-50
+                                  transition-all duration-300 text-gray-800" placeholder="contact@example.com" data-validate="required|email">
+                                            <div class="error-message mt-2 text-red-500 text-sm"></div>
+                                        </div>
+                                    </div>
+
+                                    <!-- WhatsApp -->
+                                    <div class="form-group">
+                                        <label for="whatsapp" class="block text-lg font-semibold text-gray-900 mb-4">
+                                            WhatsApp
+                                            <span class="text-sm font-normal text-gray-500">(Optionnel)</span>
+                                        </label>
+                                        <div class="relative">
+                                            <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+                                                <i class="fab fa-whatsapp text-gray-400"></i>
+                                            </div>
+                                            <input type="tel" id="whatsapp" name="whatsapp" class="w-full pl-12 pr-5 py-4 rounded-xl border-2 border-gray-200
+                                  focus:border-blue-500 focus:ring-4 focus:ring-blue-50
+                                  transition-all duration-300 text-gray-800" placeholder="+212 6XX XXXXXX">
+                                            <div class="error-message mt-2 text-red-500 text-sm"></div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Website -->
+                                    <div class="form-group">
+                                        <label for="website" class="block text-lg font-semibold text-gray-900 mb-4">
+                                            Site Web
+                                            <span class="text-sm font-normal text-gray-500">(Optionnel)</span>
+                                        </label>
+                                        <div class="relative">
+                                            <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+                                                <i class="fas fa-globe text-gray-400"></i>
+                                            </div>
+                                            <input type="url" id="website" name="website" class="w-full pl-12 pr-5 py-4 rounded-xl border-2 border-gray-200
+                                  focus:border-blue-500 focus:ring-4 focus:ring-blue-50
+                                  transition-all duration-300 text-gray-800" placeholder="https://www.example.com">
+                                            <div class="error-message mt-2 text-red-500 text-sm"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Social Media Section -->
+                                <div class="mt-12">
+                                    <div class="flex items-center gap-4 mb-8">
+                                        <div class="w-12 h-12 rounded-xl bg-purple-50 flex items-center justify-center">
+                                            <i class="fas fa-share-alt text-purple-500 text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-xl font-semibold text-gray-900">Réseaux sociaux</h3>
+                                            <p class="text-gray-500">Vos profils sur les réseaux sociaux</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                        <!-- Facebook -->
+                                        <div class="form-group">
+                                            <div class="relative">
+                                                <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+                                                    <i class="fab fa-facebook text-gray-400"></i>
+                                                </div>
+                                                <input type="text" name="facebook" class="w-full pl-12 pr-5 py-4 rounded-xl border-2 border-gray-200
+                                      focus:border-blue-500 focus:ring-4 focus:ring-blue-50
+                                      transition-all duration-300 text-gray-800" placeholder="URL de votre page Facebook">
+                                            </div>
+                                        </div>
+
+                                        <!-- Instagram -->
+                                        <div class="form-group">
+                                            <div class="relative">
+                                                <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+                                                    <i class="fab fa-instagram text-gray-400"></i>
+                                                </div>
+                                                <input type="text" name="instagram" class="w-full pl-12 pr-5 py-4 rounded-xl border-2 border-gray-200
+                                      focus:border-blue-500 focus:ring-4 focus:ring-blue-50
+                                      transition-all duration-300 text-gray-800" placeholder="Votre compte Instagram">
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-<!-- Step 2: Contact Info -->
-<div class="form-step hidden" data-step="2">
-    <div class="bg-white rounded-2xl shadow-lg p-8">
-        <!-- Contact Section Title -->
-        <div class="flex items-center gap-4 mb-8">
-            <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center">
-                <i class="fas fa-address-card text-blue-500 text-xl"></i>
-            </div>
-            <div>
-                <h3 class="text-xl font-semibold text-gray-900">Informations de contact</h3>
-                <p class="text-gray-500">Comment vos clients peuvent vous joindre</p>
-            </div>
-        </div>
 
-        <!-- Contact Fields Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <!-- Phone -->
-            <div class="form-group">
-                <label for="phone" class="block text-lg font-semibold text-gray-900 mb-4">
-                    Téléphone <span class="text-red-500">*</span>
-                </label>
-                <div class="relative">
-                    <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                        <i class="fas fa-phone text-gray-400"></i>
-                    </div>
-                    <input type="tel" 
-                           id="phone" 
-                           name="phone" 
-                           class="w-full pl-12 pr-5 py-4 rounded-xl border-2 border-gray-200
-                                  focus:border-blue-500 focus:ring-4 focus:ring-blue-50
-                                  transition-all duration-300 text-gray-800"
-                           placeholder="+212 6XX XXXXXX"
-                           data-validate="required|phone">
-                    <div class="error-message mt-2 text-red-500 text-sm"></div>
-                </div>
-            </div>
+                        <!-- Step 3: Services -->
+                        <div class="form-step hidden" data-step="3">
+                            <div class="bg-white rounded-2xl shadow-lg p-8">
+                                <!-- Services Section -->
+                                <div class="mb-12">
+                                    <div class="flex items-center gap-4 mb-8">
+                                        <div class="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center">
+                                            <i class="fas fa-concierge-bell text-green-500 text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-xl font-semibold text-gray-900">Services proposés</h3>
+                                            <p class="text-gray-500">Sélectionnez les services que vous proposez</p>
+                                        </div>
+                                    </div>
 
-            <!-- Email -->
-            <div class="form-group">
-                <label for="email" class="block text-lg font-semibold text-gray-900 mb-4">
-                    Email <span class="text-red-500">*</span>
-                </label>
-                <div class="relative">
-                    <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                        <i class="fas fa-envelope text-gray-400"></i>
-                    </div>
-                    <input type="email" 
-                           id="email" 
-                           name="email" 
-                           class="w-full pl-12 pr-5 py-4 rounded-xl border-2 border-gray-200
-                                  focus:border-blue-500 focus:ring-4 focus:ring-blue-50
-                                  transition-all duration-300 text-gray-800"
-                           placeholder="contact@example.com"
-                           data-validate="required|email">
-                    <div class="error-message mt-2 text-red-500 text-sm"></div>
-                </div>
-            </div>
-
-            <!-- WhatsApp -->
-            <div class="form-group">
-                <label for="whatsapp" class="block text-lg font-semibold text-gray-900 mb-4">
-                    WhatsApp 
-                    <span class="text-sm font-normal text-gray-500">(Optionnel)</span>
-                </label>
-                <div class="relative">
-                    <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                        <i class="fab fa-whatsapp text-gray-400"></i>
-                    </div>
-                    <input type="tel" 
-                           id="whatsapp" 
-                           name="whatsapp" 
-                           class="w-full pl-12 pr-5 py-4 rounded-xl border-2 border-gray-200
-                                  focus:border-blue-500 focus:ring-4 focus:ring-blue-50
-                                  transition-all duration-300 text-gray-800"
-                           placeholder="+212 6XX XXXXXX">
-                    <div class="error-message mt-2 text-red-500 text-sm"></div>
-                </div>
-            </div>
-
-            <!-- Website -->
-            <div class="form-group">
-                <label for="website" class="block text-lg font-semibold text-gray-900 mb-4">
-                    Site Web 
-                    <span class="text-sm font-normal text-gray-500">(Optionnel)</span>
-                </label>
-                <div class="relative">
-                    <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                        <i class="fas fa-globe text-gray-400"></i>
-                    </div>
-                    <input type="url" 
-                           id="website" 
-                           name="website" 
-                           class="w-full pl-12 pr-5 py-4 rounded-xl border-2 border-gray-200
-                                  focus:border-blue-500 focus:ring-4 focus:ring-blue-50
-                                  transition-all duration-300 text-gray-800"
-                           placeholder="https://www.example.com">
-                    <div class="error-message mt-2 text-red-500 text-sm"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Social Media Section -->
-        <div class="mt-12">
-            <div class="flex items-center gap-4 mb-8">
-                <div class="w-12 h-12 rounded-xl bg-purple-50 flex items-center justify-center">
-                    <i class="fas fa-share-alt text-purple-500 text-xl"></i>
-                </div>
-                <div>
-                    <h3 class="text-xl font-semibold text-gray-900">Réseaux sociaux</h3>
-                    <p class="text-gray-500">Vos profils sur les réseaux sociaux</p>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Facebook -->
-                <div class="form-group">
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                            <i class="fab fa-facebook text-gray-400"></i>
-                        </div>
-                        <input type="text" 
-                               name="facebook" 
-                               class="w-full pl-12 pr-5 py-4 rounded-xl border-2 border-gray-200
-                                      focus:border-blue-500 focus:ring-4 focus:ring-blue-50
-                                      transition-all duration-300 text-gray-800"
-                               placeholder="URL de votre page Facebook">
-                    </div>
-                </div>
-
-                <!-- Instagram -->
-                <div class="form-group">
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                            <i class="fab fa-instagram text-gray-400"></i>
-                        </div>
-                        <input type="text" 
-                               name="instagram" 
-                               class="w-full pl-12 pr-5 py-4 rounded-xl border-2 border-gray-200
-                                      focus:border-blue-500 focus:ring-4 focus:ring-blue-50
-                                      transition-all duration-300 text-gray-800"
-                               placeholder="Votre compte Instagram">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Step 3: Services -->
-<div class="form-step hidden" data-step="3">
-    <div class="bg-white rounded-2xl shadow-lg p-8">
-        <!-- Services Section -->
-        <div class="mb-12">
-            <div class="flex items-center gap-4 mb-8">
-                <div class="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center">
-                    <i class="fas fa-concierge-bell text-green-500 text-xl"></i>
-                </div>
-                <div>
-                    <h3 class="text-xl font-semibold text-gray-900">Services proposés</h3>
-                    <p class="text-gray-500">Sélectionnez les services que vous proposez</p>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                <% ['Élevage', 'Pension', 'Dressage', 'Formation', 'Toilettage', 'Vétérinaire'].forEach(service => { %>
-                    <label class="relative group cursor-pointer">
-                        <input type="checkbox" 
-                               name="services[]" 
-                               value="<%= service %>" 
-                               class="peer hidden">
-                        <div class="flex items-center p-4 rounded-xl border-2 border-gray-200
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                        <% ['Élevage', 'Pension' , 'Dressage' , 'Formation' , 'Toilettage' , 'Vétérinaire' ].forEach(service=> { %>
+                                            <label class="relative group cursor-pointer">
+                                                <input type="checkbox" name="services[]" value="<%= service %>" class="peer hidden">
+                                                <div class="flex items-center p-4 rounded-xl border-2 border-gray-200
                                     peer-checked:border-blue-500 peer-checked:bg-blue-50
                                     hover:border-blue-200 transition-all duration-300">
-                            <div class="w-6 h-6 rounded-md border-2 border-gray-300
+                                                    <div class="w-6 h-6 rounded-md border-2 border-gray-300
                                         peer-checked:border-blue-500 peer-checked:bg-blue-500
                                         flex items-center justify-center mr-3">
-                                <i class="fas fa-check text-white opacity-0 peer-checked:opacity-100
+                                                        <i class="fas fa-check text-white opacity-0 peer-checked:opacity-100
                                           transition-opacity duration-300"></i>
-                            </div>
-                            <span class="text-gray-700 font-medium"><%= service %></span>
-                        </div>
-                    </label>
-                <% }) %>
-            </div>
-        </div>
+                                                    </div>
+                                                    <span class="text-gray-700 font-medium">
+                                                        <%= service %>
+                                                    </span>
+                                                </div>
+                                            </label>
+                                            <% }) %>
+                                    </div>
+                                </div>
 
-        <!-- Business Hours Section -->
-        <div class="mt-12">
-            <div class="flex items-center gap-4 mb-8">
-                <div class="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center">
-                    <i class="fas fa-clock text-orange-500 text-xl"></i>
-                </div>
-                <div>
-                    <h3 class="text-xl font-semibold text-gray-900">Horaires d'ouverture</h3>
-                    <p class="text-gray-500">Définissez vos horaires de travail</p>
-                </div>
-            </div>
-
-            <div class="grid gap-4">
-                <% ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'].forEach(day => { %>
-                    <div class="flex items-center gap-4 p-4 rounded-xl bg-gray-50">
-                        <div class="w-24 font-medium text-gray-700"><%= day %></div>
-                        <div class="flex-1 grid grid-cols-2 gap-4">
-                            <div class="relative">
-                                <input type="time" 
-                                       name="hours[<%= day.toLowerCase() %>][open]" 
-                                       class="w-full px-4 py-2 rounded-lg border-2 border-gray-200
-                                              focus:border-blue-500 focus:ring-2 focus:ring-blue-50">
-                            </div>
-                            <div class="relative">
-                                <input type="time" 
-                                       name="hours[<%= day.toLowerCase() %>][close]" 
-                                       class="w-full px-4 py-2 rounded-lg border-2 border-gray-200
-                                              focus:border-blue-500 focus:ring-2 focus:ring-blue-50">
+                                <!-- Business Hours Section -->
+                                
                             </div>
                         </div>
-                    </div>
-                <% }) %>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- Navigation Buttons -->
-<div class="flex justify-between gap-4 mt-8">
-    <button type="button" 
-            class="prev-step hidden px-8 py-4 bg-gray-100 text-gray-700 rounded-xl
+                        <!-- Navigation Buttons -->
+                        <div class="flex justify-between gap-4 mt-8">
+                            <button type="button" class="prev-step hidden px-8 py-4 bg-gray-100 text-gray-700 rounded-xl
                    hover:bg-gray-200 transition-all duration-300 flex items-center gap-2">
-        <i class="fas fa-arrow-left"></i>
-        Précédent
-    </button>
-    <button type="button" 
-            class="next-step ml-auto px-8 py-4 bg-blue-600 text-white rounded-xl
+                                <i class="fas fa-arrow-left"></i>
+                                Précédent
+                            </button>
+                            <button type="button" class="next-step ml-auto px-8 py-4 bg-blue-600 text-white rounded-xl
                    hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-600/25
                    transition-all duration-300 flex items-center gap-2">
-        Suivant
-        <i class="fas fa-arrow-right"></i>
-    </button>
-    <button type="submit" 
-            class="submit-form hidden px-8 py-4 bg-blue-600 text-white rounded-xl
+                                Suivant
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                            <button type="submit" class="submit-form hidden px-8 py-4 bg-blue-600 text-white rounded-xl
                    hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-600/25
                    transition-all duration-300 flex items-center gap-2">
-        <i class="fas fa-check"></i>
-        Créer l'élevage
-    </button>
-</div>
-</form>
-</div>
-</div>
-</div>
+                                <i class="fas fa-check"></i>
+                                Créer l'élevage
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 
-<!-- Toast Notification -->
-<div id="toast" class="fixed bottom-4 right-4 transform transition-all duration-300 opacity-0 translate-y-2">
-<div class="bg-white rounded-xl shadow-xl border border-gray-100 p-4 flex items-center gap-3">
-<i class="fas text-2xl"></i>
-<p class="text-sm font-medium"></p>
-</div>
-</div>
+        <!-- Toast Notification -->
+        <div id="toast" class="fixed bottom-4 right-4 transform transition-all duration-300 opacity-0 translate-y-2">
+            <div class="bg-white rounded-xl shadow-xl border border-gray-100 p-4 flex items-center gap-3">
+                <i class="fas text-2xl"></i>
+                <p class="text-sm font-medium"></p>
+            </div>
+        </div>
 
 
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('breedingForm');
-    const steps = document.querySelectorAll('.form-step');
-    const stepIndicators = document.querySelectorAll('.step');
-    let currentStep = 1;
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const form = document.getElementById('breedingForm');
+                const steps = document.querySelectorAll('.form-step');
+                const stepIndicators = document.querySelectorAll('.step');
+                let currentStep = 1;
 
-    // Validation rules
-    const validationRules = {
-        required: value => value.trim().length > 0,
-        minLength: (value, min) => value.trim().length >= parseInt(min),
-        maxLength: (value, max) => value.trim().length <= parseInt(max),
-        email: value => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
-        phone: value => /^(?:\+212|0)[567]\d{8}$/.test(value),
-        url: value => /^(https?:\/\/)?([\w\-]+\.)+[\w\-]{2,}(\/.*)?$/.test(value),
-        json: value => {
-            try {
-                JSON.parse(value);
-                return true;
-            } catch (error) {
-                return false;
-            }
-        },
-        image: file => {
-            if (!file) return true; // Allow empty files (optional field)
-            const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
-            return validTypes.includes(file.type) && file.size <= 5 * 1024 * 1024; // 5MB limit
-        },
-    };
+                // Validation rules
+                const validationRules = {
+                    required: value => value.trim().length > 0,
+                    minLength: (value, min) => value.trim().length >= parseInt(min),
+                    maxLength: (value, max) => value.trim().length <= parseInt(max),
+                    email: value => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
+                    phone: value => /^(?:\+212|0)[567]\d{8}$/.test(value),
+                    url: value => /^(https?:\/\/)?([\w\-]+\.)+[\w\-]{2,}(\/.*)?$/.test(value),
+                    json: value => {
+                        try {
+                            JSON.parse(value);
+                            return true;
+                        } catch (error) {
+                            return false;
+                        }
+                    },
+                    image: file => {
+                        if (!file) return true; // Allow empty files (optional field)
+                        const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+                        return validTypes.includes(file.type) && file.size <= 5 * 1024 * 1024; // 5MB limit
+                    },
+                };
 
-    // Real-time validation
-    function validateField(input) {
-        const validations = input.dataset.validate?.split('|') || [];
-        const errorMessages = input.dataset.error?.split('|') || [];
-        const errorDiv = input.parentElement.querySelector('.error-message');
-        let isValid = true;
-        let errorMessage = '';
+                // Real-time validation
+                function validateField(input) {
+                    const validations = input.dataset.validate?.split('|') || [];
+                    const errorMessages = input.dataset.error?.split('|') || [];
+                    const errorDiv = input.parentElement.querySelector('.error-message');
+                    let isValid = true;
+                    let errorMessage = '';
 
-        for (let i = 0; i < validations.length; i++) {
-            const [validationType, param] = validations[i].split(':');
-            const value = input.type === 'file' ? input.files[0] : input.value;
+                    for (let i = 0; i < validations.length; i++) {
+                        const [validationType, param] = validations[i].split(':');
+                        const value = input.type === 'file' ? input.files[0] : input.value;
 
-            if (validationRules[validationType] && !validationRules[validationType](value, param)) {
-                isValid = false;
-                errorMessage = errorMessages[i] || 'Champ invalide';
-                break;
-            }
-        }
+                        if (validationRules[validationType] && !validationRules[validationType](value, param)) {
+                            isValid = false;
+                            errorMessage = errorMessages[i] || 'Champ invalide';
+                            break;
+                        }
+                    }
 
-        if (errorDiv) {
-            errorDiv.textContent = isValid ? '' : errorMessage;
-        }
+                    if (errorDiv) {
+                        errorDiv.textContent = isValid ? '' : errorMessage;
+                    }
 
-        input.classList.toggle('border-red-500', !isValid);
-        input.classList.toggle('border-green-500', isValid);
-        return isValid;
-    }
+                    input.classList.toggle('border-red-500', !isValid);
+                    input.classList.toggle('border-green-500', isValid);
+                    return isValid;
+                }
 
-    // Add validation listeners to all fields
-    form.querySelectorAll('input, textarea, select').forEach(input => {
-        if (input.dataset.validate) {
-            ['input', 'blur'].forEach(event => {
-                input.addEventListener(event, () => validateField(input));
-            });
-        }
-    });
+                // Add validation listeners to all fields
+                form.querySelectorAll('input, textarea, select').forEach(input => {
+                    if (input.dataset.validate) {
+                        ['input', 'blur'].forEach(event => {
+                            input.addEventListener(event, () => validateField(input));
+                        });
+                    }
+                });
 
-    // Character counters for description and services
-    const description = document.getElementById('description');
-    const charCount = document.getElementById('charCount');
+                // Character counters for description and services
+                const description = document.getElementById('description');
+                const charCount = document.getElementById('charCount');
 
-    if (description && charCount) {
-        description.addEventListener('input', () => {
-            const count = description.value.length;
-            charCount.textContent = count;
-            charCount.classList.toggle('text-red-500', count > 2000);
-        });
-    }
+                if (description && charCount) {
+                    description.addEventListener('input', () => {
+                        const count = description.value.length;
+                        charCount.textContent = count;
+                        charCount.classList.toggle('text-red-500', count > 2000);
+                    });
+                }
 
-    const services = document.getElementById('services');
-    const servicesCharCount = document.getElementById('servicesCharCount');
+                const services = document.getElementById('services');
+                const servicesCharCount = document.getElementById('servicesCharCount');
 
-    if (services && servicesCharCount) {
-        services.addEventListener('input', () => {
-            const count = services.value.length;
-            servicesCharCount.textContent = count;
-            servicesCharCount.classList.toggle('text-red-500', count > 1000);
-        });
-    }
+                if (services && servicesCharCount) {
+                    services.addEventListener('input', () => {
+                        const count = services.value.length;
+                        servicesCharCount.textContent = count;
+                        servicesCharCount.classList.toggle('text-red-500', count > 1000);
+                    });
+                }
 
-    // Logo preview
-    const logoInput = document.getElementById('logoInput');
-    const logoPreview = document.getElementById('logoPreview');
+                // Logo preview
+                const logoInput = document.getElementById('logoInput');
+                const logoPreview = document.getElementById('logoPreview');
 
-    if (logoInput && logoPreview) {
-        logoInput.addEventListener('change', () => {
-            const file = logoInput.files[0];
-            if (file && validationRules.image(file)) {
-                const reader = new FileReader();
-                reader.onload = e => {
-                    logoPreview.innerHTML = `
+                if (logoInput && logoPreview) {
+                    logoInput.addEventListener('change', () => {
+                        const file = logoInput.files[0];
+                        if (file && validationRules.image(file)) {
+                            const reader = new FileReader();
+                            reader.onload = e => {
+                                logoPreview.innerHTML = `
                         <img src="${e.target.result}" class="w-full h-full object-cover">
                     `;
-                };
-                reader.readAsDataURL(file);
-            } else {
-                logoPreview.innerHTML = `
+                            };
+                            reader.readAsDataURL(file);
+                        } else {
+                            logoPreview.innerHTML = `
                     <div class="flex items-center justify-center h-full text-gray-400">
                         <i class="fas fa-image text-3xl"></i>
                     </div>
                 `;
-            }
-        });
-    }
+                        }
+                    });
+                }
 
-    // Step navigation logic
-    const nextStepButtons = document.querySelectorAll('.next-step');
-    const prevStepButtons = document.querySelectorAll('.prev-step');
+                // Step navigation logic
+                const nextStepButtons = document.querySelectorAll('.next-step');
+                const prevStepButtons = document.querySelectorAll('.prev-step');
 
-    function showStep(stepNumber) {
-        steps.forEach((step, index) => {
-            if (index + 1 === stepNumber) {
-                step.classList.remove('hidden');
-            } else {
-                step.classList.add('hidden');
-            }
-        });
+                function showStep(stepNumber) {
+                    steps.forEach((step, index) => {
+                        if (index + 1 === stepNumber) {
+                            step.classList.remove('hidden');
+                        } else {
+                            step.classList.add('hidden');
+                        }
+                    });
 
-        stepIndicators.forEach((indicator, index) => {
-            const circle = indicator.querySelector('.step-circle');
-            if (index + 1 < stepNumber) {
-                circle.classList.add('completed');
-                circle.classList.remove('active');
-            } else if (index + 1 === stepNumber) {
-                circle.classList.add('active');
-                circle.classList.remove('completed');
-            } else {
-                circle.classList.remove('active', 'completed');
-            }
-        });
+                    stepIndicators.forEach((indicator, index) => {
+                        const circle = indicator.querySelector('.step-circle');
+                        if (index + 1 < stepNumber) {
+                            circle.classList.add('completed');
+                            circle.classList.remove('active');
+                        } else if (index + 1 === stepNumber) {
+                            circle.classList.add('active');
+                            circle.classList.remove('completed');
+                        } else {
+                            circle.classList.remove('active', 'completed');
+                        }
+                    });
 
-        currentStep = stepNumber;
+                    currentStep = stepNumber;
 
-        document.querySelectorAll('.prev-step').forEach(btn => {
-            btn.classList.toggle('hidden', currentStep === 1);
-        });
-        document.querySelectorAll('.next-step').forEach(btn => {
-            btn.classList.toggle('hidden', currentStep === steps.length);
-        });
-        document.querySelectorAll('.submit-form').forEach(btn => {
-            btn.classList.toggle('hidden', currentStep !== steps.length);
-        });
-    }
+                    document.querySelectorAll('.prev-step').forEach(btn => {
+                        btn.classList.toggle('hidden', currentStep === 1);
+                    });
+                    document.querySelectorAll('.next-step').forEach(btn => {
+                        btn.classList.toggle('hidden', currentStep === steps.length);
+                    });
+                    document.querySelectorAll('.submit-form').forEach(btn => {
+                        btn.classList.toggle('hidden', currentStep !== steps.length);
+                    });
+                }
 
-    nextStepButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const currentStepForm = steps[currentStep - 1];
-            const inputs = Array.from(currentStepForm.querySelectorAll('input, textarea, select'));
-            const isValid = inputs.every(input => validateField(input));
+                nextStepButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        const currentStepForm = steps[currentStep - 1];
+                        const inputs = Array.from(currentStepForm.querySelectorAll('input, textarea, select'));
+                        const isValid = inputs.every(input => validateField(input));
 
-            if (isValid) {
-                showStep(currentStep + 1);
-            } else {
-                showToast('Veuillez remplir tous les champs obligatoires correctement.', 'error');
-            }
-        });
-    });
+                        if (isValid) {
+                            showStep(currentStep + 1);
+                        } else {
+                            showToast('Veuillez remplir tous les champs obligatoires correctement.', 'error');
+                        }
+                    });
+                });
 
-    prevStepButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            showStep(currentStep - 1);
-        });
-    });
+                prevStepButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        showStep(currentStep - 1);
+                    });
+                });
 
-    // Initialize first step
-    showStep(1);
+                // Initialize first step
+                showStep(1);
 
-    // Form submission
-    form.addEventListener('submit', async e => {
-        e.preventDefault();
+                // Form submission
+                form.addEventListener('submit', async e => {
+                    e.preventDefault();
 
-        const allInputs = Array.from(form.querySelectorAll('input, textarea, select'));
-        const allValid = allInputs.every(input => validateField(input));
+                    const allInputs = Array.from(form.querySelectorAll('input, textarea, select'));
+                    const allValid = allInputs.every(input => validateField(input));
 
-        if (!allValid) {
-            showToast('Veuillez corriger les erreurs dans le formulaire avant de soumettre.', 'error');
-            return;
-        }
+                    if (!allValid) {
+                        showToast('Veuillez corriger les erreurs dans le formulaire avant de soumettre.', 'error');
+                        return;
+                    }
 
-        const formData = new FormData(form);
-        const submitBtn = form.querySelector('.submit-form');
+                    const formData = new FormData(form);
+                    const submitBtn = form.querySelector('.submit-form');
 
-        try {
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = `
+                    try {
+                        submitBtn.disabled = true;
+                        submitBtn.innerHTML = `
                 <i class="fas fa-spinner fa-spin mr-2"></i>
                 Création en cours...
             `;
 
-            const response = await fetch('/dashboard/breedings/add', {
-                method: 'POST',
-                body: formData,
-            });
+                        const response = await fetch('/dashboard/breedings/add', {
+                            method: 'POST',
+                            body: formData,
+                        });
 
-            const data = await response.json();
+                        const data = await response.json();
 
-            if (response.ok) {
-                showToast('Élevage créé avec succès!', 'success');
-                setTimeout(() => {
-                    window.location.href = data.data.redirectUrl;
-                }, 1500);
-            } else {
-                throw new Error(data.message || 'Erreur lors de la création');
-            }
-        } catch (error) {
-            showToast(error.message, 'error');
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = `
+                        if (response.ok) {
+                            showToast('Élevage créé avec succès!', 'success');
+                            setTimeout(() => {
+                                window.location.href = data.data.redirectUrl;
+                            }, 1500);
+                        } else {
+                            throw new Error(data.message || 'Erreur lors de la création');
+                        }
+                    } catch (error) {
+                        showToast(error.message, 'error');
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = `
                 <i class="fas fa-check mr-2"></i>
                 Créer l'élevage
             `;
-        }
-    });
+                    }
+                });
 
-    // Toast notification
-    function showToast(message, type = 'success') {
-        const toast = document.getElementById('toast');
-        const icon = toast.querySelector('i');
-        const text = toast.querySelector('p');
+                // Toast notification
+                function showToast(message, type = 'success') {
+                    const toast = document.getElementById('toast');
+                    const icon = toast.querySelector('i');
+                    const text = toast.querySelector('p');
 
-        icon.className = `fas ${
-            type === 'success'
-                ? 'fa-check-circle text-green-500'
-                : 'fa-exclamation-circle text-red-500'
-        }`;
-        text.textContent = message;
+                    icon.className = `fas ${type === 'success'
+                            ? 'fa-check-circle text-green-500'
+                            : 'fa-exclamation-circle text-red-500'
+                        }`;
+                    text.textContent = message;
 
-        toast.classList.remove('opacity-0', 'translate-y-2');
-        toast.classList.add('opacity-100', 'translate-y-0');
+                    toast.classList.remove('opacity-0', 'translate-y-2');
+                    toast.classList.add('opacity-100', 'translate-y-0');
 
-        setTimeout(() => {
-            toast.classList.remove('opacity-100', 'translate-y-0');
-            toast.classList.add('opacity-0', 'translate-y-2');
-        }, 3000);
-    }
-});
+                    setTimeout(() => {
+                        toast.classList.remove('opacity-100', 'translate-y-0');
+                        toast.classList.add('opacity-0', 'translate-y-2');
+                    }, 3000);
+                }
+            });
 
-</script>
+        </script>
 
 </body>
+
 </html>
