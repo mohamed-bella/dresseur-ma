@@ -1,96 +1,92 @@
-<header class="fixed top-0 inset-x-0 bg-yellow-400 z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-16">
-            <!-- Left Section -->
-            <div class="flex items-center gap-6">
-                <!-- Mobile Menu Button -->
-                <button id="mobileMenuBtn" class="lg:hidden p-2 text-gray-800 hover:bg-yellow-500/50 rounded-lg transition-colors">
-                    <i class="fas fa-bars text-lg"></i>
-                </button>
-
-                <!-- Logo -->
-                <a href="/" class="flex items-center gap-2">
-                    <span class="text-xl font-bold text-gray-800">NDRESSILIK</span>
-                </a>
-            </div>
-
-            <!-- Right Section -->
-            <div class="flex items-center gap-3">
-                <!-- Add Service Button (Desktop) -->
-                <a href="/dashboard/new-service" 
-                   class="hidden md:flex items-center gap-2 px-4 py-2 bg-gray-800 text-white rounded-lg 
-                          hover:bg-gray-700 transition-all">
-                    <i class="fas fa-plus"></i>
-                    <span>Ajouter un service</span>
-                </a>
-
-                <!-- User Profile Dropdown -->
-                <div class="relative">
-                    <button id="userDropdownBtn" 
-                            class="flex items-center gap-3 p-1.5 hover:bg-yellow-500/50 rounded-lg transition-colors">
-                        <div class="relative">
-                            <img src="<%= user.profileImage || 'https://ui-avatars.com/api/?background=0D8ABC&color=fff' %>" 
-                                 alt="<%= user.displayName %>"
-                                 class="w-8 h-8 rounded-full object-cover ring-2 ring-white"
-                                 onerror="this.src='https://ui-avatars.com/api/?name=<%= user.displayName %>&background=0D8ABC&color=fff'">
-                            <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full ring-2 ring-white"></div>
+<header class="fixed top-0 inset-x-0 z-50">
+    <!-- Main Navbar -->
+    <div class="bg-white border-b border-gray-200">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex h-16 items-center justify-between px-4">
+                <!-- Left Section -->
+                <div class="flex items-center">
+                    <!-- Mobile Menu Button -->
+                    <button id="mobileMenuBtn" class="p-2 rounded-lg text-gray-600 hover:bg-gray-100 lg:hidden">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    
+                    <!-- Logo -->
+                    <a href="/" class="flex items-center gap-3 ml-3">
+                        <div class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-2 rounded-lg">
+                            <i class="fas fa-cube text-xl"></i>
                         </div>
-                        <div class="hidden sm:block text-left">
-                            <div class="text-sm font-medium text-gray-800"><%= user.displayName %></div>
-                            <div class="text-xs text-gray-700"><%= user.role %></div>
-                        </div>
-                        <i class="fas fa-chevron-down text-gray-800 transition-transform duration-200"></i>
+                        <span class="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 text-transparent bg-clip-text hidden sm:block">
+                            NDRESSILIK
+                        </span>
+                    </a>
+
+                    <!-- Desktop Navigation -->
+                    <nav class="hidden lg:flex ml-8 gap-4">
+                        <a href="/dashboard" class="px-4 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg flex items-center gap-2 text-base">
+                            <i class="fas fa-home w-5"></i>
+                            <span>Dashboard</span>
+                        </a>
+                        <a href="/dashboard/breedings" class="px-4 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg flex items-center gap-2 text-base">
+                            <i class="fas fa-paw w-5"></i>
+                            <span>Mes Élevages</span>
+                        </a>
+                        <a href="/dashboard/services" class="px-4 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg flex items-center gap-2 text-base">
+                            <i class="fas fa-concierge-bell w-5"></i>
+                            <span>Mes Services</span>
+                        </a>
+                    </nav>
+                </div>
+
+                <!-- Right Section -->
+                <div class="flex items-center gap-3">
+                    <!-- Create Button -->
+                    <button onclick="openCreateModal()" 
+                            class="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+                        <i class="fas fa-plus"></i>
+                        <span>Créer</span>
                     </button>
 
-                    <!-- User Dropdown Menu -->
-                    <div id="userDropdown" 
-                         class="hidden absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-gray-200
-                                transform opacity-0 scale-95 transition-all origin-top-right">
-                        <!-- User Info -->
-                        <div class="p-4 border-b border-gray-100">
-                            <div class="flex items-center gap-3">
-                                <img src="<%= user.profileImage %>" 
-                                     alt="<%= user.displayName %>"
-                                     class="w-12 h-12 rounded-full object-cover ring-2 ring-gray-100">
-                                <div>
-                                    <div class="font-medium text-gray-900"><%= user.displayName %></div>
-                                    <div class="text-sm text-gray-500"><%= user.email %></div>
+                    <!-- User Menu -->
+                    <div class="relative">
+                        <button id="userMenuBtn" class="flex items-center gap-3 p-1.5 hover:bg-gray-100 rounded-lg">
+                            <img src="<%= user.profileImage || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.displayName) %>" 
+                                 alt="<%= user.displayName %>"
+                                 class="w-10 h-10 rounded-full object-cover ring-2 ring-white">
+                            <div class="hidden sm:block text-left">
+                                <div class="text-sm font-medium text-gray-900"><%= user.displayName %></div>
+                                <div class="text-xs text-gray-500"><%= user.role %></div>
+                            </div>
+                        </button>
+
+                        <!-- User Dropdown -->
+                        <div id="userDropdown" class="hidden absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-gray-200">
+                            <div class="p-4 border-b border-gray-100">
+                                <div class="flex items-center gap-3">
+                                    <img src="<%= user.profileImage %>" 
+                                         alt="<%= user.displayName %>"
+                                         class="w-12 h-12 rounded-full object-cover">
+                                    <div>
+                                        <div class="font-medium text-gray-900"><%= user.displayName %></div>
+                                        <div class="text-sm text-gray-500"><%= user.email %></div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <!-- Menu Items -->
-                        <div class="p-2 space-y-1">
-                            <a href="/dashboard/profile" class="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
-                                <i class="fas fa-user w-5"></i>
-                                <span>Profile</span>
-                            </a>
-                            <a href="/dashboard/new-service" class="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
-                                <i class="fas fa-plus w-5"></i>
-                                <span>Ajouter Services</span>
-                            </a>
-                            <a href="#services" class="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
-                                <i class="fas fa-briefcase w-5"></i>
-                                <span>Mes Services</span>
-                            </a>
-                        </div>
-
-                        <!-- Special CTA -->
-                        <div class="p-2 border-t border-gray-100">
-                            <a href="/dashboard/new-service" 
-                               class="flex items-center justify-center gap-2 px-3 py-2 bg-gray-800 text-white rounded-lg
-                                      hover:bg-gray-700 transition-colors">
-                                <i class="fas fa-plus-circle"></i>
-                                <span>Ajouter un service</span>
-                            </a>
-                        </div>
-
-                        <!-- Logout -->
-                        <div class="p-2 border-t border-gray-100">
-                            <a href="/logout" class="flex items-center gap-3 px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors">
-                                <i class="fas fa-sign-out-alt w-5"></i>
-                                <span>Déconnexion</span>
-                            </a>
+                            <div class="p-2">
+                                <a href="/profile" class="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                                    <i class="fas fa-user w-5"></i>
+                                    <span>Profile</span>
+                                </a>
+                                <a href="/settings" class="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                                    <i class="fas fa-cog w-5"></i>
+                                    <span>Paramètres</span>
+                                </a>
+                            </div>
+                            <div class="p-2 border-t border-gray-100">
+                                <a href="/logout" class="flex items-center gap-3 px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg">
+                                    <i class="fas fa-sign-out-alt w-5"></i>
+                                    <span>Déconnexion</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -99,136 +95,166 @@
     </div>
 
     <!-- Mobile Menu -->
-    <div id="mobileMenu" 
-         class="lg:hidden fixed inset-0 bg-black z-50 hidden"
-         onclick="this.classList.add('hidden')">
-        <div class="fixed inset-y-0 left-0 max-w-xs w-full bg-white shadow-xl"
-             onclick="event.stopPropagation()">
-            <!-- Mobile Menu Header -->
-            <div class="p-4 bg-yellow-400">
+    <div id="mobileMenu" class="lg:hidden fixed inset-0 z-50 hidden">
+        <div class="fixed inset-0 bg-black/50 backdrop-blur-sm" onclick="closeMobileMenu()"></div>
+        
+        <div id="mobileMenuContent" class="fixed inset-y-0 left-0 w-80 bg-white shadow-xl transform -translate-x-full transition-transform duration-300">
+            <!-- Menu Header -->
+            <div class="p-4 border-b border-gray-200">
                 <div class="flex items-center justify-between">
-                    <span class="font-bold text-gray-800">Menu</span>
-                    <button onclick="document.getElementById('mobileMenu').classList.add('hidden')"
-                            class="p-2 text-gray-800 hover:bg-yellow-500/50 rounded-lg">
-                        <i class="fas fa-times"></i>
+                    <a href="/" class="flex items-center gap-2">
+                        <div class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-2 rounded-lg">
+                            <i class="fas fa-cube"></i>
+                        </div>
+                        <span class="font-bold text-xl">NDRESSILIK</span>
+                    </a>
+                    <button onclick="closeMobileMenu()" class="p-2 hover:bg-gray-100 rounded-lg">
+                        <i class="fas fa-times text-xl"></i>
                     </button>
                 </div>
             </div>
 
             <!-- Mobile Navigation -->
-            <div class="p-4 space-y-4">
-                <!-- User Info -->
-                <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                    <img src="<%= user.profileImage %>" 
-                         alt="<%= user.displayName %>"
-                         class="w-10 h-10 rounded-full object-cover">
-                    <div>
-                        <div class="font-medium text-gray-900"><%= user.displayName %></div>
-                        <div class="text-sm text-gray-500"><%= user.email %></div>
-                    </div>
-                </div>
+            <div class="p-4 space-y-2">
+                <a href="/dashboard" class="flex items-center gap-3 px-4 py-3 text-lg text-gray-700 hover:bg-gray-100 rounded-xl">
+                    <i class="fas fa-home w-6 text-gray-400"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/dashboard/breedings" class="flex items-center gap-3 px-4 py-3 text-lg text-gray-700 hover:bg-gray-100 rounded-xl">
+                    <i class="fas fa-paw w-6 text-gray-400"></i>
+                    <span>Mes Élevages</span>
+                </a>
+                <a href="/dashboard/services" class="flex items-center gap-3 px-4 py-3 text-lg text-gray-700 hover:bg-gray-100 rounded-xl">
+                    <i class="fas fa-concierge-bell w-6 text-gray-400"></i>
+                    <span>Mes Services</span>
+                </a>
+            </div>
 
-                <!-- Navigation Links -->
-                <nav class="space-y-2">
-                    <a href="/dashboard/profile" class="flex items-center gap-3 p-3 text-gray-700 hover:bg-gray-100 rounded-lg">
-                        <i class="fas fa-user w-5"></i>
-                        <span>Profile</span>
-                    </a>
-                    <a href="#services" class="flex items-center gap-3 p-3 text-gray-700 hover:bg-gray-100 rounded-lg">
-                        <i class="fas fa-briefcase w-5"></i>
-                        <span>Mes Services</span>
-                    </a>
-                    <a href="/dashboard/new-service" 
-                       class="flex items-center gap-3 p-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700">
-                        <i class="fas fa-plus-circle w-5"></i>
-                        <span>Ajouter un service</span>
-                    </a>
-                    <a href="/logout" class="flex items-center gap-3 p-3 text-red-600 hover:bg-red-50 rounded-lg mt-4">
-                        <i class="fas fa-sign-out-alt w-5"></i>
-                        <span>Déconnexion</span>
-                    </a>
-                </nav>
+            <!-- Mobile Create Button -->
+            <div class="p-4 border-t border-gray-200">
+                <button onclick="openCreateModal()" 
+                        class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700">
+                    <i class="fas fa-plus"></i>
+                    <span>Créer</span>
+                </button>
             </div>
         </div>
     </div>
 </header>
 
-<script>
-// Dropdown Management
-const userDropdownBtn = document.getElementById('userDropdownBtn');
-const userDropdown = document.getElementById('userDropdown');
-
-function toggleDropdown() {
-    const isOpen = !userDropdown.classList.contains('hidden');
+<!-- Create Modal -->
+<div id="createModal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeCreateModal()"></div>
     
-    if (isOpen) {
-        // Close dropdown
-        userDropdown.classList.add('hidden', 'opacity-0', 'scale-95');
-        userDropdownBtn.querySelector('.fa-chevron-down').style.transform = 'rotate(0deg)';
+    <div class="fixed inset-0 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg">
+            <div class="p-6">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6">Que souhaitez-vous créer ?</h2>
+                
+                <% if (!hasBreeding) { %>
+                    <a href="/dashboard/breedings/add" 
+                       class="flex items-center gap-4 p-4 mb-4 bg-gradient-to-r from-blue-50 to-indigo-50 
+                              rounded-xl hover:bg-blue-100 transition-colors">
+                        <div class="w-12 h-12 rounded-xl bg-blue-500 text-white flex items-center justify-center">
+                            <i class="fas fa-home text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-gray-900">Créer un élevage</h3>
+                            <p class="text-sm text-gray-500">Commencez à gérer votre élevage professionnel</p>
+                        </div>
+                    </a>
+                <% } else { %>
+                    <a href="/dashboard/breedings/<%= breeding._id %>/dogs/add"
+                       class="flex items-center gap-4 p-4 mb-4 bg-gradient-to-r from-blue-50 to-indigo-50 
+                              rounded-xl hover:bg-blue-100 transition-colors">
+                        <div class="w-12 h-12 rounded-xl bg-blue-500 text-white flex items-center justify-center">
+                            <i class="fas fa-dog text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-gray-900">Ajouter un chien</h3>
+                            <p class="text-sm text-gray-500">Ajoutez un nouveau chien à votre élevage</p>
+                        </div>
+                    </a>
+                <% } %>
+
+                <a href="/dashboard/new-service" 
+                   class="flex items-center gap-4 p-4 bg-gradient-to-r from-purple-50 to-pink-50 
+                          rounded-xl hover:bg-purple-100 transition-colors">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500 text-white flex items-center justify-center">
+                        <i class="fas fa-concierge-bell text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-medium text-gray-900">Ajouter un service</h3>
+                        <p class="text-sm text-gray-500">Dressage, toilettage, pension et plus</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Modal Functions
+function openCreateModal() {
+    document.getElementById('createModal').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeCreateModal() {
+    document.getElementById('createModal').classList.add('hidden');
+    document.body.style.overflow = '';
+}
+
+// Mobile Menu Functions
+function toggleMobileMenu() {
+    const mobileMenu = document.getElementById('mobileMenu');
+    const mobileMenuContent = document.getElementById('mobileMenuContent');
+    
+    if (mobileMenu.classList.contains('hidden')) {
+        mobileMenu.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => {
+            mobileMenuContent.style.transform = 'translateX(0)';
+        }, 50);
     } else {
-        // Open dropdown
-        userDropdown.classList.remove('hidden', 'opacity-0', 'scale-95');
-        userDropdownBtn.querySelector('.fa-chevron-down').style.transform = 'rotate(180deg)';
+        closeMobileMenu();
     }
 }
 
-userDropdownBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    toggleDropdown();
-});
-
-// Mobile Menu
-document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+function closeMobileMenu() {
     const mobileMenu = document.getElementById('mobileMenu');
-    mobileMenu.classList.remove('hidden');
-});
+    const mobileMenuContent = document.getElementById('mobileMenuContent');
+    
+    mobileMenuContent.style.transform = 'translateX(-100%)';
+    setTimeout(() => {
+        mobileMenu.classList.add('hidden');
+        document.body.style.overflow = '';
+    }, 300);
+}
 
-// Close dropdowns when clicking outside
-document.addEventListener('click', () => {
-    userDropdown.classList.add('hidden', 'opacity-0', 'scale-95');
-    userDropdownBtn.querySelector('.fa-chevron-down').style.transform = 'rotate(0deg)';
-});
+// User Dropdown
+const userMenuBtn = document.getElementById('userMenuBtn');
+const userDropdown = document.getElementById('userDropdown');
 
-// Prevent dropdown close when clicking inside
-userDropdown.addEventListener('click', (e) => {
+userMenuBtn.addEventListener('click', (e) => {
     e.stopPropagation();
+    userDropdown.classList.toggle('hidden');
 });
 
-// Add scroll behavior
-let lastScrollTop = 0;
-const header = document.querySelector('header');
+document.addEventListener('click', () => {
+    userDropdown.classList.add('hidden');
+});
 
-window.addEventListener('scroll', () => {
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    
-    if (scrollTop > lastScrollTop && scrollTop > header.offsetHeight) {
-        header.style.transform = 'translateY(-100%)';
-        userDropdown.classList.add('hidden', 'opacity-0', 'scale-95');
-    } else {
-        header.style.transform = 'translateY(0)';
+userDropdown.addEventListener('click', (e) => e.stopPropagation());
+
+// Handle escape key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        closeCreateModal();
+        closeMobileMenu();
+        userDropdown.classList.add('hidden');
     }
-    
-    lastScrollTop = scrollTop;
 });
 </script>
 
-<style>
-header {
-    transition: transform 0.3s ease;
-}
-
-.mobile-menu-slide {
-    transform: translateX(-100%);
-    transition: transform 0.3s ease;
-}
-
-#mobileMenu > div {
-    transition: transform 0.3s ease-out;
-}
-
-@media (max-width: 768px) {
-    .mobile-menu-open {
-        transform: translateX(0);
-    }
-}
-</style>
+<div class="h-16"></div>

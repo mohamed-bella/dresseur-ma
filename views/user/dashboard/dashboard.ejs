@@ -5,462 +5,599 @@
     <title>NDRESSILIK - Tableau de Bord</title>
 </head>
 
-<body class="bg-gray-100">
+<body class="bg-gray-50">
     <%- include('includes/header') %>
 
     <main class="min-h-screen pt-20 pb-12">
+       
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- Welcome Section -->
+            <!-- Welcome Hero Section -->
             <div class="mb-8">
-                <div class="rounded-2xl bg-gray-900 overflow-hidden">
+                <div class="rounded-2xl bg-gradient-to-r from-gray-900 to-gray-800 overflow-hidden">
                     <div class="relative px-6 py-12 sm:px-12 sm:py-16">
-                        <!-- Background Pattern -->
+                        <!-- Animated Background Pattern -->
                         <div class="absolute inset-0 opacity-10 pointer-events-none">
                             <svg class="h-full w-full" viewBox="0 0 100 100">
                                 <defs>
-                                    <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
+                                    <pattern id="hero-pattern" width="10" height="10" patternUnits="userSpaceOnUse">
                                         <path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" stroke-width="0.5"/>
                                     </pattern>
                                 </defs>
-                                <rect width="100%" height="100%" fill="url(#grid)"/>
+                                <rect width="100%" height="100%" fill="url(#hero-pattern)"/>
                             </svg>
                         </div>
 
-                        <!-- Content -->
+                        <!-- Hero Content -->
                         <div class="relative max-w-3xl">
-                            <h1 class="text-3xl sm:text-4xl font-bold text-white mb-4">
-                                Bienvenue, <%= user.firstName %>
-                            </h1>
-                            <p class="text-lg text-gray-300" id="#services">
+                            <div class="flex items-center gap-4 mb-6">
+                                <img src="<%= user.profileImage || 'https://ui-avatars.com/api/?background=0D8ABC&color=fff' %>" 
+                                     alt="<%= user.displayName %>"
+                                     class="w-16 h-16 rounded-full object-cover ring-4 ring-white/10">
+                                <div>
+                                    <h1 class="text-3xl sm:text-4xl font-bold text-white">
+                                        Bienvenue, <%= user.firstName %>
+                                    </h1>
+                                    <div class="flex items-center gap-2 mt-2">
+                                        <span class="px-3 py-1 rounded-full text-sm font-medium bg-white/10 text-white">
+                                            <%= user.role === 'breeder' ? 'Éleveur Certifié' : 'Membre' %>
+                                        </span>
+                                        <span class="text-gray-400 text-sm">
+                                            Membre depuis <%= new Date(user.createdAt).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' }) %>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-lg text-gray-300">
                                 Gérez vos services et optimisez votre visibilité sur notre plateforme.
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
+            
 
-            <!-- Dashboard Grid -->
-            <div class="grid lg:grid-cols-3 gap-8">
-                <!-- Left Column: Profile & Actions -->
-                <div class="lg:col-span-2 space-y-8">
-                    <!-- Profile Completion Alert -->
-                    <% if (missingElements && missingElements.length > 0) { %>
-                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                            <div class="p-6">
-                                <div class="flex items-start gap-4">
-                                    <div class="w-12 h-12 rounded-full bg-yellow-50 flex items-center justify-center flex-shrink-0">
-                                        <i class="fas fa-user-edit text-yellow-600 text-xl"></i>
-                                    </div>
-                                    <div class="flex-1">
-                                        <h3 class="text-lg font-semibold text-gray-900 mb-2">
-                                            Complétez votre profil
-                                        </h3>
-                                        <p class="text-gray-600 mb-4">
-                                            Il vous reste <%= missingElements.length %> éléments à compléter pour optimiser votre profil.
-                                        </p>
-                                        <button onclick="openMissingElementsModal()" 
-                                                class="inline-flex items-center gap-2 px-4 py-2 rounded-lg
-                                                       bg-gray-800 text-white hover:bg-gray-700 
-                                                       transition-colors duration-200">
-                                            <span>Voir les éléments</span>
-                                            <i class="fas fa-arrow-right"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <% const totalElements = 5; %>
-                            <!-- Progress Bar -->
-                            <div class="h-2 bg-gray-100">
-                                <div class="h-full bg-yellow-500 transition-all duration-500"
-                                     style="width: <%= Math.round((1 - missingElements.length/totalElements) * 100) %>%">
-                                </div>
-                            </div>
+            <!-- Stats Overview -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <!-- Total Views -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-600">Vues totales</p>
+                            <h3 class="text-2xl font-bold text-gray-900 mt-1">
+                                <%= totalViews || 0 %>
+                            </h3>
                         </div>
-                    <% } %>
-
-                  <!-- Quick Actions -->
-                  <div class=" px-4 sm:px-6 lg:px-8 py-8">
-                    <!-- Main Container -->
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100">
-                        <!-- Header Section -->
-                        <div class="p-6 border-b border-gray-100">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center space-x-4">
-                                    <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Dashboard</h2>
-                                    <div class="h-1.5 w-12 bg-blue-500 rounded-full"></div>
-                                </div>
-                                <!-- User Status -->
-                                <div class="hidden sm:flex items-center space-x-2">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-50 text-blue-700">
-                                        <span class="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
-                                        <%= user.role === 'breeder' ? 'Éleveur Certifié' : 'Membre' %>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                
-                        <!-- Breeder Section -->
-                        <div class="p-6 space-y-6">
-                            <% if (user.role === 'breeder') { %>
-                                <a href="/dashboard/breedings" 
-                                   class="block hover:bg-gray-50 rounded-xl p-6 transition-all duration-200 border border-transparent hover:border-gray-200">
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center space-x-4">
-                                            <div class="flex-shrink-0">
-                                                <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center">
-                                                    <i class="fas fa-paw text-blue-500 text-3xl"></i>
-                                                </div>
-                                            </div>
-                                            <div class="space-y-1">
-                                                <h3 class="text-xl font-medium text-gray-900">Gestion d'Élevage</h3>
-                                                <p class="text-base text-gray-500">Gérer vos animaux et services</p>
-                                                <div class="flex items-center space-x-4 mt-2">
-                                                    <span class="inline-flex items-center text-sm text-gray-500">
-                                                        <i class="fas fa-dog mr-1"></i>
-                                                        <!-- < %= totalPets || 0 %> animaux -->
-                                                    </span>
-                                                    <span class="inline-flex items-center text-sm text-gray-500">
-                                                        <i class="fas fa-calendar-check mr-1"></i>
-                                                        <!-- < %= totalServices || 0 %> services -->
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                        </svg>
-                                    </div>
-                                </a>
-                            <% } %>
-                
-                          
-                
-                            <!-- Quick Actions Grid -->
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                <!-- New Service Card -->
-                                <a href="/dashboard/new-service" 
-                                   class="group block p-6 bg-white rounded-xl border border-gray-100 hover:border-blue-500 transition-all duration-200">
-                                    <div class="flex items-center space-x-4">
-                                        <div class="w-16 h-16 bg-gray-900 rounded-full flex items-center justify-center group-hover:bg-blue-500 transition-colors duration-200">
-                                            <i class="fas fa-plus text-white text-2xl"></i>
-                                        </div>
-                                        <div class="space-y-2">
-                                            <h3 class="text-xl font-medium text-gray-900">Nouveau service</h3>
-                                            <p class="text-base text-gray-500">Créer et publier vos services</p>
-                                            <div class="flex items-center text-sm text-blue-500 group-hover:text-blue-600">
-                                                <span>Commencer</span>
-                                                <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                
-                                <!-- Profile Card -->
-                                <a href="/dashboard/profile" 
-                                   class="group block p-6 bg-white rounded-xl border border-gray-100 hover:border-blue-500 transition-all duration-200">
-                                    <div class="flex items-center space-x-4">
-                                        <div class="w-16 h-16 bg-gray-900 rounded-full flex items-center justify-center group-hover:bg-blue-500 transition-colors duration-200">
-                                            <i class="fas fa-user-edit text-white text-2xl"></i>
-                                        </div>
-                                        <div class="space-y-2">
-                                            <h3 class="text-xl font-medium text-gray-900">Profil</h3>
-                                            <% if (missingElements && missingElements.length > 0) { %>
-                                                <div class="flex items-center space-x-2">
-                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-50 text-yellow-800">
-                                                        <%= missingElements.length %> à compléter
-                                                    </span>
-                                                </div>
-                                                <p class="text-base text-gray-500">Complétez votre profil pour plus de visibilité</p>
-                                            <% } else { %>
-                                                <p class="text-base text-gray-500">Gérez vos informations personnelles</p>
-                                            <% } %>
-                                            <div class="flex items-center text-sm text-blue-500 group-hover:text-blue-600">
-                                                <span>Modifier</span>
-                                                <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                                
-                            </div>
-                            <% if (user.role !== 'breeder') { %>
-                                <div class="border border-gray-100 rounded-xl p-8 bg-white">
-                                    <div class="flex items-center space-x-4 mb-6">
-                                        <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center">
-                                            <i class="fas fa-star text-blue-500 text-3xl"></i>
-                                        </div>
-                                        <div>
-                                            <h3 class="text-2xl font-semibold text-gray-900">Devenez Éleveur</h3>
-                                            <p class="text-gray-500 mt-1">Rejoignez notre communauté d'éleveurs certifiés</p>
-                                        </div>
-                                    </div>
-                
-                                    <div class="grid sm:grid-cols-2 gap-6 mb-8">
-                                        <div class="space-y-4">
-                                            <h4 class="text-lg font-medium text-gray-900">Avantages</h4>
-                                            <ul class="space-y-4">
-                                                <li class="flex items-center text-lg text-gray-600">
-                                                    <div class="w-1.5 h-1.5 bg-blue-500 rounded-full mr-3"></div>
-                                                    <span>Gérer votre élevage professionnellement</span>
-                                                </li>
-                                                <li class="flex items-center text-lg text-gray-600">
-                                                    <div class="w-1.5 h-1.5 bg-blue-500 rounded-full mr-3"></div>
-                                                    <span>Ajouter et suivre vos chiens</span>
-                                                </li>
-                                                <li class="flex items-center text-lg text-gray-600">
-                                                    <div class="w-1.5 h-1.5 bg-blue-500 rounded-full mr-3"></div>
-                                                    <span>Partager votre expertise</span>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="space-y-4">
-                                            <h4 class="text-lg font-medium text-gray-900">Fonctionnalités</h4>
-                                            <ul class="space-y-4">
-                                                <li class="flex items-center text-lg text-gray-600">
-                                                    <div class="w-1.5 h-1.5 bg-green-500 rounded-full mr-3"></div>
-                                                    <span>Gestion des pedigrees</span>
-                                                </li>
-                                                <li class="flex items-center text-lg text-gray-600">
-                                                    <div class="w-1.5 h-1.5 bg-green-500 rounded-full mr-3"></div>
-                                                    <span>Suivi des vaccinations</span>
-                                                </li>
-                                                <li class="flex items-center text-lg text-gray-600">
-                                                    <div class="w-1.5 h-1.5 bg-green-500 rounded-full mr-3"></div>
-                                                    <span>Calendrier des événements</span>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                
-                                    <button id="become-breeder-btn" 
-                                            class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium px-8 py-4 rounded-full transition-colors duration-200 flex items-center justify-center text-lg">
-                                        <span>Devenir Éleveur</span>
-                                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                        </svg>
-                                    </button>
-                                </div>
-                            <% } %>
+                        <div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center">
+                            <i class="fas fa-eye text-blue-500 text-xl"></i>
                         </div>
                     </div>
+                    <div class="mt-4 flex items-center text-sm">
+                        <span class="text-green-500 flex items-center">
+                            <i class="fas fa-arrow-up mr-1"></i>
+                            12%
+                        </span>
+                        <span class="text-gray-500 ml-2">vs last month</span>
+                    </div>
                 </div>
-                
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-                <script>
-                $(document).ready(function() {
-                    $('#become-breeder-btn').click(function() {
-                        const button = $(this);
-                        button.prop('disabled', true)
-                              .html('<i class="fas fa-spinner fa-spin mr-2"></i> Traitement en cours...');
-                        
-                        $.ajax({
-                            url: '/dashboard/change-role/breeder',
-                            method: 'POST',
-                            success: function(response) {
-                                window.location.reload();
-                            },
-                            error: function(error) {
-                                button.prop('disabled', false)
-                                      .html('Devenir Éleveur <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>');
-                                alert('Une erreur est survenue. Veuillez réessayer plus tard.');
-                            }
-                        });
-                    });
-                });
-                </script>
 
-                    <!-- Services List -->
+                <!-- Active Services -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-600">Services actifs</p>
+                            <h3 class="text-2xl font-bold text-gray-900 mt-1">
+                                <%= services.length %>
+                            </h3>
+                        </div>
+                        <div class="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center">
+                            <i class="fas fa-briefcase text-green-500 text-xl"></i>
+                        </div>
+                    </div>
+                    <a href="/dashboard/new-service" class="mt-4 inline-flex items-center text-sm text-green-600 hover:text-green-700">
+                        <span>Ajouter un service</span>
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+
+                <!-- Profile Completion -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-600">Profil complété</p>
+                            <h3 class="text-2xl font-bold text-gray-900 mt-1">
+                                <%= Math.round((1 - missingElements.length/5) * 100) %>%
+                            </h3>
+                        </div>
+                        <div class="w-12 h-12 bg-purple-50 rounded-full flex items-center justify-center">
+                            <i class="fas fa-user-check text-purple-500 text-xl"></i>
+                        </div>
+                    </div>
+                    <% if (missingElements && missingElements.length > 0) { %>
+                        <button onclick="openMissingElementsModal()" class="mt-4 inline-flex items-center text-sm text-purple-600 hover:text-purple-700">
+                            <span>Compléter le profil</span>
+                            <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    <% } %>
+                </div>
+            </div>
+
+            <!-- Main Dashboard Content -->
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Left Column -->
+                <div class="lg:col-span-2 space-y-8">
+                    <!-- Quick Actions Grid -->
+                    <div class="grid sm:grid-cols-2 gap-6">
+                        <!-- New Service Card -->
+                        <a href="/dashboard/new-service" 
+                           class="group relative bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:border-blue-500 transition-all">
+                            <div class="flex items-center gap-4">
+                                <div class="w-14 h-14 rounded-full bg-blue-50 flex items-center justify-center">
+                                    <i class="fas fa-plus text-blue-500 text-xl group-hover:scale-110 transition-transform"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-900">Nouveau service</h3>
+                                    <p class="text-gray-600 mt-1">Créer et publier un service</p>
+                                </div>
+                            </div>
+                            <i class="fas fa-arrow-right absolute bottom-6 right-6 text-blue-500 
+                                    opacity-0 group-hover:opacity-100 transform translate-x-2 
+                                    group-hover:translate-x-0 transition-all"></i>
+                        </a>
+
+                        <!-- Profile Card -->
+                        <a href="/dashboard/profile" 
+                           class="group relative bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:border-blue-500 transition-all">
+                            <div class="flex items-center gap-4">
+                                <div class="w-14 h-14 rounded-full bg-blue-50 flex items-center justify-center">
+                                    <i class="fas fa-user-edit text-blue-500 text-xl group-hover:scale-110 transition-transform"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-900">Mon profil</h3>
+                                    <p class="text-gray-600 mt-1">Gérer mes informations</p>
+                                </div>
+                            </div>
+                            <i class="fas fa-arrow-right absolute bottom-6 right-6 text-blue-500 
+                                    opacity-0 group-hover:opacity-100 transform translate-x-2 
+                                    group-hover:translate-x-0 transition-all"></i>
+                        </a>
+                    </div>
+                    <% if (user.role == 'breeder') { %>
+                        <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12">
+                            <div class="container mx-auto px-4">
+                                <!-- Header Section -->
+                                <div class="max-w-7xl mx-auto mb-12">
+                                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                                        <div>
+                                            <h1 class="text-3xl font-bold text-gray-900">Mes Élevages</h1>
+                                            <p class="mt-2 text-gray-600">Gérez vos élevages et leurs informations</p>
+                                        </div>
+                        
+                                        <a href="/dashboard" 
+                                           class="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 
+                                                  rounded-xl hover:bg-gray-200 transition-colors">
+                                            <i class="fas fa-arrow-left"></i>
+                                            <span>Retour au tableau de bord</span>
+                                        </a>
+                                    </div>
+                                </div>
+                        
+                                <!-- Main Content -->
+                                <div class="max-w-7xl mx-auto">
+                                    <!-- Featured Breedings Section -->
+                                    <div class="bg-amber-50 rounded-2xl shadow-sm border border-amber-100/50 overflow-hidden">
+                                        <!-- Section Header -->
+                                        <div class="p-6 border-b border-amber-100/50">
+                                            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                                                <div class="flex items-center gap-4">
+                                                    <div class="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center">
+                                                        <i class="fas fa-star text-amber-600 text-xl"></i>
+                                                    </div>
+                                                    <div>
+                                                        <h2 class="text-xl font-semibold text-gray-900">Élevages Récents</h2>
+                                                        <p class="text-sm text-gray-600">Vos 3 derniers élevages ajoutés</p>
+                                                    </div>
+                                                </div>
+                                                
+                                                <a href="/dashboard/breedings/add" 
+                                                   class="inline-flex items-center gap-2 px-6 py-3 bg-amber-600 text-white 
+                                                          rounded-xl hover:bg-amber-700 transition-colors">
+                                                    <i class="fas fa-plus"></i>
+                                                    <span>Ajouter un élevage</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                        
+                                        <!-- Breedings List -->
+                                        <div class="p-6">
+                                            <% if (elevages && elevages.length > 0) { %>
+                                                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                                    <% elevages.slice(0, 3).forEach(elevage => { %>
+                                                        <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200">
+                                                            <!-- Card Header -->
+                                                            <div class="relative h-40">
+                                                                <img src="<%= elevage.logo %>" 
+                                                                     alt="<%= elevage.name %>" 
+                                                                     class="w-full h-full object-cover">
+                                                                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                                                                
+                                                                <!-- Status Badge -->
+                                                                <div class="absolute top-4 right-4">
+                                                                    <span class="px-3 py-1 rounded-full text-xs font-medium
+                                                                               <%= elevage.status === 'active' ? 'bg-green-100 text-green-800' :
+                                                                                  elevage.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                                                                                  'bg-red-100 text-red-800' %>">
+                                                                        <%= elevage.status === 'active' ? 'Actif' :
+                                                                            elevage.status === 'pending' ? 'En attente' : 'Suspendu' %>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                        
+                                                            <!-- Card Content -->
+                                                            <div class="p-6">
+                                                                <h3 class="text-lg font-semibold text-gray-900 mb-2">
+                                                                    <%= elevage.name %>
+                                                                </h3>
+                                                                <p class="text-sm text-gray-500 flex items-center gap-2 mb-4">
+                                                                    <i class="fas fa-map-marker-alt"></i>
+                                                                    <%= elevage.location.city %>
+                                                                </p>
+                        
+                                                                <!-- Stats -->
+                                                                <div class="grid grid-cols-2 gap-4 mb-6">
+                                                                    <div class="flex items-center gap-2">
+                                                                        <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
+                                                                            <i class="fas fa-dog text-blue-500"></i>
+                                                                        </div>
+                                                                        <div>
+                                                                            <div class="text-sm font-semibold text-gray-900">
+                                                                                <%= elevage.dogs?.length || 0 %>
+                                                                            </div>
+                                                                            <div class="text-xs text-gray-500">Chiens</div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="flex items-center gap-2">
+                                                                        <div class="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center">
+                                                                            <i class="fas fa-check text-green-500"></i>
+                                                                        </div>
+                                                                        <div>
+                                                                            <div class="text-sm font-semibold text-gray-900">
+                                                                                <%= elevage.services?.length || 0 %>
+                                                                            </div>
+                                                                            <div class="text-xs text-gray-500">Services</div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                        
+                                                                <!-- Actions -->
+                                                                <div class="flex items-center gap-2">
+                                                                    <a href="/dashboard/breedings/<%= elevage._id %>/edit"
+                                                                       class="flex-1 text-center px-4 py-2 bg-amber-100 text-amber-700
+                                                                              rounded-lg hover:bg-amber-200 transition-colors">
+                                                                        Modifier
+                                                                    </a>
+                                                                    <button onclick="copyBreedingLink('<%= elevage.slug %>')"
+                                                                            class="p-2 text-gray-400 hover:text-gray-600 rounded-lg
+                                                                                   hover:bg-gray-100 transition-all duration-200">
+                                                                        <i class="fas fa-link"></i>
+                                                                    </button>
+                                                                    <a href="/les-elevages/<%= elevage.slug %>"
+                                                                       target="_blank"
+                                                                       class="p-2 text-gray-400 hover:text-gray-600 rounded-lg
+                                                                              hover:bg-gray-100 transition-all duration-200">
+                                                                        <i class="fas fa-external-link-alt"></i>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    <% }) %>
+                                                </div>
+                        
+                                                <% if (elevages.length > 3) { %>
+                                                    <div class="mt-8 text-center">
+                                                        <a href="/dashboard/breedings/all"
+                                                           class="inline-flex items-center gap-2 px-6 py-3 bg-amber-100 text-amber-700
+                                                                  rounded-xl hover:bg-amber-200 transition-colors">
+                                                            Voir tous les élevages
+                                                            <i class="fas fa-arrow-right"></i>
+                                                        </a>
+                                                    </div>
+                                                <% } %>
+                                            <% } else { %>
+                                                <!-- Empty State -->
+                                                <div class="text-center py-12">
+                                                    <div class="w-20 h-20 mx-auto bg-amber-100 rounded-full flex items-center justify-center mb-4">
+                                                        <i class="fas fa-home text-amber-600 text-3xl"></i>
+                                                    </div>
+                                                    <h3 class="text-xl font-semibold text-gray-900 mb-2">
+                                                        Commencez à gérer vos élevages
+                                                    </h3>
+                                                    <p class="text-gray-500 max-w-md mx-auto mb-8">
+                                                        Vous n'avez pas encore d'élevage. Cliquez sur le bouton ci-dessous pour commencer.
+                                                    </p>
+                                                    <a href="/dashboard/breedings/add"
+                                                       class="inline-flex items-center gap-2 px-6 py-3 bg-amber-600 text-white
+                                                              rounded-xl hover:bg-amber-700 transition-colors">
+                                                        <i class="fas fa-plus"></i>
+                                                        Ajouter un élevage
+                                                    </a>
+                                                </div>
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <script>
+                        function copyBreedingLink(slug) {
+                            const url = `${window.location.origin}/les-elevages/${slug}`;
+                            navigator.clipboard.writeText(url)
+                                .then(() => {
+                                    // Show success message
+                                    alert('Lien copié !');
+                                })
+                                .catch(() => {
+                                    // Show error message
+                                    alert('Erreur lors de la copie du lien');
+                                });
+                        }
+                        </script>
+                        <% } %>
+
+                    <!-- Services Section -->
                     <%- include('includes/services') %>
                 </div>
 
-                <!-- Right Column: Stats & Info -->
+
+
+                <!-- Right Column -->
                 <div class="space-y-8">
-                    <!-- Profile Stats -->
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden p-6">
-                        <h2 class="text-xl font-semibold text-gray-900 mb-6">Statistiques</h2>
-                        <div class="space-y-4">
-                            <!-- Views -->
-                            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
-                                        <i class="fas fa-eye text-blue-500"></i>
+                     <!-- Become Breeder Section -->
+                     <% if (user.role !== 'breeder') { %>
+                        <div class="bg-blue-100 rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                            <div class="p-6">
+                                <div class="flex items-center gap-4 mb-6">
+                                    <div class="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center">
+                                        <i class="fas fa-star text-blue-500 text-xl"></i>
                                     </div>
                                     <div>
-                                        <div class="text-sm text-gray-600">Vues totales (Les Services)</div>
-                                        <div class="text-lg font-semibold text-gray-900">
-                                            <%= totalViews || 0 %>
-                                        </div>
+                                        <h3 class="text-lg font-semibold text-gray-900">Devenez Éleveur</h3>
+                                        <p class="text-gray-600">Accédez à des fonctionnalités exclusives</p>
                                     </div>
                                 </div>
-                            </div>
 
-                            <!-- Services Count -->
-                            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center">
-                                        <i class="fas fa-briefcase text-green-500"></i>
+                                <div class="space-y-4 mb-6">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-6 h-6 rounded-full bg-green-50 flex items-center justify-center">
+                                            <i class="fas fa-check text-green-500 text-sm"></i>
+                                        </div>
+                                        <span class="text-gray-700">Gestion professionnelle de l'élevage</span>
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-6 h-6 rounded-full bg-green-50 flex items-center justify-center">
+                                            <i class="fas fa-check text-green-500 text-sm"></i>
+                                        </div>
+                                        <span class="text-gray-700">Suivi des pédigrees</span>
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-6 h-6 rounded-full bg-green-50 flex items-center justify-center">
+                                            <i class="fas fa-check text-green-500 text-sm"></i>
+                                        </div>
+                                        <span class="text-gray-700">Visibilité accrue</span>
+                                    </div>
+                                </div>
+
+                                <button id="become-breeder-btn" 
+                                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium
+                                               px-6 py-3 rounded-lg transition-colors flex items-center justify-center gap-2">
+                                    <span>Devenir Éleveur</span>
+                                    <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    <% } %>
+                    <!-- Profile Overview -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                        <div class="p-6">
+                            <h2 class="text-lg font-semibold text-gray-900 mb-4">Vue d'ensemble</h2>
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between py-3 border-b border-gray-100">
+                                    <span class="text-gray-600">Statut</span>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                        Actif
+                                    </span>
+                                </div>
+                                <div class="flex items-center justify-between py-3 border-b border-gray-100">
+                                    <span class="text-gray-600">Services</span>
+                                    <span class="font-medium text-gray-900"><%= services.length %></span>
+                                </div>
+                                <div class="flex items-center justify-between py-3">
+                                    <span class="text-gray-600">Vues totales</span>
+                                    <span class="font-medium text-gray-900"><%= totalViews || 0 %></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tips & Recommendations -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                        <div class="p-6">
+                            <h2 class="text-lg font-semibold text-gray-900 mb-4">Conseils pour réussir</h2>
+                            <div class="space-y-4">
+                                <div class="flex items-start gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center flex-shrink-0">
+                                        <i class="fas fa-check text-green-500"></i>
                                     </div>
                                     <div>
-                                        <div class="text-sm text-gray-600">Services actifs</div>
-                                        <div class="text-lg font-semibold text-gray-900">
-                                            <%= services.length %> service<%= services.length > 1 ? 's' : '' %>
-                                        </div>
+                                        <h3 class="text-sm font-medium text-gray-900">Photos de qualité</h3>
+                                        <p class="text-sm text-gray-600 mt-1">
+                                            Ajoutez des photos professionnelles pour attirer plus de clients.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
+                                        <i class="fas fa-pen text-blue-500"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-sm font-medium text-gray-900">Description détaillée</h3>
+                                        <p class="text-sm text-gray-600 mt-1">
+                                            Décrivez précisément vos services et votre expertise.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center flex-shrink-0">
+                                        <i class="fas fa-clock text-purple-500"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-sm font-medium text-gray-900">Réactivité</h3>
+                                        <p class="text-sm text-gray-600 mt-1">
+                                            Répondez rapidement aux messages pour augmenter vos chances de conversion.
+                                        </p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Tips Card -->
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden p-6">
-                        <h2 class="text-xl font-semibold text-gray-900 mb-4">Conseils</h2>
-                        <ul class="space-y-3">
-                            <li class="flex items-start gap-3">
-                                <i class="fas fa-check-circle text-green-500 mt-1"></i>
-                                <p class="text-sm text-gray-600">Ajoutez des photos de qualité à vos services</p>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <i class="fas fa-check-circle text-green-500 mt-1"></i>
-                                <p class="text-sm text-gray-600">Détaillez vos descriptions de services</p>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <i class="fas fa-check-circle text-green-500 mt-1"></i>
-                                <p class="text-sm text-gray-600">Répondez rapidement aux messages</p>
-                            </li>
-                        </ul>
-                    </div>
+                   
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Missing Elements Modal Components -->
-<!-- Modal Backdrop -->
-<div id="modalBackdrop" 
-class="fixed inset-0 bg-black/50 opacity-0 pointer-events-none transition-opacity duration-300" 
-onclick="closeMissingElementsModal()">
-</div>
+    <!-- Missing Elements Modal -->
+    <div id="modalBackdrop" 
+         class="fixed inset-0 bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 z-50">
+    </div>
 
-<!-- Modal -->
-<div id="missingElementsModal" class="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
-<div class="w-full max-w-lg transform translate-y-8 opacity-0 pointer-events-none transition duration-300">
-   <div class="relative bg-white rounded-xl shadow-xl mx-4">
-       <!-- Modal Header -->
-       <div class="flex items-center justify-between p-6 border-b">
-           <div class="flex items-center gap-3">
-               <div class="w-10 h-10 rounded-lg bg-yellow-50 flex items-center justify-center">
-                   <i class="fas fa-exclamation-circle text-yellow-600 text-xl"></i>
-               </div>
-               <h3 class="text-xl font-semibold text-gray-900">
-                   Améliorations recommandées
-               </h3>
-           </div>
-           <button onclick="closeMissingElementsModal()" 
-                   class="text-gray-400 hover:text-gray-600 p-2 rounded-lg transition-colors">
-               <i class="fas fa-times text-xl"></i>
-           </button>
-       </div>
+    <div id="missingElementsModal" 
+         class="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
+        <div class="w-full max-w-lg transform translate-y-8 opacity-0 pointer-events-none transition-all duration-300">
+            <div class="relative bg-white rounded-xl shadow-xl mx-4">
+                <!-- Modal Header -->
+                <div class="flex items-center justify-between p-6 border-b border-gray-100">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-yellow-50 flex items-center justify-center">
+                            <i class="fas fa-list-check text-yellow-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900">
+                            Complétez votre profil
+                        </h3>
+                    </div>
+                    <button onclick="closeMissingElementsModal()" 
+                            class="p-2 text-gray-400 hover:text-gray-600 rounded-lg transition-colors">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
 
-       <!-- Modal Content -->
-       <div class="p-6 space-y-6 max-h-[60vh] overflow-y-auto">
-           <p class="text-gray-600">
-               Complétez ces éléments pour optimiser votre profil et augmenter votre visibilité :
-           </p>
-           <div class="space-y-4">
-               <% missingElements.forEach((element, index) => { %>
-                   <div class="flex items-start gap-4 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                       <div class="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                           <span class="text-sm font-medium text-yellow-800">
-                               <%= index + 1 %>
-                           </span>
-                       </div>
-                       <div class="flex-1">
-                           <p class="font-medium text-gray-900 mb-2">
-                               <%= element.label %>
-                           </p>
-                           <a href="<%= element.link %>" 
-                              class="inline-flex items-center text-sm text-gray-800 hover:text-gray-600 
-                                     font-medium group">
-                               <span>Compléter maintenant</span>
-                               <i class="fas fa-arrow-right ml-2 text-xs transition-transform 
-                                        group-hover:translate-x-1"></i>
-                           </a>
-                       </div>
-                   </div>
-               <% }); %>
-           </div>
-       </div>
+                <!-- Modal Content -->
+                <div class="p-6 space-y-6 max-h-[60vh] overflow-y-auto">
+                    <p class="text-gray-600">
+                        Ces éléments permettront d'optimiser votre profil et d'augmenter votre visibilité :
+                    </p>
+                    <div class="space-y-4">
+                        <% missingElements.forEach((element, index) => { %>
+                            <div class="flex items-start gap-4 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                                <div class="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <span class="text-sm font-medium text-yellow-800">
+                                        <%= index + 1 %>
+                                    </span>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="font-medium text-gray-900 mb-1">
+                                        <%= element.label %>
+                                    </h4>
+                                    <p class="text-sm text-gray-600 mb-2">
+                                        <%= element.description || 'Complétez cette information pour améliorer votre profil.' %>
+                                    </p>
+                                    <a href="<%= element.link %>" 
+                                       class="inline-flex items-center text-sm text-blue-600 hover:text-blue-700 font-medium group">
+                                        <span>Compléter</span>
+                                        <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
+                </div>
 
-       <!-- Modal Footer -->
-       <div class="border-t p-6">
-           <button onclick="closeMissingElementsModal()" 
-                   class="w-full bg-gray-800 hover:bg-gray-700 text-white font-medium
-                          py-3 px-4 rounded-lg transition-colors">
-               Fermer
-           </button>
-       </div>
-   </div>
-</div>
-</div>
+                <!-- Modal Footer -->
+                <div class="border-t border-gray-100 p-6">
+                    <button onclick="closeMissingElementsModal()" 
+                            class="w-full bg-gray-900 hover:bg-gray-800 text-white font-medium
+                                   py-3 px-4 rounded-lg transition-colors">
+                        Fermer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<!-- Modal Scripts -->
-<script>
-function openMissingElementsModal() {
-   const modal = document.getElementById('missingElementsModal');
-   const modalContent = modal.querySelector('.transform');
-   const backdrop = document.getElementById('modalBackdrop');
+    <script>
+        // Modal Functions
+        function openMissingElementsModal() {
+            const modal = document.getElementById('missingElementsModal');
+            const modalContent = modal.querySelector('.transform');
+            const backdrop = document.getElementById('modalBackdrop');
 
-   // Enable pointer events
-   modal.classList.remove('pointer-events-none');
-   modalContent.classList.remove('pointer-events-none');
-   backdrop.classList.remove('pointer-events-none');
+            modal.classList.remove('pointer-events-none');
+            modalContent.classList.remove('pointer-events-none');
+            backdrop.classList.remove('pointer-events-none');
+            backdrop.classList.remove('opacity-0');
+            modalContent.classList.remove('translate-y-8', 'opacity-0');
+            document.body.style.overflow = 'hidden';
+        }
 
-   // Show backdrop
-   backdrop.classList.remove('opacity-0');
+        function closeMissingElementsModal() {
+            const modal = document.getElementById('missingElementsModal');
+            const modalContent = modal.querySelector('.transform');
+            const backdrop = document.getElementById('modalBackdrop');
 
-   // Animate modal
-   requestAnimationFrame(() => {
-       modalContent.classList.remove('translate-y-8', 'opacity-0');
-   });
+            modalContent.classList.add('translate-y-8', 'opacity-0');
+            backdrop.classList.add('opacity-0');
 
-   // Prevent body scroll
-   document.body.style.overflow = 'hidden';
-}
+            setTimeout(() => {
+                modal.classList.add('pointer-events-none');
+                modalContent.classList.add('pointer-events-none');
+                backdrop.classList.add('pointer-events-none');
+                document.body.style.overflow = '';
+            }, 300);
+        }
 
-function closeMissingElementsModal() {
-   const modal = document.getElementById('missingElementsModal');
-   const modalContent = modal.querySelector('.transform');
-   const backdrop = document.getElementById('modalBackdrop');
+        // Become Breeder Handler
+        $(document).ready(function() {
+            $('#become-breeder-btn').click(function() {
+                const button = $(this);
+                button.prop('disabled', true)
+                      .html('<i class="fas fa-spinner fa-spin mr-2"></i> Traitement en cours...');
+                
+                $.ajax({
+                    url: '/dashboard/change-role/breeder',
+                    method: 'POST',
+                    success: function(response) {
+                        window.location.reload();
+                    },
+                    error: function(error) {
+                        button.prop('disabled', false)
+                              .html('<span>Devenir Éleveur</span><i class="fas fa-arrow-right"></i>');
+                        alert('Une erreur est survenue. Veuillez réessayer plus tard.');
+                    }
+                });
+            });
+        });
 
-   // Animate out
-   modalContent.classList.add('translate-y-8', 'opacity-0');
-   backdrop.classList.add('opacity-0');
+        // Event Listeners
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeMissingElementsModal();
+            }
+        });
 
-   // Disable pointer events after animation
-   setTimeout(() => {
-       modal.classList.add('pointer-events-none');
-       modalContent.classList.add('pointer-events-none');
-       backdrop.classList.add('pointer-events-none');
+        document.getElementById('modalBackdrop').addEventListener('click', closeMissingElementsModal);
+    </script>
 
-       // Restore body scroll
-       document.body.style.overflow = '';
-   }, 300);
-}
-
-// Close modal on escape key
-document.addEventListener('keydown', (e) => {
-   if (e.key === 'Escape') {
-       closeMissingElementsModal();
-   }
-});
-
-// Close modal on backdrop click
-document.getElementById('modalBackdrop').addEventListener('click', (e) => {
-   if (e.target === e.currentTarget) {
-       closeMissingElementsModal();
-   }
-});
-</script>
     <%- include('includes/scripts') %>
 </body>
 </html>

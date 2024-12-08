@@ -3,39 +3,116 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-<!-- Tailwind CSS -->
+<!-- Favicon -->
+<link rel="icon" type="image/png" href="/favicon.png">
+
+<!-- Tailwind CSS with custom configuration -->
 <script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        fontFamily: {
+          poppins: ['Poppins', 'sans-serif'],
+          montserrat: ['Montserrat', 'sans-serif'],
+        },
+        colors: {
+          primary: '#3B82F6',
+          secondary: '#10B981',
+        }
+      }
+    }
+  }
+</script>
+
+<!-- Alpine.js for interactive components -->
 <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+<!-- Font Awesome for icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<!-- Font Awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+<!-- Chart.js for data visualization -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Date picker -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+<!-- DataTables for advanced table features -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+
+<!-- SweetAlert2 for beautiful alerts -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- Loading overlay -->
+<script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
+
+<!-- Custom Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
 <!-- Custom CSS -->
 <style>
-     @import url('https://fonts.googleapis.com/css2?family=Poppin:wght@200..1000&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+  /* Base styles */
+  body {
+    font-family: 'Poppins', sans-serif;
+    scroll-behavior: smooth;
+  }
 
-     body {
-          font-family: sans-serif;
-     }
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
 
-     /* Custom scrollbar */
-     ::-webkit-scrollbar {
-          width: 8px;
-     }
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
 
-     ::-webkit-scrollbar-track {
-          background: #f1f1f1;
-     }
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+  }
 
-     ::-webkit-scrollbar-thumb {
-          background: #888;
-          border-radius: 4px;
-     }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 
-     ::-webkit-scrollbar-thumb:hover {
-          background: #555;
-     }
+  /* Dark mode adjustments */
+  .dark ::-webkit-scrollbar-track {
+    background: #1F2937;
+  }
+
+  .dark ::-webkit-scrollbar-thumb {
+    background: #4B5563;
+  }
+
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background: #6B7280;
+  }
+
+  /* Loading animation */
+  .loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+
+  /* Utility classes */
+  .transition-all {
+    transition: all 0.3s ease;
+  }
 </style>
-
-<!-- SweetAlert2 -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">

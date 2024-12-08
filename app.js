@@ -10,6 +10,7 @@ const bodyParser = require('body-parser');
 const minifyHTML = require('express-minify-html');
 const flash = require('connect-flash');
 require('dotenv').config();
+const elevage = require('./models/elevage')
 require('./config/passport');
 
 const app = express();
@@ -132,7 +133,26 @@ app.get('/dog-breeds-analyzer', (req, res) => {
 
 app.use('/', analyzeBreedRouter);
 
-
+const checkBreedingStatus = async (req, res, next) => {
+     try {
+         if (req.user) {
+             // Check if user has any breeding
+             const breeding = await Elevage.findOne({ userId: req.user._id });
+             res.locals.hasBreeding = !!breeding;
+             res.locals.userBreeding = breeding; // Pass the breeding object if needed
+         } else {
+             res.locals.hasBreeding = false;
+             res.locals.userBreeding = null;
+         }
+         next();
+     } catch (error) {
+         console.error('Error checking breeding status:', error);
+         res.locals.hasBreeding = false;
+         res.locals.userBreeding = null;
+         next();
+     }
+ };
+ app.use(checkBreedingStatus)
 
 app.use(userRoutes);
 app.use(breedsRoutes);

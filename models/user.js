@@ -192,7 +192,7 @@ const serviceProviderSchema = new Schema({
 
      role: {
           type: String,
-          enum: ['provider', 'admin'],
+          enum: ['provider', 'admin', 'breeder'],
           default: 'provider'
      },
      createdAt: {

@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 const { ObjectId } = mongoose.Types;
 const captureVisit = require('../utils/visitTracker'); // Import the visit tracking utility
 const Visit = require('../models/visit')
+const Elevage = require('../models/elevage')
 const path = require('path');
 const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
 const { Upload } = require('@aws-sdk/lib-storage');
@@ -208,6 +209,7 @@ router.get('/', async (req, res) => {
         res.status(500).render('error', { error: 'Une erreur est survenue' });
     }
 });
+
 // change user role 
 router.post('/dashboard/change-role/breeder', isAuthenticated, async (req, res) => {
     try {
@@ -718,6 +720,37 @@ const requiredFields = [
         const totalViews = services.reduce((acc, s) => acc + (s.views || 0), 0);
 
         // console.log(totalViews)
+        
+                // Fetch all elevages associated with the user
+                const elevages = await Elevage.find({ userId: req.user._id }).lean();
+                console.log(elevages)
+
+        // Calculate Breeder Statistics
+       // Calculate Breeder Statistics
+const totalPets = elevages.reduce((sum, elevage) => {
+    const totalDogs = elevage.stats?.totalDogs || 0; // Use optional chaining and default to 0
+    return sum + totalDogs;
+}, 0);
+
+const activeLitters = elevages.reduce((sum, elevage) => {
+    const availableDogs = elevage.stats?.availableDogs || 0; // Use optional chaining and default to 0
+    return sum + availableDogs;
+}, 0);
+// Fetch recent activities
+const recentActivities = elevages.flatMap(elevage =>
+    elevage.dogs.map(dog => ({
+        title: `Activity for ${dog.name}`,
+        description: `Status updated to ${dog.status}`,
+        icon: 'fa-paw',
+        timeAgo: '2 hours ago' // Mock time for demonstration
+    }))
+).slice(0, 5);
+        // Placeholder for upcoming events calculation (adjust as per your data model)
+        const upcomingEvents = await Elevage.countDocuments({
+            userId: req.user._id,
+            'dogs.status': { $ne: 'Vendu' }, // Placeholder condition
+        });
+
 
         // Render dashboard with all data
         res.render('user/dashboard/dashboard', {
@@ -730,6 +763,11 @@ const requiredFields = [
                 completionPercentage: Math.round(completedWeight)
             },
             stats,
+            totalPets,
+            activeLitters,
+            upcomingEvents,
+            recentActivities,
+            elevages,
             missingElements, // Pass missing elements to the template
             services,
             recentConsultations: consultations[0].recent,
