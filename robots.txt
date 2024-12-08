@@ -1,0 +1,6 @@
+User-agent: *
+Disallow:
+Disallow: /admin/
+Disallow: /dashbboard/
+
+Sitemap: https://www.ndressilik.com/sitemap.xml
