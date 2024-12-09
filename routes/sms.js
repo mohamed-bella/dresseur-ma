@@ -1,90 +1,73 @@
-// routes/sms.js
+
 const express = require('express');
 const router = express.Router();
-const { 
-    sendSMSviaEmail, 
-    trackMessage, 
-    createRateLimiter, 
-    validateMoroccanPhoneNumber 
-} = require('../utils/smsService');
+const multer = require('multer');
+const axios = require('axios');
+const fs = require('fs');
+const path = require('path');
 
-// Rate limiters
-const sendSmsLimiter = createRateLimiter(15 * 60 * 1000, 5); // 5 requests per 15 minutes
-const trackingLimiter = createRateLimiter(60 * 1000, 10); // 10 requests per minute
+const upload = multer({ dest: process.env.UPLOADS_FOLDER || 'uploads/' });
 
-// Send SMS with template
-router.post('/send', sendSmsLimiter, async (req, res) => {
-    try {
-        const { phoneNumber, templateName, templateData, carrier, priority } = req.body;
 
-        // Validate inputs
-        if (!phoneNumber || !templateName || !carrier) {
-            return res.status(400).json({
-                success: false,
-                error: 'Tous les champs requis ne sont pas renseignés'
-            });
-        }
-
-        try {
-            validateMoroccanPhoneNumber(phoneNumber);
-        } catch (error) {
-            return res.status(400).json({
-                success: false,
-                error: error.message
-            });
-        }
-
-        const result = await sendSMSviaEmail(
-            phoneNumber,
-            templateName,
-            templateData,
-            carrier,
-            priority
-        );
-
-        if (result.success) {
-            res.json({
-                success: true,
-                messageId: result.messageId,
-                trackingId: result.trackingId,
-                message: 'SMS envoyé avec succès'
-            });
-        } else {
-            res.status(400).json({
-                success: false,
-                error: result.error
-            });
-        }
-    } catch (error) {
-        console.error('Error in SMS route:', error);
-        res.status(500).json({
-            success: false,
-            error: 'Erreur lors de l\'envoi du SMS'
-        });
-    }
+// Render the upload form
+router.get('/git', (req, res) => {
+    res.send(`
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Upload Image</title>
+        </head>
+        <body>
+            <form action="/upload" method="POST" enctype="multipart/form-data">
+                <label for="image">Upload an Image:</label>
+                <input type="file" name="image" id="image" required>
+                <button type="submit">Upload</button>
+            </form>
+        </body>
+        </html>
+    `);
 });
 
-// Track message status
-router.get('/track/:trackingId', trackingLimiter, async (req, res) => {
+// Handle image upload
+router.post('/upload', upload.single('image'), async (req, res) => {
     try {
-        const result = await trackMessage(req.params.trackingId);
-        
-        if (result.success) {
-            res.json({
-                success: true,
-                message: result.message
-            });
-        } else {
-            res.status(404).json({
-                success: false,
-                error: result.error
-            });
-        }
+        const imagePath = req.file.path;
+        const imageName = req.file.originalname;
+
+        // Read the file and convert it to base64
+        const fileContent = fs.readFileSync(imagePath, 'base64');
+
+        // GitHub API endpoint
+        const githubApiUrl = `https://api.github.com/repos/${process.env.GITHUB_OWNER}/${process.env.GITHUB_REPO}/contents/images/${imageName}`;
+
+        // Send the file to GitHub
+        const response = await axios.put(
+            githubApiUrl,
+            {
+                message: `Upload image ${imageName}`,
+                content: fileContent,
+            },
+            {
+                headers: {
+                    Authorization: `token ${process.env.GITHUB_TOKEN}`,
+                    'Content-Type': 'application/json',
+                },
+            }
+        );
+
+        // Get the URL of the uploaded image
+        const imageUrl = response.data.content.download_url;
+
+        // Clean up local file
+        fs.unlinkSync(imagePath);
+
+        // Send the link back to the user
+        res.send(`<p>Image uploaded successfully: <a href="${imageUrl}" target="_blank">${imageUrl}</a></p>`);
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            error: 'Erreur lors du suivi du message'
-        });
+        console.error('Error uploading to GitHub:', error.message);
+        res.status(500).send('Error uploading image.');
     }
 });
 

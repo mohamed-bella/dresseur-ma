@@ -9,6 +9,9 @@ const User = require('../models/user');
 const { isAuthenticated } = require('../middlewares/auth');
 const Service = require('../models/service');
 const Review = require('../models/review');
+const uploadToGitHub = require('../utils/GitHubImagesUploader'); // GitHub uploader utility
+const { processImage } = require('../utils/imageProcessor'); // Image processing utility
+
 
 // S3 Configuration
 const s3 = new S3Client({
@@ -77,166 +80,75 @@ const deleteFromS3 = async (url) => {
 
 // Route: Get Profile Info
 // Route: Get Profile Info
-router.get('/profile', isAuthenticated, async (req, res) => {
-     try {
-          // Fetch user with select fields
-          const user = await User.findById(req.user._id)
-               .select('-password -__v')
-               .lean();
 
-          // Calculate missing fields for completion guide
-          const missingFields = [];
-          if (!user.displayName) missingFields.push('displayName');
-          if (!user.bio) missingFields.push('bio');
-          if (!user.location?.city) missingFields.push('city');
-          if (!user.phoneNumber) missingFields.push('phone');
-          if (!user.specializations?.length) missingFields.push('specializations');
-
-          // Calculate completion percentage
-          const completionPercentage = Math.round(
-               ((5 - missingFields.length) / 5) * 100
-          );
-
-          // Calculate service metrics
-          const totalServices = await Service.countDocuments({ createdBy: user._id });
-          const userServiceIds = await Service.find({ createdBy: user._id }).distinct('_id');
-          const totalReviews = await Review.countDocuments({ serviceId: { $in: userServiceIds } });
-
-          // Calculate average rating
-          const averageRatingResult = await Review.aggregate([
-               {
-                    $match: {
-                         serviceId: { $in: userServiceIds }
-                    }
-               },
-               {
-                    $group: {
-                         _id: null,
-                         average: { $avg: '$rating' }
-                    }
-               }
-          ]);
-          const averageRating = averageRatingResult[0]?.average || 0;
-
-          // Retrieve profile views from user.metrics
-          const profileViews = user.metrics?.profileViews || 0; // Ensure this field exists in your user model
-
-          // Format data for template
-          const viewData = {
-               user: {
-                    ...user,
-                    stats: {
-                         views: profileViews,
-                         services: totalServices,
-                         reviews: totalReviews,
-                         rating: Number(averageRating.toFixed(1))
-                    }
-               },
-               completionPercentage,
-               missingFields,
-               defaultProfileImage: 'https://images.unsplash.com/photo-1614850715973-58c3167b30a0',
-               path: 'profile',
-               breadcrumbs: [
-                    { label: 'Dashboard', url: '/dashboard' },
-                    { label: 'Profil', url: '#' }
-               ],
-               specializations: [
-                    { value: 'dog-training', label: 'Dressage', icon: 'fa-dog' },
-                    { value: 'grooming', label: 'Toilettage', icon: 'fa-cut' },
-                    { value: 'walking', label: 'Promenade', icon: 'fa-walking' },
-                    { value: 'veterinary', label: 'Vétérinaire', icon: 'fa-stethoscope' },
-                    { value: 'boarding', label: 'Pension', icon: 'fa-home' },
-                    { value: 'transport', label: 'Transport', icon: 'fa-car' }
-               ]
-          };
-
-          // Add verification status
-          if (user.status === 'pending') {
-               viewData.verificationPending = true;
-          }
-
-          // Render the profile page
-          res.render('user/dashboard/profile', viewData);
-
-     } catch (error) {
-          console.error('Profile fetch error:', error);
-          res.status(500).send('Erreur du serveur');
-     }
-});
 
 
 
 // Upload route for profile/cover images
+// Upload route for profile/cover images
 router.post('/profile/update-image', isAuthenticated, upload.single('image'), async (req, res) => {
-     console.log(req.body, req.file)
      try {
-          if (!req.file) {
-               return res.status(400).json({
-                    success: false,
-                    message: 'No image provided'
-               });
-          }
-
-          const { type } = req.body;
-          if (!['profile', 'cover'].includes(type)) {
-               return res.status(400).json({
-                    success: false,
-                    message: 'Invalid image type'
-               });
-          }
-
-          // Process image
-          const processedImage = await processImage(req.file.buffer, type);
-
-          // Upload to S3
-          const imageUrl = await uploadToS3(processedImage, req.user._id, type);
-
-          // Update user
-          const updateField = type === 'profile' ? 'profileImage' : 'coverImage';
-          await User.findByIdAndUpdate(req.user._id, {
-               [updateField]: imageUrl
-          });
-
-          res.json({
-               success: true,
-               message: 'Image updated successfully',
-               url: imageUrl
-          });
-
+         // Validate uploaded file
+         if (!req.file) {
+             return res.status(400).json({
+                 success: false,
+                 message: 'No image provided',
+             });
+         }
+ 
+         const { type } = req.body;
+ 
+         // Validate image type
+         if (!['profile', 'cover'].includes(type)) {
+             return res.status(400).json({
+                 success: false,
+                 message: 'Invalid image type',
+             });
+         }
+ 
+         // Process image
+         const processedImage = await processImage(req.file.buffer);
+ 
+         // Define GitHub path
+         const key = `users/${req.user._id}/${type}-${Date.now()}.webp`; // Using .webp for optimized storage
+ 
+         // Upload to GitHub
+         const uploadResult = await uploadToGitHub([
+             {
+                 path: key,
+                 content: processedImage,
+             },
+         ]);
+ 
+         if (uploadResult.success.length === 0) {
+             throw new Error('Failed to upload image to GitHub');
+         }
+ 
+         const imageUrl = uploadResult.success[0].url;
+ 
+         // Update user profile with new image URL
+         const updateField = type === 'profile' ? 'profileImage' : 'coverImage';
+         await User.findByIdAndUpdate(req.user._id, {
+             [updateField]: imageUrl,
+         });
+ 
+         res.json({
+             success: true,
+             message: 'Image updated successfully',
+             url: imageUrl,
+         });
+ 
      } catch (error) {
-          console.error('Image update error:', error);
-          res.status(500).json({
-               success: false,
-               message: 'Failed to update image'
-          });
+         console.error('Image update error:', error);
+         res.status(500).json({
+             success: false,
+             message: 'Failed to update image',
+         });
      }
-});
+ });
+ 
 
-// Helper function to process images
-const processImage = async (buffer, type) => {
-     try {
-          if (type === 'cover') {
-               return await sharp(buffer)
-                    .resize(1920, 1080, {
-                         fit: 'cover',
-                         position: 'center'
-                    })
-                    .webp({ quality: 80 })
-                    .toBuffer();
-          } else {
-               return await sharp(buffer)
-                    .resize(400, 400, {
-                         fit: 'cover',
-                         position: 'center'
-                    })
-                    .webp({ quality: 90 })
-                    .toBuffer();
-          }
-     } catch (error) {
-          console.error('Image processing error:', error);
-          throw new Error('Failed to process image');
-     }
-};
+
 
 // Route: Update Profile Visibility
 router.put('/profile/visibility', isAuthenticated, async (req, res) => {
@@ -508,65 +420,80 @@ router.put('/profile/update-specializations', isAuthenticated, async (req, res) 
 // Route: Add Qualification
 router.post('/profile/qualifications', isAuthenticated, upload.single('certificate'), async (req, res) => {
      try {
-          const { title, institution, year } = req.body;
-
-          // Validate required fields
-          if (!title || !institution || !year) {
-               return res.status(400).json({
-                    success: false,
-                    message: 'Veuillez remplir tous les champs obligatoires'
-               });
-          }
-
-          // Validate year
-          const currentYear = new Date().getFullYear();
-          if (isNaN(year) || year < 1900 || year > currentYear) {
-               return res.status(400).json({
-                    success: false,
-                    message: 'Année invalide'
-               });
-          }
-
-          // Process certificate image if provided
-          let certificateUrl = null;
-          if (req.file) {
-               // Process image (e.g., resize and convert to webp)
-               const processedImage = await sharp(req.file.buffer)
-                    .resize(800, 600, {
-                         fit: 'cover',
-                         position: 'center'
-                    })
-                    .webp({ quality: 80 })
-                    .toBuffer();
-
-               // Upload to S3
-               certificateUrl = await uploadToS3(processedImage, req.user._id, 'certificate');
-          }
-
-          // Update user's qualifications
-          await User.findByIdAndUpdate(req.user._id, {
-               $push: {
-                    qualifications: {
-                         title,
-                         institution,
-                         year,
-                         certificate: certificateUrl
-                    }
-               }
-          });
-
-          res.json({
-               success: true,
-               message: 'Qualification ajoutée avec succès'
-          });
+         const { title, institution, year } = req.body;
+ 
+         // Validate required fields
+         if (!title || !institution || !year) {
+             return res.status(400).json({
+                 success: false,
+                 message: 'Veuillez remplir tous les champs obligatoires',
+             });
+         }
+ 
+         // Validate year
+         const currentYear = new Date().getFullYear();
+         if (isNaN(year) || year < 1900 || year > currentYear) {
+             return res.status(400).json({
+                 success: false,
+                 message: 'Année invalide',
+             });
+         }
+ 
+         // Process certificate image if provided
+         let certificateUrl = null;
+         if (req.file) {
+             // Resize and optimize image
+             const processedImage = await sharp(req.file.buffer)
+                 .resize(800, 600, {
+                     fit: 'cover',
+                     position: 'center',
+                 })
+                 .webp({ quality: 80 })
+                 .toBuffer();
+ 
+             // Define GitHub path
+             const key = `users/${req.user._id}/qualifications/${Date.now()}-certificate.webp`;
+ 
+             // Upload to GitHub
+             const uploadResult = await uploadToGitHub([
+                 {
+                     path: key,
+                     content: processedImage,
+                 },
+             ]);
+ 
+             if (uploadResult.success.length > 0) {
+                 certificateUrl = uploadResult.success[0].url;
+             } else {
+                 throw new Error('Failed to upload certificate to GitHub');
+             }
+         }
+ 
+         // Update user's qualifications
+         await User.findByIdAndUpdate(req.user._id, {
+             $push: {
+                 qualifications: {
+                     title,
+                     institution,
+                     year,
+                     certificate: certificateUrl,
+                 },
+             },
+         });
+ 
+         res.json({
+             success: true,
+             message: 'Qualification ajoutée avec succès',
+         });
      } catch (error) {
-          console.error('Add qualification error:', error);
-          res.status(500).json({
-               success: false,
-               message: 'Erreur lors de l\'ajout de la qualification'
-          });
+         console.error('Add qualification error:', error);
+         res.status(500).json({
+             success: false,
+             message: "Erreur lors de l'ajout de la qualification",
+         });
      }
-});
+ });
+ 
 
 // Route: Delete Qualification
 router.delete('/profile/qualifications/:qualificationId', isAuthenticated, async (req, res) => {

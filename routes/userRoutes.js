@@ -757,6 +757,7 @@ const recentActivities = elevages.flatMap(elevage =>
             pageTitle: 'dashboard',
             description: '',
             keywords: '',
+            page : 'services',
             totalViews,
             user: {
                 ...req.user.toObject(),

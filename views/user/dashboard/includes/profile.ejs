@@ -1,0 +1,416 @@
+
+    <!-- Main Container -->
+    <main class="pt-4 pb-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h1 class="text-5xl mb-3">Mon Profile</h1> 
+            <!-- Back Button -->
+            <div class="mb-6">
+               
+                <a href="/dashboard" 
+                   class="inline-flex items-center gap-2 px-4 py-2 text-gray-700 bg-white 
+                          rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Retour au tableau de bord</span>
+                </a>
+            </div>
+
+            <!-- Verification Alert -->
+            <!-- <div class="mb-6">
+                <button class="w-full relative overflow-hidden rounded-xl border <%= user.isVerified ? 'border-green-100 bg-green-50/50' : 'border-yellow-100 bg-yellow-50/50' %>"
+                        onclick="toggleSection('verificationAlert')">
+                    <div class="p-4">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full flex items-center justify-center 
+                                            <%= user.isVerified ? 'bg-green-100' : 'bg-yellow-100' %>">
+                                    <i class="fas fa-shield-alt <%= user.isVerified ? 'text-green-600' : 'text-yellow-600' %>"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-gray-900 font-medium">
+                                        <%= user.isVerified ? 'Profil vérifié ✨' : 'Vérification du profil requise' %>
+                                    </h3>
+                                    <p class="text-sm text-gray-500 mt-1">
+                                        <%= user.isVerified ? 'Votre profil est certifié par Ndressilik' : 'Complétez votre profil pour être vérifié' %>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <% if (!user.isVerified) { %>
+                                    <span class="hidden sm:inline-flex px-2.5 py-0.5 text-xs font-medium 
+                                                 bg-yellow-100 text-yellow-800 rounded-full">
+                                        Action requise
+                                    </span>
+                                <% } %>
+                                <i class="fas fa-chevron-down text-gray-400 transition-transform duration-200" 
+                                   id="verificationAlertIcon"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Expandable Content -->
+                    <!-- <div id="verificationAlertContent" class="hidden border-t < %= user.isVerified ? 'border-green-100' : 'border-yellow-100' %>">
+                        <div class="p-4">
+                            < % if (user.isVerified) { %>
+                                <div class="flex items-start gap-4">
+                                    <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+                                        <i class="fas fa-check text-green-600"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-medium text-gray-900">Profil vérifié ✨</h4>
+                                        <p class="mt-1 text-sm text-gray-600">
+                                            Votre profil est vérifié et bénéficie d'une meilleure visibilité.
+                                        </p>
+                                        <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                            <div class="flex items-center gap-2 text-sm text-gray-600">
+                                                <i class="fas fa-check text-green-500"></i>
+                                                <span>Meilleure visibilité</span>
+                                            </div>
+                                            <div class="flex items-center gap-2 text-sm text-gray-600">
+                                                <i class="fas fa-check text-green-500"></i>
+                                                <span>Badge vérifié</span>
+                                            </div>
+                                            <div class="flex items-center gap-2 text-sm text-gray-600">
+                                                <i class="fas fa-check text-green-500"></i>
+                                                <span>Support prioritaire</span>
+                                            </div>
+                                            <div class="flex items-center gap-2 text-sm text-gray-600">
+                                                <i class="fas fa-check text-green-500"></i>
+                                                <span>Statistiques avancées</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            < % } else { %>
+                                <div class="space-y-4">
+                                    <p class="text-sm text-gray-600">
+                                        Pour obtenir la vérification, complétez les éléments suivants :
+                                    </p>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                       
+                                        <div class="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200">
+                                            <div class="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center">
+                                                <i class="fas fa-image text-yellow-600"></i>
+                                            </div>
+                                            <div>
+                                                <span class="text-sm font-medium text-gray-900">Photos</span>
+                                                <p class="text-xs text-gray-500">Min. 3 photos</p>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            < % } %>
+                        </div>
+                    </div> 
+                </button>
+            </div> -->
+
+            <!-- Main Content Grid -->
+            <div class="grid lg:grid-cols-12 gap-6">
+                <!-- Left Sidebar -->
+                <div class="lg:col-span-4 space-y-6">
+                    <!-- Profile Card -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                        <!-- Cover Image -->
+                        <div class="h-32 bg-gradient-to-r from-gray-800 to-gray-700 relative">
+                           
+                        </div>
+                        
+                        <!-- Profile Info -->
+                        <div class="relative p-6">
+                            <!-- Profile Image -->
+                            <div class="absolute -top-12 left-6">
+                                <div class="relative">
+                                    <img src="<%= user.profileImage || '/default-avatar.jpg' %>" 
+                                         alt="Profile"
+                                         class="w-24 h-24 rounded-xl object-cover border-4 border-white shadow-md profile-image">
+                                    <button onclick="triggerFileInput('profileImage')"
+                                            class="absolute bottom-0 right-0 p-1.5 bg-gray-900 text-white rounded-lg 
+                                                       hover:bg-gray-800 transition-colors">
+                                        <i class="fas fa-camera"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Profile Details -->
+                            <div class="mt-14">
+                                <h1 class="text-xl font-bold text-gray-900"><%= user.displayName %></h1>
+                                <p class="text-gray-600 mt-1"><%= user.email %></p>
+                                
+                                <!-- Verification Badge -->
+                                <div class="flex items-center gap-2 mt-4">
+                                    <span class="px-2.5 py-0.5 text-xs font-medium rounded-full
+                                               <%= user.isVerified ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' %>">
+                                        <%= user.isVerified ? 'Vérifié' : 'Non vérifié' %>
+                                    </span>
+                                    <span class="px-2.5 py-0.5 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
+                                        Professionnel
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+               
+
+                </div>
+
+                <!-- Right Content Area -->
+                <div class="lg:col-span-8 space-y-6">
+                    <!-- Basic Information -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                        <div class="p-6">
+                            <h2 class="text-lg font-semibold text-gray-900 mb-6">Informations de base</h2>
+                            <form id="basicInfoForm" class="space-y-6">
+                                <!-- Name Fields -->
+                                <div class="grid sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Prénom</label>
+                                        <input type="text" name="displayName" 
+                                               value="<%= user.displayName %>"
+                                               required
+                                               class="w-full px-4 py-2 border border-gray-300 rounded-lg 
+                                                      focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    </div>
+                                  
+                                </div>
+
+                                <!-- Contact Info -->
+                                <div class="grid sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                                        <input type="email" name="email" 
+                                               value="<%= user.email %>"
+                                               disabled
+                                               class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Téléphone</label>
+                                        <input type="tel" name="phone" 
+                                               value="<%= user.phoneNumber || '' %>"
+                                               required
+                                               class="w-full px-4 py-2 border border-gray-300 rounded-lg 
+                                                      focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    </div>
+                                </div>
+
+                                <!-- Location -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Ville</label>
+                                    <select name="location" id="locationSelect"
+                                            required
+                                            class="w-full px-4 py-2 border border-gray-300 rounded-lg 
+                                                   focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                        <option value="">Sélectionnez une ville</option>
+                                    </select>
+                                </div>
+
+                                <!-- Bio -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Bio</label>
+                                    <textarea name="bio" rows="4"
+                                              required
+                                              class="w-full px-4 py-2 border border-gray-300 rounded-lg 
+                                                     focus:ring-2 focus:ring-blue-500 focus:border-blue-500"><%= user.bio || '' %></textarea>
+                                </div>
+
+                                <!-- Save Button -->
+                                <div class="flex justify-end">
+                                    <button type="submit" 
+                                            class="px-6 py-2 bg-gray-900 text-white rounded-lg
+                                                   hover:bg-gray-800 transition-colors">
+                                        Enregistrer les modifications
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Include other sections -->
+                    <%- include('../includes/profile/specializations') %>
+                    <%- include('../includes/profile/qualifications') %>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toastContainer" class="fixed bottom-4 right-4 z-50"></div>
+
+    <!-- Scripts -->
+    <script>
+        // Ensure user object is available in JavaScript
+        const user = <%- JSON.stringify(user) %>;
+
+        // Section Toggle Function
+        function toggleSection(sectionId) {
+            const content = document.getElementById(`${sectionId}Content`);
+            const icon = document.getElementById(`${sectionId}Icon`);
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                content.classList.add('hidden');
+                icon.style.transform = 'rotate(0)';
+            }
+        }
+
+        // File Upload Handlers
+        function triggerFileInput(type) {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.onchange = (e) => handleImageUpload(e, type);
+            input.click();
+        }
+
+        async function handleImageUpload(event, type) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // Validate file size (5MB max)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('L\'image ne doit pas dépasser 5MB');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('image', file);
+            formData.append('type', type === 'profileImage' ? 'profile' : 'cover');
+
+            try {
+                const response = await fetch('/dashboard/profile/update-image', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    // Update image in UI
+                    if (type === 'profileImage') {
+                        document.querySelector('.profile-image').src = data.url;
+                    } else if (type === 'coverImage') {
+                        // Handle cover image update if applicable
+                    }
+                    // Show success message
+                    showToast('Image mise à jour avec succès', 'success');
+                } else {
+                    throw new Error(data.message);
+                }
+            } catch (error) {
+                console.error('Upload error:', error);
+                showToast('Erreur lors de la mise à jour de l\'image', 'error');
+            }
+        }
+
+        // Basic Info Update
+        document.getElementById('basicInfoForm').addEventListener('submit', updateBasicInfo);
+
+        async function updateBasicInfo(event) {
+            event.preventDefault();
+            const form = event.target;
+
+            const formData = {
+                displayName: form.displayName.value.trim(),
+                phoneNumber: form.phone.value.trim(),
+                bio: form.bio.value.trim(),
+                location: {
+                    city: form.location.value
+                }
+            };
+
+            try {
+                const response = await fetch('/dashboard/profile/update-basic-info', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    // Show success message
+                    showToast('Informations mises à jour avec succès', 'success');
+                    setTimeout(() => {
+                        location.reload(); // Reload to reflect changes
+                    }, 1000);
+                } else {
+                    throw new Error(data.message);
+                }
+            } catch (error) {
+                console.error('Update error:', error);
+                showToast(error.message || 'Erreur lors de la mise à jour', 'error');
+            }
+        }
+
+        // Toast Notification
+        function showToast(message, type = 'success') {
+            const toastContainer = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `px-6 py-3 rounded-lg text-white mb-2
+                              ${type === 'success' ? 'bg-green-500' : 'bg-red-500'}
+                              transform transition-all duration-300 opacity-0`;
+            toast.textContent = message;
+            
+            toastContainer.appendChild(toast);
+            
+            // Animate in
+            setTimeout(() => {
+                toast.classList.remove('opacity-0');
+            }, 100);
+
+            // Remove after 3 seconds
+            setTimeout(() => {
+                toast.classList.add('opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Initialize City Select
+        const moroccanCities = [
+            { value: 'casablanca', label: 'Casablanca' },
+            { value: 'rabat', label: 'Rabat' },
+            { value: 'marrakech', label: 'Marrakech' },
+            { value: 'agadir', label: 'Agadir' },
+            { value: 'tanger', label: 'Tanger' },
+            { value: 'fes', label: 'Fès' },
+            { value: 'meknes', label: 'Meknès' },
+            { value: 'oujda', label: 'Oujda' },
+            { value: 'kenitra', label: 'Kénitra' },
+            { value: 'tetouan', label: 'Tétouan' },
+            { value: 'safi', label: 'Safi' },
+            { value: 'mohammedia', label: 'Mohammedia' },
+            { value: 'el-jadida', label: 'El Jadida' },
+            { value: 'beni-mellal', label: 'Béni Mellal' },
+            { value: 'nador', label: 'Nador' }
+        ];
+
+        function initializeLocationSelect() {
+            const select = document.getElementById('locationSelect');
+            const currentLocation = '<%= user.location?.city || '' %>'; // Get user's current location
+
+            // Sort cities alphabetically
+            moroccanCities.sort((a, b) => a.label.localeCompare(b.label));
+
+            // Add options to select
+            moroccanCities.forEach(city => {
+                const option = document.createElement('option');
+                option.value = city.value;
+                option.textContent = city.label;
+                if (city.value === currentLocation.toLowerCase()) {
+                    option.selected = true;
+                }
+                select.appendChild(option);
+            });
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeLocationSelect();
+        });
+    </script>
+
+    <%- include('../includes/scripts') %>
+

@@ -4,6 +4,9 @@ const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
 const multer = require('multer');
 const path = require('path');
 const mongoose = require('mongoose')
+const uploadToGitHub = require('../utils/GitHubImagesUploader'); // GitHub uploader utility
+const { processImage } = require('../utils/imageProcessor'); // Image processing utility
+
 const { ObjectId } = mongoose.Types;
 
 const sharp = require('sharp');
@@ -45,16 +48,7 @@ const upload = multer({
      }
 }).array('serviceImages', 5); // Changed to array for multiple files
 
-// Image processing function
-const processImage = async (buffer) => {
-     return await sharp(buffer)
-          .resize(800, 600, {
-               fit: 'cover',
-               withoutEnlargement: true
-          })
-          .webp({ quality: 80 })
-          .toBuffer();
-};
+
 
 // S3 upload function
 const uploadToS3 = async (fileBuffer, key) => {
@@ -113,91 +107,113 @@ router.get('/dashboard/new-service', isAuthenticated, async (req, res) => {
 
 router.post('/services/add', isAuthenticated, (req, res) => {
      upload(req, res, async (err) => {
-          if (err) {
-               return res.status(400).json({
-                    success: false,
-                    message: err.message
-               });
-          }
-
-          try {
-               console.log(req.body.serviceImages)
-               const { serviceName, serviceImages, description, minPrice, serviceNumber, location, serviceType } = req.body;
-
-
-               // Process and upload images
-               // if (req.files && req.files.length > 0) {
-               //      for (const file of req.files) {
-               //           const resizedImage = await processImage(file.buffer);
-               //           const key = `services/${Date.now()}-${path.basename(file.originalname)}`;
-               //           const imageUrl = await uploadToS3(resizedImage, key);
-               //           serviceImages.push(imageUrl);
-               //      }
-               // }
-
-               // console.log(serviceImages)
-               // Generate SEO-friendly slug
-            const slugBase = `${serviceName} ${location} ${serviceType}`;
-            const slug = slugify(slugBase, { lower: true, strict: true });
-
-
-               // Create new service
-               const newService = new Service({
-                    serviceName: serviceName.trim(),
-                    description: description.trim(),
-                    priceRange: `${minPrice}`,
-                    location: location.toLowerCase(),
-                    serviceOptions: serviceType,
-                    serviceNumber: serviceNumber,
-                    createdBy: req.user ? req.user._id : null,
-                    images: serviceImages,
-                    slug : slug
-               });
-
-               await newService.save();
-
-               res.status(201).json({
-                    success: true,
-                    message: 'Service créé avec succès!'
-               });
-
-          } catch (error) {
-               console.error(error);
-               res.status(500).json({
-                    success: false,
-                    message: 'Erreur lors de la création du service'
-               });
-          }
+         if (err) {
+             return res.status(400).json({
+                 success: false,
+                 message: err.message,
+             });
+         }
+ 
+         try {
+             // Parse the body data
+             const { serviceName, description, minPrice, serviceNumber, location, serviceType } = req.body;
+          
+             console.log(req.body.serviceImages)
+             // Ensure serviceImages is an array
+             const serviceImages = req.body.serviceImages 
+             
+             // Process images if files are uploaded
+             if (req.files && req.files.length > 0) {
+                 for (const file of req.files) {
+                     const resizedImage = await processImage(file.buffer);
+                     const uploadResult = await uploadToGitHub([
+                         {
+                             path: `services/${Date.now()}-${path.basename(file.originalname)}`,
+                             content: resizedImage,
+                         },
+                     ]);
+ 
+                     if (uploadResult.success.length > 0) {
+                         serviceImages.push(uploadResult.success[0].url);
+                     }
+                 }
+             }
+ 
+             // Generate SEO-friendly slug
+             const slugBase = `${serviceName} ${location} ${serviceType}`;
+             const slug = slugify(slugBase, { lower: true, strict: true });
+ 
+             // Create new service
+             const newService = new Service({
+                 serviceName: serviceName.trim(),
+                 description: description.trim(),
+                 priceRange: `${minPrice}`,
+                 location: location.toLowerCase(),
+                 serviceOptions: serviceType,
+                 serviceNumber: serviceNumber,
+                 createdBy: req.user ? req.user._id : null,
+                 images: serviceImages,
+                 slug: slug,
+             });
+ 
+             await newService.save();
+ 
+             res.status(201).json({
+                 success: true,
+                 message: 'Service créé avec succès!',
+                 data: newService,
+             });
+         } catch (error) {
+             console.error(error);
+             res.status(500).json({
+                 success: false,
+                 message: 'Erreur lors de la création du service',
+             });
+         }
      });
-});
+ });
+ 
 
-// FilePond temporary upload endpoint
-router.post('/services/upload-temp', isAuthenticated, (req, res) => {
+ router.post('/services/upload-temp', isAuthenticated, (req, res) => {
      upload(req, res, async (err) => {
-          if (err) {
-               return res.status(400).json({ error: err.message });
-          }
-
-          try {
-               if (!req.files || req.files.length === 0) {
-                    return res.status(400).json({ error: 'No file uploaded' });
-               }
-
-               const uploadedUrls = [];
-               for (const file of req.files) {
-                    const resizedImage = await processImage(file.buffer);
-                    const key = `temp/${Date.now()}-${path.basename(file.originalname)}`;
-                    const imageUrl = await uploadToS3(resizedImage, key);
-                    uploadedUrls.push({ key, url: imageUrl });
-               }
-
-               res.json({ uploadedUrls });
-          } catch (error) {
-               console.error(error);
-               res.status(500).json({ error: 'Upload failed' });
-          }
+         if (err) {
+             return res.status(400).json({ success: false, message: err.message });
+         }
+ 
+         try {
+             // Ensure files are uploaded
+             if (!req.files || req.files.length === 0) {
+                 return res.status(400).json({ success: false, message: 'No files uploaded' });
+             }
+ 
+             // Process and upload files to GitHub
+             const processedFiles = [];
+             for (const file of req.files) {
+                 const resizedImage = await processImage(file.buffer);
+ 
+                 const uploadResult = await uploadToGitHub([
+                     {
+                         path: `temp/${Date.now()}-${path.basename(file.originalname)}`,
+                         content: resizedImage,
+                     },
+                 ]);
+ 
+                 if (uploadResult.success.length > 0) {
+                     processedFiles.push(...uploadResult.success);
+                 }
+             }
+ 
+             res.status(200).json({
+                 success: true,
+                 uploadedFiles: processedFiles,
+             });
+         } catch (error) {
+             console.error('Error during upload process:', error.message);
+             res.status(500).json({ success: false, message: 'Upload failed' });
+         }
      });
-});
+ });
+ 
  
  
  // Helper function to clean up temporary files
@@ -836,81 +852,89 @@ router.post('/dashboard/services/:serviceId/delete', isAuthenticated, async (req
 // Updated route with middleware
 router.post('/dashboard/services/:serviceId', isAuthenticated, upload, async (req, res) => {
      try {
-          const serviceId = req.params.serviceId;
-          const service = await Service.findById(serviceId);
-
-          if (!service) {
-               return res.status(404).json({
-                    success: false,
-                    message: 'Service non trouvé'
-               });
-          }
-
-          // Check ownership
-          if (service.createdBy.toString() !== req.user._id.toString()) {
-               return res.status(403).json({
-                    success: false,
-                    message: 'Non autorisé à modifier ce service'
-               });
-          }
-
-          const { serviceName, description, minPrice, maxPrice, location, serviceType } = req.body;
-
-          // Parse price range from the current values
-          let priceRange;
-          if (minPrice && maxPrice) {
-               priceRange = `${minPrice}-${maxPrice} DH`;
-          } else {
-               // Keep existing price range if new values aren't provided
-               priceRange = service.priceRange;
-          }
-
-          let imageUrls = [...service.images]; // Keep existing images
-
-          // Process new images if any
-          if (req.files && req.files.length > 0) {
-               for (const file of req.files) {
-                    const resizedImage = await processImage(file.buffer);
-                    const key = `services/${Date.now()}-${path.basename(file.originalname)}`;
-                    const imageUrl = await uploadToS3(resizedImage, key);
-                    imageUrls.push(imageUrl);
-               }
-          }
-
-          // Remove images if specified
-          if (req.body.removeImages) {
-               const imagesToRemove = JSON.parse(req.body.removeImages);
-               imageUrls = imageUrls.filter(url => !imagesToRemove.includes(url));
-          }
-
-          // Update service
-          const updatedService = await Service.findByIdAndUpdate(
-               serviceId,
-               {
-                    serviceName: serviceName.trim(),
-                    description: description.trim(),
-                    priceRange,
-                    location: location.toLowerCase(),
-                    serviceOptions: serviceType,
-                    images: imageUrls
-               },
-               { new: true }
-          );
-
-          res.status(200).json({
-               success: true,
-               message: 'Service mis à jour avec succès',
-               service: updatedService
-          });
-
+         const serviceId = req.params.serviceId;
+         const service = await Service.findById(serviceId);
+ 
+         if (!service) {
+             return res.status(404).json({
+                 success: false,
+                 message: 'Service non trouvé',
+             });
+         }
+ 
+         // Check ownership
+         if (service.createdBy.toString() !== req.user._id.toString()) {
+             return res.status(403).json({
+                 success: false,
+                 message: 'Non autorisé à modifier ce service',
+             });
+         }
+ 
+         const { serviceName, description, minPrice, maxPrice, location, serviceType } = req.body;
+ 
+         // Parse price range from the current values
+         let priceRange;
+         if (minPrice && maxPrice) {
+             priceRange = `${minPrice}-${maxPrice} DH`;
+         } else {
+             // Keep existing price range if new values aren't provided
+             priceRange = service.priceRange;
+         }
+ 
+         let imageUrls = [...service.images]; // Keep existing images
+ 
+         // Process new images if any
+         if (req.files && req.files.length > 0) {
+             for (const file of req.files) {
+                 const resizedImage = await processImage(file.buffer); // Resize and optimize
+                 const uploadResult = await uploadToGitHub([
+                     {
+                         path: `services/${Date.now()}-${path.basename(file.originalname)}`,
+                         content: resizedImage,
+                     },
+                 ]);
+ 
+                 // Add the uploaded image URL
+                 if (uploadResult.success.length > 0) {
+                     imageUrls.push(uploadResult.success[0].url);
+                 }
+             }
+         }
+ 
+         // Remove images if specified
+         if (req.body.removeImages) {
+             const imagesToRemove = JSON.parse(req.body.removeImages);
+             imageUrls = imageUrls.filter(url => !imagesToRemove.includes(url));
+         }
+ 
+         // Update service
+         const updatedService = await Service.findByIdAndUpdate(
+             serviceId,
+             {
+                 serviceName: serviceName?.trim(),
+                 description: description?.trim(),
+                 priceRange,
+                 location: location?.toLowerCase(),
+                 serviceOptions: serviceType,
+                 images: imageUrls,
+             },
+             { new: true }
+         );
+ 
+         res.status(200).json({
+             success: true,
+             message: 'Service mis à jour avec succès',
+             service: updatedService,
+         });
+ 
      } catch (error) {
-          console.error('Error updating service:', error);
-          res.status(500).json({
-               success: false,
-               message: 'Erreur lors de la mise à jour du service'
-          });
+         console.error('Error updating service:', error);
+         res.status(500).json({
+             success: false,
+             message: 'Erreur lors de la mise à jour du service',
+         });
      }
-});
+ });
 
 // GET: Top 10 Active Users
 router.get('/top-users', async (req, res) => {

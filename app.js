@@ -10,7 +10,7 @@ const bodyParser = require('body-parser');
 const minifyHTML = require('express-minify-html');
 const flash = require('connect-flash');
 require('dotenv').config();
-const elevage = require('./models/elevage')
+const Elevage = require('./models/elevage')
 require('./config/passport');
 
 const app = express();
@@ -115,6 +115,7 @@ const dogPostRouter = require('./routes/dogPost');
 const smsRouter = require('./routes/sms');
 const breedsRoutes = require('./routes/breedRoutes');
 const elevageRoutes = require('./routes/elevageRoutes');
+const dashboardRoutes = require('./routes/dashboardRoutes');
 
 const dogRecommendationsRouter = require('./routes/dogRecommendations');
 app.use('/', dogRecommendationsRouter);
@@ -172,6 +173,7 @@ app.get('/test', (req, res) => {
 })
 const searchRouter = require('./routes/search');
 app.use(searchRouter);
+app.use('/dashboard', dashboardRoutes)
 
 
 // Error handling middleware (404)
