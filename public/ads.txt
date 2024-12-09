@@ -1,0 +1,4 @@
+# Authorized Digital Sellers for ndressilik.com
+google.com, pub-1234567890123456, DIRECT, f08c47fec0942fa0
+appnexus.com, 98765, RESELLER, abcde12345
+openx.com, 54321, DIRECT, xyz7890abcdef
