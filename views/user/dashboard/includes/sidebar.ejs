@@ -28,15 +28,18 @@
                  <span class="ml-3">Statistiques</span>
              </a>
  
-             <a href="/dashboard/requests" class="flex items-center px-6 py-3 text-neutral-600 hover:bg-neutral-100 hover:text-primary">
-                 <i class="fas fa-bell w-5 h-5"></i>
-                 <span class="ml-3">Requests</span>
-             </a>
+             <a href="/dashboard/requests" class="group flex items-center px-6 py-3 text-neutral-600 hover:bg-neutral-100 hover:text-primary relative">
+                <i class="fas fa-bell w-5 h-5"></i>
+                <span class="ml-3">Requests</span>
+                
+                    <span class="absolute right-6 top-1/2 -translate-y-1/2 flex">
+                        <span class="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-red-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                    </span>
+                
+            </a>
  
-             <a href="/dashboard/messages" class="flex items-center px-6 py-3 text-neutral-600 hover:bg-neutral-100 hover:text-primary">
-                 <i class="fas fa-envelope w-5 h-5"></i>
-                 <span class="ml-3">Messages</span>
-             </a>
+            
  
              <a href="/dashboard/reviews" class="flex items-center px-6 py-3 text-neutral-600 hover:bg-neutral-100 hover:text-primary">
                  <i class="fas fa-star w-5 h-5"></i>

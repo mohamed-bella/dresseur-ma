@@ -175,6 +175,10 @@ const searchRouter = require('./routes/search');
 app.use(searchRouter);
 app.use('/dashboard', dashboardRoutes)
 
+const unreadRequests = require('./middlewares/globals');
+
+// Add after your authentication middleware
+app.use('/dashboard',unreadRequests);
 
 // Error handling middleware (404)
 app.use((req, res) => {

@@ -1,6 +1,72 @@
 <%- include('./include/head.ejs')  %>
 <%- include('./include/navbar.ejs')  %>
-
+<!-- Request Modal -->
+<div id="requestModal" class="fixed inset-0 z-50 hidden">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeRequestModal()"></div>
+    
+    <!-- Modal Content -->
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md">
+        <div class="bg-white rounded-2xl shadow-xl">
+            <!-- Header -->
+            <div class="px-6 py-4 border-b border-gray-200">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-gray-900">Envoyer une demande</h3>
+                    <button onclick="closeRequestModal()" class="text-gray-400 hover:text-gray-500">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+    
+            <!-- Form -->
+            <form id="requestForm" class="p-6 space-y-4">
+                <input type="hidden" name="serviceId" value="<%= service._id %>">
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Nom complet</label>
+                    <input 
+                        type="text" 
+                        name="name" 
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        required
+                    >
+                </div>
+    
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Numéro WhatsApp</label>
+                    <input 
+                        type="tel" 
+                        name="whatsapp" 
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        required
+                        pattern="\+?[1-9]\d{9,14}"
+                    >
+                    <p class="mt-1 text-sm text-gray-500">Format: +212612345678</p>
+                </div>
+    
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Message</label>
+                    <textarea 
+                        name="message" 
+                        rows="4" 
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        required
+                        maxlength="500"
+                    ></textarea>
+                </div>
+    
+                <button 
+                    type="submit"
+                    class="w-full px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 
+                           transition-colors duration-200 flex items-center justify-center gap-2"
+                >
+                    <span>Envoyer la demande</span>
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+    </div>
 <!-- service-details.ejs -->
 <div class="relative min-h-screen">
     <!-- Premium Service Details -->
@@ -237,6 +303,84 @@ function toggleReviewStats() {
                                         <i class="fas fa-arrow-right opacity-0 group-hover:opacity-100 
                                             transform translate-x-2 group-hover:translate-x-0 transition-all"></i>
                                     </button>
+                                    
+                                    <!-- Add this button where you want in your service details page -->
+
+
+
+
+<script>
+// Modal functions
+function openRequestModal() {
+document.getElementById('requestModal').classList.remove('hidden');
+document.body.style.overflow = 'hidden';
+}
+
+function closeRequestModal() {
+document.getElementById('requestModal').classList.add('hidden');
+document.body.style.overflow = '';
+document.getElementById('requestForm').reset();
+}
+
+// Form submission
+document.getElementById('requestForm').addEventListener('submit', async function(e) {
+e.preventDefault();
+
+const submitBtn = this.querySelector('button[type="submit"]');
+const originalText = submitBtn.innerHTML;
+submitBtn.disabled = true;
+submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi en cours...';
+
+try {
+    const formData = new FormData(this);
+    const response = await fetch('/request', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(Object.fromEntries(formData))
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+        // Show success message
+        Swal.fire({
+            icon: 'success',
+            title: 'Demande envoyée !',
+            text: 'Votre demande a été envoyée avec succès.',
+            confirmButtonText: 'OK'
+        });
+        closeRequestModal();
+    } else {
+        // Show error message
+        Swal.fire({
+            icon: 'error',
+            title: 'Erreur',
+            text: Array.isArray(data.messages) ? data.messages.join('\n') : data.message,
+            confirmButtonText: 'OK'
+        });
+    }
+} catch (error) {
+    Swal.fire({
+        icon: 'error',
+        title: 'Erreur',
+        text: 'Une erreur est survenue. Veuillez réessayer.',
+        confirmButtonText: 'OK'
+    });
+} finally {
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = originalText;
+}
+});
+
+// Close modal on escape key
+document.addEventListener('keydown', function(e) {
+if (e.key === 'Escape' && !document.getElementById('requestModal').classList.contains('hidden')) {
+    closeRequestModal();
+}
+});
+</script>
 
                                     <% if (service.createdBy.email) { %>
                                         <a href="mailto:<%= service.createdBy.email %>" 
@@ -252,6 +396,14 @@ function toggleReviewStats() {
                                     <% } %>
                                 </div>
                             </div>
+                            <button 
+onclick="openRequestModal()"
+class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl 
+       hover:bg-blue-700 transition-colors duration-200 mt-2 w-full text-center"
+>
+<i class="fas fa-paper-plane"></i>
+<span>Envoyer une demande</span>
+</button>
                         </div>
                     </div>
                 </div>

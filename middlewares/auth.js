@@ -4,6 +4,21 @@ const passport = require('passport');
 const nodemailer = require('nodemailer');
 
 
+const isAuthenticated = (req, res, next) => {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect('/auth/google');
+};
+const isNotAuthenticated = (req, res, next) => {
+    if (!req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect('/dashboard');
+};
+
+
+
 function adminAuth(req, res, next) {
     const isAuthenticated = req.cookies.isAuthenticated; // Read from cookies
 
@@ -259,8 +274,9 @@ const sendWelcomeEmail = async (toEmail) => {
     }
 };
 
+
 // Google OAuth Routes
-router.get('/auth/google',
+router.get('/auth/google', isNotAuthenticated,
     passport.authenticate('google', {
         scope: ['profile', 'email'],
         prompt: 'select_account'
@@ -295,20 +311,9 @@ router.get('/logout', (req, res) => {
     res.redirect('/');
 });
 
-// Auth middleware
-const isAuthenticated = (req, res, next) => {
-    if (req.isAuthenticated()) {
-        return next();
-    }
-    res.redirect('/auth/google');
-};
 
-const isNotAuthenticated = (req, res, next) => {
-    if (!req.isAuthenticated()) {
-        return next();
-    }
-    res.redirect('/dashboard');
-};
+
+
 
 module.exports = {
     router,

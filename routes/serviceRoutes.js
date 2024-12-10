@@ -4,6 +4,8 @@ const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
 const multer = require('multer');
 const path = require('path');
 const mongoose = require('mongoose')
+const {unreadRequests} = require('../middlewares/globals');
+
 const uploadToGitHub = require('../utils/GitHubImagesUploader'); // GitHub uploader utility
 const { processImage } = require('../utils/imageProcessor'); // Image processing utility
 
@@ -11,6 +13,7 @@ const { ObjectId } = mongoose.Types;
 
 const sharp = require('sharp');
 const Service = require('../models/service');
+const Request = require('../models/request');
 const Review = require('../models/review');
 const User = require('../models/user')
 const Reservation = require('../models/reservation');
@@ -87,6 +90,7 @@ router.get('/dashboard/new-service', isAuthenticated, async (req, res) => {
           res.render('user/dashboard/newService', {
                pageTitle,
                description,
+               unreadRequests,
                keywords,
                user: req.user,
                services,
@@ -318,7 +322,158 @@ const serviceConfig = {
 
 
 
+router.get('/', async (req, res) => {
+    try {
+         const { serviceOption = 'tous', location } = req.params;
+         const page = parseInt(req.query.page) || 1;
+         const limit = parseInt(req.query.limit) || 12;
+         const sort = req.query.sort || 'recent';
 
+         // Build query
+         const query = { isActive: true }; // Filter for active services
+         if (serviceOption !== 'tous') {
+              query.serviceOptions = serviceOption.toLowerCase();
+         }
+         if (location) {
+              query.location = new RegExp(location, 'i');
+         }
+
+         // Get sort configuration
+         const sortConfig = {
+              'recent': { createdAt: -1 },
+              'price-asc': { priceRange: 1 },
+              'price-desc': { priceRange: -1 },
+              'rating': { rating: -1 }
+         }[sort] || { createdAt: -1 };
+
+         // Execute queries
+         const [services, total] = await Promise.all([
+              Service.find(query)
+                   .populate({
+                        path: 'createdBy',
+                        match: { status: 'active' }, // Filter for active providers
+                        select: 'displayName profileImage isVerified'
+                   })
+                   .sort(sortConfig)
+                   .skip((page - 1) * limit)
+                   .limit(limit)
+                   .lean(),
+              Service.countDocuments(query)
+         ]);
+
+         // Filter out services without an approved provider
+         const filteredServices = services.filter(service => service.createdBy);
+
+         // Process services
+         const processedServices = filteredServices.map(service => ({
+              _id: service._id,
+              serviceName: service.serviceName || service.serviceOptions?.[0] || 'Service',
+              serviceOptions: service.serviceOptions,
+              images: service.images || [],
+              views: service.views || '0',
+              priceRange: service.priceRange ? `${service.priceRange} DH` : 'N/A',
+              location: service.location || 'Non spécifié',
+              availability: service.availability || 'sur rendez-vous',
+              createdBy: {
+                   displayName: service.createdBy.displayName || 'Expert',
+                   profileImage: service.createdBy.profileImage || 'https://img.icons8.com/?size=100&id=7819&format=png&color=000000',
+                   isVerified: service.createdBy.isVerified || false
+              },
+              serviceType: service.serviceOptions?.[0]?.toLowerCase() || 'general',
+              icon: serviceConfig.icons[service.serviceOptions?.[0]?.toLowerCase()] || '🐾'
+         }));
+
+         // Unique locations for filtering
+         const uniqueLocations = await Service.distinct('location', {
+              serviceOptions: serviceOption === 'tous' ? { $exists: true } : serviceOption.toLowerCase(),
+              isActive: true
+         });
+
+         // Fetch top providers
+         const topProviders = await User.find({ status: 'active' })
+              .limit(7)
+              .select('displayName profileImage location city specializations metrics averageRating slug isVerified');
+
+         // Metadata for SEO
+         const pageTitle = location
+              ? ` à ${location} | Services pour animaux au Maroc | NDRESSILIK`
+              : `${serviceConfig.titles[serviceOption]} | Services pour animaux au Maroc | NDRESSILIK`;
+
+         const description = location
+              ? `Trouvez des services de ${serviceConfig.titles[serviceOption]} pour animaux de compagnie à ${location}. Explorez les offres de dressage, toilettage, garde, et plus encore sur NDRESSILIK.`
+              : `Découvrez les meilleurs services de ${serviceConfig.titles[serviceOption]} pour animaux au Maroc sur NDRESSILIK. Nos partenaires de confiance proposent dressage, toilettage, et autres services pour le bien-être de vos animaux.`;
+
+         const keywords = location
+              ? `${serviceOption}, services animaliers, ${location}, dressage, garde animaux, NDRESSILIK, Maroc`
+              : `${serviceOption}, services animaliers, Maroc, dressage, garde animaux, NDRESSILIK`;
+
+         res.render('user/allServices', {
+              pageTitle,
+              description,
+              keywords,
+              unreadRequests,
+              topProviders,
+              currentLocation: location || null,
+              locations: uniqueLocations,
+
+              // Services data
+              services: processedServices,
+              serviceIcons: serviceConfig.icons,
+
+              // Page metadata
+              meta: {
+                   title: location
+                        ? `${serviceConfig.titles[serviceOption]} à ${location} | NDRESSILIK`
+                        : `${serviceConfig.titles[serviceOption]} | NDRESSILIK`,
+                   description: serviceConfig.descriptions[serviceOption],
+                   keywords: `${serviceOption}, services animaliers, ${location || 'Maroc'}, NDRESSILIK`
+              },
+
+              // Current selections
+              current: {
+                   serviceOption,
+                   location,
+                   sort
+              },
+
+              // Options
+              options: {
+                   sorts: serviceConfig.sortOptions,
+                   serviceTypes: Object.entries(serviceConfig.titles).map(([key, value]) => ({
+                        value: key,
+                        label: value,
+                        icon: serviceConfig.icons[key] || '🐾'
+                   }))
+              },
+
+              // Pagination
+              pagination: {
+                   current: page,
+                   total: Math.ceil(filteredServices.length / limit),
+                   hasNext: page * limit < filteredServices.length,
+                   hasPrev: page > 1
+              },
+
+              // Additional info
+              stats: {
+                   total: filteredServices.length,
+                   filteredBy: location ? `à ${location}` : null
+              },
+              serviceOption
+         });
+    } catch (error) {
+         console.error('Error fetching services:', error);
+         res.render('user/services', {
+              services: [],
+              unreadRequests,
+              meta: {
+                   title: 'Services | NDRESSILIK',
+                   description: 'Découvrez nos services pour animaux'
+              },
+              error: 'Une erreur est survenue lors du chargement des services'
+         });
+    }
+});
 router.get('/services/:serviceOption?/:location?', async (req, res) => {
      try {
           const { serviceOption = 'tous', location } = req.params;
@@ -405,6 +560,7 @@ router.get('/services/:serviceOption?/:location?', async (req, res) => {
                : `${serviceOption}, services animaliers, Maroc, dressage, garde animaux, NDRESSILIK`;
 
           res.render('user/allServices', {
+            
                pageTitle,
                description,
                keywords,
@@ -807,6 +963,7 @@ router.get('/dashboard/services/:serviceId/edit', async (req, res) => {
                pageTitle,
                description,
                keywords,
+               unreadRequests,
                user: req.user,
                service,
                errors: []
@@ -1024,6 +1181,41 @@ router.get('/top-users', async (req, res) => {
          });
      }
  });
+
+ router.post('/request', async (req, res) => {
+    try {
+      const { serviceId, name, whatsapp, message } = req.body;
+  
+      // Find the service and service provider
+      const service = await Service.findById(serviceId);
+      if (!service) {
+        return res.status(404).json({ success: false, message: 'Service not found' });
+      }
+  
+      // Create request
+      const request = await Request.create({
+        serviceName: service.serviceName,
+        serviceId: service._id,
+        serviceProvider: service.createdBy,
+        name,
+        whatsapp,
+        message
+      });
+  
+      res.status(201).json({
+        success: true,
+        message: 'Request sent successfully',
+        data: request
+      });
+  
+    } catch (error) {
+      if (error.name === 'ValidationError') {
+        const messages = Object.values(error.errors).map(err => err.message);
+        return res.status(400).json({ success: false, messages });
+      }
+      res.status(500).json({ success: false, message: 'Server error' });
+    }
+  });
  
 
 module.exports = router;

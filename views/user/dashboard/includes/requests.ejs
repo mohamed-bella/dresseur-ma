@@ -1,0 +1,238 @@
+
+<!-- views/partials/requests.ejs -->
+<section class="space-y-6">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <h2 class="text-xl font-semibold text-slate-900">Demandes de services</h2>
+        
+        <!-- Filters -->
+        <div class="flex flex-wrap items-center gap-3">
+            <select id="statusFilter" class="px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="all" <%= filters.currentStatus === 'all' ? 'selected' : '' %>>Tous</option>
+                <option value="pending" <%= filters.currentStatus === 'pending' ? 'selected' : '' %>>En attente (<%= statusCounts.pending %>)</option>
+                <option value="accepted" <%= filters.currentStatus === 'accepted' ? 'selected' : '' %>>Acceptées (<%= statusCounts.accepted %>)</option>
+                <option value="rejected" <%= filters.currentStatus === 'rejected' ? 'selected' : '' %>>Rejetées (<%= statusCounts.rejected %>)</option>
+            </select>
+
+            <select id="sortFilter" class="px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="-createdAt" <%= filters.currentSort === '-createdAt' ? 'selected' : '' %>>Plus récentes</option>
+                <option value="createdAt" <%= filters.currentSort === 'createdAt' ? 'selected' : '' %>>Plus anciennes</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Requests List -->
+    <div class="space-y-4">
+        <% if (requests.length > 0) { %>
+            <% requests.forEach(request => { %>
+                <div class="bg-white rounded-xl border border-slate-200 overflow-hidden hover:border-slate-300 transition-colors">
+                    <div class="p-4 sm:p-6">
+                        <!-- Request Header -->
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                            <div class="flex items-center gap-4">
+                                <!-- Service Image -->
+                                <div class="relative w-16 h-16 rounded-lg overflow-hidden bg-slate-100">
+                                    <img 
+                                        src="<%= request.serviceId.images?.[0] || '/default-service.jpg' %>" 
+                                        alt="<%= request.serviceId.serviceName %>"
+                                        class="w-full h-full object-cover"
+                                    >
+                                </div>
+                                
+                                <!-- Service Info -->
+                                <div>
+                                    <h3 class="font-medium text-slate-900"><%= request.serviceId.serviceName %></h3>
+                                    <p class="text-sm text-slate-500">Prix: <%= request.serviceId.price %></p>
+                                </div>
+                            </div>
+
+                            <!-- Status Badge -->
+                            <div class="flex items-center gap-2">
+                                <span class="px-3 py-1 text-sm rounded-full
+                                    <%= request.status === 'pending' ? 'bg-yellow-100 text-yellow-700' : 
+                                       request.status === 'accepted' ? 'bg-green-100 text-green-700' :
+                                       'bg-red-100 text-red-700' %>">
+                                    <%= request.status === 'pending' ? 'En attente' :
+                                       request.status === 'accepted' ? 'Acceptée' : 'Rejetée' %>
+                                </span>
+                                <% if (!request.isRead) { %>
+                                    <span class="w-2 h-2 bg-blue-500 rounded-full"></span>
+                                <% } %>
+                            </div>
+                        </div>
+
+                        <!-- Request Details -->
+                        <div class="grid sm:grid-cols-2 gap-4 py-4 border-y border-slate-200">
+                            <div>
+                                <div class="text-sm text-slate-500">Nom du client</div>
+                                <div class="font-medium"><%= request.name %></div>
+                            </div>
+                            <div>
+                                <div class="text-sm text-slate-500">WhatsApp</div>
+                                <a href="https://wa.me/<%= request.whatsapp %>" 
+                                   target="_blank"
+                                   class="font-medium text-blue-600 hover:text-blue-700">
+                                    <%= request.whatsapp %>
+                                </a>
+                            </div>
+                            <div class="sm:col-span-2">
+                                <div class="text-sm text-slate-500">Message</div>
+                                <p class="mt-1 text-slate-700"><%= request.message %></p>
+                            </div>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="flex items-center justify-between mt-4">
+                            <div class="text-sm text-slate-500">
+                                Reçue <%= new Date(request.createdAt).toLocaleDateString('fr-FR', { 
+                                    day: 'numeric', 
+                                    month: 'long',
+                                    year: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                }) %>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <% if (request.status === 'pending') { %>
+                                    <button 
+                                        onclick="updateRequestStatus('<%= request._id %>', 'accepted')"
+                                        class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                                        Accepter
+                                    </button>
+                                    <button 
+                                        onclick="updateRequestStatus('<%= request._id %>', 'rejected')"
+                                        class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                                        Rejeter
+                                    </button>
+                                <% } %>
+                                <button 
+                                    onclick="deleteRequest('<%= request._id %>')"
+                                    class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+
+            <!-- Pagination -->
+            <% if (pagination.totalPages > 1) { %>
+                <div class="flex justify-center gap-2 mt-6">
+                    <% if (pagination.hasPrev) { %>
+                        <a href="?page=<%= pagination.currentPage - 1 %>&status=<%= filters.currentStatus %>&sort=<%= filters.currentSort %>"
+                           class="px-4 py-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
+                            Précédent
+                        </a>
+                    <% } %>
+                    <% if (pagination.hasNext) { %>
+                        <a href="?page=<%= pagination.currentPage + 1 %>&status=<%= filters.currentStatus %>&sort=<%= filters.currentSort %>"
+                           class="px-4 py-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
+                            Suivant
+                        </a>
+                    <% } %>
+                </div>
+            <% } %>
+        <% } else { %>
+            <div class="text-center py-12 bg-white rounded-xl border border-slate-200">
+                <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-inbox text-2xl text-slate-400"></i>
+                </div>
+                <h3 class="text-lg font-medium text-slate-900 mb-2">Aucune demande</h3>
+                <p class="text-slate-500">Vous n'avez pas encore reçu de demandes de services.</p>
+            </div>
+        <% } %>
+    </div>
+</section>
+<!-- SweetAlert2 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+// Handle filters change
+document.getElementById('statusFilter')?.addEventListener('change', function() {
+    const currentUrl = new URL(window.location.href);
+    currentUrl.searchParams.set('status', this.value);
+    currentUrl.searchParams.set('page', '1');
+    window.location.href = currentUrl.toString();
+});
+
+document.getElementById('sortFilter')?.addEventListener('change', function() {
+    const currentUrl = new URL(window.location.href);
+    currentUrl.searchParams.set('sort', this.value);
+    window.location.href = currentUrl.toString();
+});
+
+// Update request status
+async function updateRequestStatus(requestId, status) {
+    try {
+        const response = await fetch(`/dashboard/requests/${requestId}/status`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ status })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            // Show success message and refresh
+            Swal.fire({
+                icon: 'success',
+                title: 'Statut mis à jour !',
+                showConfirmButton: false,
+                timer: 1500
+            }).then(() => window.location.reload());
+        } else {
+            throw new Error(data.message);
+        }
+    } catch (error) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Erreur',
+            text: error.message || 'Une erreur est survenue'
+        });
+    }
+}
+
+// Delete request
+async function deleteRequest(requestId) {
+    try {
+        const result = await Swal.fire({
+            title: 'Êtes-vous sûr ?',
+            text: "Cette action est irréversible !",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#EF4444',
+            cancelButtonColor: '#6B7280',
+            confirmButtonText: 'Oui, supprimer',
+            cancelButtonText: 'Annuler'
+        });
+
+        if (result.isConfirmed) {
+            const response = await fetch(`/requests/${requestId}`, {
+                method: 'DELETE'
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Supprimée !',
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then(() => window.location.reload());
+            } else {
+                throw new Error(data.message);
+            }
+        }
+    } catch (error) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Erreur',
+            text: error.message || 'Une erreur est survenue'
+        });
+    }
+}
+</script>

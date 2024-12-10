@@ -1,52 +1,331 @@
 <%- include('include/head', { title: pageTitle, description: description, keywords: keywords }) %>
 <%- include('include/navbar') %>
 
-<main class="min-h-screen bg-gray-100">
+<main class="min-h-screen bg-[#F8FAFC]">
     <!-- Hero Section -->
-    <section class="bg-white border-b">
-        <div class="max-w-7xl mx-auto px-4 py-12">
-            <div class="text-center space-y-4">
-                <h1 class="text-3xl sm:text-4xl font-bold text-gray-900">
-                    Services Canins Professionnels
+    <!-- Hero Section -->
+<section class="relative bg-gradient-to-b from-white to-[#F8FAFC] border-b border-slate-200/80 overflow-hidden">
+    <!-- Background Animation -->
+    <div class="absolute inset-0 bg-grid-slate-100 [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" 
+         aria-hidden="true">
+        <div class="absolute inset-0 bg-gradient-to-r from-slate-100 to-gray-100 animate-grid"></div>
+    </div>
+
+    <!-- Content -->
+    <div class="relative max-w-7xl mx-auto px-4 py-20">
+        <div class="text-center space-y-8 animate-in">
+            <!-- Title with animated gradient -->
+            <div class="relative inline-block">
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 tracking-tight">
+                    Services Canins
+                    <span class="relative inline-block">
+                        <span class="animate-gradient bg-clip-text text-transparent bg-[length:400%_400%] bg-gradient-to-r from-blue-600 via-indigo-500 to-blue-600">
+                            Premium
+                        </span>
+                        <span class="absolute -inset-x-4 -inset-y-2 bg-gradient-to-r from-blue-100/50 to-indigo-100/50 blur-xl opacity-30 animate-pulse"></span>
+                    </span>
                 </h1>
-                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-                    Trouvez les meilleurs services pour votre compagnon à quatre pattes
-                </p>
+            </div>
+
+            <p class="text-lg sm:text-xl text-slate-600 max-w-2xl mx-auto animate-fade-in" style="--delay: 200ms">
+                Découvrez les services de qualité pour votre compagnon à quatre pattes
+            </p>
+
+            <!-- Animated Button -->
+            <div class="pt-6 animate-fade-in" style="--delay: 400ms">
+                <button onclick="toggleServiceModal()" 
+                        class="group relative inline-flex items-center gap-2 px-8 py-4 bg-slate-900 text-white rounded-xl
+                               hover:bg-slate-800 active:bg-slate-950 transition-all duration-300 overflow-hidden">
+                    <!-- Button background animation -->
+                    <div class="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-indigo-600/20 opacity-0 
+                                group-hover:opacity-100 transition-opacity duration-500"></div>
+                    
+                    <i class="fas fa-plus transform group-hover:rotate-180 transition-transform duration-500"></i>
+                    <span class="font-medium relative z-10">Ajouter un service</span>
+                    
+                    <!-- Hover effect -->
+                    <div class="absolute inset-0 -z-10 bg-gradient-to-r from-blue-600/0 via-blue-600/10 to-blue-600/0 
+                                translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+                </button>
             </div>
         </div>
-    </section>
+    </div>
+</section>
+
+<!-- Enhanced Service Modal -->
+<div id="serviceModal" 
+     class="fixed inset-0 z-50 flex items-center justify-center px-4 opacity-0 pointer-events-none transition-all duration-300">
+    <!-- Animated Backdrop -->
+    <div class="absolute inset-0 bg-slate-900/20 backdrop-blur-sm transition-opacity duration-300"
+         onclick="toggleServiceModal()"></div>
+    
+    <!-- Modal Content -->
+    <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg transform scale-95 -translate-y-8 
+                transition-all duration-300 opacity-0">
+        <!-- Header -->
+        <div class="px-6 py-4 border-b border-slate-200/80">
+            <div class="flex items-center justify-between">
+                <h3 class="text-lg font-semibold text-slate-900">Choisir un service à ajouter</h3>
+                <button onclick="toggleServiceModal()" 
+                        class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg 
+                               transition-colors duration-200 active:scale-95">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Service Options with Staggered Animation -->
+        <div class="p-6 grid gap-3 max-h-[calc(100vh-200px)] overflow-y-auto">
+            <% [
+                { 
+                    label: ' Dressage',
+                    description: 'Formation et éducation canine professionnelle',
+                    icon: 'graduation-cap',
+                    color: 'blue'
+                },
+                { 
+                    label: 'Toilettage',
+                    description: 'Soins esthétiques et hygiène pour chiens',
+                    icon: 'cut',
+                    color: 'purple'
+                },
+                { 
+                    label: 'Vétérinaire',
+                    description: 'Consultations et soins vétérinaires',
+                    icon: 'stethoscope',
+                    color: 'emerald'
+                },
+                { 
+                    label: 'Promenade',
+                    description: 'Promenades et exercices quotidiens',
+                    icon: 'walking',
+                    color: 'orange'
+                },
+                { 
+                    label: 'Pension',
+                    description: 'Hébergement et garde temporaire',
+                    icon: 'home',
+                    color: 'red'
+                },
+                { 
+                    label: 'Transport',
+                    description: 'Transport sécurisé pour animaux',
+                    icon: 'truck',
+                    color: 'indigo'
+                },
+                {
+                    label: 'Consultation',
+                    description: 'Analyse et conseils comportementaux',
+                    icon: 'brain',
+                    color: 'cyan'
+                },
+        
+            ].forEach((service, index) => { %>
+                <a href="/dashboard" 
+                   class="group flex items-center gap-4 p-4 rounded-xl bg-<%= service.color %>-50 
+                          hover:bg-<%= service.color %>-100/80 transition-all duration-300
+                          hover:shadow-lg hover:shadow-<%= service.color %>-500/10
+                          animate-slide-up"
+                   style="--delay: <%= index * 50 %>ms">
+                    <div class="w-12 h-12 flex items-center justify-center rounded-xl 
+                                bg-<%= service.color %>-100/80 group-hover:scale-110 transition-transform duration-300">
+                        <i class="fas fa-<%= service.icon %> text-<%= service.color %>-600 text-xl"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h4 class="font-medium text-slate-900 truncate"><%= service.label %></h4>
+                        <p class="text-sm text-slate-500 truncate"><%= service.description %></p>
+                    </div>
+                    <div class="flex items-center gap-2 text-<%= service.color %>-500">
+                        <span class="text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            Créer
+                        </span>
+                        <i class="fas fa-arrow-right transform group-hover:translate-x-1 transition-transform duration-300"></i>
+                    </div>
+                </a>
+            <% }) %>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Grid Background Animation */
+.bg-grid-slate-100 {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='rgb(241 245 249 / 0.1)'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e");
+}
+
+@keyframes grid {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-32px); }
+}
+
+.animate-grid {
+    animation: grid 3s linear infinite;
+}
+
+/* Gradient Animation */
+@keyframes gradient {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+.animate-gradient {
+    animation: gradient 3s ease infinite;
+}
+
+/* Fade In Animation */
+@keyframes fadeIn {
+    from { 
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out forwards;
+    animation-delay: var(--delay, 0ms);
+}
+
+/* Slide Up Animation */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-slide-up {
+    opacity: 0;
+    animation: slideUp 0.5s ease-out forwards;
+    animation-delay: var(--delay, 0ms);
+}
+
+/* Modal Scroll */
+.modal-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(203 213 225) transparent;
+}
+
+.modal-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+
+.modal-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.modal-scroll::-webkit-scrollbar-thumb {
+    background-color: rgb(203 213 225);
+    border-radius: 3px;
+}
+</style>
+
+<script>
+const modalState = {
+    isOpen: false,
+    isAnimating: false
+};
+
+function toggleServiceModal() {
+    if (modalState.isAnimating) return;
+    
+    const modal = document.getElementById('serviceModal');
+    const modalContent = modal.querySelector('.transform');
+    modalState.isAnimating = true;
+
+    if (!modalState.isOpen) {
+        // Open modal
+        modal.classList.remove('opacity-0', 'pointer-events-none');
+        setTimeout(() => {
+            modalContent.classList.remove('scale-95', '-translate-y-8', 'opacity-0');
+            document.body.style.overflow = 'hidden';
+            
+            // Reset and trigger item animations
+            const items = modal.querySelectorAll('.animate-slide-up');
+            items.forEach(item => {
+                item.style.opacity = '0';
+                void item.offsetWidth;
+                item.style.opacity = '';
+            });
+
+            modalState.isAnimating = false;
+            modalState.isOpen = true;
+        }, 50);
+    } else {
+        // Close modal
+        modalContent.classList.add('scale-95', '-translate-y-8', 'opacity-0');
+        setTimeout(() => {
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            document.body.style.overflow = '';
+            modalState.isAnimating = false;
+            modalState.isOpen = false;
+        }, 300);
+    }
+}
+
+// Close modal on escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && modalState.isOpen) {
+        toggleServiceModal();
+    }
+});
+
+// Prevent scroll when modal is open
+document.addEventListener('scroll', function(e) {
+    if (modalState.isOpen) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+    }
+});
+</script>
 
     <!-- Quick Filters -->
-    <div class="sticky top-16 z-30 bg-white border-b shadow-sm">
+    <div class="sticky top-16 z-30 bg-white/95 backdrop-blur-sm border-b border-slate-200/80 shadow-sm">
         <div class="max-w-7xl mx-auto">
-            <!-- Categories Scroll -->
-            <div class="overflow-x-auto scrollbar-hide">
-                <div class="flex whitespace-nowrap p-4 gap-3">
-                    <% const categories = [
-                        { id: 'tous', icon: '🔍', label: 'Tous' },
-                        { id: 'dressage', icon: '🐕', label: 'Dressage' },
-                        { id: 'toilettage', icon: '✂️', label: 'Toilettage' },
-                        { id: 'promenade', icon: '🦮', label: 'Promenade' },
-                        { id: 'veterinaire', icon: '⚕️', label: 'Vétérinaire' },
-                        { id: 'pension', icon: '🏠', label: 'Pension' },
-                        { id: 'transport', icon: '🚗', label: 'Transport' }
-                    ];
-                    const currentCategory = serviceOption || 'tous';
-                    %>
-                    
-                    <% categories.forEach(category => { 
-                        const isActive = currentCategory === category.id;
-                    %>
-                        <a href="/services/<%= category.id %>" 
-                           class="inline-flex flex-col items-center px-5 py-2 rounded-xl transition-all duration-200
-                                  <%= isActive ? 
-                                    'bg-gray-900 text-white' : 
-                                    'bg-gray-50 hover:bg-gray-100' %>">
-                            <span class="text-xl mb-1"><%= category.icon %></span>
-                            <span class="text-sm font-medium"><%= category.label %></span>
-                        </a>
-                    <% }) %>
+            <!-- Categories Scroll with Indicators -->
+            <div class="relative">
+                <div class="overflow-x-auto scrollbar-hide" id="categoriesScroll">
+                    <div class="flex whitespace-nowrap p-4 gap-3">
+                        <% const categories = [
+                            { id: 'tous', icon: '🔍', label: 'Tous' },
+                            { id: 'dressage', icon: '🐕', label: 'Dressage' },
+                            { id: 'toilettage', icon: '✂️', label: 'Toilettage' },
+                            { id: 'promenade', icon: '🦮', label: 'Promenade' },
+                            { id: 'veterinaire', icon: '⚕️', label: 'Vétérinaire' },
+                            { id: 'pension', icon: '🏠', label: 'Pension' },
+                            { id: 'transport', icon: '🚗', label: 'Transport' }
+                        ];
+                        const currentCategory = serviceOption || 'tous';
+                        %>
+                        
+                        <% categories.forEach(category => { 
+                            const isActive = currentCategory === category.id;
+                        %>
+                            <a href="/services/<%= category.id %>" 
+                               class="group inline-flex flex-col items-center px-5 py-2 rounded-xl transition-all duration-300
+                                      <%= isActive ? 
+                                        'bg-blue-600 text-white scale-[1.02] shadow-lg shadow-blue-500/25' : 
+                                        'bg-slate-50 hover:bg-slate-100 text-slate-600 hover:text-slate-900' %>">
+                                <span class="text-xl mb-1 transform transition-transform duration-300 group-hover:scale-110">
+                                    <%= category.icon %>
+                                </span>
+                                <span class="text-sm font-medium"><%= category.label %></span>
+                            </a>
+                        <% }) %>
+                    </div>
                 </div>
+                <!-- Scroll Indicators -->
+                <div class="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-white to-transparent pointer-events-none"></div>
+                <div class="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white to-transparent pointer-events-none"></div>
             </div>
         </div>
     </div>
@@ -54,16 +333,16 @@
     <!-- Main Content -->
     <div class="max-w-7xl mx-auto px-4 py-8">
         <!-- Location Filters -->
-        <div class="mb-8">
-           
+        <div class="mb-8 animate-in" style="--stagger: 1">
             <div class="flex flex-wrap gap-2">
-                <% locations.forEach(location => { %>
+                <% locations.forEach(location => { 
+                    const isActive = currentLocation === location;
+                %>
                     <a href="/services/<%= serviceOption %>/<%= location %>" 
                        class="inline-flex items-center px-4 py-2 rounded-xl text-sm font-medium
-                              transition-all duration-200
-                              <%= currentLocation === location ? 
-                                'bg-gray-900 text-white' : 
-                                'bg-gray-50 text-gray-800 hover:bg-gray-100' %>">
+                              transition-all duration-300 <%= isActive ? 
+                                'bg-slate-900 text-white shadow-lg shadow-slate-900/10 scale-[1.02]' : 
+                                'bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-50' %>">
                         <i class="fas fa-location-dot mr-2"></i>
                         <%= location.charAt(0).toUpperCase() + location.slice(1) %>
                     </a>
@@ -72,52 +351,51 @@
         </div>
 
         <!-- Services Results -->
-        <div class="space-y-6">
+        <div class="space-y-6 animate-in" style="--stagger: 2">
             <!-- Results Header -->
             <div class="flex flex-wrap items-center justify-between gap-4">
                 <div>
-                    <h2 class="text-xl font-bold text-gray-900">Services disponibles</h2>
-                    <p class="text-sm text-gray-500 mt-1"><%= services.length %> services trouvés</p>
+                    <h2 class="text-xl font-bold text-slate-900">Services disponibles</h2>
+                    <p class="text-sm text-slate-500 mt-1"><%= services.length %> services trouvés</p>
                 </div>
-               
             </div>
 
             <!-- Services Grid -->
             <% if (services.length > 0) { %>
                 <div class="grid gap-6">
-                    <% services.forEach(service => { %>
-                        <a href="/service/<%= service._id %>" class="block group">
-                            <article class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300">
+                    <% services.forEach((service, index) => { %>
+                        <a href="/service/<%= service._id %>" 
+                           class="block group animate-in" 
+                           style="--stagger: <%= index + 3 %>">
+                            <article class="bg-white rounded-2xl border border-slate-200/50 hover:border-slate-300
+                                          hover:shadow-xl transition-all duration-300 overflow-hidden">
                                 <div class="flex flex-row h-full p-4">
                                     <!-- Image Container -->
                                     <div class="relative w-32 sm:w-48 flex-shrink-0">
-                                        <div class="aspect-square w-full h-full rounded-xl overflow-hidden">
+                                        <div class="aspect-square w-full h-full rounded-xl overflow-hidden bg-slate-100">
                                             <img src="<%= service.images?.[0] || '/default-service.jpg' %>" 
                                                  alt="<%= service.serviceName %>"
-                                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
+                                                 />
                                         </div>
-                                        <div class="absolute top-2 left-2">
-                                            <span class="inline-block px-2 py-1 text-sm bg-white/90 backdrop-blur-sm 
-                                                       rounded-lg shadow-sm">
-                                                <%= serviceIcons[service.serviceOptions]?.emoji %>
-                                            </span>
-                                        </div>
+                                       
                                     </div>
 
                                     <!-- Content Container -->
                                     <div class="flex-1 ml-4 flex flex-col">
                                         <div class="flex justify-between items-start gap-4 mb-2">
-                                            <h3 class="text-lg font-semibold text-gray-900 group-hover:text-gray-600
-                                                       transition-colors duration-200">
+                                            <h3 class="text-lg font-semibold text-slate-900 group-hover:text-blue-600
+                                                       transition-colors duration-300">
                                                 <%= service.serviceName %>
                                             </h3>
-                                            <span class="px-3 py-1 bg-gray-900 text-white text-sm font-medium rounded-lg">
+                                            <span class="px-3 py-1 bg-slate-900 text-white text-sm font-medium 
+                                                       rounded-lg group-hover:bg-blue-600 transition-colors duration-300">
                                                 <%= service.priceRange %>
                                             </span>
                                         </div>
 
                                         <!-- Service Details -->
-                                        <div class="flex items-center gap-3 text-sm text-gray-500 mb-3">
+                                        <div class="flex items-center gap-4 text-sm text-slate-500 mb-3">
                                             <span class="flex items-center gap-1">
                                                 <i class="fas fa-location-dot"></i>
                                                 <%= service.location %>
@@ -128,32 +406,35 @@
                                             </span>
                                         </div>
 
-                                        <p class="text-gray-600 text-sm line-clamp-2 mb-4 flex-grow">
+                                        <p class="text-slate-600 text-sm line-clamp-2 mb-4 flex-grow">
                                             <%= service.description || 'Aucune description disponible.' %>
                                         </p>
 
                                         <!-- Provider Info -->
-                                        <div class="flex items-center justify-between pt-3 border-t">
+                                        <div class="flex items-center justify-between pt-3 border-t border-slate-200/80">
                                             <div class="flex items-center gap-3">
                                                 <div class="relative">
                                                     <img src="<%= service.createdBy?.profileImage || '/default-avatar.jpg' %>"
                                                          alt="<%= service.createdBy?.displayName %>"
-                                                         class="w-8 h-8 rounded-full object-cover" />
+                                                         class="w-8 h-8 rounded-full object-cover" 
+                                                         />
                                                     <% if(service.createdBy?.isVerified) { %>
                                                         <div class="absolute -right-1 -bottom-1 w-4 h-4 bg-blue-500 
-                                                                    rounded-full flex items-center justify-center border-2 border-white">
+                                                                    rounded-full flex items-center justify-center 
+                                                                    border-2 border-white">
                                                             <i class="fas fa-check text-[8px] text-white"></i>
                                                         </div>
                                                     <% } %>
                                                 </div>
                                                 <div class="text-sm">
-                                                    <div class="font-medium text-gray-900">
+                                                    <div class="font-medium text-slate-900">
                                                         <%= service.createdBy?.displayName %>
                                                     </div>
-                                                    <div class="text-xs text-gray-500">Professionnel</div>
+                                                    <div class="text-xs text-slate-500">Professionnel</div>
                                                 </div>
                                             </div>
-                                            <span class="flex items-center gap-1 text-sm font-medium text-gray-900">
+                                            <span class="flex items-center gap-1 text-sm font-medium text-blue-600 
+                                                       group-hover:gap-2 transition-all duration-300">
                                                 Détails
                                                 <i class="fas fa-arrow-right text-xs transition-transform
                                                           group-hover:translate-x-1"></i>
@@ -167,21 +448,22 @@
                 </div>
             <% } else { %>
                 <!-- Empty State -->
-                <div class="text-center py-16 bg-white rounded-2xl">
+                <div class="text-center py-16 bg-white rounded-2xl border border-slate-200/50 animate-in" 
+                     style="--stagger: 3">
                     <div class="max-w-sm mx-auto">
-                        <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <i class="fas fa-paw text-3xl text-gray-400"></i>
+                        <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fas fa-paw text-3xl text-slate-400"></i>
                         </div>
-                        <h3 class="text-xl font-semibold text-gray-900 mb-2">
+                        <h3 class="text-xl font-semibold text-slate-900 mb-2">
                             Aucun service disponible
                         </h3>
-                        <p class="text-gray-600 mb-8">
+                        <p class="text-slate-600 mb-8">
                             Aucun service n'est disponible dans cette ville pour le moment.
                             Essayez de modifier vos critères de recherche.
                         </p>
                         <div class="flex justify-center gap-4">
-                            <a href="/" class="px-6 py-3 bg-gray-900 text-white rounded-xl hover:bg-gray-800
-                                             transition-colors duration-200">
+                            <a href="/" class="px-6 py-3 bg-slate-900 text-white rounded-xl 
+                                             hover:bg-slate-800 transition-colors duration-300">
                                 Retour à l'accueil
                             </a>
                         </div>
@@ -193,6 +475,7 @@
 </main>
 
 <style>
+/* Utilities */
 .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -208,14 +491,78 @@
     overflow: hidden;
 }
 
-.backdrop-blur-sm {
-    backdrop-filter: blur(4px);
+/* Animations */
+.animate-in {
+    animation: fadeIn 0.5s ease-out forwards;
+    opacity: 0;
+    animation-delay: calc(var(--stagger) * 100ms);
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { 
+        opacity: 0; 
+        transform: translateY(10px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+/* Touch Scrolling */
+@media (hover: none) {
+    #categoriesScroll {
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+    }
+    #categoriesScroll > div {
+        scroll-snap-align: start;
+    }
 }
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Horizontal scroll buttons for categories
+    const categoriesScroll = document.getElementById('categoriesScroll');
+    
+    if (categoriesScroll) {
+        // Smooth scroll on arrow keys
+        categoriesScroll.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                categoriesScroll.scrollBy({ left: -100, behavior: 'smooth' });
+            }
+            if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                categoriesScroll.scrollBy({ left: 100, behavior: 'smooth' });
+            }
+        });
+
+        // Make active category visible
+        const activeCategory = categoriesScroll.querySelector('.bg-blue-600');
+        if (activeCategory) {
+            activeCategory.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
+    }
+
+    // Lazy loading images
+    const lazyImages = document.querySelectorAll('img[loading="lazy"]');
+    if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.src = img.getAttribute('data-src');
+                    img.classList.add('loaded');
+                    observer.unobserve(img);
+                }
+            });
+        });
+
+        lazyImages.forEach(img => imageObserver.observe(img));
+    }
+});
+</script>
 
 <%- include('./include/footer') %>

@@ -5,10 +5,13 @@ const nodemailer = require('nodemailer');
 const passport = require('passport');
 const multer = require('multer');
 const { body, validationResult } = require('express-validator');
+const {unreadRequests} = require('../middlewares/globals');
+
 const mongoose = require('mongoose');
 const { ObjectId } = mongoose.Types;
 const captureVisit = require('../utils/visitTracker'); // Import the visit tracking utility
 const Visit = require('../models/visit')
+const Request = require('../models/request')
 const Elevage = require('../models/elevage')
 const path = require('path');
 const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
@@ -81,134 +84,134 @@ const validateService = [
           .isObject()
           .withMessage('La disponibilité doit être un objet valide')
 ];
-router.get('/', async (req, res) => {
-    try {
-        const [topUsers, locations, services] = await Promise.all([
-            // Top Users Query (existing)
-            User.aggregate([
-                { $match: { status: 'active' } },
-                {
-                    $lookup: {
-                        from: 'services',
-                        localField: '_id',
-                        foreignField: 'createdBy',
-                        as: 'services'
-                    }
-                },
-                {
-                    $lookup: {
-                        from: 'reviews',
-                        let: { userServices: '$services._id' },
-                        pipeline: [
-                            {
-                                $match: {
-                                    $expr: {
-                                        $in: ['$serviceId', '$$userServices']
-                                    }
-                                }
-                            },
-                            {
-                                $group: {
-                                    _id: null,
-                                    totalReviews: { $sum: 1 }
-                                }
-                            }
-                        ],
-                        as: 'reviews'
-                    }
-                },
-                {
-                    $addFields: {
-                        servicesCount: { $size: '$services' },
-                        totalViews: {
-                            $sum: {
-                                $map: {
-                                    input: '$services',
-                                    as: 'service',
-                                    in: { $ifNull: ['$$service.views', 0] }
-                                }
-                            }
-                        },
-                        totalReviews: { $ifNull: [{ $arrayElemAt: ['$reviews.totalReviews', 0] }, 0] }
-                    }
-                },
-                {
-                    $project: {
-                        _id: 1,
-                        displayName: 1,
-                        profileImage: 1,
-                        servicesCount: 1,
-                        slug: 1,
-                        totalViews: 1,
-                        totalReviews: 1,
-                        totalScore: {
-                            $add: ['$servicesCount', '$totalViews', '$totalReviews']
-                        }
-                    }
-                },
-                { $sort: { totalScore: -1 } },
-                { $limit: 3 }
-            ]),
+// router.get('/', async (req, res) => {
+//     try {
+//         const [topUsers, locations, services] = await Promise.all([
+//             // Top Users Query (existing)
+//             User.aggregate([
+//                 { $match: { status: 'active' } },
+//                 {
+//                     $lookup: {
+//                         from: 'services',
+//                         localField: '_id',
+//                         foreignField: 'createdBy',
+//                         as: 'services'
+//                     }
+//                 },
+//                 {
+//                     $lookup: {
+//                         from: 'reviews',
+//                         let: { userServices: '$services._id' },
+//                         pipeline: [
+//                             {
+//                                 $match: {
+//                                     $expr: {
+//                                         $in: ['$serviceId', '$$userServices']
+//                                     }
+//                                 }
+//                             },
+//                             {
+//                                 $group: {
+//                                     _id: null,
+//                                     totalReviews: { $sum: 1 }
+//                                 }
+//                             }
+//                         ],
+//                         as: 'reviews'
+//                     }
+//                 },
+//                 {
+//                     $addFields: {
+//                         servicesCount: { $size: '$services' },
+//                         totalViews: {
+//                             $sum: {
+//                                 $map: {
+//                                     input: '$services',
+//                                     as: 'service',
+//                                     in: { $ifNull: ['$$service.views', 0] }
+//                                 }
+//                             }
+//                         },
+//                         totalReviews: { $ifNull: [{ $arrayElemAt: ['$reviews.totalReviews', 0] }, 0] }
+//                     }
+//                 },
+//                 {
+//                     $project: {
+//                         _id: 1,
+//                         displayName: 1,
+//                         profileImage: 1,
+//                         servicesCount: 1,
+//                         slug: 1,
+//                         totalViews: 1,
+//                         totalReviews: 1,
+//                         totalScore: {
+//                             $add: ['$servicesCount', '$totalViews', '$totalReviews']
+//                         }
+//                     }
+//                 },
+//                 { $sort: { totalScore: -1 } },
+//                 { $limit: 3 }
+//             ]),
 
-            // Get unique locations with service counts
-            Service.aggregate([
-                { $match: { isActive: true } },
-                {
-                    $group: {
-                        _id: '$location',
-                        count: { $sum: 1 },
-                        arabicName: { $first: '$locationArabic' }
-                    }
-                },
-                { $sort: { count: -1 } }
-            ]),
+//             // Get unique locations with service counts
+//             Service.aggregate([
+//                 { $match: { isActive: true } },
+//                 {
+//                     $group: {
+//                         _id: '$location',
+//                         count: { $sum: 1 },
+//                         arabicName: { $first: '$locationArabic' }
+//                     }
+//                 },
+//                 { $sort: { count: -1 } }
+//             ]),
 
-            // Get service types with counts
-            Service.aggregate([
-                { $match: { isActive: true } },
-                { $unwind: '$serviceOptions' },
-                {
-                    $group: {
-                        _id: '$serviceOptions',
-                        count: { $sum: 1 }
-                    }
-                },
-                { $sort: { count: -1 } }
-            ])
-        ]);
+//             // Get service types with counts
+//             Service.aggregate([
+//                 { $match: { isActive: true } },
+//                 { $unwind: '$serviceOptions' },
+//                 {
+//                     $group: {
+//                         _id: '$serviceOptions',
+//                         count: { $sum: 1 }
+//                     }
+//                 },
+//                 { $sort: { count: -1 } }
+//             ])
+//         ]);
 
-        // Process locations for the form
-        const processedLocations = locations
-            .filter(loc => loc._id) // Remove null/empty locations
-            .map(loc => ({
-                value: `${loc._id}${loc.arabicName ? ` - ${loc.arabicName}` : ''}`,
-                label: loc._id,
-                count: loc.count
-            }));
+//         // Process locations for the form
+//         const processedLocations = locations
+//             .filter(loc => loc._id) // Remove null/empty locations
+//             .map(loc => ({
+//                 value: `${loc._id}${loc.arabicName ? ` - ${loc.arabicName}` : ''}`,
+//                 label: loc._id,
+//                 count: loc.count
+//             }));
 
-        // Process service types for the form
-        const processedServices = services.map(service => ({
-            value: service._id.toLowerCase(),
-            // label: serviceConfig.titles[service._id] || service._id,
-            count: service.count,
-            // icon: serviceConfig.icons[service._id.toLowerCase()] || '🐾'
-        }));
-        console.log(processedLocations)
-        console.log(processedServices)
+//         // Process service types for the form
+//         const processedServices = services.map(service => ({
+//             value: service._id.toLowerCase(),
+//             // label: serviceConfig.titles[service._id] || service._id,
+//             count: service.count,
+//             // icon: serviceConfig.icons[service._id.toLowerCase()] || '🐾'
+//         }));
+//         console.log(processedLocations)
+//         console.log(processedServices)
 
-        res.render('user/index', {
-            topUsers,
-            locations: processedLocations,
-            services: processedServices,
-            pageTitle: 'Ndressilik - Trouvez les Meilleurs Services pour Chiens au Maroc',
-            description: 'Ndressilik est votre plateforme de confiance pour trouver les meilleurs services pour chiens au Maroc...',
-            keywords: 'services pour chiens Maroc, toilettage chien, éducation canine Maroc...'
-        });
-    } catch (error) {
-        console.error('Error in home page:', error);
-        res.status(500).render('error', { error: 'Une erreur est survenue' });
-    }
-});
+//         res.render('user/index', {
+//             topUsers,
+//             locations: processedLocations,
+//             services: processedServices,
+//             pageTitle: 'Ndressilik - Trouvez les Meilleurs Services pour Chiens au Maroc',
+//             description: 'Ndressilik est votre plateforme de confiance pour trouver les meilleurs services pour chiens au Maroc...',
+//             keywords: 'services pour chiens Maroc, toilettage chien, éducation canine Maroc...'
+//         });
+//     } catch (error) {
+//         console.error('Error in home page:', error);
+//         res.status(500).render('error', { error: 'Une erreur est survenue' });
+//     }
+// });
 
 // change user role 
 router.post('/dashboard/change-role/breeder', isAuthenticated, async (req, res) => {
@@ -575,6 +578,83 @@ const getDashboardStats = async (userId) => {
 
 router.get('/dashboard', isAuthenticated, async (req, res) => {
     try {
+        // Fetch user with select fields
+        const user = await User.findById(req.user._id)
+        .select('-password -__v')
+        .lean();
+
+   // Calculate missing fields for completion guide
+   const missingFields = [];
+   if (!user.displayName) missingFields.push('displayName');
+   if (!user.bio) missingFields.push('bio');
+   if (!user.location?.city) missingFields.push('city');
+   if (!user.phoneNumber) missingFields.push('phone');
+   if (!user.specializations?.length) missingFields.push('specializations');
+
+   // Calculate completion percentage
+   const completionPercentage = Math.round(
+        ((5 - missingFields.length) / 5) * 100
+   );
+
+   // Calculate service metrics
+   const totalServices = await Service.countDocuments({ createdBy: user._id });
+   const userServiceIds = await Service.find({ createdBy: user._id }).distinct('_id');
+   const totalReviews = await Review.countDocuments({ serviceId: { $in: userServiceIds } });
+
+   // Calculate average rating
+   const averageRatingResult = await Review.aggregate([
+        {
+             $match: {
+                  serviceId: { $in: userServiceIds }
+             }
+        },
+        {
+             $group: {
+                  _id: null,
+                  average: { $avg: '$rating' }
+             }
+        }
+   ]);
+   const averageRating = averageRatingResult[0]?.average || 0;
+
+   // Retrieve profile views from user.metrics
+   const profileViews = user.metrics?.profileViews || 0; // Ensure this field exists in your user model
+
+   // Format data for template
+   const viewData = {
+        page : 'profile',
+        user: {
+             ...user,
+             stats: {
+                  views: profileViews,
+                  services: totalServices,
+                  reviews: totalReviews,
+                  rating: Number(averageRating.toFixed(1))
+             }
+        },
+        completionPercentage,
+        missingFields,
+        defaultProfileImage: 'https://images.unsplash.com/photo-1614850715973-58c3167b30a0',
+        path: 'profile',
+        breadcrumbs: [
+             { label: 'Dashboard', url: '/dashboard' },
+             { label: 'Profil', url: '#' }
+        ],
+       };
+        const specializations = [
+             { value: 'dog-training', label: 'Dressage', icon: 'fa-dog' },
+             { value: 'grooming', label: 'Toilettage', icon: 'fa-cut' },
+             { value: 'walking', label: 'Promenade', icon: 'fa-walking' },
+             { value: 'veterinary', label: 'Vétérinaire', icon: 'fa-stethoscope' },
+             { value: 'boarding', label: 'Pension', icon: 'fa-home' },
+             { value: 'transport', label: 'Transport', icon: 'fa-car' }
+        ]
+   
+
+   // Add verification status
+   if (user.status === 'pending') {
+        viewData.verificationPending = true;
+   }
       // 1. Profile Completion Calculation
 const requiredFields = [
     { field: 'location.city', label: 'Ajoutez votre localisation - أضف موقعك', link: '/dashboard/profile/#location', weight: 15 },
@@ -751,13 +831,19 @@ const recentActivities = elevages.flatMap(elevage =>
             'dogs.status': { $ne: 'Vendu' }, // Placeholder condition
         });
 
-
+        // Get unread requests count
+        const unreadRequests = await Request.countDocuments({
+            serviceProvider: req.user._id,
+            isRead: false
+        });
         // Render dashboard with all data
         res.render('user/dashboard/dashboard', {
             pageTitle: 'dashboard',
             description: '',
+           
+            specializations,
             keywords: '',
-            page : 'services',
+            page : 'profile',
             totalViews,
             user: {
                 ...req.user.toObject(),

@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const sharp = require('sharp');
+const {unreadRequests} = require('../middlewares/globals');
+
 const User = require('../models/user');
 const { isAuthenticated } = require('../middlewares/auth');
 const Service = require('../models/service');
@@ -19,6 +21,7 @@ router.get('/services', async (req, res) => {
         const services = await Service.find({ serviceProvider: req.user._id });
         res.render('user/dashboard/dashboard', { 
             page: 'services',
+            unreadRequests,
             services 
         });
     } catch (error) {
@@ -98,6 +101,7 @@ router.get('/profile', isAuthenticated, async (req, res) => {
                     { label: 'Dashboard', url: '/dashboard' },
                     { label: 'Profil', url: '#' }
                ],
+               unreadRequests,
                specializations: [
                     { value: 'dog-training', label: 'Dressage', icon: 'fa-dog' },
                     { value: 'grooming', label: 'Toilettage', icon: 'fa-cut' },
@@ -282,22 +286,223 @@ router.get('/stats', isAuthenticated, async (req, res) => {
 
 
 
+// routes/dashboardRoutes.js
+const Request = require('../models/request');
+
 // Requests routes
 router.get('/requests', async (req, res) => {
     try {
-        const requests = await Request.find({ serviceProvider: req.user._id })
-            .populate('client')
-            .populate('service')
-            .sort({ createdAt: -1 });
+        const { status = 'all', sort = '-createdAt', page = 1, limit = 10 } = req.query;
+        const skip = (page - 1) * limit;
 
-        res.render('dashboard', { 
-            page: 'requests',
-            requests 
+        // Build query
+        let query = { serviceProvider: req.user._id };
+        if (status !== 'all') {
+            query.status = status;
+        }
+        
+
+        // Get total count for pagination
+        const totalRequests = await Request.countDocuments(query);
+        const totalPages = Math.ceil(totalRequests / limit);
+
+        // Fetch requests with pagination and sorting
+        const requests = await Request.find(query)
+            .populate('serviceId', 'serviceName images price')
+            .sort(sort)
+            .skip(skip)
+            .limit(parseInt(limit))
+            .lean();
+
+        // Get counts for different statuses
+        const counts = await Request.aggregate([
+            { $match: { serviceProvider: req.user._id } },
+            {
+                $group: {
+                    _id: '$status',
+                    count: { $sum: 1 }
+                }
+            }
+        ]);
+
+        // Format counts
+        const statusCounts = {
+            all: totalRequests,
+            pending: 0,
+            accepted: 0,
+            rejected: 0
+        };
+        counts.forEach(item => {
+            statusCounts[item._id] = item.count;
         });
+
+        // Mark unread requests as read
+        if (requests.length > 0) {
+            await Request.updateMany(
+                { 
+                    serviceProvider: req.user._id, 
+                    isRead: false 
+                },
+                { isRead: true }
+            );
+        }
+
+        // Render requests page
+        res.render('user/dashboard/dashboard', {
+            page: 'requests',
+            requests,
+            unreadRequests,
+            statusCounts,
+            pagination: {
+                currentPage: parseInt(page),
+                totalPages,
+                hasNext: page < totalPages,
+                hasPrev: page > 1
+            },
+            filters: {
+                currentStatus: status,
+                currentSort: sort
+            }
+        });
+
     } catch (error) {
         console.error('Requests fetch error:', error);
         req.flash('error', 'Erreur lors du chargement des demandes');
         res.redirect('/dashboard');
+    }
+});
+
+// Update request status
+router.patch('/requests/:requestId/status', async (req, res) => {
+    try {
+        const { requestId } = req.params;
+        const { status } = req.body;
+
+        // Validate status
+        if (!['pending', 'accepted', 'rejected'].includes(status)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid status'
+            });
+        }
+
+        // Update request
+        const request = await Request.findOneAndUpdate(
+            { 
+                _id: requestId,
+                serviceProvider: req.user._id 
+            },
+            { status },
+            { new: true }
+        );
+
+        if (!request) {
+            return res.status(404).json({
+                success: false,
+                message: 'Request not found'
+            });
+        }
+
+        res.json({
+            success: true,
+            message: 'Status updated successfully',
+            data: request
+        });
+
+    } catch (error) {
+        console.error('Request update error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error updating request status'
+        });
+    }
+});
+
+// Delete request
+router.delete('/requests/:requestId', async (req, res) => {
+    try {
+        const { requestId } = req.params;
+
+        const request = await Request.findOneAndDelete({
+            _id: requestId,
+            serviceProvider: req.user._id
+        });
+
+        if (!request) {
+            return res.status(404).json({
+                success: false,
+                message: 'Request not found'
+            });
+        }
+
+        res.json({
+            success: true,
+            message: 'Request deleted successfully'
+        });
+
+    } catch (error) {
+        console.error('Request delete error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error deleting request'
+        });
+    }
+});
+
+// Get request counts (for notifications)
+router.get('/requests/counts', async (req, res) => {
+    try {
+        const unreadCount = await Request.countDocuments({
+            serviceProvider: req.user._id,
+            isRead: false
+        });
+
+        const pendingCount = await Request.countDocuments({
+            serviceProvider: req.user._id,
+            status: 'pending'
+        });
+
+        res.json({
+            success: true,
+            data: {
+                unread: unreadCount,
+                pending: pendingCount
+            }
+        });
+
+    } catch (error) {
+        console.error('Request counts error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching request counts'
+        });
+    }
+});
+
+// Mark request as read
+router.patch('/requests/:requestId/read', async (req, res) => {
+    try {
+        const { requestId } = req.params;
+
+        await Request.findOneAndUpdate(
+            { 
+                _id: requestId,
+                serviceProvider: req.user._id 
+            },
+            { isRead: true }
+        );
+
+        res.json({
+            success: true,
+            message: 'Request marked as read'
+        });
+
+    } catch (error) {
+        console.error('Mark read error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error marking request as read'
+        });
     }
 });
 
@@ -362,6 +567,7 @@ router.get('/reviews', isAuthenticated, async (req, res) => {
  
          res.render('user/dashboard/dashboard', {
              path: 'reviews',
+             unreadRequests,
              page : 'reviews',
              pageTitle: 'Avis sur les Services',
              reviews,
