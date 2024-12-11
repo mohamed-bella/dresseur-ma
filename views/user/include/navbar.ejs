@@ -201,7 +201,7 @@
                         { label: 'Pension', icon: 'home', color: 'amber' },
                         { label: 'Vétérinaire', icon: 'stethoscope', color: 'emerald' }
                     ].forEach((category, index) => { %>
-                        <a href="/category/<%= category.label.toLowerCase() %>" 
+                        <a href="/services/<%= category.label.toLowerCase() %>" 
                            class="flex flex-col items-center gap-2 p-4 rounded-xl 
                                   bg-<%= category.color %>-50 hover:bg-<%= category.color %>-100/80 
                                   transition-all duration-200 group active:scale-95 sidebar-animate-item"
