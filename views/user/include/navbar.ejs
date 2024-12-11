@@ -126,13 +126,14 @@
       </div>
 
       <!-- Quick Links Bar (Mobile) -->
-      <div class="lg:hidden overflow-x-auto scrollbar-hide border-t border-slate-200/80" :class="{ 'h-0 opacity-0': isScrolled, 'h-12 opacity-100': !isScrolled }">
+      <div class="overflow-x-auto scrollbar-hide border-t border-slate-200/80" :class="{ 'h-0 opacity-0': isScrolled, 'h-12 opacity-100': !isScrolled }">
         <div class="flex items-center px-4 h-12">
           <% const quickLinks = [
                         { href: '/consultation', label: 'Consultation', icon: 'comments' },
-                        { href: '/lost-dogs', label: 'Chiens Perdus', icon: 'search' },
-                        { href: '/adoption', label: 'Adoption', icon: 'heart' },
-                        { href: '/training', label: 'Formation', icon: 'graduation-cap' }
+                        { href: '/articles', label: 'Les Articles', icon: 'newspaper' },
+                        { href: '/chien-adoption-perdus', label: 'Chiens Perdus', icon: 'search' },
+                        { href: '/chien-adoption-perdus', label: 'Adoption', icon: 'heart' },
+                        { href: '/tous-les-races-des-chiens', label: 'tous les races des chiens', icon: 'dog' }
                     ] %>
 
           <% quickLinks.forEach((link, index) => { %>
@@ -440,10 +441,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
   <!-- Mobile Add Service Button -->
   <% if (user) { %>
-  <div class="fixed right-4 bottom-4 sm:hidden z-30">
+  <div class="fixed left-4 bottom-4 sm:hidden z-30">
     <a href="/dashboard/new-service" class="flex items-center justify-center w-12 h-12 bg-blue-600 text-white rounded-full 
                        shadow-lg hover:bg-blue-700 transition-colors duration-200 hover:shadow-xl">
       <i class="fas fa-plus"></i>
+      
     </a>
   </div>
   <% } %>

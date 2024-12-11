@@ -54,58 +54,60 @@
 
 <!-- Enhanced Service Modal -->
 <div id="serviceModal" 
-     class="fixed inset-0 z-50 flex items-center justify-center px-4 opacity-0 pointer-events-none transition-all duration-300">
-    <!-- Animated Backdrop -->
-    <div class="absolute inset-0 bg-slate-900/20 backdrop-blur-sm transition-opacity duration-300"
+     class="fixed inset-0 z-50 flex items-center justify-center px-4 opacity-0 pointer-events-none transition-all duration-500">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity duration-500"
          onclick="toggleServiceModal()"></div>
     
     <!-- Modal Content -->
-    <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg transform scale-95 -translate-y-8 
-                transition-all duration-300 opacity-0">
+    <div class="relative bg-white rounded-3xl shadow-xl w-full max-w-2xl transform scale-95 -translate-y-4 
+                transition-all duration-500 opacity-0">
         <!-- Header -->
-        <div class="px-6 py-4 border-b border-slate-200/80">
+        <div class="px-8 py-6">
             <div class="flex items-center justify-between">
-                <h3 class="text-lg font-semibold text-slate-900">Choisir un service à ajouter</h3>
+                <h3 class="text-xl font-medium text-gray-900">Sélectionner un service</h3>
                 <button onclick="toggleServiceModal()" 
-                        class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg 
-                               transition-colors duration-200 active:scale-95">
-                    <i class="fas fa-times"></i>
+                        class="p-2 text-gray-400 hover:text-gray-600 rounded-full 
+                               transition-colors duration-200">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
                 </button>
             </div>
         </div>
         
-        <!-- Service Options with Staggered Animation -->
-        <div class="p-6 grid gap-3 max-h-[calc(100vh-200px)] overflow-y-auto">
+        <!-- Service Grid -->
+        <div class="px-8 pb-8 grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[calc(100vh-200px)] overflow-y-auto">
             <% [
                 { 
-                    label: ' Dressage',
+                    label: 'Dressage',
                     description: 'Formation et éducation canine professionnelle',
-                    icon: 'graduation-cap',
+                    icon: 'academic-cap',
                     color: 'blue'
                 },
                 { 
                     label: 'Toilettage',
                     description: 'Soins esthétiques et hygiène pour chiens',
-                    icon: 'cut',
-                    color: 'purple'
+                    icon: 'scissors',
+                    color: 'violet'
                 },
                 { 
                     label: 'Vétérinaire',
                     description: 'Consultations et soins vétérinaires',
-                    icon: 'stethoscope',
+                    icon: 'heart',
                     color: 'emerald'
                 },
                 { 
                     label: 'Promenade',
                     description: 'Promenades et exercices quotidiens',
-                    icon: 'walking',
-                    color: 'orange'
+                    icon: 'map',
+                    color: 'amber'
                 },
                 { 
                     label: 'Pension',
                     description: 'Hébergement et garde temporaire',
                     icon: 'home',
-                    color: 'red'
+                    color: 'rose'
                 },
                 { 
                     label: 'Transport',
@@ -116,36 +118,54 @@
                 {
                     label: 'Consultation',
                     description: 'Analyse et conseils comportementaux',
-                    icon: 'brain',
+                    icon: 'light-bulb',
                     color: 'cyan'
-                },
-        
+                }
             ].forEach((service, index) => { %>
-                <a href="/dashboard" 
-                   class="group flex items-center gap-4 p-4 rounded-xl bg-<%= service.color %>-50 
-                          hover:bg-<%= service.color %>-100/80 transition-all duration-300
-                          hover:shadow-lg hover:shadow-<%= service.color %>-500/10
-                          animate-slide-up"
-                   style="--delay: <%= index * 50 %>ms">
-                    <div class="w-12 h-12 flex items-center justify-center rounded-xl 
-                                bg-<%= service.color %>-100/80 group-hover:scale-110 transition-transform duration-300">
-                        <i class="fas fa-<%= service.icon %> text-<%= service.color %>-600 text-xl"></i>
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <h4 class="font-medium text-slate-900 truncate"><%= service.label %></h4>
-                        <p class="text-sm text-slate-500 truncate"><%= service.description %></p>
-                    </div>
-                    <div class="flex items-center gap-2 text-<%= service.color %>-500">
-                        <span class="text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            Créer
-                        </span>
-                        <i class="fas fa-arrow-right transform group-hover:translate-x-1 transition-transform duration-300"></i>
-                    </div>
-                </a>
+                <div class="group animate-fade-in" style="animation-delay: <%= index * 75 %>ms">
+                    <a href="/dashboard" 
+                       class="block p-6 rounded-2xl bg-white border border-gray-100 
+                              hover:border-<%= service.color %>-200 hover:bg-<%= service.color %>-50/30
+                              transition-all duration-300 hover:shadow-lg">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0">
+                                <div class="w-10 h-10 flex items-center justify-center rounded-xl 
+                                          bg-<%= service.color %>-100 group-hover:bg-<%= service.color %>-200 
+                                          transition-colors duration-300">
+                                    <svg class="w-5 h-5 text-<%= service.color %>-600" fill="none" stroke="currentColor">
+                                        <use href="#icon-<%= service.icon %>" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h4 class="font-medium text-gray-900 mb-1"><%= service.label %></h4>
+                                <p class="text-sm text-gray-500 leading-relaxed"><%= service.description %></p>
+                            </div>
+                            <div class="flex-shrink-0 self-center">
+                                <svg class="w-5 h-5 text-<%= service.color %>-500 transform group-hover:translate-x-1 transition-transform duration-300" 
+                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </div>
+                        </div>
+                    </a>
+                </div>
             <% }) %>
         </div>
     </div>
 </div>
+
+<style>
+@keyframes fade-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+    animation: fade-in 0.5s ease-out forwards;
+    opacity: 0;
+}
+</style>
 
 <style>
 /* Grid Background Animation */
@@ -307,13 +327,14 @@ document.addEventListener('scroll', function(e) {
                         const currentCategory = serviceOption || 'tous';
                         %>
                         
+                        
                         <% categories.forEach(category => { 
                             const isActive = currentCategory === category.id;
                         %>
                             <a href="/services/<%= category.id %>" 
                                class="group inline-flex flex-col items-center px-5 py-2 rounded-xl transition-all duration-300
                                       <%= isActive ? 
-                                        'bg-blue-600 text-white scale-[1.02] shadow-lg shadow-blue-500/25' : 
+                                        'bg-yellow-600 text-white scale-[1.02] shadow-lg shadow-blue-500/25' : 
                                         'bg-slate-50 hover:bg-slate-100 text-slate-600 hover:text-slate-900' %>">
                                 <span class="text-xl mb-1 transform transition-transform duration-300 group-hover:scale-110">
                                     <%= category.icon %>
@@ -355,7 +376,7 @@ document.addEventListener('scroll', function(e) {
             <!-- Results Header -->
             <div class="flex flex-wrap items-center justify-between gap-4">
                 <div>
-                    <h2 class="text-xl font-bold text-slate-900">Services disponibles</h2>
+                    <h2 class="text-xl font-bold text-slate-900">Services disponibles (<%= currentCategory%>)</h2>
                     <p class="text-sm text-slate-500 mt-1"><%= services.length %> services trouvés</p>
                 </div>
             </div>
