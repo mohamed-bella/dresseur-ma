@@ -109,6 +109,10 @@ router.get('/dashboard/new-service', isAuthenticated, async (req, res) => {
      }
 });
 
+router.get('/noo', (req, res) => {
+    res.render('user/500')
+})
+
 router.post('/services/add', isAuthenticated, (req, res) => {
      upload(req, res, async (err) => {
          if (err) {

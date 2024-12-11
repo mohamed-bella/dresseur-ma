@@ -1,264 +1,53 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
-     <meta charset="UTF-8">
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <title>Oups ! Erreur 500 - Ndressilik</title>
-     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-     <style>
-          body,
-          html {
-               height: 100%;
-               margin: 0;
-               font-family: 'Nunito', sans-serif;
-               background-color: #f0f7f4;
-               display: flex;
-               align-items: center;
-               justify-content: center;
-               color: #333;
-               overflow: hidden;
-          }
-
-          .container {
-               text-align: center;
-               padding: 2rem;
-               max-width: 600px;
-               position: relative;
-          }
-
-          h1 {
-               font-size: 3rem;
-               margin-bottom: 0.5rem;
-               color: #3FB1B0;
-          }
-
-          .error-code {
-               font-size: 1.5rem;
-               font-weight: 600;
-               color: #FF6B6B;
-               margin-bottom: 1rem;
-          }
-
-          p {
-               font-size: 1.2rem;
-               margin-bottom: 2rem;
-               line-height: 1.6;
-          }
-
-          .btn {
-               display: inline-block;
-               padding: 12px 24px;
-               background-color: #3FB1B0;
-               color: white;
-               text-decoration: none;
-               border-radius: 30px;
-               font-size: 1.1rem;
-               font-weight: 600;
-               transition: all 0.3s ease;
-               box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-          }
-
-          .btn:hover,
-          .btn:focus {
-               background-color: #2C7A7B;
-               transform: translateY(-2px);
-               box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-          }
-
-          .dog {
-               width: 200px;
-               height: 200px;
-               margin: 0 auto 2rem;
-               position: relative;
-               cursor: pointer;
-          }
-
-          .dog-body {
-               width: 120px;
-               height: 60px;
-               background-color: #A0522D;
-               border-radius: 50px 50px 0 0;
-               position: absolute;
-               bottom: 0;
-               left: 40px;
-          }
-
-          .dog-head {
-               width: 80px;
-               height: 80px;
-               background-color: #A0522D;
-               border-radius: 50%;
-               position: absolute;
-               top: 40px;
-               left: 60px;
-          }
-
-          .dog-ear {
-               width: 30px;
-               height: 40px;
-               background-color: #8B4513;
-               border-radius: 0 0 15px 15px;
-               position: absolute;
-               top: -10px;
-          }
-
-          .dog-ear.left {
-               left: 5px;
-               transform: rotate(-30deg);
-          }
-
-          .dog-ear.right {
-               right: 5px;
-               transform: rotate(30deg);
-          }
-
-          .dog-eye {
-               width: 12px;
-               height: 12px;
-               background-color: #000;
-               border-radius: 50%;
-               position: absolute;
-               top: 30px;
-          }
-
-          .dog-eye.left {
-               left: 20px;
-          }
-
-          .dog-eye.right {
-               right: 20px;
-          }
-
-          .dog-nose {
-               width: 16px;
-               height: 8px;
-               background-color: #000;
-               border-radius: 0 0 8px 8px;
-               position: absolute;
-               bottom: 15px;
-               left: 32px;
-          }
-
-          .dog-tail {
-               width: 15px;
-               height: 60px;
-               background-color: #8B4513;
-               border-radius: 15px;
-               position: absolute;
-               bottom: 10px;
-               right: -5px;
-               transform-origin: bottom center;
-               animation: wagTail 0.5s infinite alternate;
-          }
-
-          @keyframes wagTail {
-               0% {
-                    transform: rotate(-10deg);
-               }
-
-               100% {
-                    transform: rotate(10deg);
-               }
-          }
-
-          .paw-print {
-               position: absolute;
-               opacity: 0;
-               transition: opacity 0.3s ease;
-          }
-
-          @media (max-width: 480px) {
-               h1 {
-                    font-size: 2.5rem;
-               }
-
-               .error-code {
-                    font-size: 1.2rem;
-               }
-
-               p {
-                    font-size: 1rem;
-               }
-
-               .dog {
-                    transform: scale(0.8);
-               }
-          }
-     </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('include/head') %>
+    <title>Oups! - Erreur 500</title>
+    <script>
+        setTimeout(() => {
+            window.location.href = '/';
+        }, 2000);
+    </script>
 </head>
+<body class="bg-slate-50 min-h-screen flex items-center justify-center p-4">
+    <main class="w-full max-w-lg text-center">
+        <!-- Animated Thinking Dots -->
+        <div class="flex justify-center gap-2 mb-6">
+            <div class="w-4 h-4 bg-yellow-400 rounded-full animate-bounce" style="animation-delay: 0s"></div>
+            <div class="w-4 h-4 bg-yellow-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+            <div class="w-4 h-4 bg-yellow-400 rounded-full animate-bounce" style="animation-delay: 0.4s"></div>
+        </div>
 
-<body>
-     <div class="container">
-          <div class="dog" id="dog">
-               <div class="dog-body"></div>
-               <div class="dog-head">
-                    <div class="dog-ear left"></div>
-                    <div class="dog-ear right"></div>
-                    <div class="dog-eye left"></div>
-                    <div class="dog-eye right"></div>
-                    <div class="dog-nose"></div>
-               </div>
-               <div class="dog-tail"></div>
-          </div>
-          <h1>Oups ! Notre chien a fait une bêtise</h1>
-          <p class="error-code">Erreur 500</p>
-          <p>Il semble que notre serveur ait besoin d'un peu plus de dressage. Nous travaillons à corriger ce problème aussi vite que possible !</p>
-          <p>En attendant, pourquoi ne pas retourner à l'accueil et explorer d'autres parties de notre site ?</p>
-          <a href="/" class="btn">Retourner à l'accueil</a>
-     </div>
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">Hmmmm...</h1>
+        <p class="text-xl text-gray-600 mb-8">Oh... On dirait que quelque chose s'est mal passé.</p>
+        
+        <p class="text-gray-500 mb-8">
+            Vous serez redirigé vers la page d'accueil dans quelques secondes...
+        </p>
 
-     <script>
-          document.addEventListener('DOMContentLoaded', (event) => {
-               const dog = document.getElementById('dog');
-               const container = document.querySelector('.container');
-
-               function createPawPrint(x, y) {
-                    const pawPrint = document.createElement('div');
-                    pawPrint.className = 'paw-print';
-                    pawPrint.style.left = x + 'px';
-                    pawPrint.style.top = y + 'px';
-                    pawPrint.innerHTML = '🐾';
-                    pawPrint.style.fontSize = '24px';
-                    container.appendChild(pawPrint);
-
-                    setTimeout(() => {
-                         pawPrint.style.opacity = '1';
-                    }, 50);
-
-                    setTimeout(() => {
-                         pawPrint.style.opacity = '0';
-                         setTimeout(() => {
-                              container.removeChild(pawPrint);
-                         }, 500);
-                    }, 2000);
-               }
-
-               function handleInteraction(event) {
-                    const rect = container.getBoundingClientRect();
-                    const x = event.clientX - rect.left;
-                    const y = event.clientY - rect.top;
-                    createPawPrint(x, y);
-               }
-
-               // Handle both click and touch events
-               dog.addEventListener('click', handleInteraction);
-               dog.addEventListener('touchstart', (e) => {
-                    e.preventDefault(); // Prevent default touch behavior
-                    handleInteraction(e.touches[0]);
-               });
-
-               // Initial animation
-               container.style.opacity = '0';
-               container.style.transform = 'translateY(20px)';
-               container.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
-
-               setTimeout(() => {
-                    container.style.opacity = '1';
-                    container.style.transform = 'translateY(0)';
-               }, 100);
-          });
-     </script>
+        <div class="flex justify-center gap-4">
+            <a href="/contact" 
+               class="inline-flex items-center px-6 py-3 rounded-lg bg-gray-100 text-gray-700 
+                      hover:bg-gray-200 transition-colors duration-300">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                          d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                Nous contacter
+            </a>
+            
+            <a href="/" 
+               class="inline-flex items-center px-6 py-3 rounded-lg bg-yellow-400 text-gray-900 
+                      hover:bg-yellow-500 transition-colors duration-300">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                          d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                Page d'accueil
+            </a>
+        </div>
+    </main>
 </body>
-
 </html>
