@@ -1,58 +1,81 @@
 <!-- views/partials/sidebar.ejs -->
-<div class="flex flex-col h-full">
-     <!-- Logo -->
-     <div class="h-16 flex items-center px-6 border-b border-neutral-200">
-         <h1 class="text-xl font-semibold text-neutral-800">Ndressilik</h1>
-     </div>
- 
-     <!-- Navigation -->
-     <nav class="flex-1 py-4">
-         <div class="space-y-1">
-             <a href="/dashboard/new-service" class="flex items-center px-6 py-3 text-neutral-600 hover:bg-neutral-100 hover:text-primary">
-                 <i class="fas fa-plus-circle w-5 h-5"></i>
-                 <span class="ml-3">Ajouter un service</span>
-             </a>
- 
-             <a href="/dashboard/services" class="flex items-center px-6 py-3 text-neutral-600 hover:bg-neutral-100 hover:text-primary">
-                 <i class="fas fa-list w-5 h-5"></i>
-                 <span class="ml-3">Mes services</span>
-             </a>
- 
-             <a href="/dashboard/profile" class="flex items-center px-6 py-3 text-neutral-600 hover:bg-neutral-100 hover:text-primary">
-                 <i class="fas fa-user w-5 h-5"></i>
-                 <span class="ml-3">Mon profile</span>
-             </a>
- 
-             <a href="/dashboard/stats" class="flex items-center px-6 py-3 text-neutral-600 hover:bg-neutral-100 hover:text-primary">
-                 <i class="fas fa-chart-line w-5 h-5"></i>
-                 <span class="ml-3">Statistiques</span>
-             </a>
- 
-             <a href="/dashboard/requests" class="group flex items-center px-6 py-3 text-neutral-600 hover:bg-neutral-100 hover:text-primary relative">
-                <i class="fas fa-bell w-5 h-5"></i>
-                <span class="ml-3">Requests</span>
-                
-                    <span class="absolute right-6 top-1/2 -translate-y-1/2 flex">
-                        <span class="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-red-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
-                    </span>
-                
+<div class="flex flex-col h-full bg-white">
+    <!-- Logo -->
+    <div class="h-16 flex items-center px-6 border-b border-slate-200/80">
+        <h1 class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-500 to-amber-600">
+            Ndressilik
+        </h1>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="flex-1 py-6 px-3">
+        <div class="space-y-2">
+            <a href="/dashboard/new-service" 
+               class="group flex items-center px-4 py-3 rounded-xl text-slate-600 hover:bg-yellow-50 hover:text-yellow-700 transition-all duration-200">
+                <div class="w-9 h-9 flex items-center justify-center rounded-lg bg-yellow-100 text-yellow-600 group-hover:bg-yellow-200 transition-colors">
+                    <i class="fas fa-plus-circle text-lg"></i>
+                </div>
+                <span class="ml-3 font-medium">Ajouter un service</span>
             </a>
- 
-            
- 
-             <a href="/dashboard/reviews" class="flex items-center px-6 py-3 text-neutral-600 hover:bg-neutral-100 hover:text-primary">
-                 <i class="fas fa-star w-5 h-5"></i>
-                 <span class="ml-3">Reviews</span>
-             </a>
-         </div>
-     </nav>
- 
-     <!-- Bottom section -->
-     <div class="p-6 border-t border-neutral-200">
-         <a href="/logout" class="flex items-center text-neutral-600 hover:text-primary">
-             <i class="fas fa-sign-out-alt w-5 h-5"></i>
-             <span class="ml-3">Déconnexion</span>
-         </a>
-     </div>
- </div>
+
+            <a href="/dashboard/services" 
+               class="group flex items-center px-4 py-3 rounded-xl text-slate-600 hover:bg-purple-50 hover:text-purple-700 transition-all duration-200">
+                <div class="w-9 h-9 flex items-center justify-center rounded-lg bg-purple-100 text-purple-600 group-hover:bg-purple-200 transition-colors">
+                    <i class="fas fa-list text-lg"></i>
+                </div>
+                <span class="ml-3 font-medium">Mes services</span>
+            </a>
+
+            <a href="/dashboard/profile" 
+               class="group flex items-center px-4 py-3 rounded-xl text-slate-600 hover:bg-blue-50 hover:text-blue-700 transition-all duration-200">
+                <div class="w-9 h-9 flex items-center justify-center rounded-lg bg-blue-100 text-blue-600 group-hover:bg-blue-200 transition-colors">
+                    <i class="fas fa-user text-lg"></i>
+                </div>
+                <span class="ml-3 font-medium">Mon profile</span>
+            </a>
+
+            <a href="/dashboard/stats" 
+               class="group flex items-center px-4 py-3 rounded-xl text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 transition-all duration-200">
+                <div class="w-9 h-9 flex items-center justify-center rounded-lg bg-emerald-100 text-emerald-600 group-hover:bg-emerald-200 transition-colors">
+                    <i class="fas fa-chart-line text-lg"></i>
+                </div>
+                <span class="ml-3 font-medium">Statistiques</span>
+            </a>
+
+            <a href="/dashboard/requests" 
+               class="group flex items-center px-4 py-3 rounded-xl text-slate-600 hover:bg-amber-50 hover:text-amber-700 transition-all duration-200 relative">
+                <div class="w-9 h-9 flex items-center justify-center rounded-lg bg-amber-100 text-amber-600 group-hover:bg-amber-200 transition-colors">
+                    <i class="fas fa-bell text-lg"></i>
+                </div>
+                <span class="ml-3 font-medium">Requests</span>
+                
+                <!-- Notification Dot -->
+                <span class="absolute right-4 flex">
+                    <span class="animate-ping absolute inline-flex h-2.5 w-2.5 rounded-full bg-red-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+                </span>
+            </a>
+
+            <a href="/dashboard/reviews" 
+               class="group flex items-center px-4 py-3 rounded-xl text-slate-600 hover:bg-rose-50 hover:text-rose-700 transition-all duration-200">
+                <div class="w-9 h-9 flex items-center justify-center rounded-lg bg-rose-100 text-rose-600 group-hover:bg-rose-200 transition-colors">
+                    <i class="fas fa-star text-lg"></i>
+                </div>
+                <span class="ml-3 font-medium">Reviews</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Bottom section -->
+    <div class="p-4 mt-auto">
+        <div class="border-t border-slate-200/80 pt-4">
+            <a href="/logout" 
+               class="group flex items-center px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all duration-200">
+                <div class="w-9 h-9 flex items-center justify-center rounded-lg bg-slate-100 text-slate-600 group-hover:bg-slate-200 transition-colors">
+                    <i class="fas fa-sign-out-alt text-lg"></i>
+                </div>
+                <span class="ml-3 font-medium">Déconnexion</span>
+            </a>
+        </div>
+    </div>
+</div>
