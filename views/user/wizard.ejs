@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service de Dressage</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .step {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            display: none;
+        }
+
+        .step.active {
+            opacity: 1;
+            transform: translateY(0);
+            display: flex;
+        }
+
+        .progress-bar {
+            transition: width 0.3s ease;
+        }
+
+        .option-input:checked + .option-card {
+            border-color: #fbbf24;
+            background-color: #fef3c7;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+
+        .animate-shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
+       
+        /* Marker highlight effect */
+.highlight {
+    position: relative;
+    display: inline;
+}
+
+.highlight::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 2px;
+    width: 100%;
+    height: 35%;
+    background-color: #fef08a; /* Light yellow */
+    z-index: -1;
+    transform: skew(-15deg);
+}
+
+
+        /* Title icon and text style */
+        .step-title {
+           
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .step-title i {
+            color: #ffbb00; /* A highlight color for icons */
+        }
+    </style>
+</head>
+<body class="bg-white">
+     <!-- Navbar -->
+<nav class="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-50">
+     <div class="max-w-7xl mx-auto px-4">
+         <div class="flex items-center justify-between h-16">
+             <!-- Back Button -->
+             <a href="/" 
+                class="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
+                 <i class="fas fa-arrow-left"></i>
+                 <span class="font-medium">Retour</span>
+             </a>
+ 
+             <!-- Brand -->
+             <div class="flex items-center">
+                 <div class="flex items-center gap-2">
+                     <i class="fas fa-paw text-yellow-500 text-2xl"></i>
+                     <span class="font-bold text-xl text-gray-900">NDRESSILIK</span>
+                 </div>
+             </div>
+ 
+             <!-- Empty div for spacing -->
+             <div class="w-20"></div>
+         </div>
+     </div>
+ </nav>
+    <!-- Progress Bar -->
+    <div class="fixed top-0 left-0 right-0 z-50">
+        <div class="h-1 bg-gray-100">
+            <div class="progress-bar h-full bg-yellow-400" style="width: 0%"></div>
+        </div>
+    </div>
+
+    <!-- Form Container -->
+    <div class="relative">
+
+        <!-- Step 1: Service Type -->
+        <div class="step active" data-step="1">
+            <div class="min-h-screen w-full flex flex-col p-6">
+                <div class="flex-1 flex flex-col justify-center max-w-md mx-auto w-full">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-8 step-title">
+                        <i class="fas fa-dog"></i>  
+                        Quel type de <span class="highlight">service</span> recherchez-vous ?
+                    </h2>
+                    
+                    <div class="space-y-4">
+                        <label class="block cursor-pointer">
+                            <input type="radio" name="serviceType" value="domicile" class="option-input hidden">
+                            <div class="option-card p-4 rounded-xl border-2 border-gray-200">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center text-amber-600 shrink-0">
+                                        <i class="fas fa-home"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-gray-900">Dressage à domicile</div>
+                                        <div class="text-sm text-gray-500">Formation chez vous</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </label>
+
+                        <label class="block cursor-pointer">
+                            <input type="radio" name="serviceType" value="center" class="option-input hidden">
+                            <div class="option-card p-4 rounded-xl border-2 border-gray-200">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 shrink-0">
+                                        <i class="fas fa-building"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-gray-900">Centre Bouznika</div>
+                                        <div class="text-sm text-gray-500">Formation au centre</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </label>
+
+                        <label class="block cursor-pointer">
+                            <input type="radio" name="serviceType" value="online" class="option-input hidden">
+                            <div class="option-card p-4 rounded-xl border-2 border-gray-200">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center text-green-600 shrink-0">
+                                        <i class="fas fa-video"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-gray-900">Consultation en ligne</div>
+                                        <div class="text-sm text-gray-500">150 DH - Conseils à distance</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="mt-8">
+                        <button class="next-btn w-full p-4 bg-yellow-400 text-gray-900 font-medium rounded-xl
+                                       hover:bg-yellow-500 active:scale-[0.98] transition-all">
+                            Suivant
+                            <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2: Dog Breed -->
+        <div class="step" data-step="2">
+            <div class="min-h-screen w-full flex flex-col p-6">
+                <div class="flex-1 flex flex-col justify-center max-w-md mx-auto w-full">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-8 step-title">
+                        <i class="fas fa-paw"></i>
+                        Quelle est la <span class="highlight">race</span> de votre chien ?
+                    </h2>
+                    
+                    <input type="text" 
+                           name="dogBreed" 
+                           class="w-full p-4 text-lg rounded-xl border-2 border-gray-200 
+                                  focus:border-yellow-400 focus:outline-none focus:ring-2 
+                                  focus:ring-yellow-100"
+                           placeholder="Ex: Berger Allemand, Golden Retriever...">
+
+                    <div class="mt-8">
+                        <button class="next-btn w-full p-4 bg-yellow-400 text-gray-900 font-medium rounded-xl
+                                       hover:bg-yellow-500 active:scale-[0.98] transition-all">
+                            Suivant
+                            <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3: Dog Age -->
+        <div class="step" data-step="3">
+            <div class="min-h-screen w-full flex flex-col p-6">
+                <div class="flex-1 flex flex-col justify-center max-w-md mx-auto w-full">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-8 step-title">
+                        <i class="fas fa-birthday-cake"></i>
+                        Quel <span class="highlight">âge</span> a votre chien ?
+                    </h2>
+                    
+                    <input type="number" 
+                           name="dogAge" 
+                           class="w-full p-4 text-lg rounded-xl border-2 border-gray-200 
+                                  focus:border-yellow-400 focus:outline-none focus:ring-2 
+                                  focus:ring-yellow-100"
+                           placeholder="Âge en mois"
+                           min="1">
+
+                    <div class="mt-8">
+                        <button class="next-btn w-full p-4 bg-yellow-400 text-gray-900 font-medium rounded-xl
+                                       hover:bg-yellow-500 active:scale-[0.98] transition-all">
+                            Suivant
+                            <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 4: Vaccination -->
+        <div class="step" data-step="4">
+            <div class="min-h-screen w-full flex flex-col p-6">
+                <div class="flex-1 flex flex-col justify-center max-w-md mx-auto w-full">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-8 step-title">
+                        <i class="fas fa-syringe"></i>
+                        Votre chien est-il <span class="highlight">vacciné</span> ?
+                    </h2>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <label class="block cursor-pointer">
+                            <input type="radio" name="vaccinated" value="yes" class="option-input hidden">
+                            <div class="option-card p-6 rounded-xl border-2 border-gray-200 text-center">
+                                <div class="flex flex-col items-center gap-3">
+                                    <div class="w-12 h-12 rounded-lg bg-green-100 flex items-center justify-center text-green-600">
+                                        <i class="fas fa-check text-xl"></i>
+                                    </div>
+                                    <span class="font-medium text-gray-900">Oui</span>
+                                </div>
+                            </div>
+                        </label>
+
+                        <label class="block cursor-pointer">
+                            <input type="radio" name="vaccinated" value="no" class="option-input hidden">
+                            <div class="option-card p-6 rounded-xl border-2 border-gray-200 text-center">
+                                <div class="flex flex-col items-center gap-3">
+                                    <div class="w-12 h-12 rounded-lg bg-red-100 flex items-center justify-center text-red-600">
+                                        <i class="fas fa-times text-xl"></i>
+                                    </div>
+                                    <span class="font-medium text-gray-900">Non</span>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="mt-8">
+                        <button class="next-btn w-full p-4 bg-yellow-400 text-gray-900 font-medium rounded-xl
+                                       hover:bg-yellow-500 active:scale-[0.98] transition-all">
+                            Suivant
+                            <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+       <!-- Step 5: Problems -->
+<div class="step" data-step="5">
+     <div class="min-h-screen w-full flex flex-col p-6">
+         <div class="flex-1 flex flex-col justify-center max-w-md mx-auto w-full">
+             <h2 class="text-2xl font-bold text-gray-900 mb-8 step-title">
+                 <i class="fas fa-exclamation-triangle"></i>
+                 Quels <span class="underline">problèmes</span> souhaitez-vous résoudre ?
+             </h2>
+ 
+             <div class="space-y-3">
+                 <!-- Option 1: Agressivité -->
+                 <label class="block cursor-pointer">
+                     <input type="checkbox" name="problems" value="Agressivité" class="option-input hidden">
+                     <div class="option-card p-4 rounded-xl border-2 border-gray-200">
+                         <div class="flex items-center gap-3">
+                             <div class="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center text-red-600">
+                                 <i class="fas fa-exclamation-triangle"></i>
+                             </div>
+                             <span class="font-medium text-gray-900">Agressivité</span>
+                         </div>
+                     </div>
+                 </label>
+ 
+                 <!-- Option 2: Aboiements excessifs -->
+                 <label class="block cursor-pointer">
+                     <input type="checkbox" name="problems" value="Aboiements excessifs" class="option-input hidden">
+                     <div class="option-card p-4 rounded-xl border-2 border-gray-200">
+                         <div class="flex items-center gap-3">
+                             <div class="w-10 h-10 rounded-lg bg-orange-100 flex items-center justify-center text-orange-600">
+                                 <i class="fas fa-volume-up"></i>
+                             </div>
+                             <span class="font-medium text-gray-900">Aboiements excessifs</span>
+                         </div>
+                     </div>
+                 </label>
+ 
+                 <!-- Option 3: Éducation de base -->
+                 <label class="block cursor-pointer">
+                     <input type="checkbox" name="problems" value="Éducation de base" class="option-input hidden">
+                     <div class="option-card p-4 rounded-xl border-2 border-gray-200">
+                         <div class="flex items-center gap-3">
+                             <div class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600">
+                                 <i class="fas fa-graduation-cap"></i>
+                             </div>
+                             <span class="font-medium text-gray-900">Éducation de base</span>
+                         </div>
+                     </div>
+                 </label>
+ 
+                 <!-- Option 4: Autre -->
+                 <label class="block cursor-pointer">
+                     <input type="checkbox" name="problems" value="Autre" class="option-input hidden" id="other-problem-checkbox">
+                     <div class="option-card p-4 rounded-xl border-2 border-gray-200">
+                         <div class="flex items-center gap-3">
+                             <div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-600">
+                                 <i class="fas fa-pen"></i>
+                             </div>
+                             <span class="font-medium text-gray-900">Autre</span>
+                         </div>
+                     </div>
+                 </label>
+ 
+                 <!-- Text Input for "Autre" -->
+                 <div class="mt-3 hidden" id="other-problem-input">
+                     <input type="text" 
+                            name="otherProblemDetails" 
+                            class="w-full p-4 text-lg rounded-xl border-2 border-gray-200 
+                                   focus:border-yellow-400 focus:outline-none focus:ring-2 
+                                   focus:ring-yellow-100"
+                            placeholder="Décrivez votre problème..." />
+                 </div>
+             </div>
+ 
+             <div class="mt-8">
+                 <button class="next-btn w-full p-4 bg-yellow-400 text-gray-900 font-medium rounded-xl
+                                hover:bg-yellow-500 active:scale-[0.98] transition-all">
+                     Suivant
+                     <i class="fas fa-arrow-right ml-2"></i>
+                 </button>
+             </div>
+         </div>
+     </div>
+ </div>
+ 
+ <script>
+     // Handle "Autre" checkbox toggle
+     document.addEventListener('DOMContentLoaded', () => {
+         const otherCheckbox = document.getElementById('other-problem-checkbox');
+         const otherInputDiv = document.getElementById('other-problem-input');
+         const otherInputField = otherInputDiv.querySelector('input[name="otherProblemDetails"]');
+ 
+         otherCheckbox.addEventListener('change', () => {
+             if (otherCheckbox.checked) {
+                 otherInputDiv.classList.remove('hidden'); // Show the input field
+                 otherInputField.focus(); // Set focus to the input field
+             } else {
+                 otherInputDiv.classList.add('hidden'); // Hide the input field
+                 otherInputField.value = ''; // Clear the input field
+             }
+         });
+     });
+ </script>
+ 
+
+        <!-- Step 6: City -->
+        <div class="step" data-step="6">
+            <div class="min-h-screen w-full flex flex-col p-6">
+                <div class="flex-1 flex flex-col justify-center max-w-md mx-auto w-full">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-8 step-title">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Dans quelle <span class="highlight">ville</span> habitez-vous ?
+                    </h2>
+                    
+                    <input type="text" 
+                           name="city" 
+                           class="w-full p-4 text-lg rounded-xl border-2 border-gray-200 
+                                  focus:border-yellow-400 focus:outline-none focus:ring-2 
+                                  focus:ring-yellow-100"
+                           placeholder="Ex: Casablanca, Rabat...">
+
+                    <div class="mt-8">
+                        <button class="next-btn w-full p-4 bg-yellow-400 text-gray-900 font-medium rounded-xl
+                                       hover:bg-yellow-500 active:scale-[0.98] transition-all">
+                            Suivant
+                            <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 7: Contact Info -->
+        <div class="step" data-step="7">
+            <div class="min-h-screen w-full flex flex-col p-6">
+                <div class="flex-1 flex flex-col justify-center max-w-md mx-auto w-full">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-8 step-title">
+                        <i class="fas fa-user"></i>
+                        Vos <span class="highlight">informations</span> de contact
+                    </h2>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Nom complet
+                            </label>
+                            <input type="text" 
+                                   name="fullName" 
+                                   class="w-full p-4 text-lg rounded-xl border-2 border-gray-200 
+                                          focus:border-yellow-400 focus:outline-none focus:ring-2 
+                                          focus:ring-yellow-100"
+                                   placeholder="Votre nom complet">
+                        </div>
+                        <!-- WhatsApp input removed as requested -->
+                    </div>
+
+                    <div class="mt-8">
+                        <button class="next-btn w-full p-4 bg-yellow-400 text-gray-900 font-medium rounded-xl
+                                       hover:bg-yellow-500 active:scale-[0.98] transition-all">
+                            Voir le récapitulatif
+                            <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 8: Summary -->
+        <div class="step" data-step="8">
+            <div class="min-h-screen w-full flex flex-col p-6">
+                <div class="flex-1 flex flex-col justify-center max-w-md mx-auto w-full">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-8 step-title">
+                        <i class="fas fa-list"></i>
+                        <span class="highlight">Récapitulatif</span> de votre demande
+                    </h2>
+                    
+                    <div class="bg-white rounded-xl border-2 border-gray-200 p-6" id="summaryContent">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+
+                    <div class="flex gap-4 mt-8">
+                        <button id="copyButton" 
+                                class="flex-1 p-4 bg-white text-gray-900 font-medium rounded-xl
+                                       border-2 border-gray-200 hover:bg-gray-50 
+                                       active:scale-[0.98] transition-all">
+                            <i class="fas fa-copy mr-2"></i>
+                            Copier
+                        </button>
+                        <button id="whatsappButton"
+                                class="flex-1 p-4 bg-green-500 text-white font-medium rounded-xl
+                                       hover:bg-green-600 active:scale-[0.98] transition-all">
+                            <i class="fab fa-whatsapp mr-2"></i>
+                            WhatsApp
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Back Button -->
+        <button id="backButton"
+                class="fixed bottom-6 left-6 p-3 bg-white text-gray-500 rounded-full shadow-lg
+                       hover:bg-gray-50 hover:text-gray-700 transition-all z-50">
+            <i class="fas fa-arrow-left text-xl"></i>
+        </button>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        let totalSteps = 8;
+        const steps = document.querySelectorAll('.step');
+        const formData = {};
+
+        function showStep(stepNumber) {
+            steps.forEach(step => step.classList.remove('active'));
+            const target = document.querySelector(`.step[data-step="${stepNumber}"]`);
+            if (target) target.classList.add('active');
+            updateProgress();
+            toggleBackButton();
+        }
+
+        function updateProgress() {
+            const progressPercent = ((currentStep - 1) / (totalSteps - 1)) * 100;
+            document.querySelector('.progress-bar').style.width = `${progressPercent}%`;
+        }
+
+        function toggleBackButton() {
+            const backButton = document.getElementById('backButton');
+            if (currentStep === 1) {
+                backButton.style.display = 'none';
+            } else {
+                backButton.style.display = 'block';
+            }
+        }
+
+        function validateCurrentStep() {
+            // Minimal example: Step 1 requires a serviceType selection
+            if (currentStep === 1) {
+                const serviceSelected = document.querySelector('input[name="serviceType"]:checked');
+                if (!serviceSelected) {
+                    shakeCurrentStep();
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function shakeCurrentStep() {
+            const currentStepEl = document.querySelector(`.step[data-step="${currentStep}"]`);
+            currentStepEl.classList.add('animate-shake');
+            setTimeout(() => currentStepEl.classList.remove('animate-shake'), 500);
+        }
+
+        function goNext() {
+            if (!validateCurrentStep()) return;
+            saveFormData();
+            if (currentStep < totalSteps) {
+                currentStep++;
+                showStep(currentStep);
+                if (currentStep === totalSteps) {
+                    updateSummary();
+                }
+            }
+        }
+
+        function goBack() {
+            if (currentStep > 1) {
+                currentStep--;
+                showStep(currentStep);
+            }
+        }
+
+        function saveFormData() {
+            // Save all inputs in the current step
+            const currentStepEl = document.querySelector(`.step[data-step="${currentStep}"]`);
+            currentStepEl.querySelectorAll('input, textarea').forEach(input => {
+                if (input.type === 'radio' && input.checked) {
+                    formData[input.name] = input.value;
+                } else if (input.type === 'checkbox') {
+                    const checkboxes = currentStepEl.querySelectorAll('input[name="' + input.name + '"]:checked');
+                    formData[input.name] = Array.from(checkboxes).map(cb => cb.value);
+                } else if (input.type === 'text' || input.type === 'tel' || input.type === 'number' || input.tagName.toLowerCase() === 'textarea') {
+                    formData[input.name] = input.value.trim();
+                }
+            });
+        }
+
+        function updateSummary() {
+            const serviceTypes = {
+                domicile: "Dressage à domicile",
+                center: "Centre Bouznika",
+                online: "Consultation en ligne (150 DH)"
+            };
+
+            const summaryContent = document.getElementById('summaryContent');
+            const problemsList = (formData.problems || []).map(p => `<div class="flex items-center gap-2"><i class="fas fa-check text-green-500"></i><span>${p}</span></div>`).join('') || 'Aucun problème spécifié';
+            const problemDetails = formData.problemDetails ? `<div class="mt-2 p-3 bg-gray-50 rounded-lg"><strong>Détails:</strong> ${formData.problemDetails}</div>` : '';
+
+            summaryContent.innerHTML = `
+                <div class="space-y-4">
+                    <div class="p-3 bg-yellow-50 rounded-lg">
+                        <div class="font-medium text-yellow-800">Service choisi</div>
+                        <div class="text-yellow-900">${serviceTypes[formData.serviceType] || 'Non spécifié'}</div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <div class="flex justify-between py-2 border-b">
+                            <span class="text-gray-600">Race</span>
+                            <span class="font-medium">${formData.dogBreed || 'Non spécifié'}</span>
+                        </div>
+                        <div class="flex justify-between py-2 border-b">
+                            <span class="text-gray-600">Âge</span>
+                            <span class="font-medium">${formData.dogAge ? formData.dogAge + ' mois' : 'Non spécifié'}</span>
+                        </div>
+                        <div class="flex justify-between py-2 border-b">
+                            <span class="text-gray-600">Vacciné</span>
+                            <span class="font-medium">${formData.vaccinated === 'yes' ? 'Oui' : (formData.vaccinated === 'no' ? 'Non' : 'Non spécifié')}</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <div class="font-medium">Problèmes à résoudre:</div>
+                        ${problemsList}
+                        ${problemDetails}
+                    </div>
+
+                    <div class="space-y-2">
+                        <div class="flex justify-between py-2 border-b">
+                            <span class="text-gray-600">Ville</span>
+                            <span class="font-medium">${formData.city || 'Non spécifié'}</span>
+                        </div>
+                        <div class="flex justify-between py-2 border-b">
+                            <span class="text-gray-600">Nom</span>
+                            <span class="font-medium">${formData.fullName || 'Non spécifié'}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function createWhatsAppMessage() {
+    const serviceTypes = {
+        domicile: "Dressage à domicile",
+        center: "Centre Bouznika",
+        online: "Consultation en ligne (150 DH)"
+    };
+
+    let message = `🐕 *Nouvelle demande de service*\n\n`;
+    message += `*Service:* ${serviceTypes[formData.serviceType] || 'Non spécifié'}\n\n`;
+    message += `*Chien:*\n`;
+    message += `• Race: ${formData.dogBreed || 'Non spécifié'}\n`;
+    message += `• Age: ${formData.dogAge ? formData.dogAge + ' mois' : 'Non spécifié'}\n`;
+    message += `• Vacciné: ${formData.vaccinated === 'yes' ? 'Oui' : (formData.vaccinated === 'no' ? 'Non' : 'Non spécifié')}\n\n`;
+
+    message += `*Problèmes:*\n`;
+    if (formData.problems && formData.problems.length > 0) {
+        message += formData.problems.map(p => `• ${p}\n`).join('');
+    } else {
+        message += 'Aucun problème spécifié\n';
+    }
+
+    // Include "Autre" message if available
+    if (formData.problems && formData.problems.includes('Autre') && formData.otherProblemDetails) {
+        message += `Détails du problème: ${formData.otherProblemDetails}\n`;
+    }
+
+    message += `\n*Contact:*\n`;
+    message += `• Ville: ${formData.city || 'Non spécifié'}\n`;
+    message += `• Nom: ${formData.fullName || 'Non spécifié'}`;
+
+    return encodeURIComponent(message);
+}
+
+        function copyToClipboard() {
+            const message = decodeURIComponent(createWhatsAppMessage());
+            navigator.clipboard.writeText(message);
+            const copyButton = document.getElementById('copyButton');
+            const originalText = copyButton.innerHTML;
+            copyButton.innerHTML = '<i class="fas fa-check mr-2"></i>Copié';
+            setTimeout(() => {
+                copyButton.innerHTML = originalText;
+            }, 2000);
+        }
+
+        function sendToWhatsApp() {
+            const message = createWhatsAppMessage();
+            window.open(`https://wa.me/212713040900?text=${message}`, '_blank');
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            showStep(currentStep);
+
+            document.querySelectorAll('.next-btn').forEach(btn => {
+                btn.addEventListener('click', goNext);
+            });
+
+            document.getElementById('backButton').addEventListener('click', goBack);
+
+            document.getElementById('copyButton').addEventListener('click', copyToClipboard);
+            document.getElementById('whatsappButton').addEventListener('click', sendToWhatsApp);
+        });
+    </script>
+</body>
+</html>

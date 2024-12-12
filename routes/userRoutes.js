@@ -2231,4 +2231,8 @@ router.get('/consultations/:id', isAuthenticated, async (req, res) => {
 //     }
 // });
 
+// Wizard
+router.get('/reservez-une-seance-de-dressage', (req, res) => {
+     res.render('user/wizard')
+})
 module.exports = router;
