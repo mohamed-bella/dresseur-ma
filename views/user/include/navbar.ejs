@@ -126,25 +126,62 @@
       </div>
 
       <!-- Quick Links Bar (Mobile) -->
-      <div class="overflow-x-auto scrollbar-hide border-t border-slate-200/80" :class="{ 'h-0 opacity-0': isScrolled, 'h-12 opacity-100': !isScrolled }">
-        <div class="flex items-center px-4 h-12">
-          <% const quickLinks = [
-                        { href: '/consultation', label: 'Consultation', icon: 'comments' },
-                        { href: '/articles', label: 'Les Articles', icon: 'newspaper' },
-                        { href: '/chien-adoption-perdus', label: 'Chiens Perdus', icon: 'search' },
-                        { href: '/chien-adoption-perdus', label: 'Adoption', icon: 'heart' },
-                        { href: '/tous-les-races-des-chiens', label: 'tous les races des chiens', icon: 'dog' }
-                    ] %>
+      <div class="overflow-x-auto scrollbar-hide border-t border-slate-200/80" 
+     :class="{ 'h-0 opacity-0': isScrolled, 'h-14 opacity-100': !isScrolled }">
+    <div class="flex items-center gap-3 px-4 h-14">
+        <% const quickLinks = [
+            { 
+                href: '/consultation', 
+                label: 'Consultation', 
+                icon: 'comments',
+                bgColor: 'bg-blue-50',
+                textColor: 'text-blue-600',
+                iconColor: 'text-blue-500'
+            },
+            { 
+                href: '/articles', 
+                label: 'Les Articles', 
+                icon: 'newspaper',
+                bgColor: 'bg-purple-50',
+                textColor: 'text-purple-600',
+                iconColor: 'text-purple-500'
+            },
+            { 
+                href: '/chien-adoption-perdus', 
+                label: 'Chiens Perdus', 
+                icon: 'search',
+                bgColor: 'bg-amber-50',
+                textColor: 'text-amber-600',
+                iconColor: 'text-amber-500'
+            },
+            { 
+                href: '/chien-adoption-perdus', 
+                label: 'Adoption', 
+                icon: 'heart',
+                bgColor: 'bg-rose-50',
+                textColor: 'text-rose-600',
+                iconColor: 'text-rose-500'
+            },
+            { 
+                href: '/tous-les-races-des-chiens', 
+                label: 'Tous les races des chiens', 
+                icon: 'dog',
+                bgColor: 'bg-emerald-50',
+                textColor: 'text-emerald-600',
+                iconColor: 'text-emerald-500'
+            }
+        ] %>
 
-          <% quickLinks.forEach((link, index) => { %>
-          <a href="<%= link.href %>" class="flex items-center gap-2 px-3 text-xs font-medium text-slate-600 
-                                   whitespace-nowrap <%= index > 0 ? 'border-l border-slate-200/80' : '' %>">
-            <i class="fas fa-<%= link.icon %> text-blue-500"></i>
-            <span><%= link.label %></span>
-          </a>
-          <% }) %>
-        </div>
-      </div>
+        <% quickLinks.forEach((link) => { %>
+            <a href="<%= link.href %>" 
+               class="flex items-center gap-2 px-4 py-1.5 text-sm font-medium <%= link.textColor %> <%= link.bgColor %> 
+                      rounded-lg whitespace-nowrap hover:saturate-150 transition-all duration-300">
+                <i class="fas fa-<%= link.icon %> <%= link.iconColor %>"></i>
+                <span><%= link.label %></span>
+            </a>
+        <% }) %>
+    </div>
+</div>
     </div>
   </nav>
   <!-- Left Sidebar -->
