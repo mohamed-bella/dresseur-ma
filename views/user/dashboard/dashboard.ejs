@@ -72,13 +72,21 @@
         </a>
 
         <a 
-            href="/dashboard/requests"
+            href="/dashboard/breedings"
             class="flex flex-col items-center justify-center min-w-[4.5rem] p-2 rounded-xl transition-all duration-200
-                   <%= page === 'requests' ? 'bg-amber-50 text-amber-600' : 'bg-slate-50 text-slate-600 hover:bg-amber-50 hover:text-amber-600' %>"
+                   <%= page === 'breedings' ? 'bg-amber-50 text-amber-600' : 'bg-slate-50 text-slate-600 hover:bg-amber-50 hover:text-amber-600' %>"
         >
-            <i class="fas fa-clipboard-list text-lg mb-1"></i>
-            <span class="text-xs font-medium">Demandes</span>
+            <i class="fas fa-shield-dog text-lg mb-1"></i>
+            <span class="text-xs font-medium">Elevages</span>
         </a>
+        <a 
+        href="/dashboard/requests"
+        class="flex flex-col items-center justify-center min-w-[4.5rem] p-2 rounded-xl transition-all duration-200
+               <%= page === 'requests' ? 'bg-amber-50 text-amber-600' : 'bg-slate-50 text-slate-600 hover:bg-amber-50 hover:text-amber-600' %>"
+    >
+        <i class="fas fa-clipboard-list text-lg mb-1"></i>
+        <span class="text-xs font-medium">Demandes</span>
+    </a>
 
         <a 
             href="/dashboard/reviews"
