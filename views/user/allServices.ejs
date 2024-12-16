@@ -354,91 +354,119 @@ document.addEventListener('scroll', function(e) {
         <a href="/service/<%= service._id %>" 
            class="block group animate-in" 
            style="--stagger: <%= index + 3 %>">
-            <article class="bg-white rounded-2xl border border-slate-200 hover:border-slate-300
+            <article class="bg-white rounded-xl sm:rounded-2xl border border-slate-200/80 hover:border-slate-300
                           hover:shadow-lg transition-all duration-300">
-                <!-- Mobile-optimized layout -->
-                <div class="relative">
-                    <!-- Image Container with Gradient Overlay -->
-                    <div class="relative h-48 sm:h-56 w-full overflow-hidden rounded-t-2xl">
-                        <img src="<%= service.images?.[0] || '/default-service.jpg' %>" 
-                             alt="<%= service.serviceName %>"
-                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
-                        />
-                    </div>
-
-                    <!-- Price Badge -->
-                    <div class="absolute top-4 right-4 z-10">
-                        <span class="px-4 py-2 bg-slate-900/95 backdrop-blur text-white 
-                                   text-sm font-medium rounded-full shadow-lg">
-                            <%= service.priceRange %>
-                        </span>
-                    </div>
-
-                </div>
-
-                <!-- Content Section -->
-                <div class="p-4">
-                    <!-- Service Title -->
-                    <h3 class="text-lg font-semibold text-slate-900 mb-2 line-clamp-2">
-                        <%= service.serviceName %>
-                    </h3>
-
-                    <!-- Key Info -->
-                    <div class="flex items-center gap-4 mb-3">
-                        <div class="flex items-center gap-2">
-                            <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center">
-                                <i class="fas fa-location-dot text-slate-600"></i>
-                            </div>
-                            <span class="text-sm text-slate-600 font-medium"><%= service.location %></span>
+                <!-- Responsive Layout Container -->
+                <div class="flex flex-row h-full">
+                    <!-- Image Container -->
+                    <div class="relative w-24 sm:w-56 flex-shrink-0">
+                        <div class="aspect-square w-full h-full overflow-hidden">
+                            <img src="<%= service.images?.[0] || '/default-service.jpg' %>" 
+                                 alt="<%= service.serviceName %>"
+                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
+                            />
                         </div>
-                        <div class="flex items-center gap-2">
-                            <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center">
-                                <i class="fas fa-eye text-slate-600"></i>
-                            </div>
-                            <span class="text-sm text-slate-600 font-medium"><%= service.views %></span>
+                        <!-- Price Badge (Desktop Only) -->
+                        <div class="hidden sm:block absolute top-3 left-3">
+                            <span class="px-3 py-1.5 bg-slate-900/95 backdrop-blur text-white 
+                                       text-sm font-medium rounded-full shadow-lg">
+                                <%= service.priceRange %>
+                            </span>
                         </div>
                     </div>
 
-                    <!-- Provider Info -->
-                    <div class="flex items-center justify-between pt-3 border-t border-slate-200">
-                        <div class="flex items-center gap-3">
-                            <div class="relative">
-                                <img src="<%= service.createdBy?.profileImage || '/default-avatar.jpg' %>"
-                                     alt="<%= service.createdBy?.displayName %>"
-                                     class="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm" 
-                                />
-                                <% if(service.createdBy?.isVerified) { %>
-                                    <div class="absolute -right-1 -bottom-1 w-5 h-5 bg-blue-500 
-                                                rounded-full flex items-center justify-center 
-                                                border-2 border-white shadow-sm">
-                                        <i class="fas fa-check text-[10px] text-white"></i>
-                                    </div>
-                                <% } %>
-                            </div>
-                            <div>
-                                <div class="font-medium text-slate-900 leading-tight">
-                                    <%= service.createdBy?.displayName %>
+                    <!-- Content Section -->
+                    <div class="flex-1 flex flex-col p-3 sm:p-5">
+                        <!-- Top Section -->
+                        <div class="flex items-start justify-between gap-3 mb-2 sm:mb-3">
+                            <h3 class="text-sm sm:text-lg font-medium sm:font-semibold text-slate-900 line-clamp-2">
+                                <%= service.serviceName %>
+                            </h3>
+                            <!-- Price Badge (Mobile Only) -->
+                            <span class="sm:hidden px-2 py-1 bg-slate-900 text-white text-xs 
+                                       font-medium rounded-lg whitespace-nowrap">
+                                <%= service.priceRange %>
+                            </span>
+                        </div>
+
+                        <!-- Service Info -->
+                        <div class="flex items-center gap-3 text-xs sm:text-sm text-slate-600 mb-2 sm:mb-3">
+                            <span class="flex items-center gap-1">
+                                <i class="fas fa-location-dot text-slate-400"></i>
+                                <%= service.location %>
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <i class="fas fa-eye text-slate-400"></i>
+                                <%= service.views %>
+                            </span>
+                        </div>
+
+                        <!-- Description (Desktop Only) -->
+                        <p class="hidden sm:block text-slate-600 text-sm line-clamp-2 mb-3 flex-grow">
+                            <%= service.description || 'Aucune description disponible.' %>
+                        </p>
+
+                        <!-- Provider Info -->
+                        <div class="flex items-center justify-between mt-auto pt-2 sm:pt-3 
+                                  border-t border-slate-200/80">
+                            <!-- Provider Details -->
+                            <div class="flex items-center gap-2">
+                                <div class="relative">
+                                    <img src="<%= service.createdBy?.profileImage || '/default-avatar.jpg' %>"
+                                         alt="<%= service.createdBy?.displayName %>"
+                                         class="w-6 h-6 sm:w-8 sm:h-8 rounded-full object-cover" 
+                                    />
+                                    <% if(service.createdBy?.isVerified) { %>
+                                        <div class="absolute -right-0.5 -bottom-0.5 w-3 h-3 sm:w-4 sm:h-4 
+                                                    bg-blue-500 rounded-full flex items-center justify-center 
+                                                    border-2 border-white">
+                                            <i class="fas fa-check text-[7px] sm:text-[8px] text-white"></i>
+                                        </div>
+                                    <% } %>
                                 </div>
-                                <div class="text-sm text-slate-500">Professionnel</div>
+                                <div class="leading-tight">
+                                    <div class="text-xs sm:text-sm font-medium text-slate-900 line-clamp-1">
+                                        <%= service.createdBy?.displayName %>
+                                    </div>
+                                    <div class="text-[10px] sm:text-xs text-slate-500">Professionnel</div>
+                                </div>
                             </div>
-                        </div>
 
-                        <!-- Action Button -->
-                        <div class="h-10 px-4 bg-slate-900 rounded-full flex items-center gap-2 
-                                  text-white text-sm font-medium group-hover:bg-blue-600 
-                                  transition-colors duration-300">
-                            <span>Voir</span>
-                            <i class="fas fa-arrow-right text-xs transition-transform
-                                    group-hover:translate-x-1"></i>
+                            <!-- Action Indicator -->
+                            <span class="flex items-center gap-1 text-xs sm:text-sm font-medium text-blue-600">
+                                <span class="hidden sm:inline">Voir détails</span>
+                                <span class="sm:hidden">Voir</span>
+                                <i class="fas fa-arrow-right text-xs transition-transform
+                                       group-hover:translate-x-1"></i>
+                            </span>
                         </div>
                     </div>
                 </div>
             </article>
         </a>
     <% }) %>
+
+    
+   
 </div>
 
+<style>
+/* Optional: Add smooth scrolling for the entire page */
+html {
+    scroll-behavior: smooth;
+}
 
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+</style>
             <% } else { %>
                 <!-- Empty State -->
                 <div class="text-center py-16 bg-white rounded-2xl border border-slate-200/50 animate-in" 
