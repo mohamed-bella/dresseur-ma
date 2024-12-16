@@ -622,7 +622,7 @@ router.get('/dashboard', isAuthenticated, async (req, res) => {
 
    // Format data for template
    const viewData = {
-        page : 'profile',
+        page : 'quick',
         user: {
              ...user,
              stats: {
@@ -843,7 +843,7 @@ const recentActivities = elevages.flatMap(elevage =>
            
             specializations,
             keywords: '',
-            page : 'profile',
+            page : 'quick',
             totalViews,
             user: {
                 ...req.user.toObject(),

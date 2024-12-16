@@ -1,0 +1,142 @@
+<!-- views/partials/dashboard-actions.ejs -->
+<div class="w-full p-4 sm:p-6 lg:p-8">
+     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+         <!-- Add Service Card -->
+         <a href="/dashboard/new-service" class="group">
+             <div class="relative h-full bg-white rounded-2xl border border-slate-200 p-4 sm:p-6
+                       hover:border-yellow-300 hover:shadow-lg transition-all duration-300">
+                 <div class="flex flex-col h-full">
+                     <div class="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-xl
+                                bg-yellow-100 text-yellow-600 group-hover:bg-yellow-200 transition-colors mb-4">
+                         <i class="fas fa-plus-circle text-lg sm:text-xl"></i>
+                     </div>
+                     <h3 class="text-sm sm:text-base font-semibold text-slate-900 mb-1">Ajouter un service</h3>
+                     <p class="text-xs sm:text-sm text-slate-500">Créer un nouveau service pour vos clients</p>
+                 </div>
+                 <div class="absolute bottom-4 sm:bottom-6 right-4 sm:right-6 opacity-0 group-hover:opacity-100 
+                           transform translate-x-2 group-hover:translate-x-0 transition-all duration-300">
+                     <i class="fas fa-arrow-right text-yellow-500"></i>
+                 </div>
+             </div>
+         </a>
+ 
+         <!-- Add Breeding Card -->
+         <a href="/dashboard/breedings" class="group">
+             <div class="relative h-full bg-white rounded-2xl border border-slate-200 p-4 sm:p-6
+                       hover:border-yellow-300 hover:shadow-lg transition-all duration-300">
+                 <div class="flex flex-col h-full">
+                     <div class="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-xl
+                                bg-yellow-100 text-yellow-600 group-hover:bg-yellow-200 transition-colors mb-4">
+                         <i class="fas fa-dog text-lg sm:text-xl"></i>
+                     </div>
+                     <h3 class="text-sm sm:text-base font-semibold text-slate-900 mb-1">Ajouter un elevage</h3>
+                     <p class="text-xs sm:text-sm text-slate-500">Gérer vos élevages de chiens</p>
+                 </div>
+                 <div class="absolute bottom-4 sm:bottom-6 right-4 sm:right-6 opacity-0 group-hover:opacity-100 
+                           transform translate-x-2 group-hover:translate-x-0 transition-all duration-300">
+                     <i class="fas fa-arrow-right text-yellow-500"></i>
+                 </div>
+             </div>
+         </a>
+ 
+         <!-- My Services Card -->
+         <a href="/dashboard/services" class="group">
+             <div class="relative h-full bg-white rounded-2xl border border-slate-200 p-4 sm:p-6
+                       hover:border-purple-300 hover:shadow-lg transition-all duration-300">
+                 <div class="flex flex-col h-full">
+                     <div class="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-xl
+                                bg-purple-100 text-purple-600 group-hover:bg-purple-200 transition-colors mb-4">
+                         <i class="fas fa-list text-lg sm:text-xl"></i>
+                     </div>
+                     <h3 class="text-sm sm:text-base font-semibold text-slate-900 mb-1">Mes services</h3>
+                     <p class="text-xs sm:text-sm text-slate-500">Gérer tous vos services actifs</p>
+                 </div>
+                 <div class="absolute bottom-4 sm:bottom-6 right-4 sm:right-6 opacity-0 group-hover:opacity-100 
+                           transform translate-x-2 group-hover:translate-x-0 transition-all duration-300">
+                     <i class="fas fa-arrow-right text-purple-500"></i>
+                 </div>
+             </div>
+         </a>
+ 
+         <!-- Profile Card -->
+         <a href="/dashboard/profile" class="group">
+             <div class="relative h-full bg-white rounded-2xl border border-slate-200 p-4 sm:p-6
+                       hover:border-blue-300 hover:shadow-lg transition-all duration-300">
+                 <div class="flex flex-col h-full">
+                     <div class="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-xl
+                                bg-blue-100 text-blue-600 group-hover:bg-blue-200 transition-colors mb-4">
+                         <i class="fas fa-user text-lg sm:text-xl"></i>
+                     </div>
+                     <h3 class="text-sm sm:text-base font-semibold text-slate-900 mb-1">Mon profile</h3>
+                     <p class="text-xs sm:text-sm text-slate-500">Gérer vos informations personnelles</p>
+                 </div>
+                 <div class="absolute bottom-4 sm:bottom-6 right-4 sm:right-6 opacity-0 group-hover:opacity-100 
+                           transform translate-x-2 group-hover:translate-x-0 transition-all duration-300">
+                     <i class="fas fa-arrow-right text-blue-500"></i>
+                 </div>
+             </div>
+         </a>
+ 
+         <!-- Stats Card -->
+         <a href="/dashboard/stats" class="group">
+             <div class="relative h-full bg-white rounded-2xl border border-slate-200 p-4 sm:p-6
+                       hover:border-emerald-300 hover:shadow-lg transition-all duration-300">
+                 <div class="flex flex-col h-full">
+                     <div class="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-xl
+                                bg-emerald-100 text-emerald-600 group-hover:bg-emerald-200 transition-colors mb-4">
+                         <i class="fas fa-chart-line text-lg sm:text-xl"></i>
+                     </div>
+                     <h3 class="text-sm sm:text-base font-semibold text-slate-900 mb-1">Statistiques</h3>
+                     <p class="text-xs sm:text-sm text-slate-500">Suivre la performance de vos services</p>
+                 </div>
+                 <div class="absolute bottom-4 sm:bottom-6 right-4 sm:right-6 opacity-0 group-hover:opacity-100 
+                           transform translate-x-2 group-hover:translate-x-0 transition-all duration-300">
+                     <i class="fas fa-arrow-right text-emerald-500"></i>
+                 </div>
+             </div>
+         </a>
+ 
+         <!-- Requests Card -->
+         <a href="/dashboard/requests" class="group relative">
+             <div class="relative h-full bg-white rounded-2xl border border-slate-200 p-4 sm:p-6
+                       hover:border-amber-300 hover:shadow-lg transition-all duration-300">
+                 <div class="flex flex-col h-full">
+                     <div class="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-xl
+                                bg-amber-100 text-amber-600 group-hover:bg-amber-200 transition-colors mb-4">
+                         <i class="fas fa-bell text-lg sm:text-xl"></i>
+                     </div>
+                     <h3 class="text-sm sm:text-base font-semibold text-slate-900 mb-1">Requests</h3>
+                     <p class="text-xs sm:text-sm text-slate-500">Gérer vos demandes de services</p>
+                 </div>
+                 <!-- Notification Dot -->
+                 <span class="absolute top-4 right-4">
+                     <span class="animate-ping absolute inline-flex h-2.5 w-2.5 rounded-full bg-red-400 opacity-75"></span>
+                     <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+                 </span>
+                 <div class="absolute bottom-4 sm:bottom-6 right-4 sm:right-6 opacity-0 group-hover:opacity-100 
+                           transform translate-x-2 group-hover:translate-x-0 transition-all duration-300">
+                     <i class="fas fa-arrow-right text-amber-500"></i>
+                 </div>
+             </div>
+         </a>
+ 
+         <!-- Reviews Card -->
+         <a href="/dashboard/reviews" class="group">
+             <div class="relative h-full bg-white rounded-2xl border border-slate-200 p-4 sm:p-6
+                       hover:border-rose-300 hover:shadow-lg transition-all duration-300">
+                 <div class="flex flex-col h-full">
+                     <div class="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-xl
+                                bg-rose-100 text-rose-600 group-hover:bg-rose-200 transition-colors mb-4">
+                         <i class="fas fa-star text-lg sm:text-xl"></i>
+                     </div>
+                     <h3 class="text-sm sm:text-base font-semibold text-slate-900 mb-1">Reviews</h3>
+                     <p class="text-xs sm:text-sm text-slate-500">Voir les avis de vos clients</p>
+                 </div>
+                 <div class="absolute bottom-4 sm:bottom-6 right-4 sm:right-6 opacity-0 group-hover:opacity-100 
+                           transform translate-x-2 group-hover:translate-x-0 transition-all duration-300">
+                     <i class="fas fa-arrow-right text-rose-500"></i>
+                 </div>
+             </div>
+         </a>
+     </div>
+ </div>

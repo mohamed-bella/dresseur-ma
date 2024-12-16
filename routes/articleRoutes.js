@@ -295,6 +295,45 @@ router.post('/admin/articles/:slug/edit',ensureAdmin, async (req, res) => {
           res.redirect(`/admin/articles/${slug}/edit`);
      }
 });
+const RSS = require('rss'); // Install with: npm install rss
+
+// GET: Generate RSS feed
+router.get('/feed', async (req, res) => {
+    try {
+        // Fetch all articles from the database
+        const articles = await Article.find()
+            .sort('-createdAt') // Most recent first
+            .select('title slug summary createdAt') // Fetch relevant fields
+            .exec();
+
+        // Initialize a new RSS feed
+        const feed = new RSS({
+            title: 'NDRESSILIK Articles Feed',
+            description: 'Stay updated with the latest articles on dog training, health, and behavior.',
+            feed_url: `${req.protocol}://${req.get('host')}/feed`,
+            site_url: `${req.protocol}://${req.get('host')}`,
+            language: 'fr',
+        });
+
+        // Add articles to the RSS feed
+        articles.forEach((article) => {
+            feed.item({
+                title: article.title,
+                description: article.summary || 'Read more about this topic.',
+                url: `${req.protocol}://${req.get('host')}/articles/${article.slug}`, // Link to the article
+                date: article.createdAt,
+            });
+        });
+
+        // Set response headers and send the feed as XML
+        res.set('Content-Type', 'application/rss+xml');
+        res.send(feed.xml({ indent: true }));
+    } catch (error) {
+        console.error('Error generating RSS feed:', error);
+        res.status(500).send('Server Error: Unable to generate feed');
+    }
+});
+
 
 // DELETE: Delete article
 router.post('/admin/articles/:id/delete',ensureAdmin, async (req, res) => {
