@@ -372,50 +372,95 @@ router.put('/profile/update-basic-info', async (req, res) => {
 
 
 // Route: Update Specializations
-router.put('/profile/update-specializations', isAuthenticated, async (req, res) => {
+router.put('/profile/update-trainer-specializations', isAuthenticated, async (req, res) => {
      try {
-          const { specializations } = req.body;
+         const { specializations, trainingMethods, trainingServices, dogTypes } = req.body;
+ 
+         // Validation checks
+         if (!Array.isArray(specializations) || specializations.length === 0) {
+             return res.status(400).json({
+                 success: false,
+                 message: 'Veuillez sélectionner au moins une spécialisation'
+             });
+         }
+ 
+       
+ 
+        
+ 
+         // Allowed values
+         const allowedSpecializations = [
+             'Comportementaliste',
+                'Attaque',
+                'Discipline',
+                'Freestyle'
+         ];
+ 
 
-          if (!Array.isArray(specializations) || specializations.length === 0) {
-               return res.status(400).json({
-                    success: false,
-                    message: 'Veuillez sélectionner au moins une spécialisation'
-               });
-          }
-
-          // Validate specializations against allowed values
-          const allowedSpecializations = [
-               'dog-training', 'grooming', 'walking', 'veterinary', 'boarding', 'transport'
-          ];
-
-          const isValidSpecializations = specializations.every(spec =>
-               allowedSpecializations.includes(spec)
-          );
-
-          if (!isValidSpecializations) {
-               return res.status(400).json({
-                    success: false,
-                    message: 'Spécialisations invalides sélectionnées'
-               });
-          }
-
-          // Update user specializations
-          await User.findByIdAndUpdate(req.user._id, {
-               specializations
-          });
-
-          res.json({
-               success: true,
-               message: 'Spécialisations mises à jour avec succès'
-          });
+ 
+         // Validate against allowed values
+         const isValidSpecializations = specializations.every(spec =>
+             allowedSpecializations.includes(spec)
+         );
+ 
+       
+         
+ 
+         if (!isValidSpecializations) {
+             return res.status(400).json({
+                 success: false,
+                 message: 'Spécialisations invalides sélectionnées'
+             });
+         }
+ 
+        
+ 
+         // Update user with all fields
+         const updatedUser = await User.findByIdAndUpdate(
+             req.user._id,
+             {
+                 $set: {
+                     specializations,
+                     updatedAt: new Date()
+                 }
+             },
+             { new: true }
+         ).select('-password');
+ 
+         // Calculate completion percentage
+         const missingFields = [];
+         if (!updatedUser.specializations?.length) missingFields.push('spécialisations');
+         if (!updatedUser.trainingMethods?.length) missingFields.push('méthodes d\'éducation');
+         if (!updatedUser.trainingServices?.length) missingFields.push('services');
+         if (!updatedUser.experience?.description) missingFields.push('expérience');
+ 
+         const completionPercentage = Math.round(
+             ((4 - missingFields.length) / 4) * 100
+         );
+ 
+         res.json({
+             success: true,
+             message: 'Profil mis à jour avec succès',
+             data: {
+                 completionPercentage,
+                 missingFields,
+                 user: {
+                     specializations: updatedUser.specializations,
+                     trainingMethods: updatedUser.trainingMethods,
+                     trainingServices: updatedUser.trainingServices,
+                     dogTypes: updatedUser.dogTypes
+                 }
+             }
+         });
+ 
      } catch (error) {
-          console.error('Specializations update error:', error);
-          res.status(500).json({
-               success: false,
-               message: 'Erreur lors de la mise à jour des spécialisations'
-          });
+         console.error('Update trainer specializations error:', error);
+         res.status(500).json({
+             success: false,
+             message: 'Erreur lors de la mise à jour du profil'
+         });
      }
-});
+ });
 
 // Route: Add Qualification
 router.post('/profile/qualifications', isAuthenticated, upload.single('certificate'), async (req, res) => {

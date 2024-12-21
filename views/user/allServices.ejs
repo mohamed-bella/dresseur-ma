@@ -1,7 +1,7 @@
 <%- include('include/head', { title: pageTitle, description: description, keywords: keywords }) %>
 <%- include('include/navbar') %>
 
-<main class="min-h-screen bg-[#F8FAFC]">
+<main class="min-h-screen bg-gray-100">
 
 <style>
 @keyframes grid {
@@ -214,286 +214,302 @@
 }
 </style>
 
+<!-- Main Content -->
+<div class="lg:ml-64">
+<div class=" max-w-5xl mx-auto px-4 py-8">
+
+    <!-- Hero Section -->
+<div class="bg-white border-b border-gray-200">
+    <div class="max-w-6xl mx-auto px-4 py-8 sm:py-12">
+        <!-- Main Tabs -->
+        <div class="flex justify-center mb-8">
+            <div class="inline-flex bg-black p-1">
+                <button data-tab="client" 
+                        class="tab-btn px-4 py-2 text-sm font-medium transition-colors
+                               <%= !user ? 'bg-red-600 text-white' : 'text-gray-300 hover:text-white' %>">
+                    Je recherche un dresseur
+                </button>
+                <button data-tab="trainer" 
+                        class="tab-btn px-4 py-2 text-sm font-medium transition-colors
+                               <%= user ? 'bg-red-600 text-white' : 'text-gray-300 hover:text-white' %>">
+                    Je suis dresseur
+                </button>
+            </div>
+        </div>
+
+        <!-- Tab Contents -->
+        <div id="tabContent" class="max-w-xl mx-auto">
+            <!-- Client Content -->
+            <div id="clientContent" class="tab-content <%= !user ? 'block' : 'hidden' %>">
+                <div class="text-center">
+                    <h1 class="text-2xl sm:text-3xl font-bold text-black mb-8">
+                        Trouvez votre 
+                        <span class="text-red-600">dresseur canin</span>
+                    </h1>
+                    
+                    <!-- Main Categories -->
+                    <div class="grid grid-cols-2 gap-px bg-gray-200 border border-gray-200 mb-8">
+    <a href="/dresseur/comportementaliste" 
+       class="p-6 bg-white hover:bg-gray-50 transition-colors">
+        <div class="flex flex-col items-center">
+            <div class="w-12 h-12  text-white flex items-center justify-center mb-3">
+                <span class="text-2xl">🧠</span>
+            </div>
+            <div class="font-medium text-center">Comportementaliste</div>
+        </div>
+    </a>
+
+    <a href="/dresseur/attaque" 
+       class="p-6 bg-white hover:bg-gray-50 transition-colors">
+        <div class="flex flex-col items-center">
+            <div class="w-12 h-12  text-white flex items-center justify-center mb-3">
+                <span class="text-2xl">🛡️</span>
+            </div>
+            <div class="font-medium text-center">Attaque</div>
+        </div>
+    </a>
+
+    <a href="/dresseur/discipline" 
+       class="p-6 bg-white hover:bg-gray-50 transition-colors">
+        <div class="flex flex-col items-center">
+            <div class="w-12 h-12  text-white flex items-center justify-center mb-3">
+                <span class="text-2xl">📝</span>
+            </div>
+            <div class="font-medium text-center">Discipline</div>
+        </div>
+    </a>
+
+    <a href="/dresseur/freestyle" 
+       class="p-6 bg-white hover:bg-gray-50 transition-colors">
+        <div class="flex flex-col items-center">
+            <div class="w-12 h-12  text-white flex items-center justify-center mb-3">
+                <span class="text-2xl">🏃</span>
+            </div>
+            <div class="font-medium text-center">Freestyle</div>
+        </div>
+    </a>
+</div>
+
+                    <a href="#dresseurs" class="block w-full p-4 bg-black text-white font-medium hover:bg-red-600 transition-colors">
+                        Voir tous les dresseurs
+                    </a>
+                </div>
+            </div>
+
+            <!-- Trainer Content -->
+            <div id="trainerContent" class="tab-content <%= user ? 'block' : 'hidden' %>">
+                <div class="text-center">
+                    <% if (user) { %>
+                        <!-- Logged-in View -->
+                        <div class="mb-8">
+                            <img src="<%= user.profileImage || '/default-avatar.jpg' %>" 
+                                 alt="Profile"
+                                 class="w-20 h-20 mx-auto mb-4 border-2 border-red-600">
+                            <h2 class="text-xl font-bold">Bienvenue <%= user.displayName.split(' ')[0] %></h2>
+                        </div>
+                        
+                        <a href="/dashboard" class="block w-full p-4 bg-black text-white font-medium hover:bg-red-600 transition-colors">
+                            Accéder au tableau de bord
+                        </a>
+                    <% } else { %>
+                        <!-- Login View -->
+                        <h1 class="text-2xl sm:text-3xl font-bold text-black mb-8">
+                            Espace 
+                            <span class="text-red-600">professionnel</span>
+                        </h1>
+
+                        <a href="/auth/google" class="block w-full p-4 border-2 border-black text-black font-medium hover:bg-red-600 hover:border-red-600 hover:text-white transition-colors">
+                            <i class="fab fa-google mr-2"></i>
+                            Connexion avec Google
+                        </a>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
-const modalState = {
-    isOpen: false,
-    isAnimating: false
-};
+document.addEventListener('DOMContentLoaded', function() {
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
 
-function toggleServiceModal() {
-    if (modalState.isAnimating) return;
-    
-    const modal = document.getElementById('serviceModal');
-    const modalContent = modal.querySelector('.transform');
-    modalState.isAnimating = true;
+    function switchTab(tabId) {
+        // Update buttons
+        tabBtns.forEach(btn => {
+            const isActive = btn.getAttribute('data-tab') === tabId;
+            btn.classList.toggle('bg-red-600', isActive);
+            btn.classList.toggle('text-white', isActive);
+            btn.classList.toggle('text-gray-300', !isActive);
+        });
 
-    if (!modalState.isOpen) {
-        // Open modal
-        modal.classList.remove('opacity-0', 'pointer-events-none');
-        setTimeout(() => {
-            modalContent.classList.remove('scale-95', '-translate-y-8', 'opacity-0');
-            document.body.style.overflow = 'hidden';
-            
-            // Reset and trigger item animations
-            const items = modal.querySelectorAll('.animate-slide-up');
-            items.forEach(item => {
-                item.style.opacity = '0';
-                void item.offsetWidth;
-                item.style.opacity = '';
-            });
-
-            modalState.isAnimating = false;
-            modalState.isOpen = true;
-        }, 50);
-    } else {
-        // Close modal
-        modalContent.classList.add('scale-95', '-translate-y-8', 'opacity-0');
-        setTimeout(() => {
-            modal.classList.add('opacity-0', 'pointer-events-none');
-            document.body.style.overflow = '';
-            modalState.isAnimating = false;
-            modalState.isOpen = false;
-        }, 300);
+        // Update content
+        tabContents.forEach(content => {
+            content.classList.toggle('hidden', content.id !== `${tabId}Content`);
+            content.classList.toggle('block', content.id === `${tabId}Content`);
+        });
     }
-}
 
-// Close modal on escape key
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && modalState.isOpen) {
-        toggleServiceModal();
-    }
-});
-
-// Prevent scroll when modal is open
-document.addEventListener('scroll', function(e) {
-    if (modalState.isOpen) {
-        e.preventDefault();
-        e.stopPropagation();
-        return false;
-    }
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => switchTab(btn.getAttribute('data-tab')));
+    });
 });
 </script>
 
-    <!-- Quick Filters -->
-    <div class="sticky top-16 z-30 bg-white/95 backdrop-blur-sm border-b border-slate-200/80 shadow-sm">
-        <div class="max-w-7xl mx-auto">
-            <!-- Categories Scroll with Indicators -->
-            <div class="relative">
-                <div class="overflow-x-auto scrollbar-hide" id="categoriesScroll">
-                    <div class="flex whitespace-nowrap p-4 gap-3">
-                        <% const categories = [
-                            { id: 'tous', icon: '🔍', label: 'Tous' },
-                            { id: 'dressage', icon: '🐕', label: 'Dressage' },
-                            { id: 'toilettage', icon: '✂️', label: 'Toilettage' },
-                            { id: 'promenade', icon: '🦮', label: 'Promenade' },
-                            { id: 'veterinaire', icon: '⚕️', label: 'Vétérinaire' },
-                            { id: 'pension', icon: '🏠', label: 'Pension' },
-                            { id: 'transport', icon: '🚗', label: 'Transport' }
-                        ];
-                        const currentCategory = serviceOption || 'tous';
-                        %>
-                        
-                        
-                        <% categories.forEach(category => { 
-                            const isActive = currentCategory === category.id;
-                        %>
-                            <a href="/services/<%= category.id %>" 
-                               class="group inline-flex flex-col items-center px-5 py-2 rounded-xl transition-all duration-300
-                                      <%= isActive ? 
-                                        'bg-yellow-600 text-white scale-[1.02] shadow-lg shadow-blue-500/25' : 
-                                        'bg-slate-50 hover:bg-slate-100 text-slate-600 hover:text-slate-900' %>">
-                                <span class="text-xl mb-1 transform transition-transform duration-300 group-hover:scale-110">
-                                    <%= category.icon %>
-                                </span>
-                                <span class="text-sm font-medium"><%= category.label %></span>
-                            </a>
-                        <% }) %>
-                    </div>
-                </div>
-                <!-- Scroll Indicators -->
-                <div class="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-white to-transparent pointer-events-none"></div>
-                <div class="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white to-transparent pointer-events-none"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Main Content -->
-    <div class="max-w-5xl mx-auto px-4 py-8">
-        <!-- Location Filters -->
-        <div class="mb-8 animate-in" style="--stagger: 1">
-            <div class="flex flex-wrap gap-2">
-                <% locations.forEach(location => { 
-                    const isActive = currentLocation === location;
-                %>
-                    <a href="/services/<%= serviceOption %>/<%= location %>" 
-                       class="inline-flex items-center px-4 py-2 rounded-xl text-sm font-medium
-                              transition-all duration-300 <%= isActive ? 
-                                'bg-slate-900 text-white shadow-lg shadow-slate-900/10 scale-[1.02]' : 
-                                'bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-50' %>">
-                        <i class="fas fa-location-dot mr-2"></i>
-                        <%= location.charAt(0).toUpperCase() + location.slice(1) %>
-                    </a>
-                <% }) %>
-            </div>
-        </div>
-
-        <!-- Services Results -->
-        <div class="space-y-6 animate-in" style="--stagger: 2">
-            <!-- Results Header -->
-            <div class="flex flex-wrap items-center justify-between gap-4">
-                <div>
-                    <h2 class="text-xl font-bold text-slate-900">Services disponibles (<%= currentCategory%>)</h2>
-                    <p class="text-sm text-slate-500 mt-1"><%= services.length %> services trouvés</p>
-                </div>
-            </div>
-
-            <!-- Services Grid -->
-            <% if (services.length > 0) { %>
-                <div class="grid gap-3 sm:gap-6 px-4 sm:px-0">
-    <% services.forEach((service, index) => { %>
-        <a href="/service/<%= service._id %>" 
-           class="block group animate-in" 
-           style="--stagger: <%= index + 3 %>">
-            <article class="bg-white rounded-xl sm:rounded-2xl border border-slate-200/80 hover:border-slate-300
-                          hover:shadow-lg transition-all duration-300">
-                <!-- Responsive Layout Container -->
-                <div class="flex flex-row h-full">
-                    <!-- Image Container -->
-                    <div class="relative w-24 sm:w-56 flex-shrink-0">
-                        <div class="aspect-square w-full h-full overflow-hidden">
-                            <img src="<%= service.images?.[0] || '/default-service.jpg' %>" 
-                                 alt="<%= service.serviceName %>"
-                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
-                            />
-                        </div>
-                        <!-- Price Badge (Desktop Only) -->
-                        <div class="hidden sm:block absolute top-3 left-3">
-                            <span class="px-3 py-1.5 bg-slate-900/95 backdrop-blur text-white 
-                                       text-sm font-medium rounded-full shadow-lg">
-                                <%= service.priceRange %>
-                            </span>
-                        </div>
-                    </div>
-
-                    <!-- Content Section -->
-                    <div class="flex-1 flex flex-col p-3 sm:p-5">
-                        <!-- Top Section -->
-                        <div class="flex items-start justify-between gap-3 mb-2 sm:mb-3">
-                            <h3 class="text-sm sm:text-lg font-medium sm:font-semibold text-slate-900 line-clamp-2">
-                                <%= service.serviceName %>
-                            </h3>
-                            <!-- Price Badge (Mobile Only) -->
-                            <span class="sm:hidden px-2 py-1 bg-slate-900 text-white text-xs 
-                                       font-medium rounded-lg whitespace-nowrap">
-                                <%= service.priceRange %>
-                            </span>
-                        </div>
-
-                        <!-- Service Info -->
-                        <div class="flex items-center gap-3 text-xs sm:text-sm text-slate-600 mb-2 sm:mb-3">
-                            <span class="flex items-center gap-1">
-                                <i class="fas fa-location-dot text-slate-400"></i>
-                                <%= service.location %>
-                            </span>
-                            <span class="flex items-center gap-1">
-                                <i class="fas fa-eye text-slate-400"></i>
-                                <%= service.views %>
-                            </span>
-                        </div>
-
-                        <!-- Description (Desktop Only) -->
-                        <p class="hidden sm:block text-slate-600 text-sm line-clamp-2 mb-3 flex-grow">
-                            <%= service.description || 'Aucune description disponible.' %>
-                        </p>
-
-                        <!-- Provider Info -->
-                        <div class="flex items-center justify-between mt-auto pt-2 sm:pt-3 
-                                  border-t border-slate-200/80">
-                            <!-- Provider Details -->
-                            <div class="flex items-center gap-2">
-                                <div class="relative">
-                                    <img src="<%= service.createdBy?.profileImage || '/default-avatar.jpg' %>"
-                                         alt="<%= service.createdBy?.displayName %>"
-                                         class="w-6 h-6 sm:w-8 sm:h-8 rounded-full object-cover" 
-                                    />
-                                    <% if(service.createdBy?.isVerified) { %>
-                                        <div class="absolute -right-0.5 -bottom-0.5 w-3 h-3 sm:w-4 sm:h-4 
-                                                    bg-blue-500 rounded-full flex items-center justify-center 
-                                                    border-2 border-white">
-                                            <i class="fas fa-check text-[7px] sm:text-[8px] text-white"></i>
-                                        </div>
-                                    <% } %>
-                                </div>
-                                <div class="leading-tight">
-                                    <div class="text-xs sm:text-sm font-medium text-slate-900 line-clamp-1">
-                                        <%= service.createdBy?.displayName %>
-                                    </div>
-                                    <div class="text-[10px] sm:text-xs text-slate-500">Professionnel</div>
-                                </div>
-                            </div>
-
-                            <!-- Action Indicator -->
-                            <span class="flex items-center gap-1 text-xs sm:text-sm font-medium text-blue-600">
-                                <span class="hidden sm:inline">Voir détails</span>
-                                <span class="sm:hidden">Voir</span>
-                                <i class="fas fa-arrow-right text-xs transition-transform
-                                       group-hover:translate-x-1"></i>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </article>
-        </a>
-    <% }) %>
-
-    
-   
-</div>
-
 <style>
-/* Optional: Add smooth scrolling for the entire page */
-html {
-    scroll-behavior: smooth;
+/* Clean transitions */
+.transition-colors {
+    transition: all 0.2s ease-in-out;
 }
 
-/* Hide scrollbar for Chrome, Safari and Opera */
-.no-scrollbar::-webkit-scrollbar {
-    display: none;
-}
-
-/* Hide scrollbar for IE, Edge and Firefox */
-.no-scrollbar {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+/* Mobile optimizations */
+@media (max-width: 640px) {
+    .tab-btn {
+        font-size: 0.875rem;
+        padding: 0.5rem 1rem;
+    }
 }
 </style>
-            <% } else { %>
-                <!-- Empty State -->
-                <div class="text-center py-16 bg-white rounded-2xl border border-slate-200/50 animate-in" 
-                     style="--stagger: 3">
-                    <div class="max-w-sm mx-auto">
-                        <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <i class="fas fa-paw text-3xl text-slate-400"></i>
+    <!-- Profiles Results -->
+    <div class="space-y-6 animate-in" style="--stagger: 2" id="dresseurs">
+        <!-- Results Header -->
+        <div class="flex flex-wrap items-center justify-between gap-4" >
+            <div>
+                <h2 class="text-2xl mt-5 font-bold text-slate-900">Dresseurs disponibles</h2>
+                <p class="text-sm text-slate-500 mt-1"><%= profiles.length %> profils trouvés</p>
+            </div>
+        </div>
+
+        <!-- Profile List Section -->
+<% if (profiles.length > 0) { %>
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
+        <% profiles.forEach((profile, index) => { %>
+            <a href="/@<%= profile.slug %>" class="block group">
+                <article class="relative bg-white overflow-hidden rounded-xl 
+                              border border-gray-200/80 hover:border-red-600/20
+                              transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
+                    <div class="flex items-center gap-6 p-4 sm:p-6">
+                        <!-- Profile Image -->
+                        <div class="relative flex-none">
+                            <div class="h-24 w-24 sm:h-28 sm:w-28 rounded-xl overflow-hidden bg-gray-100">
+                                <img src="<%= profile.profileImage %>" 
+                                     alt="<%= profile.displayName %>"
+                                     class="h-full w-full object-cover transform transition 
+                                            duration-500 group-hover:scale-110" />
+                            </div>
+                            <% if (profile.isVerified) { %>
+                                <!-- Verification Badge -->
+                                <div class="absolute -top-1 -right-1 h-6 w-6 bg-red-600 rounded-full 
+                                            flex items-center justify-center ring-2 ring-white">
+                                    <i class="fas fa-check text-xs text-white"></i>
+                                </div>
+                            <% } %>
                         </div>
-                        <h3 class="text-xl font-semibold text-slate-900 mb-2">
-                            Aucun service disponible
-                        </h3>
-                        <p class="text-slate-600 mb-8">
-                            Aucun service n'est disponible dans cette ville pour le moment.
-                            Essayez de modifier vos critères de recherche.
-                        </p>
-                        <div class="flex justify-center gap-4">
-                            <a href="/" class="px-6 py-3 bg-slate-900 text-white rounded-xl 
-                                             hover:bg-slate-800 transition-colors duration-300">
-                                Retour à l'accueil
-                            </a>
+
+                        <!-- Content -->
+                        <div class="flex-1 min-w-0">
+                            <!-- Header -->
+                            <div class="flex items-center gap-3 mb-2">
+                                <h3 class="text-xl font-bold text-gray-900 truncate 
+                                           group-hover:text-red-600 transition-colors duration-300">
+                                    <%= profile.displayName %>
+                                </h3>
+                                
+                                <!-- Rating -->
+                                <% if (profile.rating) { %>
+                                    <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full 
+                                                bg-black/5 text-black font-medium">
+                                        <i class="fas fa-star text-red-600"></i>
+                                        <span class="text-sm"><%= profile.rating.toFixed(1) %></span>
+                                    </div>
+                                <% } %>
+
+                                <!-- Review Count -->
+                                <% if (profile.reviewCount) { %>
+                                    <div class="text-sm text-gray-500">
+                                        (<%= profile.reviewCount %> avis)
+                                    </div>
+                                <% } %>
+                            </div>
+
+                            <!-- Location & Experience -->
+                            <div class="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-4">
+                                <div class="flex items-center gap-1.5">
+                                    <i class="fas fa-location-dot text-red-600"></i>
+                                    <span><%= profile.location.city || 'Maroc' %></span>
+                                </div>
+                                
+                                <% if (profile.experience) { %>
+                                    <div class="flex items-center gap-1.5">
+                                        <i class="fas fa-clock text-red-600"></i>
+                                        <span><%= profile.experience.years || 0 %> ans d'expérience</span>
+                                    </div>
+                                <% } %>
+                            </div>
+
+                            <!-- Specialties -->
+                            <% if (profile.specializations && profile.specializations.length > 0) { %>
+                                <div class="flex flex-wrap gap-2">
+                                    <% profile.specializations.slice(0, 3).forEach(specialty => { %>
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full 
+                                                   text-sm bg-black/5 text-gray-700 font-medium
+                                                   transition-colors duration-200
+                                                   group-hover:bg-red-50 group-hover:text-red-600">
+                                            <%= specialty %>
+                                        </span>
+                                    <% }) %>
+                                    <% if (profile.specializations.length > 3) { %>
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full 
+                                                   text-sm bg-black/5 text-gray-700 font-medium">
+                                            +<%= profile.specializations.length - 3 %>
+                                        </span>
+                                    <% } %>
+                                </div>
+                            <% } %>
+                        </div>
+
+                        <!-- Right Arrow -->
+                        <div class="flex-none self-center">
+                            <div class="w-8 h-8 rounded-full flex items-center justify-center
+                                      bg-black/5 text-gray-400 group-hover:bg-red-600 
+                                      group-hover:text-white transition-all duration-300">
+                                <i class="fas fa-arrow-right text-sm transition-transform 
+                                         group-hover:translate-x-0.5"></i>
+                            </div>
                         </div>
                     </div>
-                </div>
-            <% } %>
-        </div>
+                </article>
+            </a>
+        <% }) %>
     </div>
-</main>
+<% } else { %>
+    <!-- Empty State -->
+    <div class="max-w-md mx-auto px-4 py-16 text-center">
+        <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-black/5 
+                    flex items-center justify-center">
+            <i class="fas fa-paw text-2xl text-gray-400"></i>
+        </div>
+        
+        <h3 class="text-xl font-bold text-gray-900 mb-3">
+            Aucun dresseur trouvé
+        </h3>
+        <p class="text-gray-600 mb-8">
+            Nous n'avons trouvé aucun dresseur correspondant à vos critères. 
+            Essayez d'élargir votre recherche.
+        </p>
+        
+        <a href="/" class="inline-flex items-center justify-center px-6 py-3 
+                          bg-black text-white font-medium rounded-xl
+                          hover:bg-red-600 transition-all duration-300
+                          hover:-translate-y-0.5 hover:shadow-lg">
+            <i class="fas fa-home mr-2"></i>
+            Retour à l'accueil
+        </a>
+    </div>
+<% } %>
+    </div>
+</div>
+</div>
 
 <style>
 /* Utilities */

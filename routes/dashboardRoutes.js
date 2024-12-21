@@ -8,6 +8,10 @@ const { isAuthenticated } = require('../middlewares/auth');
 const Service = require('../models/service');
 const Review = require('../models/review');
 const multer = require('multer');
+
+const TrainingSession = require('../models/trainingSession');
+const Client = require('../models/client');
+const Program = require('../models/program');
 // const { isAuthenticated, isServiceProvider } = require('../middleware/auth');
 
 // Dashboard middleware to check if user is a service provider
@@ -38,93 +42,95 @@ router.get('/services', async (req, res) => {
 
 
 router.get('/profile', isAuthenticated, async (req, res) => {
-     try {
-          // Fetch user with select fields
-          const user = await User.findById(req.user._id)
-               .select('-password -__v')
-               .lean();
 
-          // Calculate missing fields for completion guide
-          const missingFields = [];
-          if (!user.displayName) missingFields.push('displayName');
-          if (!user.bio) missingFields.push('bio');
-          if (!user.location?.city) missingFields.push('city');
-          if (!user.phoneNumber) missingFields.push('phone');
-          if (!user.specializations?.length) missingFields.push('specializations');
+    /**
+     * Maps training specializations to their corresponding Font Awesome icons
+     * @param {string} specialization - The specialization name
+     * @returns {string} - The Font Awesome icon class
+     */
+    const getSpecializationIcon = (specialization) => {
+        const iconMap = {
+            'Comportementaliste': 'fa-brain',  // Behavioral Trainer
+            'Attaque': 'fa-fist-raised',       // Attack/Protection Training
+            'Discipline': 'fa-graduation-cap', // Discipline and Obedience
+            'Freestyle': 'fa-dance'            // Freestyle
+        };
+        return iconMap[specialization] || 'fa-paw';
+    };
 
-          // Calculate completion percentage
-          const completionPercentage = Math.round(
-               ((5 - missingFields.length) / 5) * 100
-          );
+    try {
+        // Fetch trainer with select fields
+        const user = await User.findById(req.user._id)
+            .select('-password -__v')
+            .lean();
 
-          // Calculate service metrics
-          const totalServices = await Service.countDocuments({ createdBy: user._id });
-          const userServiceIds = await Service.find({ createdBy: user._id }).distinct('_id');
-          const totalReviews = await Review.countDocuments({ serviceId: { $in: userServiceIds } });
+        // Calculate missing fields for completion guide
+        const missingFields = [];
+        if (!user.displayName) missingFields.push('displayName');
+        if (!user.bio) missingFields.push('bio');
+        if (!user.location?.city) missingFields.push('ville');
+        if (!user.phoneNumber) missingFields.push('téléphone');
+        if (!user.specializations?.length) missingFields.push('spécialisations');
+        if (!user.trainingMethods?.length) missingFields.push('méthodes d\'éducation');
+        if (!user.certifications?.length) missingFields.push('certifications');
+        if (!user.experience?.description) missingFields.push('expérience');
 
-          // Calculate average rating
-          const averageRatingResult = await Review.aggregate([
-               {
-                    $match: {
-                         serviceId: { $in: userServiceIds }
-                    }
-               },
-               {
-                    $group: {
-                         _id: null,
-                         average: { $avg: '$rating' }
-                    }
-               }
-          ]);
-          const averageRating = averageRatingResult[0]?.average || 0;
+        // Calculate completion percentage
+        const totalFields = 8; // Updated number of required fields
+        const completionPercentage = Math.round(
+            ((totalFields - missingFields.length) / totalFields) * 100
+        );
 
-          // Retrieve profile views from user.metrics
-          const profileViews = user.metrics?.profileViews || 0; // Ensure this field exists in your user model
+        // Calculate training metrics
+        const completedTrainings = user.metrics?.completedTrainings || 0;
+        const totalClients = user.metrics?.totalClients || 0;
+        const totalSessions = user.metrics?.totalSessions || 0;
+        const successRate = user.metrics?.successRate || 0;
 
-          // Format data for template
-          const viewData = {
-               page : 'profile',
-               user: {
-                    ...user,
-                    stats: {
-                         views: profileViews,
-                         services: totalServices,
-                         reviews: totalReviews,
-                         rating: Number(averageRating.toFixed(1))
-                    }
-               },
-               completionPercentage,
-               missingFields,
-               defaultProfileImage: 'https://images.unsplash.com/photo-1614850715973-58c3167b30a0',
-               path: 'profile',
-               breadcrumbs: [
-                    { label: 'Dashboard', url: '/dashboard' },
-                    { label: 'Profil', url: '#' }
-               ],
-               unreadRequests,
-               specializations: [
-                    { value: 'dog-training', label: 'Dressage', icon: 'fa-dog' },
-                    { value: 'grooming', label: 'Toilettage', icon: 'fa-cut' },
-                    { value: 'walking', label: 'Promenade', icon: 'fa-walking' },
-                    { value: 'veterinary', label: 'Vétérinaire', icon: 'fa-stethoscope' },
-                    { value: 'boarding', label: 'Pension', icon: 'fa-home' },
-                    { value: 'transport', label: 'Transport', icon: 'fa-car' }
-               ]
-          };
+        // Calculate average rating from reviews
+        const reviews = await Review.find({ trainerId: user._id });
+        const averageRating = reviews.length > 0 
+            ? reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length 
+            : 0;
 
-          // Add verification status
-          if (user.status === 'pending') {
-               viewData.verificationPending = true;
-          }
+        // Format data for template
+        const viewData = {
+            page: 'profile',
+            user: {
+                ...user,
+                stats: {
+                    clients: totalClients,
+                    sessions: totalSessions,
+                    completedTrainings,
+                    successRate: Number(successRate.toFixed(1)),
+                    reviews: reviews.length,
+                    rating: Number(averageRating.toFixed(1))
+                }
+            },
+            completionPercentage,
+            missingFields,
+            defaultProfileImage: 'https://images.unsplash.com/photo-1614850715973-58c3167b30a0',
+            path: 'profile',
+            breadcrumbs: [
+                { label: 'Dashboard', url: '/dashboard' },
+                { label: 'Profil', url: '#' }
+            ],
+            // Training specializations
+            specializations: [
+                'Comportementaliste',
+                'Attaque',
+                'Discipline',
+                'Freestyle'
+            ]
+        };
 
-          // Render the profile page
-          res.render('user/dashboard/dashboard', viewData);
-
-     } catch (error) {
-          console.error('Profile fetch error:', error);
-          res.status(500).send('Erreur du serveur');
-     }
+        res.render('user/dashboard/profile', viewData);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server Error');
+    }
 });
+
 
 
 
@@ -565,7 +571,7 @@ router.get('/reviews', isAuthenticated, async (req, res) => {
              .populate('serviceId', 'serviceName') // Populate service details
              .sort({ createdAt: -1 }); // Sort reviews by the newest first
  
-         res.render('user/dashboard/dashboard', {
+         res.render('user/dashboard/includes/reviews', {
              path: 'reviews',
              unreadRequests,
              page : 'reviews',
@@ -578,6 +584,93 @@ router.get('/reviews', isAuthenticated, async (req, res) => {
          res.status(500).send('Erreur lors du chargement des avis');
      }
  });
+
+
+
+
+
+ // Training Sessions
+router.get('/training-sessions', isAuthenticated, async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id).lean();
+        const sessions = await TrainingSession.find({ trainerId: user._id })
+            .sort({ startTime: -1 })
+            .populate('clientId', 'displayName profileImage')
+            .lean();
+
+        res.render('dashboard/training-sessions', {
+            page: 'training-sessions',
+            user,
+            sessions
+        });
+    } catch (error) {
+        console.error('Training sessions error:', error);
+        res.status(500).send('Erreur du serveur');
+    }
+});
+
+// Clients
+router.get('/clients', isAuthenticated, async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id).lean();
+        const clients = await Client.find({ trainerId: user._id })
+            .sort({ createdAt: -1 })
+            .lean();
+
+        res.render('dashboard/clients', {
+            page: 'clients',
+            user,
+            clients
+        });
+    } catch (error) {
+        console.error('Clients error:', error);
+        res.status(500).send('Erreur du serveur');
+    }
+});
+
+// Schedule
+router.get('/schedule', isAuthenticated, async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id).lean();
+        const sessions = await TrainingSession.find({
+            trainerId: user._id,
+            startTime: {
+                $gte: new Date(new Date().setHours(0, 0, 0, 0)),
+                $lte: new Date(new Date().setDate(new Date().getDate() + 30))
+            }
+        })
+            .populate('clientId', 'displayName profileImage')
+            .lean();
+
+        res.render('dashboard/schedule', {
+            page: 'schedule',
+            user,
+            sessions
+        });
+    } catch (error) {
+        console.error('Schedule error:', error);
+        res.status(500).send('Erreur du serveur');
+    }
+});
+
+// Training Programs
+router.get('/programs', isAuthenticated, async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id).lean();
+        const programs = await Program.find({ trainerId: user._id })
+            .sort({ createdAt: -1 })
+            .lean();
+
+        res.render('dashboard/programs', {
+            page: 'programs',
+            user,
+            programs
+        });
+    } catch (error) {
+        console.error('Programs error:', error);
+        res.status(500).send('Erreur du serveur');
+    }
+});
 
 // Export router
 module.exports = router;

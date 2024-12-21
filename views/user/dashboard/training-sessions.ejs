@@ -1,0 +1,624 @@
+<!-- views/dashboard/training-sessions.ejs -->
+<%- include('../partials/header') %>
+
+<div class="flex h-screen bg-gray-50">
+    <!-- Sidebar -->
+    <%- include('../partials/trainer-sidebar') %>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col overflow-hidden">
+        <!-- Top Navigation -->
+        <%- include('../partials/trainer-navigation') %>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 overflow-y-auto bg-gray-50 p-4 md:p-6">
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900">Séances d'éducation</h2>
+                    <p class="mt-1 text-gray-600">Gérez vos séances d'éducation canine</p>
+                </div>
+                <button onclick="openNewSessionModal()"
+                        class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                    <i class="fas fa-plus"></i>
+                    <span>Nouvelle séance</span>
+                </button>
+            </div>
+
+            <!-- Filters -->
+            <div class="bg-white rounded-xl shadow-sm p-4 mb-6">
+                <div class="flex flex-wrap gap-4">
+                    <!-- Status Filter -->
+                    <div class="flex-1 min-w-[200px]">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Statut</label>
+                        <select id="statusFilter" class="w-full rounded-lg border-gray-200 focus:border-blue-500 focus:ring-blue-500">
+                            <option value="all">Tous les statuts</option>
+                            <option value="pending">En attente</option>
+                            <option value="confirmed">Confirmé</option>
+                            <option value="completed">Terminé</option>
+                            <option value="cancelled">Annulé</option>
+                        </select>
+                    </div>
+
+                    <!-- Type Filter -->
+                    <div class="flex-1 min-w-[200px]">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Type de séance</label>
+                        <select id="typeFilter" class="w-full rounded-lg border-gray-200 focus:border-blue-500 focus:ring-blue-500">
+                            <option value="all">Tous les types</option>
+                            <option value="Cours particuliers">Cours particuliers</option>
+                            <option value="Cours collectifs">Cours collectifs</option>
+                            <option value="Stage intensif">Stage intensif</option>
+                            <option value="Consultation comportementale">Consultation comportementale</option>
+                            <option value="Formation à domicile">Formation à domicile</option>
+                            <option value="Cours en visioconférence">Cours en visioconférence</option>
+                        </select>
+                    </div>
+
+                    <!-- Date Range Filter -->
+                    <div class="flex-1 min-w-[200px]">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Période</label>
+                        <select id="dateFilter" class="w-full rounded-lg border-gray-200 focus:border-blue-500 focus:ring-blue-500">
+                            <option value="all">Toutes les dates</option>
+                            <option value="today">Aujourd'hui</option>
+                            <option value="week">Cette semaine</option>
+                            <option value="month">Ce mois</option>
+                            <option value="custom">Personnalisé</option>
+                        </select>
+                    </div>
+
+                    <!-- Search -->
+                    <div class="flex-1 min-w-[200px]">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Recherche</label>
+                        <div class="relative">
+                            <input type="text" 
+                                   placeholder="Rechercher un client..." 
+                                   class="w-full pl-10 rounded-lg border-gray-200 focus:border-blue-500 focus:ring-blue-500">
+                            <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sessions List -->
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="bg-gray-50 border-b border-gray-100">
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Client</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Date & Heure</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Type</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Lieu</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Statut</th>
+                                <th class="px-6 py-4 text-right text-sm font-semibold text-gray-900">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <% if (sessions.length > 0) { %>
+                                <% sessions.forEach(session => { %>
+                                    <tr class="hover:bg-gray-50">
+                                        <!-- Client -->
+                                        <td class="px-6 py-4">
+                                            <div class="flex items-center gap-3">
+                                                <img src="<%= session.clientId.profileImage %>" 
+                                                     alt="<%= session.clientId.displayName %>"
+                                                     class="w-8 h-8 rounded-full">
+                                                <span class="font-medium text-gray-900">
+                                                    <%= session.clientId.displayName %>
+                                                </span>
+                                            </div>
+                                        </td>
+
+                                        <!-- Date & Time -->
+                                        <td class="px-6 py-4">
+                                            <div class="text-sm">
+                                                <div class="font-medium text-gray-900">
+                                                    <%= new Date(session.startTime).toLocaleDateString('fr-FR', {
+                                                        day: 'numeric',
+                                                        month: 'long',
+                                                        year: 'numeric'
+                                                    }) %>
+                                                </div>
+                                                <div class="text-gray-500">
+                                                    <%= new Date(session.startTime).toLocaleTimeString('fr-FR', {
+                                                        hour: '2-digit',
+                                                        minute: '2-digit'
+                                                    }) %>
+                                                    (<%= session.duration %> min)
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <!-- Type -->
+                                        <td class="px-6 py-4">
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                                <%= session.type === 'Cours particuliers' ? 'bg-blue-100 text-blue-800' :
+                                                    session.type === 'Cours collectifs' ? 'bg-green-100 text-green-800' :
+                                                    session.type === 'Stage intensif' ? 'bg-purple-100 text-purple-800' :
+                                                    session.type === 'Consultation comportementale' ? 'bg-amber-100 text-amber-800' :
+                                                    session.type === 'Formation à domicile' ? 'bg-indigo-100 text-indigo-800' :
+                                                    'bg-gray-100 text-gray-800' %>">
+                                                <%= session.type %>
+                                            </span>
+                                        </td>
+
+                                        <!-- Location -->
+                                        <td class="px-6 py-4">
+                                            <div class="flex items-center gap-1 text-gray-500">
+                                                <i class="fas fa-map-marker-alt"></i>
+                                                <span><%= session.location %></span>
+                                            </div>
+                                        </td>
+
+                                        <!-- Status -->
+                                        <td class="px-6 py-4">
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                                <%= session.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                                                    session.status === 'confirmed' ? 'bg-blue-100 text-blue-800' :
+                                                    session.status === 'completed' ? 'bg-green-100 text-green-800' :
+                                                    'bg-red-100 text-red-800' %>">
+                                                <%= session.status === 'pending' ? 'En attente' :
+                                                    session.status === 'confirmed' ? 'Confirmé' :
+                                                    session.status === 'completed' ? 'Terminé' :
+                                                    'Annulé' %>
+                                            </span>
+                                        </td>
+
+                                        <!-- Actions -->
+                                        <td class="px-6 py-4">
+                                            <div class="flex items-center justify-end gap-2">
+                                                <button onclick="viewSession('<%= session._id %>')"
+                                                        class="p-1 text-gray-500 hover:text-gray-700 transition-colors">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button onclick="editSession('<%= session._id %>')"
+                                                        class="p-1 text-blue-500 hover:text-blue-700 transition-colors">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button onclick="deleteSession('<%= session._id %>')"
+                                                        class="p-1 text-red-500 hover:text-red-700 transition-colors">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="6" class="px-6 py-12 text-center">
+                                        <div class="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+                                            <i class="fas fa-calendar-alt text-gray-400 text-xl"></i>
+                                        </div>
+                                        <h3 class="text-lg font-medium text-gray-900 mb-1">Aucune séance</h3>
+                                        <p class="text-gray-500">Commencez par créer votre première séance d'éducation</p>
+                                    </td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- New Session Modal -->
+<div id="newSessionModal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+    
+    <div class="fixed inset-0 flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-2xl rounded-xl shadow-2xl">
+            <div class="p-6 border-b border-gray-100">
+                <h3 class="text-lg font-semibold text-gray-900">Nouvelle séance d'éducation</h3>
+            </div>
+
+            <form id="newSessionForm" class="p-6 space-y-6">
+                <!-- Client Selection -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Client</label>
+                    <select name="clientId" required
+                            class="w-full rounded-lg border-gray-200 focus:border-blue-500 focus:ring-blue-500">
+                        <option value="">Sélectionner un client</option>
+                        <% clients.forEach(client => { %>
+                            <option value="<%= client._id %>"><%= client.displayName %></option>
+                        <% }); %>
+                    </select>
+                </div>
+
+                <!-- Session Type -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Type de séance</label>
+                    <select name="type" required
+                            class="w-full rounded-lg border-gray-200 focus:border-blue-500 focus:ring-blue-500">
+                        <option value="">Sélectionner un type</option>
+                        <option value="Cours particuliers">Cours particuliers</option>
+                        <option value="Cours collectifs">Cours collectifs</option>
+                        <option value="Stage intensif">Stage intensif</option>
+                        <option value="Consultation comportementale">Consultation comportementale</option>
+                        <option value="Formation à domicile">Formation à domicile</option>
+                        <option value="Cours en visioconférence">Cours en visioconférence</option>
+                    </select>
+                </div>
+
+                <!-- Date and Time -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Date</label>
+                        <input type="date" name="date" required
+                               class="w-full rounded-lg border-gray-200 focus:border-blue-500 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Heure</label>
+                        <input type="time" name="time" required
+                               class="w-full rounded-lg border-gray-200 focus:border-blue-500 focus:ring-blue-500">
+                    </div>
+                </div>
+
+                <!-- Duration and Price -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Durée (minutes)</label>
+                        <input type="number" name="duration" required min="30" step="15"
+                               class="w-full rounded-lg border-gray-200 focus:border-blue-500 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Prix (€)</label>
+                        <input type="number" name="price" required min="0" step="0.01"
+                               class="w-full rounded-lg border-gray-200 focus:border-blue-500 focus:ring-blue-500">
+                    </div>
+                </div>
+
+                <!-- Location -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Lieu</label>
+                    <input type="text" name="location" required
+                           class="w-full rounded-lg border-gray-200 focus:border-blue-500 focus:ring-blue-500">
+                </div>
+
+                <!-- Notes -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+                    <textarea name="notes" rows="3"
+                              class="w-full rounded-lg border-gray-200 focus:border-blue-500 focus:ring-blue-500"></textarea>
+                </div>
+
+                <!-- Actions -->
+                <div class="flex items-center justify-end gap-4 pt-4 border-t">
+                    <button type="button" onclick="closeNewSessionModal()"
+                            class="px-4 py-2 text-gray-700 hover:text-gray-900 transition-colors">
+                        Annuler
+                    </button>
+                    <button type="submit"
+                            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                        Créer la séance
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>
+
+<script>
+// Session management functions
+let activeFilters = {
+    status: 'all',
+    type: 'all',
+    date: 'all',
+    search: ''
+};
+
+// Modal functions
+function openNewSessionModal() {
+    document.getElementById('newSessionModal').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeNewSessionModal() {
+    document.getElementById('newSessionModal').classList.add('hidden');
+    document.body.style.overflow = '';
+    document.getElementById('newSessionForm').reset();
+}
+
+// Form submission
+document.getElementById('newSessionForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData(e.target);
+    const data = {
+        clientId: formData.get('clientId'),
+        type: formData.get('type'),
+        startTime: new Date(`${formData.get('date')}T${formData.get('time')}`),
+        duration: parseInt(formData.get('duration')),
+        price: parseFloat(formData.get('price')),
+        location: formData.get('location'),
+        notes: formData.get('notes')
+    };
+
+    try {
+        const response = await fetch('/api/training-sessions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.content
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (!response.ok) throw new Error('Erreur lors de la création de la séance');
+
+        // Reload page on success
+        window.location.reload();
+    } catch (error) {
+        console.error('Error:', error);
+        alert(error.message);
+    }
+});
+
+// Filter functions
+function applyFilters() {
+    const rows = document.querySelectorAll('tbody tr');
+    rows.forEach(row => {
+        let show = true;
+
+        // Status filter
+        if (activeFilters.status !== 'all') {
+            const status = row.querySelector('[data-status]')?.dataset.status;
+            if (status !== activeFilters.status) show = false;
+        }
+
+        // Type filter
+        if (activeFilters.type !== 'all') {
+            const type = row.querySelector('[data-type]')?.dataset.type;
+            if (type !== activeFilters.type) show = false;
+        }
+
+        // Date filter
+        if (activeFilters.date !== 'all') {
+            const date = new Date(row.querySelector('[data-date]')?.dataset.date);
+            const today = new Date();
+            
+            switch (activeFilters.date) {
+                case 'today':
+                    if (date.toDateString() !== today.toDateString()) show = false;
+                    break;
+                case 'week':
+                    const weekAgo = new Date(today.setDate(today.getDate() - 7));
+                    if (date < weekAgo) show = false;
+                    break;
+                case 'month':
+                    const monthAgo = new Date(today.setMonth(today.getMonth() - 1));
+                    if (date < monthAgo) show = false;
+                    break;
+            }
+        }
+
+        // Search filter
+        if (activeFilters.search) {
+            const searchText = row.textContent.toLowerCase();
+            if (!searchText.includes(activeFilters.search.toLowerCase())) show = false;
+        }
+
+        row.classList.toggle('hidden', !show);
+    });
+}
+
+// Event listeners for filters
+document.getElementById('statusFilter').addEventListener('change', (e) => {
+    activeFilters.status = e.target.value;
+    applyFilters();
+});
+
+document.getElementById('typeFilter').addEventListener('change', (e) => {
+    activeFilters.type = e.target.value;
+    applyFilters();
+});
+
+document.getElementById('dateFilter').addEventListener('change', (e) => {
+    activeFilters.date = e.target.value;
+    applyFilters();
+});
+
+document.querySelector('input[type="text"]').addEventListener('input', (e) => {
+    activeFilters.search = e.target.value;
+    applyFilters();
+});
+
+// Session management functions
+async function viewSession(sessionId) {
+    try {
+        const response = await fetch(`/api/training-sessions/${sessionId}`);
+        if (!response.ok) throw new Error('Erreur lors de la récupération de la séance');
+        
+        const session = await response.json();
+        // Open view modal with session details
+        openViewSessionModal(session);
+    } catch (error) {
+        console.error('Error:', error);
+        alert(error.message);
+    }
+}
+
+async function editSession(sessionId) {
+    try {
+        const response = await fetch(`/api/training-sessions/${sessionId}`);
+        if (!response.ok) throw new Error('Erreur lors de la récupération de la séance');
+        
+        const session = await response.json();
+        // Open edit modal with session details
+        openEditSessionModal(session);
+    } catch (error) {
+        console.error('Error:', error);
+        alert(error.message);
+    }
+}
+
+async function deleteSession(sessionId) {
+    if (!confirm('Êtes-vous sûr de vouloir supprimer cette séance ?')) return;
+
+    try {
+        const response = await fetch(`/api/training-sessions/${sessionId}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.content
+            }
+        });
+
+        if (!response.ok) throw new Error('Erreur lors de la suppression de la séance');
+
+        // Remove row from table
+        document.querySelector(`tr[data-session-id="${sessionId}"]`).remove();
+
+        // Show success message
+        showNotification('success', 'Séance supprimée avec succès');
+    } catch (error) {
+        console.error('Error:', error);
+        showNotification('error', error.message);
+    }
+}
+
+// View Session Modal
+function openViewSessionModal(session) {
+    const modal = document.createElement('div');
+    modal.className = 'fixed inset-0 z-50 overflow-y-auto';
+    modal.innerHTML = `
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-black/50 backdrop-blur-sm" onclick="closeViewSessionModal()"></div>
+
+            <div class="relative inline-block w-full max-w-2xl p-6 my-8 text-left bg-white rounded-xl shadow-xl transform transition-all sm:align-middle">
+                <div class="absolute top-0 right-0 p-4">
+                    <button onclick="closeViewSessionModal()" class="text-gray-400 hover:text-gray-500">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <!-- Session Details -->
+                <div class="mt-3">
+                    <div class="flex items-center gap-4 mb-6">
+                        <img src="${session.clientId.profileImage}" 
+                             alt="${session.clientId.displayName}"
+                             class="w-16 h-16 rounded-full">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900">
+                                ${session.clientId.displayName}
+                            </h3>
+                            <p class="text-gray-500">
+                                ${new Date(session.startTime).toLocaleDateString('fr-FR', {
+                                    weekday: 'long',
+                                    day: 'numeric',
+                                    month: 'long',
+                                    year: 'numeric'
+                                })}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="text-sm font-medium text-gray-500">Type de séance</h4>
+                            <p class="mt-1 text-gray-900">${session.type}</p>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-medium text-gray-500">Durée</h4>
+                            <p class="mt-1 text-gray-900">${session.duration} minutes</p>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-medium text-gray-500">Lieu</h4>
+                            <p class="mt-1 text-gray-900">${session.location}</p>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-medium text-gray-500">Prix</h4>
+                            <p class="mt-1 text-gray-900">${session.price}€</p>
+                        </div>
+                        <div class="col-span-2">
+                            <h4 class="text-sm font-medium text-gray-500">Notes</h4>
+                            <p class="mt-1 text-gray-900">${session.notes || 'Aucune note'}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="mt-6 pt-6 border-t border-gray-100 flex justify-end gap-4">
+                    <button onclick="editSession('${session._id}')"
+                            class="px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-700">
+                        Modifier
+                    </button>
+                    <button onclick="deleteSession('${session._id}')"
+                            class="px-4 py-2 text-sm font-medium text-red-600 hover:text-red-700">
+                        Supprimer
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+    document.body.style.overflow = 'hidden';
+}
+
+function closeViewSessionModal() {
+    const modal = document.querySelector('.fixed.inset-0.z-50');
+    if (modal) {
+        modal.remove();
+        document.body.style.overflow = '';
+    }
+}
+
+// Notification system
+function showNotification(type, message) {
+    const notification = document.createElement('div');
+    notification.className = `fixed bottom-4 right-4 px-6 py-3 rounded-lg shadow-lg transform transition-all duration-300 ${
+        type === 'success' ? 'bg-green-500' : 'bg-red-500'
+    } text-white`;
+    notification.innerHTML = message;
+
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+        notification.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    // Set default filters
+    applyFilters();
+});
+</script>
+
+<style>
+/* Animation for notifications */
+@keyframes slideIn {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.notification-enter {
+    animation: slideIn 0.3s ease-out forwards;
+}
+
+/* Modal transitions */
+.modal-enter {
+    transition: opacity 0.3s ease-out;
+}
+
+.modal-enter-active {
+    opacity: 1;
+}
+
+.modal-exit {
+    transition: opacity 0.2s ease-in;
+}
+
+.modal-exit-active {
+    opacity: 0;
+}
+</style>

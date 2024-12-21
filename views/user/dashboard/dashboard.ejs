@@ -1,169 +1,245 @@
-<!-- views/dashboard.ejs -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <%- include('./includes/head') %>
-    <title>Dashboard | Service Provider</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K9 Dashboard</title>
+    
+    <!-- Tailwind and FontAwesome -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-neutral-100">
-    <div class="min-h-screen">
-        <!-- Sidebar for desktop -->
-        <aside class="fixed hidden md:flex flex-col w-64 h-screen bg-white border-r border-neutral-200">
-            <%- include('./includes/sidebar') %>
-        </aside>
+<body class="bg-gray-50">
 
-        <!-- Main content -->
-        <main class="md:ml-64 min-h-screen">
-            <!-- Top navigation -->
-            <nav class="bg-white border-b border-neutral-200 sticky top-0 z-30">
-                <div class="h-16 flex items-center justify-between px-4 md:px-6">
-                    <div class="flex items-center">
-                        <div class="md:hidden">
-                            <span class="text-lg font-semibold">NDRESSILIK</span>
-                        </div>
-                        <div class="hidden md:block">
-                            <h1 class="text-xl font-semibold">Dashboard</h1>
-                        </div>
+<div class="min-h-screen">
+    <!-- Desktop Sidebar -->
+    <aside class="fixed inset-y-0 left-0 w-64 bg-black hidden lg:block">
+        <!-- Logo -->
+        <div class="h-16 flex items-center px-6 border-b border-gray-800">
+            <div class="flex items-center">
+                <i class="fas fa-shield-dog text-red-600 text-2xl mr-2"></i>
+                <h1 class="text-xl font-bold text-white">K9 Pro</h1>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="py-4">
+            <div class="px-4 space-y-1">
+                <a href="/dashboard" 
+                   class="flex items-center px-4 py-3 text-gray-300 border-l-4 border-red-600 bg-gray-900">
+                    <i class="fas fa-home w-5"></i>
+                    <span class="ml-3">Tableau de bord</span>
+                </a>
+
+                <a href="/dashboard/profile" 
+                   class="flex items-center px-4 py-3 text-gray-400 hover:bg-gray-900 hover:text-white border-l-4 border-transparent">
+                    <i class="fas fa-user w-5"></i>
+                    <span class="ml-3">Mon profil</span>
+                </a>
+
+                <a href="/dashboard/stats" 
+                   class="flex items-center px-4 py-3 text-gray-400 hover:bg-gray-900 hover:text-white border-l-4 border-transparent">
+                    <i class="fas fa-chart-bar w-5"></i>
+                    <span class="ml-3">Statistiques</span>
+                </a>
+
+                <a href="/dashboard/reviews" 
+                   class="flex items-center px-4 py-3 text-gray-400 hover:bg-gray-900 hover:text-white border-l-4 border-transparent">
+                    <i class="fas fa-star w-5"></i>
+                    <span class="ml-3">Avis clients</span>
+                </a>
+            </div>
+        </nav>
+
+        <!-- User Menu -->
+        <div class="absolute bottom-0 left-0 right-0 border-t border-gray-800">
+            <div class="p-4">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 bg-gray-800"></div>
+                    <div class="ml-3">
+                        <p class="text-sm font-medium text-white">John Doe</p>
+                        <p class="text-xs text-gray-400">Professionnel</p>
                     </div>
-                    <div class="flex items-center space-x-4">
-                        <a href="/" class="text-neutral-500 relative">
-                            <i class="fas fa-home text-xl"></i>
-                            <!-- <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">3</span> -->
-                        </a>
-                        <div class="h-8 w-8 rounded-full overflow-hidden cursor-pointer">
-                            <% if (user.profileImage) { %>
-                                <img 
-                                    src="<%= user.profileImage %>" 
-                                    alt="<%= user.name %>'s profile" 
-                                    class="w-full h-full object-cover"
-                                    onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=<%= encodeURIComponent(user.name) %>&background=F3F4F6&color=6B7280'"
-                                />
-                            <% } else { %>
-                                <img 
-                                    src="https://ui-avatars.com/api/?name=<%= encodeURIComponent(user.name) %>&background=F3F4F6&color=6B7280" 
-                                    alt="<%= user.name %>'s profile"
-                                    class="w-full h-full object-cover"
-                                />
-                            <% } %>
+                </div>
+                <a href="/logout" 
+                   class="mt-4 flex items-center px-4 py-2 text-gray-400 hover:text-white hover:bg-gray-900">
+                    <i class="fas fa-sign-out-alt w-5"></i>
+                    <span class="ml-2">Déconnexion</span>
+                </a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Mobile Header -->
+    <header class="lg:hidden bg-black text-white sticky top-0 z-30">
+        <div class="px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center">
+                <i class="fas fa-shield-dog text-red-600 text-2xl mr-2"></i>
+                <h1 class="text-xl font-bold">K9 Pro</h1>
+            </div>
+            <button id="mobileMenuBtn" class="p-2 hover:bg-gray-800">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="fixed inset-0 bg-black transform translate-x-full transition-transform duration-300 lg:hidden z-50">
+        <div class="h-16 flex items-center justify-between px-4 border-b border-gray-800">
+            <h1 class="text-xl font-bold text-white">Menu</h1>
+            <button id="closeMobileMenu" class="p-2 text-white hover:bg-gray-800">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+        </div>
+        
+        <!-- Mobile Navigation -->
+        <nav class="py-4">
+            <div class="px-4 space-y-1">
+                <a href="/dashboard" class="flex items-center px-4 py-3 text-white bg-gray-900">
+                    <i class="fas fa-home w-5"></i>
+                    <span class="ml-3">Tableau de bord</span>
+                </a>
+                <a href="/profile" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-900 hover:text-white">
+                    <i class="fas fa-user w-5"></i>
+                    <span class="ml-3">Mon profil</span>
+                </a>
+                <a href="/stats" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-900 hover:text-white">
+                    <i class="fas fa-chart-bar w-5"></i>
+                    <span class="ml-3">Statistiques</span>
+                </a>
+                <a href="/reviews" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-900 hover:text-white">
+                    <i class="fas fa-star w-5"></i>
+                    <span class="ml-3">Avis clients</span>
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <main class="lg:pl-64">
+        <!-- Top Bar -->
+        <div class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 lg:px-8 sticky top-0 lg:top-0 z-20">
+            <h2 class="text-xl font-semibold text-gray-900">Tableau de bord</h2>
+            <div class="flex items-center gap-4">
+                <button class="p-2 text-gray-600 hover:text-gray-900 relative">
+                    <i class="fas fa-bell text-xl"></i>
+                </button>
+                
+                <div class="relative hidden lg:block">
+                    <button id="profileMenuBtn" 
+                            class="flex items-center gap-2 text-gray-600 hover:text-gray-900">
+                        <div class="w-8 h-8 bg-gray-200"></div>
+                        <span class="font-medium">John Doe</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page Content -->
+        <div class="p-4 lg:p-8">
+            <!-- Quick Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                <!-- Profile Views -->
+                <div class="bg-white border border-gray-200 hover:border-red-600 transition-colors">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-600">Vues du profil</p>
+                                <h3 class="text-2xl font-bold text-gray-900 mt-1">0</h3>
+                            </div>
+                            <div class="w-12 h-12 bg-black text-white flex items-center justify-center">
+                                <i class="fas fa-eye text-xl"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Mobile Navigation Links -->
-                <!-- Mobile Navigation Links -->
-<div class="md:hidden overflow-x-auto scrollbar-hide border-t border-neutral-100">
-    <div class="flex px-4 py-2 space-x-3">
-        <a 
-            href="/dashboard"
-            class="flex flex-col items-center justify-center min-w-[4.5rem] p-2 rounded-xl transition-all duration-200
-                   <%= page === 'dashboard' ? 'bg-blue-50 text-blue-600' : 'bg-slate-50 text-slate-600 hover:bg-blue-50 hover:text-blue-600' %>"
-        >
-            <i class="fas fa-home text-lg mb-1"></i>
-            <span class="text-xs font-medium">Accueil</span>
-        </a>
+                <!-- Services -->
+                <div class="bg-white border border-gray-200 hover:border-red-600 transition-colors">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-600">Services</p>
+                                <h3 class="text-2xl font-bold text-gray-900 mt-1">0</h3>
+                            </div>
+                            <div class="w-12 h-12 bg-black text-white flex items-center justify-center">
+                                <i class="fas fa-briefcase text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-        <a 
-            href="/dashboard/services"
-            class="flex flex-col items-center justify-center min-w-[4.5rem] p-2 rounded-xl transition-all duration-200
-                   <%= page === 'services' ? 'bg-purple-50 text-purple-600' : 'bg-slate-50 text-slate-600 hover:bg-purple-50 hover:text-purple-600' %>"
-        >
-            <i class="fas fa-concierge-bell text-lg mb-1"></i>
-            <span class="text-xs font-medium">Services</span>
-        </a>
+                <!-- Reviews -->
+                <div class="bg-white border border-gray-200 hover:border-red-600 transition-colors">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-600">Avis</p>
+                                <h3 class="text-2xl font-bold text-gray-900 mt-1">0</h3>
+                            </div>
+                            <div class="w-12 h-12 bg-black text-white flex items-center justify-center">
+                                <i class="fas fa-star text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-        <a 
-            href="/dashboard/breedings"
-            class="flex flex-col items-center justify-center min-w-[4.5rem] p-2 rounded-xl transition-all duration-200
-                   <%= page === 'breedings' ? 'bg-amber-50 text-amber-600' : 'bg-slate-50 text-slate-600 hover:bg-amber-50 hover:text-amber-600' %>"
-        >
-            <i class="fas fa-shield-dog text-lg mb-1"></i>
-            <span class="text-xs font-medium">Elevages</span>
-        </a>
-        <a 
-        href="/dashboard/requests"
-        class="flex flex-col items-center justify-center min-w-[4.5rem] p-2 rounded-xl transition-all duration-200
-               <%= page === 'requests' ? 'bg-amber-50 text-amber-600' : 'bg-slate-50 text-slate-600 hover:bg-amber-50 hover:text-amber-600' %>"
-    >
-        <i class="fas fa-clipboard-list text-lg mb-1"></i>
-        <span class="text-xs font-medium">Demandes</span>
-    </a>
-
-        <a 
-            href="/dashboard/reviews"
-            class="flex flex-col items-center justify-center min-w-[4.5rem] p-2 rounded-xl transition-all duration-200
-                   <%= page === 'reviews' ? 'bg-yellow-50 text-yellow-600' : 'bg-slate-50 text-slate-600 hover:bg-yellow-50 hover:text-yellow-600' %>"
-        >
-            <i class="fas fa-star text-lg mb-1"></i>
-            <span class="text-xs font-medium">Avis</span>
-        </a>
-
-        <a 
-            href="/dashboard/stats"
-            class="flex flex-col items-center justify-center min-w-[4.5rem] p-2 rounded-xl transition-all duration-200
-                   <%= page === 'stats' ? 'bg-emerald-50 text-emerald-600' : 'bg-slate-50 text-slate-600 hover:bg-emerald-50 hover:text-emerald-600' %>"
-        >
-            <i class="fas fa-chart-line text-lg mb-1"></i>
-            <span class="text-xs font-medium">Stats</span>
-        </a>
-
-        <a 
-            href="/dashboard/profile"
-            class="flex flex-col items-center justify-center min-w-[4.5rem] p-2 rounded-xl transition-all duration-200
-                   <%= page === 'profile' ? 'bg-rose-50 text-rose-600' : 'bg-slate-50 text-slate-600 hover:bg-rose-50 hover:text-rose-600' %>"
-        >
-            <i class="fas fa-user text-lg mb-1"></i>
-            <span class="text-xs font-medium">Profile</span>
-        </a>
-    </div>
-</div>
-            </nav>
-
-           <!-- Quick Actions (Mobile Only) -->
-<div class="md:hidden bg-gradient-to-r from-yellow-50 to-amber-50 border-b border-yellow-100/50 px-4 py-3">
-    <div class="flex justify-between items-center">
-       
-
-        
-    </div>
-</div>
-
-            <!-- Page content -->
-            <div class="p-4 md:p-6">
-                <%- include(`./includes/${page}`) %>
+                <!-- Rating -->
+                <div class="bg-white border border-gray-200 hover:border-red-600 transition-colors">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-600">Note</p>
+                                <h3 class="text-2xl font-bold text-gray-900 mt-1">0.0</h3>
+                            </div>
+                            <div class="w-12 h-12 bg-black text-white flex items-center justify-center">
+                                <i class="fas fa-award text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <!-- Mobile Bottom Padding for Navigation -->
-            <div class="h-16 md:hidden"></div>
-        </main>
-    </div>
+            <!-- Recent Activity -->
+            <div class="bg-white border border-gray-200">
+                <div class="border-b border-gray-200">
+                    <div class="px-6 py-4 bg-black text-white">
+                        <h3 class="text-lg font-semibold">Activité récente</h3>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <p class="text-gray-600 text-center py-8">Aucune activité récente</p>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
 
-    <!-- Add this style to your head or in a separate CSS file -->
-    <style>
-        /* Hide scrollbar for Chrome, Safari and Opera */
-        .scrollbar-hide::-webkit-scrollbar {
-            display: none;
-        }
+<script>
+// Mobile menu functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const closeMobileMenuBtn = document.getElementById('closeMobileMenu');
+    const mobileMenu = document.getElementById('mobileMenu');
 
-        /* Hide scrollbar for IE, Edge and Firefox */
-        .scrollbar-hide {
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
-        }
+    function toggleMobileMenu() {
+        const isOpen = !mobileMenu.classList.contains('translate-x-full');
+        mobileMenu.classList.toggle('translate-x-full', isOpen);
+        document.body.style.overflow = isOpen ? '' : 'hidden';
+    }
 
-        /* Smooth transitions */
-        .transition-colors {
-            transition: all 0.2s ease-in-out;
-        }
+    mobileMenuBtn?.addEventListener('click', toggleMobileMenu);
+    closeMobileMenuBtn?.addEventListener('click', toggleMobileMenu);
 
-        /* Active tab indicator animation */
-        .border-b-2 {
-            transition: border-color 0.2s ease-in-out;
+    // Close menu on escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !mobileMenu.classList.contains('translate-x-full')) {
+            toggleMobileMenu();
         }
+    });
+});
+</script>
 
-        /* Active link styles */
-        .text-primary-600 {
-            position: relative;
-        }
-    </style>
 </body>
 </html>

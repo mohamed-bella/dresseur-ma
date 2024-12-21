@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const slugify = require('slugify');
 const Schema = mongoose.Schema;
 
-const serviceProviderSchema = new Schema({
+const dogTrainerSchema = new Schema({
      // Authentication & Basic Info
      googleId: {
           type: String,
@@ -27,7 +27,6 @@ const serviceProviderSchema = new Schema({
      // Profile Details
      profileImage: {
           type: String,
-          // required: true
           default: 'https://images.unsplash.com/photo-1614850715973-58c3167b30a0?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
      },
      coverImage: {
@@ -46,7 +45,6 @@ const serviceProviderSchema = new Schema({
      location: {
           city: {
                type: String,
-               // required: true,
                default: ''
           },
           address: String,
@@ -59,16 +57,31 @@ const serviceProviderSchema = new Schema({
      // Professional Info
      specializations: [{
           type: String,
-          enum: ['dog-training', 'grooming', 'walking', 'veterinary', 'boarding', 'transport']
+          enum: [
+               'Comportementaliste',
+               'Attaque',
+               'Discipline',
+               'Freestyle',
+          ]
+     }],
+     trainingMethods: [{
+          type: String,
+          enum: [
+               'Renforcement positif',
+               'Clicker training',
+               'Méthode traditionnelle',
+               'Éducation en douceur',
+               'Conditionnement opérant'
+          ]
      }],
      experience: {
           years: {
                type: Number,
-               defalut: 0,
+               default: 0,
           },
           description: {
                type: String,
-               default: 'Sans Experience.'
+               default: 'Sans expérience.'
           }
      },
      qualifications: [{
@@ -76,6 +89,43 @@ const serviceProviderSchema = new Schema({
           institution: String,
           year: Number,
           certificate: String // URL to certificate image
+     }],
+     certifications: [{
+          type: String,
+          enum: [
+               'CPDT-KA',
+               'CTC',
+               'CCPDT',
+               'APDT',
+               'Moniteur canin',
+               'Éducateur canin professionnel',
+               'Comportementaliste canin'
+          ]
+     }],
+
+     // Training Specifics
+     trainingServices: [{
+          type: String,
+          enum: [
+               'Cours particuliers',
+               'Cours collectifs',
+               'Stage intensif',
+               'Pension éducative',
+               'Consultation comportementale',
+               'Formation à domicile',
+               'Cours en visioconférence'
+          ]
+     }],
+     dogTypes: [{
+          type: String,
+          enum: [
+               'Chiots',
+               'Chiens adultes',
+               'Chiens seniors',
+               'Chiens agressifs',
+               'Chiens anxieux',
+               'Races spécifiques'
+          ]
      }],
 
      // Business Details
@@ -90,7 +140,7 @@ const serviceProviderSchema = new Schema({
      },
      languages: [{
           type: String,
-          enum: ['french', 'arabic', 'english', 'spanish']
+          enum: ['Français', 'Arabe', 'Anglais', 'Espagnol']
      }],
 
      // Verification & Status
@@ -99,26 +149,26 @@ const serviceProviderSchema = new Schema({
           default: false
      },
      verificationDocuments: [{
-          type: String, // URLs to verification documents
+          type: String,
           required: true
      }],
      status: {
           type: String,
-          enum: ['pending', 'active', 'suspended'],
-          default: 'pending'
+          enum: ['En attente', 'Actif', 'Suspendu'],
+          default: 'En attente'
      },
 
      // Trust & Safety
      badges: [{
           type: {
                type: String,
-               // enum: [
-               //      'Basic',
-               //      'chosen',
-               //      'specialist',
-               //      'prominent',
-               //      'lead-expert'
-               // ]
+               enum: [
+                    'Expert en éducation',
+                    'Spécialiste comportement',
+                    'Formateur certifié',
+                    'Excellence du service',
+                    'Top éducateur'
+               ]
           },
           earnedAt: {
                type: Date,
@@ -150,9 +200,13 @@ const serviceProviderSchema = new Schema({
           }
      },
 
-     // Statistics & Metrics
+     // Training Success Metrics
      metrics: {
-          totalServices: {
+          totalClients: {
+               type: Number,
+               default: 0
+          },
+          totalSessions: {
                type: Number,
                default: 0
           },
@@ -164,7 +218,11 @@ const serviceProviderSchema = new Schema({
                type: Number,
                default: 0
           },
-          completedBookings: {
+          completedTrainings: {
+               type: Number,
+               default: 0
+          },
+          successRate: {
                type: Number,
                default: 0
           }
@@ -187,13 +245,17 @@ const serviceProviderSchema = new Schema({
           displayPhoneNumber: {
                type: Boolean,
                default: false
+          },
+          maxSimultaneousClients: {
+               type: Number,
+               default: 5
           }
      },
 
      role: {
           type: String,
-          enum: ['provider', 'admin', 'breeder'],
-          default: 'provider'
+          enum: ['éducateur', 'admin'],
+          default: 'éducateur'
      },
      createdAt: {
           type: Date,
@@ -204,7 +266,7 @@ const serviceProviderSchema = new Schema({
 });
 
 // Pre-save middleware to generate slug
-serviceProviderSchema.pre('save', function (next) {
+dogTrainerSchema.pre('save', function (next) {
      if (!this.slug || this.isModified('displayName')) {
           this.slug = slugify(this.displayName, { lower: true });
      }
@@ -212,44 +274,47 @@ serviceProviderSchema.pre('save', function (next) {
 });
 
 // Virtual for full address
-serviceProviderSchema.virtual('fullAddress').get(function () {
+dogTrainerSchema.virtual('fullAddress').get(function () {
      return `${this.location.address}, ${this.location.city}`;
 });
 
-// Method to check if provider is available at specific time
-serviceProviderSchema.methods.isAvailable = function (day, time) {
+// Method to check if trainer is available at specific time
+dogTrainerSchema.methods.isAvailable = function (day, time) {
      const schedule = this.businessHours[day.toLowerCase()];
      if (!schedule.open || !schedule.close) return false;
-
      return time >= schedule.open && time <= schedule.close;
 };
 
-// Method to calculate NDRESSILIK score
-serviceProviderSchema.methods.calculateNdressilikScore = function () {
+// Method to calculate NDRESSILIK score with training-specific factors
+dogTrainerSchema.methods.calculateNdressilikScore = function () {
      let score = 0;
 
-     // Rating contribution (40%)
-     score += (this.metrics.averageRating / 5) * 40;
+     // Rating contribution (35%)
+     score += (this.metrics.averageRating / 5) * 35;
 
-     // Completion rate contribution (20%)
-     score += this.trustFactors.completionRate * 20;
+     // Success rate contribution (25%)
+     score += (this.metrics.successRate / 100) * 25;
 
-     // Response rate contribution (20%)
-     score += this.trustFactors.responseRate * 20;
+     // Completion rate contribution (15%)
+     score += this.trustFactors.completionRate * 15;
 
-     // On-time rate contribution (20%)
-     score += this.trustFactors.onTimeRate * 20;
+     // Response rate contribution (15%)
+     score += this.trustFactors.responseRate * 15;
 
-     // Bonus points for badges (up to 10 extra points)
-     const badgeBonus = Math.min(this.badges.length * 2, 10);
-     score += badgeBonus;
+     // On-time rate contribution (10%)
+     score += this.trustFactors.onTimeRate * 10;
+
+     // Bonus points for certifications and badges (up to 10 extra points)
+     const certificationsBonus = Math.min((this.certifications?.length || 0) * 2, 5);
+     const badgesBonus = Math.min((this.badges?.length || 0) * 1, 5);
+     score += certificationsBonus + badgesBonus;
 
      // Cap the score at 100
      return Math.min(Math.round(score), 100);
 };
 
 // Index for geospatial queries
-serviceProviderSchema.index({ 'location.coordinates': '2dsphere' });
+dogTrainerSchema.index({ 'location.coordinates': '2dsphere' });
 
-const User = mongoose.model('User', serviceProviderSchema);
+const User = mongoose.model('User', dogTrainerSchema);
 module.exports = User;

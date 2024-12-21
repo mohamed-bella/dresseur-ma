@@ -4,12 +4,125 @@
     <%- include('includes/head') %>
     <title>NDRESSILIK - Profil</title>
 </head>
+<% const cities = [
+{ value: 'casablanca', label: 'Casablanca' },
+{ value: 'rabat', label: 'Rabat' },
+{ value: 'marrakech', label: 'Marrakech' },
+{ value: 'tanger', label: 'Tanger' },
+{ value: 'agadir', label: 'Agadir' },
+{ value: 'fes', label: 'Fès' },
+{ value: 'meknes', label: 'Meknès' },
+{ value: 'oujda', label: 'Oujda' },
+{ value: 'kenitra', label: 'Kénitra' },
+{ value: 'tetouan', label: 'Tétouan' }
+]; %>
 
-<body class="bg-gray-50">
-    <%- include('includes/header') %>
-
+<body class="bg-white">
+        <!-- Desktop Sidebar -->
+        <aside class="fixed inset-y-0 left-0 w-64 bg-black hidden lg:block">
+            <!-- Logo -->
+            <div class="h-16 flex items-center px-6 border-b border-gray-800">
+                <div class="flex items-center">
+                    <i class="fas fa-shield-dog text-red-600 text-2xl mr-2"></i>
+                    <h1 class="text-xl font-bold text-white">K9 Pro</h1>
+                </div>
+            </div>
+    
+            <!-- Navigation -->
+            <nav class="py-4">
+                <div class="px-4 space-y-1">
+                    <a href="/dashboard" 
+                       class="flex items-center px-4 py-3 text-gray-300 border-l-4 border-red-600 bg-gray-900">
+                        <i class="fas fa-home w-5"></i>
+                        <span class="ml-3">Tableau de bord</span>
+                    </a>
+    
+                    <a href="/dashboard/profile" 
+                       class="flex items-center px-4 py-3 text-gray-400 hover:bg-gray-900 hover:text-white border-l-4 border-transparent">
+                        <i class="fas fa-user w-5"></i>
+                        <span class="ml-3">Mon profil</span>
+                    </a>
+    
+                    <a href="/dashboard/stats" 
+                       class="flex items-center px-4 py-3 text-gray-400 hover:bg-gray-900 hover:text-white border-l-4 border-transparent">
+                        <i class="fas fa-chart-bar w-5"></i>
+                        <span class="ml-3">Statistiques</span>
+                    </a>
+    
+                    <a href="/dashboard/reviews" 
+                       class="flex items-center px-4 py-3 text-gray-400 hover:bg-gray-900 hover:text-white border-l-4 border-transparent">
+                        <i class="fas fa-star w-5"></i>
+                        <span class="ml-3">Avis clients</span>
+                    </a>
+                </div>
+            </nav>
+    
+            <!-- User Menu -->
+            <div class="absolute bottom-0 left-0 right-0 border-t border-gray-800">
+                <div class="p-4">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-gray-800"></div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-white">John Doe</p>
+                            <p class="text-xs text-gray-400">Professionnel</p>
+                        </div>
+                    </div>
+                    <a href="/logout" 
+                       class="mt-4 flex items-center px-4 py-2 text-gray-400 hover:text-white hover:bg-gray-900">
+                        <i class="fas fa-sign-out-alt w-5"></i>
+                        <span class="ml-2">Déconnexion</span>
+                    </a>
+                </div>
+            </div>
+        </aside>
+    
+        <!-- Mobile Header -->
+        <header class="lg:hidden bg-black text-white sticky top-0 z-30">
+            <div class="px-4 h-16 flex items-center justify-between">
+                <div class="flex items-center">
+                    <i class="fas fa-shield-dog text-red-600 text-2xl mr-2"></i>
+                    <h1 class="text-xl font-bold">K9 Pro</h1>
+                </div>
+                <button id="mobileMenuBtn" class="p-2 hover:bg-gray-800">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </header>
+    
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="fixed inset-0 bg-black transform translate-x-full transition-transform duration-300 lg:hidden z-50">
+            <div class="h-16 flex items-center justify-between px-4 border-b border-gray-800">
+                <h1 class="text-xl font-bold text-white">Menu</h1>
+                <button id="closeMobileMenu" class="p-2 text-white hover:bg-gray-800">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <!-- Mobile Navigation -->
+            <nav class="py-4">
+                <div class="px-4 space-y-1">
+                    <a href="/dashboard" class="flex items-center px-4 py-3 text-white bg-gray-900">
+                        <i class="fas fa-home w-5"></i>
+                        <span class="ml-3">Tableau de bord</span>
+                    </a>
+                    <a href="/profile" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-900 hover:text-white">
+                        <i class="fas fa-user w-5"></i>
+                        <span class="ml-3">Mon profil</span>
+                    </a>
+                    <a href="/stats" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-900 hover:text-white">
+                        <i class="fas fa-chart-bar w-5"></i>
+                        <span class="ml-3">Statistiques</span>
+                    </a>
+                    <a href="/reviews" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-900 hover:text-white">
+                        <i class="fas fa-star w-5"></i>
+                        <span class="ml-3">Avis clients</span>
+                    </a>
+                </div>
+            </nav>
+        </div>
+        
     <!-- Main Container -->
-    <main class="pt-20 pb-12">
+    <main class="lg:ml-64 pt-20 pb-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Back Button -->
             <div class="mb-6">
@@ -21,103 +134,14 @@
                 </a>
             </div>
 
-            <!-- Verification Alert -->
-            <div class="mb-6">
-                <button class="w-full relative overflow-hidden rounded-xl border <%= user.isVerified ? 'border-green-100 bg-green-50/50' : 'border-yellow-100 bg-yellow-50/50' %>"
-                        onclick="toggleSection('verificationAlert')">
-                    <div class="p-4">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-full flex items-center justify-center 
-                                            <%= user.isVerified ? 'bg-green-100' : 'bg-yellow-100' %>">
-                                    <i class="fas fa-shield-alt <%= user.isVerified ? 'text-green-600' : 'text-yellow-600' %>"></i>
-                                </div>
-                                <div>
-                                    <h3 class="text-gray-900 font-medium">
-                                        <%= user.isVerified ? 'Profil vérifié ✨' : 'Vérification du profil requise' %>
-                                    </h3>
-                                    <p class="text-sm text-gray-500 mt-1">
-                                        <%= user.isVerified ? 'Votre profil est certifié par Ndressilik' : 'Complétez votre profil pour être vérifié' %>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <% if (!user.isVerified) { %>
-                                    <span class="hidden sm:inline-flex px-2.5 py-0.5 text-xs font-medium 
-                                                 bg-yellow-100 text-yellow-800 rounded-full">
-                                        Action requise
-                                    </span>
-                                <% } %>
-                                <i class="fas fa-chevron-down text-gray-400 transition-transform duration-200" 
-                                   id="verificationAlertIcon"></i>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Expandable Content -->
-                    <div id="verificationAlertContent" class="hidden border-t <%= user.isVerified ? 'border-green-100' : 'border-yellow-100' %>">
-                        <div class="p-4">
-                            <% if (user.isVerified) { %>
-                                <div class="flex items-start gap-4">
-                                    <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-                                        <i class="fas fa-check text-green-600"></i>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-medium text-gray-900">Profil vérifié ✨</h4>
-                                        <p class="mt-1 text-sm text-gray-600">
-                                            Votre profil est vérifié et bénéficie d'une meilleure visibilité.
-                                        </p>
-                                        <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                            <div class="flex items-center gap-2 text-sm text-gray-600">
-                                                <i class="fas fa-check text-green-500"></i>
-                                                <span>Meilleure visibilité</span>
-                                            </div>
-                                            <div class="flex items-center gap-2 text-sm text-gray-600">
-                                                <i class="fas fa-check text-green-500"></i>
-                                                <span>Badge vérifié</span>
-                                            </div>
-                                            <div class="flex items-center gap-2 text-sm text-gray-600">
-                                                <i class="fas fa-check text-green-500"></i>
-                                                <span>Support prioritaire</span>
-                                            </div>
-                                            <div class="flex items-center gap-2 text-sm text-gray-600">
-                                                <i class="fas fa-check text-green-500"></i>
-                                                <span>Statistiques avancées</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            <% } else { %>
-                                <div class="space-y-4">
-                                    <p class="text-sm text-gray-600">
-                                        Pour obtenir la vérification, complétez les éléments suivants :
-                                    </p>
-                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                        <!-- Requirements List -->
-                                        <div class="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200">
-                                            <div class="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center">
-                                                <i class="fas fa-image text-yellow-600"></i>
-                                            </div>
-                                            <div>
-                                                <span class="text-sm font-medium text-gray-900">Photos</span>
-                                                <p class="text-xs text-gray-500">Min. 3 photos</p>
-                                            </div>
-                                        </div>
-                                        <!-- Add more requirements as needed -->
-                                    </div>
-                                </div>
-                            <% } %>
-                        </div>
-                    </div>
-                </button>
-            </div>
+          
 
             <!-- Main Content Grid -->
             <div class="grid lg:grid-cols-12 gap-6">
                 <!-- Left Sidebar -->
                 <div class="lg:col-span-4 space-y-6">
                     <!-- Profile Card -->
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                    <div class="bg-white shadow-sm border border-gray-200 overflow-hidden">
                         <!-- Cover Image -->
                         <div class="h-32 bg-gradient-to-r from-gray-800 to-gray-700 relative">
                            
@@ -132,8 +156,8 @@
                                          alt="Profile"
                                          class="w-24 h-24 rounded-xl object-cover border-4 border-white shadow-md profile-image">
                                     <button onclick="triggerFileInput('profileImage')"
-                                            class="absolute bottom-0 right-0 p-1.5 bg-gray-900 text-white rounded-lg 
-                                                       hover:bg-gray-800 transition-colors">
+                                            class="absolute bottom-0 right-0 p-1.5 bg-red-600 text-white rounded-lg 
+                                                       hover:bg-red-800 transition-colors">
                                         <i class="fas fa-camera"></i>
                                     </button>
                                 </div>
@@ -161,32 +185,7 @@
                   <!-- Stats Card -->
 <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
     <div class="p-6">
-        <h2 class="text-lg font-semibold text-gray-900 mb-4">Statistiques</h2>
-        <div class="grid grid-cols-2 gap-4">
-            <!-- Views -->
-            <div class="p-4 bg-gray-50 rounded-lg">
-                <div class="text-2xl font-bold text-gray-900"><%= user.stats.views || 0 %></div>
-                <div class="text-sm text-gray-600 mt-1">Vues du profil</div>
-            </div>
-            
-            <!-- Services -->
-            <div class="p-4 bg-gray-50 rounded-lg">
-                <div class="text-2xl font-bold text-gray-900"><%= user.stats.services || 0 %></div>
-                <div class="text-sm text-gray-600 mt-1">Services actifs</div>
-            </div>
-            
-            <!-- Reviews -->
-            <div class="p-4 bg-gray-50 rounded-lg">
-                <div class="text-2xl font-bold text-gray-900"><%= user.stats.reviews || 0 %></div>
-                <div class="text-sm text-gray-600 mt-1">Avis clients</div>
-            </div>
-            
-            <!-- Rating -->
-            <div class="p-4 bg-gray-50 rounded-lg">
-                <div class="text-2xl font-bold text-gray-900"><%= user.stats.rating || '0.0' %></div>
-                <div class="text-sm text-gray-600 mt-1">Note moyenne</div>
-            </div>
-        </div>
+       
     </div>
 </div>
 
@@ -194,74 +193,175 @@
 
                 <!-- Right Content Area -->
                 <div class="lg:col-span-8 space-y-6">
-                    <!-- Basic Information -->
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                        <div class="p-6">
-                            <h2 class="text-lg font-semibold text-gray-900 mb-6">Informations de base</h2>
-                            <form id="basicInfoForm" class="space-y-6">
-                                <!-- Name Fields -->
-                                <div class="grid sm:grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Prénom</label>
-                                        <input type="text" name="displayName" 
-                                               value="<%= user.displayName %>"
-                                               required
-                                               class="w-full px-4 py-2 border border-gray-300 rounded-lg 
-                                                      focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                                    </div>
-                                  
-                                </div>
+                    <!-- Basic Information Section -->
+<div class="border border-gray-200">
+    <!-- Header -->
+    <div class="bg-black text-white">
+        <div class="px-6 py-4 flex items-center justify-between">
+            <h2 class="text-lg font-semibold">Informations de base</h2>
+         
+        </div>
+    </div>
 
-                                <!-- Contact Info -->
-                                <div class="grid sm:grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                                        <input type="email" name="email" 
-                                               value="<%= user.email %>"
-                                               disabled
-                                               class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Téléphone</label>
-                                        <input type="tel" name="phone" 
-                                               value="<%= user.phoneNumber || '' %>"
-                                               required
-                                               class="w-full px-4 py-2 border border-gray-300 rounded-lg 
-                                                      focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                                    </div>
-                                </div>
+    <!-- Form Content -->
+    <form id="basicInfoForm">
+        <!-- Main Info Grid -->
+        <div class="border-t border-gray-200">
+            <div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-gray-200">
+                <!-- Personal Info Section -->
+                <div class="p-6 space-y-4">
+                    <!-- Name -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Nom complet <span class="text-red-600">*</span>
+                        </label>
+                        <input type="text" 
+                               name="displayName" 
+                               value="<%= user.displayName %>"
+                               required
+                               class="w-full h-10 px-3 border border-gray-300 focus:border-red-600 focus:outline-none">
+                    </div>
 
-                                <!-- Location -->
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Ville</label>
-                                    <select name="location" id="locationSelect"
-                                            required
-                                            class="w-full px-4 py-2 border border-gray-300 rounded-lg 
-                                                   focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                                        <option value="">Sélectionnez une ville</option>
-                                    </select>
-                                </div>
+                    <!-- Email -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Email <span class="text-gray-400">(Non modifiable)</span>
+                        </label>
+                        <input type="email" 
+                               value="<%= user.email %>"
+                               disabled
+                               class="w-full h-10 px-3 border border-gray-200 bg-gray-50 text-gray-600">
+                    </div>
+                </div>
 
-                                <!-- Bio -->
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Bio</label>
-                                    <textarea name="bio" rows="4"
-                                              required
-                                              class="w-full px-4 py-2 border border-gray-300 rounded-lg 
-                                                     focus:ring-2 focus:ring-blue-500 focus:border-blue-500"><%= user.bio || '' %></textarea>
-                                </div>
+                <!-- Contact Info Section -->
+                <div class="p-6 space-y-4">
+                    <!-- Phone -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Téléphone <span class="text-red-600">*</span>
+                        </label>
+                        <input type="tel" 
+                               name="phone" 
+                               value="<%= user.phoneNumber || '' %>"
+                               required
+                               class="w-full h-10 px-3 border border-gray-300 focus:border-red-600 focus:outline-none">
+                    </div>
 
-                                <!-- Save Button -->
-                                <div class="flex justify-end">
-                                    <button type="submit" 
-                                            class="px-6 py-2 bg-gray-900 text-white rounded-lg
-                                                   hover:bg-gray-800 transition-colors">
-                                        Enregistrer les modifications
-                                    </button>
-                                </div>
-                            </form>
+                    <!-- Location -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Ville <span class="text-red-600">*</span>
+                        </label>
+                        <div class="relative">
+                            <select name="location" 
+                                    id="locationSelect"
+                                    required
+                                    class="w-full h-10 px-3 border border-gray-300 focus:border-red-600 focus:outline-none appearance-none">
+                                <option value="">Sélectionnez une ville</option>
+                                <% cities.forEach(city => { %>
+                                    <option value="<%= city.id %>" 
+                                            <%= user.location?.city === city.id ? 'selected' : '' %>>
+                                        <%= city.name %>
+                                    </option>
+                                <% }); %>
+                            </select>
+                            <i class="fas fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Biography Section -->
+        <div class="border-t border-gray-200 p-6">
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+                Biographie professionnelle <span class="text-red-600">*</span>
+            </label>
+            <div class="relative">
+                <textarea name="bio" 
+                          rows="4"
+                          required
+                          class="w-full p-3 border border-gray-300 focus:border-red-600 focus:outline-none resize-none"><%= user.bio || '' %></textarea>
+                <div class="absolute right-3 bottom-3 text-sm text-gray-500">
+                    <span id="charCount">0</span>/500
+                </div>
+            </div>
+        </div>
+
+        <!-- Submit Section -->
+        <div class="border-t border-gray-200 bg-gray-50 p-6 flex justify-end">
+            <button type="submit" 
+                    class="inline-flex items-center justify-center px-6 h-10 bg-black text-white hover:bg-gray-900 
+                           focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900">
+                <i class="fas fa-save mr-2"></i>
+                Sauvegarder
+            </button>
+        </div>
+    </form>
+</div>
+
+<style>
+/* Custom Select Styling */
+select {
+    background-image: none;
+}
+
+/* Remove default number input arrows */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Custom focus states */
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #DC2626;
+}
+
+/* Custom disabled state */
+input:disabled {
+    background-color: #F3F4F6;
+    cursor: not-allowed;
+}
+
+/* Form validation styles */
+input:invalid:not(:placeholder-shown),
+select:invalid:not(:placeholder-shown),
+textarea:invalid:not(:placeholder-shown) {
+    border-color: #DC2626;
+}
+
+/* Loading state for submit button */
+button[type="submit"].loading {
+    position: relative;
+    color: transparent;
+}
+
+button[type="submit"].loading::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin: -8px 0 0 -8px;
+    border: 2px solid transparent;
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: button-loading-spinner 1s linear infinite;
+}
+
+@keyframes button-loading-spinner {
+    from {
+        transform: rotate(0turn);
+    }
+    to {
+        transform: rotate(1turn);
+    }
+}
+</style>
 
                     <!-- Include other sections -->
                     <%- include('includes/profile/specializations') %>
@@ -273,7 +373,31 @@
 
     <!-- Toast Notification -->
     <div id="toastContainer" class="fixed bottom-4 right-4 z-50"></div>
-
+    <script>
+        // Mobile menu functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const closeMobileMenuBtn = document.getElementById('closeMobileMenu');
+            const mobileMenu = document.getElementById('mobileMenu');
+        
+            function toggleMobileMenu() {
+                const isOpen = !mobileMenu.classList.contains('translate-x-full');
+                mobileMenu.classList.toggle('translate-x-full', isOpen);
+                document.body.style.overflow = isOpen ? '' : 'hidden';
+            }
+        
+            mobileMenuBtn?.addEventListener('click', toggleMobileMenu);
+            closeMobileMenuBtn?.addEventListener('click', toggleMobileMenu);
+        
+            // Close menu on escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && !mobileMenu.classList.contains('translate-x-full')) {
+                    toggleMobileMenu();
+                }
+            });
+        });
+        </script>
+        
     <!-- Scripts -->
     <script>
         // Ensure user object is available in JavaScript

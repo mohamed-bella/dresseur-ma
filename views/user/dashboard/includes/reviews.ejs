@@ -1,30 +1,130 @@
+<%- include('./head.ejs') %>
 <!-- views/partials/reviews.ejs -->
-<div class="container mx-auto px-4 py-6" x-data="reviewsData">
-    <!-- Header Section -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between mb-6">
-        <div>
-            <h1 class="text-2xl font-bold text-neutral-800">Avis sur vos Services</h1>
-            <p class="text-neutral-500 mt-1">Gérez et suivez les avis de vos clients</p>
+<!-- Reviews Section Container -->
+
+     <!-- Desktop Sidebar -->
+     <aside class="fixed inset-y-0 left-0 w-64 bg-black hidden lg:block">
+        <!-- Logo -->
+        <div class="h-16 flex items-center px-6 border-b border-gray-800">
+            <div class="flex items-center">
+                <i class="fas fa-shield-dog text-red-600 text-2xl mr-2"></i>
+                <h1 class="text-xl font-bold text-white">K9 Pro</h1>
+            </div>
         </div>
 
-        <!-- Filters -->
-        <div class="mt-4 md:mt-0 flex flex-wrap gap-3">
-            <select 
-                x-model="currentFilter" 
-                @change="filterReviews"
-                class="px-4 py-2 bg-white border border-neutral-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-            >
+        <!-- Navigation -->
+        <nav class="py-4">
+            <div class="px-4 space-y-1">
+                <a href="/dashboard" 
+                   class="flex items-center px-4 py-3 text-gray-300 border-l-4 border-red-600 bg-gray-900">
+                    <i class="fas fa-home w-5"></i>
+                    <span class="ml-3">Tableau de bord</span>
+                </a>
+
+                <a href="/dashboard/profile" 
+                   class="flex items-center px-4 py-3 text-gray-400 hover:bg-gray-900 hover:text-white border-l-4 border-transparent">
+                    <i class="fas fa-user w-5"></i>
+                    <span class="ml-3">Mon profil</span>
+                </a>
+
+                <a href="/dashboard/stats" 
+                   class="flex items-center px-4 py-3 text-gray-400 hover:bg-gray-900 hover:text-white border-l-4 border-transparent">
+                    <i class="fas fa-chart-bar w-5"></i>
+                    <span class="ml-3">Statistiques</span>
+                </a>
+
+                <a href="/dashboard/reviews" 
+                   class="flex items-center px-4 py-3 text-gray-400 hover:bg-gray-900 hover:text-white border-l-4 border-transparent">
+                    <i class="fas fa-star w-5"></i>
+                    <span class="ml-3">Avis clients</span>
+                </a>
+            </div>
+        </nav>
+
+        <!-- User Menu -->
+        <div class="absolute bottom-0 left-0 right-0 border-t border-gray-800">
+            <div class="p-4">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 bg-gray-800"></div>
+                    <div class="ml-3">
+                        <p class="text-sm font-medium text-white">John Doe</p>
+                        <p class="text-xs text-gray-400">Professionnel</p>
+                    </div>
+                </div>
+                <a href="/logout" 
+                   class="mt-4 flex items-center px-4 py-2 text-gray-400 hover:text-white hover:bg-gray-900">
+                    <i class="fas fa-sign-out-alt w-5"></i>
+                    <span class="ml-2">Déconnexion</span>
+                </a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Mobile Header -->
+    <header class="lg:hidden bg-black text-white sticky top-0 z-30">
+        <div class="px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center">
+                <i class="fas fa-shield-dog text-red-600 text-2xl mr-2"></i>
+                <h1 class="text-xl font-bold">K9 Pro</h1>
+            </div>
+            <button id="mobileMenuBtn" class="p-2 hover:bg-gray-800">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="fixed inset-0 bg-black transform translate-x-full transition-transform duration-300 lg:hidden z-50">
+        <div class="h-16 flex items-center justify-between px-4 border-b border-gray-800">
+            <h1 class="text-xl font-bold text-white">Menu</h1>
+            <button id="closeMobileMenu" class="p-2 text-white hover:bg-gray-800">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+        </div>
+        
+        <!-- Mobile Navigation -->
+        <nav class="py-4">
+            <div class="px-4 space-y-1">
+                <a href="/dashboard" class="flex items-center px-4 py-3 text-white bg-gray-900">
+                    <i class="fas fa-home w-5"></i>
+                    <span class="ml-3">Tableau de bord</span>
+                </a>
+                <a href="/profile" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-900 hover:text-white">
+                    <i class="fas fa-user w-5"></i>
+                    <span class="ml-3">Mon profil</span>
+                </a>
+                <a href="/stats" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-900 hover:text-white">
+                    <i class="fas fa-chart-bar w-5"></i>
+                    <span class="ml-3">Statistiques</span>
+                </a>
+                <a href="/reviews" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-900 hover:text-white">
+                    <i class="fas fa-star w-5"></i>
+                    <span class="ml-3">Avis clients</span>
+                </a>
+            </div>
+        </nav>
+    </div>
+    <!-- Header Section -->
+   
+<div class="lg:ml-64 container max-w-5xl px-4 py-6">
+    <div class=" bg-black text-white mb-6">
+        <div class="px-6 py-4">
+            <h1 class="text-xl font-bold">Avis Clients</h1>
+        </div>
+    </div>
+    <!-- Filters Bar -->
+    <div class="bg-white border border-gray-200 mb-6">
+        <div class="p-4 flex flex-wrap gap-4">
+            <select id="serviceFilter" 
+                    class="px-4 h-10 bg-white border border-gray-300 focus:border-red-600 focus:outline-none">
                 <option value="all">Tous les services</option>
                 <option value="recent">Plus récents</option>
                 <option value="highest">Meilleures notes</option>
                 <option value="lowest">Notes faibles</option>
             </select>
 
-            <select 
-                x-model="ratingFilter" 
-                @change="filterReviews"
-                class="px-4 py-2 bg-white border border-neutral-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-            >
+            <select id="ratingFilter" 
+                    class="px-4 h-10 bg-white border border-gray-300 focus:border-red-600 focus:outline-none">
                 <option value="all">Toutes les notes</option>
                 <option value="5">5 étoiles</option>
                 <option value="4">4 étoiles</option>
@@ -36,27 +136,34 @@
     </div>
 
     <!-- Stats Overview -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <div class="bg-white rounded-lg p-4 border border-neutral-100">
-            <div class="text-sm text-neutral-500">Total des avis</div>
-            <div class="text-2xl font-semibold mt-1"><%= reviews.length %></div>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-px bg-gray-200 border border-gray-200 mb-6">
+        <!-- Total Reviews -->
+        <div class="bg-white p-6">
+            <div class="text-sm text-gray-600">Total des avis</div>
+            <div class="text-2xl font-bold text-black mt-1"><%= reviews.length %></div>
         </div>
-        <div class="bg-white rounded-lg p-4 border border-neutral-100">
-            <div class="text-sm text-neutral-500">Note moyenne</div>
-            <div class="text-2xl font-semibold mt-1 flex items-center">
+
+        <!-- Average Rating -->
+        <div class="bg-white p-6">
+            <div class="text-sm text-gray-600">Note moyenne</div>
+            <div class="text-2xl font-bold text-black mt-1 flex items-center">
                 <%= (reviews.reduce((acc, rev) => acc + rev.rating, 0) / reviews.length).toFixed(1) %>
-                <i class="fas fa-star text-yellow-400 ml-2 text-lg"></i>
+                <i class="fas fa-star text-red-600 ml-2"></i>
             </div>
         </div>
-        <div class="bg-white rounded-lg p-4 border border-neutral-100">
-            <div class="text-sm text-neutral-500">5 étoiles</div>
-            <div class="text-2xl font-semibold mt-1">
+
+        <!-- 5 Star Reviews -->
+        <div class="bg-white p-6">
+            <div class="text-sm text-gray-600">5 étoiles</div>
+            <div class="text-2xl font-bold text-black mt-1">
                 <%= reviews.filter(r => r.rating === 5).length %>
             </div>
         </div>
-        <div class="bg-white rounded-lg p-4 border border-neutral-100">
-            <div class="text-sm text-neutral-500">Nouveaux (7j)</div>
-            <div class="text-2xl font-semibold mt-1">
+
+        <!-- New Reviews -->
+        <div class="bg-white p-6">
+            <div class="text-sm text-gray-600">Cette semaine</div>
+            <div class="text-2xl font-bold text-black mt-1">
                 <%= reviews.filter(r => new Date(r.createdAt) > new Date(Date.now() - 7*24*60*60*1000)).length %>
             </div>
         </div>
@@ -64,27 +171,26 @@
 
     <% if (reviews.length > 0) { %>
         <!-- Reviews Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <% reviews.forEach(review => { %>
-                <div class="bg-white rounded-lg border border-neutral-100 hover:border-neutral-200 transition-colors">
+                <div class="bg-white border border-gray-200 hover:border-red-600 transition-colors">
                     <!-- Review Header -->
-                    <div class="p-4 border-b border-neutral-100">
+                    <div class="p-4 border-b border-gray-200">
                         <div class="flex items-start justify-between">
                             <div>
-                                <h2 class="font-semibold text-neutral-800">
+                                <h2 class="font-bold text-gray-900">
                                     <%= review.serviceId.serviceName %>
                                 </h2>
-                                <p class="text-sm text-neutral-500 mt-1">
+                                <p class="text-sm text-gray-600 mt-1">
                                     Par <%= review.userId ? review.userId.name : 'Utilisateur anonyme' %>
                                 </p>
                             </div>
-                            <span class="px-3 py-1 bg-neutral-100 text-neutral-600 rounded-full text-sm">
+                            <div class="text-sm text-gray-600">
                                 <%= new Date(review.createdAt).toLocaleDateString('fr-FR', {
                                     day: 'numeric',
-                                    month: 'short',
-                                    year: 'numeric'
+                                    month: 'long'
                                 }) %>
-                            </span>
+                            </div>
                         </div>
                     </div>
 
@@ -92,40 +198,33 @@
                     <div class="p-4">
                         <!-- Rating -->
                         <div class="flex items-center mb-3">
-                            <div class="flex text-yellow-400">
+                            <div class="flex text-red-600">
                                 <% for(let i = 0; i < 5; i++) { %>
-                                    <i class="fas fa-star <%= i < review.rating ? 'text-yellow-400' : 'text-neutral-200' %>"></i>
+                                    <i class="fas fa-star <%= i < review.rating ? 'text-red-600' : 'text-gray-200' %>"></i>
                                 <% } %>
                             </div>
-                            <span class="ml-2 text-sm text-neutral-500">
+                            <span class="ml-2 text-sm text-gray-600">
                                 <%= review.rating %>/5
                             </span>
                         </div>
 
                         <!-- Comment -->
-                        <div class="text-neutral-600 text-sm">
+                        <div class="text-gray-600">
                             <%= review.comment || 'Pas de commentaire.' %>
                         </div>
 
                         <!-- Actions -->
-                        <div class="mt-4 pt-4 border-t border-neutral-100 flex justify-between items-center">
-                            <button 
-                                @click="replyToReview(review.id)"
-                                class="text-sm text-primary-600 hover:text-primary-700"
-                            >
-                                <i class="fas fa-reply mr-1"></i> Répondre
+                        <div class="mt-4 pt-4 border-t border-gray-200 flex justify-between">
+                            <button class="text-gray-600 hover:text-red-600">
+                                <i class="fas fa-reply"></i>
+                                <span class="ml-2">Répondre</span>
                             </button>
-                            <div class="flex items-center space-x-3">
-                                <button 
-                                    @click="reportReview(review.id)"
-                                    class="text-sm text-neutral-500 hover:text-neutral-700"
-                                >
+                            
+                            <div class="flex gap-4">
+                                <button class="text-gray-600 hover:text-red-600">
                                     <i class="fas fa-flag"></i>
                                 </button>
-                                <button 
-                                    @click="archiveReview(review.id)"
-                                    class="text-sm text-neutral-500 hover:text-neutral-700"
-                                >
+                                <button class="text-gray-600 hover:text-red-600">
                                     <i class="fas fa-archive"></i>
                                 </button>
                             </div>
@@ -135,16 +234,40 @@
             <% }); %>
         </div>
     <% } else { %>
-        <div class="text-center py-12">
-            <div class="text-neutral-400 mb-3">
-                <i class="fas fa-star text-6xl"></i>
+        <!-- Empty State -->
+        <div class="bg-white border border-gray-200 p-12 text-center">
+            <div class="w-16 h-16 mx-auto mb-4 bg-black flex items-center justify-center text-white">
+                <i class="fas fa-star text-2xl"></i>
             </div>
-            <h3 class="text-lg font-medium text-neutral-700">Aucun avis pour le moment</h3>
-            <p class="text-neutral-500 mt-2">Les avis de vos clients apparaîtront ici une fois qu'ils auront évalué vos services.</p>
+            <h3 class="text-lg font-bold text-gray-900">Aucun avis</h3>
+            <p class="text-gray-600 mt-2">Les avis de vos clients apparaîtront ici.</p>
         </div>
     <% } %>
 </div>
-
+<script>
+    // Mobile menu functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const closeMobileMenuBtn = document.getElementById('closeMobileMenu');
+        const mobileMenu = document.getElementById('mobileMenu');
+    
+        function toggleMobileMenu() {
+            const isOpen = !mobileMenu.classList.contains('translate-x-full');
+            mobileMenu.classList.toggle('translate-x-full', isOpen);
+            document.body.style.overflow = isOpen ? '' : 'hidden';
+        }
+    
+        mobileMenuBtn?.addEventListener('click', toggleMobileMenu);
+        closeMobileMenuBtn?.addEventListener('click', toggleMobileMenu);
+    
+        // Close menu on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !mobileMenu.classList.contains('translate-x-full')) {
+                toggleMobileMenu();
+            }
+        });
+    });
+    </script>
 <!-- Alpine.js functionality -->
 <script>
 document.addEventListener('alpine:init', () => {
