@@ -3,4 +3,4 @@ Disallow:
 Disallow: /admin/
 Disallow: /dashbboard/
 
-Sitemap: https://www.ndressilik.com/sitemap.xml
+Sitemap: https://www.dresseur.ma/sitemap.xml
