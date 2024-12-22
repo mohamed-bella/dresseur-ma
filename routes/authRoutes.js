@@ -2,43 +2,36 @@ const express = require('express');
 const passport = require('passport');
 const router = express.Router();
 
-// Redirect the user to Google for authentication
+// Redirect to Google auth
 router.get('/auth/google',
-     passport.authenticate('google', { scope: ['profile', 'email'] })
+    passport.authenticate('google', { 
+        scope: ['profile', 'email'],
+        prompt: 'select_account'  // Add this to always show account selection
+    })
 );
 
-// Google callback URL after authentication
+// Google callback with error handling
 router.get('/auth/google/cb',
-     passport.authenticate('google', { failureRedirect: '/', failureMessage: true }),
-     (req, res) => {
-          if (req.authInfo) {
-               console.log('Authentication Info:', req.authInfo);
-          }
-          if (req.user) {
-               console.log('User Info:', req.user);  // This should log the authenticated user.
-          }
-          res.redirect('/dashboard');
-     }
+    passport.authenticate('google', { 
+        failureRedirect: '/login',
+        failureFlash: true 
+    }),
+    (req, res) => {
+        // Log successful authentication
+        console.log('Successfully authenticated user:', req.user?.displayName);
+        res.redirect('/');
+    }
 );
 
-
-// Logout route
+// Logout with proper callback
 router.get('/logout', (req, res) => {
-     req.logout(() => {
-          res.redirect('/');
-     });
+    req.logout((err) => {
+        if (err) {
+            console.error('Logout error:', err);
+            return res.redirect('/');
+        }
+        res.redirect('/');
+    });
 });
-
-// Protect dashboard route (or other routes)
-
-
-// GET: Logout
-router.get('/logout', (req, res) => {
-     req.logout(() => {
-          res.redirect('/');
-     });
-});
-
-
 
 module.exports = router;
