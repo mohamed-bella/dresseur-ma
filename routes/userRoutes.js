@@ -9,7 +9,7 @@ const {unreadRequests} = require('../middlewares/globals');
 
 const mongoose = require('mongoose');
 const { ObjectId } = mongoose.Types;
-const captureVisit = require('../utils/visitTracker'); // Import the visit tracking utility
+const visitMiddleware = require('../middlewares/visitMiddleware');
 const Visit = require('../models/visit')
 const Request = require('../models/request')
 const Elevage = require('../models/elevage')
@@ -1499,6 +1499,8 @@ const badgeData = {
      }
 };
 // GET Public Profile
+const captureVisit = require('../utils/visitTracker');  // Add this import
+
 router.get('/@:slug', async (req, res) => {
      try {
           const { slug } = req.params;
@@ -1524,10 +1526,13 @@ router.get('/@:slug', async (req, res) => {
                return res.status(403).render('403', {
                     message: 'Profil non disponible'
                });
-          }
+          }         
 
-          // Capturer la visite de l'utilisateur pour l'analyse
+
+
+           // Capture the visit
           await captureVisit(req, user._id);
+
 
           // Récupérer les services créés par l'utilisateur
           const services = await Service.find({ createdBy: user._id }).sort('-createdAt');

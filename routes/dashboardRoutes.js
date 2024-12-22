@@ -2,13 +2,14 @@ const express = require('express');
 const router = express.Router();
 const sharp = require('sharp');
 const {unreadRequests} = require('../middlewares/globals');
+const mongoose = require('mongoose');
 
 const User = require('../models/user');
 const { isAuthenticated } = require('../middlewares/auth');
 const Service = require('../models/service');
 const Review = require('../models/review');
 const multer = require('multer');
-
+const Visit = require('../models/visit');
 const TrainingSession = require('../models/trainingSession');
 const Client = require('../models/client');
 const Program = require('../models/program');
@@ -132,162 +133,169 @@ router.get('/profile', isAuthenticated, async (req, res) => {
 });
 
 
-
-
-const Elevage = require('../models/elevage');
-const Consultation = require('../models/consultation');
-
-
-// GET /stats: Fetch user stats for the dashboard
-router.get('/stats', isAuthenticated, async (req, res) => {
+// GET /stats - Get analytics data for dashboard
+router.get('/stats', async (req, res) => {
     try {
         const userId = req.user._id;
+        const timeframe = req.query.timeframe || '30'; // Default to 30 days
+        const startDate = new Date();
+        startDate.setDate(startDate.getDate() - parseInt(timeframe));
 
-     //    // Elevages Stats
-     //    const elevages = await Elevage.find({ userId }).lean();
-     //    const totalElevages = elevages.length;
-     //    const activeElevages = elevages.filter(e => e.status === 'active').length;
-     //    const pendingElevages = elevages.filter(e => e.status === 'pending').length;
-     //    const suspendedElevages = elevages.filter(e => e.status === 'suspended').length;
-     // //    const totalDogs = elevages.reduce((sum, e) => sum + e.stats.totalDogs, 0);
-     //    const availableDogs = elevages.reduce((sum, e) => sum + e.stats.availableDogs, 0);
-     //    const totalReviews = elevages.reduce((sum, e) => sum + e.stats.totalReviews, 0);
-     //    const averageRating =
-     //        elevages.length > 0
-     //            ? (
-     //                elevages.reduce((sum, e) => sum + e.stats.averageRating * e.stats.totalReviews, 0) /
-     //                totalReviews
-     //            ).toFixed(1)
-     //            : 0;
+        // Get all visits for this user within timeframe
+        const visits = await Visit.find({
+            providerId: userId,
+            createdAt: { $gte: startDate }
+        }).lean();
 
-        // Services Stats
-        const services = await Service.aggregate([
-            { $match: { createdBy: userId } },
-            {
-                $lookup: {
-                    from: 'reviews',
-                    localField: '_id',
-                    foreignField: 'serviceId',
-                    as: 'reviews',
-                },
-            },
-            {
-                $lookup: {
-                    from: 'reservations',
-                    localField: '_id',
-                    foreignField: 'serviceId',
-                    as: 'reservations',
-                },
-            },
-            {
-                $addFields: {
-                    averageRating: {
-                        $cond: [{ $gt: [{ $size: '$reviews' }, 0] }, { $avg: '$reviews.rating' }, 0],
-                    },
-                    totalReservations: { $size: '$reservations' },
-                },
-            },
-        ]);
-        const totalServices = services.length;
-        const activeServices = services.filter(s => s.isActive).length;
-        const inactiveServices = totalServices - activeServices;
-        const totalServiceReservations = services.reduce((sum, s) => sum + s.totalReservations, 0);
-        const totalServiceReviews = services.reduce((sum, s) => sum + s.reviews.length, 0);
-        const serviceAverageRating =
-            totalServiceReviews > 0
-                ? (
-                    services.reduce(
-                        (sum, s) => sum + s.averageRating * s.reviews.length,
-                        0
-                    ) / totalServiceReviews
-                ).toFixed(1)
-                : 0;
-        const totalServiceViews = services.reduce((sum, s) => sum + (s.views || 0), 0);
-
-        // Consultations Stats
-        const consultations = await Consultation.aggregate([
-            { $match: { assignedExpert: userId } },
-            {
-                $group: {
-                    _id: null,
-                    total: { $sum: 1 },
-                    pending: { $sum: { $cond: [{ $eq: ['$status', 'pending'] }, 1, 0] } },
-                    inProgress: { $sum: { $cond: [{ $eq: ['$status', 'in_progress'] }, 1, 0] } },
-                    completed: { $sum: { $cond: [{ $eq: ['$status', 'completed'] }, 1, 0] } },
-                    paid: { $sum: { $cond: [{ $eq: ['$type', 'paid'] }, 1, 0] } },
-                    free: { $sum: { $cond: [{ $eq: ['$type', 'free'] }, 1, 0] } },
-                },
-            },
-        ]);
-        const consultationStats = consultations[0] || {
-            total: 0,
-            pending: 0,
-            inProgress: 0,
-            completed: 0,
-            paid: 0,
-            free: 0,
-        };
-
-        // Reviews Stats
-        const reviews = await Review.find({ userId }).sort({ createdAt: -1 }).lean();
-        const totalReviewsCount = reviews.length;
-        const reviewsAverageRating =
-            totalReviewsCount > 0
-                ? (
-                    reviews.reduce((sum, r) => sum + r.rating, 0) /
-                    totalReviewsCount
-                ).toFixed(1)
-                : 0;
-        const latestReviews = reviews.slice(0, 5);
-
-      
-
-        // Compile Stats
+        // Calculate basic stats
         const stats = {
-            // elevages: {
-            //     total: totalElevages,
-            //     active: activeElevages,
-            //     pending: pendingElevages,
-            //     suspended: suspendedElevages,
-            //     totalDogs,
-            //     availableDogs,
-            //     totalReviews,
-            //     averageRating,
-            // },
-            services: {
-                total: totalServices,
-                active: activeServices,
-                inactive: inactiveServices,
-                reservations: totalServiceReservations,
-                totalViews: totalServiceViews,
-                totalReviews: totalServiceReviews,
-                averageRating: serviceAverageRating,
+            overview: {
+                totalVisits: visits.length,
+                uniqueVisitors: new Set(visits.map(v => v.session?.id)).size,
+                devices: {
+                    mobile: visits.filter(v => v.device?.type === 'Mobile').length,
+                    tablet: visits.filter(v => v.device?.type === 'Tablet').length,
+                    desktop: visits.filter(v => v.device?.type === 'Desktop').length
+                }
             },
-            consultations: {
-                total: consultationStats.total,
-                pending: consultationStats.pending,
-                inProgress: consultationStats.inProgress,
-                completed: consultationStats.completed,
-                paid: consultationStats.paid,
-                free: consultationStats.free,
-            },
-            reviews: {
-                total: totalReviewsCount,
-                averageRating: reviewsAverageRating,
-                latest: latestReviews,
-            },
-        };
-        console.log(stats)
 
-        res.render('user/dashboard/dashboard', {
-            page: 'stats',
-            stats,
-        });
+            // Group visits by date
+            dailyVisits: getDailyVisits(visits),
+
+            // Device & browser stats
+            technology: {
+                browsers: getBrowserStats(visits),
+                performance: getPerformanceStats(visits)
+            },
+
+            // Location stats
+            locations: getLocationStats(visits),
+
+            // Traffic sources
+            traffic: {
+                sources: getReferrerStats(visits),
+                recent: visits.slice(0, 10).map(visit => ({
+                    date: visit.createdAt,
+                    device: visit.device?.type || 'Unknown',
+                    country: visit.location?.country || 'Unknown',
+                    browser: visit.browser?.name || 'Unknown',
+                    referrer: visit.session?.referrer || 'Direct'
+                }))
+            },
+
+            // Engagement metrics
+            engagement: {
+                averageSessionDuration: calculateAverageSessionDuration(visits),
+                bounceRate: calculateBounceRate(visits),
+                peakHours: getPeakHours(visits)
+            }
+        };
+        console.log(stats.technology.browsers)
+        res.render('user/dashboard/includes/stats', {stats : stats})
+
     } catch (error) {
         console.error('Error fetching stats:', error);
-        res.status(500).send('Error loading stats');
+        res.status(500).json({
+            success: false,
+            message: 'Error loading statistics'
+        });
     }
 });
+
+// Helper functions
+function getDailyVisits(visits) {
+    const dailyMap = {};
+    visits.forEach(visit => {
+        const date = visit.createdAt.toISOString().split('T')[0];
+        dailyMap[date] = (dailyMap[date] || 0) + 1;
+    });
+    return Object.entries(dailyMap).map(([date, count]) => ({
+        date,
+        visits: count
+    })).sort((a, b) => a.date.localeCompare(b.date));
+}
+
+function getBrowserStats(visits) {
+    const browsers = {};
+    visits.forEach(visit => {
+        const browser = visit.browser?.name || 'Unknown';
+        browsers[browser] = (browsers[browser] || 0) + 1;
+    });
+    return Object.entries(browsers)
+        .map(([name, count]) => ({ name, count }))
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 5);
+}
+
+function getLocationStats(visits) {
+    const locations = {};
+    visits.forEach(visit => {
+        const country = visit.location?.country || 'Unknown';
+        locations[country] = (locations[country] || 0) + 1;
+    });
+    return Object.entries(locations)
+        .map(([country, count]) => ({ country, count }))
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 10);
+}
+
+function getReferrerStats(visits) {
+    const referrers = {};
+    visits.forEach(visit => {
+        const source = visit.session?.referrer || 'Direct';
+        referrers[source] = (referrers[source] || 0) + 1;
+    });
+    return Object.entries(referrers)
+        .map(([source, count]) => ({ source, count }))
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 5);
+}
+
+function getPerformanceStats(visits) {
+    if (visits.length === 0) return {
+        avgLoadTime: 0,
+        avgDomComplete: 0,
+        avgRenderTime: 0
+    };
+
+    const totals = visits.reduce((acc, visit) => {
+        return {
+            loadTime: acc.loadTime + (visit.performance?.loadTime || 0),
+            domComplete: acc.domComplete + (visit.performance?.domComplete || 0),
+            renderTime: acc.renderTime + (visit.performance?.renderTime || 0)
+        };
+    }, { loadTime: 0, domComplete: 0, renderTime: 0 });
+
+    return {
+        avgLoadTime: +(totals.loadTime / visits.length).toFixed(2),
+        avgDomComplete: +(totals.domComplete / visits.length).toFixed(2),
+        avgRenderTime: +(totals.renderTime / visits.length).toFixed(2)
+    };
+}
+
+function calculateAverageSessionDuration(visits) {
+    const durations = visits
+        .map(v => v.session?.duration || 0)
+        .filter(d => d > 0);
+    if (durations.length === 0) return 0;
+    return Math.round(durations.reduce((a, b) => a + b, 0) / durations.length);
+}
+
+function calculateBounceRate(visits) {
+    if (visits.length === 0) return 0;
+    const bounces = visits.filter(v => v.session?.duration < 10 || !v.session?.duration).length;
+    return +((bounces / visits.length) * 100).toFixed(2);
+}
+
+function getPeakHours(visits) {
+    const hours = new Array(24).fill(0);
+    visits.forEach(visit => {
+        const hour = new Date(visit.createdAt).getHours();
+        hours[hour]++;
+    });
+    return hours.map((count, hour) => ({ hour, count }));
+}
+
 
 
 
