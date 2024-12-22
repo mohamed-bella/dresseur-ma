@@ -41,9 +41,11 @@
      <div class="absolute bottom-0 left-0 right-0 border-t border-gray-800">
          <div class="p-4">
              <div class="flex items-center">
-                 <div class="w-10 h-10 bg-gray-800"></div>
+                 <div class="w-10 h-10 bg-gray-800">
+                    <img class="w-10 h-10" src="<%= user.profileImage  %>" alt="">
+                 </div>
                  <div class="ml-3">
-                     <p class="text-sm font-medium text-white">John Doe</p>
+                     <p class="text-sm font-medium text-white"><%= user.displayName  %></p>
                      <p class="text-xs text-gray-400">Professionnel</p>
                  </div>
              </div>
@@ -61,7 +63,7 @@
      <div class="px-4 h-16 flex items-center justify-between">
          <div class="flex items-center">
              <i class="fas fa-shield-dog text-red-600 text-2xl mr-2"></i>
-             <h1 class="text-xl font-bold">K9 Pro</h1>
+             <h1 class="text-xl font-bold">Dresseur.ma</h1>
          </div>
          <button id="mobileMenuBtn" class="p-2 hover:bg-gray-800">
              <i class="fas fa-bars text-xl"></i>
@@ -85,15 +87,15 @@
                  <i class="fas fa-home w-5"></i>
                  <span class="ml-3">Tableau de bord</span>
              </a>
-             <a href="/profile" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-900 hover:text-white">
+             <a href="/dashboard/profile" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-900 hover:text-white">
                  <i class="fas fa-user w-5"></i>
                  <span class="ml-3">Mon profil</span>
              </a>
-             <a href="/stats" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-900 hover:text-white">
+             <a href="/dashboard/stats" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-900 hover:text-white">
                  <i class="fas fa-chart-bar w-5"></i>
                  <span class="ml-3">Statistiques</span>
              </a>
-             <a href="/reviews" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-900 hover:text-white">
+             <a href="/dashboard/reviews" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-900 hover:text-white">
                  <i class="fas fa-star w-5"></i>
                  <span class="ml-3">Avis clients</span>
              </a>
