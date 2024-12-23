@@ -622,4 +622,32 @@ router.put('/profile/update-settings', isAuthenticated, async (req, res) => {
           });
      }
 });
+
+router.post('/api/reviews', async (req, res) => {
+    try {
+        const { profileId, rating, comment } = req.body;
+        
+        // Create new review
+        const review = new Review({
+            userId: profileId, // The profile being reviewed
+            rating,
+            comment,
+            createdAt: new Date()
+        });
+        
+        await review.save();
+        
+        res.status(201).json({ 
+            success: true, 
+            message: 'Avis ajouté avec succès' 
+        });
+        
+    } catch (error) {
+        console.error('Review submission error:', error);
+        res.status(500).json({ 
+            success: false, 
+            message: 'Une erreur est survenue lors de l\'ajout de l\'avis' 
+        });
+    }
+});
 module.exports = router;

@@ -352,14 +352,14 @@ router.get('/', async (req, res) => {
         ]);
 
         // Process profiles for display
-        const processedProfiles = profiles.map(profile => ({
-            displayName: profile.displayName || 'User',
-            profileImage: profile.profileImage || 'https://img.icons8.com/?size=100&id=7819&format=png&color=000000',
-            location: profile.location.city || 'Non spécifié',
-            isVerified: profile.isVerified || false,
-            slug : profile.slug,
+        // const processedProfiles = profiles.map(profile => ({
+        //     displayName: profile.displayName || 'User',
+        //     profileImage: profile.profileImage || 'https://img.icons8.com/?size=100&id=7819&format=png&color=000000',
+        //     location: profile.location.city || 'Non spécifié',
+        //     isVerified: profile.isVerified || false,
+        //     slug : profile.slug,
             
-        }));
+        // }));
 
         // Metadata for SEO
         const pageTitle = location
@@ -372,7 +372,7 @@ router.get('/', async (req, res) => {
             ? `${serviceOption}, profils, ${location}, NDRESSILIK`
             : `${serviceOption}, profils, NDRESSILIK`;
 
-            // console.log(profiles)
+            console.log(profiles[0])
         res.render('user/allServices', {
             profiles: profiles,
             pagination: {
@@ -423,12 +423,12 @@ router.get('/dresseur/:serviceOption?/:location?', async (req, res) => {
         ]);
 
         // Process profiles for display
-        const processedProfiles = profiles.map(profile => ({
-            displayName: profile.displayName || 'User',
-            profileImage: profile.profileImage || 'https://img.icons8.com/?size=100&id=7819&format=png&color=000000',
-            location: profile.location || 'Non spécifié',
-            isVerified: profile.isVerified || false
-        }));
+        // const processedProfiles = profiles.map(profile => ({
+        //     displayName: profile.displayName || 'User',
+        //     profileImage: profile.profileImage || 'https://img.icons8.com/?size=100&id=7819&format=png&color=000000',
+        //     location: profile.location || 'Non spécifié',
+        //     isVerified: profile.isVerified || false
+        // }));
 
         // Metadata for SEO
         const pageTitle = location
@@ -442,7 +442,7 @@ router.get('/dresseur/:serviceOption?/:location?', async (req, res) => {
             : `${serviceOption}, profils, NDRESSILIK`;
 
         res.render('user/allServices', {
-            profiles: processedProfiles,
+            profiles: profiles,
             pagination: {
                 current: page,
                 total: Math.ceil(total / limit),

@@ -569,14 +569,8 @@ router.get('/messages', async (req, res) => {
 // Route: Display all reviews for the authenticated user's services
 router.get('/reviews', isAuthenticated, async (req, res) => {
      try {
-         // Fetch all services created by the logged-in user
-         const services = await Service.find({ createdBy: req.user._id }).select('_id serviceName');
- 
-         // Fetch all reviews for the user's services
-         const serviceIds = services.map(service => service._id);
-         const reviews = await Review.find({ serviceId: { $in: serviceIds } })
-             .populate('userId', 'name email') // Populate user details
-             .populate('serviceId', 'serviceName') // Populate service details
+
+         const reviews = await Review.find({ userId: req.user._id  })
              .sort({ createdAt: -1 }); // Sort reviews by the newest first
  
          res.render('user/dashboard/includes/reviews', {
@@ -677,6 +671,54 @@ router.get('/programs', isAuthenticated, async (req, res) => {
     } catch (error) {
         console.error('Programs error:', error);
         res.status(500).send('Erreur du serveur');
+    }
+});
+
+router.delete('/api/reviews/:reviewId', isAuthenticated, async (req, res) => {
+    try {
+        const { reviewId } = req.params;
+        const { profileId } = req.body;
+
+        // Validate the review exists
+        const review = await Review.findById(reviewId);
+        if (!review) {
+            return res.status(404).json({
+                success: false,
+                message: 'Avis non trouvé'
+            });
+        }
+
+        // Validate that the review belongs to the profile
+        if (review.userId.toString() !== profileId) {
+            return res.status(403).json({
+                success: false,
+                message: 'Non autorisé à supprimer cet avis'
+            });
+        }
+
+        // Verify the logged-in user owns the profile
+        const profile = await User.findById(profileId);
+        if (!profile || profile._id.toString() !== req.user._id.toString()) {
+            return res.status(403).json({
+                success: false,
+                message: 'Non autorisé à supprimer cet avis'
+            });
+        }
+
+        // Delete the review
+        await Review.findByIdAndDelete(reviewId);
+
+        res.json({
+            success: true,
+            message: 'Avis supprimé avec succès'
+        });
+
+    } catch (error) {
+        console.error('Delete review error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Une erreur est survenue lors de la suppression'
+        });
     }
 });
 

@@ -1,173 +1,155 @@
-<%- include('./head.ejs') %>
-<!-- views/partials/reviews.ejs -->
-<!-- Reviews Section Container -->
-
-     <!-- Desktop Sidebar -->
-     <aside class="fixed inset-y-0 left-0 w-64 bg-black hidden lg:block">
-        <!-- Logo -->
-        <div class="h-16 flex items-center px-6 border-b border-gray-800">
-            <div class="flex items-center">
-                <i class="fas fa-shield-dog text-red-600 text-2xl mr-2"></i>
-                <h1 class="text-xl font-bold text-white">K9 Pro</h1>
-            </div>
-        </div>
-
-        <!-- Navigation -->
-        <nav class="py-4">
-            <div class="px-4 space-y-1">
-                <a href="/dashboard" 
-                   class="flex items-center px-4 py-3 text-gray-300 border-l-4 border-red-600 bg-gray-900">
-                    <i class="fas fa-home w-5"></i>
-                    <span class="ml-3">Tableau de bord</span>
-                </a>
-
-                <a href="/dashboard/profile" 
-                   class="flex items-center px-4 py-3 text-gray-400 hover:bg-gray-900 hover:text-white border-l-4 border-transparent">
-                    <i class="fas fa-user w-5"></i>
-                    <span class="ml-3">Mon profil</span>
-                </a>
-
-                <a href="/dashboard/stats" 
-                   class="flex items-center px-4 py-3 text-gray-400 hover:bg-gray-900 hover:text-white border-l-4 border-transparent">
-                    <i class="fas fa-chart-bar w-5"></i>
-                    <span class="ml-3">Statistiques</span>
-                </a>
-
-                <a href="/dashboard/reviews" 
-                   class="flex items-center px-4 py-3 text-gray-400 hover:bg-gray-900 hover:text-white border-l-4 border-transparent">
-                    <i class="fas fa-star w-5"></i>
-                    <span class="ml-3">Avis clients</span>
-                </a>
-            </div>
-        </nav>
-
-        <!-- User Menu -->
-        <div class="absolute bottom-0 left-0 right-0 border-t border-gray-800">
-            <div class="p-4">
-                <div class="flex items-center">
-                    <div class="w-10 h-10 bg-gray-800"></div>
-                    <div class="ml-3">
-                        <p class="text-sm font-medium text-white">John Doe</p>
-                        <p class="text-xs text-gray-400">Professionnel</p>
-                    </div>
-                </div>
-                <a href="/logout" 
-                   class="mt-4 flex items-center px-4 py-2 text-gray-400 hover:text-white hover:bg-gray-900">
-                    <i class="fas fa-sign-out-alt w-5"></i>
-                    <span class="ml-2">Déconnexion</span>
-                </a>
-            </div>
-        </div>
-    </aside>
-
-    <!-- Mobile Header -->
-    <header class="lg:hidden bg-black text-white sticky top-0 z-30">
-        <div class="px-4 h-16 flex items-center justify-between">
-            <div class="flex items-center">
-                <i class="fas fa-shield-dog text-red-600 text-2xl mr-2"></i>
-                <h1 class="text-xl font-bold">K9 Pro</h1>
-            </div>
-            <button id="mobileMenuBtn" class="p-2 hover:bg-gray-800">
-                <i class="fas fa-bars text-xl"></i>
-            </button>
-        </div>
-    </header>
-
-    <!-- Mobile Menu -->
-    <div id="mobileMenu" class="fixed inset-0 bg-black transform translate-x-full transition-transform duration-300 lg:hidden z-50">
-        <div class="h-16 flex items-center justify-between px-4 border-b border-gray-800">
-            <h1 class="text-xl font-bold text-white">Menu</h1>
-            <button id="closeMobileMenu" class="p-2 text-white hover:bg-gray-800">
-                <i class="fas fa-times text-xl"></i>
-            </button>
-        </div>
-        
-        <!-- Mobile Navigation -->
-        <nav class="py-4">
-            <div class="px-4 space-y-1">
-                <a href="/dashboard" class="flex items-center px-4 py-3 text-white bg-gray-900">
-                    <i class="fas fa-home w-5"></i>
-                    <span class="ml-3">Tableau de bord</span>
-                </a>
-                <a href="/profile" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-900 hover:text-white">
-                    <i class="fas fa-user w-5"></i>
-                    <span class="ml-3">Mon profil</span>
-                </a>
-                <a href="/stats" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-900 hover:text-white">
-                    <i class="fas fa-chart-bar w-5"></i>
-                    <span class="ml-3">Statistiques</span>
-                </a>
-                <a href="/reviews" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-900 hover:text-white">
-                    <i class="fas fa-star w-5"></i>
-                    <span class="ml-3">Avis clients</span>
-                </a>
-            </div>
-        </nav>
-    </div>
-    <!-- Header Section -->
-   
-<div class="lg:ml-64 container max-w-5xl px-4 py-6">
+<%- include('./head.ejs')  %>
+    <%- include('./navbar.ejs')  %>
+<div class="container px-4 py-6">
     <div class=" bg-black text-white mb-6">
         <div class="px-6 py-4">
             <h1 class="text-xl font-bold">Avis Clients</h1>
         </div>
     </div>
-    <!-- Filters Bar -->
-    <div class="bg-white border border-gray-200 mb-6">
-        <div class="p-4 flex flex-wrap gap-4">
-            <select id="serviceFilter" 
-                    class="px-4 h-10 bg-white border border-gray-300 focus:border-red-600 focus:outline-none">
-                <option value="all">Tous les services</option>
-                <option value="recent">Plus récents</option>
-                <option value="highest">Meilleures notes</option>
-                <option value="lowest">Notes faibles</option>
-            </select>
-
-            <select id="ratingFilter" 
-                    class="px-4 h-10 bg-white border border-gray-300 focus:border-red-600 focus:outline-none">
-                <option value="all">Toutes les notes</option>
-                <option value="5">5 étoiles</option>
-                <option value="4">4 étoiles</option>
-                <option value="3">3 étoiles</option>
-                <option value="2">2 étoiles</option>
-                <option value="1">1 étoile</option>
-            </select>
-        </div>
-    </div>
-
-    <!-- Stats Overview -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-px bg-gray-200 border border-gray-200 mb-6">
-        <!-- Total Reviews -->
-        <div class="bg-white p-6">
-            <div class="text-sm text-gray-600">Total des avis</div>
-            <div class="text-2xl font-bold text-black mt-1"><%= reviews.length %></div>
-        </div>
-
-        <!-- Average Rating -->
-        <div class="bg-white p-6">
-            <div class="text-sm text-gray-600">Note moyenne</div>
-            <div class="text-2xl font-bold text-black mt-1 flex items-center">
-                <%= (reviews.reduce((acc, rev) => acc + rev.rating, 0) / reviews.length).toFixed(1) %>
-                <i class="fas fa-star text-red-600 ml-2"></i>
+   
+   <!-- Stats Overview Slider -->
+<div class="relative mb-6 px-4">
+    <!-- Stats Container -->
+    <div class="overflow-hidden">
+        <div class="stats-slider flex transition-transform duration-300 gap-4">
+            <!-- Total Reviews -->
+            <div class="stats-slide min-w-[280px] bg-white border border-gray-200 p-6 rounded-lg">
+                <div class="text-sm text-gray-600">Total des avis</div>
+                <div class="text-2xl font-bold text-black mt-1"><%= reviews.length %></div>
             </div>
-        </div>
 
-        <!-- 5 Star Reviews -->
-        <div class="bg-white p-6">
-            <div class="text-sm text-gray-600">5 étoiles</div>
-            <div class="text-2xl font-bold text-black mt-1">
-                <%= reviews.filter(r => r.rating === 5).length %>
+            <!-- Average Rating -->
+            <div class="stats-slide min-w-[280px] bg-white border border-gray-200 p-6 rounded-lg">
+                <div class="text-sm text-gray-600">Note moyenne</div>
+                <div class="text-2xl font-bold text-black mt-1 flex items-center">
+                    <%= (reviews.reduce((acc, rev) => acc + rev.rating, 0) / reviews.length).toFixed(1) %>
+                    <i class="fas fa-star text-red-600 ml-2"></i>
+                </div>
             </div>
-        </div>
 
-        <!-- New Reviews -->
-        <div class="bg-white p-6">
-            <div class="text-sm text-gray-600">Cette semaine</div>
-            <div class="text-2xl font-bold text-black mt-1">
-                <%= reviews.filter(r => new Date(r.createdAt) > new Date(Date.now() - 7*24*60*60*1000)).length %>
+            <!-- 5 Star Reviews -->
+            <div class="stats-slide min-w-[280px] bg-white border border-gray-200 p-6 rounded-lg">
+                <div class="text-sm text-gray-600">5 étoiles</div>
+                <div class="text-2xl font-bold text-black mt-1">
+                    <%= reviews.filter(r => r.rating === 5).length %>
+                </div>
+            </div>
+
+            <!-- New Reviews -->
+            <div class="stats-slide min-w-[280px] bg-white border border-gray-200 p-6 rounded-lg">
+                <div class="text-sm text-gray-600">Cette semaine</div>
+                <div class="text-2xl font-bold text-black mt-1">
+                    <%= reviews.filter(r => new Date(r.createdAt) > new Date(Date.now() - 7*24*60*60*1000)).length %>
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- Navigation Buttons -->
+    <button 
+        onclick="slideStats('left')" 
+        class="absolute left-0 top-1/2 -translate-y-1/2 w-8 h-8 bg-white border border-gray-200 rounded-full flex items-center justify-center text-gray-600 hover:text-black hover:border-gray-300 transition-colors">
+        <i class="fas fa-chevron-left"></i>
+    </button>
+    <button 
+        onclick="slideStats('right')" 
+        class="absolute right-0 top-1/2 -translate-y-1/2 w-8 h-8 bg-white border border-gray-200 rounded-full flex items-center justify-center text-gray-600 hover:text-black hover:border-gray-300 transition-colors">
+        <i class="fas fa-chevron-right"></i>
+    </button>
+
+    <!-- Dots Navigation -->
+    <div class="flex justify-center mt-4 gap-2">
+        <% for(let i = 0; i < 4; i++) { %>
+            <button 
+                onclick="goToSlide(<%= i %>)" 
+                class="w-2 h-2 rounded-full bg-gray-300 dot-indicator hover:bg-gray-400 transition-colors"
+                data-slide="<%= i %>">
+            </button>
+        <% } %>
+    </div>
+</div>
+
+<script>
+let currentSlide = 0;
+const totalSlides = 4;
+const slideWidth = 280 + 16; // slide width + gap
+const slider = document.querySelector('.stats-slider');
+const dots = document.querySelectorAll('.dot-indicator');
+
+function updateSliderPosition() {
+    slider.style.transform = `translateX(-${currentSlide * slideWidth}px)`;
+    updateDots();
+}
+
+function updateDots() {
+    dots.forEach((dot, index) => {
+        if (index === currentSlide) {
+            dot.classList.add('bg-red-600');
+            dot.classList.remove('bg-gray-300');
+        } else {
+            dot.classList.remove('bg-red-600');
+            dot.classList.add('bg-gray-300');
+        }
+    });
+}
+
+function slideStats(direction) {
+    if (direction === 'left') {
+        currentSlide = Math.max(currentSlide - 1, 0);
+    } else {
+        currentSlide = Math.min(currentSlide + 1, totalSlides - 1);
+    }
+    updateSliderPosition();
+}
+
+function goToSlide(index) {
+    currentSlide = index;
+    updateSliderPosition();
+}
+
+// Touch support
+let touchStartX = 0;
+let touchEndX = 0;
+
+slider.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].screenX;
+});
+
+slider.addEventListener('touchend', e => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+});
+
+function handleSwipe() {
+    const swipeDistance = touchEndX - touchStartX;
+    if (Math.abs(swipeDistance) > 50) { // Minimum swipe distance
+        if (swipeDistance > 0) {
+            slideStats('left');
+        } else {
+            slideStats('right');
+        }
+    }
+}
+
+// Optional: Auto slide
+let autoSlideInterval;
+
+function startAutoSlide() {
+    autoSlideInterval = setInterval(() => {
+        currentSlide = (currentSlide + 1) % totalSlides;
+        updateSliderPosition();
+    }, 5000); // Change slide every 5 seconds
+}
+
+function stopAutoSlide() {
+    clearInterval(autoSlideInterval);
+}
+
+// Start auto slide and handle hover
+startAutoSlide();
+slider.parentElement.addEventListener('mouseenter', stopAutoSlide);
+slider.parentElement.addEventListener('mouseleave', startAutoSlide);
+</script>
 
     <% if (reviews.length > 0) { %>
         <!-- Reviews Grid -->
@@ -179,7 +161,7 @@
                         <div class="flex items-start justify-between">
                             <div>
                                 <h2 class="font-bold text-gray-900">
-                                    <%= review.serviceId.serviceName %>
+                                    <!--  -->
                                 </h2>
                                 <p class="text-sm text-gray-600 mt-1">
                                     Par <%= review.userId ? review.userId.name : 'Utilisateur anonyme' %>
@@ -224,9 +206,77 @@
                                 <button class="text-gray-600 hover:text-red-600">
                                     <i class="fas fa-flag"></i>
                                 </button>
-                                <button class="text-gray-600 hover:text-red-600">
-                                    <i class="fas fa-archive"></i>
+                                <!-- Delete Review Button -->
+                                <button 
+                                onclick="handleDeleteReview('<%=review._id%>', '<%=user._id%>', this)"
+                                class="text-gray-600 hover:text-red-600 p-2 rounded-full transition-all focus:outline-none relative group"
+                                data-review-id="<%=review._id%>">
+                                <i class="fas fa-archive transition-opacity duration-200"></i>
+                                <i class="fas fa-spinner fa-spin absolute inset-0 m-auto opacity-0 transition-opacity duration-200"></i>
                                 </button>
+
+                                <script>
+                                async function handleDeleteReview(reviewId, profileId, buttonElement) {
+                                // Check if already deleting (prevent double clicks)
+                                if (buttonElement.disabled) return;
+
+                                // Show loading state
+                                const archiveIcon = buttonElement.querySelector('.fa-archive');
+                                const spinnerIcon = buttonElement.querySelector('.fa-spinner');
+
+                                try {
+                                    // Start loading state
+                                    buttonElement.disabled = true;
+                                    archiveIcon.classList.add('opacity-0');
+                                    spinnerIcon.classList.remove('opacity-0');
+
+                                    // Make API call to delete review
+                                    const response = await fetch(`/dashboard/api/reviews/${reviewId}`, {
+                                        method: 'DELETE',
+                                        headers: {
+                                            'Content-Type': 'application/json'
+                                        },
+                                        body: JSON.stringify({
+                                            profileId: profileId // Send profile ID for validation
+                                        })
+                                    });
+
+                                    const data = await response.json();
+
+                                    if (!response.ok) {
+                                        throw new Error(data.message || 'Error deleting review');
+                                    }
+
+                                    // Success - Refresh the page
+                                    window.location.reload();
+
+                                } catch (error) {
+                                    console.error('Delete review error:', error);
+                                    // Reset button state
+                                    archiveIcon.classList.remove('opacity-0');
+                                    spinnerIcon.classList.add('opacity-0');
+                                    buttonElement.disabled = false;
+                                    
+                                    // Show error message
+                                    showErrorToast(error.message || 'Une erreur est survenue');
+                                }
+                                }
+
+                                // Optional: Update review statistics
+                                function updateReviewStats() {
+                                const reviewCountElement = document.querySelector('[data-review-count]');
+                                if (reviewCountElement) {
+                                    const currentCount = parseInt(reviewCountElement.textContent) || 0;
+                                    reviewCountElement.textContent = Math.max(0, currentCount - 1);
+                                }
+                                }
+
+                                // Show error toast message
+                                function showErrorToast(message) {
+                                // Implement your preferred toast notification here
+                                alert(message); // Simple alert for now
+                                }
+                                </script>
                             </div>
                         </div>
                     </div>
